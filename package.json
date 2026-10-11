@@ -1,0 +1,25 @@
+{
+  "name": "nexo-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server.mjs",
+    "lab": "node --env-file-if-exists=.env.local scripts/lab.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "demo": "node --env-file-if-exists=.env.local scripts/demo.mjs",
+    "evaluate": "node --env-file-if-exists=.env.local scripts/evaluate.mjs",
+    "test:live": "node --env-file-if-exists=.env.local scripts/live.mjs",
+    "test:ui": "node scripts/ui-test.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12",
+    "lucide-static": "^0.574.0"
+  },
+  "devDependencies": { "@playwright/test": "^1.56.1", "prettier": "^3.6.2" }
+}
