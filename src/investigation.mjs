@@ -18,6 +18,17 @@ const obj = (properties) => ({
 const STR = { type: "string" };
 export const researchTools = [
   tool(
+    "find_facilities",
+    "Search the RECEIVED map directory for candidate shelter or water-plant sites. A candidate is not inspected, authorized, operating or guaranteed available. Demand locations are not service facilities. Returns only actor-visible locations and any received assessment.",
+    {
+      ...obj({
+        use: { type: "string", enum: ["shelter", "plant"] },
+        offset: { type: "integer", minimum: 0 },
+      }),
+      required: ["use"],
+    },
+  ),
+  tool(
     "plan_service",
     "Build a sourced dependency draft for an inspected facility using owned and explicitly shared capabilities. Missing safety, technical compatibility, stock or transport remain visible. No activation or authority.",
     { ...obj({ building: STR }), required: ["building"] },
@@ -126,7 +137,7 @@ Distinguish observed evidence, inferred possibilities, owner confirmation, autho
 Look for capabilities described for another purpose, conditional collaboration, empty return trips, safe alternatives and composition of water/energy/personnel/sanitation/transport/facilities where relevant. Never certify a damaged building safe without a completed inspection. Avoid duplicating help already committed or in transit. Review dependencies and preserve unaffected work when repairing.
 Dispatch parameter names are exactly vehicle, resource, quantity and need (or building/destination). Quantity is an integer in the resource's native unit. available = quantity - reserved - floor. Partial delivery is valid. Do not empty protected reserves to satisfy an entire need. A current authorized need observation can be the basis for a proportionate partial response; uncertainty must be recorded but do not invent unnecessary conditions. If verification is important, use verify and cite the returned inspection ID, not an invented evidence ID. Use a condition only if it truly prevents the planned action. Do not mark an unverified condition satisfied.
 Produce a draft_response with evidence IDs from the available inputs or recorded claims, clear pending conditions, responsible owners, alternatives and a SHORT decision rationale. Do not expose private chain-of-thought. Your rationale explains evidence, checked constraints and remaining uncertainty only. If tools cannot establish feasibility, finish_without_proposal rather than invent IDs. All actions are drafts, human authorization is required. Use native English.`;
-const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions.\n`;
+const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need; do not substitute an unrelated allocation as its solution. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
 export class Investigator {
   constructor({ store, domain, connector, provider, config }) {
     Object.assign(this, { store, domain, connector, provider, config });
@@ -404,7 +415,44 @@ export class Investigator {
           try {
             args = JSON.parse(call.function.arguments);
             const name = call.function.name;
-            if (name === "plan_service") {
+            if (name === "find_facilities") {
+              check(
+                ["shelter", "plant"].includes(args.use) &&
+                  (args.offset === undefined ||
+                    (Number.isSafeInteger(args.offset) && args.offset >= 0)),
+                "FACILITY_DIRECTORY",
+                "Select a service use and a nonnegative directory offset.",
+              );
+              const geography = await this.store.get(
+                org,
+                "context",
+                "geography",
+                false,
+              );
+              const places = (geography?.map?.places ?? []).filter(
+                (p) => p.use === args.use,
+              );
+              const offset = args.offset ?? 0;
+              response = {
+                source: "received_geography_directory",
+                use: args.use,
+                totalAvailable: places.length,
+                nextOffset: offset + 40 < places.length ? offset + 40 : null,
+                candidates: await Promise.all(
+                  places.slice(offset, offset + 40).map(async (place) => ({
+                    ...place,
+                    receivedAssessment: await this.store.get(
+                      org,
+                      "facility",
+                      place.id,
+                      false,
+                    ),
+                  })),
+                ),
+                note: "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning.",
+              };
+              step.label = "Found candidate service sites in the received map";
+            } else if (name === "plan_service") {
               await this.ingestKnown?.();
               service = await servicePlan(this.store, org, args.building);
               response = {

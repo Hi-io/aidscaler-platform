@@ -50,70 +50,77 @@ export class OpenRouterProvider {
       reserve =
         approxIn * Number(pricing.rates.prompt) +
         maxTokens * Number(pricing.rates.completion);
-    await this.store.transaction(async (tx) => {
-      await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
-        org,
-      ]);
-      const { rows } = await tx.query(
-        this.config.modelScopePrefix
-          ? "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND substring(episode,1,length($2))=$2"
-          : "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
-        [org, this.config.modelScopePrefix ?? episode],
-      );
-      const hourly = (
-        await tx.query(
-          "SELECT COUNT(*) AS calls,COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged FROM usage WHERE org=$1 AND started_at>$2",
-          [org, Date.now() - 3600000],
-        )
-      ).rows[0];
-      const policy = await tx.get(org, "automation", "intake", false);
-      check(
-        Number(hourly.calls) <
-          Math.min(
-            policy?.hourlyCallLimit ?? Infinity,
-            this.config.hourlyCallLimit ?? 40,
-          ),
-        "ORGANIZATION_CALL_BUDGET",
-        "The organization has reached its hourly model-call limit.",
-        429,
-      );
-      check(
-        Number(hourly.charged) + reserve <=
-          Math.min(
-            policy?.hourlyBudgetUsd ?? Infinity,
-            this.config.hourlyBudgetUsd ?? 2,
-          ),
-        "ORGANIZATION_MODEL_BUDGET",
-        "The organization has reached its hourly model budget. Unknown-cost failures retain their conservative reservation.",
-        429,
-      );
-      check(
-        Number(rows[0].charged) + reserve <= this.config.budgetUsd,
-        "MODEL_BUDGET",
-        "This episode has reached its model budget.",
-        429,
-      );
-      check(
-        Number(rows[0].calls) <
-          (this.config.modelScopeCalls ?? this.config.maxCalls),
-        "MODEL_CALL_BUDGET",
-        "Investigation call limit reached.",
-        429,
-      );
-      await tx.query(
-        "INSERT INTO usage(id,org,episode,model,request_hash,state,started_at,reserved_usd,pricing) VALUES($1,$2,$3,$4,$5,'running',$6,$7,$8)",
-        [
-          id,
+    const pool = this.config.modelBudgetPool;
+    const poolReservation = pool?.reserve(reserve);
+    try {
+      await this.store.transaction(async (tx) => {
+        await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
           org,
-          episode,
-          this.config.modelId,
-          requestHash,
-          Date.now(),
-          reserve,
-          JSON.stringify(pricing),
-        ],
-      );
-    });
+        ]);
+        const { rows } = await tx.query(
+          this.config.modelScopePrefix
+            ? "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND substring(episode,1,length($2))=$2"
+            : "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
+          [org, this.config.modelScopePrefix ?? episode],
+        );
+        const hourly = (
+          await tx.query(
+            "SELECT COUNT(*) AS calls,COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged FROM usage WHERE org=$1 AND started_at>$2",
+            [org, Date.now() - 3600000],
+          )
+        ).rows[0];
+        const policy = await tx.get(org, "automation", "intake", false);
+        check(
+          Number(hourly.calls) <
+            Math.min(
+              policy?.hourlyCallLimit ?? Infinity,
+              this.config.hourlyCallLimit ?? 40,
+            ),
+          "ORGANIZATION_CALL_BUDGET",
+          "The organization has reached its hourly model-call limit.",
+          429,
+        );
+        check(
+          Number(hourly.charged) + reserve <=
+            Math.min(
+              policy?.hourlyBudgetUsd ?? Infinity,
+              this.config.hourlyBudgetUsd ?? 2,
+            ),
+          "ORGANIZATION_MODEL_BUDGET",
+          "The organization has reached its hourly model budget. Unknown-cost failures retain their conservative reservation.",
+          429,
+        );
+        check(
+          Number(rows[0].charged) + reserve <= this.config.budgetUsd,
+          "MODEL_BUDGET",
+          "This episode has reached its model budget.",
+          429,
+        );
+        check(
+          Number(rows[0].calls) <
+            (this.config.modelScopeCalls ?? this.config.maxCalls),
+          "MODEL_CALL_BUDGET",
+          "Investigation call limit reached.",
+          429,
+        );
+        await tx.query(
+          "INSERT INTO usage(id,org,episode,model,request_hash,state,started_at,reserved_usd,pricing) VALUES($1,$2,$3,$4,$5,'running',$6,$7,$8)",
+          [
+            id,
+            org,
+            episode,
+            this.config.modelId,
+            requestHash,
+            Date.now(),
+            reserve,
+            JSON.stringify(pricing),
+          ],
+        );
+      });
+    } catch (e) {
+      if (poolReservation !== undefined) pool.cancel(poolReservation);
+      throw e;
+    }
     const start = performance.now();
     try {
       const response = await this.fetcher(
@@ -197,8 +204,10 @@ export class OpenRouterProvider {
           JSON.stringify(result),
         ],
       );
+      if (poolReservation !== undefined) pool.settle(poolReservation, cost);
       return result;
     } catch (e) {
+      if (poolReservation !== undefined) pool.settle(poolReservation, null);
       await this.store.query(
         "UPDATE usage SET state='failed',wall_ms=$2,error=$3 WHERE id=$1",
         [id, performance.now() - start, e.code ?? e.name],

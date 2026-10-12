@@ -10,6 +10,11 @@ export async function servicePlan(store, org, building) {
     "FACILITY",
     "Read the facility location and request its inspection first.",
   );
+  check(
+    ["shelter", "plant"].includes(facility.use) && facility.capacity > 0,
+    "FACILITY_PURPOSE",
+    "This assessed location is not a usable service facility. A demand location is not automatically a shelter. Find an eligible candidate site in the actor-visible map and inspect it.",
+  );
   const inspections = (await store.list(org, "verification", 2000)).filter(
     (v) =>
       v.target === "building" &&

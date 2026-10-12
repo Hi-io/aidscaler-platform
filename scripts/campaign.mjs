@@ -3,7 +3,7 @@ import {
   buildFingerprint,
   evaluatorFingerprint,
 } from "../evaluation/harness.mjs";
-import { pairedBootstrap, gates } from "../src/evaluation.mjs";
+import { summarizeCampaign } from "../evaluation/campaign-summary.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 const options = Object.fromEntries(
     process.argv.slice(2).map((s) => s.replace(/^--/, "").split("=")),
@@ -78,65 +78,7 @@ process.on("SIGINT", () => {
   stopRequested = true;
 });
 async function saveSummary() {
-  const comparisons = [],
-    missing = planned.filter(
-      (p) =>
-        !rows.some(
-          (r) =>
-            r.scenario === p.scenario && r.seed === p.seed && r.arm === p.arm,
-        ),
-    );
-  for (const scenario of scenarios)
-    for (const arm of arms.filter((a) => a !== arms[0])) {
-      const aa = rows.filter(
-          (r) => r.scenario === scenario && r.arm === arms[0],
-        ),
-        bb = rows.filter((r) => r.scenario === scenario && r.arm === arm),
-        pairedSeeds = aa
-          .filter((r) => bb.some((b) => b.seed === r.seed))
-          .map((r) => r.seed),
-        a = aa.filter((r) => pairedSeeds.includes(r.seed)),
-        b = bb.filter((r) => pairedSeeds.includes(r.seed));
-      for (const resource of new Set(
-        [...a, ...b].flatMap((r) => Object.keys(r.metrics.services)),
-      ))
-        comparisons.push({
-          scenario,
-          baseline: arms[0],
-          candidate: arm,
-          missingWorldPairs: seeds - pairedSeeds.length,
-          ...pairedBootstrap(a, b, { resource }),
-        });
-    }
-  const report = {
-    at: new Date().toISOString(),
-    protocol: folder + "/protocol.json",
-    complete: missing.length === 0,
-    stoppedReason,
-    runs: rows.length,
-    plannedRuns: planned.length,
-    missing,
-    costUsd: cost,
-    chargedBudgetUsd: charged,
-    unknownCostCalls: rows.reduce((s, r) => s + r.unknownCostCalls, 0),
-    comparisons,
-    gates: rows.map((r) => ({
-      scenario: r.scenario,
-      seed: r.seed,
-      arm: r.arm,
-      status: r.status,
-      ...gates(r.metrics),
-      invariantViolations: r.invariants.length,
-    })),
-    notAClaimOfSuperiority: true,
-    remainingValidation: [
-      "Independent sealed structural holdout",
-      "Human operator and public comprehension trials",
-      "Institutional calibration and adoption",
-      "Gemini remeasurement after changing models",
-      "Recurrent policies across evolving emergencies",
-    ],
-  };
+  const report = summarizeCampaign({ folder, protocol, rows, stoppedReason });
   await writeFile(folder + "/summary.json", JSON.stringify(report, null, 2));
   await writeFile(
     "reports/evaluation-latest.json",
@@ -150,7 +92,7 @@ try {
       stoppedReason = "interrupted_after_current_episode";
       break;
     }
-    if (limit - charged < 0.025) {
+    if (limit - charged < perEpisode) {
       stoppedReason = "campaign_budget_exhausted";
       break;
     }
@@ -164,7 +106,7 @@ try {
     console.log("Running", p.arm, p.scenario, p.seed);
     const report = await runEpisode({
       ...p,
-      episodeBudgetUsd: Math.min(perEpisode, limit - charged),
+      episodeBudgetUsd: perEpisode,
       planningRounds,
       policyIntervalMs,
     });

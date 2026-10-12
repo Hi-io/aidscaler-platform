@@ -7,6 +7,7 @@ import { hash } from "../src/store.mjs";
 import { readFile } from "node:fs/promises";
 import { allocationPlan } from "../src/planning.mjs";
 import { servicePlan } from "../src/services.mjs";
+import { ModelBudgetPool } from "../src/budget-pool.mjs";
 import { readdir } from "node:fs/promises";
 import {
   normalizeExtraction,
@@ -40,6 +41,7 @@ export async function evaluatorFingerprint() {
         "evaluation/harness.mjs",
         "scripts/evaluate.mjs",
         "scripts/campaign.mjs",
+        "evaluation/campaign-summary.mjs",
         "src/evaluation.mjs",
       ].map(async (f) => [
         f,
@@ -515,10 +517,14 @@ export async function runEpisode({
       config,
       provider,
       maxCalls,
-      budgetUsd: episodeBudgetUsd / (["B5", "B6"].includes(arm) ? 4 : 1),
+      budgetUsd: episodeBudgetUsd,
       platformConfig: {
         modelScopePrefix: episodePrefix,
         modelScopeCalls: maxCalls * planningRounds,
+        modelBudgetPool: new ModelBudgetPool({
+          budgetUsd: episodeBudgetUsd,
+          calls: maxCalls * planningRounds,
+        }),
       },
     }),
     activities = [],
@@ -827,6 +833,8 @@ export async function runEpisode({
       modelConfig: {
         modelId: h.apps[0].config.modelId,
         maxCallsPerRound: maxCalls,
+        totalEpisodeCalls: maxCalls * planningRounds,
+        budgetPolicy: "shared_episode_pool_same_total_cap_for_every_arm",
       },
       wallMs: performance.now() - start,
       activities,

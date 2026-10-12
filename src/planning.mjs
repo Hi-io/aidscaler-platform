@@ -533,6 +533,11 @@ export async function validatePlan(store, org, proposal) {
     if (a.type === "activate") {
       const f = await store.get(org, "facility", a.params.building, false);
       check(
+        ["shelter", "plant"].includes(f?.use) && f.capacity > 0,
+        "FACILITY_PURPOSE",
+        "Activation requires an assessed service facility with positive useful capacity, not merely a safe demand location.",
+      );
+      check(
         f?.safe === true,
         "SAFETY_INSPECTION",
         "A completed safety assessment is required before activation.",
