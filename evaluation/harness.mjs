@@ -838,6 +838,10 @@ export async function runEpisode({
         : "one_isolated_instance",
       modelConfig: {
         modelId: h.apps[0].config.modelId,
+        maxOutputTokens: h.apps[0].config.modelMaxOutputTokens,
+        reasoningEnabled: h.apps[0].config.modelReasoning,
+        providerSort: h.apps[0].config.modelProviderSort,
+        priceMultiplier: h.apps[0].config.modelPriceMultiplier,
         maxCallsPerRound: maxCalls,
         totalEpisodeCalls: maxCalls * planningRounds,
         budgetPolicy: "shared_episode_pool_same_total_cap_for_every_arm",

@@ -48,7 +48,7 @@ export const fieldReport = z
   .strict();
 const ID = z.string().min(1).max(180),
   POS = z.number().int().positive();
-const parameterSchemas = {
+export const parameterSchemas = {
   dispatch: z
     .object({
       vehicle: ID,

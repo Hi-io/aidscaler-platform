@@ -55,6 +55,14 @@ const protocol = {
   seedPrefix: "pilot-2026-",
   budgetUsd: limit,
   episodeBudgetUsd: perEpisode,
+  modelRequestPolicy: {
+    maxOutputTokens: Number(process.env.MODEL_MAX_OUTPUT_TOKENS ?? 8192),
+    reasoningEnabled: process.env.MODEL_REASONING !== "false",
+    providerSort: process.env.MODEL_PROVIDER_SORT ?? "price",
+    priceMultiplier: Number(process.env.MODEL_PRICE_MULTIPLIER ?? 2),
+    context:
+      "focused received-data preview, scoped retrieval and progressively loaded custom action contracts",
+  },
   candidateFingerprint: await buildFingerprint(),
   evaluatorFingerprint: await evaluatorFingerprint(),
   primary: "uncoveredUnitMs by native resource type",

@@ -25,10 +25,19 @@ export class OpenRouterProvider {
       rates: entry.pricing,
       modalities: entry.architecture.input_modalities,
       parameters: entry.supported_parameters,
+      reasoning: entry.reasoning,
+      maxCompletionTokens: entry.top_provider?.max_completion_tokens,
     };
     return this.pricing;
   }
-  async complete({ org, episode, messages, tools = [], signal }) {
+  async complete({
+    org,
+    episode,
+    messages,
+    tools = [],
+    signal,
+    maxOutputTokens,
+  }) {
     // A funding refusal requires operator intervention, not a retry per case.
     // Restart this backend after restoring provider credit; manual work stays available.
     if (this.fundingError) throw this.fundingError;
@@ -47,12 +56,53 @@ export class OpenRouterProvider {
     );
     const pricing = await this.catalogue(),
       id = uid("usage"),
-      requestHash = hash({ messages, tools, model: this.config.modelId }),
-      maxTokens = 2400;
+      maxTokens = Math.min(
+        maxOutputTokens ?? this.config.modelMaxOutputTokens ?? 8192,
+        pricing.maxCompletionTokens ?? 32768,
+      );
+    check(
+      Number.isSafeInteger(maxTokens) &&
+        maxTokens >= 1024 &&
+        maxTokens <= 32768,
+      "MODEL_OUTPUT_BUDGET",
+      "Use an output allowance between 1024 and 32768 tokens, within the provider's published limit.",
+    );
+    const reasoningEnabled =
+      !!pricing.parameters?.includes("reasoning") &&
+      this.config.modelReasoning !== false;
+    const providerSort = this.config.modelProviderSort ?? "price";
+    const priceMultiplier = this.config.modelPriceMultiplier ?? 2;
+    check(
+      ["price", "throughput", "latency"].includes(providerSort) &&
+        Number.isFinite(priceMultiplier) &&
+        priceMultiplier >= 1 &&
+        priceMultiplier <= 10,
+      "MODEL_ROUTING",
+      "Select a supported provider sort and a price multiplier between 1 and 10.",
+    );
+    const maximumRates = {
+      prompt: Number(pricing.rates.prompt) * priceMultiplier,
+      completion: Number(pricing.rates.completion) * priceMultiplier,
+    };
+    check(
+      Object.values(maximumRates).every(
+        (rate) => Number.isFinite(rate) && rate >= 0,
+      ),
+      "MODEL_PRICING",
+      "Published token prices must be available before inference.",
+    );
+    const requestHash = hash({
+      messages,
+      tools,
+      model: this.config.modelId,
+      maxTokens,
+      reasoningEnabled,
+      providerSort,
+      maximumRates,
+    });
     const approxIn = Math.ceil(JSON.stringify({ messages, tools }).length / 2),
       reserve =
-        approxIn * Number(pricing.rates.prompt) +
-        maxTokens * Number(pricing.rates.completion);
+        approxIn * maximumRates.prompt + maxTokens * maximumRates.completion;
     const pool = this.config.modelBudgetPool;
     const poolReservation = pool?.reserve(reserve);
     try {
@@ -148,8 +198,17 @@ export class OpenRouterProvider {
             tools: tools.length ? tools : undefined,
             temperature: 0.1,
             max_tokens: maxTokens,
-            provider: { require_parameters: true, sort: "throughput" },
-            reasoning: { enabled: false },
+            provider: {
+              require_parameters: true,
+              sort: providerSort,
+              max_price: {
+                prompt: maximumRates.prompt * 1000000,
+                completion: maximumRates.completion * 1000000,
+              },
+            },
+            reasoning: pricing.parameters?.includes("reasoning")
+              ? { enabled: this.config.modelReasoning !== false, exclude: true }
+              : undefined,
           }),
         },
       );
@@ -180,26 +239,36 @@ export class OpenRouterProvider {
           ? u.cost
           : Number.isFinite(u.prompt_tokens) &&
               Number.isFinite(u.completion_tokens)
-            ? u.prompt_tokens * Number(pricing.rates.prompt) +
-              u.completion_tokens * Number(pricing.rates.completion)
+            ? u.prompt_tokens * maximumRates.prompt +
+              u.completion_tokens * maximumRates.completion
             : null;
       const result = {
         message: data.choices[0].message,
         usage: {
           promptTokens: u.prompt_tokens ?? 0,
           outputTokens: u.completion_tokens ?? 0,
+          reasoningTokens:
+            u.completion_tokens_details?.reasoning_tokens ?? null,
           providerCost: cost,
           providerRequestId: data.id,
           wallMs: performance.now() - start,
         },
         model: data.model ?? this.config.modelId,
+        finishReason: data.choices[0].finish_reason ?? null,
+        request: {
+          inputCharacters: JSON.stringify({ messages, tools }).length,
+          maxOutputTokens: maxTokens,
+          reasoningEnabled,
+          providerSort,
+          maximumTokenRates: maximumRates,
+        },
         pricing,
         costSource:
           cost == null
             ? "unknown; conservative reservation retained"
             : Number.isFinite(u.cost)
               ? "provider receipt"
-              : "catalogue estimate",
+              : "routing token-price ceiling estimate",
       };
       delete result.message.reasoning;
       delete result.message.reasoning_details;

@@ -98,7 +98,9 @@ test("cumulative model budget covers all rounds and unknown-cost attempts rather
       modelScopeCalls: 24,
       budgetUsd: 1,
       hourlyCallLimit: 40,
-      hourlyBudgetUsd: 2,
+      // Isolate the episode cap; the larger output/price reservation also
+      // correctly exceeds the default hourly cap, which is tested separately.
+      hourlyBudgetUsd: 10,
     },
     () => {
       throw Error("A budget rejection must happen before provider execution");
