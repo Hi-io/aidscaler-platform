@@ -2,7 +2,7 @@
 
 Actualizado el 13 de octubre de 2026 (Tokio). Complementa [la especificación](PLATAFORMA.md), [el laboratorio](SIMULADOR.md), [la operación local](LOCAL.md) y [la validación externa](VALIDACION_EXTERNA.md). Los objetivos de la especificación siguen vigentes: esta matriz no los rebaja para declarar terminado el proyecto.
 
-> La matriz histórica siguiente conserva lo medido en cada fecha. La revisión completa de la versión actual está en [COBERTURA_REQUISITOS.md](COBERTURA_REQUISITOS.md): funcionalidades, 26 entradas, 23 salidas, 14 experiencias, 27 grupos de pruebas, 30 KPIs y 24 escenarios. Verificación actual: plataforma215/215 y simulador154/154, hashes estables, 84 comprobaciones de navegador. La mejora física sigue evaluándose en [MEJORA_RESPUESTA.md](MEJORA_RESPUESTA.md).
+> La matriz histórica siguiente conserva lo medido en cada fecha. La revisión completa de la versión actual está en [COBERTURA_REQUISITOS.md](COBERTURA_REQUISITOS.md): funcionalidades, 26 entradas, 23 salidas, 14 experiencias, 27 grupos de pruebas, 30 KPIs y 24 escenarios. La [verificación actual](../reports/verifications/1791841893496.json) pasó plataforma **274/274** y simulador **173/173**, con tres hashes estables; navegador pasó 84 comprobaciones. La recuperación nominal sin pago cerró 214 fuentes versionadas en cuatro bases y 24/24 necesidades físicas; es un mecanismo de integración con parser sustituido, no calidad GenAI ni ventaja. La mejora comparativa sigue evaluándose en [MEJORA_RESPUESTA.md](MEJORA_RESPUESTA.md).
 
 ## 1. Qué existe
 

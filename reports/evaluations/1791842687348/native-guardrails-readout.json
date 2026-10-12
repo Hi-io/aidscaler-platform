@@ -1,0 +1,4989 @@
+{
+  "at": "2026-10-12T22:45:49.776Z",
+  "protocol": "protocol.json",
+  "complete": true,
+  "missing": [],
+  "unexpected": [],
+  "invalidation": null,
+  "rows": [
+    {
+      "variant": "distributed",
+      "seed": "delegated-final-2026-distributed-01",
+      "treatment": "B5",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-distributed-01-B5.json",
+      "status": "completed",
+      "errors": [],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 685800900,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 125760170,
+          "onTime": 1
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 1114668,
+          "p95": 2184004,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 1171335,
+          "p95": 3020003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 1171335,
+          "p95": 3020003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 1171335,
+              "firstServiceAt": 1114668,
+              "sufficientServiceAt": 1171335,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 1114668,
+              "timeToSufficientServiceMs": 1171335,
+              "uncoveredUnitMs": 685800900
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3020003,
+              "firstServiceAt": 2184004,
+              "sufficientServiceAt": 3020003,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2184004,
+              "timeToSufficientServiceMs": 3020003,
+              "uncoveredUnitMs": 125760170
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 18.5778,
+          "sufficientMin": 19.52225,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 36.40006666666667,
+          "sufficientMin": 50.33338333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 24500,
+          "fuelMl": 4410,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 165.06661944444446,
+          "operatingHours": 3.513611111111111,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 2,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 40,
+          "accepted": 40,
+          "interpreted": 0,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 143732,
+            "p95": 286663
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 17,
+      "toolCost": 17,
+      "operatorReviewMs": 330000,
+      "usage": {
+        "calls": 0,
+        "knownCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "models": [],
+        "unknownCostCalls": 0,
+        "providerWallMs": 0,
+        "providerWallMissing": 0,
+        "failedCalls": 0
+      },
+      "totalWallMs": 54872.1068,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 391000,
+          "arrivedAt": 524334,
+          "observedAt": 584334,
+          "completedAt": 585335,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 584334,
+            "validUntil": 22184334,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 391000,
+          "arrivedAt": 524334,
+          "observedAt": 584334,
+          "completedAt": 585335,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 584334,
+            "validUntil": 22184334,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 391000,
+          "arrivedAt": 524334,
+          "observedAt": 584334,
+          "completedAt": 585335,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 584334,
+            "validUntil": 22184334,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 391000,
+          "arrivedAt": 524334,
+          "observedAt": 584334,
+          "completedAt": 585335,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 584334,
+            "validUntil": 22184334,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 2960003,
+            "service": 3020003,
+            "prepared": 2835002,
+            "received": 3020003,
+            "authorized": 2649000,
+            "dispatched": 2835002,
+            "orderReceived": 2650001,
+            "pickupDispatched": 2650001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2534003,
+            "service": 2594003,
+            "prepared": 2409002,
+            "received": 2594003,
+            "authorized": 2223000,
+            "dispatched": 2409002,
+            "orderReceived": 2224001,
+            "pickupDispatched": 2224001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-8",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2124004,
+            "service": 2184004,
+            "prepared": 1999003,
+            "received": 2184004,
+            "authorized": 1813001,
+            "dispatched": 1999003,
+            "orderReceived": 1814002,
+            "pickupDispatched": 1814002
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 162,
+          "quantity": 162,
+          "times": {
+            "arrived": 902337,
+            "accepted": 617336,
+            "prepared": 677336,
+            "received": 962337,
+            "reserved": 616335,
+            "authorized": 616335,
+            "dispatched": 677336,
+            "orderReceived": 617336,
+            "unloadingStarted": 902337
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1054668,
+            "service": 1114668,
+            "accepted": 853001,
+            "prepared": 913001,
+            "received": 1114668,
+            "reserved": 852000,
+            "authorized": 852000,
+            "dispatched": 913001,
+            "orderReceived": 853001,
+            "unloadingStarted": 1054668
+          }
+        },
+        {
+          "owner": "org2",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 969669,
+            "accepted": 693001,
+            "prepared": 753001,
+            "received": 1029669,
+            "reserved": 692000,
+            "authorized": 692000,
+            "dispatched": 753001,
+            "orderReceived": 693001,
+            "unloadingStarted": 969669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1550669,
+            "accepted": 1224001,
+            "prepared": 1417335,
+            "received": 1610669,
+            "reserved": 1223000,
+            "authorized": 1223000,
+            "dispatched": 1417335,
+            "orderReceived": 1224001,
+            "pickupArrived": 1357335,
+            "pickupDispatched": 1224001,
+            "unloadingStarted": 1550669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1081335,
+            "service": 1171335,
+            "accepted": 888001,
+            "prepared": 948001,
+            "received": 1171335,
+            "reserved": 887000,
+            "authorized": 887000,
+            "dispatched": 948001,
+            "orderReceived": 888001,
+            "unloadingStarted": 1111335
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-4",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 2,
+          "quantity": 2,
+          "times": {
+            "arrived": 1050669,
+            "accepted": 724001,
+            "prepared": 917335,
+            "received": 1110669,
+            "reserved": 723000,
+            "authorized": 723000,
+            "dispatched": 917335,
+            "orderReceived": 724001,
+            "pickupArrived": 857335,
+            "pickupDispatched": 724001,
+            "unloadingStarted": 1050669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-1",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 524334,
+            "service": 584334,
+            "authorized": 391000,
+            "dispatched": 391000
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "proposalId": "proposal_19f77a76-9bea-4e96-9597-68cb1573b1fe",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "pending",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "proposalId": "proposal_35c63ec4-b6b0-43bc-8f86-0f085f4e024d",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "checked-service-composition",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 2,
+          "proposalId": "proposal_b558b2b1-1c2b-4755-a92c-a60d6106ba99",
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 3,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 4,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 5,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 6,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 7,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 8,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 9,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 10,
+          "proposalId": "proposal_2c37f14c-2b2d-4460-9827-56897ed34218",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "checked-service-composition",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 11,
+          "proposalId": "proposal_122c07e0-6b92-4e58-852f-06ec1a99f9c9",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "checked-service-composition",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "distributed",
+      "seed": "delegated-final-2026-distributed-01",
+      "treatment": "B6",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-distributed-01-B6.json",
+      "status": "failed",
+      "errors": [
+        {
+          "phase": "policy_round",
+          "round": 11,
+          "code": "PROVIDER_TIMEOUT"
+        }
+      ],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 542144500,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 158550160,
+          "onTime": 0
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 1,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 1,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 854685,
+          "p95": 2831003,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 937352,
+          "p95": 3679004,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 937352,
+          "p95": 3679004,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 937352,
+              "firstServiceAt": 854685,
+              "sufficientServiceAt": 937352,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 854685,
+              "timeToSufficientServiceMs": 937352,
+              "uncoveredUnitMs": 542144500
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3679004,
+              "firstServiceAt": 2831003,
+              "sufficientServiceAt": 3679004,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2831003,
+              "timeToSufficientServiceMs": 3679004,
+              "uncoveredUnitMs": 158550160
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 14.24475,
+          "sufficientMin": 15.622533333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 47.18338333333333,
+          "sufficientMin": 61.31673333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 24500,
+          "fuelMl": 4410,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 155.9582888888889,
+          "operatingHours": 3.3294444444444444,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 3,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 40,
+          "accepted": 40,
+          "interpreted": 10,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 127666,
+            "p95": 287380
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 19,
+      "toolCost": 19,
+      "operatorReviewMs": 300000,
+      "usage": {
+        "calls": 34,
+        "knownCostUsd": 0.06558776000000001,
+        "chargedBudgetUsd": 0.09493652000000001,
+        "models": [
+          "google/gemma-4-31b-it"
+        ],
+        "unknownCostCalls": 3,
+        "providerWallMs": 881115.9653999999,
+        "providerWallMissing": 0,
+        "failedCalls": 3
+      },
+      "totalWallMs": 938338.8407,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 953017,
+          "arrivedAt": 953017,
+          "observedAt": 1013017,
+          "completedAt": 1014018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 1013017,
+            "validUntil": 22613017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 953017,
+          "arrivedAt": 953017,
+          "observedAt": 1013017,
+          "completedAt": 1014018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 1013017,
+            "validUntil": 22613017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 953017,
+          "arrivedAt": 953017,
+          "observedAt": 1013017,
+          "completedAt": 1014018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 1013017,
+            "validUntil": 22613017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 953017,
+          "arrivedAt": 953017,
+          "observedAt": 1013017,
+          "completedAt": 1014018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 1013017,
+            "validUntil": 22613017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 3619004,
+            "service": 3679004,
+            "prepared": 3494003,
+            "received": 3679004,
+            "authorized": 3308001,
+            "dispatched": 3494003,
+            "orderReceived": 3309002,
+            "pickupDispatched": 3309002
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 3197003,
+            "service": 3257003,
+            "prepared": 3072002,
+            "received": 3257003,
+            "authorized": 2886000,
+            "dispatched": 3072002,
+            "orderReceived": 2887001,
+            "pickupDispatched": 2887001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2771003,
+            "service": 2831003,
+            "prepared": 2646002,
+            "received": 2831003,
+            "authorized": 2460000,
+            "dispatched": 2646002,
+            "orderReceived": 2461001,
+            "pickupDispatched": 2461001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 162,
+          "quantity": 162,
+          "times": {
+            "arrived": 1516020,
+            "accepted": 1231019,
+            "prepared": 1291019,
+            "received": 1576020,
+            "reserved": 1230018,
+            "authorized": 1230018,
+            "dispatched": 1291019,
+            "orderReceived": 1231019,
+            "unloadingStarted": 1516020
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-1",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 100,
+          "quantity": 100,
+          "times": {
+            "arrived": 794685,
+            "service": 854685,
+            "accepted": 593018,
+            "prepared": 653018,
+            "received": 854685,
+            "reserved": 592017,
+            "authorized": 592017,
+            "dispatched": 653018,
+            "orderReceived": 593018,
+            "unloadingStarted": 794685
+          }
+        },
+        {
+          "owner": "org2",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1569669,
+            "accepted": 1293001,
+            "prepared": 1353001,
+            "received": 1629669,
+            "reserved": 1292000,
+            "authorized": 1292000,
+            "dispatched": 1353001,
+            "orderReceived": 1293001,
+            "unloadingStarted": 1569669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 2192669,
+            "accepted": 1866001,
+            "prepared": 2059335,
+            "received": 2252669,
+            "reserved": 1865000,
+            "authorized": 1865000,
+            "dispatched": 2059335,
+            "orderReceived": 1866001,
+            "pickupArrived": 1999335,
+            "pickupDispatched": 1866001,
+            "unloadingStarted": 2192669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 2,
+          "quantity": 2,
+          "times": {
+            "arrived": 1650669,
+            "accepted": 1324001,
+            "prepared": 1517335,
+            "received": 1710669,
+            "reserved": 1323000,
+            "authorized": 1323000,
+            "dispatched": 1517335,
+            "orderReceived": 1324001,
+            "pickupArrived": 1457335,
+            "pickupDispatched": 1324001,
+            "unloadingStarted": 1650669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-4",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 953017,
+            "service": 1013017,
+            "authorized": 953017,
+            "dispatched": 953017
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 847352,
+            "service": 937352,
+            "accepted": 654018,
+            "prepared": 714018,
+            "received": 937352,
+            "reserved": 653017,
+            "authorized": 653017,
+            "dispatched": 714018,
+            "orderReceived": 654018,
+            "unloadingStarted": 877352
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 200,
+          "quantity": 200,
+          "times": {
+            "arrived": 817352,
+            "service": 877352,
+            "accepted": 624018,
+            "prepared": 684018,
+            "received": 877352,
+            "reserved": 623017,
+            "authorized": 623017,
+            "dispatched": 684018,
+            "orderReceived": 624018,
+            "unloadingStarted": 817352
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "calls": 5,
+          "proposalId": "proposal_5966529f-e1fb-4a9c-bfc5-9ef3ebe954c6",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_assessment",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "calls": 6,
+          "proposalId": "proposal_c850a7da-024e-41cc-8095-8e55a7d2078d",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "failed",
+              "error": "VALIDATION"
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 2,
+          "calls": 8,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "compose_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "failed",
+              "error": "ACCESS"
+            },
+            {
+              "tool": "verify",
+              "state": "failed",
+              "error": "ACCESS"
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "lookup",
+              "state": "failed",
+              "error": "NOT_FOUND"
+            },
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 3,
+          "calls": 3,
+          "proposalId": "proposal_e8a97b70-e409-4eb0-ba6a-a177206abc98",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 4,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 5,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 6,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 7,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 8,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 9,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "inconclusive",
+          "round": 10,
+          "calls": 8,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "failed",
+              "error": "VALIDATION"
+            },
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "lookup",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "state": "failed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "distributed",
+      "seed": "delegated-final-2026-distributed-01",
+      "treatment": "B7",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-distributed-01-B7.json",
+      "status": "completed",
+      "errors": [],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 515144500,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 155250170,
+          "onTime": 1
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 809685,
+          "p95": 2784004,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 892352,
+          "p95": 3569003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 892352,
+          "p95": 3569003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 892352,
+              "firstServiceAt": 809685,
+              "sufficientServiceAt": 892352,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 809685,
+              "timeToSufficientServiceMs": 892352,
+              "uncoveredUnitMs": 515144500
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3569003,
+              "firstServiceAt": 2784004,
+              "sufficientServiceAt": 3569003,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2784004,
+              "timeToSufficientServiceMs": 3569003,
+              "uncoveredUnitMs": 155250170
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 13.49475,
+          "sufficientMin": 14.872533333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": false,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 46.40006666666667,
+          "sufficientMin": 59.483383333333336,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 24500,
+          "fuelMl": 4410,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 156.87495277777776,
+          "operatingHours": 3.3469444444444445,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 3,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 40,
+          "accepted": 40,
+          "interpreted": 10,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 77066,
+            "p95": 271330
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 17,
+      "toolCost": 17,
+      "operatorReviewMs": 330000,
+      "usage": {
+        "calls": 24,
+        "knownCostUsd": 0.04111676,
+        "chargedBudgetUsd": 0.04111676,
+        "models": [
+          "google/gemma-4-31b-it"
+        ],
+        "unknownCostCalls": 0,
+        "providerWallMs": 226947.19879999943,
+        "providerWallMissing": 0,
+        "failedCalls": 0
+      },
+      "totalWallMs": 294976.7143,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 908017,
+          "arrivedAt": 908017,
+          "observedAt": 968017,
+          "completedAt": 969018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 968017,
+            "validUntil": 22568017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 908017,
+          "arrivedAt": 908017,
+          "observedAt": 968017,
+          "completedAt": 969018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 968017,
+            "validUntil": 22568017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 908017,
+          "arrivedAt": 908017,
+          "observedAt": 968017,
+          "completedAt": 969018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 968017,
+            "validUntil": 22568017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "sourceOwner": "org3",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 908017,
+          "arrivedAt": 908017,
+          "observedAt": 968017,
+          "completedAt": 969018,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 968017,
+            "validUntil": 22568017,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 3509003,
+            "service": 3569003,
+            "prepared": 3384002,
+            "received": 3569003,
+            "authorized": 3198000,
+            "dispatched": 3384002,
+            "orderReceived": 3199001,
+            "pickupDispatched": 3199001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 3134003,
+            "service": 3194003,
+            "prepared": 3009002,
+            "received": 3194003,
+            "authorized": 2823000,
+            "dispatched": 3009002,
+            "orderReceived": 2824001,
+            "pickupDispatched": 2824001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2724004,
+            "service": 2784004,
+            "prepared": 2599003,
+            "received": 2784004,
+            "authorized": 2413001,
+            "dispatched": 2599003,
+            "orderReceived": 2414002,
+            "pickupDispatched": 2414002
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 162,
+          "quantity": 162,
+          "times": {
+            "arrived": 1471020,
+            "accepted": 1186019,
+            "prepared": 1246019,
+            "received": 1531020,
+            "reserved": 1185018,
+            "authorized": 1185018,
+            "dispatched": 1246019,
+            "orderReceived": 1186019,
+            "unloadingStarted": 1471020
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-1",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 100,
+          "quantity": 100,
+          "times": {
+            "arrived": 749685,
+            "service": 809685,
+            "accepted": 548018,
+            "prepared": 608018,
+            "received": 809685,
+            "reserved": 547017,
+            "authorized": 547017,
+            "dispatched": 608018,
+            "orderReceived": 548018,
+            "unloadingStarted": 749685
+          }
+        },
+        {
+          "owner": "org2",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1554687,
+            "accepted": 1278019,
+            "prepared": 1338019,
+            "received": 1614687,
+            "reserved": 1277018,
+            "authorized": 1277018,
+            "dispatched": 1338019,
+            "orderReceived": 1278019,
+            "unloadingStarted": 1554687
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 2129669,
+            "accepted": 1803001,
+            "prepared": 1996335,
+            "received": 2189669,
+            "reserved": 1802000,
+            "authorized": 1802000,
+            "dispatched": 1996335,
+            "orderReceived": 1803001,
+            "pickupArrived": 1936335,
+            "pickupDispatched": 1803001,
+            "unloadingStarted": 2129669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 2,
+          "quantity": 2,
+          "times": {
+            "arrived": 1635687,
+            "accepted": 1309019,
+            "prepared": 1502353,
+            "received": 1695687,
+            "reserved": 1308018,
+            "authorized": 1308018,
+            "dispatched": 1502353,
+            "orderReceived": 1309019,
+            "pickupArrived": 1442353,
+            "pickupDispatched": 1309019,
+            "unloadingStarted": 1635687
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-4",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 908017,
+            "service": 968017,
+            "authorized": 908017,
+            "dispatched": 908017
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 802352,
+            "service": 892352,
+            "accepted": 609018,
+            "prepared": 669018,
+            "received": 892352,
+            "reserved": 608017,
+            "authorized": 608017,
+            "dispatched": 669018,
+            "orderReceived": 609018,
+            "unloadingStarted": 832352
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 200,
+          "quantity": 200,
+          "times": {
+            "arrived": 772352,
+            "service": 832352,
+            "accepted": 579018,
+            "prepared": 639018,
+            "received": 832352,
+            "reserved": 578017,
+            "authorized": 578017,
+            "dispatched": 639018,
+            "orderReceived": 579018,
+            "unloadingStarted": 772352
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "calls": 4,
+          "proposalId": "proposal_666cfa17-9d92-499e-ac9d-f23c0105a09c",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_assessment",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "calls": 4,
+          "proposalId": "proposal_9e99a2a8-857b-47bc-b8fd-cfde2d977f1e",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 2,
+          "calls": 8,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "compose_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "failed",
+              "error": "ACCESS"
+            },
+            {
+              "tool": "verify",
+              "state": "failed",
+              "error": "ACCESS"
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 3,
+          "calls": 3,
+          "proposalId": "proposal_37fcc139-bce0-45c7-ac34-dc0a431ec1be",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 4,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 5,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 6,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 7,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 8,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 9,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "ready",
+          "round": 10,
+          "calls": 3,
+          "proposalId": "proposal_02dc3bd5-09d8-4bbb-8a18-0f1cea0fe425",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 11,
+          "calls": 2,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "finish_without_proposal",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "delayed",
+      "seed": "delegated-final-2026-delayed-01",
+      "treatment": "B5",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-delayed-01-B5.json",
+      "status": "completed",
+      "errors": [],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 680400900,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 131530150,
+          "onTime": 1
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          },
+          "false": {}
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 1120668,
+          "p95": 2291003,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 1147335,
+          "p95": 3131003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 1147335,
+          "p95": 3131003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 1147335,
+              "firstServiceAt": 1120668,
+              "sufficientServiceAt": 1147335,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 1120668,
+              "timeToSufficientServiceMs": 1147335,
+              "uncoveredUnitMs": 680400900
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3131003,
+              "firstServiceAt": 2291003,
+              "sufficientServiceAt": 3131003,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2291003,
+              "timeToSufficientServiceMs": 3131003,
+              "uncoveredUnitMs": 131530150
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 18.6778,
+          "sufficientMin": 19.12225,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 38.18338333333333,
+          "sufficientMin": 52.18338333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 30000,
+          "fuelMl": 5400,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 163.46384722222223,
+          "operatingHours": 3.48,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 1,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 40,
+          "accepted": 40,
+          "interpreted": 0,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 90397,
+            "p95": 503819
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 16,
+      "toolCost": 16,
+      "operatorReviewMs": 240000,
+      "usage": {
+        "calls": 0,
+        "knownCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "models": [],
+        "unknownCostCalls": 0,
+        "providerWallMs": 0,
+        "providerWallMissing": 0,
+        "failedCalls": 0
+      },
+      "totalWallMs": 71478.83330000006,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 303017,
+          "arrivedAt": 528018,
+          "observedAt": 588018,
+          "completedAt": 589019,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 588018,
+            "validUntil": 22188018,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 303017,
+          "arrivedAt": 528018,
+          "observedAt": 588018,
+          "completedAt": 589019,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 588018,
+            "validUntil": 22188018,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 3071003,
+            "service": 3131003,
+            "prepared": 2946002,
+            "received": 3131003,
+            "authorized": 2760000,
+            "dispatched": 2946002,
+            "orderReceived": 2761001,
+            "pickupDispatched": 2761001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2660003,
+            "service": 2720003,
+            "prepared": 2535002,
+            "received": 2720003,
+            "authorized": 2349000,
+            "dispatched": 2535002,
+            "orderReceived": 2350001,
+            "pickupDispatched": 2350001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2231003,
+            "service": 2291003,
+            "prepared": 2106002,
+            "received": 2291003,
+            "authorized": 1920000,
+            "dispatched": 2106002,
+            "orderReceived": 1921001,
+            "pickupDispatched": 1921001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1707003,
+            "accepted": 1197001,
+            "prepared": 1482002,
+            "received": 1767003,
+            "reserved": 1196000,
+            "authorized": 1196000,
+            "dispatched": 1482002,
+            "orderReceived": 1197001,
+            "pickupArrived": 1422002,
+            "pickupDispatched": 1197001,
+            "unloadingStarted": 1707003
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 181,
+          "quantity": 181,
+          "times": {
+            "arrived": 905021,
+            "accepted": 620020,
+            "prepared": 680020,
+            "received": 965021,
+            "reserved": 619019,
+            "authorized": 619019,
+            "dispatched": 680020,
+            "orderReceived": 620020,
+            "unloadingStarted": 905021
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1130022,
+            "accepted": 620020,
+            "prepared": 905021,
+            "received": 1190022,
+            "reserved": 619019,
+            "authorized": 619019,
+            "dispatched": 905021,
+            "orderReceived": 620020,
+            "pickupArrived": 845021,
+            "pickupDispatched": 620020,
+            "unloadingStarted": 1130022
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-1",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 528018,
+            "service": 588018,
+            "authorized": 303017,
+            "dispatched": 303017
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1060668,
+            "service": 1120668,
+            "accepted": 859001,
+            "prepared": 919001,
+            "received": 1120668,
+            "reserved": 858000,
+            "authorized": 858000,
+            "dispatched": 919001,
+            "orderReceived": 859001,
+            "unloadingStarted": 1060668
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-4",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 897668,
+            "accepted": 696001,
+            "prepared": 756001,
+            "received": 957668,
+            "reserved": 695000,
+            "authorized": 695000,
+            "dispatched": 756001,
+            "orderReceived": 696001,
+            "unloadingStarted": 897668
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1087335,
+            "service": 1147335,
+            "accepted": 894001,
+            "prepared": 954001,
+            "received": 1147335,
+            "reserved": 893000,
+            "authorized": 893000,
+            "dispatched": 954001,
+            "orderReceived": 894001,
+            "unloadingStarted": 1087335
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 920335,
+            "accepted": 727001,
+            "prepared": 787001,
+            "received": 1040335,
+            "reserved": 726000,
+            "authorized": 726000,
+            "dispatched": 787001,
+            "orderReceived": 727001,
+            "unloadingStarted": 980335
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "proposalId": "proposal_6a89c576-ac77-4006-9d7d-f9e7eff31df1",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "pending",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "proposalId": "proposal_abaf8943-0a31-448c-999e-e86e6e5368aa",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "checked-service-composition",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 2,
+          "proposalId": "proposal_4a5db523-d1c1-4353-a5ff-d77c0caa79a5",
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 3,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 4,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 5,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 6,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 7,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 8,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 9,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 10,
+          "error": null,
+          "steps": [
+            {
+              "tool": "shared-constrained-allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 11,
+          "proposalId": "proposal_1e3332a8-dd08-4d13-ad5a-5c6a655700e3",
+          "error": null,
+          "steps": [
+            {
+              "tool": "checked-field-assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "checked-service-composition",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "delayed",
+      "seed": "delegated-final-2026-delayed-01",
+      "treatment": "B6",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-delayed-01-B6.json",
+      "status": "completed",
+      "errors": [],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 422734300,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 144520150,
+          "onTime": 1
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          },
+          "false": {}
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 655668,
+          "p95": 2612003,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 738335,
+          "p95": 3194003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 738335,
+          "p95": 3194003,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 738335,
+              "firstServiceAt": 655668,
+              "sufficientServiceAt": 738335,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 655668,
+              "timeToSufficientServiceMs": 738335,
+              "uncoveredUnitMs": 422734300
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3194003,
+              "firstServiceAt": 2612003,
+              "sufficientServiceAt": 3194003,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2612003,
+              "timeToSufficientServiceMs": 3194003,
+              "uncoveredUnitMs": 144520150
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 10.9278,
+          "sufficientMin": 12.305583333333333,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 43.53338333333333,
+          "sufficientMin": 53.233383333333336,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 34500,
+          "fuelMl": 6210,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 159.85551388888888,
+          "operatingHours": 3.3833333333333333,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 1,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 48,
+          "accepted": 48,
+          "interpreted": 12,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 132134,
+            "p95": 370800
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 16,
+      "toolCost": 16,
+      "operatorReviewMs": 270000,
+      "usage": {
+        "calls": 16,
+        "knownCostUsd": 0.03809,
+        "chargedBudgetUsd": 0.03809,
+        "models": [
+          "google/gemma-4-31b-it"
+        ],
+        "unknownCostCalls": 0,
+        "providerWallMs": 192854.9256000002,
+        "providerWallMissing": 0,
+        "failedCalls": 0
+      },
+      "totalWallMs": 261686.89439999987,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 546000,
+          "arrivedAt": 771001,
+          "observedAt": 831001,
+          "completedAt": 832002,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 831001,
+            "validUntil": 22431001,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 546000,
+          "arrivedAt": 771001,
+          "observedAt": 831001,
+          "completedAt": 832002,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-4",
+            "observedAt": 831001,
+            "validUntil": 22431001,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-12",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 3134003,
+            "service": 3194003,
+            "prepared": 3009002,
+            "received": 3194003,
+            "authorized": 2823000,
+            "dispatched": 3009002,
+            "orderReceived": 2824001,
+            "pickupDispatched": 2824001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2957003,
+            "service": 3017003,
+            "prepared": 2832002,
+            "received": 3017003,
+            "authorized": 2646000,
+            "dispatched": 2832002,
+            "orderReceived": 2647001,
+            "pickupDispatched": 2647001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2552003,
+            "service": 2612003,
+            "prepared": 2427002,
+            "received": 2612003,
+            "authorized": 2241000,
+            "dispatched": 2427002,
+            "orderReceived": 2242001,
+            "pickupDispatched": 2242001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 2056003,
+            "accepted": 1546001,
+            "prepared": 1831002,
+            "received": 2116003,
+            "reserved": 1545000,
+            "authorized": 1545000,
+            "dispatched": 1831002,
+            "orderReceived": 1546001,
+            "pickupArrived": 1771002,
+            "pickupDispatched": 1546001,
+            "unloadingStarted": 2056003
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 181,
+          "quantity": 181,
+          "times": {
+            "arrived": 1199004,
+            "accepted": 914003,
+            "prepared": 974003,
+            "received": 1259004,
+            "reserved": 913002,
+            "authorized": 913002,
+            "dispatched": 974003,
+            "orderReceived": 914003,
+            "unloadingStarted": 1199004
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1424005,
+            "accepted": 914003,
+            "prepared": 1199004,
+            "received": 1484005,
+            "reserved": 913002,
+            "authorized": 913002,
+            "dispatched": 1199004,
+            "orderReceived": 914003,
+            "pickupArrived": 1139004,
+            "pickupDispatched": 914003,
+            "unloadingStarted": 1424005
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-4",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 771001,
+            "service": 831001,
+            "authorized": 546000,
+            "dispatched": 546000
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1339335,
+            "accepted": 996001,
+            "prepared": 1197668,
+            "received": 1399335,
+            "reserved": 995000,
+            "authorized": 995000,
+            "dispatched": 1197668,
+            "orderReceived": 996001,
+            "pickupArrived": 1137668,
+            "pickupDispatched": 996001,
+            "unloadingStarted": 1339335
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-1",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 100,
+          "quantity": 100,
+          "times": {
+            "arrived": 595668,
+            "service": 655668,
+            "accepted": 394001,
+            "prepared": 454001,
+            "received": 655668,
+            "reserved": 393000,
+            "authorized": 393000,
+            "dispatched": 454001,
+            "orderReceived": 394001,
+            "unloadingStarted": 595668
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1353669,
+            "accepted": 1027001,
+            "prepared": 1220335,
+            "received": 1413669,
+            "reserved": 1026000,
+            "authorized": 1026000,
+            "dispatched": 1220335,
+            "orderReceived": 1027001,
+            "pickupArrived": 1160335,
+            "pickupDispatched": 1027001,
+            "unloadingStarted": 1353669
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 648335,
+            "service": 738335,
+            "accepted": 455001,
+            "prepared": 515001,
+            "received": 738335,
+            "reserved": 454000,
+            "authorized": 454000,
+            "dispatched": 515001,
+            "orderReceived": 455001,
+            "unloadingStarted": 678335
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 200,
+          "quantity": 200,
+          "times": {
+            "arrived": 618335,
+            "service": 678335,
+            "accepted": 425001,
+            "prepared": 485001,
+            "received": 678335,
+            "reserved": 424000,
+            "authorized": 424000,
+            "dispatched": 485001,
+            "orderReceived": 425001,
+            "unloadingStarted": 618335
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "calls": 3,
+          "proposalId": "proposal_d2b112cb-f791-438e-a95a-4fbf3b210342",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "failed",
+              "error": "VALIDATION"
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "calls": 4,
+          "proposalId": "proposal_a8d50eea-241e-4c45-8189-3fbf05ef8b1a",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_assessment",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 2,
+          "calls": 2,
+          "proposalId": "proposal_5042d9cd-54d0-4f44-85d3-264c79a5952c",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 3,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 4,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 5,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 6,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 7,
+          "calls": 1,
+          "waitReceipt": [
+            {
+              "proposal": "proposal_5042d9cd-54d0-4f44-85d3-264c79a5952c",
+              "state": "executing",
+              "building": "b13"
+            }
+          ],
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 8,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "ready",
+          "round": 9,
+          "calls": 2,
+          "proposalId": "proposal_bcd6dbba-e523-4056-976d-49a19a22a870",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "draft_response",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 10,
+          "calls": 2,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "plan_repair",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "finish_without_proposal",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 11,
+          "calls": 2,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "finish_without_proposal",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "delayed",
+      "seed": "delegated-final-2026-delayed-01",
+      "treatment": "B7",
+      "scenario": "S19",
+      "file": "S19-delegated-final-2026-delayed-01-B7.json",
+      "status": "failed",
+      "errors": [
+        {
+          "phase": "policy_round",
+          "round": 8,
+          "code": "PROVIDER_TIMEOUT"
+        }
+      ],
+      "hashes": {
+        "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluator": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "native": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 745812300,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 133470160,
+          "onTime": 1
+        }
+      },
+      "subgroups": {
+        "silent": {
+          "true": {},
+          "false": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          }
+        },
+        "remote": {
+          "true": {
+            "water": {
+              "needs": 1,
+              "demand": 600,
+              "served": 600,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            },
+            "shelter": {
+              "needs": 1,
+              "demand": 50,
+              "served": 50,
+              "missedDeadline": 0,
+              "pendingBeforeDeadline": 0,
+              "rightCensored": 0
+            }
+          },
+          "false": {}
+        }
+      },
+      "response": {
+        "eligibleNeeds": 2,
+        "completed": 2,
+        "rightCensored": 0,
+        "firstUsefulCompleted": 2,
+        "firstUsefulRightCensored": 0,
+        "firstUsefulServiceMs": {
+          "p50": 1229687,
+          "p95": 2360003,
+          "samples": 2,
+          "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+        },
+        "sufficientServiceMs": {
+          "p50": 1256354,
+          "p95": 3127004,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "needToServiceMs": {
+          "p50": 1256354,
+          "p95": 3127004,
+          "samples": 2,
+          "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+        },
+        "excludedNonpositiveNeeds": 0,
+        "excludedRetiredPositiveNeeds": 0,
+        "episodes": {
+          "eligible": 2,
+          "completed": 2,
+          "retired": 0,
+          "rightCensored": 0,
+          "perEpisode": [
+            {
+              "need": "need-water-main",
+              "episode": 1,
+              "building": "b13",
+              "type": "water",
+              "unit": "L",
+              "startedAt": 0,
+              "quantity": 600,
+              "peakQuantity": 600,
+              "targetQuantity": 600,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 1256354,
+              "firstServiceAt": 1229687,
+              "sufficientServiceAt": 1256354,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 1229687,
+              "timeToSufficientServiceMs": 1256354,
+              "uncoveredUnitMs": 745812300
+            },
+            {
+              "need": "need-case-2",
+              "episode": 1,
+              "building": "b2",
+              "type": "shelter",
+              "unit": "place",
+              "startedAt": 0,
+              "quantity": 50,
+              "peakQuantity": 50,
+              "targetQuantity": 50,
+              "baselineServed": 0,
+              "state": "covered",
+              "closedReason": "physical_service",
+              "endedAt": 3127004,
+              "firstServiceAt": 2360003,
+              "sufficientServiceAt": 3127004,
+              "firstUsefulCensored": false,
+              "sufficientCensored": false,
+              "censoredAt": null,
+              "timeToFirstUsefulServiceMs": 2360003,
+              "timeToSufficientServiceMs": 3127004,
+              "uncoveredUnitMs": 133470160
+            }
+          ],
+          "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+        }
+      },
+      "perCommunity": [
+        {
+          "id": "need-water-main",
+          "type": "water",
+          "quantity": 600,
+          "served": 600,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 20.494783333333334,
+          "sufficientMin": 20.939233333333334,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        },
+        {
+          "id": "need-case-2",
+          "type": "shelter",
+          "quantity": 50,
+          "served": 50,
+          "silent": false,
+          "remote": true,
+          "responseEpisode": 1,
+          "responseState": "covered",
+          "firstUsefulMin": 39.33338333333333,
+          "sufficientMin": 52.116733333333336,
+          "firstUsefulCensored": false,
+          "sufficientCensored": false
+        }
+      ],
+      "guardrails": {
+        "physical": {
+          "closedCrossings": 0,
+          "trafficQueue": 0,
+          "overprovidedByType": {
+            "water": {
+              "quantity": 0,
+              "unit": "L"
+            },
+            "shelter": {
+              "quantity": 0,
+              "unit": "place"
+            }
+          },
+          "distanceM": 30000,
+          "fuelMl": 5400,
+          "arrivedNotReceived": 1,
+          "facilitiesOperating": 1,
+          "blocked": 0
+        },
+        "collective": {
+          "shelterPlaceHours": 162.92495555555556,
+          "operatingHours": 3.4491666666666667,
+          "waterProduced": 0,
+          "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+        },
+        "ledgerValid": true,
+        "invalidActions": 1,
+        "staleOrders": 0,
+        "failedTrips": 0,
+        "coordination": {
+          "expired": 0,
+          "withdrawn": 0,
+          "orphanReservations": 0,
+          "clarifications": 0,
+          "reviewQueued": 0,
+          "loansOverdue": 0
+        },
+        "sourceWorldInformation": {
+          "downloaded": 40,
+          "accepted": 40,
+          "interpreted": 10,
+          "discarded": 0,
+          "downloadLatencyMs": {
+            "p50": 167379,
+            "p95": 563819
+          },
+          "confirmedFalse": 0,
+          "rejectedObservedTrue": 0,
+          "falseMerges": 0,
+          "unobservedNeeds": 0,
+          "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+        },
+        "invariants": []
+      },
+      "queries": 17,
+      "toolCost": 17,
+      "operatorReviewMs": 240000,
+      "usage": {
+        "calls": 27,
+        "knownCostUsd": 0.062326280000000005,
+        "chargedBudgetUsd": 0.08246523999999998,
+        "models": [
+          "google/gemma-4-31b-it"
+        ],
+        "unknownCostCalls": 2,
+        "providerWallMs": 747769.3839999996,
+        "providerWallMissing": 0,
+        "failedCalls": 2
+      },
+      "totalWallMs": 812807.8070000003,
+      "before": null,
+      "after": null,
+      "physicalRepairSucceeded": null,
+      "fieldVisits": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 363017,
+          "arrivedAt": 588018,
+          "observedAt": 648018,
+          "completedAt": 649019,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 648018,
+            "validUntil": 22248018,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "assessments": [
+        {
+          "receivedBy": "org0",
+          "sourceOwner": "org0",
+          "sourceId": "inspection-2",
+          "entity": "b13",
+          "state": "completed",
+          "method": "field",
+          "purpose": "facility_safety",
+          "confirmedBySource": true,
+          "startedAt": 363017,
+          "arrivedAt": 588018,
+          "observedAt": 648018,
+          "completedAt": 649019,
+          "resultVersion": 1,
+          "safe": true,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org0-1",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 648018,
+            "validUntil": 22248018,
+            "inspectorOrg": "org0",
+            "staffResource": "r-org0-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          }
+        }
+      ],
+      "ownerOperations": [
+        {
+          "owner": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 10,
+          "times": {
+            "arrived": 3067004,
+            "service": 3127004,
+            "prepared": 2942003,
+            "received": 3127004,
+            "authorized": 2756001,
+            "dispatched": 2942003,
+            "orderReceived": 2757002,
+            "pickupDispatched": 2757002
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2690003,
+            "service": 2750003,
+            "prepared": 2565002,
+            "received": 2750003,
+            "authorized": 2379000,
+            "dispatched": 2565002,
+            "orderReceived": 2380001,
+            "pickupDispatched": 2380001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "quantity": 20,
+          "times": {
+            "arrived": 2300003,
+            "service": 2360003,
+            "prepared": 2175002,
+            "received": 2360003,
+            "authorized": 1989000,
+            "dispatched": 2175002,
+            "orderReceived": 1990001,
+            "pickupDispatched": 1990001
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1856003,
+            "accepted": 1346001,
+            "prepared": 1631002,
+            "received": 1916003,
+            "reserved": 1345000,
+            "authorized": 1345000,
+            "dispatched": 1631002,
+            "orderReceived": 1346001,
+            "pickupArrived": 1571002,
+            "pickupDispatched": 1346001,
+            "unloadingStarted": 1856003
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 181,
+          "quantity": 181,
+          "times": {
+            "arrived": 1010021,
+            "accepted": 725020,
+            "prepared": 785020,
+            "received": 1100021,
+            "reserved": 724019,
+            "authorized": 724019,
+            "dispatched": 785020,
+            "orderReceived": 725020,
+            "unloadingStarted": 1040021
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 1235022,
+            "accepted": 725020,
+            "prepared": 1010021,
+            "received": 1295022,
+            "reserved": 724019,
+            "authorized": 724019,
+            "dispatched": 1010021,
+            "orderReceived": 725020,
+            "pickupArrived": 950021,
+            "pickupDispatched": 725020,
+            "unloadingStarted": 1235022
+          }
+        },
+        {
+          "owner": "org0",
+          "id": "operation-1",
+          "type": "inspection",
+          "state": "completed",
+          "times": {
+            "arrived": 588018,
+            "service": 648018,
+            "authorized": 363017,
+            "dispatched": 363017
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1169687,
+            "service": 1229687,
+            "accepted": 968020,
+            "prepared": 1028020,
+            "received": 1229687,
+            "reserved": 967019,
+            "authorized": 967019,
+            "dispatched": 1028020,
+            "orderReceived": 968020,
+            "unloadingStarted": 1169687
+          }
+        },
+        {
+          "owner": "org1",
+          "id": "operation-4",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 961687,
+            "accepted": 760020,
+            "prepared": 820020,
+            "received": 1021687,
+            "reserved": 759019,
+            "authorized": 759019,
+            "dispatched": 820020,
+            "orderReceived": 760020,
+            "unloadingStarted": 961687
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 300,
+          "quantity": 300,
+          "times": {
+            "arrived": 1196354,
+            "service": 1256354,
+            "accepted": 1003020,
+            "prepared": 1063020,
+            "received": 1256354,
+            "reserved": 1002019,
+            "authorized": 1002019,
+            "dispatched": 1063020,
+            "orderReceived": 1003020,
+            "unloadingStarted": 1196354
+          }
+        },
+        {
+          "owner": "org3",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "received": 1,
+          "quantity": 1,
+          "times": {
+            "arrived": 984354,
+            "accepted": 791020,
+            "prepared": 851020,
+            "received": 1044354,
+            "reserved": 790019,
+            "authorized": 790019,
+            "dispatched": 851020,
+            "orderReceived": 791020,
+            "unloadingStarted": 984354
+          }
+        }
+      ],
+      "activities": [
+        {
+          "state": "ready",
+          "round": 0,
+          "calls": 4,
+          "proposalId": "proposal_ce73f39d-7286-4dd6-94e0-2089f50cbb59",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "verify",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_assessment",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 1,
+          "calls": 3,
+          "proposalId": "proposal_4d2beba1-88ac-4be9-82be-d9c1bd8e31ed",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 2,
+          "calls": 3,
+          "proposalId": "proposal_36d9e5ea-5e7f-41bb-8dbc-0245aa1e522b",
+          "error": null,
+          "steps": [
+            {
+              "tool": "plan_allocations",
+              "state": "failed",
+              "error": "VALIDATION"
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_allocation",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 3,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 4,
+          "calls": 1,
+          "waitReceipt": [
+            {
+              "proposal": "proposal_4d2beba1-88ac-4be9-82be-d9c1bd8e31ed",
+              "state": "executing",
+              "building": "b13"
+            }
+          ],
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 5,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "waiting_receipt",
+          "round": 6,
+          "calls": 0,
+          "error": null,
+          "steps": []
+        },
+        {
+          "state": "inconclusive",
+          "round": 7,
+          "calls": 2,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "read_action_contract",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "ready",
+          "round": 9,
+          "calls": 3,
+          "proposalId": "proposal_a245ec8b-bcf9-40c2-9b25-8d5d3d6b0098",
+          "error": null,
+          "steps": [
+            {
+              "tool": "find_facilities",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "read_context",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 10,
+          "calls": 3,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "prepare_repair",
+              "state": "failed",
+              "error": "REPAIR_PENDING"
+            },
+            {
+              "tool": "plan_allocations",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "plan_repair",
+              "state": "completed",
+              "error": null
+            },
+            {
+              "tool": "finish_without_proposal",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        },
+        {
+          "state": "inconclusive",
+          "round": 11,
+          "calls": 1,
+          "proposalId": null,
+          "error": null,
+          "steps": [
+            {
+              "tool": "finish_without_proposal",
+              "state": "completed",
+              "error": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contrasts": [
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-distributed-01",
+      "variant": "distributed",
+      "baseline": "B5",
+      "candidate": "B6",
+      "validPair": true,
+      "native": [
+        {
+          "type": "water",
+          "baseline": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 685800900,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 542144500,
+            "onTime": 1
+          },
+          "deficitReduction": 0.2094724576768564,
+          "servedDifference": 0
+        },
+        {
+          "type": "shelter",
+          "baseline": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 125760170,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 158550160,
+            "onTime": 0
+          },
+          "deficitReduction": -0.26073430085216964,
+          "servedDifference": 0
+        }
+      ],
+      "fewerQueries": false,
+      "costDifference": 0.06558776000000001,
+      "note": "A failed but same-build episode is retained. Missing/censored service is not imputed as success. Lower queries alone do not establish benefit."
+    },
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-distributed-01",
+      "variant": "distributed",
+      "baseline": "B5",
+      "candidate": "B7",
+      "validPair": true,
+      "native": [
+        {
+          "type": "water",
+          "baseline": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 685800900,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 515144500,
+            "onTime": 1
+          },
+          "deficitReduction": 0.24884248475031168,
+          "servedDifference": 0
+        },
+        {
+          "type": "shelter",
+          "baseline": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 125760170,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 155250170,
+            "onTime": 1
+          },
+          "deficitReduction": -0.23449395782464344,
+          "servedDifference": 0
+        }
+      ],
+      "fewerQueries": false,
+      "costDifference": 0.04111676,
+      "note": "A failed but same-build episode is retained. Missing/censored service is not imputed as success. Lower queries alone do not establish benefit."
+    },
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-delayed-01",
+      "variant": "delayed",
+      "baseline": "B5",
+      "candidate": "B6",
+      "validPair": true,
+      "native": [
+        {
+          "type": "water",
+          "baseline": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 680400900,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 422734300,
+            "onTime": 1
+          },
+          "deficitReduction": 0.37869820571959856,
+          "servedDifference": 0
+        },
+        {
+          "type": "shelter",
+          "baseline": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 131530150,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 144520150,
+            "onTime": 1
+          },
+          "deficitReduction": -0.098760626365894,
+          "servedDifference": 0
+        }
+      ],
+      "fewerQueries": false,
+      "costDifference": 0.03809,
+      "note": "A failed but same-build episode is retained. Missing/censored service is not imputed as success. Lower queries alone do not establish benefit."
+    },
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-delayed-01",
+      "variant": "delayed",
+      "baseline": "B5",
+      "candidate": "B7",
+      "validPair": true,
+      "native": [
+        {
+          "type": "water",
+          "baseline": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 680400900,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "L",
+            "demand": 600,
+            "served": 600,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 745812300,
+            "onTime": 1
+          },
+          "deficitReduction": -0.09613655713859282,
+          "servedDifference": 0
+        },
+        {
+          "type": "shelter",
+          "baseline": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 131530150,
+            "onTime": 1
+          },
+          "candidate": {
+            "unit": "place",
+            "demand": 50,
+            "served": 50,
+            "pending": 0,
+            "overprovided": 0,
+            "uncoveredUnitMs": 133470160,
+            "onTime": 1
+          },
+          "deficitReduction": -0.014749546016635806,
+          "servedDifference": 0
+        }
+      ],
+      "fewerQueries": false,
+      "costDifference": 0.062326280000000005,
+      "note": "A failed but same-build episode is retained. Missing/censored service is not imputed as success. Lower queries alone do not establish benefit."
+    }
+  ],
+  "limitations": [
+    "Internal developer-defined scenarios, finite scripted review, modeled physics/delays; not external disaster validation.",
+    "Preserve native units and silent/remote-group tradeoffs; no aggregate invented score.",
+    "Source-world claim statistics are not external-platform interpretation precision/recall.",
+    "S19 physical composition is not automatically marginal model benefit; K07/K14 are internal policy ablations."
+  ]
+}

@@ -172,7 +172,7 @@ Los tres ensayos de descubrimiento interrumpidos y la composición anterior cons
 
 El nuevo gate exige pruebas de coalescencia, recuperación/fencing, cambio físico final y estabilidad frente a distintas cadencias reales de sondeo. Tras verificarlo se congelan nuevas huellas y se repiten los mismos perfiles y semillas completos, con la corrección común a todas las referencias.
 
-## 9. Versión congelada para las comparaciones nuevas
+## 9. Versión congelada anterior, superada por las reparaciones de §10
 
 La [verificación 1791837370142](../reports/verifications/1791837370142.json) pasó **215/215 pruebas de plataforma y 154/154 de simulador**, con cero fallos, cancelaciones, omisiones o cambios de huella. Las cuatro suites de navegador repitieron **84 comprobaciones**. El [sello de la versión](../reports/frozen-candidate-final.json) vincula sus recibos, hashes de tests y el commit `7cc8fd1` con los bytes probados. La revisión de credenciales/artefactos privados y comparación de bytes staged también pasó; los secretos permanecen fuera de Git.
 
@@ -212,3 +212,70 @@ La versión siguiente retiene mensajes estrictamente de apoyo/administración si
 ### 10.2 Segundo perfil de volumen, separado del original
 
 [El plan de carga informativa](../reports/information-load-plan.json) predeclara 24 necesidades y 768 distractores, con la misma física y capacidad del perfil original. Antes de gastar inferencia se inspeccionarán B5/B8 gratuitos. Sólo se admite el contraste si hay un cuello causal de información, manteniendo los resultados originales y controles de lectura de 0/5/15/30 segundos, reportes inmediatos, silencio y pérdida. El porcentaje de ruido y la productividad de lectura son hipótesis internas no calibradas. Aumentar ruido no demuestra por sí solo innovación semántica ni superioridad sobre un filtro barato; B8 y los controles pueden refutar la afirmación. El endpoint sigue siendo ayuda suficiente física con censura al horizonte fijo, acompañado de primera ayuda, cobertura y déficit por unidad nativa.
+
+## 11. Nuevo snapshot verificado: mecanismos cerrados, comparación en curso
+
+La [verificación 1791841893496](../reports/verifications/1791841893496.json) pasó **274/274 pruebas de plataforma y 173/173 del simulador**, sin fallos, omisiones ni cancelaciones. Las tres huellas de contenido iniciales y finales son iguales. [El recorrido de navegador actual](../reports/ui-verifications/1791841913671.json) pasó **84 comprobaciones** en las cuatro suites y mantuvo esas mismas huellas. [El nuevo sello](../reports/frozen-candidate-repaired-1791842535794.json) vincula los recibos y hashes de tests al commit privado `f37d1325c7be639cbbe85d1d6231c3bb63133471`. El motor está guardado en `237ac30dd1fb7277b2d847d898632c38dff83ed1`.
+
+| Capa | Huella de contenido del snapshot nuevo |
+|---|---|
+| Candidato | `86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc` |
+| Evaluador | `9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d` |
+| Simulador | `bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c` |
+
+Las reparaciones preservan ventanas de pickup revisadas, versiones materiales de operaciones, stock real por dueño, cualificaciones transportadas, holds de servicio y refresh de instalaciones. Las propuestas guardan comparaciones que realmente se hicieron y sus checkpoints; los cambios de hechos/permiso/vigencia invalidan esa comparación. Un fallo de almacenamiento comprobado revierte propuesta, auditoría, job e idempotencia como una única transacción. Estos contratos hacen confiable el recorrido local; no acreditan todavía que el modelo lo utilice mejor que las referencias.
+
+La [repetición del primario original](../reports/discovery/1791842491166/protocol.json) conserva las tres semillas y B5/B6/B8 declarados. [Los cinco controles](../reports/discovery-controls-1791842989724/index.json) conservan sus mismas semillas, física, capacidades y parámetros: la enmienda sólo paraleliza dos mundos gratuitos en el host y deja una fase de inferencia secuencial. Cada carpeta declara B5/B6 antes de ejecutar cualquiera de ellos; un resultado ausente permanece ausente. El [contraste de composición](../reports/evaluations/1791842687348/protocol.json) conserva seis episodios, ambos tipos de variación y B5/B6/B7. Ningún protocolo iniciado se presenta como resultado final.
+
+### 11.1 Recuperar la información no es terminar de ayudar
+
+[El nominal de recuperación sin pago](../reports/source-recovery/source-recovery-parser-1791842632387/report.json) cerró una cohorte sellada de **214 IDs+versiones recibidos por HTTP**. Todas las versiones fueron durables en cada una de cuatro bases independientes; al detener el controlador no quedaban disposiciones de fuentes, trabajos, consultas, inspecciones, propuestas, operaciones, descubrimientos o necesidades recibidas pendientes. Cerró a los **79,15 minutos virtuales**, 74,15 minutos después del cutoff de 5 minutos; el runner tardó 227,18 segundos reales. El scorer al horizonte confirmó **24/24 necesidades físicas suficientes**, sin errores, invariantes ni coste de proveedor. Las 36 versiones recibidas después del cutoff se conservan separadas, sin contarlas como éxito de la cohorte original.
+
+Este control sustituye la percepción por un parser público, bloquea HTTP externo y no hace llamadas pagadas. Las disposiciones de todas las fuentes cerraron a los 5,75 minutos modelados; campo, revisión, transporte y recibos continuaron después. **No demuestra que un LLM entregue ayuda en 45 segundos**, precisión semántica independiente ni una ventaja temporal. Las 35 revisiones de origen duraron 30 segundos modelados y se solicitaron secuencialmente; su backlog final cero tampoco mide capacidad humana concurrente. El ensayo con el modelo real debe usar el mismo perfil y declarar sus fallos, costes y diferencias, sin sustituirlo por este control.
+
+### 11.2 Qué puede y qué no puede demostrar el corpus actual
+
+La familia original tiene ubicaciones literales y peticiones/contextos generados a partir de pocas estructuras conocidas. En esta ruta el modelo propone un lugar que comprobar; la cantidad planificada procede de la observación operacional recibida después. B8 puede detectar muchos lugares con keywords y pedir la misma comprobación. Una mejora frente a lectura humana modelada puede acreditar ahorro en búsqueda/interpretación a esa carga, pero **no razonamiento logístico abierto ni superioridad sobre un filtro competente**.
+
+Para extender la afirmación, harían falta problemas en los que información accesible sobre horario, unidad, compatibilidad, ubicación, disponibilidad o permiso cambie una opción factible. Todos los brazos deben tener las mismas fuentes, herramientas, verificaciones finitas, políticas y recursos. El resultado debe cerrar desde interpretación hasta acción autorizada y servicio físico, sin entregar la respuesta ni leer la verdad oculta. Añadir cientos de distractores es un control de carga, no reemplaza esa extensión semántica.
+
+### 11.3 Primer mundo corregido: aún no supera a la referencia competente
+
+El [primer par cerrado](../reports/repaired-primary-readout-partial-1791842491166.json), **todavía 2/9 outcomes del primario**, da 24/24 necesidades suficientes tanto para B5 como B6. RMST físico: **31,0100 min convencional frente a 32,8659 min con percepción de Gemma**; B6 tarda 5,98% más. Ocho llamadas, 0,0052796 USD, cero errores/invariantes y las tres huellas iniciales/finales iguales. B8 después cerró 24/24 a 35,2274 min; vencer esa referencia en esta semilla no compensa perder frente a B5 ni constituye el resultado de tres mundos.
+
+[El diagnóstico por necesidad](../reports/repaired-primary-first-world-diagnosis.json) conserva las 24 filas y separa autorización de servicio. La media de comida tarda 6,58 min más con B6: 2,15 min adicionales hasta autorización y 4,43 min después. Agua y mantas adelantan sólo 0,43/0,58 min de media. Dos casos de comida cambian de decisión de flota y su tramo autorización→servicio tarda 14,17 min más. Ambos brazos completan exactamente 24 comprobaciones; no se identifica aquí una cascada de falsos positivos ni un fallo de pickup. La secuencia de información cambia la asignación sucesiva de vehículos: descubrir antes no garantiza optimizar la consecuencia global.
+
+Los timestamps de solicitud y ACK no se presentan como recepción de la comprobación. El reporte actual no expone una fecha de recepción final para cada check en ese embudo; esa etapa permanece sin imputar. La campaña original sigue con todas sus semillas, y el preflight de carga informativa conserva B5/B8 gratuitos antes de admitir pago. No modificar el mundo, la referencia o el objetivo para borrar este resultado.
+
+### 11.4 Fallos nuevos encontrados después de congelar, con reparación aislada
+
+Los cambios siguientes se desarrollan en un checkout separado; no alteran los bytes de las campañas abiertas. Necesitan otra verificación y otra medición antes de anunciar resultados de la versión reparada.
+
+| Causa comprobable | Consecuencia | Cambio necesario y prueba de cierre |
+|---|---|---|
+| La ruta activa de recepción de evacuación marca `completed` y servicio, pero no registra el número de pasajeros realmente recibidos. | `effectiveNeed` no puede actualizar un snapshot de población atrasado. La composición vuelve a investigar o propone otra evacuación de personas ya alojadas. El motor rechaza exceso, pero persiste trabajo evitable. | Guardar la recepción física antes de vaciar pasajeros; propagarla por el canal consentido sin sustituirla por cantidad autorizada. Probar evacuaciones seriales, pérdida/retraso de recibo, replay y mezcla de completado/tránsito/hold: 20+20+10 cubre 50 sin nueva propuesta ni llamada. |
+| Los holds globales no protegen un vehículo reservado por una evaluación de seguridad todavía sin emitir. | La asignación de otra ayuda puede usar ese mismo vehículo, retrasando inspección y apertura del refugio. En S19 B6 la evaluación de org3 y el envío de agua compiten por el mismo vehículo. | Proteger prospectivamente vehículo y crew cualificada de assessments, igual para todas las referencias. No sumar ese personal como ayuda servida. Liberar por emisión/recibo/retirada exactos y verificar stock/flota físicos. |
+| La automatización exige habilidades universales aunque un depósito contenga una crew cualificada y otras personas sin esas habilidades. | Pierde capacidad utilizable o considera imposible una evaluación/servicio que sí es físicamente factible. | Selección tipada `staffSkills`, perfiles conservados, límites inferiores de capacidad recibida, mínimos/reservas descontados, permisos/versiones revalidados. No inferir intersección de habilidades con el mínimo de cuentas marginales. |
+| Un rechazo parcial semántico sin atribución fina deja toda su tanda en atención pendiente; el runner original no vuelve sobre esa atención. | En [el nominal con Gemma](../reports/source-recovery/source-recovery-real-1791843532906/report.json), las 214 versiones son durables y las 24 entregas son suficientes, pero quedan 30 fuentes sin cerrar aunque el resto de colas esté a cero. | Atribuir sólo referencias presentadas exactas, conservar el batch si el rechazo no puede atribuirse, reintentos finitos registrados con todos sus costes y recuperación por recibo posterior de la misma versión. Nunca convertir silencio/rechazo en lectura aceptada. |
+| Polling reconsulta individualmente cientos de registros y reescribe recibos idénticos. | Aumenta CPU/SQL y churn de versiones; no corresponde a una demora física nueva. | Lecturas por IDs dentro del alcance y transacción; revalidar erasure/versiones después de HTTP, conservar primera recepción material y no reescribir un recibo idéntico. Las mismas optimizaciones se usan en todos los brazos. No atribuir ahorro de SQL al razonamiento del modelo. |
+
+El nominal con Gemma conserva **184/214 disposiciones**, 30 en atención, **3 llamadas / 0,00238686 USD**, cero errores/invariantes y estado `incomplete_wall_limit`: 604,96 s reales, cutoff de control a170,15 min virtuales. Entregar todo no reemplaza cerrar correctamente la atención pendiente. Tampoco se descarta un resultado parcial para repetir hasta escoger uno favorable: una corrección crea un candidato nuevo y conserva el anterior.
+
+El [preflight informativo gratuito](../reports/information-load-admission-1791843358195.json) cerró ambos brazos 24/24: B5 a40,7485 min y B8 a36,8704 min. B5 pidió 21 confirmaciones y B8 64. Hay un cuello informativo plausible para probar percepción, junto a costes reales de campo que una búsqueda indiscriminada puede aumentar. La decisión de admitir el ensayo está escrita antes del pago; no garantiza ganancia, no reemplaza el primario negativo y no acredita productividad humana medida.
+
+
+### 11.5 Primario original completamente cerrado: resultado negativo conservado
+
+El [primario reparado](../reports/discovery/1791842491166/summary.json) cerró **9/9 mundos**, tres semillas pareadas y B5/B6/B8, sin invariantes ni errores. Las tres huellas de su protocolo coinciden con el snapshot 274+173. Todos los brazos alcanzaron 24/24 necesidades suficientes por semilla. B6 usó 23 llamadas reales con coste conocido total **USD 0.01496978**; esto no incluye otros experimentos.
+
+| Semilla | B5 convencional, min | B6 NEXO, min | B8 automático fuerte, min |
+|---|---:|---:|---:|
+| 1 | 31.010 | 32.866 | 35.227 |
+| 2 | 31.206 | 33.392 | 39.048 |
+| 3 | 33.993 | 37.363 | 33.568 |
+
+En suficiencia física con horizonte fijo, B6 tarda **34.540 min** frente a **32.070 min** de B5: **7,70% más lento**, no una mejora. Contra B8 el promedio es sólo 3,92% mejor, con una semilla peor y rango de remuestreo que incluye empeoramiento: no se acepta como mejora sustancial estable. El déficit de agua/comida/mantas se conserva por unidad nativa; no se suma como personas salvadas.
+
+El corpus de información secundaria de 768 distractores sigue siendo una sensibilidad distinta, con otras semillas. Aunque permita un resultado favorable, no reemplaza estos nueve mundos ni acredita que aumentar ruido de 192 a 768 sea causalmente la única diferencia. Sus plantillas/lecturas humanas siguen siendo supuestos internos.
+
+Las correcciones aisladas posteriores crean otra versión: recibos de personas admitidas, holds de evaluación/flota, cualificación de personal, contexto de herramientas, oportunidades verificables, atención por fuente, lectura por lotes y revisión operacional concurrente. Hay que volver a pasar el gate conjunto y medir; **no se les asigna retrospectivamente el resultado anterior**.

@@ -1,0 +1,609 @@
+{
+  "frozenAt": "2026-10-12T22:02:15.793Z",
+  "sourceCommit": "f37d1325c7be639cbbe85d1d6231c3bb63133471",
+  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+  "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+  "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+  "verification": {
+    "at": "2026-10-12T21:51:33.499Z",
+    "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+    "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+    "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+    "gitRevisions": {
+      "platform": "7cc8fd1b3a52d9e00d9be4485875e912e192e478",
+      "simulator": "237ac30dd1fb7277b2d847d898632c38dff83ed1"
+    },
+    "node": "v24.19.0",
+    "platform": "win32",
+    "arch": "x64",
+    "hardware": {
+      "cpu": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "logicalCpus": 12,
+      "memoryBytes": 68644159488
+    },
+    "cases": [
+      {
+        "name": "platform-syntax",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 10832.6025,
+        "summary": [
+          "Syntax verified: 197 JavaScript modules."
+        ]
+      },
+      {
+        "name": "platform-tests",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 415980.50330000004,
+        "tests": {
+          "tests": 274,
+          "pass": 274,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "name": "simulator-syntax-contracts",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 4393.89499999996,
+        "summary": [
+          "79 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
+        ]
+      },
+      {
+        "name": "simulator-tests",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 7359.244499999972,
+        "tests": {
+          "tests": 173,
+          "pass": 173,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      }
+    ],
+    "scope": "Automated local mechanism verification, no paid model calls and no human or field validation.",
+    "candidateFinalFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+    "evaluatorFinalFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+    "simulatorFinalFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+    "candidateChanged": false,
+    "evaluatorChanged": false,
+    "simulatorChanged": false,
+    "passed": true
+  },
+  "ui": {
+    "at": "2026-10-12T21:52:32.179Z",
+    "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+    "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+    "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+    "finalFingerprints": {
+      "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+      "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+      "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+    },
+    "unchanged": true,
+    "passed": true,
+    "cases": [
+      {
+        "script": "ui-test.mjs",
+        "at": "2026-10-12T21:51:53.695Z",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 6911.221,
+        "report": {
+          "at": "2026-10-12T21:52:00.540Z",
+          "browser": "Chromium",
+          "checks": [
+            {
+              "page": "overview",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "map",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "signals",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "investigations",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "review",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "operations",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "resources",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "network",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "publications",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "finance",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "field",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "coordination",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "settings",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "audit",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "media",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "connections",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "moderation",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "public",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "community",
+              "width": 1440,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "overview",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "map",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "signals",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "investigations",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "review",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "operations",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "resources",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "network",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "publications",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "finance",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "field",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "coordination",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "settings",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "audit",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "media",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "connections",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "moderation",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "public",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "community",
+              "width": 1920,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "overview",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "map",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "signals",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "investigations",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "review",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "operations",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "resources",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "network",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "publications",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "finance",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "field",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "coordination",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "settings",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "audit",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "media",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "connections",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "moderation",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "public",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            },
+            {
+              "page": "community",
+              "width": 390,
+              "loaded": true,
+              "horizontalOverflow": false
+            }
+          ],
+          "errors": [],
+          "note": "Automated rendering/navigation at 1440, 1920 and 390 px with reduced motion. Not human comprehension evidence or a full accessibility certification."
+        }
+      },
+      {
+        "script": "journey-test.mjs",
+        "at": "2026-10-12T21:52:00.607Z",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 10441.9604,
+        "report": {
+          "at": "2026-10-12T21:52:10.954Z",
+          "browser": "Chromium",
+          "checks": [
+            "Case → manual draft → versioned revision; no dispatch",
+            "Received operational map and keyboard fallback render",
+            "Actual source file upload → processing → unverified interpretation",
+            "Field offline write → reload → reconnect → one durable acknowledged report",
+            "Dispatcher assignment → field acknowledgement → offline departure → restart/reconnect; no invented physical receipt",
+            "Scoped delegation exposes one analyst approval and revocation removes it without changing the user's role",
+            "Role workspace: admin",
+            "Role workspace: analyst",
+            "Role workspace: dispatcher",
+            "Role workspace: publisher",
+            "Role workspace: finance",
+            "Role workspace: auditor"
+          ],
+          "errors": [],
+          "scope": "Automated workflows and keyboard/mobile/offline checks; not a human comprehension or accessibility certification"
+        }
+      },
+      {
+        "script": "review-journey.mjs",
+        "at": "2026-10-12T21:52:11.049Z",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 8818.056399999998,
+        "report": {
+          "at": "2026-10-12T21:52:19.743Z",
+          "checks": [
+            "Anonymous image submission without written narrative stays private and creates no model work",
+            "Human moderation with exact version stages source evidence without confirming physical demand",
+            "Source dossier → corrected interpretation → reversible evidence grouping with retained history",
+            "Private photo → reviewed actual PNG rendition → approved public receipt update; only derived image URL",
+            "Corrected public update atomically replaces previous version; withdrawal retains notice and hides photo",
+            "Versioned organization setup resumes after reload; finite model limits persist and remain inside server maxima"
+          ],
+          "errors": [],
+          "scope": "Automated UI workflows; publication receipt explicitly injected as a synthetic UI fixture, not physical-delivery evidence; no human comprehension study"
+        }
+      },
+      {
+        "script": "response-journey.mjs",
+        "at": "2026-10-12T21:52:19.867Z",
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 12289.3021,
+        "report": {
+          "at": "2026-10-12T21:52:32.013Z",
+          "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+          "candidateChanged": false,
+          "checks": [
+            "Coordinator approves priorities and protected types through the UI; native units and delivery authority remain separate",
+            "Received-source batch is queued through the UI; sourced interpretations do not create operational authority or a proposal",
+            "Discover a response invokes the durable source pipeline; unresolved locations stay inconclusive without fabricated delivery authority",
+            "Waiting for owner review is visible and stoppable; synthetic UI state fixture, not a physical-delivery claim",
+            "Waiting for physical delivery is visible and stoppable; synthetic UI state fixture, not a physical-delivery claim",
+            "A waiting field-confirmation inquiry exposes Stop and cannot be resumed after operator cancellation",
+            "A delayed investigation response cannot replace the newly selected sources screen",
+            "Explicit local erasure review removes linked source content, completes durable cleanup and pauses automatic investigation without deleting physical history",
+            "Response-policy dialog remains usable at 390px with reduced motion and without page overflow"
+          ],
+          "errors": [],
+          "scope": "Automated browser mechanism exercise with a recorded semantic provider fixture; not real-model accuracy or human understanding"
+        }
+      }
+    ],
+    "scope": "Automated local browser journeys; no paid model and no human comprehension validation."
+  },
+  "testHashes": {
+    "account-scope.test.mjs": "6fe61d02aa8df4948259501f50e967844dbadd46efc5bb557f298ed476723f1f",
+    "activation-assessment.test.mjs": "74ac3cd5fc9b4cde789cc96ab82dba517a1533a086ba8afbcc2c0412102b6b8c",
+    "allocation-concurrency.test.mjs": "27173512ac99304157540460861fa72a5317f222de46301f83ef79c061704b87",
+    "allocation-travel.test.mjs": "4914e5050bbb5bc28f2e1077ffe4ee7fe869593dd42ac12476785e934791a65f",
+    "backup.test.mjs": "3b9e37a1d99435044c87e00a34b88e6effc1b489f3af7a337603a9aeefddf9d8",
+    "blocked-physical-integration.test.mjs": "630640cc26d9799b57d4aded7ec06fb8f2f138cd9ae8c9269184fbc31b81fa1f",
+    "blocked-response.test.mjs": "c25c31d062e58521297a4a812acd6fa831dba67dda2ecdaaa05356c767f5addd",
+    "campaign-report.test.mjs": "5942a99d65cc55ebfbf3296d22466a8dbe7f272da340e75bdd8f05924df96cb9",
+    "case-context.test.mjs": "85d86b57d7628e759c5babaf47725a8dc7e5a3bf30d1e9c0066b4343bd1fc950",
+    "casework.test.mjs": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912",
+    "communication-query.test.mjs": "648a946897780e37837d6d66fad4d6d8fe09bfb760231f20530a63d900e00b28",
+    "connector-retry.test.mjs": "3df298d8752c67ff258b528e84cd19bba686a3b51d8bd6e99b3c08480bfcd4d7",
+    "continuation-recovery.test.mjs": "f953fed077fb171dfa60c2a2a2db127e7fd2c6848dd703235ab39ef167c9ff57",
+    "contracts-evidence.test.mjs": "68c746bce9f7739d9b0dcea71e7c2b141fbf5442bae54315bbfd11c2fe5bcf57",
+    "conventional-source.test.mjs": "c3255167abbbadf3f6d70456e8d481d0d2a535efa56baf06cc04abbda2987db8",
+    "decision-page.test.mjs": "4a4ce98939ad45ccb9c23d1a33fc1a69bd52287dc8e098790b71eba9d2e0de5a",
+    "delegated-assessment.test.mjs": "ac936a64286d5d6dc336c438ba56c1fbcc8dd220b04a532f8c7325104cd4e684",
+    "discovery-general-reference.test.mjs": "29dc6b1ef4b932d1b73874c789af8b3e5ebb2c29953fe5415f5e67ad0d595e75",
+    "discovery-lifecycle.test.mjs": "609805a6a50d6634c4004c14689f59e650ff0f078b2db8d46b5fa17557412744",
+    "discovery-queue.test.mjs": "b66af8330d4c25db077a3f5f219654cde94ed44a2b3a9547eb5a957b7002bd2d",
+    "discovery-response.test.mjs": "6040b3e08b437d8e1bc857997f57cee6b25df5d5900abfe706511cd125f593c2",
+    "discovery-source-pending.test.mjs": "88900675739d1fededa70834489a6c495248c5179309d46781fcdfa7746249a7",
+    "discovery-summary.test.mjs": "64971370c6ababc063a3b7789a97f8abb6d73c291ee32e7473a552e2aab7c68f",
+    "dispatch-failure-recovery.test.mjs": "f418e96408972d035e4d646f41c9dbc628c92d5265a4a8e14ffa72060b5fa959",
+    "dispatch-reservation.test.mjs": "646e591565c3404717f70d84c3af61e812d4cdc87e5242c7511ec06d2ec46caf",
+    "domain.test.mjs": "edceceeae05ab6718e65397d69d66c7f933f530dbcbf88f0ed833c777a313b7b",
+    "durable-lease.test.mjs": "ee3c8323453119587aef1ce0476d05b5e1c1092d91cd58cd4a81377978fab69f",
+    "evaluation-build-integrity.test.mjs": "ac416975427aa73a219c7d0a643b1c2252c7478b400a02d74f2e58c5268dfb7e",
+    "evaluation-stop.test.mjs": "989b67c9ee647bd5dce1be85317b50fc07d08c4aa0401b56902d9b50f1d991af",
+    "evaluation.test.mjs": "05132b288e4dee88a102fa9a5e4cd975d834e59a1fd119de85747630c93e1782",
+    "external-gateway.test.mjs": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc",
+    "extraction.test.mjs": "3d8ab24704368e2ed685794a2595b88d15f1bbcb235c71317ca7d1a9b994654a",
+    "facility-purpose.test.mjs": "0ec8f5ae26a1c0950cb05c8e0e85f6a126eca9d30e3c4913063c4d3e21ef6756",
+    "fleet-assignment.test.mjs": "d05d47bc2d74cd32c04d70bc7419d5d51f9accdd91e3e48f262c024894e4318c",
+    "http.test.mjs": "820aa30a0abb57ffcc7f9744ff264311fe95153e74137f5c527dc23524860467",
+    "intake-moderation.test.mjs": "d9e590a43e9678f27ba3b4ef956447c2f67f8efd8898926b0c54880c1e7e3492",
+    "intake.test.mjs": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e",
+    "integrations.test.mjs": "f30f6ed09b43b9935415ef4a73fba67d55af6cc223290ea07e2007bcbf9e7fad",
+    "investigation-assessment.test.mjs": "61f074d7b17089e14643e970390f4797eb28aa9f7f1e0e44591cc4d05d27a18b",
+    "investigation-checkpoint.test.mjs": "a483e0d8d73dc0832d38fa4e1ff1c61675589f1c9ba02972c36e34a27209a364",
+    "investigation-progress-wait.test.mjs": "4beadff1493b0b977df082cd84893d0da22424892ddbfe05a6eb1fe002f26887",
+    "investigation-safety.test.mjs": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188",
+    "media-availability.test.mjs": "db075fbddee870e9a4e29cc7f33f98c40bcdf8ad67d0e856fd4dad4c150a2d59",
+    "monitoring-review-recovery.test.mjs": "b7cc5bd14d98ee15df2801561151abacda99be530c4708081f924d915c329419",
+    "network-ownership.test.mjs": "f3fef63f85c97d014f9a7dee654649d71a0364d18b4189f46b63b9ebf0391776",
+    "network-receipt-volume.test.mjs": "328a2d84dcea990710c418fa8438c61f5de78b122f9ba80c68e4ce14c83c8590",
+    "network-recovery.test.mjs": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14",
+    "network-transport.test.mjs": "c533ac4aa6b87b25bff635e0eb9f41453a1f2572436129f4e5af1ad271876e20",
+    "offline-shell.test.mjs": "b5164a25a234b309519077b0d3f56cb6d07fa9e1334f763c9cd0b2a813af6fe7",
+    "operational-integration.test.mjs": "4effac944b73bf0fe3f40ee58fe5c9620a4009041803b44c25958f81ec3dadba",
+    "organization-policy.test.mjs": "33e3a30175a36a8ecbf6d85b3b2a777d69163ebc597ddf297c4e64ce82c2d2bb",
+    "pdf-continuation.test.mjs": "aaa75ded86eb2dbf14febb2b7d6eaf883b541d56a6d18c6fd38355dd1010514b",
+    "physical-recovery.test.mjs": "3bc5366517439618ed32350f052bbe406d1632998025f35ed31cd3cfd67a69f4",
+    "physical-trace.test.mjs": "0231e3ba75b0f80ba5aaf5db42a7936fd119c367de36ab470db623ea00b3df0d",
+    "planning-throughput.test.mjs": "8522ba771924bd61fe33e4c7434194b54f7090a39f54ddf3fa210e05ccaa8fd8",
+    "planning.test.mjs": "d927ba7f66c99c6530bdbf50c3657d88f4480be73dbdd59a78d4ef296a3cd811",
+    "poll-clock.test.mjs": "670a97363d72aa1aa3600920a52a3c77f5f844ba6a0312664512fbf70c8cbbb2",
+    "provider-funding.test.mjs": "a6ec1eca67cea12e8155c9c433c92157ec49e157d80d83f842a41ab3bf8aac5e",
+    "provider-output.test.mjs": "a2485e98c6ba670216ac3f980bbc8789ff3006af631031c851630e698bda5321",
+    "public-workflow.test.mjs": "85543fc12e2f23c00822ebd1564f2965fc8f1c173e709627d2ac526927dd07e5",
+    "received-allocation.test.mjs": "71f94da357a3553ef3c0f54ce4ca4a943e0492a8dc4d9d355bca174014ecd7ba",
+    "recurrent-policy.test.mjs": "7ea8b7212bc2d72d6203f032aeae31223a3b62ab56ea4c4fae6f7d99fb4afc76",
+    "reference-recovery.test.mjs": "2039bf1c1843461c4c582f309ae91c568df81eec2a65cd7982c8a0c31a932041",
+    "repair-addressing.test.mjs": "df1aaeb4b98e25be6781020cae9d03efeb251aad0e71df8e5cac6b123f4b24d2",
+    "repository-hygiene.test.mjs": "915eb1abb812ce28d6b0ad53c6126f82542ebd104a3d78b1f77618e922f5090b",
+    "reservation-source.test.mjs": "cf2937a831517f2ca93e2f53b32db77c8a2132335f22a5a440039a4fbbbf98d2",
+    "response-comparison.test.mjs": "2ca46fc89c27682b1f47d1fb444f12c1b134fb31c907191b4e686c21f4da96a7",
+    "response-policy.test.mjs": "c1c07608d976d0e61724af7fdbdaabba765d9ef00ab337c385adaa0a25ca8b7f",
+    "response-receipts.test.mjs": "aba3aba53a1fd4eb45f6cce26f18862d1efe8eb88a0e7c5a7e6824425fe52fb5",
+    "retention.test.mjs": "2298fc89f74a021cd15d463c7e2d9113e6d50fff3356d139f6b85e4f2f7620e9",
+    "semantic-ingestion.test.mjs": "afaafe072ae0d52be7bcd7fec49c5f8255309c7caa2f8ba02bacc8ff26a8a6a1",
+    "service-composition.test.mjs": "9c30070bdd7057a8fb3f2c448c41c8d0c83436956b74b5d2ad56c16567a84d66",
+    "service-receipts.test.mjs": "b21b7b4496a5a382181281e8004c82cb87e0a20200efe064ad49881f0a6f32c3",
+    "source-receipt-recovery.test.mjs": "01de56582db15aeccea6185c4d218bf6254b67e19d62393cf023f99a1f3aef4e",
+    "source-recovery.test.mjs": "9932c73d370d12b79eeed2d64fdcff36e56f1dd105f5b7caae02bd8955803815",
+    "source-relevance.test.mjs": "647abdc93af97af1bd581c3221fdba9a048e743f77d9c1202a1db5ea87f0106d",
+    "storage-fault.test.mjs": "ac722207f26ef6464faf3ba4d025cadf241ec9ae8d64c96509d329cb99796793",
+    "verification-gates.test.mjs": "c66c1377ac197515e87a7516b996f07589cdeeee0286c33ee73ad1addb72eb5d",
+    "worker-progress-race.test.mjs": "1e33b6147ee2abea1a677e0c96bfe4a4e1732d18451056fe69b303d3b62cdbc7",
+    "workforce.test.mjs": "e8c33c0a2b441834a3c2bcbc7d6a2d39899dfec5865ffda976b7e1a1ded60efc"
+  },
+  "scope": "Exact committed candidate bytes; no source mutations during campaigns. Historical seals, outcomes and costs retained."
+}

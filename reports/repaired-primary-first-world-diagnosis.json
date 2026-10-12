@@ -1,0 +1,623 @@
+{
+  "at": "2026-10-12T22:17:27.620Z",
+  "scope": "Partial first original world, not the completed three-world campaign. Final received confirmation timestamps are absent; request ACK is not completion.",
+  "folder": "reports/discovery/1791842491166",
+  "seed": "response-burst-2026-01",
+  "sourceIntegrity": [
+    {
+      "arm": "B5",
+      "candidateChanged": false,
+      "evaluatorChanged": false,
+      "simulatorChanged": false
+    },
+    {
+      "arm": "B6",
+      "candidateChanged": false,
+      "evaluatorChanged": false,
+      "simulatorChanged": false
+    }
+  ],
+  "pairs": [
+    {
+      "need": "ddd019e9472e9f0088e77613",
+      "type": "water",
+      "quantity": 40,
+      "baseline": {
+        "request": 3.0336,
+        "auth": 14.066933333333333,
+        "service": 29.41695
+      },
+      "candidate": {
+        "request": 3.0336,
+        "auth": 19.916933333333333,
+        "service": 42.558616666666666
+      },
+      "deltaServiceMinutes": 13.141666666666666,
+      "deltaAuthorizationMinutes": 5.85,
+      "deltaPostAuthorizationMinutes": 7.291666666666666
+    },
+    {
+      "need": "6ade73c20a1d9fef71a5faa9",
+      "type": "food",
+      "quantity": 25,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 39.266933333333334,
+        "service": 51.07528333333333
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 41.0336,
+        "service": 67.00861666666667
+      },
+      "deltaServiceMinutes": 15.933333333333337,
+      "deltaAuthorizationMinutes": 1.7666666666666657,
+      "deltaPostAuthorizationMinutes": 14.166666666666664
+    },
+    {
+      "need": "eae4859514817ff3ec5c565a",
+      "type": "blankets",
+      "quantity": 11,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 18.866933333333332,
+        "service": 41.71695
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 35.90026666666667,
+        "service": 47.708616666666664
+      },
+      "deltaServiceMinutes": 5.991666666666667,
+      "deltaAuthorizationMinutes": 17.033333333333335,
+      "deltaPostAuthorizationMinutes": -11.041666666666664
+    },
+    {
+      "need": "7f8ae859c62ff6378d26ce3b",
+      "type": "water",
+      "quantity": 70,
+      "baseline": {
+        "request": 3.0336,
+        "auth": 14.5836,
+        "service": 27.64195
+      },
+      "candidate": {
+        "request": null,
+        "auth": 12.600266666666666,
+        "service": 24.408616666666667
+      },
+      "deltaServiceMinutes": -3.2333333333333343,
+      "deltaAuthorizationMinutes": -1.9833333333333343,
+      "deltaPostAuthorizationMinutes": -1.25
+    },
+    {
+      "need": "36c458b059e8d2066f42502e",
+      "type": "food",
+      "quantity": 12,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 6.700266666666667,
+        "service": 16.633616666666665
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 6.400266666666667,
+        "service": 16.333616666666668
+      },
+      "deltaServiceMinutes": -0.29999999999999716,
+      "deltaAuthorizationMinutes": -0.2999999999999998,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "4172519fc4b1c5a64a25e880",
+      "type": "blankets",
+      "quantity": 20,
+      "baseline": {
+        "request": 8.266933333333334,
+        "auth": 12.850266666666666,
+        "service": 24.86695
+      },
+      "candidate": {
+        "request": null,
+        "auth": 13.666933333333333,
+        "service": 25.683616666666666
+      },
+      "deltaServiceMinutes": 0.8166666666666664,
+      "deltaAuthorizationMinutes": 0.8166666666666664,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "e459d52d4e800379a134e750",
+      "type": "water",
+      "quantity": 70,
+      "baseline": {
+        "request": 8.350266666666666,
+        "auth": 34.66693333333333,
+        "service": 62.72528333333333
+      },
+      "candidate": {
+        "request": null,
+        "auth": 38.766933333333334,
+        "service": 57.24195
+      },
+      "deltaServiceMinutes": -5.483333333333327,
+      "deltaAuthorizationMinutes": 4.100000000000001,
+      "deltaPostAuthorizationMinutes": -9.583333333333336
+    },
+    {
+      "need": "a622ceb628049636bb77722f",
+      "type": "food",
+      "quantity": 14,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 5.0836,
+        "service": 12.100283333333334
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 5.0836,
+        "service": 12.100283333333334
+      },
+      "deltaServiceMinutes": 0,
+      "deltaAuthorizationMinutes": 0,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "f01fcd6db05165de2cb61ac8",
+      "type": "blankets",
+      "quantity": 16,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 4.566933333333333,
+        "service": 11.583616666666666
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 4.566933333333333,
+        "service": 11.583616666666666
+      },
+      "deltaServiceMinutes": 0,
+      "deltaAuthorizationMinutes": 0,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "67adac8809fe36651e05433c",
+      "type": "water",
+      "quantity": 40,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 8.266933333333334,
+        "service": 16.325283333333335
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 9.3336,
+        "service": 17.39195
+      },
+      "deltaServiceMinutes": 1.0666666666666664,
+      "deltaAuthorizationMinutes": 1.0666666666666664,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "b9cbb40fef5f66e6845912b6",
+      "type": "food",
+      "quantity": 24,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 7.2336,
+        "service": 10.500283333333334
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 6.9336,
+        "service": 10.200283333333333
+      },
+      "deltaServiceMinutes": -0.3000000000000007,
+      "deltaAuthorizationMinutes": -0.2999999999999998,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "a8c425465db3a7044a9d4b95",
+      "type": "blankets",
+      "quantity": 15,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 7.7336,
+        "service": 12.250283333333334
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 8.800266666666667,
+        "service": 13.31695
+      },
+      "deltaServiceMinutes": 1.0666666666666664,
+      "deltaAuthorizationMinutes": 1.0666666666666673,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "f8cb939a2c6df067434282c8",
+      "type": "water",
+      "quantity": 40,
+      "baseline": {
+        "request": 15.5836,
+        "auth": 17.1336,
+        "service": 31.350283333333334
+      },
+      "candidate": {
+        "request": null,
+        "auth": 30.4836,
+        "service": 44.375283333333336
+      },
+      "deltaServiceMinutes": 13.025000000000002,
+      "deltaAuthorizationMinutes": 13.349999999999998,
+      "deltaPostAuthorizationMinutes": -0.32500000000000107
+    },
+    {
+      "need": "b862f9e0af934f3efabfefae",
+      "type": "food",
+      "quantity": 19,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 6.166933333333334,
+        "service": 15.683616666666667
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 8.2336,
+        "service": 17.750283333333332
+      },
+      "deltaServiceMinutes": 2.0666666666666647,
+      "deltaAuthorizationMinutes": 2.0666666666666655,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "e669b19d787c3da60a81f88a",
+      "type": "blankets",
+      "quantity": 19,
+      "baseline": {
+        "request": 25.600266666666666,
+        "auth": 29.200266666666668,
+        "service": 41.00861666666667
+      },
+      "candidate": {
+        "request": null,
+        "auth": 26.066933333333335,
+        "service": 37.875283333333336
+      },
+      "deltaServiceMinutes": -3.133333333333333,
+      "deltaAuthorizationMinutes": -3.133333333333333,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "5a2bad133562e25bbbad1299",
+      "type": "water",
+      "quantity": 70,
+      "baseline": {
+        "request": 20.066933333333335,
+        "auth": 26.116933333333332,
+        "service": 36.88361666666667
+      },
+      "candidate": {
+        "request": null,
+        "auth": 20.4336,
+        "service": 33.70028333333333
+      },
+      "deltaServiceMinutes": -3.183333333333337,
+      "deltaAuthorizationMinutes": -5.683333333333334,
+      "deltaPostAuthorizationMinutes": 2.5
+    },
+    {
+      "need": "e1798378fa08936d61979c1b",
+      "type": "food",
+      "quantity": 16,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 17.650266666666667,
+        "service": 28.41695
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 19.916933333333333,
+        "service": 36.51695
+      },
+      "deltaServiceMinutes": 8.100000000000001,
+      "deltaAuthorizationMinutes": 2.2666666666666657,
+      "deltaPostAuthorizationMinutes": 5.833333333333332
+    },
+    {
+      "need": "b7787c603aa4db86135c6065",
+      "type": "blankets",
+      "quantity": 29,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 17.1336,
+        "service": 38.525283333333334
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 28.266933333333334,
+        "service": 42.36695
+      },
+      "deltaServiceMinutes": 3.8416666666666686,
+      "deltaAuthorizationMinutes": 11.133333333333333,
+      "deltaPostAuthorizationMinutes": -7.291666666666666
+    },
+    {
+      "need": "f1c24493897f02f1498e1883",
+      "type": "water",
+      "quantity": 80,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 8.266933333333334,
+        "service": 16.325283333333335
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 9.3336,
+        "service": 17.39195
+      },
+      "deltaServiceMinutes": 1.0666666666666664,
+      "deltaAuthorizationMinutes": 1.0666666666666664,
+      "deltaPostAuthorizationMinutes": 0
+    },
+    {
+      "need": "c74aa28c6c86560dedd29744",
+      "type": "food",
+      "quantity": 24,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 11.700266666666666,
+        "service": 33.09195
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 15.4336,
+        "service": 38.07528333333333
+      },
+      "deltaServiceMinutes": 4.983333333333334,
+      "deltaAuthorizationMinutes": 3.7333333333333343,
+      "deltaPostAuthorizationMinutes": 1.25
+    },
+    {
+      "need": "505a2d05906a235fdf46449b",
+      "type": "blankets",
+      "quantity": 10,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 38.116933333333336,
+        "service": 57.21695
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 41.5336,
+        "service": 51.88361666666667
+      },
+      "deltaServiceMinutes": -5.333333333333329,
+      "deltaAuthorizationMinutes": 3.4166666666666643,
+      "deltaPostAuthorizationMinutes": -8.749999999999998
+    },
+    {
+      "need": "9f4006596c56cb34f2095c76",
+      "type": "water",
+      "quantity": 40,
+      "baseline": {
+        "request": 28.600266666666666,
+        "auth": 31.4336,
+        "service": 47.82528333333333
+      },
+      "candidate": {
+        "request": null,
+        "auth": 14.900266666666667,
+        "service": 27.958616666666668
+      },
+      "deltaServiceMinutes": -19.866666666666664,
+      "deltaAuthorizationMinutes": -16.53333333333333,
+      "deltaPostAuthorizationMinutes": -3.333333333333332
+    },
+    {
+      "need": "677db368a279032011b2fdef",
+      "type": "food",
+      "quantity": 17,
+      "baseline": {
+        "request": 2.0336,
+        "auth": 30.25026666666667,
+        "service": 37.26695
+      },
+      "candidate": {
+        "request": 2.0336,
+        "auth": 38.21693333333333,
+        "service": 59.400283333333334
+      },
+      "deltaServiceMinutes": 22.133333333333333,
+      "deltaAuthorizationMinutes": 7.9666666666666615,
+      "deltaPostAuthorizationMinutes": 14.166666666666668
+    },
+    {
+      "need": "2c26eb6e326c0c566f3dace1",
+      "type": "blankets",
+      "quantity": 30,
+      "baseline": {
+        "request": 29.7336,
+        "auth": 32.00026666666667,
+        "service": 43.808616666666666
+      },
+      "candidate": {
+        "request": null,
+        "auth": 17.6836,
+        "service": 35.95028333333333
+      },
+      "deltaServiceMinutes": -7.858333333333334,
+      "deltaAuthorizationMinutes": -14.31666666666667,
+      "deltaPostAuthorizationMinutes": 6.458333333333332
+    }
+  ],
+  "means": {
+    "water": {
+      "n": 8,
+      "deltaServiceMinutes": -0.4333333333333327,
+      "deltaAuthorizationMinutes": 0.15416666666666679,
+      "deltaPostAuthorizationMinutes": -0.5875000000000004
+    },
+    "food": {
+      "n": 8,
+      "deltaServiceMinutes": 6.577083333333334,
+      "deltaAuthorizationMinutes": 2.149999999999999,
+      "deltaPostAuthorizationMinutes": 4.427083333333333
+    },
+    "blankets": {
+      "n": 8,
+      "deltaServiceMinutes": -0.5760416666666659,
+      "deltaAuthorizationMinutes": 2.0020833333333328,
+      "deltaPostAuthorizationMinutes": -2.5781249999999996
+    }
+  },
+  "modelActivities": [
+    {
+      "at": 2.0336,
+      "available": 2.2836,
+      "sourceCount": 30,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 2.2836,
+      "available": 2.5336,
+      "sourceCount": 30,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 2.5336,
+      "available": 2.7836,
+      "sourceCount": 30,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 2.7836,
+      "available": 3.0336,
+      "sourceCount": 30,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 3.0336,
+      "available": 3.2836,
+      "sourceCount": 30,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 3.7836,
+      "available": 4.0336,
+      "sourceCount": 16,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 5.600266666666666,
+      "available": 5.850266666666666,
+      "sourceCount": 3,
+      "state": "waiting_evidence",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 7.450266666666667,
+      "available": 7.700266666666667,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 13.150266666666667,
+      "available": 13.150266666666667,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 14.3336,
+      "available": 14.3336,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 17.1336,
+      "available": 17.1336,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 19.416933333333333,
+      "available": 19.416933333333333,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 25.5336,
+      "available": 25.5336,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 27.75026666666667,
+      "available": 27.75026666666667,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 37.71693333333333,
+      "available": 37.71693333333333,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 42.7336,
+      "available": 42.7336,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 44.96693333333333,
+      "available": 44.96693333333333,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 48.200266666666664,
+      "available": 48.200266666666664,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 52.450266666666664,
+      "available": 52.450266666666664,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 57.65026666666667,
+      "available": 57.65026666666667,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    },
+    {
+      "at": 67.86693333333334,
+      "available": 67.86693333333334,
+      "sourceCount": 1,
+      "state": "inconclusive",
+      "reason": "No confirmed actionable need received yet"
+    }
+  ]
+}

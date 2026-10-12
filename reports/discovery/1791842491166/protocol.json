@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-12T22:01:31.166Z",
+  "version": "public-discovery-physical-response-v2",
+  "hypothesis": "Earlier interpretation of public information can reduce time until useful physical aid, compared with competent finite conventional review.",
+  "fairness": "Same raw public bytes, metadata, directory, formal-report delay, consented stock, fleet, field checks, dispatch reviews and physical world. Neither controller receives evaluator gold. Explicit structured requests and repost grouping are free in all arms.",
+  "references": {
+    "B5": "Conventional shared planner with free structured parsing plus finite human source review",
+    "B6": "Real configured model perception, targeted confirmations and deterministic batching",
+    "B8": "Stronger free broad keyword/location discovery, then the same targeted confirmations and batching",
+    "B9": "Same configured model as a general tool-using disaster-response investigator: raw source batches, no specialized semantic preprocessor, same operational tools and reviewed physical response",
+    "B0": "Extraction disconnected: formal observations only, same competent allocator"
+  },
+  "clocks": "World travel/communication/review delays are modeled. Model availability is charged at max(declared latency, actual measured provider time). Human attention duration/workers are sensitivity parameters, not measured field productivity. SQL/HTTP wall overhead is separately reported, not sped up with the simulation clock.",
+  "negatives": "Zero human-reading delay, immediate formal reports, failures, unserved needs and no advantage against a stronger keyword baseline must remain visible.",
+  "verification": "Requests return a pending receipt. The same finite field queue progresses while owners review and trucks move; no controller must wait synchronously for all inquiries before acting on an already received need.",
+  "generalAgentScope": "B9 is this explicit finite general-agent reference implementation, not all possible agents. It receives the same public sources, free structured parsing, approved policy, deterministic planner, owners, model configuration and total call/cost cap. The general agent chooses its own queries and drafts; no observer facts or specialized perception receipt are supplied.",
+  "config": {
+    "count": 24,
+    "noise": 192,
+    "reposts": 2,
+    "humanReadMs": 30000,
+    "humanWorkers": 2,
+    "clarificationWorkers": 2,
+    "formalDelayMs": 3600000,
+    "extentKm": 6,
+    "grid": 9,
+    "horizonMs": 10800000,
+    "silentFraction": 0,
+    "traffic": 0,
+    "packetLoss": 0,
+    "budgetUsd": 0.15,
+    "maxModelCalls": 32,
+    "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+    "evaluatorBuild": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d"
+  },
+  "seeds": 3,
+  "arms": [
+    "B5",
+    "B6",
+    "B8"
+  ],
+  "simulatorBuild": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+  "totalBudgetUsd": 0.6,
+  "stop": "All declared worlds retained, including failures; no edits during the campaign"
+}

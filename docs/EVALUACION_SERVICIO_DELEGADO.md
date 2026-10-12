@@ -224,3 +224,65 @@ node --test --test-concurrency=1 tests/response-comparison.test.mjs tests/storag
 Resultado: **18/18 PASS**. El subconjunto incluye preparación compilada de asignación y servicio con comparación real, rechazo de evidencia o permisos cambiados, vigencia física, refrescos equivalentes, separación de organizaciones, ausencia honesta de alternativas, reparación física del mismo cargamento y entrega multiowner, recuperación de checkpoint y rollback/reintento transaccional. Los proveedores de estas pruebas son fixtures registrados o replay, sin nuevas llamadas pagadas.
 
 Esta evidencia acredita **mecanismo funcional y protección de trazabilidad**. No mide calidad semántica del proveedor real, comprensión humana de las alternativas, mejora de tiempo de respuesta ni superioridad frente a B5/B7. Tampoco traslada los resultados de campañas anteriores al candidato nuevo. K01/K02 y los contrastes S19, K07 y K14 requieren nuevas ejecuciones completas con los tres hashes congelados, sus controles, resultados negativos, censura y costes conservados.
+
+## Enmienda previa al reinicio sobre el candidato reparado
+
+Antes de iniciar S19 se registra una modificación de **orquestación del host**: la repetición utiliza `--workers=1` para no añadir dos campañas pagadas simultáneas al estudio de fuentes que root ya ejecuta. Esta cantidad limita mundos ejecutados en paralelo; no modifica personal, consultas físicas, revisión, recursos, comunicación ni ningún supuesto del mundo simulado. Las variantes `distributed`/`delayed`, sus semillas, los tres brazos, doce rondas, intervalo de cinco minutos y caps originales de $0,15 por episodio/$0,75 total se mantienen.
+
+La congelación autorizada es `reports/frozen-candidate-repaired-1791842535794.json`, verificada con 274 pruebas de plataforma, 173 de simulador y 84 comprobaciones UI. El preflight exige los hashes completos de candidato, evaluador y simulador declarados en ese archivo; no utiliza sólo sus abreviaturas. El stop-file de esta repetición es **nuevo**: `.local/STOP_DELEGATED_REPAIRED`. No se borra el archivo de parada de campañas anteriores ni se reaprovechan sus resultados como baseline.
+
+K07 y K14 quedan en cola. No se lanzan hasta que la campaña S19 cierre, escriba resultados/usage y se notifique a root. Un defecto nuevo se informa y conserva antes de cambiar fuentes; mientras haya campañas activas se mantiene la congelación.
+
+```powershell
+node --env-file-if-exists=.env.local scripts/parallel-campaign.mjs --scenarios=S19 --arms=B5,B6,B7 --seeds=1 --composition-variants=distributed,delayed --seed-prefix=delegated-final-2026- --rounds=12 --interval-ms=300000 --workers=1 --budget=0.75 --episode-budget=0.15 --stop-file=.local/STOP_DELEGATED_REPAIRED
+```
+
+## Diagnóstico parcial del reinicio: no equivale a cierre de KPIs
+
+Carpeta de resultados: `reports/evaluations/1791842687348`. Al escribir este diagnóstico han cerrado los brazos B5 y B6 de `distributed`; los otros cuatro resultados permanecen pendientes. `native-guardrails-readout.json` conserva explícitamente esa incompletitud. No se copia un resultado anterior ni se selecciona una variante favorable.
+
+| distributed | B5 | B6 |
+| --- | --- | --- |
+| Agua física | 600/600 L | 600/600 L |
+| Refugio físico | 50/50 plazas | 50/50 plazas |
+| Déficit de agua | 685.800.900 L·ms | 542.144.500 L·ms |
+| Déficit de refugio | 125.760.170 plazas·ms | 158.550.160 plazas·ms |
+| Cobertura suficiente de refugio | 50,3334 min | 61,3167 min |
+| Estado de episodio | `completed` | `failed`: `PROVIDER_TIMEOUT` en ronda 11 |
+| Llamadas de modelo | 0 | 34 |
+| Coste conocido | $0 | $0,06558776 |
+| Coste con reservas desconocidas | $0 | $0,09493652; tres llamadas desconocidas |
+| Invariantes violados | 0 | 0 |
+
+El agua mejora su déficit un 20,95%, pero el refugio empeora un 26,07% y se completa después de su ventana útil de una hora. Ambos brazos conservan una inspección física delegada y las dependencias reales del refugio. Esto demuestra el mecanismo compuesto; **no** demuestra una ventaja general de NEXO. El estado fallido del proveedor se conserva aunque los viajes físicos ya emitidos terminen sirviendo a las 50 personas.
+
+En B6, 881,12 de los 938,34 segundos de ejecución real corresponden a llamadas al proveedor (93,9%). Las rondas 4 a 9 esperan recibos sin nuevas inferencias. La ronda 10 vuelve a consumir ocho llamadas sin producir un borrador: el planificador declara veinte plazas pendientes y diez retenidas pese a haber completado ya una primera evacuación de veinte personas. También se registran lecturas fallidas del ID de una propuesta como si fuese un `peer_offer` o `evidence_group`, por lo que no toda la espera se explica por latencia del proveedor.
+
+La auditoría de sólo lectura identifica un recibo físico incompleto: `engine/tasks.mjs`, en `evacuation_receive`, sirve la necesidad y registra `times.service`, `times.received` y `state: completed`, pero no registra la cantidad numérica `operation.received`. Las tres evacuaciones propias del informe cerrado tienen ese campo ausente. `effectiveNeed` exige una cantidad física finita; por tanto no puede sumar esa recepción a un snapshot anterior de la necesidad. El mismo contrato estricto protege los recibos entre organizaciones, así que no debe sustituirse por una cantidad inventada en la plataforma.
+
+La siguiente versión debe registrar en el motor la cantidad de pasajeros efectivamente alojados antes de vaciar el vehículo. La regresión necesaria combina una necesidad de 50 plazas, un snapshot atrasado, veinte plazas ya recibidas, veinte en tránsito y diez retenidas por pasos futuros del mismo plan: el planificador debe declarar cero cantidad disponible para otro plan, esperar los recibos y evitar nuevas inferencias automáticas. Deben comprobarse tanto el dueño local como un recibo de otro dueño, deduplicación, fallo o redirección de viaje y ausencia de doble servicio. Se conserva este diagnóstico antes de cualquier cambio; las fuentes de la campaña continúan congeladas.
+
+## Cierre del reinicio y siguiente reparación aislada
+
+La carpeta `1791842687348` cierra sus **seis resultados completos**, sin episodios faltantes ni llamadas activas. Los tres hashes se mantienen durante toda esta campaña. `native-guardrails-readout.json` y `source-receipt-diagnosis.json` se actualizan con los seis brazos; los fallos de proveedor no se eliminan de las parejas.
+
+| Variante | Brazo | Agua suficiente | Refugio suficiente | Déficit de refugio, plazas·h | Llamadas | Estado |
+| --- | --- | --- | --- | --- | --- | --- |
+| distributed | B5 | 19,5223 min | 50,3334 min | 34,9334 | 0 | completed |
+| distributed | B6 | 15,6225 min | 61,3167 min | 44,0417 | 34 | failed, timeout ronda 11 |
+| distributed | B7 | 14,8725 min | 59,4834 min | 43,1250 | 24 | completed |
+| delayed | B5 | 19,1223 min | 52,1834 min | 36,5362 | 0 | completed |
+| delayed | B6 | 12,3056 min | 53,2334 min | 40,1445 | 16 | completed |
+| delayed | B7 | 20,9392 min | 52,1167 min | 37,0750 | 27 | failed, timeout ronda 8 |
+
+Todos sirven físicamente 600 L y alojan a 50 personas; ninguno viola invariantes. Los dos B6 mejoran el déficit de agua un 20,95% y 37,87%, respectivamente, pero empeoran el de refugio un 26,07% y 9,88%. El B7 distributed mejora agua un 24,88% y empeora refugio un 23,45%; delayed empeora ambos déficits, agua un 9,61% y refugio un 1,47%. La finalización suficiente por sí sola tampoco describe todo el recorrido: delayed B7 termina el refugio ligeramente antes, pero su déficit acumulado sigue siendo peor. No se mezclan litros con plazas ni se presenta uno de estos tradeoffs como una superioridad general.
+
+Coste total conservado: **101 llamadas, $0,20712080 conocido y $0,25660852 cargado con reservas de cinco costes desconocidos**. Los dos timeouts terminales permanecen como resultados fallidos, aunque el trabajo físico emitido llegue a terminar. Este piloto explora dos mundos predeclarados; no mide efectividad de campo, vidas salvadas ni confianza humana.
+
+Una segunda causa de la demora precede a los recibos ausentes. `responseQueue` de este build sólo crea reservas prospectivas para `dispatch` y `evacuate`; la evaluación física `verify` queda fuera. En distributed B6, el borrador de evaluación usa `v-org3-0` en ronda 0 y la entrega ordinaria vuelve a asignar ese mismo vehículo en ronda 1. La entrega sirve su carga a 937.352 ms; la inspección física empieza a 953.017 ms y termina a 1.013.017 ms. La ronda 2 no consigue un servicio listo y consume ocho llamadas; el servicio se prepara recién en ronda 3. B5 lo prepara en ronda 1. Corregir el recibo de evacuación elimina sondeos tardíos, pero no puede borrar retroactivamente esta demora inicial.
+
+La reparación determinista compartida debe extender las reservas prospectivas al vehículo y un miembro de personal de una evaluación física, en el ámbito exacto del dueño. Una persona reservada para inspeccionar no se contabiliza como ayuda servida. Si el snapshot del dueño ya incluye una reserva física, no se resta dos veces al personal; el vehículo sigue ocupado hasta una recepción terminal. Rechazar una propuesta todavía no emitida libera sólo su asignación prospectiva. La misma protección debe aplicarse a los compiladores utilizados por las referencias convencionales y el modelo.
+
+Las herramientas también ofrecen instrucciones ambiguas que consumen llamadas sin mejorar el plan: `verify` no explicita en su descripción que no confirma directamente un recurso privado de otro dueño; `lookup` de capacidades necesita `org`; `read_context` de `peer_offer` filtra `type` por el tipo de recurso proyectado, no por el valor `resource` del campo `kind`. Además `compose_service` revisa una plantilla genérica, mientras `plan_service` comprueba la instalación, flota y cantidades concretas. Indicar una fuente real, dueño, motivo de carencia y próximo acceso permitido puede evitar intentos `ACCESS`/`NOT_FOUND`; no autoriza consultar inventarios privados ni presume capacidad futura disponible.
+
+En la copia de desarrollo aislada se añaden regresiones de producto, sin modificar las fuentes main de esta campaña: tres pruebas de recibos propios/peer y cola serial; seis pruebas de reservas de evaluaciones propias/peer, liberación y ausencia de doble reserva; y una prueba física de evaluación y entrega concurrentes con **la flota original**, sin dotación añadida ni llamadas pagadas. La prueba física obtiene directorio, metadata, cantidades y permisos mediante las fuentes; utiliza una inspección competente y entrega agua en otro vehículo real, conservando invariantes. Estos PASS acreditan mecanismo y prevención de colisiones. La ventaja de KPIs de la versión aislada exige otra congelación y medición; no se transfiere ningún porcentaje de esta campaña al candidato corregido.
