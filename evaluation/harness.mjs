@@ -5,6 +5,10 @@ import { Store } from "../src/store.mjs";
 import { SimulatorConnector } from "../src/connector.mjs";
 import { hash } from "../src/store.mjs";
 import { check } from "../src/errors.mjs";
+import {
+  checkFinalBuilds,
+  requireLoadedSimulatorBuild,
+} from "./simulator-build.mjs";
 import { readFile } from "node:fs/promises";
 import { allocationPlan } from "../src/planning.mjs";
 import { servicePlan } from "../src/services.mjs";
@@ -14,6 +18,7 @@ import {
   configureResponsePolicy,
 } from "../src/response-policy.mjs";
 import { receivedAllocationPlan } from "../src/received-allocation.mjs";
+import { receivedExecutionPolicy } from "../src/reservation-policy.mjs";
 import { ModelBudgetPool } from "../src/budget-pool.mjs";
 import { readdir } from "node:fs/promises";
 import {
@@ -56,6 +61,7 @@ export async function evaluatorFingerprint() {
         "scripts/research-ablation.mjs",
         "scripts/semantic-load.mjs",
         "scripts/pdf-byte-continuation.mjs",
+        "scripts/source-recovery.mjs",
         "evaluation/blocked-repair.mjs",
         "scripts/blocked-repair.mjs",
         "evaluation/campaign-summary.mjs",
@@ -63,6 +69,7 @@ export async function evaluatorFingerprint() {
         "evaluation/discovery-benchmark.mjs",
         "evaluation/physical-trace.mjs",
         "evaluation/conventional-source.mjs",
+        "evaluation/simulator-build.mjs",
         "scripts/discovery-benchmark.mjs",
       ].map(async (f) => [
         f,
@@ -335,6 +342,11 @@ export async function ruleProposal(app, episode, extraction = null) {
     operations: snapshot.operations,
     now: snapshot.now,
     policy: await responsePolicy(app.store, org),
+    map: (await app.store.get(org, "context", "geography", false))?.map,
+    observedRoads: Object.fromEntries(
+      (await app.store.list(org, "road", 5000)).map((r) => [r.id, r]),
+    ),
+    executionPolicy: await receivedExecutionPolicy(app.store, org),
   });
   if (!plan.allocations.length)
     return {
@@ -369,6 +381,7 @@ export async function ruleProposal(app, episode, extraction = null) {
           resource: a.resource,
           vehicle: a.vehicle,
           quantity: a.quantity,
+          ttlMs: a.ttlMs,
         },
         dependsOn: [],
       })),
@@ -412,16 +425,31 @@ export async function conventionalSharedProposal(app, episode) {
           episode + "-describe-" + b.id,
         );
       await app.ingestion.sync({ sources: false });
-      const assessment = await assessmentPlan(app.store, org, b.id, { peers: app.config.peers });
-      steps.push({ tool: "checked-field-assessment", state: assessment.satisfied ? "completed" : "pending", result: assessment });
+      const assessment = await assessmentPlan(app.store, org, b.id, {
+        peers: app.config.peers,
+      });
+      steps.push({
+        tool: "checked-field-assessment",
+        state: assessment.satisfied ? "completed" : "pending",
+        result: assessment,
+      });
       if (assessment.readyToDraft) {
         const p = await app.domain.propose(
           { id: "shared-rules-reference", org, role: "agent" },
-          { title: "Request a competent field assessment from an available crew",
-            summary: "The site owner and qualified crew owner approve independently before physical travel and work.",
-            benefit: "A current received assessment, never an assumed safe site",
-            rationale: "The same conventional rule may use consented peer crew and transport offers. This is not credited to an LLM.",
-            actions: assessment.actions, references: assessment.references, conditions: [], alternatives: [] },
+          {
+            title:
+              "Request a competent field assessment from an available crew",
+            summary:
+              "The site owner and qualified crew owner approve independently before physical travel and work.",
+            benefit:
+              "A current received assessment, never an assumed safe site",
+            rationale:
+              "The same conventional rule may use consented peer crew and transport offers. This is not credited to an LLM.",
+            actions: assessment.actions,
+            references: assessment.references,
+            conditions: [],
+            alternatives: [],
+          },
           episode + "-assessment-" + b.id,
         );
         return { state: "ready", proposalId: p.id, steps };
@@ -432,6 +460,19 @@ export async function conventionalSharedProposal(app, episode) {
         service = await servicePlan(app.store, org, b.id, {
           needId: needs[0].id,
           peers: app.config.peers,
+          refreshFacility: async (request) => {
+            const q = await app.connector.action(
+              "query",
+              { target: request.target, id: request.id },
+              episode +
+                "-service-status-" +
+                b.id +
+                "-" +
+                request.afterReceiptAt,
+            );
+            await app.investigator.wait(q.id);
+            await app.ingestion.sync({ sources: false });
+          },
         });
       } catch (error) {
         if (
@@ -549,6 +590,7 @@ export async function conventionalSharedProposal(app, episode) {
             resource: a.resource,
             vehicle: a.vehicle,
             quantity: a.quantity,
+            ttlMs: a.ttlMs,
           },
           dependsOn: [],
         })),
@@ -574,6 +616,7 @@ export async function runEpisode({
   responseOrder = "deadline_then_priority",
   repairStrategy = "selective",
   inquiryStrategy = "active",
+  shouldStop = () => false,
 } = {}) {
   if (
     !["selective", "full_refresh"].includes(repairStrategy) ||
@@ -591,6 +634,7 @@ export async function runEpisode({
       "Use one to twenty-four finite policy rounds with at least a minute between opportunities.",
     );
   const episodePrefix = `pilot-${arm}-${scenario}-${seed}-${replicate}-`;
+  await requireLoadedSimulatorBuild();
   const fingerprint = await buildFingerprint(),
     evaluatorBuild = await evaluatorFingerprint(),
     start = performance.now(),
@@ -614,13 +658,14 @@ export async function runEpisode({
     activities = [],
     errors = [],
     researchedSources = new Map();
-  let status = "completed";
+  let status = "completed",
+    stopRequestedAt = null;
   let planRound,
     roundsExecuted = 0;
   try {
     h.lab.world.advance(60000);
     for (const app of h.apps) {
-      for (const target of ["inventory", "vehicles", "map"])
+      for (const target of ["inventory", "vehicles", "map", "policy"])
         await app.connector.action("query", { target }, `initial-${target}`);
       await app.ingestion.sync();
       const actor = (
@@ -715,10 +760,18 @@ export async function runEpisode({
             timingSubmitted = true;
             await app.connector.finishModel(timing.id, {
               ...result.usage,
-              wallMs: Math.max(result.usage?.wallMs ?? 0, performance.now() - callStartedAt),
+              wallMs: Math.max(
+                result.usage?.wallMs ?? 0,
+                performance.now() - callStartedAt,
+              ),
               ...(result.finishReason === "length" ? { failed: true } : {}),
             });
-            check(result.finishReason !== "length", "SEMANTIC_INCOMPLETE", "Extraction output was incomplete.", 409);
+            check(
+              result.finishReason !== "length",
+              "SEMANTIC_INCOMPLETE",
+              "Extraction output was incomplete.",
+              409,
+            );
             extraction = normalizeExtraction(
               result.message.content,
               signals,
@@ -750,9 +803,13 @@ export async function runEpisode({
               kind: "extraction_only",
             });
           } catch (e) {
-            if (!timingSubmitted) await app.connector
-              .finishModel(timing.id, { failed: true, wallMs: performance.now() - callStartedAt })
-              .catch(() => {});
+            if (!timingSubmitted)
+              await app.connector
+                .finishModel(timing.id, {
+                  failed: true,
+                  wallMs: performance.now() - callStartedAt,
+                })
+                .catch(() => {});
             throw e;
           }
           activity = await ruleProposal(app, episode, extraction);
@@ -854,7 +911,15 @@ export async function runEpisode({
         }
       }
     };
-    await planRound();
+    if (await shouldStop()) {
+      status = "aborted";
+      stopRequestedAt = h.lab.world.now;
+      errors.push({
+        phase: "episode",
+        code: "CAMPAIGN_INTERRUPTED",
+        at: stopRequestedAt,
+      });
+    } else await planRound();
   } catch (e) {
     status = "failed";
     errors.push({ phase: "episode", code: e.code ?? e.name });
@@ -862,6 +927,23 @@ export async function runEpisode({
   try {
     // Fixed horizon also applies to failed/inconclusive runs; they are never excluded.
     while (h.lab.world.now < h.lab.world.config.durationMs) {
+      // Calls inside a policy round settle before this boundary. Do not kill a
+      // provider request or discard its cost just to stop another round.
+      if (status === "aborted" || (await shouldStop())) {
+        if (status !== "aborted") {
+          status = "aborted";
+          stopRequestedAt = h.lab.world.now;
+          errors.push({
+            phase: "episode",
+            code: "CAMPAIGN_INTERRUPTED",
+            at: stopRequestedAt,
+          });
+        }
+        h.lab.world.advance(h.lab.world.config.durationMs, {
+          maxEvents: 1000000,
+        });
+        break;
+      }
       const nextRoundAt = 60000 + roundsExecuted * policyIntervalMs;
       if (
         roundsExecuted < planningRounds &&
@@ -936,7 +1018,10 @@ export async function runEpisode({
     for (const app of h.apps) {
       await app.ingestion.sync({ sources: false });
       for (const p of await app.store.list(app.config.org, "proposal", 100))
-        if (["executing", "awaiting_partner"].includes(p.state)) {
+        if (
+          status !== "aborted" &&
+          ["executing", "awaiting_partner"].includes(p.state)
+        ) {
           try {
             await app.worker.execute(p.id);
           } catch (e) {
@@ -957,11 +1042,16 @@ export async function runEpisode({
           )
         ).rows,
       );
-    const changed = fingerprint !== (await buildFingerprint());
-    if (changed) {
-      status = "invalid_candidate_changed";
-      errors.push({ phase: "manifest", code: "CANDIDATE_CHANGED_DURING_RUN" });
-    }
+    const finalBuilds = await checkFinalBuilds(
+      {
+        candidate: fingerprint,
+        evaluator: evaluatorBuild,
+        simulator: h.lab.world.manifest.engineBuild,
+      },
+      { candidate: buildFingerprint, evaluator: evaluatorFingerprint },
+    );
+    if (finalBuilds.invalidStatus) status = finalBuilds.invalidStatus;
+    errors.push(...finalBuilds.errors);
     const platformEvidence = [];
     for (const app of h.apps) {
       const counts = (
@@ -976,8 +1066,9 @@ export async function runEpisode({
         counts: counts.map((r) => ({ ...r, n: Number(r.n) })),
         claimCount: claims.length,
         // Received owner-scoped evidence, separate from evaluator-only truth.
-        assessments: (await app.store.list(app.config.org, "verification", 2000))
-          .filter(v => v.purpose === "facility_safety"),
+        assessments: (
+          await app.store.list(app.config.org, "verification", 2000)
+        ).filter((v) => v.purpose === "facility_safety"),
         operations: await app.store.list(app.config.org, "operation", 2000),
         facilities: await app.store.list(app.config.org, "facility", 2000),
         investigatorQueries: activities
@@ -1006,6 +1097,12 @@ export async function runEpisode({
       initialMapHash: h.lab.world.state.map.hash,
       candidateFingerprint: fingerprint,
       evaluatorFingerprint: evaluatorBuild,
+      candidateChanged: finalBuilds.candidateChanged,
+      evaluatorChanged: finalBuilds.evaluatorChanged,
+      simulatorChanged: finalBuilds.simulatorChanged,
+      finalCandidateFingerprint: finalBuilds.finalCandidateFingerprint,
+      finalEvaluatorFingerprint: finalBuilds.finalEvaluatorFingerprint,
+      finalEngineBuild: finalBuilds.finalEngineBuild,
       measurementMode: "modeled",
       clockPolicy: "declared delays; no accelerated wall-time charging",
       operator: "scripted; human comprehension not measured",
@@ -1014,6 +1111,7 @@ export async function runEpisode({
       repairStrategy,
       inquiryStrategy,
       roundsExecuted,
+      stopRequestedAt,
       policyIntervalMs,
       episodeBudgetUsd,
       planningTopology: ["B5", "B6", "B7"].includes(arm)

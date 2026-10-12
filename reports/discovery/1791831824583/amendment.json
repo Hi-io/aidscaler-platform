@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-12T19:16:19.044Z",
+  "reason": "The duplicate B8 control was stopped to avoid rerunning a deterministic arm whose controller does not use human reading duration. The original pilot B8 continues to its full horizon. Completed B5/B6 outcomes and all declared runs remain recorded.",
+  "interruptedArm": "B8",
+  "state": "aborted_no_report",
+  "knownModelCostUsd": 0,
+  "costBasis": "B8 has no provider calls; no paid inference was interrupted. In-memory physical outcomes are unavailable and are not filled with fabricated zeros."
+}

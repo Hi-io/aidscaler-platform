@@ -11,6 +11,7 @@ import { resolveEvidence } from "./citations.mjs";
 import { repairContext } from "./repair.mjs";
 import { reviewAuthority } from "./authority.mjs";
 import { publicText } from "./public-safety.mjs";
+import { assertComparisonSourcesCurrent } from "./response-comparison.mjs";
 const COMMAND = ["commander", "dispatcher"];
 export class Domain {
   constructor(store, config) {
@@ -48,14 +49,20 @@ export class Domain {
       return c;
     });
   }
-  async propose(actor, input, key, { repairOf = null } = {}) {
+  async propose(
+    actor,
+    input,
+    key,
+    { repairOf = null, comparison = null } = {},
+  ) {
     role(actor, ["analyst", "commander", "dispatcher", "agent"]);
     const d = proposalSchema.parse(input);
     return this.store.command(
       actor.org,
       key,
-      { draft: d, repairOf },
+      { draft: d, repairOf, comparison },
       async (tx) => {
+        await assertComparisonSourcesCurrent(tx, actor.org, comparison);
         const repair = await repairContext(tx, actor.org, repairOf, d.actions);
         for (const ref of d.references)
           check(
@@ -96,6 +103,7 @@ export class Domain {
               dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
               activity: [],
               ...repair,
+              ...(comparison ? { comparison } : {}),
             },
             0,
           );
@@ -142,6 +150,8 @@ export class Domain {
           409,
         );
         p.conditions = await validateConditions(tx, actor.org, p.conditions);
+        if (decision === "approve")
+          await assertComparisonSourcesCurrent(tx, actor.org, p.comparison);
         if (p.repairOf)
           Object.assign(
             p,
@@ -373,6 +383,8 @@ export class Domain {
           previousAuthorization: p.authorization ?? p.previousAuthorization,
           authorization: null,
           simId: null,
+          previousComparison: p.comparison ?? p.previousComparison ?? null,
+          comparison: null,
           dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
           changedReason: note,
           revisedBy: actor.id,

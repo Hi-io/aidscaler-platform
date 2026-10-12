@@ -2,6 +2,8 @@
 
 Actualizado el 13 de octubre de 2026 (Tokio). Complementa [la especificación](PLATAFORMA.md), [el laboratorio](SIMULADOR.md), [la operación local](LOCAL.md) y [la validación externa](VALIDACION_EXTERNA.md). Los objetivos de la especificación siguen vigentes: esta matriz no los rebaja para declarar terminado el proyecto.
 
+> La matriz histórica siguiente conserva lo medido en cada fecha. La revisión completa de la versión actual está en [COBERTURA_REQUISITOS.md](COBERTURA_REQUISITOS.md): funcionalidades, 26 entradas, 23 salidas, 14 experiencias, 27 grupos de pruebas, 30 KPIs y 24 escenarios. Verificación actual: plataforma215/215 y simulador154/154, hashes estables, 84 comprobaciones de navegador. La mejora física sigue evaluándose en [MEJORA_RESPUESTA.md](MEJORA_RESPUESTA.md).
+
 ## 1. Qué existe
 
 Existe una plataforma local ejecutable, con UI por rol, bases independientes, ingesta HTTP, investigación mediante **Gemma 4 31B en OpenRouter**, propuestas versionadas, autorización humana, ejecución contra sistemas de origen, red entre organizaciones, portal público aprobado, fondos de prueba y laboratorio 3D separado. No se desplegó GCP. Gemini todavía no se ejecutó ni se evaluó.
@@ -234,7 +236,7 @@ Implementado después de aquella revisión: política aprobada y versionada de p
 
 Los reportes finales separan cuatro niveles: funcionamiento, resultado físico interno, contraste causal interno y evidencia externa. Los targets de ventaja estadística, comprensión humana y calibración independiente no se declaran satisfechos por el número de tests. El alcance finito local no exige todos los países/conectores/profesiones (§37 de PLATAFORMA); ampliar a ellos necesita contratos y pruebas propios.
 
-## 11. Resultado del cierre — 13 de octubre de 2026, Tokio
+## 11. Resultado histórico del cierre anterior — 13 de octubre de 2026, Tokio
 
 La verificación final pasa **120+120 pruebas** con candidato estable. El código local incluye los mecanismos y recorridos por rol descritos en [CIERRE_LOCAL.md](CIERRE_LOCAL.md); [VALIDACION §13](VALIDACION.md#13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio) conserva el resultado completo y sus huellas.
 

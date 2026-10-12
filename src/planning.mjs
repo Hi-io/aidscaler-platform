@@ -1,6 +1,11 @@
 import { check } from "./errors.mjs";
 import { compareNeeds, outstanding } from "./response-policy.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
+import {
+  dispatchReservationEstimate,
+  receivedExecutionPolicy,
+  validateDispatchTtl,
+} from "./reservation-policy.mjs";
 export function shortestRoute(map, from, to, vehicle = {}, observed = {}) {
   if (from === to)
     return { nodes: [from], distanceM: 0, seconds: 0, unknownEdges: [] };
@@ -60,6 +65,7 @@ export function allocationPlan({
   now = 0,
   map,
   observedRoads = {},
+  executionPolicy = null,
   policy = { order: "priority_then_deadline" },
 }) {
   const ownedKey = (record) => JSON.stringify([record.owner, record.id]);
@@ -180,7 +186,19 @@ export function allocationPlan({
               };
             }),
         )
-        .filter((candidate) => candidate.travel !== false);
+        .map((candidate) => ({
+          ...candidate,
+          reservationEstimate: dispatchReservationEstimate(
+            candidate.travel?.pickup,
+            executionPolicy,
+          ),
+        }))
+        .filter(
+          (candidate) =>
+            candidate.travel !== false &&
+            candidate.reservationEstimate.recommendedTtlMs <=
+              candidate.reservationEstimate.maxTtlMs,
+        );
       if (hasMap)
         candidates.sort(
           (a, b) =>
@@ -189,7 +207,8 @@ export function allocationPlan({
             ownedKey(a.vehicle).localeCompare(ownedKey(b.vehicle)),
         );
       if (!candidates.length) break;
-      const { resource, vehicle, quantity, travel } = candidates[0];
+      const { resource, vehicle, quantity, travel, reservationEstimate } =
+        candidates[0];
       allocations.push({
         need: need.id,
         resource: resource.id,
@@ -197,6 +216,8 @@ export function allocationPlan({
         quantity,
         owner: resource.owner,
         needsRouteCheck: true,
+        ttlMs: reservationEstimate.recommendedTtlMs,
+        reservationEstimate,
         ...(travel ? { travelEstimate: travel } : {}),
       });
       stock.set(ownedKey(resource), stock.get(ownedKey(resource)) - quantity);
@@ -212,10 +233,122 @@ export function allocationPlan({
         reason: "No uncommitted eligible capacity in this planning round",
       });
   }
+  // Admission above preserves the approved need order and exact native-unit
+  // quantities. Improve only this concurrent batch's fleet assignment: greedy
+  // nearest-first choices can send the second truck on a long avoidable detour.
+  // No unreceived need, future availability or observer road state enters here.
+  const assignment = {
+    swaps: 0,
+    beforeSeconds: allocations.reduce(
+      (n, a) => n + (a.travelEstimate?.seconds ?? 0),
+      0,
+    ),
+    afterSeconds: null,
+    objective:
+      "shorter concurrent received travel, unchanged priority admission and quantities",
+  };
+  if (hasMap) {
+    const needById = new Map(needs.map((n) => [n.id, n])),
+      resourceByKey = new Map(resources.map((r) => [ownedKey(r), r])),
+      vehicleByKey = new Map(vehicles.map((v) => [ownedKey(v), v]));
+    const changed = (allocation, supply) => {
+      const resource = resourceByKey.get(
+          ownedKey({ owner: supply.owner, id: supply.resource }),
+        ),
+        vehicle = vehicleByKey.get(
+          ownedKey({ owner: supply.owner, id: supply.vehicle }),
+        ),
+        need = needById.get(allocation.need),
+        quantity = allocation.quantity;
+      if (
+        !resource ||
+        !vehicle ||
+        resource.type !== need.type ||
+        quantity > (vehicle.capacity ?? 0) ||
+        quantity * (resource.type === "energy" ? 150 : 1) >
+          (vehicle.maxCargoKg ?? Infinity) ||
+        quantity * (resource.type === "energy" ? 0.2 : 0.001) >
+          (vehicle.volumeM3 ?? Infinity)
+      )
+        return null;
+      const travel = travelFor(resource, vehicle, need, quantity);
+      if (!travel) return null;
+      const reservationEstimate = dispatchReservationEstimate(
+        travel.pickup,
+        executionPolicy,
+      );
+      if (reservationEstimate.recommendedTtlMs > reservationEstimate.maxTtlMs)
+        return null;
+      // Do not introduce or increase a known missed useful window to shorten
+      // another trip. Unknown windows remain unknown, never invented deadlines.
+      if (Number.isFinite(need.deadline)) {
+        const serviceMs = (t) =>
+          now +
+          t.seconds * 1000 +
+          (executionPolicy?.delivery?.loadMs ?? 0) +
+          (executionPolicy?.delivery?.unloadMs ?? 0) +
+          (executionPolicy?.delivery?.commandNominalLatencyMs ?? 0);
+        if (
+          Math.max(0, serviceMs(travel) - need.deadline) >
+          Math.max(0, serviceMs(allocation.travelEstimate) - need.deadline)
+        )
+          return null;
+      }
+      return {
+        ...allocation,
+        owner: supply.owner,
+        resource: supply.resource,
+        vehicle: supply.vehicle,
+        travelEstimate: travel,
+        reservationEstimate,
+        ttlMs: reservationEstimate.recommendedTtlMs,
+      };
+    };
+    for (let pass = 0; pass < allocations.length; pass++) {
+      let improved = false;
+      for (let i = 0; i < allocations.length; i++)
+        for (let j = i + 1; j < allocations.length; j++) {
+          const a = allocations[i],
+            b = allocations[j],
+            ra = ownedKey({ owner: a.owner, id: a.resource }),
+            rb = ownedKey({ owner: b.owner, id: b.resource }),
+            na = changed(a, b),
+            nb = changed(b, a);
+          if (
+            !na ||
+            !nb ||
+            na.travelEstimate.seconds + nb.travelEstimate.seconds >=
+              a.travelEstimate.seconds + b.travelEstimate.seconds - 1e-8
+          )
+            continue;
+          if (
+            ra !== rb &&
+            ((stock.get(ra) ?? 0) + a.quantity - b.quantity < 0 ||
+              (stock.get(rb) ?? 0) + b.quantity - a.quantity < 0)
+          )
+            continue;
+          if (ra !== rb) {
+            stock.set(ra, stock.get(ra) + a.quantity - b.quantity);
+            stock.set(rb, stock.get(rb) + b.quantity - a.quantity);
+          }
+          allocations[i] = na;
+          allocations[j] = nb;
+          assignment.swaps++;
+          improved = true;
+        }
+      if (!improved) break;
+    }
+  }
+  assignment.afterSeconds = allocations.reduce(
+    (n, a) => n + (a.travelEstimate?.seconds ?? 0),
+    0,
+  );
   return {
     allocations,
     unserved,
-    algorithm: "deterministic constrained greedy reference",
+    algorithm:
+      "deterministic priority admission with bounded received fleet assignment",
+    assignment,
     routing: hasMap
       ? "received pickup and delivery travel estimates"
       : "no received map; no travel estimate",
@@ -599,6 +732,7 @@ export async function validatePlan(store, org, proposal) {
       usedStock.set(r.id, (usedStock.get(r.id) ?? 0) + q);
       usedVehicles.add(v.id);
       const map = (await store.get(org, "context", "geography", false))?.map;
+      let pickup = null;
       if (map?.roads) {
         const roads = Object.fromEntries(
           (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
@@ -613,21 +747,47 @@ export async function validatePlan(store, org, proposal) {
           "DESTINATION_LOCATION",
           "Query the destination location before checking a route.",
         );
-        const route = shortestRoute(map, r.node, destination, v, roads);
+        pickup = shortestRoute(map, v.node, r.node, v, roads);
+        const route = shortestRoute(
+          map,
+          r.node,
+          destination,
+          { ...v, weightKg: (v.weightKg ?? 0) + q * massPerUnit },
+          roads,
+        );
         check(
-          route,
+          pickup && route,
           "NO_KNOWN_ROUTE",
           "No accessible known route can carry this vehicle to the destination.",
           409,
         );
         check(
           (v.fuel ?? Infinity) >=
-            (route.distanceM / 1000) * (v.fuelMlPerKm ?? 0),
+            ((pickup.distanceM + route.distanceM) / 1000) *
+              (v.fuelMlPerKm ?? 0),
           "FUEL",
           "Fuel is insufficient for this checked route.",
         );
-        checks.push({ index, type: "route", state: "checked", ...route });
+        checks.push({
+          index,
+          type: "route",
+          state: "checked",
+          ...route,
+          pickup,
+        });
       }
+      const reservation = await validateDispatchReservation(
+        store,
+        org,
+        a.params,
+        { pickup },
+      );
+      checks.push({
+        index,
+        type: "dispatch_reservation",
+        state: "checked",
+        ...reservation,
+      });
       checks.push({
         index,
         type: "quantity_capacity",
@@ -779,4 +939,62 @@ export async function validatePlan(store, org, proposal) {
     }
   }
   return checks;
+}
+
+export async function validateDispatchReservation(
+  store,
+  org,
+  params,
+  { pickup } = {},
+) {
+  if (pickup === undefined) {
+    const r = await store.get(org, "resource", params.resource, false),
+      v = await store.get(org, "vehicle", params.vehicle, false),
+      map = (await store.get(org, "context", "geography", false))?.map,
+      roads = Object.fromEntries(
+        (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
+      );
+    pickup =
+      map && r && v ? shortestRoute(map, v.node, r.node, v, roads) : null;
+    check(
+      !map || !r || !v || pickup,
+      "NO_KNOWN_ROUTE",
+      "No received pickup route supports this dispatch reservation.",
+      409,
+    );
+  }
+  const estimate = dispatchReservationEstimate(
+    pickup,
+    await receivedExecutionPolicy(store, org),
+  );
+  if (params.commitment || params.transfer) {
+    check(
+      params.ttlMs === undefined,
+      "RESERVATION_SCOPE",
+      "A dispatch cannot extend an existing commitment or transfer. Review that reservation separately.",
+    );
+    const state = (await store.get(org, "context", "operational", false))
+        ?.snapshot,
+      row = (params.commitment ? state?.commitments : state?.transfers)?.find(
+        (c) => c.id === (params.commitment ?? params.transfer),
+      );
+    if (row && estimate.timingKnown && Number.isFinite(row.expiresAt))
+      check(
+        Number.isFinite(state.now) &&
+          row.expiresAt - state.now >= estimate.minimumTtlMs,
+        "RESERVATION_TOO_SHORT",
+        "The existing received reservation expires before pickup and loading. Obtain a new owner-reviewed reservation; its expiry cannot be extended by dispatch.",
+        409,
+      );
+    return {
+      ...estimate,
+      existingReservation: params.commitment ?? params.transfer,
+      ttlMs: null,
+    };
+  }
+  return {
+    ...estimate,
+    ttlMs: validateDispatchTtl(params.ttlMs, estimate),
+    existingReservation: null,
+  };
 }

@@ -2,6 +2,8 @@
 
 Actualizado el 13 de octubre de 2026 (Tokio). Este documento relaciona la [especificación de la plataforma](PLATAFORMA.md), el [simulador](SIMULADOR.md), el código ejecutable, las pruebas y lo que permiten afirmar los resultados. La matriz completa de entradas, salidas, pantallas y KPIs permanece en [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md). Los resultados numéricos finales se registran en [VALIDACION.md](VALIDACION.md) y en los reportes originales enlazados allí.
 
+> El cierre histórico de este documento precede a la iteración de mejora temporal. El código actual pasó 215 pruebas de plataforma y 154 del simulador, más 84 comprobaciones de navegador. Las campañas actuales están en [MEJORA_RESPUESTA.md](MEJORA_RESPUESTA.md); la matriz exhaustiva de requisitos y sus límites está en [COBERTURA_REQUISITOS.md](COBERTURA_REQUISITOS.md). Un cierre funcional y una ganancia comparativa son estados distintos.
+
 ## 1. Alcance de esta entrega
 
 La implementación usa Gemma 4 31B mediante OpenRouter, datos y herramientas de origen recibidos por HTTP, cuatro instancias independientes de NEXO y un socio externo con gateway propio. El mundo del laboratorio, sus publicaciones y sus consecuencias físicas se ejecutan realmente. El visor 3D sirve para inspeccionar esas consecuencias; una animación no sustituye un recibo.
@@ -122,7 +124,7 @@ Seguir [LOCAL.md](LOCAL.md) para arrancar las instancias y sus cuentas privadas.
 
 La especificación sigue definiendo los objetivos. Este documento informa implementación y evidencia sin reescribirlos retroactivamente para que cualquier resultado parezca suficiente.
 
-## 11. Estado final de la entrega local
+## 11. Estado de la entrega local anterior
 
 [Verificación final](../reports/verifications/1791818045802.json): **120 pruebas de plataforma y 120 del simulador aprobadas**, sin omitir fallos ni cambiar el candidato. [Resultados completos](VALIDACION.md#13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio) incluyen campaña principal de 36 outcomes, variación estructural, reparación física, carga concurrente/semántica, bytes, UI, fuente real y transporte.
 

@@ -1,3 +1,4 @@
+import { actionBrief } from "./uploads.mjs";
 const content = document.querySelector("#content"),
   notice = document.querySelector("#notice");
 let csrf = "";
@@ -55,7 +56,7 @@ async function show() {
     (d.requests
       .map(
         (w) =>
-          `<section><span class="status">${escape(w.state.replaceAll("_", " "))} · from ${escape(w.from)}</span><h2>${escape(w.title)}</h2><p>Requested: ${escape(w.action?.params.quantity)} native units, using your own vehicle ${escape(w.action?.params.vehicle)}.</p>${w.changedReason ? `<p>${escape(w.changedReason)}</p>` : ""}<details><summary>Requested scope and source confirmation</summary><pre>${escape(JSON.stringify({ action: w.action, issued: w.issued, receipt: w.receipt }, null, 2))}</pre></details>${w.state === "awaiting_review" ? `<form data-id="${escape(w.id)}" data-version="${w.version}"><label>Decision reason<textarea name="note" required></textarea></label><button name="decision" value="approve">Approve my delivery</button><button name="decision" value="reject">Decline request</button></form>` : ""}<p class="status">${w.receipt?.confirmedBySource ? "Your operational source confirms physical receipt." : "A request or dispatch is not a confirmed arrival."}</p></section>`,
+          `<section><span class="status">${escape(w.state.replaceAll("_", " "))} · from ${escape(w.from)}</span><h2>${escape(w.title)}</h2><p>${escape(actionBrief(w.action))}.</p>${w.changedReason ? `<p>${escape(w.changedReason)}</p>` : ""}<details><summary>Requested scope and source confirmation</summary><pre>${escape(JSON.stringify({ action: w.action, issued: w.issued, receipt: w.receipt }, null, 2))}</pre></details>${w.state === "awaiting_review" ? `<form data-id="${escape(w.id)}" data-version="${w.version}"><label>Decision reason<textarea name="note" required></textarea></label><button name="decision" value="approve">Approve my delivery</button><button name="decision" value="reject">Decline request</button></form>` : ""}<p class="status">${w.receipt?.confirmedBySource ? (["failed", "blocked", "cancelled"].includes(w.receipt.state) ? "Your operational source reports interrupted work. A new owner decision is required." : ["completed", "received", "service"].includes(w.receipt.state) ? "Your operational source confirms physical receipt." : "Your source reports work in progress; arrival is not yet confirmed.") : "A request or dispatch is not a confirmed arrival."}</p></section>`,
       )
       .join("") ||
       "<section><h2>No requests yet.</h2><p>Your inventory remains private until you choose what to share.</p></section>");

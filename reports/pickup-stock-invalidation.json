@@ -1,0 +1,275 @@
+{
+  "at": "2026-10-12T21:15:51.941Z",
+  "validForComparativeClaims": false,
+  "causes": [
+    "15-minute reservation can expire during a legitimate longer pickup without a truthful terminal receipt",
+    "Facility activation ignores correctly received owner-suffixed inventory after foreign aid",
+    "Stale service snapshot and pending holds cause repeated plans and wasted model budget"
+  ],
+  "sourceMutationAt": "2026-10-12T21:09:30.952Z",
+  "stopReceipt": "reports/pickup-failure-boundary-stop.json",
+  "entries": [
+    {
+      "folder": "reports/discovery/1791837744022",
+      "declaredRuns": 9,
+      "closedRuns": 2,
+      "missingRuns": 7,
+      "rows": [
+        {
+          "file": "response-burst-2026-01-B5.json",
+          "arm": "B5",
+          "seed": "response-burst-2026-01",
+          "status": "completed",
+          "costUsd": 0,
+          "chargedBudgetUsd": 0,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": {
+            "eligible": 24,
+            "completed": 23,
+            "rightCensored": 1,
+            "medianMs": 1960513,
+            "p95Ms": 3792013,
+            "restrictedMeanMs": 2252095.7916666665
+          },
+          "errors": []
+        },
+        {
+          "file": "response-burst-2026-01-B6.json",
+          "arm": "B6",
+          "seed": "response-burst-2026-01",
+          "status": "completed",
+          "costUsd": 0.0070272400000000014,
+          "chargedBudgetUsd": 0.0070272400000000014,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": {
+            "eligible": 24,
+            "completed": 23,
+            "rightCensored": 1,
+            "medianMs": 1992013,
+            "p95Ms": 3778013,
+            "restrictedMeanMs": 2215179.125
+          },
+          "errors": []
+        }
+      ],
+      "knownClosedCostUsd": 0.0070272400000000014,
+      "knownClosedChargedBudgetUsd": 0.0070272400000000014,
+      "activeUsagePending": false
+    },
+    {
+      "folder": "reports/discovery/1791837754844",
+      "declaredRuns": 2,
+      "closedRuns": 2,
+      "missingRuns": 0,
+      "rows": [
+        {
+          "file": "response-burst-2026-01-B5.json",
+          "arm": "B5",
+          "seed": "response-burst-2026-01",
+          "status": "completed",
+          "costUsd": 0,
+          "chargedBudgetUsd": 0,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": {
+            "eligible": 24,
+            "completed": 23,
+            "rightCensored": 1,
+            "medianMs": 1738013,
+            "p95Ms": 3802513,
+            "restrictedMeanMs": 2265908.2916666665
+          },
+          "errors": []
+        },
+        {
+          "file": "response-burst-2026-01-B6.json",
+          "arm": "B6",
+          "seed": "response-burst-2026-01",
+          "status": "completed",
+          "costUsd": 0.007239399999999998,
+          "chargedBudgetUsd": 0.007239399999999998,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": {
+            "eligible": 24,
+            "completed": 24,
+            "rightCensored": 0,
+            "medianMs": 2035013,
+            "p95Ms": 3816013,
+            "restrictedMeanMs": 2218929.6666666665
+          },
+          "errors": []
+        }
+      ],
+      "knownClosedCostUsd": 0.007239399999999998,
+      "knownClosedChargedBudgetUsd": 0.007239399999999998,
+      "activeUsagePending": false
+    },
+    {
+      "folder": "reports/discovery/1791839019386",
+      "declaredRuns": 2,
+      "closedRuns": 0,
+      "missingRuns": 2,
+      "rows": [],
+      "knownClosedCostUsd": 0,
+      "knownClosedChargedBudgetUsd": 0,
+      "activeUsagePending": false
+    },
+    {
+      "folder": "reports/evaluations/1791837825645",
+      "declaredRuns": 6,
+      "closedRuns": 6,
+      "missingRuns": 0,
+      "rows": [
+        {
+          "file": "S19-delegated-final-2026-delayed-01-B5.json",
+          "arm": "B5",
+          "seed": "delegated-final-2026-delayed-01",
+          "status": "completed",
+          "costUsd": 0,
+          "chargedBudgetUsd": 0,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": []
+        },
+        {
+          "file": "S19-delegated-final-2026-delayed-01-B6.json",
+          "arm": "B6",
+          "seed": "delegated-final-2026-delayed-01",
+          "status": "failed",
+          "costUsd": 0.08527074000000001,
+          "chargedBudgetUsd": 0.08527074000000001,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": [
+            {
+              "phase": "policy_round",
+              "round": 9,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            },
+            {
+              "phase": "policy_round",
+              "round": 10,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            },
+            {
+              "phase": "policy_round",
+              "round": 11,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            }
+          ]
+        },
+        {
+          "file": "S19-delegated-final-2026-delayed-01-B7.json",
+          "arm": "B7",
+          "seed": "delegated-final-2026-delayed-01",
+          "status": "invalid_candidate_changed",
+          "costUsd": 0.07789285999999998,
+          "chargedBudgetUsd": 0.12424299999999998,
+          "unknownCostCalls": 5,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": [
+            {
+              "phase": "policy_round",
+              "round": 4,
+              "code": "PROVIDER_SCHEMA"
+            },
+            {
+              "phase": "policy_round",
+              "round": 10,
+              "code": "PROVIDER_TIMEOUT"
+            },
+            {
+              "phase": "manifest",
+              "code": "CANDIDATE_CHANGED_DURING_RUN"
+            }
+          ]
+        },
+        {
+          "file": "S19-delegated-final-2026-distributed-01-B5.json",
+          "arm": "B5",
+          "seed": "delegated-final-2026-distributed-01",
+          "status": "completed",
+          "costUsd": 0,
+          "chargedBudgetUsd": 0,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": []
+        },
+        {
+          "file": "S19-delegated-final-2026-distributed-01-B6.json",
+          "arm": "B6",
+          "seed": "delegated-final-2026-distributed-01",
+          "status": "failed",
+          "costUsd": 0.10111205999999999,
+          "chargedBudgetUsd": 0.10111205999999999,
+          "unknownCostCalls": 0,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": [
+            {
+              "phase": "policy_round",
+              "round": 10,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            },
+            {
+              "phase": "policy_round",
+              "round": 11,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            }
+          ]
+        },
+        {
+          "file": "S19-delegated-final-2026-distributed-01-B7.json",
+          "arm": "B7",
+          "seed": "delegated-final-2026-distributed-01",
+          "status": "invalid_candidate_changed",
+          "costUsd": 0.09789867999999999,
+          "chargedBudgetUsd": 0.10761787999999999,
+          "unknownCostCalls": 1,
+          "buildChanged": false,
+          "sufficient": null,
+          "errors": [
+            {
+              "phase": "policy_round",
+              "round": 10,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            },
+            {
+              "phase": "policy_round",
+              "round": 11,
+              "code": "ORGANIZATION_CALL_BUDGET"
+            },
+            {
+              "phase": "manifest",
+              "code": "CANDIDATE_CHANGED_DURING_RUN"
+            }
+          ]
+        }
+      ],
+      "knownClosedCostUsd": 0.36217433999999993,
+      "knownClosedChargedBudgetUsd": 0.41824368,
+      "activeUsagePending": false
+    }
+  ],
+  "combinedProbes": {
+    "files": [
+      "reports/combined/local-combined-load-1791837802363.json",
+      "reports/combined/local-combined-load-1791838300733.json"
+    ],
+    "scope": "Historical transport/queue diagnostics from the superseded engine; no model/baseline benefit claim."
+  },
+  "transfer": {
+    "started": false,
+    "calls": 0,
+    "knownCostUsd": 0,
+    "reason": "Queued transfer cancelled before any episode or provider call; repeat only after corrected common engine/product and fresh freeze."
+  },
+  "interpretation": "The apparent 2.07% positive control estimate depended on a censored baseline pickup; it is not a legitimate improvement. No missing outcome is imputed. Pending B7 usage must be refreshed after safe episode completion."
+}

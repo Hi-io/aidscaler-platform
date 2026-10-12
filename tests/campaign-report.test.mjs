@@ -63,6 +63,18 @@ test("one shared inference budget permits a busy owner without fixed quarters an
   );
 });
 
+test("a changed simulator retains costs and physical outcomes but gives no apparent campaign advantage", () => {
+  const outcomes = [row("B5", 0.25), { ...row("B6", 0.25), simulatorChanged: true, status: "invalid_simulator_changed" }];
+  const report = summarizeCampaign({ folder: "reports/changed", protocol: { scenarios: ["S19"], seeds: 1, arms: ["B5", "B6"] }, rows: outcomes });
+  assert.equal(report.runs, 2);
+  assert.equal(report.costUsd, .02);
+  assert.equal(report.comparisons[0].comparisonRejected, true);
+  assert.equal(report.comparisons[0].reason, "EVALUATION_BUILD_CHANGED");
+  assert.equal(report.comparisons[0].improvement, null);
+  assert.equal(report.gates[1].status, "invalid_simulator_changed");
+  assert.equal(outcomes[1].metrics.services.water.uncoveredUnitMs, 100);
+});
+
 test("structural variants count planned worlds and retain a missing outcome without a negative denominator", () => {
   const protocol = {
     scenarios: ["S19"],

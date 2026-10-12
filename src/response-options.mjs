@@ -46,6 +46,7 @@ export async function responseOptions(
         requirements: plan.requirements,
         missing: plan.missing,
         owners: plan.ownerApprovals,
+        references: plan.references,
         actions: plan.actions.length,
         seats: plan.actions
           .filter((a) => a.type === "evacuate")
@@ -62,6 +63,7 @@ export async function responseOptions(
         source: "received_directory_only",
         nextCheck: "verify_building",
         reason: error.code,
+        references: [place.id],
       });
     }
   }
@@ -85,6 +87,9 @@ export async function responseOptions(
     focusNeed: focus ?? null,
     knownConcurrentNeeds: queue.total,
     immediateSupply: {
+      references: [
+        ...new Set(allocation.allocations.flatMap((a) => a.evidenceIds)),
+      ],
       quantities: allocation.allocations.map((a) => ({
         need: a.need,
         quantity: a.quantity,

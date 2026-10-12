@@ -1,0 +1,10 @@
+{
+  "declaredPlan": "reports/discovery-followup-plan.json",
+  "runs": [
+    {
+      "name": "single-confirmation-worker",
+      "folder": "reports/discovery/1791837754844",
+      "exitCode": 0
+    }
+  ]
+}

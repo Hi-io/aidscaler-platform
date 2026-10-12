@@ -42,6 +42,11 @@ export function pairedBootstrap(
     const groups = new Map();
     for (const r of rows) {
       check(
+        !r.candidateChanged && !r.evaluatorChanged && !r.simulatorChanged && !/^invalid_(candidate|evaluator|simulator)_changed$/.test(r.status ?? ""),
+        "EVALUATION_BUILD_CHANGED",
+        "A source build changed during this run; retain its outcomes but reject comparative effects.",
+      );
+      check(
         r.metrics,
         "EVALUATION_MISSING",
         "Failed runs must retain outcome metrics, not be silently dropped.",

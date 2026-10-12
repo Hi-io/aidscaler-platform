@@ -4,6 +4,7 @@ import {
   buildFingerprint,
   evaluatorFingerprint,
 } from "./harness.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "./simulator-build.mjs";
 import { installResponseBenchmark } from "../../disaster-response-simulator/generators/response-benchmark.mjs";
 import { evaluate } from "../../disaster-response-simulator/evaluation/metrics.mjs";
 import {
@@ -17,6 +18,7 @@ import { configureResponsePolicy } from "../src/response-policy.mjs";
 import { hash } from "../src/store.mjs";
 import { percentile, pairedBootstrap } from "../src/evaluation.mjs";
 import { ModelBudgetPool } from "../src/budget-pool.mjs";
+import { receivedProgressReference, routinePublicCommentary } from "../src/source-relevance.mjs";
 import {
   capturePhysicalDepartures,
   operationTrace,
@@ -32,6 +34,7 @@ export const DISCOVERY_PROTOCOL = {
     B5: "Conventional shared planner with free structured parsing plus finite human source review",
     B6: "Real configured model perception, targeted confirmations and deterministic batching",
     B8: "Stronger free broad keyword/location discovery, then the same targeted confirmations and batching",
+    B9: "Same configured model as a general tool-using disaster-response investigator: raw source batches, no specialized semantic preprocessor, same operational tools and reviewed physical response",
     B0: "Extraction disconnected: formal observations only, same competent allocator",
   },
   clocks:
@@ -40,6 +43,8 @@ export const DISCOVERY_PROTOCOL = {
     "Zero human-reading delay, immediate formal reports, failures, unserved needs and no advantage against a stronger keyword baseline must remain visible.",
   verification:
     "Requests return a pending receipt. The same finite field queue progresses while owners review and trucks move; no controller must wait synchronously for all inquiries before acting on an already received need.",
+  generalAgentScope:
+    "B9 is this explicit finite general-agent reference implementation, not all possible agents. It receives the same public sources, free structured parsing, approved policy, deterministic planner, owners, model configuration and total call/cost cap. The general agent chooses its own queries and drafts; no observer facts or specialized perception receipt are supplied.",
 };
 
 export async function runDiscoveryEpisode({
@@ -60,13 +65,14 @@ export async function runDiscoveryEpisode({
   packetLoss = 0,
   budgetUsd = 0.15,
   maxModelCalls = 16,
+  provider,
   candidateFingerprint,
   evaluatorBuild,
   onProgress = () => {},
   shouldStop = () => false,
 } = {}) {
   if (
-    !["B5", "B6", "B8", "B0"].includes(arm) ||
+    !["B5", "B6", "B8", "B0", "B9"].includes(arm) ||
     !Number.isSafeInteger(humanReadMs) ||
     humanReadMs < 0 ||
     humanReadMs > 600000 ||
@@ -77,6 +83,7 @@ export async function runDiscoveryEpisode({
     throw Error("Invalid finite discovery protocol");
   candidateFingerprint ??= await buildFingerprint();
   evaluatorBuild ??= await evaluatorFingerprint();
+  await requireLoadedSimulatorBuild();
   const episode = "discovery-" + arm + "-" + seed + "-" + Date.now();
   const start = performance.now(),
     h = await createHarness({
@@ -99,6 +106,7 @@ export async function runDiscoveryEpisode({
         sourceRequestLimit: 1000000,
       },
       budgetUsd,
+      provider,
       maxCalls: 8,
       platformConfig: {
         modelScopePrefix: episode,
@@ -131,7 +139,10 @@ export async function runDiscoveryEpisode({
   let status = "completed",
     planningTurns = 0,
     semanticBatches = 0,
-    readCosts = 0;
+    generalAgentBatches = 0,
+    readCosts = 0,
+    reconciledProgressSources = 0,
+    routineCommentarySources = 0;
   // Provider wall time is retained AND charged to the world: no optimistic
   // fifteen-second assumption when this real call took longer to finish.
   const originalFinish = app.connector.finishModel.bind(app.connector);
@@ -232,7 +243,7 @@ export async function runDiscoveryEpisode({
     // the scorer. Startup reads are identical in every arm.
     w.advance(60000);
     for (const owner of h.apps) {
-      for (const target of ["map", "inventory", "vehicles"])
+      for (const target of ["map", "inventory", "vehicles", "policy"])
         await owner.connector.action(
           "query",
           { target },
@@ -290,11 +301,27 @@ export async function runDiscoveryEpisode({
         );
       const explicitRequests = [],
         keywordRequests = [];
+      const operations = await app.store.list('org0', 'operation', 10000);
       for (const source of originals) {
         seenSources.add(
           source.id + ":" + (source.sourceVersion ?? source.version ?? 1),
         );
         if (arm === "B0") continue;
+        // The same narrow zero-model progress reconciliation is available to
+        // conventional and keyword references. It never suppresses unknown
+        // reports, contradictions or additional requests.
+        const progress = receivedProgressReference(source, operations);
+        if (progress) {
+          reconciledProgressSources++;
+          activities.push({ stage: 'received-progress-reconciliation', source: source.id, at: receivedAt, ...progress });
+          continue;
+        }
+        const commentary = routinePublicCommentary(source);
+        if (commentary) {
+          routineCommentarySources++;
+          activities.push({stage:'routine-commentary-retained',source:source.id,at:receivedAt,...commentary});
+          continue;
+        }
         const explicit = parseExplicitCurrentRequest(source, places);
         if (explicit) explicitRequests.push(explicit);
         else if (!/^ARCHIVE\b/i.test(source.text)) {
@@ -336,6 +363,7 @@ export async function runDiscoveryEpisode({
           worldMinutes: w.now / 60000,
           planningTurns,
           semanticBatches,
+          generalAgentBatches,
           receivedOriginals: seenSources.size,
         });
       if (w.now - lastSourcePoll >= 60000) await receiveSourceBatch();
@@ -345,18 +373,21 @@ export async function runDiscoveryEpisode({
       await actOnObservedDraft(
         await draftReceivedResponse(app, episode + "-turn-" + planningTurns++),
       );
-      if (arm === "B6" && batchOffset < pendingSources.length) {
+      if (["B6", "B9"].includes(arm) && batchOffset < pendingSources.length) {
         const batch = pendingSources.slice(batchOffset, batchOffset + 30);
         const at = w.now;
+        const stage = arm === "B9" ? "general-agent-discovery" : "model-discovery";
         let result;
         try {
-          result = await app.discovery.run(
-            { ids: batch.map((s) => s.id) },
-            episode + "-batch-" + semanticBatches++,
-          );
+          result = arm === "B9"
+            ? await app.investigator.run({ ids: batch.map(s => s.id), policy: "general", interpretSources: false, focusMode: "manual" }, episode + "-general-batch-" + generalAgentBatches++)
+            : await app.discovery.run(
+                { ids: batch.map((s) => s.id) },
+                episode + "-batch-" + semanticBatches++,
+              );
         } catch (error) {
           errors.push({
-            phase: "model-discovery",
+            phase: stage,
             at: w.now,
             code: error.code ?? error.name,
             sourceCount: batch.length,
@@ -370,7 +401,7 @@ export async function runDiscoveryEpisode({
         }
         batchOffset += batch.length;
         activities.push({
-          stage: "model-discovery",
+          stage,
           sourceCount: batch.length,
           requestedAt: at,
           availableAt: w.now,
@@ -481,6 +512,13 @@ export async function runDiscoveryEpisode({
       ),
     )
   ).flatMap((r) => r.rows);
+  const finalBuilds = await checkFinalBuilds({
+    candidate: candidateFingerprint,
+    evaluator: evaluatorBuild,
+    simulator: w.manifest.engineBuild,
+  }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint });
+  if (finalBuilds.invalidStatus) status = finalBuilds.invalidStatus;
+  errors.push(...finalBuilds.errors);
   const report = {
     arm,
     seed,
@@ -488,8 +526,22 @@ export async function runDiscoveryEpisode({
     errors,
     candidateFingerprint,
     evaluatorFingerprint: evaluatorBuild,
-    candidateChanged: candidateFingerprint !== (await buildFingerprint()),
-    evaluatorChanged: evaluatorBuild !== (await evaluatorFingerprint()),
+    candidateChanged: finalBuilds.candidateChanged,
+    evaluatorChanged: finalBuilds.evaluatorChanged,
+    simulatorChanged: finalBuilds.simulatorChanged,
+    finalCandidateFingerprint: finalBuilds.finalCandidateFingerprint,
+    finalEvaluatorFingerprint: finalBuilds.finalEvaluatorFingerprint,
+    finalEngineBuild: finalBuilds.finalEngineBuild,
+    modelConfig: {
+      modelId: app.config.modelId,
+      maxOutputTokens: app.config.modelMaxOutputTokens,
+      reasoningEnabled: app.config.modelReasoning,
+      providerSort: app.config.modelProviderSort,
+      priceMultiplier: app.config.modelPriceMultiplier,
+      maxCallsPerInvestigation: app.config.maxCalls,
+      totalEpisodeCalls: maxModelCalls,
+      budgetUsd,
+    },
     protocol: {
       ...DISCOVERY_PROTOCOL,
       humanReadMs,
@@ -546,6 +598,9 @@ export async function runDiscoveryEpisode({
       completedHumanReviews: attention.filter((j) => j.completed).length,
       modeledHumanAttentionMs: readCosts,
       semanticBatches,
+      generalAgentBatches,
+      reconciledProgressSources,
+      routineCommentarySources,
       note: "Source counts and inferred claims are not the number of people or needs physically served.",
     },
     activities,
@@ -599,7 +654,7 @@ export async function runDiscoveryEpisode({
 export function summarizeDiscovery(rows) {
   const groups = Object.groupBy(rows, (r) => r.arm),
     comparisons = [];
-  for (const arm of ["B5", "B8", "B0"]) {
+  for (const arm of ["B5", "B8", "B0", "B9"]) {
     const reference = groups[arm] ?? [],
       candidate = groups.B6 ?? [];
     const pairs = reference.map((a) => ({
@@ -613,6 +668,8 @@ export function summarizeDiscovery(rows) {
         b.candidateChanged ||
         a.evaluatorChanged ||
         b.evaluatorChanged ||
+        a.simulatorChanged ||
+        b.simulatorChanged ||
         hash(a.protocol) !== hash(b.protocol) ||
         hash(a.corpus) !== hash(b.corpus) ||
         a.candidateFingerprint !== b.candidateFingerprint ||
@@ -681,7 +738,7 @@ export function summarizeDiscovery(rows) {
     failedRuns: rows.filter((r) => r.status !== "completed").length,
     modelFailures: rows.reduce(
       (s, r) =>
-        s + r.errors.filter((e) => e.phase === "model-discovery").length,
+        s + r.errors.filter((e) => ["model-discovery", "general-agent-discovery"].includes(e.phase)).length,
       0,
     ),
     invariantViolations: rows.reduce((s, r) => s + r.invariants.length, 0),

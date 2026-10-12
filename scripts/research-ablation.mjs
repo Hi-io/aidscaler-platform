@@ -1,4 +1,5 @@
 import { runEpisode, buildFingerprint, evaluatorFingerprint } from "../evaluation/harness.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "../evaluation/simulator-build.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { pairedBootstrap } from "../src/evaluation.mjs";
 import { blockedRepairEpisode } from "../evaluation/blocked-repair.mjs";
@@ -7,7 +8,7 @@ const o = Object.fromEntries(process.argv.slice(2).map(s => s.replace(/^--/, "")
   kind = o.kind ?? "repair", scenarios = (o.scenarios ?? (kind === "repair" ? "S23" : "S06,S11,S18")).split(",");
 if (!["repair", "inquiry"].includes(kind) || !Number.isSafeInteger(seeds) || seeds < 1 || seeds > 30 || !(cap > 0 && cap <= budget && budget <= 10) || !scenarios.every(s => /^S(0[1-9]|1[0-9]|2[0-4])$/.test(s))) throw Error("Invalid finite ablation protocol");
 const folder = "reports/ablations/" + kind + "-" + Date.now(),
-  protocol = { at: new Date().toISOString(), kind, scenarios, seeds, budgetUsd: budget, episodeBudgetUsd: cap, candidateFingerprint: await buildFingerprint(), evaluatorFingerprint: await evaluatorFingerprint(),
+  protocol = { at: new Date().toISOString(), kind, scenarios, seeds, budgetUsd: budget, episodeBudgetUsd: cap, candidateFingerprint: await buildFingerprint(), evaluatorFingerprint: await evaluatorFingerprint(), simulatorBuild: await requireLoadedSimulatorBuild(),
     arm: "B6", planningRounds: kind === "repair" ? 1 : 3, policyIntervalMs: 1200000, responseOrder: "deadline_then_priority", includeFailures: true,
     treatments: kind === "repair" ? ["full_refresh", "selective"] : ["broad_refresh", "active"],
     scope: "Internal mechanism ablation. Repair physically blocks a pre-existing loaded trip and compares four-class refresh with using received changes, then requires the same original cargo to arrive. Broad inquiry refreshes six classes. Treatments preserve physical work with the same model, sources, budgets, tools, owners and finite review. Not a professional baseline or independent annotation of marginal query utility.",
@@ -16,7 +17,7 @@ await mkdir(folder, { recursive: true }); await writeFile(folder + "/protocol.js
 const rows = []; let charged = 0, stoppedReason = null;
 for (const scenario of scenarios) for (let i = 1; i <= seeds && !stoppedReason; i++) for (const treatment of protocol.treatments) {
   if (charged + cap > budget) { stoppedReason = "budget_cap"; break; }
-  if (protocol.candidateFingerprint !== await buildFingerprint() || protocol.evaluatorFingerprint !== await evaluatorFingerprint()) { stoppedReason = "source_changed"; break; }
+  if ((await checkFinalBuilds({ candidate: protocol.candidateFingerprint, evaluator: protocol.evaluatorFingerprint, simulator: protocol.simulatorBuild }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint })).invalidStatus) { stoppedReason = "source_changed"; break; }
   const seed = "research-ablation-" + String(i).padStart(2, "0");
   console.log(JSON.stringify({ running: { scenario, seed, kind, treatment } }));
   const report = kind === "repair" ? await blockedRepairEpisode({ seed, strategy: treatment, budgetUsd: cap }) :
@@ -25,13 +26,20 @@ for (const scenario of scenarios) for (let i = 1; i <= seeds && !stoppedReason; 
   charged += report.chargedBudgetUsd; rows.push({ treatment, report });
   await writeFile(`${folder}/${scenario}-${seed}-${treatment}.json`, JSON.stringify(report, null, 2));
   await writeFile(folder + "/progress.json", JSON.stringify({ completed: rows.length, chargedBudgetUsd: charged, stoppedReason }, null, 2));
+  if (report.candidateChanged || report.evaluatorChanged || report.simulatorChanged) { stoppedReason = "source_changed"; break; }
 }
 const contrasts = [], incomplete = [];
 for (const scenario of scenarios) {
  const base = rows.filter(r => r.treatment === protocol.treatments[0] && r.report.scenario === scenario).map(r => r.report),
    candidate = rows.filter(r => r.treatment === protocol.treatments[1] && r.report.scenario === scenario).map(r => r.report);
  if (base.length !== seeds || candidate.length !== seeds) { incomplete.push(scenario); continue; }
- for (const resource of new Set([...base, ...candidate].flatMap(r => Object.keys(r.metrics.services)))) contrasts.push({ scenario, resource, ...pairedBootstrap(base, candidate, { resource }) });
+ for (const resource of new Set([...base, ...candidate].flatMap(r => Object.keys(r.metrics.services)))) {
+  try { contrasts.push({ scenario, resource, ...pairedBootstrap(base, candidate, { resource }) }); }
+  catch (error) {
+   if (error.code !== "EVALUATION_BUILD_CHANGED") throw error;
+   contrasts.push({ scenario, resource, comparisonRejected: true, reason: error.code, improvement: null });
+  }
+ }
 }
 const cases = rows.map(({ treatment, report: r }) => ({ treatment, scenario: r.scenario, seed: r.seed, status: r.status, errors: r.errors, queries: r.metrics.queries, toolCost: r.metrics.cost,
   repairAttempts: r.before ? [{ state: r.status, calls: r.usage.length, wallMs: r.after?.draftWallMs ?? null, modelledDraftMs: r.after?.draftModeledMs ?? null,

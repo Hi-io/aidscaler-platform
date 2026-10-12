@@ -16,7 +16,16 @@ import {
 import { composeService } from "./planning.mjs";
 import { servicePlan, assessmentPlan } from "./services.mjs";
 import { responseQueue } from "./response-policy.mjs";
+import {
+  receivedProgressReference,
+  routinePublicCommentary,
+} from "./source-relevance.mjs";
 import { responseOptions } from "./response-options.mjs";
+import {
+  captureResponseComparison,
+  assertComparisonOptionsCurrent,
+  consideredAlternatives,
+} from "./response-comparison.mjs";
 import { checkedRepairPlan } from "./response-repair.mjs";
 import { SemanticIngestion } from "./semantic-ingestion.mjs";
 import { boundedContext } from "./model-context.mjs";
@@ -158,7 +167,10 @@ export const researchTools = [
   tool(
     "prepare_assessment",
     "Prepare the last checked field-assessment plan for separate human owner review. The team must travel and perform the work before a current source receipt can unlock service planning.",
-    { ...obj({ title: STR, rationale: STR, benefit: STR }), required: ["title", "rationale", "benefit"] },
+    {
+      ...obj({ title: STR, rationale: STR, benefit: STR }),
+      required: ["title", "rationale", "benefit"],
+    },
   ),
   tool(
     "lookup",
@@ -329,6 +341,28 @@ export class Investigator {
         "last_investigated_sources",
         false,
       );
+    const sourceVersions = signals.map((s) => [s.id, s.sourceVersion, s.state]),
+      reportSignature = hash(
+        fieldReports.map((r) => [r.id, r.version, r.state]),
+      ),
+      operationsForProgress = await this.store.list(org, "operation", 10000),
+      priorVersions = new Map(
+        (previousSources?.sourceVersions ?? []).map((v) => [v[0], hash(v)]),
+      ),
+      noUnknownNewSources =
+        previousSources?.signature === presentedSourceSignature ||
+        (previousSources?.reportSignature === reportSignature &&
+          Array.isArray(previousSources?.sourceVersions) &&
+          previousSources.sourceVersions.every((v) =>
+            sourceVersions.some((s) => s[0] === v[0]),
+          ) &&
+          signals.every(
+            (s) =>
+              priorVersions.get(s.id) ===
+                hash([s.id, s.sourceVersion, s.state]) ||
+              receivedProgressReference(s, operationsForProgress) ||
+              routinePublicCommentary(s),
+          ));
     if (
       focusMode === "automatic" &&
       !needId &&
@@ -336,16 +370,20 @@ export class Investigator {
       !facilityId &&
       !ids.length &&
       queue.policy.approved &&
-      queue.total &&
       !queue.nextOffset &&
       queue.rows.every(
         (n) => n.planningOutstanding <= 0 || n.investigationDeferred,
       ) &&
-      previousSources?.signature === presentedSourceSignature
+      noUnknownNewSources
     ) {
+      const awaitingReceipt = queue.rows.some(
+        (n) => n.pendingProposals.length && n.planningOutstanding <= 0,
+      );
       const deferred = {
-        state: "inconclusive",
-        kind: "unchanged_deferred_scope",
+        state: awaitingReceipt ? "waiting_receipt" : "inconclusive",
+        kind: awaitingReceipt
+          ? "assigned_response_waiting_receipt"
+          : "unchanged_deferred_scope",
         model: this.config.modelId,
         calls: 0,
         steps: [],
@@ -354,6 +392,12 @@ export class Investigator {
         reason:
           "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
       };
+      await this.store.upsert(org, "context", "last_investigated_sources", {
+        signature: presentedSourceSignature,
+        sourceVersions,
+        reportSignature,
+        note: "Previously investigated versions and narrowly correlated public progress remain unverified sources. Waiting changes no demand or physical outcome.",
+      });
       await this.activity(jobId, deferred);
       return deferred;
     }
@@ -501,6 +545,7 @@ export class Investigator {
       service = checkpoint?.service ?? null,
       assessment = checkpoint?.assessment ?? null,
       repairPlan = checkpoint?.repairPlan ?? null,
+      comparison = checkpoint?.comparison ?? null,
       pendingMessage = checkpoint?.pendingMessage ?? null,
       toolOffset = checkpoint?.toolOffset ?? 0;
     const consultedContracts = new Set(checkpoint?.consultedContracts ?? []);
@@ -515,6 +560,7 @@ export class Investigator {
         service,
         assessment,
         repairPlan,
+        comparison,
         messages,
         pendingMessage,
         toolOffset,
@@ -527,6 +573,30 @@ export class Investigator {
     };
     const started = performance.now();
     let transientRetries = checkpoint?.transientRetries ?? 0;
+    const comparedDraft = async (draft) => {
+      if (!comparison) return { draft, comparison: null };
+      const current = await responseOptions(
+        this.store,
+        this.config,
+        comparison.scope,
+      );
+      await assertComparisonOptionsCurrent(
+        this.store,
+        org,
+        comparison,
+        current,
+      );
+      return {
+        draft: {
+          ...draft,
+          references: [
+            ...new Set([...draft.references, ...comparison.references]),
+          ],
+          alternatives: consideredAlternatives(comparison, draft.actions),
+        },
+        comparison,
+      };
+    };
     try {
       while (
         (pendingMessage || calls < this.config.maxCalls) &&
@@ -673,17 +743,22 @@ export class Investigator {
           try {
             const name = call.function.name;
             const rawArguments = call.function.arguments,
-              emptyArguments = rawArguments == null ||
-                typeof rawArguments === "string" && !rawArguments.trim(),
-              contract = researchTools.find((t) => t.function.name === name)?.function.parameters;
+              emptyArguments =
+                rawArguments == null ||
+                (typeof rawArguments === "string" && !rawArguments.trim()),
+              contract = researchTools.find((t) => t.function.name === name)
+                ?.function.parameters;
             check(
-              !emptyArguments || contract && !contract.required?.length,
+              !emptyArguments || (contract && !contract.required?.length),
               "TOOL_ARGUMENTS",
               "This tool requires explicit arguments; an empty optional-tool object does not satisfy required fields.",
             );
             args = emptyArguments ? {} : JSON.parse(rawArguments);
-            check(args && typeof args === "object" && !Array.isArray(args),
-              "TOOL_ARGUMENTS", "Tool arguments must be a JSON object.");
+            check(
+              args && typeof args === "object" && !Array.isArray(args),
+              "TOOL_ARGUMENTS",
+              "Tool arguments must be a JSON object.",
+            );
             if (name === "read_action_contract") {
               check(
                 Array.isArray(args.types) &&
@@ -748,22 +823,33 @@ export class Investigator {
                 alternatives: [],
                 priority: "high",
               };
-              await validatePlan(this.store, org, draft);
+              const compared = await comparedDraft(draft);
+              await validatePlan(this.store, org, compared.draft);
               response = await this.domain.propose(
                 actor,
-                draft,
+                compared.draft,
                 "draft_" + jobId,
-                { repairOf: currentRepair.proposalId },
+                {
+                  repairOf: currentRepair.proposalId,
+                  comparison: compared.comparison,
+                },
               );
               activity.proposalId = response.id;
               step.label =
                 "Prepared recovery of the same cargo for its owner's review";
               done = true;
             } else if (name === "compare_responses") {
-              response = await responseOptions(this.store, this.config, {
+              const scope = {
                 needId: args.needId ?? needId,
                 excludeProposal: repairOf,
-              });
+              };
+              response = await responseOptions(this.store, this.config, scope);
+              comparison = await captureResponseComparison(
+                this.store,
+                org,
+                response,
+                scope,
+              );
               step.label =
                 "Compared useful responses and effects on concurrent needs";
             } else if (name === "find_facilities") {
@@ -805,32 +891,102 @@ export class Investigator {
               step.label = "Found candidate service sites in the received map";
             } else if (name === "plan_assessment") {
               await this.ingestKnown?.();
-              assessment = await assessmentPlan(this.store, org, args.building, { peers: this.config.peers });
-              response = { ...assessment, nextTool: assessment.readyToDraft ? "prepare_assessment" : "wait_for_current_receipt_or_plan_service" };
-              step.label = "Checked a qualified owner's field-assessment capacity";
+              assessment = await assessmentPlan(
+                this.store,
+                org,
+                args.building,
+                { peers: this.config.peers },
+              );
+              response = {
+                ...assessment,
+                nextTool: assessment.readyToDraft
+                  ? "prepare_assessment"
+                  : "wait_for_current_receipt_or_plan_service",
+              };
+              step.label =
+                "Checked a qualified owner's field-assessment capacity";
             } else if (name === "prepare_assessment") {
-              check(assessment?.readyToDraft, "ASSESSMENT_PENDING", "Run plan_assessment and resolve its pending conditions first.");
-              const current = await assessmentPlan(this.store, org, assessment.building, { peers: this.config.peers });
-              check(current.readyToDraft && hash([current.actions, current.references, current.offerVersions]) === hash([assessment.actions, assessment.references, assessment.offerVersions]), "ASSESSMENT_CHANGED", "The target, owner capacity or sharing permission changed. Recheck the assessment plan before preparing a request.", 409);
-              const draft = { title: args.title, summary: args.benefit, benefit: args.benefit, rationale: args.rationale, references: current.references, actions: current.actions, conditions: [], alternatives: [] };
+              check(
+                assessment?.readyToDraft,
+                "ASSESSMENT_PENDING",
+                "Run plan_assessment and resolve its pending conditions first.",
+              );
+              const current = await assessmentPlan(
+                this.store,
+                org,
+                assessment.building,
+                { peers: this.config.peers },
+              );
+              check(
+                current.readyToDraft &&
+                  hash([
+                    current.actions,
+                    current.references,
+                    current.offerVersions,
+                  ]) ===
+                    hash([
+                      assessment.actions,
+                      assessment.references,
+                      assessment.offerVersions,
+                    ]),
+                "ASSESSMENT_CHANGED",
+                "The target, owner capacity or sharing permission changed. Recheck the assessment plan before preparing a request.",
+                409,
+              );
+              const draft = {
+                title: args.title,
+                summary: args.benefit,
+                benefit: args.benefit,
+                rationale: args.rationale,
+                references: current.references,
+                actions: current.actions,
+                conditions: [],
+                alternatives: [],
+              };
               await validatePlan(this.store, org, draft);
-              response = await this.domain.propose(actor, draft, "draft_" + jobId);
+              response = await this.domain.propose(
+                actor,
+                draft,
+                "draft_" + jobId,
+              );
               activity.proposalId = response.id;
-              step.label = "Prepared a field-assessment request for owner review";
+              step.label =
+                "Prepared a field-assessment request for owner review";
               done = true;
             } else if (name === "plan_service") {
               await this.ingestKnown?.();
               service = await servicePlan(this.store, org, args.building, {
                 needId,
                 peers: this.config.peers,
+                excludeProposal: repairOf,
+                refreshFacility: async (request) => {
+                  const q = await this.connector.action(
+                    "query",
+                    {
+                      target: request.target,
+                      id: request.id,
+                    },
+                    "service_status_" +
+                      hash([org, request.id, request.afterReceiptAt]),
+                  );
+                  await this.wait(q.id);
+                  await this.ingestKnown?.();
+                },
               });
               response = {
                 ...service,
                 nextTool: service.readyToDraft
                   ? "prepare_service"
-                  : "verify_or_lookup_missing_dependencies",
+                  : service.waitReceipt
+                    ? "wait_for_current_physical_receipt"
+                    : "verify_or_lookup_missing_dependencies",
               };
               step.label = "Checked a service across complementary owners";
+              if (service.waitReceipt) {
+                activity.waitReceipt = service.pending;
+                activity.reason = service.note;
+                done = true;
+              }
             } else if (name === "prepare_service") {
               check(
                 service?.readyToDraft,
@@ -851,12 +1007,13 @@ export class Investigator {
                 alternatives: [],
                 priority: "high",
               };
-              await validatePlan(this.store, org, draft);
+              const compared = await comparedDraft(draft);
+              await validatePlan(this.store, org, compared.draft);
               response = await this.domain.propose(
                 actor,
-                draft,
+                compared.draft,
                 "draft_" + jobId,
-                { repairOf },
+                { repairOf, comparison: compared.comparison },
               );
               activity.proposalId = response.id;
               step.label = "Prepared a composed service for owner review";
@@ -935,16 +1092,38 @@ export class Investigator {
                 "Unknown verification target.",
               );
               const method = args.method ?? "field";
-              check(["field", "radio", "clarification"].includes(method), "VERIFICATION_METHOD", "Choose an available verification channel.");
-              const pending = (await this.connector.state()).inspections?.find(i =>
-                i.target === args.target && i.entity === args.id &&
-                (i.method ?? "field") === method && !["completed", "inconclusive", "timeout", "failed", "cancelled"].includes(i.state));
-              const q = pending ?? await this.connector.action(
-                "verify",
-                { target: args.target, id: args.id, method },
-                "verify_" + hash([jobId, args.target, args.id, method]),
+              check(
+                ["field", "radio", "clarification"].includes(method),
+                "VERIFICATION_METHOD",
+                "Choose an available verification channel.",
               );
-              response = pending ? { ...pending, reusedPending: true, note: "Existing check is still pending; no duplicate inquiry or authority was created." } : await this.wait(q.id, "inspections", 6000);
+              const pending = (await this.connector.state()).inspections?.find(
+                (i) =>
+                  i.target === args.target &&
+                  i.entity === args.id &&
+                  (i.method ?? "field") === method &&
+                  ![
+                    "completed",
+                    "inconclusive",
+                    "timeout",
+                    "failed",
+                    "cancelled",
+                  ].includes(i.state),
+              );
+              const q =
+                pending ??
+                (await this.connector.action(
+                  "verify",
+                  { target: args.target, id: args.id, method },
+                  "verify_" + hash([jobId, args.target, args.id, method]),
+                ));
+              response = pending
+                ? {
+                    ...pending,
+                    reusedPending: true,
+                    note: "Existing check is still pending; no duplicate inquiry or authority was created.",
+                  }
+                : await this.wait(q.id, "inspections", 6000);
               await this.ingestKnown?.();
               if (response.state === "completed")
                 await this.store.upsert(
@@ -989,8 +1168,12 @@ export class Investigator {
                 excludeProposal: repairOf,
                 // Automatic response is a concurrent queue, not a model-picked
                 // single-case filter. An explicit operator focus stays scoped.
-                needIds: focusMode === "automatic" ? undefined :
-                  needId ? [needId] : args.needIds,
+                needIds:
+                  focusMode === "automatic"
+                    ? undefined
+                    : needId
+                      ? [needId]
+                      : args.needIds,
               });
               allocation = response;
               step.label = "Checked allocations against scarce capacity";
@@ -1012,14 +1195,26 @@ export class Investigator {
               );
               const selected = indices.map((i) => allocation.allocations[i]);
               await validateAllocationOffers(this.store, this.config, selected);
-              const current = await receivedAllocationPlan(this.store, this.config, allocation.scope);
-              check(selected.every((old) => current.allocations.some((a) =>
-                a.owner === old.owner && a.need === old.need &&
-                a.resource === old.resource && a.vehicle === old.vehicle &&
-                a.quantity === old.quantity)),
+              const current = await receivedAllocationPlan(
+                this.store,
+                this.config,
+                allocation.scope,
+              );
+              check(
+                selected.every((old) =>
+                  current.allocations.some(
+                    (a) =>
+                      a.owner === old.owner &&
+                      a.need === old.need &&
+                      a.resource === old.resource &&
+                      a.vehicle === old.vehicle &&
+                      a.quantity === old.quantity,
+                  ),
+                ),
                 "ALLOCATION_CHANGED",
                 "A need, pending draft or capacity changed while preparing this response. Rebuild the checked allocation; no overlapping draft was prepared.",
-                409);
+                409,
+              );
               const actions = indices.map((i) => allocation.actions[i]),
                 references = [
                   ...new Set(selected.flatMap((a) => a.evidenceIds)),
@@ -1035,10 +1230,17 @@ export class Investigator {
                 actions,
                 priority: "high",
               };
-              await validatePlan(this.store, org, d);
-              response = await this.domain.propose(actor, d, "draft_" + jobId, {
-                repairOf,
-              });
+              const compared = await comparedDraft(d);
+              await validatePlan(this.store, org, compared.draft);
+              response = await this.domain.propose(
+                actor,
+                compared.draft,
+                "draft_" + jobId,
+                {
+                  repairOf,
+                  comparison: compared.comparison,
+                },
+              );
               activity.proposalId = response.id;
               step.label = "Prepared checked allocations for human review";
               done = true;
@@ -1114,7 +1316,9 @@ export class Investigator {
         ? "cancelled"
         : activity.proposalId
           ? "ready"
-          : "inconclusive";
+          : activity.waitReceipt
+            ? "waiting_receipt"
+            : "inconclusive";
       activity.finishedAt = Date.now();
       activity.calls = calls;
       if (perceptionReceipt) activity.perceptionReceipt = perceptionReceipt.id;
@@ -1122,6 +1326,8 @@ export class Investigator {
       if (!activity.cancelled)
         await this.store.upsert(org, "context", "last_investigated_sources", {
           signature: presentedSourceSignature,
+          sourceVersions,
+          reportSignature,
           note: "Versions presented in the last bounded investigation, not independently verified interpretation.",
         });
       if (

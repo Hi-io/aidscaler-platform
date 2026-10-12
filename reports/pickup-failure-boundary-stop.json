@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-12T21:07:18.553Z",
+  "stopped": [
+    {
+      "kind": "controls",
+      "folder": "reports/discovery/1791837754844",
+      "at": "2026-10-12T21:03:40.415Z",
+      "completedRuns": 2,
+      "reason": "Confirmed common simulator defects; no next control is allowed to launch paid inference."
+    },
+    {
+      "kind": "primary",
+      "folder": "reports/discovery/1791837744022",
+      "at": "2026-10-12T21:07:18.553Z",
+      "completedFirstCandidateStatus": "completed",
+      "reason": "Confirmed common reservation/failure-observation defects; stop after provider usage has settled and before another paid arm."
+    }
+  ],
+  "queuedTransferStoppedBeforeCalls": true
+}

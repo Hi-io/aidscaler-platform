@@ -57,3 +57,11 @@ test("arrival with receipt pending is not mislabeled an integrity failure", () =
     1,
   );
 });
+
+test("in-run build changes reject effects while ordinary failures remain in the paired outcomes", () => {
+  for (const field of ["candidateChanged", "evaluatorChanged", "simulatorChanged"]) {
+    assert.throws(() => pairedBootstrap([row("a", 100)], [row("a", 50, { [field]: true })]), e => e.code === "EVALUATION_BUILD_CHANGED");
+  }
+  assert.throws(() => pairedBootstrap([row("a", 100)], [row("a", 50, { status: "invalid_simulator_changed" })]), e => e.code === "EVALUATION_BUILD_CHANGED");
+  assert.equal(pairedBootstrap([row("a", 100)], [row("a", 200, { status: "failed" })]).improvement, -1);
+});

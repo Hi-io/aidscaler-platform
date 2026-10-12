@@ -64,3 +64,17 @@ La reparación usa datos recibidos del viaje afectado, posición/flota y accesos
 Checkpoints privados conservan herramientas terminadas y offsets/idempotencia; leases renovables y fencing impiden finalizaciones desde un worker antiguo. El estado visible indica consulta, comprobación, preparación, inconcluso o error reales. No se almacena razonamiento privado ni se simula una cadena de pensamientos.
 
 Los recibos de fuente y la calidad semántica tienen métricas diferentes. Ver [CIERRE_LOCAL.md](CIERRE_LOCAL.md) y [VALIDACION.md](VALIDACION.md) para el contraste y la carga real del build final.
+
+## Economía de la respuesta híbrida — revisión del 13 de octubre
+
+Una necesidad ya estructurada y recibida no necesita dos turnos adicionales de modelo para pedir una asignación aritmética y copiarla. La revisión incorpora un camino compilado que usa capacidad finita, mínimos, cantidades pendientes, rutas y revisión independiente del dueño sin inferencia adicional. **Ese ahorro corresponde al diseño del producto; no se atribuye a razonamiento de Gemma/Gemini.**
+
+Las fuentes externas desorganizadas sí pasan por interpretación semántica: un lote finito de hasta 35 fuentes/versiones, referencias cortas y ubicaciones pertinentes. Las inferencias originan consultas o aclaraciones puntuales; solo una observación operacional recibida puede alimentar la asignación física. Una publicación de necesidad no se convierte automáticamente en un hecho confirmado ni en permiso de despacho. La composición de servicios y las reparaciones mantienen la investigación con herramientas donde las dependencias lo requieren.
+
+`discoveryMode` selecciona esta separación en la política de ingesta. `maxGroups` conserva un valor inicial de tres y admite hasta 35 para agrupar más fuentes independientes dentro del mismo límite de señales, sin leer el mundo completo. No se aumenta el límite de salida ni se reduce el espacio de razonamiento para conseguir un gráfico favorable. La optimización principal evita llamadas redundantes, interpreta versiones nuevas y reutiliza comprobaciones recibidas.
+
+Las llamadas sin payload de herramientas con todos sus argumentos opcionales se normalizan a `{}`; un payload mal formado o la ausencia de campos obligatorios continúa rechazándose. El caso de carga `physical-scale-02-B6` había gastado una llamada extra en cada ronda por ese fallo de interoperabilidad. El arreglo corrige el contrato, no la calidad del modelo.
+
+La investigación automática contempla el alcance concurrente completo aunque el modelo intente limitar `needIds` al caso destacado. Una selección manual del operador permanece restringida a su caso. Un borrador parcial retiene solo su cantidad y sus medios de planificación; deja visible y revisable el déficit restante. Antes de preparar una asignación se comprueban de nuevo las proyecciones y se recompila el alcance para rechazar una carrera con otro borrador. Estos holds no reservan stock en el sistema de origen ni conceden autoridad.
+
+La comparación nueva debe separar: coste de interpretar fuentes, tiempo hasta una observación verificable, tiempo hasta revisión y tiempo hasta ayuda físicamente útil. Los resultados anteriores, incluidos los negativos, siguen en [VALIDACION.md](VALIDACION.md); la existencia del camino híbrido no demuestra por sí sola una mejora de KPI.

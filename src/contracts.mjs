@@ -62,17 +62,31 @@ export const parameterSchemas = {
       destination: ID.optional(),
       commitment: ID.optional(),
       transfer: ID.optional(),
+      ttlMs: POS.max(86400000).optional(),
     })
     .strict(),
   activate: z.object({ building: ID, permit: z.boolean() }).strict(),
-  verify: z.object({
-    target: z.literal("building"), id: ID, method: z.literal("field"),
-    purpose: z.literal("facility_safety"), reportTo: ID,
-    staff: ID, vehicle: ID,
-    targetVersion: z.number().int().nonnegative(),
-    validForMs: z.number().int().min(1000).max(86400000).default(21600000),
-  }).strict(),
-  reroute: z.object({ vehicle: ID, destination: ID, need: ID.optional(), building: ID.optional() }).strict(),
+  verify: z
+    .object({
+      target: z.literal("building"),
+      id: ID,
+      method: z.literal("field"),
+      purpose: z.literal("facility_safety"),
+      reportTo: ID,
+      staff: ID,
+      vehicle: ID,
+      targetVersion: z.number().int().nonnegative(),
+      validForMs: z.number().int().min(1000).max(86400000).default(21600000),
+    })
+    .strict(),
+  reroute: z
+    .object({
+      vehicle: ID,
+      destination: ID,
+      need: ID.optional(),
+      building: ID.optional(),
+    })
+    .strict(),
   repair: z.object({ edge: ID, engineering: z.boolean().optional() }).strict(),
   evacuate: z.object({ from: ID, to: ID, vehicle: ID, quantity: POS }).strict(),
   purchase: z

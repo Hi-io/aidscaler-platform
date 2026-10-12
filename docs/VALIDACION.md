@@ -2,10 +2,12 @@
 
 12 de octubre de 2026. Leer junto a [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md). Este documento describe pruebas ejecutadas, no los números inventados de la landing ni una garantía de clasificación en una competición.
 
-## 1. Resumen que se puede defender
+> Actualización en curso: la iteración de fuentes recibidas y evaluación delegada tiene su propia verificación y comparaciones. Los resultados de las secciones anteriores pertenecen a las versiones allí registradas. Consultar [MEJORA_RESPUESTA.md](MEJORA_RESPUESTA.md) y [COBERTURA_REQUISITOS.md](COBERTURA_REQUISITOS.md) para el estado actual; no trasladar un porcentaje entre builds distintos.
+
+## 1. Resumen histórico de la primera verificación
 
 - Plataforma local real, con proveedor **Gemma 4 31B mediante OpenRouter**. No hubo Gemini ni despliegue GCP.
-- **89/89 pruebas de plataforma y 117/117 del simulador**, cero fallos, omitidas o canceladas en la última verificación conjunta.
+- **89/89 pruebas de plataforma y 117/117 del simulador**, cero fallos, omitidas o canceladas en aquella verificación conjunta. La versión posterior congelada pasa **215+154**: [recibo fechado](../reports/verifications/1791837370142.json) y [sello del código comprometido](../reports/frozen-candidate-final.json).
 - **57 verificaciones de render/navegación** en 1440, 1920 y 390 píxeles; **12 recorridos operativos y seis de corrección/publicación**, sin errores de página u overflow en esas pruebas.
 - **Cuatro formatos de entrada con bytes reales** procesados: imagen, audio, video y PDF, más una foto pública derivada y revisada. Los conectores JSON se prueban por separado. Es funcionamiento, no precisión sobre un corpus de campo.
 - **Nueve perfiles de carga**: 1/4/12 organizaciones y 10/100/1.000 necesidades. La ingesta/persistencia funciona; no se midió inferencia semántica a esa escala.
@@ -217,7 +219,9 @@ La referencia convencional de aquella variante abortó con FACILITY al no tener 
 
 Los contrastes finales tienen que conservar pérdidas, inconclusos, timeouts, coste desconocido y referencias con debilidades. La regla del producto es preparar ayuda verificable, no elegir un subconjunto de gráficos favorables. Los gates estadísticos, independientes y humanos permanecen separados de los mecanismos implementados.
 
-## 13. Resultados finales de la entrega local — 13 de octubre de 2026, Tokio
+<a id="13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio"></a>
+
+## 13. Resultados de la entrega local anterior — 13 de octubre de 2026, Tokio
 
 Los timestamps originales están en UTC, por lo que estos reportes aparecen fechados el 12 de octubre. El candidato conserva la huella `27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f`. No se retocó el producto durante estas mediciones. Gemma 4 31B/OpenRouter es el proveedor real; Gemini y GCP no participaron.
 

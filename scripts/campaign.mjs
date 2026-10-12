@@ -3,6 +3,7 @@ import {
   buildFingerprint,
   evaluatorFingerprint,
 } from "../evaluation/harness.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "../evaluation/simulator-build.mjs";
 import { summarizeCampaign } from "../evaluation/campaign-summary.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 const options = Object.fromEntries(
@@ -65,6 +66,7 @@ const protocol = {
   },
   candidateFingerprint: await buildFingerprint(),
   evaluatorFingerprint: await evaluatorFingerprint(),
+  simulatorBuild: await requireLoadedSimulatorBuild(),
   primary: "uncoveredUnitMs by native resource type",
   clock: "modeled",
   includeFailures: true,
@@ -107,10 +109,7 @@ try {
       stoppedReason = "campaign_budget_exhausted";
       break;
     }
-    if (
-      protocol.candidateFingerprint !== (await buildFingerprint()) ||
-      protocol.evaluatorFingerprint !== (await evaluatorFingerprint())
-    ) {
+    if ((await checkFinalBuilds({ candidate: protocol.candidateFingerprint, evaluator: protocol.evaluatorFingerprint, simulator: protocol.simulatorBuild }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint })).invalidStatus) {
       stoppedReason = "build_changed";
       break;
     }
@@ -145,6 +144,10 @@ try {
     );
     if (report.errors.some((e) => e.code === "PROVIDER_FUNDS")) {
       stoppedReason = "provider_credit_exhausted";
+      break;
+    }
+    if (report.candidateChanged || report.evaluatorChanged || report.simulatorChanged) {
+      stoppedReason = "build_changed";
       break;
     }
   }

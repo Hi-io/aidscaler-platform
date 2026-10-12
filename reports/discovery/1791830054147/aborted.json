@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-12T18:43:43.502Z",
+  "status": "aborted",
+  "arm": "B6",
+  "seed": "discovery-transfer-01",
+  "reason": "Pilot halted after B5 exposed terminal fleet observability omission and product lifecycle tests exposed cancellation/retention bugs. No comparative benefit claimed.",
+  "knownCostUsd": null,
+  "chargedBudgetUsd": 0.12,
+  "costTreatment": "Conservatively retain the entire candidate episode budget as an unknown-cost reservation; in-memory provider receipts were not recovered after interruption.",
+  "candidateFingerprint": "957fd5ca95bb52f4eb5f08ca1e0ae4264e6c56559cbf7c7eed428e8605525cd5",
+  "evaluatorFingerprint": "287202423aabcc1b697c1992be32fc9f1a6d116cb60d7c5bf045bf06c3400f91"
+}

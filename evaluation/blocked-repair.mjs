@@ -1,11 +1,13 @@
 import { createHarness, scriptedReview, buildFingerprint, evaluatorFingerprint } from "./harness.mjs";
 import { evaluate } from "../../disaster-response-simulator/evaluation/metrics.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "./simulator-build.mjs";
 
 /** An evaluator-only disruption. The candidate sees HTTP reports, not the
  * selected road IDs or physical state. The same owned, reviewed prelude is
  * used in both repair treatments; its service is not credited to the model. */
 export async function blockedRepairEpisode({ seed = "blocked-transfer-01", provider, strategy = "selective", budgetUsd = .15 } = {}) {
   if (!["selective", "full_refresh"].includes(strategy)) throw Error("Unknown repair treatment");
+  await requireLoadedSimulatorBuild();
   const started = performance.now(), fingerprint = await buildFingerprint(), evaluatorBuild = await evaluatorFingerprint(),
     episode = "blocked-repair-" + Date.now() + "-" + strategy,
     h = await createHarness({ seed, scenario: "S23", organizations: 1, provider, budgetUsd, maxCalls: 8,
@@ -15,7 +17,7 @@ export async function blockedRepairEpisode({ seed = "blocked-transfer-01", provi
   let status = "completed", error = null, activity = null, before = null, after = null, proposal = null;
   try {
     h.lab.world.advance(60000);
-    for (const target of ["inventory", "vehicles", "map", "roads"]) await app.connector.action("query", { target }, episode + "-initial-" + target);
+    for (const target of ["inventory", "vehicles", "map", "roads", "policy"]) await app.connector.action("query", { target }, episode + "-initial-" + target);
     await app.ingestion.sync();
     const need = (await app.store.list(org, "need")).find(n => n.id === "need-water-main");
     const old = await app.domain.propose({ org, id: "prelude-planner", role: "agent" }, {
@@ -71,8 +73,12 @@ export async function blockedRepairEpisode({ seed = "blocked-transfer-01", provi
       throw Object.assign(Error("Repair did not preserve and complete the original physical delivery"), { code: "REPAIR_OUTCOME" });
   } catch (e) { status = "failed"; error = { code: e.code ?? e.name, message: e.message.slice(0, 250) }; }
   h.lab.world.advance(h.lab.world.config.durationMs, { maxEvents: 1000000 });
+  const finalBuilds = await checkFinalBuilds({ candidate: fingerprint, evaluator: evaluatorBuild, simulator: h.lab.world.manifest.engineBuild }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint });
+  if (finalBuilds.invalidStatus) status = finalBuilds.invalidStatus;
   const usage = (await app.store.query("SELECT episode,model,state,wall_ms,input_tokens,output_tokens,cost_usd,reserved_usd,error FROM usage")).rows,
-    report = { episode, seed, strategy, status, error, candidateFingerprint: fingerprint, candidateChanged: fingerprint !== await buildFingerprint(),
+    report = { episode, seed, strategy, status, error, errors: finalBuilds.errors, candidateFingerprint: fingerprint,
+      candidateChanged: finalBuilds.candidateChanged, evaluatorChanged: finalBuilds.evaluatorChanged, simulatorChanged: finalBuilds.simulatorChanged,
+      finalCandidateFingerprint: finalBuilds.finalCandidateFingerprint, finalEvaluatorFingerprint: finalBuilds.finalEvaluatorFingerprint, finalEngineBuild: finalBuilds.finalEngineBuild,
       evaluatorFingerprint: evaluatorBuild, episodeBudgetUsd: budgetUsd, measurementMode: "modeled", responseOrder: "common reviewed prelude; preserve existing cargo",
       wallMs: performance.now() - started, manifest: h.lab.world.manifest, before, after, activity, proposal,
       metrics: evaluate(h.lab.world), invariants: h.lab.world.invariants(), usage, costUsd: usage.reduce((s, r) => s + Number(r.cost_usd ?? 0), 0),

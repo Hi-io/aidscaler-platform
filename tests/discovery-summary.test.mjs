@@ -30,5 +30,15 @@ test("discovery effects cluster seeds and retain censored failures rather than e
 test("response-effect comparison rejects changed source builds and missing censored clocks", () => {
   const a = row("seed-a", "B5", 60), b = row("seed-a", "B6", 30);
   assert.throws(() => summarizeDiscovery([a, { ...b, candidateFingerprint: "other" }]), /matching frozen/);
+  assert.throws(() => summarizeDiscovery([a, { ...b, simulatorChanged: true }]), /matching frozen/);
   assert.throws(() => summarizeDiscovery([a, { ...b, timeToFirstUsefulService: {} }]), /Missing censored/);
+});
+
+test("the same-model general agent is included as its own paired reference without dropping its failures", () => {
+  const rows = [row("seed-a", "B9", 60), row("seed-a", "B6", 30), row("seed-b", "B9", 120, { status: "failed", completed: 0 }), row("seed-b", "B6", 60)];
+  const summary = summarizeDiscovery(rows);
+  assert.equal(summary.comparisons.length, 1);
+  assert.equal(summary.comparisons[0].baseline, "B9");
+  assert.equal(summary.comparisons[0].independentWorlds, 2);
+  assert.equal(summary.failedRuns, 1);
 });

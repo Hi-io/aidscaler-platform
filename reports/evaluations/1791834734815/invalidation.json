@@ -1,0 +1,41 @@
+{
+  "comparisonInvalid": true,
+  "reason": "Continuation and unchanged physical receipt amplification can make modeled peer communication clock depend on wall-time job drainage. Source audit requires correction and a fresh paired campaign.",
+  "stopPolicy": "Parent instructed immediate Ctrl-C to stop invalid active episodes, after stop-file alone left them running. B7 never started.",
+  "notASuperiorityEstimate": true,
+  "mechanismEvidenceSeparateFromTiming": true,
+  "at": "2026-10-12T20:15:34.161Z",
+  "activeProcessExitCode": 1,
+  "abortedEpisodes": [
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-distributed-01",
+      "arm": "B6",
+      "status": "aborted_invalid_clock",
+      "finalOutcomeAvailable": false,
+      "modelCalls": null,
+      "costUsd": null,
+      "chargedBudgetUsd": null,
+      "episodeBudgetUsd": 0.15,
+      "conservativeReservationUsd": 0.15,
+      "reason": "Windows Ctrl-C terminated active episode; no final outcome or usage persisted."
+    },
+    {
+      "scenario": "S19",
+      "seed": "delegated-final-2026-delayed-01",
+      "arm": "B6",
+      "status": "aborted_invalid_clock",
+      "finalOutcomeAvailable": false,
+      "modelCalls": null,
+      "costUsd": null,
+      "chargedBudgetUsd": null,
+      "episodeBudgetUsd": 0.15,
+      "conservativeReservationUsd": 0.15,
+      "reason": "Windows Ctrl-C terminated active episode; no final outcome or usage persisted."
+    }
+  ],
+  "knownPersistedCostUsd": 0,
+  "unknownFinalUsage": true,
+  "conservativeReservationUsd": 0.3,
+  "notAnActualBill": true
+}

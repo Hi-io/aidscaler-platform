@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-12T19:03:46.514Z",
+  "version": "public-discovery-physical-response-v2",
+  "hypothesis": "Earlier interpretation of public information can reduce time until useful physical aid, compared with competent finite conventional review.",
+  "fairness": "Same raw public bytes, metadata, directory, formal-report delay, consented stock, fleet, field checks, dispatch reviews and physical world. Neither controller receives evaluator gold. Explicit structured requests and repost grouping are free in all arms.",
+  "references": {
+    "B5": "Conventional shared planner with free structured parsing plus finite human source review",
+    "B6": "Real configured model perception, targeted confirmations and deterministic batching",
+    "B8": "Stronger free broad keyword/location discovery, then the same targeted confirmations and batching",
+    "B0": "Extraction disconnected: formal observations only, same competent allocator"
+  },
+  "clocks": "World travel/communication/review delays are modeled. Model availability is charged at max(declared latency, actual measured provider time). Human attention duration/workers are sensitivity parameters, not measured field productivity. SQL/HTTP wall overhead is separately reported, not sped up with the simulation clock.",
+  "negatives": "Zero human-reading delay, immediate formal reports, failures, unserved needs and no advantage against a stronger keyword baseline must remain visible.",
+  "verification": "Requests return a pending receipt. The same finite field queue progresses while owners review and trucks move; no controller must wait synchronously for all inquiries before acting on an already received need.",
+  "config": {
+    "count": 12,
+    "noise": 48,
+    "reposts": 2,
+    "humanReadMs": 10000,
+    "humanWorkers": 4,
+    "formalDelayMs": 1800000,
+    "extentKm": 6,
+    "grid": 9,
+    "horizonMs": 10800000,
+    "silentFraction": 0,
+    "traffic": 0,
+    "packetLoss": 0,
+    "budgetUsd": 0.12,
+    "maxModelCalls": 16,
+    "candidateFingerprint": "65a0adc4f9e3f522a045547ae765c1b46c105a6f0318f5acde166ed6c49a83ec",
+    "evaluatorBuild": "434798509962d4b672f9903c02fb66e38a8d7877a2662e9239dd54f1e01e80a4"
+  },
+  "seeds": 1,
+  "arms": [
+    "B5",
+    "B6"
+  ],
+  "totalBudgetUsd": 0.3,
+  "stop": "All declared worlds retained, including failures; no edits during the campaign"
+}

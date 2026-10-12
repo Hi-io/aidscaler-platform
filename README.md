@@ -29,6 +29,8 @@ For one standalone instance, provision its scoped source configuration in `.loca
 
 ## Workspaces
 
+The public-source response pipeline interprets bounded received batches, requests field confirmations and compiles checked quantities for independent owner review. Structured demand uses the same deterministic allocator without an unnecessary model call. See [response diagnosis and measured comparisons](docs/MEJORA_RESPUESTA.md) and [local operation](docs/LOCAL.md#descubrir-una-respuesta-desde-publicaciones-recibidas).
+
 - Response overview, collected signals, sourced investigations and a human decision queue.
 - Operational stages, inventory, vehicles, assessed facilities, reservations, deadlines and protected reserves.
 - Signed partner messages, explicit sharing, version handling, revocation and independent owner decisions.
@@ -70,6 +72,8 @@ The full product contract is [PLATAFORMA.md](docs/PLATAFORMA.md). [Implementatio
 
 Google Cloud architecture is retained in [ARQUITECTURA_GCP.md](docs/ARQUITECTURA_GCP.md) for a later migration. No cloud service is deployed by this repository at this stage.
 
-The final local verification passes **120 platform tests and 120 simulator tests** with an unchanged candidate fingerprint. The four-process transport probe persisted all **4,000 expected publication/organization versions**, including late uploads, at **3.33 seconds p95 from source availability**; polling and model inference are excluded. Physical service, original-cargo repair, semantic interpretation and role-based UI have separate evidence.
+The current frozen-source verification passes **215 platform tests and 154 simulator tests**, with unchanged candidate, evaluator and simulator fingerprints. **84 browser checks** cover desktop/mobile navigation, operator journeys, independent reviews and the public-response pipeline. See [complete requirement coverage](docs/COBERTURA_REQUISITOS.md), [the verification receipt](reports/verifications/1791837370142.json) and [the committed-source seal](reports/frozen-candidate-final.json).
 
-The 36-outcome comparative pilot **does not establish a robust advantage over conventional shared planning or the same-model general investigator**. Negative results, provider failures, backlogs, historical builds and evaluator corrections are retained. See [the final evidence ledger](docs/VALIDACION.md#13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio). Independent calibration, human trials and Gemini remeasurement remain separate requirements.
+The earlier four-process transport probe persisted all **4,000 expected publication/organization versions**, including late uploads, at **3.33 seconds p95 from source availability**; polling and model inference are excluded. That historical transport measurement is not a physical-response or model-throughput result for the new candidate. Physical service, original-cargo repair, semantic interpretation and role-based UI have separate evidence.
+
+The earlier 36-outcome comparative pilot **does not establish a robust advantage over conventional shared planning or the same-model general investigator**. Negative results, provider failures, backlogs, historical builds and evaluator corrections are retained. The new received-source and delegated-assessment comparisons have their own predeclared protocol and source fingerprints; current results are tracked in [response improvement](docs/MEJORA_RESPUESTA.md). Independent calibration, human trials and Gemini remeasurement remain separate requirements.

@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-12T20:36:10.144Z",
+  "candidateFingerprint": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+  "evaluatorFingerprint": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584",
+  "simulatorFingerprint": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee",
+  "gitRevisions": {
+    "platform": "9c0bf8240cdc66ac9e1b7bed587da089bee2514d",
+    "simulator": "fafa7c8641af70cecfc5bbdc4aa1d8de4e6fd15c"
+  },
+  "node": "v24.19.0",
+  "platform": "win32",
+  "arch": "x64",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+    "logicalCpus": 12,
+    "memoryBytes": 68644159488
+  },
+  "cases": [
+    {
+      "name": "platform-syntax",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 9574.997500000001,
+      "summary": [
+        "Syntax verified: 174 JavaScript modules."
+      ]
+    },
+    {
+      "name": "platform-tests",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 334926.2868,
+      "tests": {
+        "tests": 215,
+        "pass": 215,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "simulator-syntax-contracts",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 4271.41869999998,
+      "summary": [
+        "75 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
+      ]
+    },
+    {
+      "name": "simulator-tests",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 6175.960699999996,
+      "tests": {
+        "tests": 154,
+        "pass": 154,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "scope": "Automated local mechanism verification, no paid model calls and no human or field validation.",
+  "candidateFinalFingerprint": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+  "evaluatorFinalFingerprint": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584",
+  "simulatorFinalFingerprint": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee",
+  "candidateChanged": false,
+  "evaluatorChanged": false,
+  "simulatorChanged": false,
+  "passed": true
+}

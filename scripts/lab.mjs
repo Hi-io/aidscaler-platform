@@ -53,7 +53,7 @@ for (let i = 0; i < 5; i++) {
     )?.[0];
   // One-time source discovery for a fresh lab. These are ordinary scoped read
   // actions, not observer facts. Replies arrive when the initial clock advances.
-  for (const target of ["inventory", "vehicles", "map"]) {
+  for (const target of ["inventory", "vehicles", "map", "policy"]) {
     const discovery = await fetch(
       `http://127.0.0.1:${lab.sourcePort}/api/actor/action`,
       {

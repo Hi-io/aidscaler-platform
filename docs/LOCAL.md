@@ -215,3 +215,19 @@ node scripts/summarize-campaign.mjs reports/evaluations/structure-continuation-1
 ```
 
 El último comando escribe `summary-reviewed.json`, conserva el original, incorpora expresamente outcomes heredados y reservas desconocidas y no repite llamadas al modelo. El probe nominal incluye publicaciones tardías y separa disponibilidad, persistencia y UI; no mide toma de decisiones ni procesamiento multimodal.
+
+## Descubrir una respuesta desde publicaciones recibidas
+
+En Signals, seleccionar hasta 35 fuentes y usar **Discover a response**. El recorrido interpreta un lote acotado, conserva sus versiones y referencias, pide comprobaciones al canal de campo y prepara cantidades a partir de observaciones operativas recibidas. Una cantidad estimada por el modelo nunca autoriza ni sustituye una observación de demanda. **Interpret only** conserva el recorrido de extracción sin proponer una respuesta.
+
+El operador ve tres etapas: interpretación, comprobaciones y borrador revisable. Son acciones y resultados observables; no una transcripción del razonamiento privado del modelo. Los propietarios siguen autorizando los pasos físicos. Si falta una comprobación o capacidad, el caso conserva su estado pendiente y se reanuda ante información material nueva sin volver a pagar por interpretar las mismas fuentes.
+
+En Organization, el intake puede activar **discovery mode** bajo los límites de llamadas, presupuesto y revisiones configurados. Permanece desactivado por defecto. Las necesidades ya estructuradas pasan por el compilador determinista sin otra inferencia. Una investigación de composición o reparación sigue su recorrido de herramientas específico.
+
+La comparación reproducible de información pública y ayuda física usa:
+
+```powershell
+node --env-file-if-exists=.env.local scripts/discovery-benchmark.mjs --seeds=3 --arms=B5,B6,B8 --needs=12 --noise=48 --read-ms=60000 --workers=2 --budget=.5 --episode-budget=.12
+```
+
+Consume saldo solo en B6. El protocolo se guarda antes de las ejecuciones. B5 usa lectura convencional finita y extracción estructurada gratuita; B8 añade detección automática amplia por palabras y ubicación. Las demoras de atención humana son supuestos experimentales, no mediciones de profesionales. Consultar [diagnóstico y resultados](MEJORA_RESPUESTA.md) antes de interpretar la comparación.

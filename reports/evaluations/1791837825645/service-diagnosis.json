@@ -1,0 +1,4260 @@
+{
+  "at": "2026-10-12T21:03:51.713Z",
+  "scope": "Diagnostic extraction of both fixed-seed B6 outcomes. No hidden state supplied to the candidate and no source edits.",
+  "attribution": "Owner stock resolution and receipt freshness are deterministic product/simulator correctness. Their correction is not a GenAI gain.",
+  "rows": [
+    {
+      "file": "S19-delegated-final-2026-distributed-01-B6.json",
+      "variant": "distributed",
+      "status": "failed",
+      "errors": [
+        {
+          "phase": "policy_round",
+          "round": 10,
+          "code": "ORGANIZATION_CALL_BUDGET"
+        },
+        {
+          "phase": "policy_round",
+          "round": 11,
+          "code": "ORGANIZATION_CALL_BUDGET"
+        }
+      ],
+      "hashes": {
+        "candidate": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+        "evaluator": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584"
+      },
+      "calls": 40,
+      "costUsd": 0.10111205999999999,
+      "chargedBudgetUsd": 0.10111205999999999,
+      "unknownCostCalls": 0,
+      "wallMs": 489137.1043,
+      "services": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 537342100,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 0,
+          "pending": 50,
+          "overprovided": 0,
+          "uncoveredUnitMs": 720000000,
+          "onTime": 0
+        }
+      },
+      "collective": {
+        "shelterPlaceHours": 0,
+        "operatingHours": 0,
+        "waterProduced": 0,
+        "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+      },
+      "invariants": [],
+      "ownOperations": [
+        {
+          "receivedBy": "org0",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "water",
+          "quantity": 162,
+          "received": 162,
+          "destinationStock": "stock-n13-water-org0",
+          "times": {
+            "arrived": 1370016,
+            "accepted": 1085015,
+            "prepared": 1145015,
+            "received": 1430016,
+            "reserved": 1084014,
+            "authorized": 1084014,
+            "dispatched": 1145015,
+            "orderReceived": 1085015,
+            "unloadingStarted": 1370016
+          }
+        },
+        {
+          "receivedBy": "org1",
+          "id": "operation-1",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-water-main",
+          "resourceType": "water",
+          "quantity": 100,
+          "received": 100,
+          "destinationStock": "stock-n13-water",
+          "times": {
+            "arrived": 786681,
+            "service": 846681,
+            "accepted": 585014,
+            "prepared": 645014,
+            "received": 846681,
+            "reserved": 584013,
+            "authorized": 584013,
+            "dispatched": 645014,
+            "orderReceived": 585014,
+            "unloadingStarted": 786681
+          }
+        },
+        {
+          "receivedBy": "org2",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "energy",
+          "quantity": 1,
+          "received": 1,
+          "destinationStock": "stock-n13-energy",
+          "times": {
+            "arrived": 1400683,
+            "accepted": 1124015,
+            "prepared": 1184015,
+            "received": 1460683,
+            "reserved": 1123014,
+            "authorized": 1123014,
+            "dispatched": 1184015,
+            "orderReceived": 1124015,
+            "unloadingStarted": 1400683
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "sanitation",
+          "quantity": 1,
+          "received": 1,
+          "destinationStock": "stock-n13-sanitation",
+          "times": {
+            "arrived": 1918669,
+            "accepted": 1592001,
+            "prepared": 1785335,
+            "received": 1978669,
+            "reserved": 1591000,
+            "authorized": 1591000,
+            "dispatched": 1785335,
+            "orderReceived": 1592001,
+            "pickupArrived": 1725335,
+            "pickupDispatched": 1592001,
+            "unloadingStarted": 1918669
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "staff",
+          "quantity": 2,
+          "received": 2,
+          "destinationStock": "stock-n13-staff",
+          "times": {
+            "arrived": 1481683,
+            "accepted": 1155015,
+            "prepared": 1348349,
+            "received": 1541683,
+            "reserved": 1154014,
+            "authorized": 1154014,
+            "dispatched": 1348349,
+            "orderReceived": 1155015,
+            "pickupArrived": 1288349,
+            "pickupDispatched": 1155015,
+            "unloadingStarted": 1481683
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-4",
+          "type": "inspection",
+          "state": "arrived",
+          "need": null,
+          "times": {
+            "arrived": 945013,
+            "authorized": 945013,
+            "dispatched": 945013
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-water-main",
+          "resourceType": "water",
+          "quantity": 300,
+          "received": 300,
+          "destinationStock": "stock-n13-water-org3",
+          "times": {
+            "arrived": 839348,
+            "service": 929348,
+            "accepted": 646014,
+            "prepared": 706014,
+            "received": 929348,
+            "reserved": 645013,
+            "authorized": 645013,
+            "dispatched": 706014,
+            "orderReceived": 646014,
+            "unloadingStarted": 869348
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-water-main",
+          "resourceType": "water",
+          "quantity": 200,
+          "received": 200,
+          "destinationStock": "stock-n13-water-org3",
+          "times": {
+            "arrived": 809348,
+            "service": 869348,
+            "accepted": 616014,
+            "prepared": 676014,
+            "received": 869348,
+            "reserved": 615013,
+            "authorized": 615013,
+            "dispatched": 676014,
+            "orderReceived": 616014,
+            "unloadingStarted": 809348
+          }
+        }
+      ],
+      "facilities": [
+        {
+          "receivedBy": "org0",
+          "id": "b13",
+          "node": "n13",
+          "state": "candidate",
+          "safe": true,
+          "at": 1005013,
+          "provisioned": {
+            "staff": 0,
+            "water": 0,
+            "energy": 0,
+            "sanitation": 0
+          },
+          "dependencies": {
+            "staff": 2,
+            "water": 162,
+            "energy": 1,
+            "sanitation": 1
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "b13",
+          "node": "n13",
+          "state": "candidate",
+          "safe": true,
+          "at": 1005013,
+          "provisioned": {
+            "staff": 0,
+            "water": 0,
+            "energy": 0,
+            "sanitation": 0
+          },
+          "dependencies": {
+            "staff": 2,
+            "water": 162,
+            "energy": 1,
+            "sanitation": 1
+          }
+        }
+      ],
+      "rounds": [
+        {
+          "round": 0,
+          "org": "org0",
+          "atSim": 340013,
+          "state": "ready",
+          "calls": 5,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": false,
+                "missing": [
+                  {
+                    "type": "facility_metadata",
+                    "quantity": 1
+                  }
+                ],
+                "pending": [],
+                "actions": [],
+                "note": "Receive the site's current metadata through a clarification first. A location on a public map is not a safety assessment."
+              }
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "missing": [],
+                "pending": [],
+                "actions": [
+                  {
+                    "type": "verify",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "target": "building",
+                      "id": "b13",
+                      "method": "field",
+                      "purpose": "facility_safety",
+                      "reportTo": "org0",
+                      "staff": "r-org3-staff",
+                      "vehicle": "v-org3-0",
+                      "targetVersion": 1,
+                      "validForMs": 21600000
+                    }
+                  }
+                ],
+                "note": "The responsible organization and crew owner approve independently. The owner source assigns qualified staff, real road travel and field work; activation waits for a current received assessment."
+              }
+            }
+          ]
+        },
+        {
+          "round": 1,
+          "org": "org0",
+          "atSim": 460013,
+          "state": "ready",
+          "calls": 6,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": false,
+                "assessment": {
+                  "current": false,
+                  "id": null,
+                  "sourceNow": 400013,
+                  "next": "plan_assessment"
+                },
+                "requirements": {
+                  "staff": 2,
+                  "water": 162,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [
+                  {
+                    "type": "current_safety_assessment",
+                    "quantity": 1
+                  }
+                ],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-staff",
+                      "vehicle": "v-org3-0",
+                      "quantity": 2,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 162,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org2-energy",
+                      "vehicle": "v-org2-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": false,
+                "missing": [],
+                "pending": [
+                  {
+                    "proposal": "proposal_9978d29f-e509-413a-b102-f7ebbb6167a8",
+                    "state": "awaiting_partner"
+                  }
+                ],
+                "actions": [],
+                "note": "The current assessment is pending. Do not allocate a second crew or assume a positive result."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "org": "org0",
+          "atSim": 1054014,
+          "state": "ready",
+          "calls": 3,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "received:org0:inspection-2",
+                  "sourceNow": 1039014
+                },
+                "requirements": {
+                  "staff": 2,
+                  "water": 162,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-staff",
+                      "vehicle": "v-org3-0",
+                      "quantity": 2,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 162,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org2-energy",
+                      "vehicle": "v-org2-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      5
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "benefit": "Provides shelter for 50 people from b2 at the safe and inspected facility b13.",
+                "rationale": "Facility b13 is a safe candidate shelter with a capacity of 300. The plan coordinates the necessary staff, water, energy, and sanitation from org0, org2, and org3 to activate the facility and evacuate the 50 people in need from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "id": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6",
+                "state": "awaiting_review",
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org3-0",
+                      "building": "b13",
+                      "quantity": 2,
+                      "resource": "r-org3-staff",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org0-1",
+                      "building": "b13",
+                      "quantity": 162,
+                      "resource": "r-org0-water",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org2-0",
+                      "building": "b13",
+                      "quantity": 1,
+                      "resource": "r-org2-energy",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "vehicle": "v-org3-0",
+                      "building": "b13",
+                      "quantity": 1,
+                      "resource": "r-org3-sanitation",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "params": {
+                      "permit": true,
+                      "building": "b13"
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      1
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      5
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      6
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "repairOf": null,
+                "inheritedWork": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "org": "org0",
+          "atSim": 1166014,
+          "state": "inconclusive",
+          "calls": 0,
+          "reason": "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+          "tools": []
+        },
+        {
+          "round": 4,
+          "org": "org0",
+          "atSim": 1269000,
+          "state": "inconclusive",
+          "calls": 0,
+          "reason": "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+          "tools": []
+        },
+        {
+          "round": 5,
+          "org": "org0",
+          "atSim": 1682000,
+          "state": "ready",
+          "calls": 6,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "received:org0:inspection-2",
+                  "sourceNow": 1607000
+                },
+                "requirements": {
+                  "staff": 2,
+                  "water": 162,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-staff",
+                      "vehicle": "v-org3-0",
+                      "quantity": 2,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 162,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org2-energy",
+                      "vehicle": "v-org2-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      5
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "failed",
+              "error": "VEHICLE_CONFLICT",
+              "message": "A vehicle is already assigned to another concurrent operation.",
+              "params": {
+                "benefit": "Activates shelter b13 and evacuates 50 people from b2, satisfying need-case-2.",
+                "rationale": "The plan utilizes available resources from org0, org2, and org3 to meet the dependencies of shelter b13 (staff, water, energy, sanitation) and then performs the evacuation of the 50 people in need at b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "EVIDENCE",
+              "message": "A proposal must cite accessible evidence. Copy the exact evidence IDs returned by tools.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org3",
+                    "params": {
+                      "building": "b13",
+                      "destination": "n13",
+                      "quantity": 1,
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0"
+                    },
+                    "type": "dispatch"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-0 is also available and may be closer to the pickup point at b2.",
+                    "title": "Use v-org0-0 for evacuation"
+                  }
+                ],
+                "benefit": "Satisfies need-case-2 by providing 50 shelter places at b13 for people at b2.",
+                "conditions": [
+                  {
+                    "description": "Sanitation delivery (operation-8) must be completed to activate shelter b13.",
+                    "id": "operation-8",
+                    "satisfied": false,
+                    "type": "commitment"
+                  }
+                ],
+                "priority": "urgent",
+                "rationale": "Shelter b13 is safe and has most dependencies met (staff, water, energy). Once the remaining sanitation requirement is fulfilled (currently in transit via operation-8), the facility can be activated. v-org0-1 is then used to evacuate the 50 people from b2 in three trips (capacity 20 per trip).",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "org3_resource_r-org3-sanitation",
+                  "v-org0-1",
+                  "operation-8"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-0 is also available at n0 and could be used for evacuation.",
+                    "title": "Use v-org0-0 for evacuation"
+                  }
+                ],
+                "benefit": "Provides shelter for 50 people from b2 by activating shelter b13.",
+                "conditions": [
+                  {
+                    "description": "Completion of sanitation delivery operation-8.",
+                    "id": "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_3",
+                    "satisfied": false,
+                    "type": "commitment"
+                  }
+                ],
+                "priority": "urgent",
+                "rationale": "Shelter b13 is safe and has staff, water, and energy already delivered. It only requires the delivery of sanitation (operation-8, currently in transit) to be activated. Once active, v-org0-1 (currently at n13) can perform the evacuation of 50 people from b2 in three trips.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "received:org0:inspection-2",
+                  "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_3",
+                  "v-org0-1"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "id": "proposal_9a03bf13-a9b5-4282-8270-4c65f7d3e05f",
+                "state": "awaiting_review",
+                "actions": [
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "permit": true,
+                      "building": "b13"
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "repairOf": null,
+                "inheritedWork": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 6,
+          "org": "org0",
+          "atSim": 1863000,
+          "state": "inconclusive",
+          "calls": 0,
+          "reason": "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+          "tools": []
+        },
+        {
+          "round": 7,
+          "org": "org0",
+          "atSim": 2235000,
+          "state": "ready",
+          "calls": 5,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_repair",
+              "state": "failed",
+              "error": "NOT_FOUND",
+              "message": "Record not found.",
+              "params": {
+                "proposalId": "proposal-7"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "plan_repair",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "proposalId": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6"
+              },
+              "result": {
+                "readyToDraft": false,
+                "pending": [],
+                "actions": [],
+                "preserved": [
+                  {
+                    "index": 1,
+                    "operationId": "operation-5",
+                    "state": "completed"
+                  }
+                ],
+                "note": "A checked reroute preserves the same trip, cargo, destination and responsible owner. Human approval and a source-confirmed physical receipt are still required; no additional allocation is made."
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "EVIDENCE",
+              "message": "A proposal must cite accessible evidence. Copy the exact evidence IDs returned by tools.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "Wait for formal system update of operation-5 before activation.",
+                    "title": "Deferred Activation"
+                  }
+                ],
+                "benefit": "Provides shelter for 50 people from b2 at the safe and inspected facility b13.",
+                "conditions": [
+                  {
+                    "description": "Confirmation of 162 L water receipt at b13 (Signal 6675efbcc3316b42c0ad13ff)",
+                    "id": "6675efbcc3316b42c0ad13ff",
+                    "satisfied": true,
+                    "type": "evidence"
+                  }
+                ],
+                "priority": "high",
+                "rationale": "Facility b13 is a safe candidate shelter. All activation dependencies are now met: staff (operation-7), energy (operation-6), and sanitation (operation-8) are completed, and water receipt (162 L) is confirmed by the receiving team via signal 6675efbcc3316b42c0ad13ff. Vehicle v-org0-1 is idle at n13 and available to perform the evacuation from b2.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "6675efbcc3316b42c0ad13ff",
+                  "operation-7",
+                  "operation-6",
+                  "operation-8",
+                  "operation-5",
+                  "need-case-2"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "Wait for the system to formally mark operation-5 as completed.",
+                    "title": "Deferred Activation"
+                  }
+                ],
+                "benefit": "Provides shelter for 50 people from b2 at the safe and inspected facility b13.",
+                "conditions": [
+                  {
+                    "description": "Confirmation of 162 L water receipt at b13.",
+                    "id": "6675efbcc3316b42c0ad13ff",
+                    "satisfied": true,
+                    "type": "evidence"
+                  }
+                ],
+                "priority": "high",
+                "rationale": "Facility b13 is a safe candidate shelter. All activation dependencies are now physically met: staff (org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_0), energy (org2_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_2), and sanitation (org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_3) are completed, and water receipt (162 L) is confirmed by the receiving team via signal 6675efbcc3316b42c0ad13ff. Vehicle v-org0-1 is available to perform the evacuation from b2.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "6675efbcc3316b42c0ad13ff",
+                  "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_0",
+                  "org2_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_2",
+                  "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_3",
+                  "need-case-2",
+                  "v-org0-1"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "id": "proposal_c68e82ce-b48e-42c1-8ffe-c2a57709cbcd",
+                "state": "awaiting_review",
+                "actions": [
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "permit": true,
+                      "building": "b13"
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "repairReason": "The operational source refused a prospective command: DEPENDENCY",
+                "repairOf": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6",
+                "inheritedWork": [
+                  {
+                    "index": 0,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org3",
+                      "params": {
+                        "vehicle": "v-org3-0",
+                        "building": "b13",
+                        "quantity": 2,
+                        "resource": "r-org3-staff",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-7",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 2,
+                      "times": {
+                        "arrived": 1481683,
+                        "accepted": 1155015,
+                        "prepared": 1348349,
+                        "received": 1541683,
+                        "reserved": 1154014,
+                        "authorized": 1154014,
+                        "dispatched": 1348349,
+                        "orderReceived": 1155015,
+                        "pickupArrived": 1288349,
+                        "pickupDispatched": 1155015,
+                        "unloadingStarted": 1481683
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": "completed",
+                    "operationId": "operation-5",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org0",
+                      "params": {
+                        "vehicle": "v-org0-1",
+                        "building": "b13",
+                        "quantity": 162,
+                        "resource": "r-org0-water",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-5",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "destinationStock": "stock-n13-water-org0",
+                      "received": 162,
+                      "times": {
+                        "arrived": 1370016,
+                        "accepted": 1085015,
+                        "prepared": 1145015,
+                        "received": 1430016,
+                        "reserved": 1084014,
+                        "authorized": 1084014,
+                        "dispatched": 1145015,
+                        "orderReceived": 1085015,
+                        "unloadingStarted": 1370016
+                      }
+                    }
+                  },
+                  {
+                    "index": 2,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org2",
+                      "params": {
+                        "vehicle": "v-org2-0",
+                        "building": "b13",
+                        "quantity": 1,
+                        "resource": "r-org2-energy",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-6",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 1,
+                      "times": {
+                        "arrived": 1400683,
+                        "accepted": 1124015,
+                        "prepared": 1184015,
+                        "received": 1460683,
+                        "reserved": 1123014,
+                        "authorized": 1123014,
+                        "dispatched": 1184015,
+                        "orderReceived": 1124015,
+                        "unloadingStarted": 1400683
+                      }
+                    }
+                  },
+                  {
+                    "index": 3,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org3",
+                      "params": {
+                        "vehicle": "v-org3-0",
+                        "building": "b13",
+                        "quantity": 1,
+                        "resource": "r-org3-sanitation",
+                        "destination": "n13"
+                      },
+                      "dependsOn": [
+                        0
+                      ]
+                    },
+                    "source": {
+                      "id": "operation-8",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 1,
+                      "times": {
+                        "arrived": 1918669,
+                        "accepted": 1592001,
+                        "prepared": 1785335,
+                        "received": 1978669,
+                        "reserved": 1591000,
+                        "authorized": 1591000,
+                        "dispatched": 1785335,
+                        "orderReceived": 1592001,
+                        "pickupArrived": 1725335,
+                        "pickupDispatched": 1592001,
+                        "unloadingStarted": 1918669
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 8,
+          "org": "org0",
+          "atSim": 2565000,
+          "state": "ready",
+          "calls": 7,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_repair",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "proposalId": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6"
+              },
+              "result": {
+                "readyToDraft": false,
+                "pending": [],
+                "actions": [],
+                "preserved": [
+                  {
+                    "index": 1,
+                    "operationId": "operation-5",
+                    "state": "completed"
+                  }
+                ],
+                "note": "A checked reroute preserves the same trip, cargo, destination and responsible owner. Human approval and a source-confirmed physical receipt are still required; no additional allocation is made."
+              }
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "received:org0:inspection-2",
+                  "sourceNow": 2490000
+                },
+                "requirements": {
+                  "staff": 2,
+                  "water": 162,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-staff",
+                      "vehicle": "v-org3-0",
+                      "quantity": 2,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 162,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org2-energy",
+                      "vehicle": "v-org2-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      5
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      4,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "failed",
+              "error": "REPAIR_DUPLICATES_COMPLETED",
+              "message": "This repair repeats an already completed physical step. Preserve it as history, and propose only changed future work.",
+              "params": {
+                "benefit": "Activates shelter b13 to provide safe housing for 50 people currently in need at b2.",
+                "rationale": "Facility b13 is a safe candidate shelter. Staff, energy, and sanitation have already been delivered (operations 7, 6, and 8). Water delivery (operation 5) is reserved and pending. Once all dependencies are physically received, the facility can be activated and the evacuation of 50 people from b2 can proceed using vehicle v-org0-1.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "EVIDENCE",
+              "message": "A proposal must cite accessible evidence. Copy the exact evidence IDs returned by tools.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "Wait for more vehicles to speed up evacuation.",
+                    "title": "Multi-vehicle Evacuation"
+                  }
+                ],
+                "benefit": "Provides safe shelter for 50 people from b2 at the inspected facility b13.",
+                "conditions": [
+                  {
+                    "description": "Receipt of water delivery operation-5 at b13.",
+                    "id": "operation-5",
+                    "satisfied": false,
+                    "type": "commitment"
+                  }
+                ],
+                "priority": "high",
+                "rationale": "Facility b13 is safe and has received staff (operation-7), energy (operation-6), and sanitation (operation-8). Activation is pending the receipt of water (operation-5). Once activated, vehicle v-org0-1 will perform the evacuation of 50 people from b2 in three trips.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-5",
+                  "operation-6",
+                  "operation-7",
+                  "operation-8",
+                  "v-org0-1"
+                ],
+                "summary": "Activate shelter b13 upon water receipt and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "Wait for more vehicles to speed up evacuation.",
+                    "title": "Multi-vehicle Evacuation"
+                  }
+                ],
+                "benefit": "Provides safe shelter for 50 people from b2 at the inspected facility b13.",
+                "conditions": [
+                  {
+                    "description": "Receipt of water delivery operation-5 at b13.",
+                    "id": "operation-5",
+                    "satisfied": false,
+                    "type": "commitment"
+                  }
+                ],
+                "priority": "high",
+                "rationale": "Facility b13 is safe and has received staff, energy, and sanitation. Activation is pending the receipt of water (operation-5). Once activated, vehicle v-org0-1 will perform the evacuation of 50 people from b2 in three trips.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-5",
+                  "org2_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_2",
+                  "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_0",
+                  "org3_response_receipt_work_proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6_3",
+                  "v-org0-1",
+                  "received:org0:inspection-2"
+                ],
+                "summary": "Activate shelter b13 upon water receipt and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "id": "proposal_227f35c9-c7b6-4ac3-b604-5d4e8237c69b",
+                "state": "awaiting_review",
+                "actions": [
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "permit": true,
+                      "building": "b13"
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "repairReason": "The operational source refused a prospective command: DEPENDENCY",
+                "repairOf": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6",
+                "inheritedWork": [
+                  {
+                    "index": 0,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org3",
+                      "params": {
+                        "vehicle": "v-org3-0",
+                        "building": "b13",
+                        "quantity": 2,
+                        "resource": "r-org3-staff",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-7",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 2,
+                      "times": {
+                        "arrived": 1481683,
+                        "accepted": 1155015,
+                        "prepared": 1348349,
+                        "received": 1541683,
+                        "reserved": 1154014,
+                        "authorized": 1154014,
+                        "dispatched": 1348349,
+                        "orderReceived": 1155015,
+                        "pickupArrived": 1288349,
+                        "pickupDispatched": 1155015,
+                        "unloadingStarted": 1481683
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": "completed",
+                    "operationId": "operation-5",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org0",
+                      "params": {
+                        "vehicle": "v-org0-1",
+                        "building": "b13",
+                        "quantity": 162,
+                        "resource": "r-org0-water",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-5",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "destinationStock": "stock-n13-water-org0",
+                      "received": 162,
+                      "times": {
+                        "arrived": 1370016,
+                        "accepted": 1085015,
+                        "prepared": 1145015,
+                        "received": 1430016,
+                        "reserved": 1084014,
+                        "authorized": 1084014,
+                        "dispatched": 1145015,
+                        "orderReceived": 1085015,
+                        "unloadingStarted": 1370016
+                      }
+                    }
+                  },
+                  {
+                    "index": 2,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org2",
+                      "params": {
+                        "vehicle": "v-org2-0",
+                        "building": "b13",
+                        "quantity": 1,
+                        "resource": "r-org2-energy",
+                        "destination": "n13"
+                      },
+                      "dependsOn": []
+                    },
+                    "source": {
+                      "id": "operation-6",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 1,
+                      "times": {
+                        "arrived": 1400683,
+                        "accepted": 1124015,
+                        "prepared": 1184015,
+                        "received": 1460683,
+                        "reserved": 1123014,
+                        "authorized": 1123014,
+                        "dispatched": 1184015,
+                        "orderReceived": 1124015,
+                        "unloadingStarted": 1400683
+                      }
+                    }
+                  },
+                  {
+                    "index": 3,
+                    "state": "completed",
+                    "action": {
+                      "type": "dispatch",
+                      "owner": "org3",
+                      "params": {
+                        "vehicle": "v-org3-0",
+                        "building": "b13",
+                        "quantity": 1,
+                        "resource": "r-org3-sanitation",
+                        "destination": "n13"
+                      },
+                      "dependsOn": [
+                        0
+                      ]
+                    },
+                    "source": {
+                      "id": "operation-8",
+                      "confirmedBySource": true,
+                      "state": "completed",
+                      "received": 1,
+                      "times": {
+                        "arrived": 1918669,
+                        "accepted": 1592001,
+                        "prepared": 1785335,
+                        "received": 1978669,
+                        "reserved": 1591000,
+                        "authorized": 1591000,
+                        "dispatched": 1785335,
+                        "orderReceived": 1592001,
+                        "pickupArrived": 1725335,
+                        "pickupDispatched": 1592001,
+                        "unloadingStarted": 1918669
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 9,
+          "org": "org0",
+          "atSim": 2880000,
+          "state": "inconclusive",
+          "calls": 8,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "6675efbcc3316b42c0ad13ff",
+                  "ab2d739f3b45fa61efc5b139",
+                  "749aeb307ee257f9f72a77de",
+                  "a126f8cb022fd54a7b170db8",
+                  "45a4b55168914ba1d5f05e6e"
+                ],
+                "sourceRelations": [],
+                "state": "observed",
+                "text": "The receiving team at b13 confirms a total of 1062 L of water (162 + 100 + 200 + 300 + 300)."
+              },
+              "result": {
+                "id": "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "6f15110d525c07d4c0f844e1"
+                ],
+                "sourceRelations": [],
+                "state": "observed",
+                "text": "The receiving team at b13 confirms 1 unit of sanitation."
+              },
+              "result": {
+                "id": "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "f5e427c77e5c6f0b07e0d51f"
+                ],
+                "sourceRelations": [],
+                "state": "observed",
+                "text": "The receiving team at b13 confirms 1 unit of energy."
+              },
+              "result": {
+                "id": "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "79baabe37a7fa98f6761b774"
+                ],
+                "sourceRelations": [],
+                "state": "observed",
+                "text": "The receiving team at b13 confirms 2 persons of staff."
+              },
+              "result": {
+                "id": "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "plan_repair",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "proposalId": "proposal_b32c6d17-9c51-4cb8-ab8a-270ca7f4fcb6"
+              },
+              "result": {
+                "readyToDraft": false,
+                "pending": [],
+                "actions": [],
+                "preserved": [
+                  {
+                    "index": 1,
+                    "operationId": "operation-5",
+                    "state": "completed"
+                  }
+                ],
+                "note": "A checked reroute preserves the same trip, cargo, destination and responsible owner. Human approval and a source-confirmed physical receipt are still required; no additional allocation is made."
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SHELTER",
+              "message": "The shelter must be operating, or depend on a current safety-checked activation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides immediate shelter for 50 people from b2 by activating the safe and fully provisioned facility b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Facility b13 is safe (inspection-2) and has now received all required dependencies: staff (2), energy (1), sanitation (1), and water (1062 L total confirmed via signals), meeting the activation requirements. Vehicle v-org0-1 is available to perform the evacuation from b2 to b13 in three trips.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "need-case-2",
+                  "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                  "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                  "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                  "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SHELTER",
+              "message": "The shelter must be operating, or depend on a current safety-checked activation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides immediate shelter for 50 people from b2 by activating the safe and fully provisioned facility b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Facility b13 is safe (inspection-2) and has now received all required dependencies: staff (2), energy (1), sanitation (1), and water (1062 L total confirmed via signals), meeting the activation requirements. Vehicle v-org0-1 is available to perform the evacuation from b2 to b13 in three trips. The evacuations depend on the successful activation of the shelter.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "need-case-2",
+                  "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                  "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                  "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                  "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SHELTER",
+              "message": "The shelter must be operating, or depend on a current safety-checked activation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides immediate shelter for 50 people from b2 by activating the safe and fully provisioned facility b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Facility b13 is safe (inspection-2) and has now received all required dependencies: staff (2), energy (1), sanitation (1), and water (1062 L total confirmed via signals), meeting the activation requirements. Vehicle v-org0-1 is available to perform the evacuation from b2 to b13 in three trips. The evacuations depend on the successful activation of the shelter.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "need-case-2",
+                  "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                  "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                  "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                  "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SHELTER",
+              "message": "The shelter must be operating, or depend on a current safety-checked activation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides immediate shelter for 50 people from b2 by activating the safe and fully provisioned facility b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Facility b13 is safe (inspection-2) and has now received all required dependencies: staff (2), energy (1), sanitation (1), and water (1062 L total confirmed via signals), meeting the activation requirements. Vehicle v-org0-1 is available to perform the evacuation from b2 to b13 in three trips. The evacuations depend on the successful activation of the shelter.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "need-case-2",
+                  "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                  "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                  "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                  "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SHELTER",
+              "message": "The shelter must be operating, or depend on a current safety-checked activation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-1"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides immediate shelter for 50 people from b2 by activating the safe and fully provisioned facility b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Facility b13 is safe (inspection-2) and has now received all required dependencies: staff (2), energy (1), sanitation (1), and water (1062 L total confirmed via signals), meeting the activation requirements. Vehicle v-org0-1 is available to perform the evacuation from b2 to b13 in three trips. The evacuations depend on the successful activation of the shelter.",
+                "references": [
+                  "b13",
+                  "received:org0:inspection-2",
+                  "need-case-2",
+                  "claim_f9f8687a-0265-4d40-a540-47ee2b3fe5d4",
+                  "claim_cf5c93a1-05f3-45c0-823c-8c6089a4093d",
+                  "claim_9eab14fa-80e4-4f66-9fc6-6c8264ebbf7b",
+                  "claim_21a28ac3-1c95-4714-85a4-3ed03c47e14f"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "S19-delegated-final-2026-delayed-01-B6.json",
+      "variant": "delayed",
+      "status": "failed",
+      "errors": [
+        {
+          "phase": "policy_round",
+          "round": 9,
+          "code": "ORGANIZATION_CALL_BUDGET"
+        },
+        {
+          "phase": "policy_round",
+          "round": 10,
+          "code": "ORGANIZATION_CALL_BUDGET"
+        },
+        {
+          "phase": "policy_round",
+          "round": 11,
+          "code": "ORGANIZATION_CALL_BUDGET"
+        }
+      ],
+      "hashes": {
+        "candidate": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+        "evaluator": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584"
+      },
+      "calls": 40,
+      "costUsd": 0.08527074000000001,
+      "chargedBudgetUsd": 0.08527074000000001,
+      "unknownCostCalls": 0,
+      "wallMs": 622359.4739,
+      "services": {
+        "water": {
+          "unit": "L",
+          "demand": 600,
+          "served": 600,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 759009900,
+          "onTime": 1
+        },
+        "shelter": {
+          "unit": "place",
+          "demand": 50,
+          "served": 50,
+          "pending": 0,
+          "overprovided": 0,
+          "uncoveredUnitMs": 241650190,
+          "onTime": 0
+        }
+      },
+      "collective": {
+        "shelterPlaceHours": 132.87494722222223,
+        "operatingHours": 3.4141666666666666,
+        "waterProduced": 0,
+        "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+      },
+      "invariants": [],
+      "ownOperations": [
+        {
+          "receivedBy": "org0",
+          "id": "operation-11",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-case-2",
+          "quantity": 10,
+          "times": {
+            "arrived": 6621005,
+            "service": 6681005,
+            "prepared": 6496004,
+            "received": 6681005,
+            "authorized": 6310002,
+            "dispatched": 6496004,
+            "orderReceived": 6311003,
+            "pickupDispatched": 6311003
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-10",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-case-2",
+          "quantity": 20,
+          "times": {
+            "arrived": 6196004,
+            "service": 6256004,
+            "prepared": 6071003,
+            "received": 6256004,
+            "authorized": 5885001,
+            "dispatched": 6071003,
+            "orderReceived": 5886002,
+            "pickupDispatched": 5886002
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-9",
+          "type": "evacuation",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-case-2",
+          "quantity": 20,
+          "times": {
+            "arrived": 2426003,
+            "service": 2486003,
+            "prepared": 2301002,
+            "received": 2486003,
+            "authorized": 2115000,
+            "dispatched": 2301002,
+            "orderReceived": 2116001,
+            "pickupDispatched": 2116001
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-8",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "water",
+          "quantity": 300,
+          "received": 300,
+          "destinationStock": "stock-n13-water",
+          "times": {
+            "arrived": 1963018,
+            "accepted": 1453016,
+            "prepared": 1738017,
+            "received": 2023018,
+            "reserved": 1452015,
+            "authorized": 1452015,
+            "dispatched": 1738017,
+            "orderReceived": 1453016,
+            "pickupArrived": 1678017,
+            "pickupDispatched": 1453016,
+            "unloadingStarted": 1963018
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-3",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "water",
+          "quantity": 181,
+          "received": 181,
+          "destinationStock": "stock-n13-water",
+          "times": {
+            "arrived": 1032017,
+            "accepted": 747016,
+            "prepared": 807016,
+            "received": 1122017,
+            "reserved": 746015,
+            "authorized": 746015,
+            "dispatched": 807016,
+            "orderReceived": 747016,
+            "unloadingStarted": 1062017
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-2",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "staff",
+          "quantity": 1,
+          "received": 1,
+          "destinationStock": "stock-n13-staff",
+          "times": {
+            "arrived": 1257018,
+            "accepted": 747016,
+            "prepared": 1032017,
+            "received": 1317018,
+            "reserved": 746015,
+            "authorized": 746015,
+            "dispatched": 1032017,
+            "orderReceived": 747016,
+            "pickupArrived": 972017,
+            "pickupDispatched": 747016,
+            "unloadingStarted": 1257018
+          }
+        },
+        {
+          "receivedBy": "org0",
+          "id": "operation-1",
+          "type": "inspection",
+          "state": "arrived",
+          "need": null,
+          "times": {
+            "arrived": 610014,
+            "authorized": 385013,
+            "dispatched": 385013
+          }
+        },
+        {
+          "receivedBy": "org1",
+          "id": "operation-6",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-water-main",
+          "resourceType": "water",
+          "quantity": 300,
+          "received": 300,
+          "destinationStock": "stock-n13-water-org1",
+          "times": {
+            "arrived": 1191683,
+            "service": 1251683,
+            "accepted": 990016,
+            "prepared": 1050016,
+            "received": 1251683,
+            "reserved": 989015,
+            "authorized": 989015,
+            "dispatched": 1050016,
+            "orderReceived": 990016,
+            "unloadingStarted": 1191683
+          }
+        },
+        {
+          "receivedBy": "org1",
+          "id": "operation-4",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "energy",
+          "quantity": 1,
+          "received": 1,
+          "destinationStock": "stock-n13-energy",
+          "times": {
+            "arrived": 983683,
+            "accepted": 782016,
+            "prepared": 842016,
+            "received": 1043683,
+            "reserved": 781015,
+            "authorized": 781015,
+            "dispatched": 842016,
+            "orderReceived": 782016,
+            "unloadingStarted": 983683
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-7",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": "need-water-main",
+          "resourceType": "water",
+          "quantity": 300,
+          "received": 300,
+          "destinationStock": "stock-n13-water-org3",
+          "times": {
+            "arrived": 1218350,
+            "service": 1278350,
+            "accepted": 1025016,
+            "prepared": 1085016,
+            "received": 1278350,
+            "reserved": 1024015,
+            "authorized": 1024015,
+            "dispatched": 1085016,
+            "orderReceived": 1025016,
+            "unloadingStarted": 1218350
+          }
+        },
+        {
+          "receivedBy": "org3",
+          "id": "operation-5",
+          "type": "delivery",
+          "state": "completed",
+          "building": "b13",
+          "need": null,
+          "resourceType": "sanitation",
+          "quantity": 1,
+          "received": 1,
+          "destinationStock": "stock-n13-sanitation",
+          "times": {
+            "arrived": 1006350,
+            "accepted": 813016,
+            "prepared": 873016,
+            "received": 1066350,
+            "reserved": 812015,
+            "authorized": 812015,
+            "dispatched": 873016,
+            "orderReceived": 813016,
+            "unloadingStarted": 1006350
+          }
+        }
+      ],
+      "facilities": [
+        {
+          "receivedBy": "org0",
+          "id": "b13",
+          "node": "n13",
+          "state": "operating",
+          "safe": true,
+          "occupancy": 50,
+          "at": 670014,
+          "statusObservedAt": 6681005,
+          "provisioned": {
+            "staff": 1,
+            "water": 478,
+            "energy": 1,
+            "sanitation": 1
+          },
+          "dependencies": {
+            "staff": 1,
+            "water": 481,
+            "energy": 1,
+            "sanitation": 1
+          }
+        }
+      ],
+      "rounds": [
+        {
+          "round": 0,
+          "org": "org0",
+          "atSim": 355013,
+          "state": "ready",
+          "calls": 6,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": false,
+                "missing": [
+                  {
+                    "type": "facility_metadata",
+                    "quantity": 1
+                  }
+                ],
+                "pending": [],
+                "actions": [],
+                "note": "Receive the site's current metadata through a clarification first. A location on a public map is not a safety assessment."
+              }
+            },
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": false,
+                "assessment": {
+                  "current": false,
+                  "id": null,
+                  "sourceNow": 325013,
+                  "next": "plan_assessment"
+                },
+                "requirements": {
+                  "staff": 1,
+                  "water": 481,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [
+                  {
+                    "type": "current_safety_assessment",
+                    "quantity": 1
+                  }
+                ],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-staff",
+                      "vehicle": "v-org0-1",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 300,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-0",
+                      "quantity": 181,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org1-energy",
+                      "vehicle": "v-org1-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "plan_assessment",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "missing": [],
+                "pending": [],
+                "actions": [
+                  {
+                    "type": "verify",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "target": "building",
+                      "id": "b13",
+                      "method": "field",
+                      "purpose": "facility_safety",
+                      "reportTo": "org0",
+                      "staff": "r-org0-staff",
+                      "vehicle": "v-org0-1",
+                      "targetVersion": 1,
+                      "validForMs": 21600000
+                    }
+                  }
+                ],
+                "note": "The responsible organization and crew owner approve independently. The owner source assigns qualified staff, real road travel and field work; activation waits for a current received assessment."
+              }
+            }
+          ]
+        },
+        {
+          "round": 1,
+          "org": "org0",
+          "atSim": 716015,
+          "state": "ready",
+          "calls": 3,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "inspection-2",
+                  "sourceNow": 701015
+                },
+                "requirements": {
+                  "staff": 1,
+                  "water": 481,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-staff",
+                      "vehicle": "v-org0-1",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-1",
+                      "quantity": 300,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-0",
+                      "quantity": 181,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org1-energy",
+                      "vehicle": "v-org1-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      7
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "benefit": "Provides 50 places of shelter for people at b2 by activating facility b13.",
+                "rationale": "Facility b13 is a safe candidate shelter with a capacity of 300. The plan coordinates the delivery of required staff, water, energy, and sanitation from org0, org1, and org3 to meet the facility's operational dependencies, followed by the evacuation of 50 people from b2.",
+                "title": "Activate Shelter b13 for need-case-2"
+              },
+              "result": {
+                "id": "proposal_baa21dcc-e080-41d0-9bde-a3706bc65aa5",
+                "state": "awaiting_review",
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org0-1",
+                      "building": "b13",
+                      "quantity": 1,
+                      "resource": "r-org0-staff",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "vehicle": "v-org0-1",
+                      "building": "b13",
+                      "quantity": 300,
+                      "resource": "r-org0-water",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org0-0",
+                      "building": "b13",
+                      "quantity": 181,
+                      "resource": "r-org0-water",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org1-0",
+                      "building": "b13",
+                      "quantity": 1,
+                      "resource": "r-org1-energy",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "vehicle": "v-org3-0",
+                      "building": "b13",
+                      "quantity": 1,
+                      "resource": "r-org3-sanitation",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "params": {
+                      "permit": true,
+                      "building": "b13"
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      1
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      6
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      7
+                    ],
+                    "params": {
+                      "to": "b13",
+                      "from": "b2",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "repairOf": null,
+                "inheritedWork": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "org": "org0",
+          "atSim": 858015,
+          "state": "ready",
+          "calls": 3,
+          "reason": null,
+          "tools": []
+        },
+        {
+          "round": 3,
+          "org": "org0",
+          "atSim": 1029015,
+          "state": "inconclusive",
+          "calls": 0,
+          "reason": "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+          "tools": []
+        },
+        {
+          "round": 4,
+          "org": "org0",
+          "atSim": 1392015,
+          "state": "inconclusive",
+          "calls": 8,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "inspection-2",
+                  "sourceNow": 1287015
+                },
+                "requirements": {
+                  "staff": 1,
+                  "water": 481,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-staff",
+                      "vehicle": "v-org0-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-0",
+                      "quantity": 300,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org1-water",
+                      "vehicle": "v-org1-1",
+                      "quantity": 181,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [
+                      2
+                    ],
+                    "params": {
+                      "resource": "r-org1-energy",
+                      "vehicle": "v-org1-1",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      7
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "failed",
+              "error": "INSUFFICIENT_RESOURCE",
+              "message": "The requested stock is already allocated, reserved or protected.",
+              "params": {
+                "benefit": "Activates shelter b13 to provide 50 places of shelter for people at b2, fulfilling need-case-2.",
+                "rationale": "Facility b13 is safe and has received the required staff, water (481L), energy, and sanitation. The plan ensures all dependencies are met and coordinates the evacuation of 50 people from b2.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VALIDATION",
+              "message": "[\n  {\n    \"expected\": \"boolean\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      0,\n      \"params\",\n      \"permit\"\n    ],\n    \"message\": \"Invalid input: expected boolean, received string\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      1,\n      \"params\",\n      \"quantity\"\n    ],\n    \"message\": \"Invalid input: expected number, received string\"\n  }\n]",
+              "params": {
+                "actions": [
+                  {
+                    "dependsOn": [],
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": "true"
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "dependsOn": [
+                      0
+                    ],
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": "50"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides 50 places of shelter for the people at b2 by activating the already-provisioned shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "The requirements for shelter b13 (1 staff, 481L water, 1 energy, 1 sanitation) have been met according to received signals and operation records: staff arrived in operation-2, water confirmed via signals 2bab95b917c04fc67658b8ad and 787d796f188ccea0be5668ff, energy via 35e7f5bda092dceb0daa0a00, and sanitation via 9b20cc7d95d5e0e6e380f1a4. With the facility safe and provisioned, it can be activated to serve need-case-2.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-2",
+                  "35e7f5bda092dceb0daa0a00",
+                  "9b20cc7d95d5e0e6e380f1a4",
+                  "2bab95b917c04fc67658b8ad",
+                  "787d796f188ccea0be5668ff"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Shelter Activation and Evacuation for need-case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VALIDATION",
+              "message": "[\n  {\n    \"expected\": \"boolean\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      0,\n      \"params\",\n      \"permit\"\n    ],\n    \"message\": \"Invalid input: expected boolean, received string\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      1,\n      \"params\",\n      \"quantity\"\n    ],\n    \"message\": \"Invalid input: expected number, received string\"\n  }\n]",
+              "params": {
+                "actions": [
+                  {
+                    "dependsOn": [],
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": "true"
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "dependsOn": [
+                      0
+                    ],
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": "50",
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides 50 places of shelter for the people at b2 by activating the already-provisioned shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "The requirements for shelter b13 (1 staff, 481L water, 1 energy, 1 sanitation) have been met according to received signals and operation records: staff arrived in operation-2, water confirmed via signals 2bab95b917c04fc67658b8ad and 787d796f188ccea0be5668ff, energy via 35e7f5bda092dceb0daa0a00, and sanitation via 9b20cc7d95d5e0e6e380f1a4. With the facility safe and provisioned, it can be activated to serve need-case-2.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-2",
+                  "35e7f5bda092dceb0daa0a00",
+                  "9b20cc7d95d5e0e6e380f1a4",
+                  "2bab95b917c04fc67658b8ad",
+                  "787d796f188ccea0be5668ff"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Shelter Activation and Evacuation for need-case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VALIDATION",
+              "message": "[\n  {\n    \"expected\": \"boolean\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      0,\n      \"params\",\n      \"permit\"\n    ],\n    \"message\": \"Invalid input: expected boolean, received string\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      1,\n      \"params\",\n      \"quantity\"\n    ],\n    \"message\": \"Invalid input: expected number, received string\"\n  }\n]",
+              "params": {
+                "actions": [
+                  {
+                    "dependsOn": [],
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": "true"
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "dependsOn": [
+                      0
+                    ],
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": "50",
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides 50 places of shelter for the people at b2 by activating the already-provisioned shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "The requirements for shelter b13 (1 staff, 481L water, 1 energy, 1 sanitation) have been met according to received signals and operation records: staff arrived in operation-2, water confirmed via signals 2bab95b917c04fc67658b8ad and 787d796f188ccea0be5668ff, energy via 35e7f5bda092dceb0daa0a00, and sanitation via 9b20cc7d95d5e0e6e380f1a4. With the facility safe and provisioned, it can be activated to serve need-case-2.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-2",
+                  "35e7f5bda092dceb0daa0a00",
+                  "9b20cc7d95d5e0e6e380f1a4",
+                  "2bab95b917c04fc67658b8ad",
+                  "787d796f188ccea0be5668ff"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Shelter Activation and Evacuation for need-case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VALIDATION",
+              "message": "[\n  {\n    \"expected\": \"boolean\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      0,\n      \"params\",\n      \"permit\"\n    ],\n    \"message\": \"Invalid input: expected boolean, received string\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"actions\",\n      1,\n      \"params\",\n      \"quantity\"\n    ],\n    \"message\": \"Invalid input: expected number, received string\"\n  }\n]",
+              "params": {
+                "actions": [
+                  {
+                    "dependsOn": [],
+                    "owner": "org0",
+                    "params": {
+                      "building": "b13",
+                      "permit": "true"
+                    },
+                    "type": "activate"
+                  },
+                  {
+                    "dependsOn": [
+                      0
+                    ],
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": "50",
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [],
+                "benefit": "Provides 50 places of shelter for the people at b2 by activating the already-provisioned shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "The requirements for shelter b13 (1 staff, 481L water, 1 energy, 1 sanitation) have been met according to received signals and operation records: staff arrived in operation-2, water confirmed via signals 2bab95b917c04fc67658b8ad (181L) and 787d796f188ccea0be5668ff (300L), energy via 35e7f5bda092dceb0daa0a00, and sanitation via 9b20cc7d95d5e0e6e380f1a4. With the facility safe and provisioned, it can be activated to serve need-case-2.",
+                "references": [
+                  "b13",
+                  "need-case-2",
+                  "operation-2",
+                  "35e7f5bda092dceb0daa0a00",
+                  "9b20cc7d95d5e0e6e380f1a4",
+                  "2bab95b917c04fc67658b8ad",
+                  "787d796f188ccea0be5668ff"
+                ],
+                "summary": "Activate shelter b13 and evacuate 50 people from b2.",
+                "title": "Shelter Activation and Evacuation for need-case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 5,
+          "org": "org0",
+          "atSim": 1623000,
+          "state": "inconclusive",
+          "calls": 4,
+          "reason": "The primary shelter need (need-case-2) is already assigned to a pending proposal (proposal_baa21dcc-e080-41d0-9bde-a3706bc65aa5), and the water need (need-water-main) has been satisfied by completed deliveries from org1 and org3 (600 L total received). No further actionable needs remain.",
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "inspection-2",
+                  "sourceNow": 1578000
+                },
+                "requirements": {
+                  "staff": 1,
+                  "water": 481,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "dispatch",
+                    "owner": "org2",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org2-staff",
+                      "vehicle": "v-org2-0",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org0-water",
+                      "vehicle": "v-org0-0",
+                      "quantity": 300,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org3-water",
+                      "vehicle": "v-org3-1",
+                      "quantity": 181,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org1",
+                    "dependsOn": [],
+                    "params": {
+                      "resource": "r-org1-energy",
+                      "vehicle": "v-org1-1",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "dispatch",
+                    "owner": "org3",
+                    "dependsOn": [
+                      2
+                    ],
+                    "params": {
+                      "resource": "r-org3-sanitation",
+                      "vehicle": "v-org3-1",
+                      "quantity": 1,
+                      "building": "b13",
+                      "destination": "n13"
+                    }
+                  },
+                  {
+                    "type": "activate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "params": {
+                      "building": "b13",
+                      "permit": true
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      6
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      5,
+                      7
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-0",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "failed",
+              "error": "POPULATION",
+              "message": "The observed group is already served or assigned.",
+              "params": {
+                "benefit": "Activates shelter b13 and provides 50 places of shelter for people at b2, meeting the requirements for staff, water, energy, and sanitation.",
+                "rationale": "The plan sources the necessary resources (staff from org2, water from org0 and org3, energy from org1, and sanitation from org3) to meet the facility's operational requirements. Once activated, it enables the evacuation of 50 people from b2 to b13.",
+                "title": "Activate Shelter b13 and Evacuate b2"
+              },
+              "result": {
+                "actions": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 6,
+          "org": "org0",
+          "atSim": 1863000,
+          "state": "inconclusive",
+          "calls": 0,
+          "reason": "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+          "tools": []
+        },
+        {
+          "round": 7,
+          "org": "org0",
+          "atSim": 5885001,
+          "state": "inconclusive",
+          "calls": 8,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "EVACUATION_OBSERVATION",
+              "message": "Pickup demand and receiving shelter must be observed before review.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "n2",
+                      "quantity": 20,
+                      "to": "n13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "n2",
+                      "quantity": 10,
+                      "to": "n13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-1 is already en route to n2 but is limited by its 20-seat capacity and is already assigned to 20 people.",
+                    "title": "Use v-org0-1 for additional capacity"
+                  }
+                ],
+                "benefit": "Completes the evacuation of the remaining 30 people from b2 to the safe shelter b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Need need-case-2 requires 50 shelter places at b2. Operation-9 is already dispatched to move 20 people using v-org0-1. The remaining 30 people can be moved by v-org0-0, which is currently idle at n13. Since v-org0-0 has a capacity of 20 seats, two trips are necessary to move the remaining 30 people. Shelter b13 is operating, safe, and has sufficient capacity (300) and provisions to accommodate the arrivals. Need need-water-main is already satisfied by multiple deliveries totaling 1081 L.",
+                "references": [
+                  "need-case-2",
+                  "v-org0-0",
+                  "b13",
+                  "operation-9"
+                ],
+                "summary": "Evacuate remaining 30 people from b2 to b13 using v-org0-0 in two trips.",
+                "title": "Complete Evacuation of b2 to b13"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b2",
+                "references": [
+                  "324c79093d6f6117fe1188d6",
+                  "52901ecda1ccae41397f9e9e"
+                ],
+                "sourceRelations": [
+                  {
+                    "id": "324c79093d6f6117fe1188d6",
+                    "relation": "supports"
+                  }
+                ],
+                "state": "observed",
+                "text": "60 people at b2 need 50 places of shelter."
+              },
+              "result": {
+                "id": "claim_976882a8-1bdf-4c64-952e-df12e95ad796",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "failed",
+              "error": "HUMAN_CONFIRMATION",
+              "message": "A model cannot independently certify a claim.",
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "b13"
+                ],
+                "sourceRelations": [],
+                "state": "confirmed",
+                "text": "Shelter b13 is operating, safe, and has a capacity of 300."
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "record_claim",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "contradicts": [],
+                "location": "b13",
+                "references": [
+                  "b13"
+                ],
+                "sourceRelations": [],
+                "state": "observed",
+                "text": "Shelter b13 is operating, safe, and has a capacity of 300."
+              },
+              "result": {
+                "id": "claim_aa02121b-42e4-4599-8d3e-dd9cfbc1856e",
+                "state": "observed",
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "EVACUATION_OBSERVATION",
+              "message": "Pickup demand and receiving shelter must be observed before review.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "n2",
+                      "quantity": 20,
+                      "to": "n13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "n2",
+                      "quantity": 10,
+                      "to": "n13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-1 is already en route to n2 but is limited by its 20-seat capacity and is already assigned to 20 people.",
+                    "title": "Use v-org0-1 for additional capacity"
+                  }
+                ],
+                "benefit": "Completes the evacuation of the remaining 30 people from b2 to the safe shelter b13.",
+                "conditions": [],
+                "priority": "high",
+                "rationale": "Need need-case-2 requires 50 shelter places at b2. Operation-9 is already dispatched to move 20 people using v-org0-1. The remaining 30 people can be moved by v-org0-0, which is currently idle at n13. Since v-org0-0 has a capacity of 20 seats, two trips are necessary to move the remaining 30 people. Shelter b13 is operating, safe, and has sufficient capacity (300) and provisions to accommodate the arrivals. Need need-water-main is already satisfied by multiple deliveries totaling 1081 L.",
+                "references": [
+                  "need-case-2",
+                  "claim_976882a8-1bdf-4c64-952e-df12e95ad796",
+                  "claim_aa02121b-42e4-4599-8d3e-dd9cfbc1856e"
+                ],
+                "summary": "Evacuate remaining 30 people from b2 to b13 using v-org0-0 in two trips.",
+                "title": "Complete Evacuation of b2 to b13"
+              },
+              "result": {
+                "actions": []
+              }
+            }
+          ]
+        },
+        {
+          "round": 8,
+          "org": "org0",
+          "atSim": 6010002,
+          "state": "inconclusive",
+          "calls": 8,
+          "reason": null,
+          "tools": [
+            {
+              "tool": "plan_service",
+              "state": "completed",
+              "error": null,
+              "message": null,
+              "params": {
+                "building": "b13"
+              },
+              "result": {
+                "readyToDraft": true,
+                "assessment": {
+                  "current": true,
+                  "id": "inspection-2",
+                  "sourceNow": 5903001
+                },
+                "requirements": {
+                  "staff": 1,
+                  "water": 481,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "missing": [],
+                "actions": [
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      0
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 20
+                    }
+                  },
+                  {
+                    "type": "evacuate",
+                    "owner": "org0",
+                    "dependsOn": [
+                      1
+                    ],
+                    "params": {
+                      "from": "b2",
+                      "to": "b13",
+                      "vehicle": "v-org0-1",
+                      "quantity": 10
+                    }
+                  }
+                ],
+                "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+              }
+            },
+            {
+              "tool": "prepare_service",
+              "state": "failed",
+              "error": "VEHICLE_CONFLICT",
+              "message": "A vehicle is assigned to another concurrent operation.",
+              "params": {
+                "benefit": "Provides shelter for 50 people from b2 at the operating and safe facility b13.",
+                "rationale": "Facility b13 is confirmed safe and operating with sufficient capacity (300 total, 20 occupied). All operational dependencies (staff, water, energy, sanitation) are currently provisioned. Vehicle v-org0-1 is available to perform the evacuation in three trips.",
+                "title": "Evacuation of 50 people from b2 to shelter b13"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "SEATS",
+              "message": "Not enough observed passenger seats.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 30,
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-1 is already dispatched for 20 people (operation-10), leaving 30 people unserved.",
+                    "title": "Use v-org0-1 for all remaining needs"
+                  }
+                ],
+                "benefit": "Completes the evacuation of the remaining 30 people from b2 to the safe shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "Need-case-2 requires shelter for 50 people. Operation-10 is already dispatched to evacuate 20 people using v-org0-1. The remaining 30 people are unserved. Facility b13 is confirmed safe and operating with a capacity of 300 and current occupancy of 20, providing ample space. Vehicle v-org0-0 is currently idle at n13 and available to perform the remaining evacuation.",
+                "references": [
+                  "need-case-2",
+                  "b13",
+                  "v-org0-0",
+                  "operation-10"
+                ],
+                "summary": "Evacuate the remaining 30 people from b2 to shelter b13 using vehicle v-org0-0.",
+                "title": "Completion of Evacuation for Need-Case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VEHICLE_CONFLICT",
+              "message": "A vehicle is assigned to another concurrent operation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-1 is already dispatched for 20 people (operation-10).",
+                    "title": "Use v-org0-1 for all remaining needs"
+                  }
+                ],
+                "benefit": "Completes the evacuation of the remaining 30 people from b2 to the safe shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "Need-case-2 requires shelter for 50 people. Operation-10 is already dispatched to evacuate 20 people using v-org0-1. The remaining 30 people are unserved. Facility b13 is confirmed safe and operating with a capacity of 300 and current occupancy of 20. Vehicle v-org0-0 is available and is the same model as v-org0-1, which is currently performing an evacuation of 20 people. Therefore, v-org0-0 is used in two trips (20 and 10) to transport the remaining 30 people.",
+                "references": [
+                  "need-case-2",
+                  "b13",
+                  "v-org0-0",
+                  "operation-10"
+                ],
+                "summary": "Evacuate the remaining 30 people from b2 to shelter b13 using vehicle v-org0-0 in two trips.",
+                "title": "Completion of Evacuation for Need-Case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            },
+            {
+              "tool": "draft_response",
+              "state": "failed",
+              "error": "VEHICLE_CONFLICT",
+              "message": "A vehicle is assigned to another concurrent operation.",
+              "params": {
+                "actions": [
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 20,
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  },
+                  {
+                    "owner": "org0",
+                    "params": {
+                      "from": "b2",
+                      "quantity": 10,
+                      "to": "b13",
+                      "vehicle": "v-org0-0"
+                    },
+                    "type": "evacuate"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "reason": "v-org0-1 is already dispatched for 20 people (operation-10).",
+                    "title": "Use v-org0-1 for all remaining needs"
+                  }
+                ],
+                "benefit": "Completes the evacuation of the remaining 30 people from b2 to the safe shelter b13.",
+                "conditions": [],
+                "priority": "urgent",
+                "rationale": "Need-case-2 requires shelter for 50 people. Operation-10 is already dispatched to evacuate 20 people using v-org0-1. The remaining 30 people are unserved. Facility b13 is confirmed safe and operating with a capacity of 300 and current occupancy of 20. Vehicle v-org0-0 is idle at n13 and has 20 seats, allowing it to transport the remaining 30 people in two sequential trips.",
+                "references": [
+                  "need-case-2",
+                  "b13",
+                  "v-org0-0",
+                  "operation-10"
+                ],
+                "summary": "Evacuate the remaining 30 people from b2 to shelter b13 using vehicle v-org0-0 in two sequential trips.",
+                "title": "Completion of Evacuation for Need-Case-2"
+              },
+              "result": {
+                "actions": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

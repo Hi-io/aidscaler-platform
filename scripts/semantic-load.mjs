@@ -39,6 +39,7 @@ try {
   // The public place directory is received over the same scoped HTTP tool as
   // production. Evaluator gold IDs are never copied into candidate context.
   await app.connector.action("query", { target: "map" }, run + "-map-" + app.config.org);
+  await app.connector.action("query", { target: "policy" }, run + "-policy-" + app.config.org);
   for (let pass = 0; pass < 10000; pass++) {
    await app.ingestion.sync();
    const stored = Number((await app.store.query("SELECT COUNT(*) AS n FROM entities WHERE org=$1 AND kind='signal'", [app.config.org])).rows[0].n);

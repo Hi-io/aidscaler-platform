@@ -1,0 +1,31 @@
+{
+  "id": "source-recovery-parser-1791841800942",
+  "at": "2026-10-12T21:50:00.968Z",
+  "mode": "parser",
+  "seed": "source-recovery-fixture-01",
+  "count": 2,
+  "noise": 4,
+  "reposts": 1,
+  "grid": 5,
+  "extentKm": 2,
+  "sourceCutoffMs": 300000,
+  "horizonMs": 3600000,
+  "wallLimitMs": 120000,
+  "batchSize": 30,
+  "maxModelCalls": 32,
+  "budgetUsd": 0.15,
+  "clarificationWorkers": 2,
+  "reviewMs": 30000,
+  "formalDelayMs": 1800000,
+  "writeReport": true,
+  "fingerprints": {
+    "candidate": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+    "evaluator": "1fe725673bdba540988a290f109704cf3a02b7cb6329b1966f1419e6fca0dfdb",
+    "simulator": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+  },
+  "scriptFingerprint": "ff653047b1a3c6c61c6e006b63306a35521ed49602bd0afde9aeb2d2df95d0cd",
+  "scope": "Fixed HTTP-received source-version cohort recovery with finite field checks, owner review and physical execution; not semantic accuracy, comparative gain or human productivity.",
+  "stopping": "Only sealed source dispositions and received local jobs/proposals/queries/inspections/operations/needs; never simulator truth.",
+  "revisionPolicy": "Changed/deleted/unversioned changed sealed content remains retained attention; never credited by a stale receipt.",
+  "subsequentSources": "Later records are retained and counted separately, outside the fixed recovery denominator."
+}

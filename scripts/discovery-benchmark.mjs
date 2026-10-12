@@ -7,6 +7,7 @@ import {
   buildFingerprint,
   evaluatorFingerprint,
 } from "../evaluation/harness.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "../evaluation/simulator-build.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 const o = Object.fromEntries(
   process.argv.slice(2).map((s) => s.replace(/^--/, "").split("=")),
@@ -22,11 +23,12 @@ if (
   !(budget > 0 && budget <= 5) ||
   !(cap > 0 && cap <= budget) ||
   new Set(arms).size !== arms.length ||
-  !arms.every((a) => ["B5", "B6", "B8", "B0"].includes(a))
+  !arms.every((a) => ["B5", "B6", "B8", "B0", "B9"].includes(a))
 )
   throw Error("Invalid declared campaign");
 const candidateFingerprint = await buildFingerprint(),
   evaluatorBuild = await evaluatorFingerprint(),
+  simulatorBuild = await requireLoadedSimulatorBuild(),
   folder = "reports/discovery/" + Date.now();
 const config = {
   count: Number(o.needs ?? 12),
@@ -57,6 +59,7 @@ await writeFile(
       config,
       seeds,
       arms,
+      simulatorBuild,
       totalBudgetUsd: budget,
       stop: "All declared worlds retained, including failures; no edits during the campaign",
     },
@@ -77,14 +80,11 @@ let charged = 0,
   stop = null;
 for (let i = 1; i <= seeds && !stop; i++)
   for (const arm of arms) {
-    if (arm === "B6" && charged + cap > budget) {
+    if (["B6", "B9"].includes(arm) && charged + cap > budget) {
       stop = "budget_cap";
       break;
     }
-    if (
-      candidateFingerprint !== (await buildFingerprint()) ||
-      evaluatorBuild !== (await evaluatorFingerprint())
-    ) {
+    if ((await checkFinalBuilds({ candidate: candidateFingerprint, evaluator: evaluatorBuild, simulator: simulatorBuild }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint })).invalidStatus) {
       stop = "source_changed";
       break;
     }
@@ -126,9 +126,27 @@ for (let i = 1; i <= seeds && !stop; i++)
       stop = "interrupted";
       break;
     }
+    if (r.candidateChanged || r.evaluatorChanged || r.simulatorChanged) {
+      stop = "source_changed";
+      break;
+    }
   }
+let effects;
+try { effects = summarizeDiscovery(rows); }
+catch (error) {
+  if (!rows.some(r => r.candidateChanged || r.evaluatorChanged || r.simulatorChanged)) throw error;
+  effects = {
+    runs: rows.length, completedRuns: rows.filter(r => r.status === "completed").length,
+    failedRuns: rows.filter(r => r.status !== "completed").length,
+    invariantViolations: rows.reduce((sum, r) => sum + r.invariants.length, 0),
+    costUsd: rows.reduce((sum, r) => sum + r.costUsd, 0),
+    chargedBudgetUsd: rows.reduce((sum, r) => sum + r.chargedBudgetUsd, 0),
+    comparisons: [], comparisonRejected: true, reason: error.message,
+    note: "Raw physical outcomes and costs are retained; no effect is computed from changed sources.",
+  };
+}
 const summary = {
-  ...summarizeDiscovery(rows),
+  ...effects,
   folder,
   stoppedReason: stop,
   declaredRuns: seeds * arms.length,

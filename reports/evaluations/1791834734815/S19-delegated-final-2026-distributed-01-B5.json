@@ -1,0 +1,3959 @@
+{
+  "at": "2026-10-12T19:54:41.290Z",
+  "arm": "B5",
+  "scenario": "S19",
+  "seed": "delegated-final-2026-distributed-01",
+  "replicate": 0,
+  "status": "completed",
+  "errors": [],
+  "manifest": {
+    "schemaVersion": 1,
+    "engineVersion": "0.2.0",
+    "engineBuild": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee",
+    "randomVersion": "fnv-avalanche-v1",
+    "runtimeMajor": 24,
+    "config": {
+      "seed": "delegated-final-2026-distributed-01",
+      "scenario": "S19",
+      "hazard": "none",
+      "variant": "standard",
+      "compositionVariant": "distributed",
+      "grid": 5,
+      "extentKm": 2,
+      "organizations": 4,
+      "durationMs": 14400000,
+      "populationPerSector": 60,
+      "backgroundTraffic": 0,
+      "postsPerHour": 0,
+      "falseRate": 0.12,
+      "observationRate": 0.8,
+      "operatorCount": 2,
+      "reviewMs": 30000,
+      "inspectionMs": 60000,
+      "clarificationWorkers": 1,
+      "loadMs": 60000,
+      "unloadMs": 60000,
+      "setupMs": 60000,
+      "networkLatencyMs": 1000,
+      "packetLoss": 0,
+      "networkCapacity": 30,
+      "sourceIndexMs": 10000,
+      "queryLatencyMs": 1000,
+      "bandwidthBytesPerSecond": 1000000,
+      "toolQuota": 60,
+      "funds": 5000,
+      "stockWater": 2400,
+      "reservedWater": 100,
+      "policy": "none",
+      "mode": "modeled",
+      "clockLatency": "modeled",
+      "split": "development",
+      "language": "mixed",
+      "logMode": "compact",
+      "maxEvents": 2000000,
+      "maxPosts": 1000000,
+      "topology": "grid",
+      "bridgeCount": 3,
+      "healthTickMs": 600000,
+      "waterMlPerPersonDay": 3000,
+      "foodKcalPerPersonDay": 2100,
+      "initialWaterHours": 6,
+      "initialFoodHours": 12,
+      "waterCriticalHours": 30,
+      "foodCriticalHours": 72,
+      "injuryCriticalHours": 2,
+      "exposureCriticalHours": 4,
+      "waterFatalityBpPerHour": 150,
+      "foodFatalityBpPerHour": 25,
+      "injuryFatalityBpPerHour": 1000,
+      "exposureFatalityBpPerHour": 600,
+      "injuryFractionBp": 1500,
+      "temperatureC": 24,
+      "healthReports": true,
+      "recurringNeeds": true,
+      "resupplyReviewHours": 6,
+      "resupplyHorizonHours": 24,
+      "authorshipMs": 1000,
+      "staffShiftMs": 28800000,
+      "staffRestMs": 3600000,
+      "vehicleFuelMl": 80000,
+      "fuelMlPerKm": 180,
+      "sourceRequestLimit": 100000,
+      "modelLatencyMs": 15000,
+      "modelCallLimit": 1000,
+      "subsystemSeeds": {}
+    },
+    "contentVersion": "presets-v1+social-v1"
+  },
+  "engineBuild": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee",
+  "initialMapHash": "c309b626055dd442ede6f09c32d9bc9992c6c70a91cfb3f3c38225d071f52163",
+  "candidateFingerprint": "af94176a69fa9adf92b6f3db52d20c23ab7db39773c6b3f3de3e8b3d1e815384",
+  "evaluatorFingerprint": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584",
+  "measurementMode": "modeled",
+  "clockPolicy": "declared delays; no accelerated wall-time charging",
+  "operator": "scripted; human comprehension not measured",
+  "planningRounds": 12,
+  "responseOrder": "deadline_then_priority",
+  "repairStrategy": "selective",
+  "inquiryStrategy": "active",
+  "roundsExecuted": 12,
+  "policyIntervalMs": 300000,
+  "episodeBudgetUsd": 0.15,
+  "planningTopology": "one_incident_coordinator_independent_owner_review",
+  "modelConfig": {
+    "modelId": "google/gemma-4-31b-it",
+    "maxOutputTokens": 8192,
+    "modelTimeoutMs": 120000,
+    "investigationTimeoutMs": 360000,
+    "reasoningEnabled": true,
+    "providerSort": "latency",
+    "priceMultiplier": 2,
+    "maxCallsPerRound": 8,
+    "totalEpisodeCalls": 96,
+    "budgetPolicy": "shared_episode_pool_same_total_cap_for_every_arm"
+  },
+  "wallMs": 146405.0008,
+  "activities": [
+    {
+      "org": "org0",
+      "round": 0,
+      "atSim": 265013,
+      "state": "ready",
+      "proposalId": "proposal_a2076f0c-6ee3-4e7a-8036-938bbf638f58",
+      "steps": [
+        {
+          "tool": "checked-field-assessment",
+          "state": "pending",
+          "result": {
+            "building": "b13",
+            "purpose": "facility_safety",
+            "sourceNow": 265013,
+            "readyToDraft": true,
+            "actions": [
+              {
+                "type": "verify",
+                "owner": "org3",
+                "dependsOn": [],
+                "params": {
+                  "target": "building",
+                  "id": "b13",
+                  "method": "field",
+                  "purpose": "facility_safety",
+                  "reportTo": "org0",
+                  "staff": "r-org3-staff",
+                  "vehicle": "v-org3-0",
+                  "targetVersion": 1,
+                  "validForMs": 21600000
+                }
+              }
+            ],
+            "references": [
+              "b13",
+              "org3_resource_r-org3-staff",
+              "org3_vehicle_v-org3-0"
+            ],
+            "ownerApprovals": [
+              "org0",
+              "org3"
+            ],
+            "missing": [],
+            "pending": [],
+            "crew": {
+              "owner": "org3",
+              "resource": "r-org3-staff",
+              "vehicle": "v-org3-0"
+            },
+            "offerVersions": [
+              {
+                "id": "org3_vehicle_v-org3-0",
+                "version": 1,
+                "permissionVersion": 1
+              },
+              {
+                "id": "org3_resource_r-org3-staff",
+                "version": 1,
+                "permissionVersion": 1
+              }
+            ],
+            "note": "The responsible organization and crew owner approve independently. The owner source assigns qualified staff, real road travel and field work; activation waits for a current received assessment."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 1,
+      "atSim": 581348,
+      "state": "ready",
+      "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+      "steps": [
+        {
+          "tool": "checked-field-assessment",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "purpose": "facility_safety",
+            "sourceNow": 581348,
+            "readyToDraft": false,
+            "actions": [],
+            "references": [
+              "b13",
+              "received:org0:inspection-2"
+            ],
+            "ownerApprovals": [],
+            "missing": [],
+            "pending": [],
+            "satisfied": true,
+            "assessment": "received:org0:inspection-2",
+            "note": "A current competent physical assessment has already reached this organization."
+          }
+        },
+        {
+          "tool": "checked-service-composition",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": true,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "resource": "r-org3-staff",
+                  "vehicle": "v-org3-0",
+                  "quantity": 2,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-1",
+                  "quantity": 162,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org2",
+                "params": {
+                  "resource": "r-org2-energy",
+                  "vehicle": "v-org2-0",
+                  "quantity": 1,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "resource": "r-org3-sanitation",
+                  "vehicle": "v-org3-0",
+                  "quantity": 1,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": [
+                  0
+                ]
+              },
+              {
+                "type": "activate",
+                "owner": "org0",
+                "params": {
+                  "building": "b13",
+                  "permit": true
+                },
+                "dependsOn": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": [
+                  4,
+                  1
+                ]
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": [
+                  4,
+                  5
+                ]
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 10
+                },
+                "dependsOn": [
+                  4,
+                  6
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "received:org0:inspection-2",
+              "org3_resource_r-org3-staff",
+              "org3_vehicle_v-org3-0",
+              "r-org0-water",
+              "v-org0-1",
+              "org2_resource_r-org2-energy",
+              "org2_vehicle_v-org2-0",
+              "org3_resource_r-org3-sanitation",
+              "need-case-2"
+            ],
+            "missing": [],
+            "requirements": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [
+              {
+                "id": "org3_vehicle_v-org3-0",
+                "version": 1,
+                "permissionVersion": 1
+              },
+              {
+                "id": "org3_resource_r-org3-staff",
+                "version": 1,
+                "permissionVersion": 1
+              },
+              {
+                "id": "org3_resource_r-org3-sanitation",
+                "version": 1,
+                "permissionVersion": 1
+              },
+              {
+                "id": "org2_vehicle_v-org2-0",
+                "version": 1,
+                "permissionVersion": 1
+              },
+              {
+                "id": "org2_resource_r-org2-energy",
+                "version": 1,
+                "permissionVersion": 1
+              }
+            ],
+            "ownerApprovals": [
+              "org3",
+              "org0",
+              "org2"
+            ],
+            "assessment": {
+              "current": true,
+              "id": "received:org0:inspection-2",
+              "sourceNow": 581348
+            },
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 2,
+      "atSim": 731002,
+      "state": "ready",
+      "proposalId": "proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [
+              {
+                "need": "need-water-main",
+                "resource": "r-org3-water",
+                "vehicle": "v-org3-1",
+                "quantity": 300,
+                "owner": "org3",
+                "needsRouteCheck": true,
+                "travelEstimate": {
+                  "pickup": {
+                    "nodes": [
+                      "n24"
+                    ],
+                    "distanceM": 0,
+                    "seconds": 0,
+                    "unknownEdges": []
+                  },
+                  "delivery": {
+                    "nodes": [
+                      "n24",
+                      "n19",
+                      "n14",
+                      "n13"
+                    ],
+                    "distanceM": 1500,
+                    "seconds": 133.33333333333331,
+                    "unknownEdges": []
+                  },
+                  "seconds": 133.33333333333331,
+                  "distanceM": 1500,
+                  "fuelMl": 270,
+                  "at": 731002,
+                  "unknownEdges": []
+                },
+                "evidenceIds": [
+                  "need-water-main",
+                  "org3_resource_r-org3-water",
+                  "org3_vehicle_v-org3-1"
+                ],
+                "offerVersions": [
+                  {
+                    "id": "org3_resource_r-org3-water",
+                    "version": 1,
+                    "permissionVersion": 1
+                  },
+                  {
+                    "id": "org3_vehicle_v-org3-1",
+                    "version": 1,
+                    "permissionVersion": 1
+                  }
+                ]
+              },
+              {
+                "need": "need-water-main",
+                "resource": "r-org1-water",
+                "vehicle": "v-org1-0",
+                "quantity": 300,
+                "owner": "org1",
+                "needsRouteCheck": true,
+                "travelEstimate": {
+                  "pickup": {
+                    "nodes": [
+                      "n4"
+                    ],
+                    "distanceM": 0,
+                    "seconds": 0,
+                    "unknownEdges": []
+                  },
+                  "delivery": {
+                    "nodes": [
+                      "n4",
+                      "n9",
+                      "n14",
+                      "n13"
+                    ],
+                    "distanceM": 1500,
+                    "seconds": 141.66666666666666,
+                    "unknownEdges": []
+                  },
+                  "seconds": 141.66666666666666,
+                  "distanceM": 1500,
+                  "fuelMl": 270,
+                  "at": 731002,
+                  "unknownEdges": []
+                },
+                "evidenceIds": [
+                  "need-water-main",
+                  "org1_resource_r-org1-water",
+                  "org1_vehicle_v-org1-0"
+                ],
+                "offerVersions": [
+                  {
+                    "id": "org1_resource_r-org1-water",
+                    "version": 1,
+                    "permissionVersion": 1
+                  },
+                  {
+                    "id": "org1_vehicle_v-org1-0",
+                    "version": 1,
+                    "permissionVersion": 1
+                  }
+                ]
+              }
+            ],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "vehicle": "v-org3-1",
+                  "resource": "r-org3-water",
+                  "need": "need-water-main",
+                  "quantity": 300
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "vehicle": "v-org1-0",
+                  "resource": "r-org1-water",
+                  "need": "need-water-main",
+                  "quantity": 300
+                },
+                "dependsOn": []
+              }
+            ],
+            "evidenceIds": [
+              "need-water-main",
+              "org3_resource_r-org3-water",
+              "org3_vehicle_v-org3-1",
+              "org1_resource_r-org1-water",
+              "org1_vehicle_v-org1-0"
+            ],
+            "ownerApprovals": [
+              "org3",
+              "org1"
+            ],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 50,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [
+                "need-water-main"
+              ],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 3,
+      "atSim": 988005,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 50,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 4,
+      "atSim": 1300029,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 50,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 5,
+      "atSim": 1567065,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 50,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 6,
+      "atSim": 1892016,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 30,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 7,
+      "atSim": 2197074,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 30,
+                "planningOutstanding": 0
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 8,
+      "atSim": 2509023,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 10,
+                "planningOutstanding": 20
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 9,
+      "atSim": 2811024,
+      "state": "inconclusive",
+      "reason": "No executable shared capacity",
+      "steps": [
+        {
+          "tool": "shared-constrained-allocation",
+          "state": "completed",
+          "result": {
+            "allocations": [],
+            "unserved": [],
+            "algorithm": "deterministic constrained greedy reference",
+            "routing": "received pickup and delivery travel estimates",
+            "doesNotDispatch": true,
+            "actions": [],
+            "evidenceIds": [],
+            "ownerApprovals": [],
+            "nextTool": "prepare_allocation",
+            "policy": {
+              "version": 1,
+              "order": "deadline_then_priority",
+              "approved": true
+            },
+            "deferred": [
+              {
+                "need": "need-case-2",
+                "pendingProposals": [
+                  "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221"
+                ],
+                "draftHeldQuantity": 0,
+                "planningOutstanding": 40
+              }
+            ],
+            "scope": {
+              "needIds": [],
+              "excludeVehicles": [],
+              "excludeProposal": null
+            },
+            "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 10,
+      "atSim": 3065001,
+      "state": "ready",
+      "proposalId": "proposal_791fe906-5a77-4416-a165-8f68d920923d",
+      "steps": [
+        {
+          "tool": "checked-field-assessment",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "purpose": "facility_safety",
+            "sourceNow": 3065001,
+            "readyToDraft": false,
+            "actions": [],
+            "references": [
+              "b13",
+              "received:org0:inspection-2"
+            ],
+            "ownerApprovals": [],
+            "missing": [],
+            "pending": [],
+            "satisfied": true,
+            "assessment": "received:org0:inspection-2",
+            "note": "A current competent physical assessment has already reached this organization."
+          }
+        },
+        {
+          "tool": "checked-service-composition",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": true,
+            "actions": [
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": [
+                  0
+                ]
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 10
+                },
+                "dependsOn": [
+                  1
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "received:org0:inspection-2",
+              "need-case-2",
+              "v-org0-1"
+            ],
+            "missing": [],
+            "requirements": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [],
+            "ownerApprovals": [
+              "org0"
+            ],
+            "assessment": {
+              "current": true,
+              "id": "received:org0:inspection-2",
+              "sourceNow": 3065001
+            },
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+          }
+        }
+      ]
+    },
+    {
+      "org": "org0",
+      "round": 11,
+      "atSim": 3360000,
+      "state": "ready",
+      "proposalId": "proposal_390f520c-df86-4ea1-90c7-296a02957e97",
+      "steps": [
+        {
+          "tool": "checked-field-assessment",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "purpose": "facility_safety",
+            "sourceNow": 3360000,
+            "readyToDraft": false,
+            "actions": [],
+            "references": [
+              "b13",
+              "received:org0:inspection-2"
+            ],
+            "ownerApprovals": [],
+            "missing": [],
+            "pending": [],
+            "satisfied": true,
+            "assessment": "received:org0:inspection-2",
+            "note": "A current competent physical assessment has already reached this organization."
+          }
+        },
+        {
+          "tool": "checked-service-composition",
+          "state": "completed",
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": true,
+            "actions": [
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 20
+                },
+                "dependsOn": [
+                  0
+                ]
+              },
+              {
+                "type": "evacuate",
+                "owner": "org0",
+                "params": {
+                  "from": "b2",
+                  "to": "b13",
+                  "vehicle": "v-org0-1",
+                  "quantity": 10
+                },
+                "dependsOn": [
+                  1
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "received:org0:inspection-2",
+              "need-case-2",
+              "v-org0-1"
+            ],
+            "missing": [],
+            "requirements": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [],
+            "ownerApprovals": [
+              "org0"
+            ],
+            "assessment": {
+              "current": true,
+              "id": "received:org0:inspection-2",
+              "sourceNow": 3360000
+            },
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status."
+          }
+        }
+      ]
+    }
+  ],
+  "platformEvidence": [
+    {
+      "org": "org0",
+      "counts": [
+        {
+          "kind": "context",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "facility",
+          "state": "operating",
+          "n": 1
+        },
+        {
+          "kind": "intake",
+          "state": "pending",
+          "n": 9
+        },
+        {
+          "kind": "need",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "operation",
+          "state": "completed",
+          "n": 9
+        },
+        {
+          "kind": "peer_offer",
+          "state": null,
+          "n": 36
+        },
+        {
+          "kind": "permission",
+          "state": null,
+          "n": 30
+        },
+        {
+          "kind": "proposal",
+          "state": "completed",
+          "n": 3
+        },
+        {
+          "kind": "proposal",
+          "state": "requires_review",
+          "n": 2
+        },
+        {
+          "kind": "resource",
+          "state": null,
+          "n": 8
+        },
+        {
+          "kind": "response_policy",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "road",
+          "state": null,
+          "n": 80
+        },
+        {
+          "kind": "signal",
+          "state": "unverified",
+          "n": 10
+        },
+        {
+          "kind": "source",
+          "state": "connected",
+          "n": 1
+        },
+        {
+          "kind": "source_version",
+          "state": null,
+          "n": 10
+        },
+        {
+          "kind": "vehicle",
+          "state": "idle",
+          "n": 2
+        },
+        {
+          "kind": "verification",
+          "state": "completed",
+          "n": 3
+        }
+      ],
+      "claimCount": 0,
+      "assessments": [
+        {
+          "org": "org0",
+          "staff": "commitment-1",
+          "state": "completed",
+          "entity": "b13",
+          "method": "field",
+          "result": {
+            "id": "b13",
+            "use": "shelter",
+            "node": "n13",
+            "safe": true,
+            "state": "candidate",
+            "damage": 0,
+            "version": 1,
+            "capacity": 300,
+            "assessment": {
+              "method": "field",
+              "purpose": "facility_safety",
+              "vehicle": "v-org3-0",
+              "competent": true,
+              "operation": "operation-1",
+              "observedAt": 579347,
+              "validUntil": 22179347,
+              "inspectorOrg": "org3",
+              "staffResource": "r-org3-staff",
+              "targetVersion": 1,
+              "qualifications": [
+                "field_assessment",
+                "shelter_support",
+                "water_operations"
+              ]
+            },
+            "provisioned": {
+              "staff": 0,
+              "water": 0,
+              "energy": 0,
+              "sanitation": 0
+            },
+            "dependencies": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "requiredPower": {
+              "powerKw": 10,
+              "connector": "A"
+            },
+            "requiredStaffSkills": [
+              "shelter_support"
+            ]
+          },
+          "target": "building",
+          "purpose": "facility_safety",
+          "vehicle": "v-org3-0",
+          "reportTo": "org0",
+          "sourceId": "inspection-2",
+          "arrivedAt": 519347,
+          "operation": "operation-1",
+          "startedAt": 386013,
+          "observedAt": 579347,
+          "validForMs": 21600000,
+          "completedAt": 580348,
+          "requestStep": 0,
+          "sourceOwner": "org3",
+          "authorizedBy": "scripted-org3",
+          "queueSequence": 2,
+          "staffResource": "r-org3-staff",
+          "targetVersion": 1,
+          "requestProposal": "proposal-1",
+          "requestedVehicle": "v-org3-0",
+          "confirmedBySource": true,
+          "id": "received:org0:inspection-2",
+          "version": 47,
+          "createdAt": 1791834752394,
+          "updatedAt": 1791834880665
+        },
+        {
+          "org": "org3",
+          "step": 0,
+          "staff": "commitment-1",
+          "state": "completed",
+          "entity": "b13",
+          "method": "field",
+          "result": {
+            "id": "b13",
+            "use": "shelter",
+            "node": "n13",
+            "safe": true,
+            "state": "candidate",
+            "damage": 0,
+            "version": 1,
+            "capacity": 300,
+            "assessment": {
+              "method": "field",
+              "purpose": "facility_safety",
+              "vehicle": "v-org3-0",
+              "competent": true,
+              "operation": "operation-1",
+              "observedAt": 579347,
+              "validUntil": 22179347,
+              "inspectorOrg": "org3",
+              "staffResource": "r-org3-staff",
+              "targetVersion": 1,
+              "qualifications": [
+                "field_assessment",
+                "shelter_support",
+                "water_operations"
+              ]
+            },
+            "provisioned": {
+              "staff": 0,
+              "water": 0,
+              "energy": 0,
+              "sanitation": 0
+            },
+            "dependencies": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "requiredPower": {
+              "powerKw": 10,
+              "connector": "A"
+            },
+            "requiredStaffSkills": [
+              "shelter_support"
+            ]
+          },
+          "target": "building",
+          "purpose": "facility_safety",
+          "vehicle": "v-org3-0",
+          "reportTo": "org0",
+          "sourceId": "inspection-2",
+          "arrivedAt": 519347,
+          "operation": "operation-1",
+          "startedAt": 386013,
+          "observedAt": 579347,
+          "proposalId": "proposal_a2076f0c-6ee3-4e7a-8036-938bbf638f58",
+          "validForMs": 21600000,
+          "completedAt": 580348,
+          "requestStep": 0,
+          "sourceOwner": "org3",
+          "authorizedBy": "scripted-org3",
+          "queueSequence": 2,
+          "receiptOrigin": "authenticated_owner_source_report",
+          "staffResource": "r-org3-staff",
+          "targetVersion": 1,
+          "requestProposal": "proposal-1",
+          "requestedVehicle": "v-org3-0",
+          "confirmedBySource": true,
+          "id": "peer:org3:inspection-2",
+          "version": 1,
+          "createdAt": 1791834752156,
+          "updatedAt": 1791834752156
+        }
+      ],
+      "operations": [
+        {
+          "to": "b13",
+          "eta": 2996051,
+          "org": "org0",
+          "from": "b2",
+          "need": "need-case-2",
+          "step": 7,
+          "type": "evacuation",
+          "phase": "shelter",
+          "state": "completed",
+          "times": {
+            "arrived": 2996051,
+            "service": 3056051,
+            "prepared": 2871050,
+            "received": 3056051,
+            "authorized": 2685048,
+            "dispatched": 2871050,
+            "orderReceived": 2686049,
+            "pickupDispatched": 2686049
+          },
+          "vehicle": "v-org0-1",
+          "building": "b13",
+          "quantity": 10,
+          "operation": "operation-10",
+          "evacuation": "evacuation-3",
+          "observedAt": 3056051,
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "destination": "n13",
+          "authorizedBy": "user_ec9c29b6-8198-494e-bee4-a260717dbd43",
+          "dependencies": [
+            "b13",
+            "received:org0:inspection-2",
+            "org3_resource_r-org3-staff",
+            "org3_vehicle_v-org3-0",
+            "r-org0-water",
+            "v-org0-1",
+            "org2_resource_r-org2-energy",
+            "org2_vehicle_v-org2-0",
+            "org3_resource_r-org3-sanitation",
+            "need-case-2"
+          ],
+          "sourceSnapshot": {
+            "id": "operation-10",
+            "eta": 2996051,
+            "org": "org0",
+            "need": "need-case-2",
+            "type": "evacuation",
+            "phase": "shelter",
+            "state": "completed",
+            "times": {
+              "arrived": 2996051,
+              "service": 3056051,
+              "prepared": 2871050,
+              "received": 3056051,
+              "authorized": 2685048,
+              "dispatched": 2871050,
+              "orderReceived": 2686049,
+              "pickupDispatched": 2686049
+            },
+            "vehicle": "v-org0-1",
+            "building": "b13",
+            "quantity": 10,
+            "createdAt": 2685048,
+            "evacuation": "evacuation-3",
+            "observedAt": 3056051,
+            "destination": "n13"
+          },
+          "confirmedBySource": true,
+          "id": "operation-10",
+          "version": 17,
+          "createdAt": 1791834849920,
+          "updatedAt": 1791834880658
+        },
+        {
+          "to": "b13",
+          "eta": 2568077,
+          "org": "org0",
+          "from": "b2",
+          "need": "need-case-2",
+          "step": 6,
+          "type": "evacuation",
+          "phase": "shelter",
+          "state": "completed",
+          "times": {
+            "arrived": 2568077,
+            "service": 2628077,
+            "prepared": 2443076,
+            "received": 2628077,
+            "authorized": 2257074,
+            "dispatched": 2443076,
+            "orderReceived": 2258075,
+            "pickupDispatched": 2258075
+          },
+          "vehicle": "v-org0-1",
+          "building": "b13",
+          "quantity": 20,
+          "operation": "operation-9",
+          "evacuation": "evacuation-2",
+          "observedAt": 2628077,
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "destination": "n13",
+          "authorizedBy": "user_ec9c29b6-8198-494e-bee4-a260717dbd43",
+          "dependencies": [
+            "b13",
+            "received:org0:inspection-2",
+            "org3_resource_r-org3-staff",
+            "org3_vehicle_v-org3-0",
+            "r-org0-water",
+            "v-org0-1",
+            "org2_resource_r-org2-energy",
+            "org2_vehicle_v-org2-0",
+            "org3_resource_r-org3-sanitation",
+            "need-case-2"
+          ],
+          "sourceSnapshot": {
+            "id": "operation-9",
+            "eta": 2568077,
+            "org": "org0",
+            "need": "need-case-2",
+            "type": "evacuation",
+            "phase": "shelter",
+            "state": "completed",
+            "times": {
+              "arrived": 2568077,
+              "service": 2628077,
+              "prepared": 2443076,
+              "received": 2628077,
+              "authorized": 2257074,
+              "dispatched": 2443076,
+              "orderReceived": 2258075,
+              "pickupDispatched": 2258075
+            },
+            "vehicle": "v-org0-1",
+            "building": "b13",
+            "quantity": 20,
+            "createdAt": 2257074,
+            "evacuation": "evacuation-2",
+            "observedAt": 2628077,
+            "destination": "n13"
+          },
+          "confirmedBySource": true,
+          "id": "operation-9",
+          "version": 22,
+          "createdAt": 1791834834794,
+          "updatedAt": 1791834880655
+        },
+        {
+          "to": "b13",
+          "eta": 2191013,
+          "org": "org0",
+          "from": "b2",
+          "need": "need-case-2",
+          "step": 5,
+          "type": "evacuation",
+          "phase": "shelter",
+          "state": "completed",
+          "times": {
+            "arrived": 2191013,
+            "service": 2251013,
+            "prepared": 2066012,
+            "received": 2251013,
+            "authorized": 1880010,
+            "dispatched": 2066012,
+            "orderReceived": 1881011,
+            "pickupDispatched": 1881011
+          },
+          "vehicle": "v-org0-1",
+          "building": "b13",
+          "quantity": 20,
+          "operation": "operation-8",
+          "evacuation": "evacuation-1",
+          "observedAt": 2251013,
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "destination": "n13",
+          "authorizedBy": "user_ec9c29b6-8198-494e-bee4-a260717dbd43",
+          "dependencies": [
+            "b13",
+            "received:org0:inspection-2",
+            "org3_resource_r-org3-staff",
+            "org3_vehicle_v-org3-0",
+            "r-org0-water",
+            "v-org0-1",
+            "org2_resource_r-org2-energy",
+            "org2_vehicle_v-org2-0",
+            "org3_resource_r-org3-sanitation",
+            "need-case-2"
+          ],
+          "sourceSnapshot": {
+            "id": "operation-8",
+            "eta": 2191013,
+            "org": "org0",
+            "need": "need-case-2",
+            "type": "evacuation",
+            "phase": "shelter",
+            "state": "completed",
+            "times": {
+              "arrived": 2191013,
+              "service": 2251013,
+              "prepared": 2066012,
+              "received": 2251013,
+              "authorized": 1880010,
+              "dispatched": 2066012,
+              "orderReceived": 1881011,
+              "pickupDispatched": 1881011
+            },
+            "vehicle": "v-org0-1",
+            "building": "b13",
+            "quantity": 20,
+            "createdAt": 1880010,
+            "evacuation": "evacuation-1",
+            "observedAt": 2251013,
+            "destination": "n13"
+          },
+          "confirmedBySource": true,
+          "id": "operation-8",
+          "version": 28,
+          "createdAt": 1791834821331,
+          "updatedAt": 1791834880652
+        },
+        {
+          "eta": 897350,
+          "org": "org0",
+          "need": null,
+          "step": 1,
+          "type": "delivery",
+          "state": "completed",
+          "times": {
+            "arrived": 897350,
+            "accepted": 612349,
+            "prepared": 672349,
+            "received": 957350,
+            "reserved": 611348,
+            "authorized": 611348,
+            "dispatched": 672349,
+            "orderReceived": 612349,
+            "unloadingStarted": 897350
+          },
+          "vehicle": "v-org0-1",
+          "building": "b13",
+          "proposal": "proposal-3",
+          "quantity": 162,
+          "received": 162,
+          "resource": "r-org0-water",
+          "commitment": "commitment-2",
+          "observedAt": 957350,
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_ec9c29b6-8198-494e-bee4-a260717dbd43",
+          "dependencies": [
+            "b13",
+            "received:org0:inspection-2",
+            "org3_resource_r-org3-staff",
+            "org3_vehicle_v-org3-0",
+            "r-org0-water",
+            "v-org0-1",
+            "org2_resource_r-org2-energy",
+            "org2_vehicle_v-org2-0",
+            "org3_resource_r-org3-sanitation",
+            "need-case-2"
+          ],
+          "resourceType": "water",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-2",
+            "eta": 897350,
+            "org": "org0",
+            "need": null,
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 897350,
+              "accepted": 612349,
+              "prepared": 672349,
+              "received": 957350,
+              "reserved": 611348,
+              "authorized": 611348,
+              "dispatched": 672349,
+              "orderReceived": 612349,
+              "unloadingStarted": 897350
+            },
+            "vehicle": "v-org0-1",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-3",
+            "quantity": 162,
+            "received": 162,
+            "resource": "r-org0-water",
+            "createdAt": 611348,
+            "commitment": "commitment-2",
+            "observedAt": 957350,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "water",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-water"
+          },
+          "destinationStock": "stock-n13-water",
+          "confirmedBySource": true,
+          "id": "operation-2",
+          "version": 45,
+          "createdAt": 1791834754087,
+          "updatedAt": 1791834880649
+        },
+        {
+          "org": "org3",
+          "need": null,
+          "step": 3,
+          "type": "delivery",
+          "owner": "org3",
+          "state": "completed",
+          "times": {
+            "arrived": 1618698,
+            "accepted": 1292030,
+            "prepared": 1485364,
+            "received": 1678698,
+            "reserved": 1291029,
+            "authorized": 1291029,
+            "dispatched": 1485364,
+            "orderReceived": 1292030,
+            "pickupArrived": 1425364,
+            "pickupDispatched": 1292030,
+            "unloadingStarted": 1618698
+          },
+          "vehicle": "v-org3-0",
+          "quantity": 1,
+          "received": 1,
+          "resource": "r-org3-sanitation",
+          "sourceId": "operation-7",
+          "peerOwner": "org3",
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "resourceType": "sanitation",
+          "receiptOrigin": "authenticated_owner_source_report",
+          "sourceSnapshot": {
+            "id": "operation-7",
+            "org": "org3",
+            "need": null,
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1618698,
+              "accepted": 1292030,
+              "prepared": 1485364,
+              "received": 1678698,
+              "reserved": 1291029,
+              "authorized": 1291029,
+              "dispatched": 1485364,
+              "orderReceived": 1292030,
+              "pickupArrived": 1425364,
+              "pickupDispatched": 1292030,
+              "unloadingStarted": 1618698
+            },
+            "vehicle": "v-org3-0",
+            "building": "b13",
+            "quantity": 1,
+            "received": 1,
+            "resource": "r-org3-sanitation",
+            "observedAt": 1750094,
+            "destination": "n13",
+            "resourceType": "sanitation",
+            "confirmedBySource": true
+          },
+          "sourceObservedAt": 1750094,
+          "confirmedBySource": true,
+          "id": "peer:org3:operation-7",
+          "version": 11,
+          "createdAt": 1791834778578,
+          "updatedAt": 1791834815099
+        },
+        {
+          "org": "org3",
+          "need": "need-water-main",
+          "step": 0,
+          "type": "delivery",
+          "owner": "org3",
+          "state": "completed",
+          "times": {
+            "arrived": 1096341,
+            "service": 1186341,
+            "accepted": 903007,
+            "prepared": 963007,
+            "received": 1186341,
+            "reserved": 902006,
+            "authorized": 902006,
+            "dispatched": 963007,
+            "orderReceived": 903007,
+            "unloadingStarted": 1126341
+          },
+          "vehicle": "v-org3-1",
+          "quantity": 300,
+          "received": 300,
+          "resource": "r-org3-water",
+          "sourceId": "operation-6",
+          "peerOwner": "org3",
+          "proposalId": "proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124",
+          "resourceType": "water",
+          "receiptOrigin": "authenticated_owner_source_report",
+          "sourceSnapshot": {
+            "id": "operation-6",
+            "org": "org3",
+            "need": "need-water-main",
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1096341,
+              "service": 1186341,
+              "accepted": 903007,
+              "prepared": 963007,
+              "received": 1186341,
+              "reserved": 902006,
+              "authorized": 902006,
+              "dispatched": 963007,
+              "orderReceived": 903007,
+              "unloadingStarted": 1126341
+            },
+            "vehicle": "v-org3-1",
+            "building": "b13",
+            "quantity": 300,
+            "received": 300,
+            "resource": "r-org3-water",
+            "observedAt": 1291029,
+            "destination": "n13",
+            "resourceType": "water",
+            "confirmedBySource": true
+          },
+          "sourceObservedAt": 1291029,
+          "confirmedBySource": true,
+          "id": "peer:org3:operation-6",
+          "version": 9,
+          "createdAt": 1791834761732,
+          "updatedAt": 1791834778604
+        },
+        {
+          "org": "org3",
+          "need": null,
+          "step": 0,
+          "type": "delivery",
+          "owner": "org3",
+          "state": "completed",
+          "times": {
+            "arrived": 1054671,
+            "accepted": 728003,
+            "prepared": 921337,
+            "received": 1114671,
+            "reserved": 727002,
+            "authorized": 727002,
+            "dispatched": 921337,
+            "orderReceived": 728003,
+            "pickupArrived": 861337,
+            "pickupDispatched": 728003,
+            "unloadingStarted": 1054671
+          },
+          "vehicle": "v-org3-0",
+          "quantity": 2,
+          "received": 2,
+          "resource": "r-org3-staff",
+          "sourceId": "operation-4",
+          "peerOwner": "org3",
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "resourceType": "staff",
+          "receiptOrigin": "authenticated_owner_source_report",
+          "sourceSnapshot": {
+            "id": "operation-4",
+            "org": "org3",
+            "need": null,
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1054671,
+              "accepted": 728003,
+              "prepared": 921337,
+              "received": 1114671,
+              "reserved": 727002,
+              "authorized": 727002,
+              "dispatched": 921337,
+              "orderReceived": 728003,
+              "pickupArrived": 861337,
+              "pickupDispatched": 728003,
+              "unloadingStarted": 1054671
+            },
+            "vehicle": "v-org3-0",
+            "building": "b13",
+            "quantity": 2,
+            "received": 2,
+            "resource": "r-org3-staff",
+            "observedAt": 1167019,
+            "destination": "n13",
+            "resourceType": "staff",
+            "confirmedBySource": true
+          },
+          "sourceObservedAt": 1167019,
+          "confirmedBySource": true,
+          "id": "peer:org3:operation-4",
+          "version": 9,
+          "createdAt": 1791834756551,
+          "updatedAt": 1791834774449
+        },
+        {
+          "org": "org1",
+          "need": "need-water-main",
+          "step": 1,
+          "type": "delivery",
+          "owner": "org1",
+          "state": "completed",
+          "times": {
+            "arrived": 1069674,
+            "service": 1129674,
+            "accepted": 868007,
+            "prepared": 928007,
+            "received": 1129674,
+            "reserved": 867006,
+            "authorized": 867006,
+            "dispatched": 928007,
+            "orderReceived": 868007,
+            "unloadingStarted": 1069674
+          },
+          "vehicle": "v-org1-0",
+          "quantity": 300,
+          "received": 300,
+          "resource": "r-org1-water",
+          "sourceId": "operation-5",
+          "peerOwner": "org1",
+          "proposalId": "proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124",
+          "resourceType": "water",
+          "receiptOrigin": "authenticated_owner_source_report",
+          "sourceSnapshot": {
+            "id": "operation-5",
+            "org": "org1",
+            "need": "need-water-main",
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1069674,
+              "service": 1129674,
+              "accepted": 868007,
+              "prepared": 928007,
+              "received": 1129674,
+              "reserved": 867006,
+              "authorized": 867006,
+              "dispatched": 928007,
+              "orderReceived": 868007,
+              "unloadingStarted": 1069674
+            },
+            "vehicle": "v-org1-0",
+            "building": "b13",
+            "quantity": 300,
+            "received": 300,
+            "resource": "r-org1-water",
+            "observedAt": 1160019,
+            "destination": "n13",
+            "resourceType": "water",
+            "confirmedBySource": true
+          },
+          "sourceObservedAt": 1160019,
+          "confirmedBySource": true,
+          "id": "peer:org1:operation-5",
+          "version": 4,
+          "createdAt": 1791834760326,
+          "updatedAt": 1791834773238
+        },
+        {
+          "org": "org2",
+          "need": null,
+          "step": 2,
+          "type": "delivery",
+          "owner": "org2",
+          "state": "completed",
+          "times": {
+            "arrived": 973671,
+            "accepted": 697003,
+            "prepared": 757003,
+            "received": 1033671,
+            "reserved": 696002,
+            "authorized": 696002,
+            "dispatched": 757003,
+            "orderReceived": 697003,
+            "unloadingStarted": 973671
+          },
+          "vehicle": "v-org2-0",
+          "quantity": 1,
+          "received": 1,
+          "resource": "r-org2-energy",
+          "sourceId": "operation-3",
+          "peerOwner": "org2",
+          "proposalId": "proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221",
+          "resourceType": "energy",
+          "receiptOrigin": "authenticated_owner_source_report",
+          "sourceSnapshot": {
+            "id": "operation-3",
+            "org": "org2",
+            "need": null,
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 973671,
+              "accepted": 697003,
+              "prepared": 757003,
+              "received": 1033671,
+              "reserved": 696002,
+              "authorized": 696002,
+              "dispatched": 757003,
+              "orderReceived": 697003,
+              "unloadingStarted": 973671
+            },
+            "vehicle": "v-org2-0",
+            "building": "b13",
+            "quantity": 1,
+            "received": 1,
+            "resource": "r-org2-energy",
+            "observedAt": 1067011,
+            "destination": "n13",
+            "resourceType": "energy",
+            "confirmedBySource": true
+          },
+          "sourceObservedAt": 1067011,
+          "confirmedBySource": true,
+          "id": "peer:org2:operation-3",
+          "version": 4,
+          "createdAt": 1791834755677,
+          "updatedAt": 1791834769492
+        }
+      ],
+      "facilities": [
+        {
+          "at": 579347,
+          "use": "shelter",
+          "node": "n13",
+          "safe": true,
+          "floor": 0,
+          "owner": "org0",
+          "state": "operating",
+          "damage": 0,
+          "openAt": 1878094,
+          "capacity": 300,
+          "ownerOrg": "org0",
+          "reserved": 0,
+          "occupancy": 50,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 579347,
+            "validUntil": 22179347,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          },
+          "provisioned": {
+            "staff": 2,
+            "water": 162,
+            "energy": 1,
+            "sanitation": 1
+          },
+          "dependencies": {
+            "staff": 2,
+            "water": 162,
+            "energy": 1,
+            "sanitation": 1
+          },
+          "requiredPower": {
+            "powerKw": 10,
+            "connector": "A"
+          },
+          "sourceVersion": 1,
+          "sourceSnapshot": {
+            "at": 579347,
+            "id": "b13",
+            "use": "shelter",
+            "node": "n13",
+            "safe": true,
+            "state": "operating",
+            "damage": 0,
+            "openAt": 1878094,
+            "version": 1,
+            "capacity": 300,
+            "ownerOrg": "org0",
+            "occupancy": 50,
+            "assessment": {
+              "method": "field",
+              "purpose": "facility_safety",
+              "vehicle": "v-org3-0",
+              "competent": true,
+              "operation": "operation-1",
+              "observedAt": 579347,
+              "validUntil": 22179347,
+              "inspectorOrg": "org3",
+              "staffResource": "r-org3-staff",
+              "targetVersion": 1,
+              "qualifications": [
+                "field_assessment",
+                "shelter_support",
+                "water_operations"
+              ]
+            },
+            "provisioned": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "dependencies": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "requiredPower": {
+              "powerKw": 10,
+              "connector": "A"
+            },
+            "statusObservedAt": 3056051,
+            "requiredStaffSkills": [
+              "shelter_support"
+            ]
+          },
+          "statusObservedAt": 3056051,
+          "requiredStaffSkills": [
+            "shelter_support"
+          ],
+          "id": "b13",
+          "version": 6,
+          "createdAt": 1791834750779,
+          "updatedAt": 1791834867153
+        }
+      ],
+      "investigatorQueries": [],
+      "evidencePrecision": null,
+      "evidenceRecall": null,
+      "humanMinutes": null,
+      "note": "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied."
+    },
+    {
+      "org": "org1",
+      "counts": [
+        {
+          "kind": "context",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "intake",
+          "state": "pending",
+          "n": 9
+        },
+        {
+          "kind": "need",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "operation",
+          "state": "completed",
+          "n": 1
+        },
+        {
+          "kind": "peer_offer",
+          "state": null,
+          "n": 31
+        },
+        {
+          "kind": "permission",
+          "state": null,
+          "n": 30
+        },
+        {
+          "kind": "proposal",
+          "state": "completed",
+          "n": 1
+        },
+        {
+          "kind": "resource",
+          "state": null,
+          "n": 16
+        },
+        {
+          "kind": "response_policy",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "road",
+          "state": null,
+          "n": 80
+        },
+        {
+          "kind": "signal",
+          "state": "unverified",
+          "n": 10
+        },
+        {
+          "kind": "source",
+          "state": "connected",
+          "n": 1
+        },
+        {
+          "kind": "source_version",
+          "state": null,
+          "n": 10
+        },
+        {
+          "kind": "vehicle",
+          "state": "idle",
+          "n": 4
+        }
+      ],
+      "claimCount": 0,
+      "assessments": [],
+      "operations": [
+        {
+          "eta": 1069674,
+          "org": "org1",
+          "need": "need-water-main",
+          "step": 0,
+          "type": "delivery",
+          "state": "completed",
+          "times": {
+            "arrived": 1069674,
+            "service": 1129674,
+            "accepted": 868007,
+            "prepared": 928007,
+            "received": 1129674,
+            "reserved": 867006,
+            "authorized": 867006,
+            "dispatched": 928007,
+            "orderReceived": 868007,
+            "unloadingStarted": 1069674
+          },
+          "vehicle": "v-org1-0",
+          "building": "b13",
+          "proposal": "proposal-7",
+          "quantity": 300,
+          "received": 300,
+          "resource": "r-org1-water",
+          "commitment": "commitment-5",
+          "observedAt": 1129674,
+          "proposalId": "partner_work_proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124_1",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_549ed011-b56d-47e3-93a1-60b9196ee81a",
+          "dependencies": [
+            "org0_response_request_work_proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124_1"
+          ],
+          "resourceType": "water",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-5",
+            "eta": 1069674,
+            "org": "org1",
+            "need": "need-water-main",
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1069674,
+              "service": 1129674,
+              "accepted": 868007,
+              "prepared": 928007,
+              "received": 1129674,
+              "reserved": 867006,
+              "authorized": 867006,
+              "dispatched": 928007,
+              "orderReceived": 868007,
+              "unloadingStarted": 1069674
+            },
+            "vehicle": "v-org1-0",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-7",
+            "quantity": 300,
+            "received": 300,
+            "resource": "r-org1-water",
+            "createdAt": 867006,
+            "commitment": "commitment-5",
+            "observedAt": 1129674,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "water",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-water-org1"
+          },
+          "destinationStock": "stock-n13-water-org1",
+          "confirmedBySource": true,
+          "id": "operation-5",
+          "version": 40,
+          "createdAt": 1791834759878,
+          "updatedAt": 1791834880852
+        }
+      ],
+      "facilities": [],
+      "investigatorQueries": [],
+      "evidencePrecision": null,
+      "evidenceRecall": null,
+      "humanMinutes": null,
+      "note": "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied."
+    },
+    {
+      "org": "org2",
+      "counts": [
+        {
+          "kind": "context",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "intake",
+          "state": "pending",
+          "n": 9
+        },
+        {
+          "kind": "operation",
+          "state": "completed",
+          "n": 1
+        },
+        {
+          "kind": "peer_offer",
+          "state": null,
+          "n": 31
+        },
+        {
+          "kind": "permission",
+          "state": null,
+          "n": 30
+        },
+        {
+          "kind": "proposal",
+          "state": "completed",
+          "n": 1
+        },
+        {
+          "kind": "resource",
+          "state": null,
+          "n": 16
+        },
+        {
+          "kind": "response_policy",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "road",
+          "state": null,
+          "n": 80
+        },
+        {
+          "kind": "signal",
+          "state": "unverified",
+          "n": 10
+        },
+        {
+          "kind": "source",
+          "state": "connected",
+          "n": 1
+        },
+        {
+          "kind": "source_version",
+          "state": null,
+          "n": 10
+        },
+        {
+          "kind": "vehicle",
+          "state": "idle",
+          "n": 4
+        }
+      ],
+      "claimCount": 0,
+      "assessments": [],
+      "operations": [
+        {
+          "eta": 973671,
+          "org": "org2",
+          "need": null,
+          "step": 0,
+          "type": "delivery",
+          "state": "completed",
+          "times": {
+            "arrived": 973671,
+            "accepted": 697003,
+            "prepared": 757003,
+            "received": 1033671,
+            "reserved": 696002,
+            "authorized": 696002,
+            "dispatched": 757003,
+            "orderReceived": 697003,
+            "unloadingStarted": 973671
+          },
+          "vehicle": "v-org2-0",
+          "building": "b13",
+          "proposal": "proposal-4",
+          "quantity": 1,
+          "received": 1,
+          "resource": "r-org2-energy",
+          "commitment": "commitment-3",
+          "observedAt": 1033671,
+          "proposalId": "partner_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_2",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_0ee7332a-da26-41f2-b3e5-4c2234850ed8",
+          "dependencies": [
+            "org0_response_request_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_2"
+          ],
+          "resourceType": "energy",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-3",
+            "eta": 973671,
+            "org": "org2",
+            "need": null,
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 973671,
+              "accepted": 697003,
+              "prepared": 757003,
+              "received": 1033671,
+              "reserved": 696002,
+              "authorized": 696002,
+              "dispatched": 757003,
+              "orderReceived": 697003,
+              "unloadingStarted": 973671
+            },
+            "vehicle": "v-org2-0",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-4",
+            "quantity": 1,
+            "received": 1,
+            "resource": "r-org2-energy",
+            "createdAt": 696002,
+            "commitment": "commitment-3",
+            "observedAt": 1033671,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "energy",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-energy"
+          },
+          "destinationStock": "stock-n13-energy",
+          "confirmedBySource": true,
+          "id": "operation-3",
+          "version": 42,
+          "createdAt": 1791834755600,
+          "updatedAt": 1791834881024
+        }
+      ],
+      "facilities": [],
+      "investigatorQueries": [],
+      "evidencePrecision": null,
+      "evidenceRecall": null,
+      "humanMinutes": null,
+      "note": "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied."
+    },
+    {
+      "org": "org3",
+      "counts": [
+        {
+          "kind": "context",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "facility",
+          "state": "candidate",
+          "n": 1
+        },
+        {
+          "kind": "intake",
+          "state": "pending",
+          "n": 9
+        },
+        {
+          "kind": "need",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "operation",
+          "state": "arrived",
+          "n": 1
+        },
+        {
+          "kind": "operation",
+          "state": "completed",
+          "n": 3
+        },
+        {
+          "kind": "peer_offer",
+          "state": null,
+          "n": 34
+        },
+        {
+          "kind": "permission",
+          "state": null,
+          "n": 30
+        },
+        {
+          "kind": "proposal",
+          "state": "completed",
+          "n": 4
+        },
+        {
+          "kind": "resource",
+          "state": null,
+          "n": 16
+        },
+        {
+          "kind": "response_policy",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "road",
+          "state": null,
+          "n": 80
+        },
+        {
+          "kind": "signal",
+          "state": "unverified",
+          "n": 10
+        },
+        {
+          "kind": "source",
+          "state": "connected",
+          "n": 1
+        },
+        {
+          "kind": "source_version",
+          "state": null,
+          "n": 10
+        },
+        {
+          "kind": "vehicle",
+          "state": "idle",
+          "n": 4
+        },
+        {
+          "kind": "verification",
+          "state": "completed",
+          "n": 1
+        }
+      ],
+      "claimCount": 0,
+      "assessments": [
+        {
+          "org": "org3",
+          "staff": "commitment-1",
+          "state": "completed",
+          "entity": "b13",
+          "method": "field",
+          "result": {
+            "id": "b13",
+            "use": "shelter",
+            "node": "n13",
+            "safe": true,
+            "state": "candidate",
+            "damage": 0,
+            "version": 1,
+            "capacity": 300,
+            "assessment": {
+              "method": "field",
+              "purpose": "facility_safety",
+              "vehicle": "v-org3-0",
+              "competent": true,
+              "operation": "operation-1",
+              "observedAt": 579347,
+              "validUntil": 22179347,
+              "inspectorOrg": "org3",
+              "staffResource": "r-org3-staff",
+              "targetVersion": 1,
+              "qualifications": [
+                "field_assessment",
+                "shelter_support",
+                "water_operations"
+              ]
+            },
+            "provisioned": {
+              "staff": 0,
+              "water": 0,
+              "energy": 0,
+              "sanitation": 0
+            },
+            "dependencies": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "requiredPower": {
+              "powerKw": 10,
+              "connector": "A"
+            },
+            "requiredStaffSkills": [
+              "shelter_support"
+            ]
+          },
+          "target": "building",
+          "purpose": "facility_safety",
+          "vehicle": "v-org3-0",
+          "reportTo": "org0",
+          "arrivedAt": 519347,
+          "operation": "operation-1",
+          "startedAt": 386013,
+          "observedAt": 579347,
+          "validForMs": 21600000,
+          "completedAt": 580348,
+          "requestStep": 0,
+          "authorizedBy": "scripted-org3",
+          "queueSequence": 2,
+          "staffResource": "r-org3-staff",
+          "targetVersion": 1,
+          "requestProposal": "proposal-1",
+          "requestedVehicle": "v-org3-0",
+          "confirmedBySource": true,
+          "id": "inspection-2",
+          "version": 44,
+          "createdAt": 1791834752134,
+          "updatedAt": 1791834881169
+        }
+      ],
+      "operations": [
+        {
+          "eta": 1618698,
+          "org": "org3",
+          "need": null,
+          "step": 0,
+          "type": "delivery",
+          "phase": null,
+          "state": "completed",
+          "times": {
+            "arrived": 1618698,
+            "accepted": 1292030,
+            "prepared": 1485364,
+            "received": 1678698,
+            "reserved": 1291029,
+            "authorized": 1291029,
+            "dispatched": 1485364,
+            "orderReceived": 1292030,
+            "pickupArrived": 1425364,
+            "pickupDispatched": 1292030,
+            "unloadingStarted": 1618698
+          },
+          "vehicle": "v-org3-0",
+          "building": "b13",
+          "proposal": "proposal-9",
+          "quantity": 1,
+          "received": 1,
+          "resource": "r-org3-sanitation",
+          "commitment": "commitment-7",
+          "observedAt": 1678698,
+          "proposalId": "partner_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_3",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_8a1de8cc-174b-47ae-bec6-73e6041453cf",
+          "dependencies": [
+            "org0_response_request_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_3"
+          ],
+          "resourceType": "sanitation",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-7",
+            "eta": 1618698,
+            "org": "org3",
+            "need": null,
+            "type": "delivery",
+            "phase": null,
+            "state": "completed",
+            "times": {
+              "arrived": 1618698,
+              "accepted": 1292030,
+              "prepared": 1485364,
+              "received": 1678698,
+              "reserved": 1291029,
+              "authorized": 1291029,
+              "dispatched": 1485364,
+              "orderReceived": 1292030,
+              "pickupArrived": 1425364,
+              "pickupDispatched": 1292030,
+              "unloadingStarted": 1618698
+            },
+            "vehicle": "v-org3-0",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-9",
+            "quantity": 1,
+            "received": 1,
+            "resource": "r-org3-sanitation",
+            "createdAt": 1291029,
+            "commitment": "commitment-7",
+            "observedAt": 1678698,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "sanitation",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-sanitation"
+          },
+          "destinationStock": "stock-n13-sanitation",
+          "confirmedBySource": true,
+          "id": "operation-7",
+          "version": 35,
+          "createdAt": 1791834778126,
+          "updatedAt": 1791834881167
+        },
+        {
+          "eta": 1096341,
+          "org": "org3",
+          "need": "need-water-main",
+          "step": 0,
+          "type": "delivery",
+          "state": "completed",
+          "times": {
+            "arrived": 1096341,
+            "service": 1186341,
+            "accepted": 903007,
+            "prepared": 963007,
+            "received": 1186341,
+            "reserved": 902006,
+            "authorized": 902006,
+            "dispatched": 963007,
+            "orderReceived": 903007,
+            "unloadingStarted": 1126341
+          },
+          "vehicle": "v-org3-1",
+          "building": "b13",
+          "proposal": "proposal-8",
+          "quantity": 300,
+          "received": 300,
+          "resource": "r-org3-water",
+          "commitment": "commitment-6",
+          "observedAt": 1186341,
+          "proposalId": "partner_work_proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124_0",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_8a1de8cc-174b-47ae-bec6-73e6041453cf",
+          "dependencies": [
+            "org0_response_request_work_proposal_c300c8cf-0ba6-4225-b837-49dbc84fc124_0"
+          ],
+          "resourceType": "water",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-6",
+            "eta": 1096341,
+            "org": "org3",
+            "need": "need-water-main",
+            "type": "delivery",
+            "state": "completed",
+            "times": {
+              "arrived": 1096341,
+              "service": 1186341,
+              "accepted": 903007,
+              "prepared": 963007,
+              "received": 1186341,
+              "reserved": 902006,
+              "authorized": 902006,
+              "dispatched": 963007,
+              "orderReceived": 903007,
+              "unloadingStarted": 1126341
+            },
+            "vehicle": "v-org3-1",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-8",
+            "quantity": 300,
+            "received": 300,
+            "resource": "r-org3-water",
+            "createdAt": 902006,
+            "commitment": "commitment-6",
+            "observedAt": 1186341,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "water",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-water-org3"
+          },
+          "destinationStock": "stock-n13-water-org3",
+          "confirmedBySource": true,
+          "id": "operation-6",
+          "version": 40,
+          "createdAt": 1791834761112,
+          "updatedAt": 1791834881165
+        },
+        {
+          "eta": 1054671,
+          "org": "org3",
+          "need": null,
+          "step": 0,
+          "type": "delivery",
+          "phase": null,
+          "state": "completed",
+          "times": {
+            "arrived": 1054671,
+            "accepted": 728003,
+            "prepared": 921337,
+            "received": 1114671,
+            "reserved": 727002,
+            "authorized": 727002,
+            "dispatched": 921337,
+            "orderReceived": 728003,
+            "pickupArrived": 861337,
+            "pickupDispatched": 728003,
+            "unloadingStarted": 1054671
+          },
+          "vehicle": "v-org3-0",
+          "building": "b13",
+          "proposal": "proposal-5",
+          "quantity": 2,
+          "received": 2,
+          "resource": "r-org3-staff",
+          "commitment": "commitment-4",
+          "observedAt": 1114671,
+          "proposalId": "partner_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_0",
+          "references": [],
+          "destination": "n13",
+          "authorizedBy": "user_8a1de8cc-174b-47ae-bec6-73e6041453cf",
+          "dependencies": [
+            "org0_response_request_work_proposal_3d3a2613-f8a1-4669-b9c8-3fedd75e7221_0"
+          ],
+          "resourceType": "staff",
+          "unloadingSlot": false,
+          "sourceSnapshot": {
+            "id": "operation-4",
+            "eta": 1054671,
+            "org": "org3",
+            "need": null,
+            "type": "delivery",
+            "phase": null,
+            "state": "completed",
+            "times": {
+              "arrived": 1054671,
+              "accepted": 728003,
+              "prepared": 921337,
+              "received": 1114671,
+              "reserved": 727002,
+              "authorized": 727002,
+              "dispatched": 921337,
+              "orderReceived": 728003,
+              "pickupArrived": 861337,
+              "pickupDispatched": 728003,
+              "unloadingStarted": 1054671
+            },
+            "vehicle": "v-org3-0",
+            "version": 1,
+            "building": "b13",
+            "proposal": "proposal-5",
+            "quantity": 2,
+            "received": 2,
+            "resource": "r-org3-staff",
+            "createdAt": 727002,
+            "commitment": "commitment-4",
+            "observedAt": 1114671,
+            "references": [],
+            "destination": "n13",
+            "resourceType": "staff",
+            "unloadingSlot": false,
+            "destinationStock": "stock-n13-staff"
+          },
+          "destinationStock": "stock-n13-staff",
+          "confirmedBySource": true,
+          "id": "operation-4",
+          "version": 42,
+          "createdAt": 1791834756209,
+          "updatedAt": 1791834881163
+        },
+        {
+          "eta": 519347,
+          "org": "org3",
+          "type": "inspection",
+          "state": "arrived",
+          "times": {
+            "arrived": 519347,
+            "authorized": 386013,
+            "dispatched": 386013
+          },
+          "vehicle": "v-org3-0",
+          "inspection": "inspection-2",
+          "observedAt": 519347,
+          "destination": "n13",
+          "sourceSnapshot": {
+            "id": "operation-1",
+            "eta": 519347,
+            "org": "org3",
+            "type": "inspection",
+            "state": "arrived",
+            "times": {
+              "arrived": 519347,
+              "authorized": 386013,
+              "dispatched": 386013
+            },
+            "vehicle": "v-org3-0",
+            "createdAt": 386013,
+            "inspection": "inspection-2",
+            "observedAt": 519347,
+            "destination": "n13"
+          },
+          "confirmedBySource": true,
+          "id": "operation-1",
+          "version": 43,
+          "createdAt": 1791834753332,
+          "updatedAt": 1791834881161
+        }
+      ],
+      "facilities": [
+        {
+          "at": 579347,
+          "use": "shelter",
+          "node": "n13",
+          "safe": true,
+          "floor": 0,
+          "owner": "org3",
+          "state": "candidate",
+          "damage": 0,
+          "capacity": 300,
+          "reserved": 0,
+          "assessment": {
+            "method": "field",
+            "purpose": "facility_safety",
+            "vehicle": "v-org3-0",
+            "competent": true,
+            "operation": "operation-1",
+            "observedAt": 579347,
+            "validUntil": 22179347,
+            "inspectorOrg": "org3",
+            "staffResource": "r-org3-staff",
+            "targetVersion": 1,
+            "qualifications": [
+              "field_assessment",
+              "shelter_support",
+              "water_operations"
+            ]
+          },
+          "provisioned": {
+            "staff": 0,
+            "water": 0,
+            "energy": 0,
+            "sanitation": 0
+          },
+          "dependencies": {
+            "staff": 2,
+            "water": 162,
+            "energy": 1,
+            "sanitation": 1
+          },
+          "requiredPower": {
+            "powerKw": 10,
+            "connector": "A"
+          },
+          "sourceVersion": 1,
+          "sourceSnapshot": {
+            "at": 579347,
+            "id": "b13",
+            "use": "shelter",
+            "node": "n13",
+            "safe": true,
+            "state": "candidate",
+            "damage": 0,
+            "version": 1,
+            "capacity": 300,
+            "assessment": {
+              "method": "field",
+              "purpose": "facility_safety",
+              "vehicle": "v-org3-0",
+              "competent": true,
+              "operation": "operation-1",
+              "observedAt": 579347,
+              "validUntil": 22179347,
+              "inspectorOrg": "org3",
+              "staffResource": "r-org3-staff",
+              "targetVersion": 1,
+              "qualifications": [
+                "field_assessment",
+                "shelter_support",
+                "water_operations"
+              ]
+            },
+            "provisioned": {
+              "staff": 0,
+              "water": 0,
+              "energy": 0,
+              "sanitation": 0
+            },
+            "dependencies": {
+              "staff": 2,
+              "water": 162,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "requiredPower": {
+              "powerKw": 10,
+              "connector": "A"
+            },
+            "requiredStaffSkills": [
+              "shelter_support"
+            ]
+          },
+          "requiredStaffSkills": [
+            "shelter_support"
+          ],
+          "id": "b13",
+          "version": 1,
+          "createdAt": 1791834753281,
+          "updatedAt": 1791834753281
+        }
+      ],
+      "investigatorQueries": [],
+      "evidencePrecision": null,
+      "evidenceRecall": null,
+      "humanMinutes": null,
+      "note": "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied."
+    }
+  ],
+  "usage": [],
+  "costUsd": 0,
+  "chargedBudgetUsd": 0,
+  "unknownCostCalls": 0,
+  "metrics": {
+    "simulatedMs": 14400000,
+    "services": {
+      "water": {
+        "unit": "L",
+        "demand": 600,
+        "served": 600,
+        "pending": 0,
+        "overprovided": 0,
+        "uncoveredUnitMs": 694804500,
+        "onTime": 1
+      },
+      "shelter": {
+        "unit": "place",
+        "demand": 50,
+        "served": 50,
+        "pending": 0,
+        "overprovided": 0,
+        "uncoveredUnitMs": 128142310,
+        "onTime": 1
+      }
+    },
+    "collective": {
+      "shelterPlaceHours": 164.4049138888889,
+      "operatingHours": 3.4783072222222224,
+      "waterProduced": 0,
+      "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+    },
+    "population": {
+      "model": "experimental-v1",
+      "clinicallyValidated": false,
+      "alive": 1500,
+      "deceased": 0,
+      "injured": 0,
+      "waterDeficitPersonHours": 0,
+      "foodDeficitPersonHours": 0,
+      "exposurePersonHours": 73.02562777777779,
+      "untreatedInjuryPersonHours": 0,
+      "communities": [
+        {
+          "id": "community-s0",
+          "sector": "s0",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s1",
+          "sector": "s1",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s2",
+          "sector": "s2",
+          "population": 10,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 4,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 40,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s3",
+          "sector": "s3",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s4",
+          "sector": "s4",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s5",
+          "sector": "s5",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s6",
+          "sector": "s6",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s7",
+          "sector": "s7",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s8",
+          "sector": "s8",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s9",
+          "sector": "s9",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s10",
+          "sector": "s10",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s11",
+          "sector": "s11",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s12",
+          "sector": "s12",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s13",
+          "sector": "s13",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s14",
+          "sector": "s14",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s15",
+          "sector": "s15",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s16",
+          "sector": "s16",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s17",
+          "sector": "s17",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s18",
+          "sector": "s18",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s19",
+          "sector": "s19",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s20",
+          "sector": "s20",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s21",
+          "sector": "s21",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s22",
+          "sector": "s22",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s23",
+          "sector": "s23",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s24",
+          "sector": "s24",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "relocated-evacuation-1",
+          "sector": "s13",
+          "population": 20,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 11.477844444444445,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "relocated-evacuation-2",
+          "sector": "s13",
+          "population": 20,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 13.572644444444444,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "relocated-evacuation-3",
+          "sector": "s13",
+          "population": 10,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 7.975138888888889,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        }
+      ]
+    },
+    "perCommunity": [
+      {
+        "id": "need-water-main",
+        "building": "b13",
+        "type": "water",
+        "quantity": 600,
+        "served": 600,
+        "firstServiceAt": 1129674,
+        "sufficientServiceAt": 1186341,
+        "completedAt": 1186341,
+        "createdAt": 0,
+        "originalCreatedAt": 0,
+        "responseEpisode": 1,
+        "responseState": "covered",
+        "deadline": 10800000,
+        "silent": false,
+        "firstSignalAt": 32001,
+        "remote": false,
+        "knownBy": [
+          "org0",
+          "org1",
+          "org3"
+        ]
+      },
+      {
+        "id": "need-case-2",
+        "building": "b2",
+        "type": "shelter",
+        "quantity": 50,
+        "served": 50,
+        "firstServiceAt": 2251013,
+        "sufficientServiceAt": 3056051,
+        "completedAt": 3056051,
+        "createdAt": 0,
+        "originalCreatedAt": 0,
+        "responseEpisode": 1,
+        "responseState": "covered",
+        "deadline": 3600000,
+        "silent": false,
+        "firstSignalAt": 32000,
+        "remote": false,
+        "knownBy": [
+          "org0"
+        ]
+      }
+    ],
+    "latency": {
+      "authorized": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 10
+      },
+      "dispatched": {
+        "p50": 61001,
+        "p95": 194335,
+        "samples": 10
+      },
+      "arrived": {
+        "p50": 286002,
+        "p95": 327669,
+        "samples": 10
+      },
+      "service": {
+        "p50": 284335,
+        "p95": 371003,
+        "samples": 6
+      },
+      "reserved": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 6
+      },
+      "orderReceived": {
+        "p50": 1001,
+        "p95": 1001,
+        "samples": 9
+      },
+      "accepted": {
+        "p50": 1001,
+        "p95": 1001,
+        "samples": 6
+      },
+      "prepared": {
+        "p50": 186002,
+        "p95": 194335,
+        "samples": 9
+      },
+      "unloadingStarted": {
+        "p50": 277669,
+        "p95": 327669,
+        "samples": 6
+      },
+      "received": {
+        "p50": 371003,
+        "p95": 387669,
+        "samples": 9
+      },
+      "pickupDispatched": {
+        "p50": 1001,
+        "p95": 1001,
+        "samples": 5
+      },
+      "pickupArrived": {
+        "p50": 134335,
+        "p95": 134335,
+        "samples": 2
+      }
+    },
+    "posts": 10,
+    "ingested": 80,
+    "operations": 10,
+    "operatorReviewMs": 330000,
+    "conflicts": 0,
+    "failedTrips": 0,
+    "staleOrders": 0,
+    "queries": 396,
+    "cost": 396,
+    "events": 1866,
+    "modelCalls": 0,
+    "modelWallMs": 0,
+    "modelUsage": {
+      "promptTokens": 0,
+      "outputTokens": 0,
+      "pending": 0,
+      "failed": 0,
+      "providerCost": null
+    },
+    "platformTransport": {
+      "attempts": 293,
+      "disconnected": 0,
+      "bytes": 166202,
+      "note": "Actual platform peer HTTP is charged by the laboratory transport adapter; this is distinct from source-system messages."
+    },
+    "invalidActions": 2,
+    "ledgerValid": true,
+    "source": {
+      "created": 10,
+      "published": 10,
+      "falseSignals": 0,
+      "deleted": 0,
+      "capped": false
+    },
+    "information": {
+      "downloaded": 40,
+      "accepted": 40,
+      "interpreted": 0,
+      "discarded": 0,
+      "downloadLatencyMs": {
+        "p50": 121356,
+        "p95": 263758
+      },
+      "confirmedFalse": 0,
+      "rejectedObservedTrue": 0,
+      "falseMerges": 0,
+      "unobservedNeeds": 0,
+      "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+    },
+    "coordination": {
+      "expired": 0,
+      "withdrawn": 0,
+      "orphanReservations": 0,
+      "clarifications": 0,
+      "reviewQueued": 0,
+      "loansOverdue": 0
+    },
+    "physical": {
+      "closedCrossings": 0,
+      "trafficQueue": 0,
+      "overprovidedByType": {
+        "water": {
+          "quantity": 0,
+          "unit": "L"
+        },
+        "shelter": {
+          "quantity": 0,
+          "unit": "place"
+        }
+      },
+      "distanceM": 24500,
+      "fuelMl": 4410,
+      "arrivedNotReceived": 1,
+      "facilitiesOperating": 1,
+      "blocked": 0
+    },
+    "finance": {
+      "sandbox": true,
+      "available": 20000,
+      "spent": 0,
+      "received": 0
+    },
+    "subgroups": {
+      "silent": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 600,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 0
+          },
+          "shelter": {
+            "needs": 1,
+            "demand": 50,
+            "served": 50,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 0
+          }
+        }
+      },
+      "remote": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 600,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 0
+          },
+          "shelter": {
+            "needs": 1,
+            "demand": 50,
+            "served": 50,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 0
+          }
+        }
+      }
+    },
+    "response": {
+      "eligibleNeeds": 2,
+      "completed": 2,
+      "rightCensored": 0,
+      "firstUsefulCompleted": 2,
+      "firstUsefulRightCensored": 0,
+      "firstUsefulServiceMs": {
+        "p50": 1129674,
+        "p95": 2251013,
+        "samples": 2,
+        "note": "First physical positive contribution to outstanding demand; partial service counts here, but not as sufficient service. Report firstUsefulRightCensored separately."
+      },
+      "sufficientServiceMs": {
+        "p50": 1186341,
+        "p95": 3056051,
+        "samples": 2,
+        "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+      },
+      "needToServiceMs": {
+        "p50": 1186341,
+        "p95": 3056051,
+        "samples": 2,
+        "note": "Sufficient physical service, completed positive-demand cases only; report right-censored cases alongside these percentiles."
+      },
+      "excludedNonpositiveNeeds": 0,
+      "excludedRetiredPositiveNeeds": 0,
+      "episodes": {
+        "eligible": 2,
+        "completed": 2,
+        "retired": 0,
+        "rightCensored": 0,
+        "perEpisode": [
+          {
+            "need": "need-water-main",
+            "episode": 1,
+            "building": "b13",
+            "type": "water",
+            "unit": "L",
+            "startedAt": 0,
+            "quantity": 600,
+            "peakQuantity": 600,
+            "targetQuantity": 600,
+            "baselineServed": 0,
+            "state": "covered",
+            "closedReason": "physical_service",
+            "endedAt": 1186341,
+            "firstServiceAt": 1129674,
+            "sufficientServiceAt": 1186341,
+            "firstUsefulCensored": false,
+            "sufficientCensored": false,
+            "censoredAt": null,
+            "timeToFirstUsefulServiceMs": 1129674,
+            "timeToSufficientServiceMs": 1186341,
+            "uncoveredUnitMs": 694804500
+          },
+          {
+            "need": "need-case-2",
+            "episode": 1,
+            "building": "b2",
+            "type": "shelter",
+            "unit": "place",
+            "startedAt": 0,
+            "quantity": 50,
+            "peakQuantity": 50,
+            "targetQuantity": 50,
+            "baselineServed": 0,
+            "state": "covered",
+            "closedReason": "physical_service",
+            "endedAt": 3056051,
+            "firstServiceAt": 2251013,
+            "sufficientServiceAt": 3056051,
+            "firstUsefulCensored": false,
+            "sufficientCensored": false,
+            "censoredAt": null,
+            "timeToFirstUsefulServiceMs": 2251013,
+            "timeToSufficientServiceMs": 3056051,
+            "uncoveredUnitMs": 128142310
+          }
+        ],
+        "note": "A new outstanding shortfall after coverage or retirement starts a new episode. Earlier aid is retained in history, never credited as response to a new episode. Withdrawn episodes are censored at withdrawal and must be reported separately; native resource quantities and integrals are not summed across types."
+      }
+    },
+    "eventCounts": {
+      "need_created": 2,
+      "world_initialized": 1,
+      "signal_created": 10,
+      "message_delivered": 528,
+      "post_published": 10,
+      "action_accepted": 430,
+      "query_completed": 396,
+      "ingestion_receipt": 80,
+      "platform_peer_transport": 293,
+      "verification_completed": 3,
+      "review_completed": 11,
+      "vehicle_dispatched": 15,
+      "vehicle_arrived": 15,
+      "community_health": 108,
+      "delivery_received": 6,
+      "unloading_queued": 1,
+      "need_changed": 5,
+      "service_delivered": 5,
+      "facility_permission_granted": 1,
+      "facility_operating": 1,
+      "evacuation_completed": 3,
+      "action_rejected": 2
+    }
+  },
+  "invariants": [],
+  "claimScope": "development pilot; not held-out, calibrated field or UX validation"
+}

@@ -19,7 +19,14 @@ for (const file of files) {
     bad++;
   }
   try {
-    const content = readFileSync(file, "utf8");
+    // Verify what Git would commit, not a possibly redacted working copy.
+    const content = staged
+      ? execFileSync("git", ["show", ":" + file], {
+          encoding: "utf8",
+          windowsHide: true,
+          maxBuffer: 16 * 1024 * 1024,
+        })
+      : readFileSync(file, "utf8");
     if (secret.test(content)) {
       console.error("Credential pattern detected in tracked file:", file);
       bad++;

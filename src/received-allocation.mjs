@@ -1,6 +1,7 @@
 import { allocationPlan } from "./planning.mjs";
 import { check } from "./errors.mjs";
 import { responsePolicy, responseQueue } from "./response-policy.mjs";
+import { receivedExecutionPolicy } from "./reservation-policy.mjs";
 
 const key = (owner, id) => JSON.stringify([owner, id]);
 
@@ -101,6 +102,7 @@ export async function receivedAllocationPlan(
       observedRoads,
       now,
       policy,
+      executionPolicy: await receivedExecutionPolicy(store, org),
     });
   plan.allocations = plan.allocations.map((a) => {
     const records = [
@@ -127,6 +129,7 @@ export async function receivedAllocationPlan(
       resource: a.resource,
       need: a.need,
       quantity: a.quantity,
+      ttlMs: a.ttlMs,
     },
     dependsOn: [],
   }));

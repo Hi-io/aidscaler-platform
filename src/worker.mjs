@@ -3,6 +3,7 @@ import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
 import { authorizationCurrent } from "./authority.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
+import { validateDispatchReservation } from "./planning.mjs";
 const PHYSICAL = new Set([
   "dispatch",
   "repair",
@@ -301,22 +302,40 @@ export class Worker {
         .map((r) => r.index);
       await this.store.transaction(async (tx) => {
         const row = await tx.get(org, "proposal", id);
+        const currentAuthority = sameExecutionScope(row, p);
+        for (const receipt of failed) {
+          const operation = current.operations.find(
+            (o) => o.id === (receipt.result?.operation ?? receipt.result?.id),
+          );
+          if (operation)
+            await tx.upsert(org, "operation", operation.id, {
+              ...operation,
+              confirmedBySource: true,
+              sourceSnapshot: operation,
+              proposalId: id,
+              step: receipt.index,
+            });
+        }
         await tx.put(
           org,
           "proposal",
           id,
           {
             ...row,
-            state: "requires_review",
-            previousAuthorization: row.authorization,
-            authorization: null,
-            changedReason: failed.some(
-              (r) => p.actions[r.index]?.type === "verify",
-            )
-              ? "A field assessment failed, became stale or lost validity. Review affected work; preserve the physical crew operation and historical source receipts."
-              : "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
-            affectedSteps: failed.map((r) => r.index),
-            preservedSteps: preserved,
+            ...(currentAuthority
+              ? {
+                  state: "requires_review",
+                  previousAuthorization: row.authorization,
+                  authorization: null,
+                  changedReason: failed.some(
+                    (r) => p.actions[r.index]?.type === "verify",
+                  )
+                    ? "A field assessment failed, became stale or lost validity. Review affected work; preserve the physical crew operation and historical source receipts."
+                    : "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
+                  affectedSteps: failed.map((r) => r.index),
+                  preservedSteps: preserved,
+                }
+              : {}),
           },
           row.version,
         );
@@ -331,12 +350,32 @@ export class Worker {
           ),
         });
       });
-      if (p.originPartner)
-        await this.network.response(p, "failed", {
-          confirmedBySource: true,
-          reason:
-            "Owner source reports interrupted physical work requiring a new decision; a blocked shipment is not released or cancelled",
-        });
+      if (p.originPartner) {
+        const receipt = failed[0],
+          action = p.actions[receipt.index],
+          source =
+            action.type === "verify"
+              ? current.inspections?.find((i) => i.id === receipt.result?.id)
+              : current.operations.find(
+                  (o) =>
+                    o.id === (receipt.result?.operation ?? receipt.result?.id),
+                );
+        await this.network.response(
+          p,
+          "failed",
+          source
+            ? {
+                ...source,
+                observedAt: current.now,
+                confirmedBySource: true,
+              }
+            : {
+                confirmedBySource: false,
+                reason:
+                  "The owner's observed assessment is no longer valid. Review issued work; physical history is preserved.",
+              },
+        );
+      }
       await this.store.completeContinuation(org, id, { requiresReview: true });
       return {
         requiresReview: true,
@@ -435,6 +474,12 @@ export class Worker {
       }
       let result;
       try {
+        if (a.type === "dispatch")
+          await validateDispatchReservation(
+            this.store,
+            org,
+            resolveParams(a.params, results),
+          );
         result = await this.connector.action(
           a.type,
           {

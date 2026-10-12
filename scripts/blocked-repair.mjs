@@ -7,5 +7,6 @@ await mkdir("reports/runs", { recursive: true });
 const report = await blockedRepairEpisode({ seed, strategy, budgetUsd });
 await writeFile("reports/runs/" + report.episode + ".json", JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ episode: report.episode, status: report.status, error: report.error, before: report.before, after: report.after,
-  costUsd: report.costUsd, calls: report.usage.length, invariants: report.invariants.length, candidateChanged: report.candidateChanged }));
-if (report.status !== "completed" || report.candidateChanged || report.invariants.length) process.exitCode = 1;
+  costUsd: report.costUsd, calls: report.usage.length, invariants: report.invariants.length, candidateChanged: report.candidateChanged,
+  evaluatorChanged: report.evaluatorChanged, simulatorChanged: report.simulatorChanged, errors: report.errors }));
+if (report.status !== "completed" || report.candidateChanged || report.evaluatorChanged || report.simulatorChanged || report.invariants.length) process.exitCode = 1;

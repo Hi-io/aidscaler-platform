@@ -1,0 +1,13 @@
+{
+  "status": "aborted",
+  "declaredRuns": 3,
+  "completedRuns": 1,
+  "abortedRuns": 1,
+  "missingRuns": 1,
+  "costUsd": 0,
+  "unknownCostReservationUsd": 0.12,
+  "comparisons": [],
+  "reason": "Pilot halted after B5 exposed terminal fleet observability omission and product lifecycle tests exposed cancellation/retention bugs. No comparative benefit claimed.",
+  "baselineCompleted": 8,
+  "baselineEligible": 12
+}

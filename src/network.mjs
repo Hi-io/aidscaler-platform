@@ -549,6 +549,11 @@ export class Network {
             if (assessment?.stale) return { accepted: true, stale: true };
             result.state = p.state;
             result.partnerResult = p.operation;
+            const needsReview =
+              ["failed", "rejected"].includes(p.state) &&
+              ["authorized", "executing", "awaiting_partner"].includes(
+                proposal.state,
+              );
             await tx.put(
               this.config.org,
               "proposal",
@@ -556,10 +561,19 @@ export class Network {
               {
                 ...proposal,
                 executionResults: results,
-                ...(["failed", "rejected"].includes(p.state)
+                ...(needsReview
                   ? {
                       state: "requires_review",
+                      previousAuthorization:
+                        proposal.authorization ??
+                        proposal.previousAuthorization,
                       authorization: null,
+                      affectedSteps: [
+                        ...new Set([
+                          ...(proposal.affectedSteps ?? []),
+                          p.originStep,
+                        ]),
+                      ],
                       changedReason:
                         "A partner could not complete its part of the response",
                     }
@@ -567,6 +581,11 @@ export class Network {
               },
               proposal.version,
             );
+            if (["failed", "rejected"].includes(p.state))
+              await tx.completeContinuation(this.config.org, proposal.id, {
+                requiresReview: needsReview,
+                receivedState: p.state,
+              });
             if (p.state === "completed")
               await tx.enqueueContinuation(this.config.org, proposal.id, {
                 due: Date.now(),

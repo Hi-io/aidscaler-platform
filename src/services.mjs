@@ -1,6 +1,28 @@
 import { check } from "./errors.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
 import { responseQueue } from "./response-policy.mjs";
+import { effectiveNeed } from "./response-receipts.mjs";
+
+const ACTIVE_PROPOSALS = new Set(["awaiting_review", "needs_clarification", "conditionally_authorized", "authorized", "executing", "awaiting_partner"]);
+const PHYSICAL_COMPLETE = new Set(["completed", "received", "service"]);
+
+// Received receipts are a watermark for requesting fresher service state, not
+// permission to treat historically delivered stock as currently available.
+function provisioningReceipts(operations, building) {
+  const latest = new Map();
+  for (const row of operations) {
+    const source = row.sourceSnapshot ?? row;
+    if (row.confirmedBySource !== true || !PHYSICAL_COMPLETE.has(row.state) ||
+      source.type !== "delivery" || source.need || source.building !== building ||
+      !Number.isFinite(source.received) || source.received <= 0 ||
+      !Number.isFinite(source.times?.received)) continue;
+    const key = JSON.stringify([row.owner ?? source.org ?? row.org, row.sourceId ?? source.id ?? row.id]);
+    const old = latest.get(key);
+    if (!old || (row.sourceObservedAt ?? source.observedAt ?? 0) >=
+      (old.sourceObservedAt ?? old.sourceSnapshot?.observedAt ?? old.observedAt ?? 0)) latest.set(key, row);
+  }
+  return [...latest.values()];
+}
 
 /** Prepare only the finite, owner-approved physical assessment. An incomplete
  * assessment cannot be used to draft activation. The same helper is available
@@ -72,7 +94,7 @@ export async function assessmentPlan(store, org, building, { peers, validForMs =
 /** Build a checked dependency draft from RECEIVED inspections and consented
  * owner projections. This is a formal feasibility aid, not LLM discovery and
  * never activation or authorization. Other owners still approve their steps. */
-export async function servicePlan(store, org, building, { needId, peers } = {}) {
+export async function servicePlan(store, org, building, { needId, peers, excludeProposal = null, refreshFacility } = {}) {
   const facility = await store.get(org, "facility", building, false);
   check(
     facility,
@@ -97,6 +119,38 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
       (a.completedAt ?? a.observedAt ?? a.at ?? 0),
   )[0];
   const safe = facility.safe === true && !!assessment;
+  const operations = await store.list(org, "operation", 10000),
+    receipts = provisioningReceipts(operations, building),
+    statusAt = facility.statusObservedAt ?? facility.sourceSnapshot?.statusObservedAt ??
+      facility.at ?? facility.sourceSnapshot?.at ?? -1,
+    afterReceiptAt = Math.max(-1, ...receipts.map(r => (r.sourceSnapshot ?? r).times.received)),
+    receivedReferences = receipts.map(r => r.id),
+    queue = await responseQueue(store, org, { excludeProposal, limit: 2000 }),
+    openProposals = (await store.list(org, "proposal", 2000)).filter(p =>
+      p.id !== excludeProposal && ACTIVE_PROPOSALS.has(p.state)),
+    pendingService = openProposals.filter(p => p.actions?.some(a =>
+      a.type === "activate" && a.params.building === building ||
+      a.type === "dispatch" && !a.params.need && a.params.building === building)),
+    base = { building, service: facility.use, readyToDraft: false, actions: [],
+      references: [building, ...receivedReferences, ...(assessment ? [assessment.id] : [])],
+      missing: [], pending: [], waitReceipt: false,
+      assessment: { current: safe, id: assessment?.id ?? null, sourceNow },
+      requirements: facility.dependencies ?? assessment?.result?.dependencies,
+      offerVersions: [], ownerApprovals: [], affectedNeeds: [] };
+  if (facility.state !== "operating" && pendingService.length)
+    return { ...base, waitReceipt: true,
+      pending: pendingService.map(p => ({ proposal: p.id, state: p.state, building })),
+      note: "This site's provisioning or activation already has an owner-reviewed workflow. Await its physical receipts or a material failure; do not dispatch the same supplies or authorize a second activation." };
+  if (afterReceiptAt > statusAt) {
+    const refreshRequest = { target: "facility", id: building, afterReceiptAt };
+    if (refreshFacility) {
+      await refreshFacility(refreshRequest);
+      return servicePlan(store, org, building, { needId, peers, excludeProposal });
+    }
+    return { ...base, waitReceipt: true, refreshRequest,
+      pending: [{ type: "current_facility_status", afterReceiptAt, statusAt }],
+      note: "New source-confirmed provisioning receipts arrived after this facility snapshot. Request current facility status before reusing stock, activating or compiling replacement work. Ordinary need deliveries are consumed aid, not service provisions." };
+  }
   const dependencies =
     facility.dependencies ?? assessment?.result?.dependencies;
   check(
@@ -131,15 +185,19 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
     ...offers
       .filter((o) => o.kind === "vehicle")
       .map((o) => ({ ...o.projection, owner: o.from, evidence: o.id })),
-  ].filter((v) => ["idle", "arrived"].includes(v.state));
+  ].filter((v) => ["idle", "arrived"].includes(v.state) &&
+    !queue.planningHolds.some(h => h.owner === v.owner && h.vehicle === v.id));
   const actions = [],
     missing = [],
-    references = new Set([building]);
+    references = new Set([building, ...receivedReferences]);
   if (assessment) references.add(assessment.id);
   const usedStock = new Map(),
     lastVehicle = new Map();
   const scopedKey = (r) => JSON.stringify([r.owner, r.id]);
-  for (const [type, required] of Object.entries(dependencies)) {
+  // Startup dependencies do not become a new dispatch merely because an
+  // operating shelter has consumed some of its initial water. Replenishment is
+  // a separate received demand; the source can also report a closed service.
+  for (const [type, required] of Object.entries(facility.state === "operating" ? {} : dependencies)) {
     let remaining = Math.max(0, required - (facility.provisioned?.[type] ?? 0));
     for (const r of resources.filter((r) => r.type === type)) {
       if (type === "staff" && (facility.requiredStaffSkills ?? assessment?.result?.requiredStaffSkills ?? []).some((skill) => !r.qualifications?.includes(skill))) continue;
@@ -155,7 +213,9 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
         const quantity = Math.floor(
           Math.min(
             remaining,
-            r.available - (usedStock.get(scopedKey(r)) ?? 0),
+            r.available - (usedStock.get(scopedKey(r)) ?? 0) - queue.planningHolds
+              .filter(h => h.owner === r.owner && h.resource === r.id)
+              .reduce((sum, h) => sum + h.quantity, 0),
             v.capacity ?? 0,
           ),
         );
@@ -199,7 +259,7 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
         0,
         (facility.capacity ?? 0) - (facility.occupancy ?? 0),
       );
-      const needs = (await store.list(org, "need", 2000)).filter(
+      const needs = (await store.list(org, "need", 2000)).map(n => effectiveNeed(n, operations)).filter(
         (n) =>
           n.type === "shelter" &&
           (!needId || n.id === needId) &&
@@ -209,7 +269,7 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
       for (const n of needs) {
         let remaining = Math.min(
           places,
-          n.quantity - (n.served ?? 0) - (n.inTransit ?? 0),
+          queue.rows.find(row => row.id === n.id)?.planningOutstanding ?? 0,
         );
         for (const v of vehicles.filter(
           (v) => v.owner === org && v.seats > 0,
@@ -253,12 +313,15 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
   return {
     building,
     service: facility.use,
-    readyToDraft: !missing.length,
+    readyToDraft: !missing.length && actions.length > 0,
     actions,
     references: [...references],
     missing,
     requirements: dependencies,
-    affectedNeeds: [...new Set(actions.flatMap((a) => a.params.need ? [a.params.need] : []))],
+    affectedNeeds: [...new Set(actions.flatMap((a) => a.params.need ? [a.params.need] :
+      a.type === "evacuate" ? queue.rows.filter(n => n.type === "shelter" && n.building === a.params.from).map(n => n.id) : []))],
+    pending: queue.planningHolds.filter(h => h.needIds.some(id => queue.rows.find(n => n.id === id)?.type === "shelter")),
+    waitReceipt: !actions.length && queue.planningHolds.some(h => h.needIds.some(id => queue.rows.find(n => n.id === id)?.type === "shelter")),
     offerVersions: offers.filter((o) => references.has(o.id)).map((o) => ({ id: o.id, version: o.version, permissionVersion: o.permissionVersion })),
     ownerApprovals: [...new Set(actions.map((a) => a.owner))],
     assessment: { current: safe, id: assessment?.id ?? null, sourceNow,

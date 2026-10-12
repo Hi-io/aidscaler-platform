@@ -13,7 +13,12 @@ export async function repairContext(store, org, id, actions) {
   const inherited = [];
   for (const receipt of old.executionResults ?? []) {
     const action = old.actions[receipt.index],
-      operationId = receipt.result?.operation ?? receipt.result?.id,
+      operationId =
+        receipt.result?.operation ??
+        receipt.result?.id ??
+        (receipt.partnerResult?.id
+          ? `peer:${action.owner}:${receipt.partnerResult.id}`
+          : null),
       operation = operationId
         ? await store.get(org, "operation", operationId, false)
         : null;
@@ -57,7 +62,8 @@ export async function repairContext(store, org, id, actions) {
               a.owner === action.owner &&
               ((a.type === "reroute" &&
                 a.params.vehicle === operation.vehicle) ||
-                (a.type === "cancel" && a.params.id === operation.id)),
+                (a.type === "cancel" &&
+                  a.params.id === (operation.sourceId ?? operation.id))),
           ),
           "REPAIR_UNADDRESSED",
           "This repair must address the existing blocked trip. A different dispatch does not recover its loaded cargo. Reroute the same vehicle, or request cancellation of this exact operation and wait for physical recovery.",
@@ -70,6 +76,17 @@ export async function repairContext(store, org, id, actions) {
         operationId: operation.id,
         receipt: operation,
         state: "still_in_progress",
+      });
+    } else if (
+      operation?.confirmedBySource &&
+      ["failed", "cancelled"].includes(operation.state)
+    ) {
+      inherited.push({
+        index: receipt.index,
+        action,
+        operationId: operation.id,
+        receipt: operation,
+        state: "failed_history",
       });
     }
   }

@@ -3,6 +3,7 @@ import {
   buildFingerprint,
   evaluatorFingerprint,
 } from "../evaluation/harness.mjs";
+import { checkFinalBuilds, requireLoadedSimulatorBuild } from "../evaluation/simulator-build.mjs";
 import { summarizeCampaign } from "../evaluation/campaign-summary.mjs";
 import { mkdir, writeFile, access } from "node:fs/promises";
 
@@ -65,6 +66,7 @@ const protocol = {
   episodeBudgetUsd: perEpisode,
   candidateFingerprint: await buildFingerprint(),
   evaluatorFingerprint: await evaluatorFingerprint(),
+  simulatorBuild: await requireLoadedSimulatorBuild(),
   modelRequestPolicy: {
     maxOutputTokens: Number(process.env.MODEL_MAX_OUTPUT_TOKENS ?? 8192),
     reasoningEnabled: process.env.MODEL_REASONING !== "false",
@@ -136,10 +138,7 @@ async function worker(index) {
       if (await cancelled())
         stoppedReason ??= "operator_stop_file_after_active_episodes";
       if (stoppedReason) break;
-      if (
-        protocol.candidateFingerprint !== (await buildFingerprint()) ||
-        protocol.evaluatorFingerprint !== (await evaluatorFingerprint())
-      ) {
+      if ((await checkFinalBuilds({ candidate: protocol.candidateFingerprint, evaluator: protocol.evaluatorFingerprint, simulator: protocol.simulatorBuild }, { candidate: buildFingerprint, evaluator: evaluatorFingerprint })).invalidStatus) {
         stoppedReason = "build_changed";
         break;
       }
@@ -168,6 +167,7 @@ async function worker(index) {
           episodeBudgetUsd: perEpisode,
           planningRounds,
           policyIntervalMs,
+          shouldStop: async () => !!stoppedReason || await cancelled(),
         });
         charged += report.chargedBudgetUsd;
         rows.push(report);
@@ -177,6 +177,8 @@ async function worker(index) {
         );
         if (report.errors.some((e) => e.code === "PROVIDER_FUNDS"))
           stoppedReason = "provider_credit_exhausted";
+        if (report.candidateChanged || report.evaluatorChanged || report.simulatorChanged)
+          stoppedReason = "build_changed";
         await save();
         console.log(
           JSON.stringify({
