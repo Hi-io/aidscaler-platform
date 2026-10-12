@@ -9,6 +9,9 @@ const { createLabServers } = await import(
   pathToFileURL(path.join(simRoot, "sources/server.mjs")).href
 );
 const scenario = process.env.NEXO_SCENARIO ?? "S01";
+const initialRate = Number(process.env.NEXO_LAB_RATE ?? 10);
+if (!Number.isFinite(initialRate) || initialRate <= 0 || initialRate > 1000)
+  throw Error("NEXO_LAB_RATE must be greater than zero and at most 1000.");
 // A reset world must not inherit stale physical operations/source versions from
 // an earlier run. Preserve each prior database under its own private session.
 const sessionId =
@@ -132,7 +135,7 @@ await fetch(`http://127.0.0.1:${lab.observerPort}/api/control`, {
     Authorization: `Bearer ${lab.observerKey}`,
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({ play: true, rate: 100 }),
+  body: JSON.stringify({ play: true, rate: initialRate }),
 });
 await writeFile(
   path.join(root, ".local", "lab.json"),

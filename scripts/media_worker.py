@@ -12,7 +12,25 @@ if mode=='audio':
     result={'text':' '.join(s['text'] for s in rows),'segments':rows,'language':info.language,'languageProbability':info.language_probability,'durationSeconds':info.duration,'engine':'faster-whisper','model':os.environ.get('ASR_MODEL','tiny')}
 elif mode=='pdf':
     from pypdf import PdfReader
-    reader=PdfReader(request['path']);pages=[{'page':i+1,'text':(p.extract_text() or '')[:20000]} for i,p in enumerate(reader.pages[:20])];result={'pages':pages,'needsOCR':any(not p['text'].strip() for p in pages),'truncated':len(reader.pages)>20,'engine':'pypdf'}
+    reader=PdfReader(request['path'])
+    pages=[{'page':i+1,'text':(p.extract_text() or '')[:20000],'textProvenance':'embedded_pdf_text'} for i,p in enumerate(reader.pages[:20])]
+    scanned=[p for p in pages if not p['text'].strip()]
+    if scanned:
+        import pypdfium2 as pdfium
+        from pathlib import Path
+        destination=Path(request['output']);destination.mkdir(parents=True,exist_ok=True)
+        document=pdfium.PdfDocument(request['path'])
+        # Bounded image context. Unobserved pages remain pending, never fabricated.
+        for p in scanned[:4]:
+            page=document[p['page']-1]
+            scale=min(1.5,1280/max(page.get_size()))
+            bitmap=page.render(scale=scale);image=bitmap.to_pil()
+            filename=destination/f"page-{p['page']:02d}.png";image.save(filename)
+            p.update({'renderPath':str(filename),'ocrState':'pending_visual_transcription'})
+            image.close();bitmap.close();page.close()
+        document.close()
+        for p in scanned[4:]:p['ocrState']='pending_context_limit'
+    result={'pages':pages,'needsOCR':bool(scanned),'truncated':len(reader.pages)>20,'unreadPageCount':max(0,len(reader.pages)-20),'engine':'pypdf','ocrScope':'at most four scanned pages rendered per analysis; all transcriptions require review'}
 elif mode=='public_image':
     from PIL import Image, ImageOps
     Image.MAX_IMAGE_PIXELS=20000000

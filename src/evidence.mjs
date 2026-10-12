@@ -2,6 +2,19 @@ import { mkdir, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { hash, uid } from "./store.mjs";
 import { check, role } from "./errors.mjs";
+export function requireMediaBytes(metadata) {
+  check(
+    metadata &&
+      /^[a-f0-9]{64}$/.test(metadata.contentHash ?? "") &&
+      typeof metadata.mime === "string" &&
+      Number.isSafeInteger(metadata.size) &&
+      metadata.size > 0,
+    "MEDIA_BYTES_UNAVAILABLE",
+    "This source has no uploaded media bytes. Its description can be reviewed as a signal, but not as a viewed image, video or document.",
+    404,
+  );
+  return metadata;
+}
 export class EvidenceStore {
   constructor(store, config) {
     Object.assign(this, { store, config });
@@ -66,12 +79,27 @@ export class EvidenceStore {
     );
   }
   async read(org, id) {
-    const metadata = await this.store.get(org, "media", id);
-    return {
-      metadata,
-      bytes: await readFile(
-        path.resolve(this.config.evidenceDir, org, metadata.contentHash),
-      ),
-    };
+    const metadata = requireMediaBytes(
+      await this.store.get(org, "media", id, false),
+    );
+    const bytes = await readFile(
+      path.resolve(this.config.evidenceDir, org, metadata.contentHash),
+    ).catch((error) => {
+      check(
+        error.code !== "ENOENT",
+        "MEDIA_BYTES_UNAVAILABLE",
+        "The original media file is unavailable. Preserve its reference and request the source again.",
+        404,
+      );
+      throw error;
+    });
+    check(
+      bytes.length === metadata.size &&
+        hash(bytes.toString("base64")) === metadata.contentHash,
+      "MEDIA_INTEGRITY",
+      "This media file does not match its stored original. Do not interpret or publish it.",
+      409,
+    );
+    return { metadata, bytes };
   }
 }

@@ -6,10 +6,11 @@ import { MediaProcessor } from "../src/media.mjs";
 import { PublicEvidence } from "../src/public-evidence.mjs";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import assert from "node:assert/strict";
+import { buildFingerprint } from "../evaluation/harness.mjs";
 const config = await configuration({
   org: "media-test",
   evidenceDir: ".local/media-test-evidence",
-  maxCalls: 4,
+  maxCalls: 6,
   episodeBudgetUsd: 0.25,
 });
 const store = await Store.open();
@@ -22,6 +23,7 @@ const report = {
   kind: "synthetic-byte-integration",
   notAccuracyValidation: true,
   model: config.modelId,
+  candidateFingerprint: await buildFingerprint(),
   results: [],
 };
 try {
@@ -51,7 +53,23 @@ try {
     if (mime.startsWith("image"))
       assert.equal(result.result.engine, "model-image-input");
     if (mime.startsWith("video")) assert.ok(result.result.frames.length > 1);
-    if (mime === "application/pdf") assert.ok(result.result.pages.length === 1);
+    if (mime === "application/pdf") {
+      assert.equal(result.result.pages.length, 1);
+      assert.equal(result.result.needsOCR, false);
+      assert.match(result.result.text, /water/i);
+      assert.equal(
+        result.result.pages[0].textProvenance,
+        "model_visual_transcription",
+      );
+      assert.ok(
+        await store.get(
+          config.org,
+          "signal",
+          "media_interpretation_" + media.id,
+          false,
+        ),
+      );
+    }
     report.results.push({
       filename,
       mime,
@@ -125,9 +143,16 @@ try {
   // Temporary decoder filenames are not portable evidence identifiers.
   for (const r of report.results)
     for (const f of r.result?.frames ?? []) delete f.path;
+  for (const r of report.results)
+    for (const p of r.result?.pages ?? []) delete p.renderPath;
   await mkdir("reports", { recursive: true });
   await writeFile(
     "reports/media-byte-smoke.json",
+    JSON.stringify(report, null, 2),
+  );
+  await mkdir("reports/runs", { recursive: true });
+  await writeFile(
+    `reports/runs/media-byte-${Date.parse(report.at)}.json`,
     JSON.stringify(report, null, 2),
   );
   await store.close();

@@ -7,6 +7,42 @@ import { Store } from "../src/store.mjs";
 import { OpenRouterProvider } from "../src/provider.mjs";
 import { pairedBootstrap } from "../src/evaluation.mjs";
 
+test("shared incident research does not repeat at each resource owner, while four scoped owner instances remain", async () => {
+  const calls = [];
+  const result = await runEpisode({
+    arm: "B6",
+    scenario: "S01",
+    planningRounds: 2,
+    config: { durationMs: 1800000 },
+    provider: {
+      async complete(request) {
+        calls.push({ org: request.org, episode: request.episode });
+        return {
+          model: "scripted-topology-fixture",
+          message: {
+            role: "assistant",
+            content: "No executable plan in this topology fixture.",
+          },
+          usage: {},
+        };
+      },
+    },
+  });
+  assert.equal(result.status, "completed");
+  assert.equal(
+    result.planningTopology,
+    "one_incident_coordinator_independent_owner_review",
+  );
+  assert.equal(result.platformEvidence.length, 4);
+  assert.deepEqual(
+    calls.map((c) => c.org),
+    ["org0", "org0"],
+  );
+  assert.equal(new Set(calls.map((c) => c.episode)).size, 2);
+  assert.equal(result.activities.length, 2);
+  assert.equal(result.invariants.length, 0);
+});
+
 test("recurrent reference policy receives a second scheduled opportunity without creating additional stock", async () => {
   const r = await runEpisode({
     arm: "B1",

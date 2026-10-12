@@ -64,6 +64,8 @@ const protocol = {
   operator: "scripted",
   planningRounds,
   policyIntervalMs,
+  planningTopology:
+    "Shared B5/B6 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance.",
   scope:
     "Finite scheduled policy rounds plus physical execution, partner decisions and receipts at a fixed horizon. The model budget is cumulative across rounds. This is a development pilot, not an independently authored disaster calibration.",
   costPolicy:

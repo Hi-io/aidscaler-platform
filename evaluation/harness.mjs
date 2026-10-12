@@ -562,7 +562,10 @@ export async function runEpisode({
     planRound = async () => {
       const round = roundsExecuted++;
       for (const app of h.apps) {
-        if (arm === "B5" && app !== h.apps[0]) continue;
+        // Both shared arms assign this incident's research to one coordinator.
+        // Each partner still owns its stock, authority, execution and receipt.
+        // This is a declared deployment policy, not distributed leader election.
+        if (["B5", "B6"].includes(arm) && app !== h.apps[0]) continue;
         const episode = `${episodePrefix}${app.config.org}-round${round}`;
         let activity;
         if (arm === "B1") activity = await ruleProposal(app, episode);
@@ -830,6 +833,9 @@ export async function runEpisode({
       roundsExecuted,
       policyIntervalMs,
       episodeBudgetUsd,
+      planningTopology: ["B5", "B6"].includes(arm)
+        ? "one_incident_coordinator_independent_owner_review"
+        : "one_isolated_instance",
       modelConfig: {
         modelId: h.apps[0].config.modelId,
         maxCallsPerRound: maxCalls,
