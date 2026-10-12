@@ -106,7 +106,9 @@ export class Intake {
     return this.store.command(actor.org, key, input, async (tx) => {
       const row = await tx.upsert(actor.org, "automation", "intake", {
         enabled,
-        ...(typeof input.interpretSources === "boolean" ? { interpretSources: input.interpretSources } : {}),
+        ...(typeof input.interpretSources === "boolean"
+          ? { interpretSources: input.interpretSources }
+          : {}),
         ...limits,
         changedBy: actor.id,
       });
@@ -122,7 +124,8 @@ export class Intake {
       policy = await this.policy();
     if (!policy.enabled) return { paused: true };
     const queue = await responseQueue(this.store, org, { limit: 100 });
-    if (queue.openReviews >= queue.policy.maxOpenReviews) return { humanBackpressure: true, openReviews: queue.openReviews };
+    if (queue.openReviews >= queue.policy.maxOpenReviews)
+      return { humanBackpressure: true, openReviews: queue.openReviews };
     return this.store.transaction(async (tx) => {
       await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
         org,
@@ -154,15 +157,54 @@ export class Intake {
         )
         .slice(0, policy.maxGroups);
       const proposals = await tx.list(org, "proposal", 2000),
-        repair = proposals.find(p => p.state === "requires_review" && !proposals.some(replacement => replacement.repairOf === p.id &&
-          ["awaiting_review", "needs_clarification", "conditionally_authorized", "authorized", "executing", "awaiting_partner", "requires_review", "completed", "repaired"].includes(replacement.state))),
-        repairSignature = repair ? hash([queue.signature, repair.id, repair.version, repair.changedReason, repair.affectedSteps,
-          proposals.filter(p => p.repairOf === repair.id).map(p => [p.id, p.version, p.state])]) : null,
+        repair = proposals.find(
+          (p) =>
+            p.state === "requires_review" &&
+            !proposals.some(
+              (replacement) =>
+                replacement.repairOf === p.id &&
+                [
+                  "awaiting_review",
+                  "needs_clarification",
+                  "conditionally_authorized",
+                  "authorized",
+                  "executing",
+                  "awaiting_partner",
+                  "requires_review",
+                  "completed",
+                  "repaired",
+                ].includes(replacement.state),
+            ),
+        ),
+        repairSignature = repair
+          ? hash([
+              queue.signature,
+              repair.id,
+              repair.version,
+              repair.changedReason,
+              repair.affectedSteps,
+              proposals
+                .filter((p) => p.repairOf === repair.id)
+                .map((p) => [p.id, p.version, p.state]),
+            ])
+          : null,
         attempt = await tx.get(org, "response_attempt", "active", false),
-        focus = queue.policy.approved ? queue.rows.find((n) => !n.pendingProposals.length) : null,
-        responseChanged = repair ? attempt?.signature !== repairSignature || attempt?.repairOf !== repair.id : focus && (attempt?.signature !== queue.signature || attempt?.needId !== focus.id),
-        cooldownElapsed = !attempt || Date.now() - attempt.at >= queue.policy.investigationCooldownMs;
-      if (!groups.length && !(responseChanged && cooldownElapsed)) return { empty: true };
+        focus = queue.policy.approved
+          ? queue.rows.find(
+              (n) => !n.pendingProposals.length && !n.investigationDeferred,
+            )
+          : null,
+        responseChanged = repair
+          ? attempt?.signature !== repairSignature ||
+            attempt?.repairOf !== repair.id
+          : focus &&
+            (attempt?.signature !== queue.signature ||
+              attempt?.needId !== focus.id),
+        cooldownElapsed =
+          !attempt ||
+          Date.now() - attempt.at >= queue.policy.investigationCooldownMs;
+      if (!groups.length && !(responseChanged && cooldownElapsed))
+        return { empty: true };
       const id = uid("intake"),
         ids = groups
           .flatMap((g) =>
@@ -204,12 +246,27 @@ export class Intake {
             ids: ids.filter((s) => s in g.versions),
           })),
           automatic: true,
+          focusMode: "automatic",
           interpretSources: policy.interpretSources,
-          ...(repair ? { repairOf: repair.id } : focus ? { needId: focus.id, responsePolicyVersion: queue.policy.version } : {}),
+          ...(repair
+            ? { repairOf: repair.id }
+            : focus
+              ? {
+                  needId: focus.id,
+                  responsePolicyVersion: queue.policy.version,
+                }
+              : {}),
         },
         id,
       );
-      if (repair || focus) await tx.upsert(org, "response_attempt", "active", { needId: repair ? null : focus.id, repairOf: repair?.id ?? null, signature: repairSignature ?? queue.signature, at: Date.now(), jobId: id });
+      if (repair || focus)
+        await tx.upsert(org, "response_attempt", "active", {
+          needId: repair ? null : focus.id,
+          repairOf: repair?.id ?? null,
+          signature: repairSignature ?? queue.signature,
+          at: Date.now(),
+          jobId: id,
+        });
       return { queued: true, id, groups: selected.length, signals: ids.length };
     });
   }

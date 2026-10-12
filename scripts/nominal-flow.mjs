@@ -39,6 +39,8 @@ const protocol = {
   batches: 20,
   postsPerBatch: 50,
   nominalPostsPerHour: 10000,
+  ingestionTopology:
+    "Four independent concurrent organization workers; no artificial serial wait between organizations",
   publicationMix: {
     tweet: 0.5,
     videoDescription: 0.2,
@@ -93,31 +95,37 @@ try {
     // Only evaluator bookkeeping records availability. The candidate uses its
     // ordinary HTTP sources and never receives this manifest of expected IDs.
     const availableAt = Date.now();
-    for (const app of h.apps) {
-      const expected = ids.filter((id) =>
-        w.sourceVisible(
-          w.state.posts.find((p) => p.public.id === id),
-          app.config.org,
-        ),
-      );
-      const t = performance.now();
-      await app.ingestion.sync();
-      const missing = [],
-        delays = [];
-      for (const id of expected) {
-        const s = await app.store.get(app.config.org, "signal", id, false);
-        if (!s) missing.push(id);
-        else delays.push(Math.max(0, s.receivedAt - availableAt));
-      }
-      rows.push({
-        batch,
-        org: app.config.org,
-        expected: expected.length,
-        durable: expected.length - missing.length,
-        missing,
-        ingestionWallMs: performance.now() - t,
-        availableToDurableMs: delays,
-      });
+    const batchResults = await Promise.allSettled(
+      h.apps.map(async (app) => {
+        const expected = ids.filter((id) =>
+          w.sourceVisible(
+            w.state.posts.find((p) => p.public.id === id),
+            app.config.org,
+          ),
+        );
+        const t = performance.now();
+        await app.ingestion.sync();
+        const missing = [],
+          delays = [];
+        for (const id of expected) {
+          const s = await app.store.get(app.config.org, "signal", id, false);
+          if (!s) missing.push(id);
+          else delays.push(Math.max(0, Date.now() - availableAt));
+        }
+        return {
+          batch,
+          org: app.config.org,
+          expected: expected.length,
+          durable: expected.length - missing.length,
+          missing,
+          ingestionWallMs: performance.now() - t,
+          availableToDurableMs: delays,
+        };
+      }),
+    );
+    for (const result of batchResults) {
+      if (result.status === "rejected") throw result.reason;
+      rows.push(result.value);
     }
     if ((batch + 1) % 5 === 0)
       console.log(
@@ -198,7 +206,11 @@ try {
     );
 } catch (e) {
   status = "failed";
-  failure = { code: e.code ?? e.name, message: e.message.slice(0, 300) };
+  failure = {
+    code: e.code ?? e.name,
+    causeCode: e.cause?.code ?? null,
+    message: e.message.slice(0, 300),
+  };
 }
 await browser?.close();
 const delays = rows.flatMap((r) => r.availableToDurableMs),
@@ -237,10 +249,22 @@ const report = {
     filterInputToTwoFramesP95Ms: 200,
   },
   targetResults: {
-    source: results.sourceAvailableToDurableP95Ms < 5000,
-    command: results.commandDurableP95Ms < 2000,
-    navigation: results.workspaceNavigationToVisibleP95Ms < 2000,
-    interaction: results.filterInputToTwoFramesP95Ms < 200,
+    source:
+      results.sourceAvailableToDurableP95Ms == null
+        ? null
+        : results.sourceAvailableToDurableP95Ms < 5000,
+    command:
+      results.commandDurableP95Ms == null
+        ? null
+        : results.commandDurableP95Ms < 2000,
+    navigation:
+      results.workspaceNavigationToVisibleP95Ms == null
+        ? null
+        : results.workspaceNavigationToVisibleP95Ms < 2000,
+    interaction:
+      results.filterInputToTwoFramesP95Ms == null
+        ? null
+        : results.filterInputToTwoFramesP95Ms < 200,
   },
   rows,
   commandWallMs: commands,

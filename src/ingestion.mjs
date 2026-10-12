@@ -30,7 +30,8 @@ export class Ingestion {
           const fresh = [];
           for (const p of feed.posts) {
             downloaded++;
-            if (await this.store.get(org, "erased_source", p.id, false)) continue;
+            if (await this.store.get(org, "erased_source", p.id, false))
+              continue;
             const old = await this.store.get(org, "signal", p.id, false);
             if (old?.sourceVersion >= p.version) continue;
             fresh.push(p);
@@ -45,13 +46,17 @@ export class Ingestion {
             );
           } else
             for (const p of fresh) await this.connector.ack(p, "downloaded");
-          for (const p of fresh) {
-            const old = await this.store.get(org, "signal", p.id, false);
-            const group = hash(
-              p.references?.[0] ??
-                p.text.toLowerCase().replace(/\s+/g, " ").trim(),
-            );
-            await this.store.transaction(async (tx) => {
+          const accepted = [],
+            acceptJob = `source_accept_${org}_${hash(fresh.map((p) => [p.id, p.version]))}`;
+          await this.store.transaction(async (tx) => {
+            for (const p of fresh) {
+              if (await tx.get(org, "erased_source", p.id, false)) continue;
+              const old = await tx.get(org, "signal", p.id, false);
+              if (old?.sourceVersion >= p.version) continue;
+              const group = hash(
+                p.references?.[0] ??
+                  p.text.toLowerCase().replace(/\s+/g, " ").trim(),
+              );
               await tx.upsert(org, "signal", p.id, {
                 ...p,
                 sourceVersion: p.version,
@@ -106,19 +111,62 @@ export class Ingestion {
                   },
                   `signal_change_${p.id}_${p.version}`,
                 );
-            });
-            changed++;
-            receiptIds.push(p.id);
-          }
-          if (this.connector.ackBatch) {
-            const receipts = await this.connector.ackBatch(fresh, "accepted");
-            check(
-              receipts.every((r) => r.ok),
-              "SOURCE_RECEIPT",
-              "The source did not acknowledge every accepted record.",
-              502,
+              accepted.push(p);
+            }
+            if (accepted.length)
+              await tx.enqueue(
+                org,
+                "source_accept",
+                {
+                  versions: accepted.map((p) => ({
+                    id: p.id,
+                    version: p.version,
+                  })),
+                },
+                acceptJob,
+              );
+          });
+          changed += accepted.length;
+          receiptIds.push(...accepted.map((p) => p.id));
+          try {
+            if (this.connector.ackBatch) {
+              const receipts = await this.connector.ackBatch(
+                accepted,
+                "accepted",
+              );
+              check(
+                receipts.every((r) => r.ok),
+                "SOURCE_RECEIPT",
+                "The source did not acknowledge every accepted record.",
+                502,
+              );
+            } else
+              for (const p of accepted) await this.connector.ack(p, "accepted");
+            if (accepted.length)
+              await this.store.query(
+                "UPDATE jobs SET state='completed',result=$2 WHERE id=$1 AND state='queued'",
+                [
+                  acceptJob,
+                  JSON.stringify({
+                    accepted: accepted.length,
+                    confirmedBySource: true,
+                  }),
+                ],
+              );
+          } catch (e) {
+            // The sources are already durable. Preserve the outbox and retry
+            // the exact versions; do not roll back or claim a remote receipt.
+            await this.store.audit(
+              org,
+              "connector",
+              "source.receipt_pending",
+              acceptJob,
+              {
+                versions: accepted.length,
+                code: e.code ?? "SOURCE_UNAVAILABLE",
+              },
             );
-          } else for (const p of fresh) await this.connector.ack(p, "accepted");
+          }
         }
       const team = sources ? await this.connector.inbox() : { posts: [] };
       for (const p of team.posts ?? []) {

@@ -229,7 +229,7 @@ Distinguish observed evidence, inferred possibilities, owner confirmation, autho
 Look for capabilities described for another purpose, conditional collaboration, empty return trips, safe alternatives and composition of water/energy/personnel/sanitation/transport/facilities where relevant. Never certify a damaged building safe without a completed inspection. Avoid duplicating help already committed or in transit. Review dependencies and preserve unaffected work when repairing.
 Dispatch parameter names are exactly vehicle, resource, quantity and need (or building/destination). Quantity is an integer in the resource's native unit. available = quantity - reserved - floor. Partial delivery is valid. Do not empty protected reserves to satisfy an entire need. A current authorized need observation can be the basis for a proportionate partial response; uncertainty must be recorded but do not invent unnecessary conditions. If verification is important, use verify and cite the returned inspection ID, not an invented evidence ID. Use a condition only if it truly prevents the planned action. Do not mark an unverified condition satisfied.
 Produce a draft_response with evidence IDs from the available inputs or recorded claims, clear pending conditions, responsible owners, alternatives and a SHORT decision rationale. Do not expose private chain-of-thought. Your rationale explains evidence, checked constraints and remaining uncertainty only. If tools cannot establish feasibility, finish_without_proposal rather than invent IDs. All actions are drafts, human authorization is required. Use native English.`;
-const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: If repair is supplied and an existing loaded trip is blocked, use plan_repair then prepare_repair. A different dispatch does not repair that trip; preserve its operation ID, cargo and owner. Missing current route evidence requires a targeted query, not invented recovery. when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. It includes consented current peer offers as well as owned capacity. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Do NOT add a made-up owner approval condition: the built-in independent owner workflow already enforces consent. An approval condition is only for a dependency on an EXISTING different proposal ID. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need; do not substitute an unrelated allocation as its solution. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
+const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: If repair is supplied and an existing loaded trip is blocked, use plan_repair then prepare_repair. A different dispatch does not repair that trip; preserve its operation ID, cargo and owner. Missing current route evidence requires a targeted query, not invented recovery. when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. It includes consented current peer offers as well as owned capacity. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Do NOT add a made-up owner approval condition: the built-in independent owner workflow already enforces consent. An approval condition is only for a dependency on an EXISTING different proposal ID. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need. If focusMode=automatic and it cannot currently be served, preserve it as pending and use compare_responses/plan_allocations to prepare useful aid for other received needs in one reviewed batch. Do not label another delivery as solving the focus need. plan_allocations without needIds covers concurrent demand; only provide needIds when deliberately limiting a batch. Explicit manual focus remains specific to the selected case. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
 export class Investigator {
   constructor({ store, domain, connector, provider, config }) {
     Object.assign(this, { store, domain, connector, provider, config });
@@ -267,6 +267,7 @@ export class Investigator {
       facilityId = null,
       policy = "nexo",
       interpretSources = false,
+      focusMode = needId || facilityId ? "manual" : "automatic",
     } = {},
     jobId = uid("investigation"),
   ) {
@@ -289,7 +290,10 @@ export class Investigator {
       limit: 100,
     });
     if (!needId && !facilityId && !repairOf && queue.policy.approved)
-      needId = queue.rows.find((n) => !n.pendingProposals.length)?.id ?? null;
+      needId =
+        queue.rows.find(
+          (n) => !n.pendingProposals.length && !n.investigationDeferred,
+        )?.id ?? null;
     const signals = ids.length
       ? (
           await Promise.all(
@@ -329,18 +333,17 @@ export class Investigator {
     };
     await this.activity(jobId, activity);
     const input = {
+      focusMode,
       responsePolicy: queue.policy,
-      competingNeeds: queue.rows
-        .slice(0, 8)
-        .map((n) => ({
-          id: n.id,
-          type: n.type,
-          unit: n.unit,
-          outstanding: n.outstanding,
-          deadline: n.deadline,
-          priority: n.priority,
-          pendingProposals: n.pendingProposals,
-        })),
+      competingNeeds: queue.rows.slice(0, 8).map((n) => ({
+        id: n.id,
+        type: n.type,
+        unit: n.unit,
+        outstanding: n.outstanding,
+        deadline: n.deadline,
+        priority: n.priority,
+        pendingProposals: n.pendingProposals,
+      })),
       organization: org,
       simulatedAt: context?.now,
       signals: signals.map(
@@ -429,6 +432,7 @@ export class Investigator {
         coverage: scopedInput.coverage,
       },
       policy,
+      focusMode,
       focusNeed: needId,
       focusFacility: facilityId,
       sourceObservedAt: context?.now,
@@ -895,7 +899,11 @@ export class Investigator {
               response = await receivedAllocationPlan(this.store, this.config, {
                 ...args,
                 excludeProposal: repairOf,
-                ...(args.needIds ? {} : needId ? { needIds: [needId] } : {}),
+                ...(args.needIds
+                  ? {}
+                  : needId && focusMode === "manual"
+                    ? { needIds: [needId] }
+                    : {}),
               });
               allocation = response;
               step.label = "Checked allocations against scarce capacity";
@@ -1016,6 +1024,24 @@ export class Investigator {
       activity.calls = calls;
       if (perceptionReceipt) activity.perceptionReceipt = perceptionReceipt.id;
       activity.wallMs = performance.now() - started;
+      if (
+        activity.state === "inconclusive" &&
+        needId &&
+        !repairOf &&
+        focusMode === "automatic"
+      ) {
+        const currentQueue = await responseQueue(this.store, org, {
+          limit: 100,
+        });
+        await this.store.upsert(org, "response_defer", needId, {
+          signature: currentQueue.signature,
+          activityId: jobId,
+          at: Date.now(),
+          reason:
+            activity.reason ??
+            "The bounded investigation produced no executable proposal. Keep this need visible; investigate other needs until material evidence changes or an operator explicitly retries.",
+        });
+      }
       await this.activity(jobId, activity);
       if (!(await this.store.get(org, "activity", jobId, false))?.erasure)
         await this.store.upsert(org, "investigation_checkpoint", jobId, {

@@ -293,6 +293,7 @@ export function caseContext(input) {
     organization: input.organization,
     simulatedAt: input.simulatedAt,
     focusNeed: recordPreview("need", input.focusNeed),
+    focusMode: input.focusMode,
     focusFacility: input.focusFacility,
     responsePolicy: input.responsePolicy,
     competingNeeds: input.competingNeeds,

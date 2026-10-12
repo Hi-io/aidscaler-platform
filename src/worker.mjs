@@ -473,7 +473,36 @@ export class Worker {
     heartbeat.unref();
     try {
       let result;
-      if (job.kind === "ingest") result = await this.ingestion.sync();
+      if (job.kind === "source_accept") {
+        const posts = [];
+        for (const ref of job.payload.versions) {
+          if (await this.store.get(job.org, "erased_source", ref.id, false))
+            continue;
+          const version = await this.store.get(
+            job.org,
+            "source_version",
+            `${ref.id}_${ref.version}`,
+            false,
+          );
+          if (version?.snapshot) posts.push(version.snapshot);
+        }
+        const receipts = this.connector.ackBatch
+          ? await this.connector.ackBatch(posts, "accepted")
+          : await Promise.all(
+              posts.map((p) => this.connector.ack(p, "accepted")),
+            );
+        check(
+          receipts.every((r) => r.ok !== false),
+          "SOURCE_RECEIPT",
+          "The source has not confirmed every durable version.",
+          502,
+        );
+        result = {
+          accepted: posts.length,
+          skippedErased: job.payload.versions.length - posts.length,
+          confirmedBySource: true,
+        };
+      } else if (job.kind === "ingest") result = await this.ingestion.sync();
       else if (job.kind === "investigate")
         result = await this.investigator.run(job.payload, job.id);
       else if (job.kind === "analyze_media")
