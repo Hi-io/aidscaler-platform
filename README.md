@@ -32,6 +32,7 @@ For one standalone instance, provision its scoped source configuration in `.loca
 - Response overview, collected signals, sourced investigations and a human decision queue.
 - Operational stages, inventory, vehicles, assessed facilities, reservations, deadlines and protected reserves.
 - Signed partner messages, explicit sharing, version handling, revocation and independent owner decisions.
+- Compiled allocations from owned and current consented partner capacities, with exact offer references, revalidation and independent owner review.
 - Approved public response updates, pooled-fund accounting and a local payment-provider sandbox.
 - Field reporting with a durable device queue, community intake, scoped accounts and decision history.
 - Reviewed photo/audio uploads, reversible evidence groups, sourced human corrections, public photo derivation and traceable publication corrections/retractions.

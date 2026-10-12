@@ -5,7 +5,7 @@
 ## 1. Resumen que se puede defender
 
 - Plataforma local real, con proveedor **Gemma 4 31B mediante OpenRouter**. No hubo Gemini ni despliegue GCP.
-- **76/76 pruebas de plataforma y 117/117 del simulador**, cero fallos, omitidas o canceladas en la última verificación conjunta.
+- **89/89 pruebas de plataforma y 117/117 del simulador**, cero fallos, omitidas o canceladas en la última verificación conjunta.
 - **57 verificaciones de render/navegación** en 1440, 1920 y 390 píxeles; **12 recorridos operativos y seis de corrección/publicación**, sin errores de página u overflow en esas pruebas.
 - **Cuatro formatos de entrada con bytes reales** procesados: imagen, audio, video y PDF, más una foto pública derivada y revisada. Los conectores JSON se prueban por separado. Es funcionamiento, no precisión sobre un corpus de campo.
 - **Nueve perfiles de carga**: 1/4/12 organizaciones y 10/100/1.000 necesidades. La ingesta/persistencia funciona; no se midió inferencia semántica a esa escala.
@@ -38,8 +38,13 @@ Las pruebas nuevas cubren:
 8. Elegibilidad de instalación: un edificio residencial seguro con cero plazas no puede activarse como refugio por un título convincente del modelo.
 9. Comparaciones con presupuesto distinto que se rechazan explícitamente sin perder outcomes ni romper el reporte final.
 10. Medios inexistentes/descriptivos/de otro propietario que no crean uploads ficticios ni gastan inferencia; bytes alterados que fallan integridad.
+
 11. Un coordinador de investigación por incidente compartido, sin perder las cuatro instancias ni sus aprobaciones individuales.
 12. Falta de crédito del proveedor que pausa nuevas llamadas sin falsear coste cero ni eliminar trabajo previo; la prueba usa una respuesta HTTP controlada, no un nuevo gasto real.
+
+Las siete pruebas añadidas después de la recarga comprueban contexto relevante entre miles de registros, recuperación paginada y aislada, conservación de mínimos/compatibilidad/descripciones/refutaciones, índices de asignación, contratos personalizados bajo demanda con validación estricta, espacio de salida/razonamiento privado y diagnóstico de timeout con coste desconocido reservado. La configuración de coste y contexto está documentada en [CONTEXTO_MODELO.md](CONTEXTO_MODELO.md).
+
+La revisión siguiente añade seis regresiones sobre stock/flota con IDs repetidos entre propietarios, proyecciones consentidas y vigentes, retirada/cambio de versión, referencias reales de ofertas, condiciones de aprobación existentes y entrega física tras revisión independiente. Su replay comprueba el mecanismo; no se cuenta como inferencia real ni mejora del modelo.
 
 El motor acumula plazas·hora **ocupadas**, no horas de apertura de un refugio vacío. Integra consumo fraccional sin redondear cada minuto hacia arriba, detiene acumulación al cerrar y conserva efectos físicos del tiempo. La aritmética no certifica necesidades sanitarias reales.
 
@@ -50,6 +55,10 @@ El motor acumula plazas·hora **ocupadas**, no horas de apertura de un refugio v
 El smoke anterior completó dos llamadas visuales con coste recibido de **USD 0,0018055**. Su primer intento encontró un fallo al serializar el reporte después de procesar medios; se corrigió el serializer y se repitió. La repetición con PDF escaneado, guardada en [media-byte-1791776581764.json](../reports/runs/media-byte-1791776581764.json), completó tres llamadas visuales, **USD 0,00155219**, y convirtió el texto de la página en una señal privada no verificada. El número de formatos de entrada no incluye la imagen pública derivada como una nueva modalidad. No se usa ese smoke como una medida de recall, lectura completa de videos o comprensión bajo ruido.
 
 No se ha suministrado un corpus independiente permitido de desastres. Los videos del simulador son objetos descriptivos; no cuentan como percepción. El recorrido posterior renderiza PDFs escaneados con PDFium y pide transcripción visual al modelo: hasta cuatro páginas escaneadas por análisis, con texto embebido separado, pendientes explícitos y revisión humana. El smoke posterior incluye un PDF de imagen sin capa de texto. Los formatos, segmentos o páginas no observados conservan esa limitación.
+
+Después de la recarga, el smoke [media-byte-1791796512126.json](../reports/runs/media-byte-1791796512126.json) conservó una transcripción de audio positiva y un timeout visual con coste desconocido, sin etiquetar el conjunto como éxito. La repetición con perfil de percepción separado de investigación, [media-byte-1791797444466.json](../reports/runs/media-byte-1791797444466.json), procesó los cuatro formatos: tres llamadas visuales reales por **USD 0,00052922**, más ASR local y derivación pública revisada. La huella es `611d328…`; la precisión independiente sigue pendiente.
+
+La versión actual `c59fc605…` repitió el recorrido completo en [media-byte-1791799152025.json](../reports/runs/media-byte-1791799152025.json): cuatro formatos procesados, tres llamadas visuales por **USD 0,00052162**, ASR local y derivación pública revisada. Tampoco constituye un corpus de precisión.
 
 ## 5. Composición de refugio: positivo y negativos
 
@@ -63,6 +72,10 @@ Ensayo posterior: [service-live-1791774820679.json](../reports/runs/service-live
 
 Esta mejora entre versiones es una prueba dirigida de regresión/funcionamiento. No es un ensayo emparejado de eficacia, un holdout ni demostración de que el modelo descubrirá composiciones desconocidas en cualquier desastre. Las herramientas contienen recetas acotadas de refugio/planta; no se afirma síntesis arbitraria de infraestructura.
 
+Con el contexto enfocado y el techo de tarifa, [service-live-1791797909175.json](../reports/runs/service-live-1791797909175.json), huella `611d328…`, volvió a obtener **50 ocupantes**, con siete llamadas reales, **USD 0,00806514** y unos 38,78 segundos de pared para todo el ensayo dirigido modelado. No implica 38,78 segundos de respuesta de terreno: las demoras físicas siguen el reloj declarado del laboratorio y el propietario es un proxy programado. La necesidad de agua independiente quedó sin resolver en este ensayo de refugio. No es un antes/después causal de ahorro frente al recibo anterior.
+
+El recibo de la versión actual es [service-live-1791799154381.json](../reports/runs/service-live-1791799154381.json): **50 ocupantes, 22,4143 plazas·hora, seis llamadas, USD 0,00692284** y cero violaciones. El candidato permaneció congelado. El mundo avanzó unos 77,88 minutos modelados; los 37,15 segundos de pared incluyen trabajo acelerado del laboratorio y no son tiempo de rescate real. Se mantuvieron pendientes los 600 L de la necesidad de agua independiente. Esta composición dirigida por la necesidad no cierra la selección autónoma de prioridades de una emergencia completa.
+
 ## 6. Tiempo real ×1
 
 `pnpm demo:live` ejecuta fuente HTTP, modelo real, aprobación del proxy identificado, carga/viaje/descarga y recibos con el mundo avanzando a ×1. Se reportan reloj físico y latencia de proveedor; no se multiplica inferencia por ×1000.
@@ -72,6 +85,10 @@ Ensayo anterior positivo: [live-response-1791771412685.json](../reports/runs/liv
 También se conservan los intentos previos de quota/ventana insuficiente en `reports/runs/`. No contar una llegada sin recibo como entrega. El último ensayo de la versión actual se identifica en [live-response-latest.json](../reports/live-response-latest.json), cuya copia fechada es la evidencia a utilizar si se presenta esta versión.
 
 La repetición en el build corregido es [live-response-1791774948996.json](../reports/runs/live-response-1791774948996.json): **257,32 segundos de pared, 255,233 segundos simulados, dos llamadas y USD 0,00551945**. Confirmó 500 de 600 L, sin exceso ni violaciones; mantuvo 100 L pendientes. No hubo cambios de candidato durante el episodio.
+
+La repetición después de la recarga, [live-response-1791797905296.json](../reports/runs/live-response-1791797905296.json), huella `611d328…`, registra aproximadamente **265 segundos de pared, dos llamadas reales y USD 0,0018668**. El estado físico confirma 500 L y deja 100 L pendientes. Es una ejecución ×1, diferente de los comparativos modelados y del replay de regresión.
+
+El recorrido ×1 del candidato actual está en [live-response-1791799152429.json](../reports/runs/live-response-1791799152429.json): **265,685 segundos de pared / 263,429 segundos del mundo, dos llamadas y USD 0,001835**. Entregó 500/600 L desde una instancia, conservó 100 L pendientes y no registró violaciones ni cambio de candidato. La colaboración de cuatro instancias y su cobertura completa pertenecen a otros episodios; no se trasladan a esta prueba aislada.
 
 ## 7. UI, privacidad y comprensión
 
@@ -114,6 +131,44 @@ La campaña posterior, [1791776579865](../reports/evaluations/1791776579865/summ
 En el primer mundo S19 de ese protocolo, B6 investigó sin instalación predeterminada, coordinó cuatro propietarios y alojó 50 personas; B5 también alojó 50. B6 acumuló 120.036.590 plazas·ms de déficit frente a 199.956.130 de B5 en ese episodio, aproximadamente **40% menos**. Es un resultado de un solo mundo de desarrollo, dentro de una campaña incompleta; **no es una ventaja general acreditada ni un intervalo confirmatorio**. La segunda seed B6 quedó afectada por el rechazo del proveedor y registra cero atención, sin ser eliminada del contraste.
 
 La repetición dirigida `service-live-1791776847917.json` también quedó sin proveedor durante la búsqueda: dos intentos, USD 0,0114431 conocido, sin propuesta ni ocupación. Se conserva junto a los positivos anteriores. El backend posterior pausa la inferencia de esa instancia ante HTTP 402 y el runner detiene la campaña: no fabricar nuevas respuestas ni repetir llamadas en cada caso mientras falte saldo. El operador restaura crédito y reinicia el backend para volver a probar. Trabajos/recibos y acciones manuales permanecen disponibles.
+
+### 9.1 Recarga, contexto útil y campaña completa
+
+El primer piloto posterior, [1791795781278](../reports/evaluations/1791795781278/summary.json), se detuvo en un checkpoint de nueve outcomes, con 39 faltantes y **USD 0,03311543** conocido. Se encontraron timeouts reales bajo el plazo anterior de 60 segundos y campos relevantes que faltaban en el contexto inicial. El summary previo y los outcomes se preservaron; no se mezclan sus réplicas con la revisión siguiente.
+
+La campaña [1791797597750](../reports/evaluations/1791797597750/summary.json), huella `611d328…`, completó **48/48 episodios**, cuatro escenarios, dos mundos por escenario y seis brazos. Registró **222 llamadas, USD 0,3153094, cero intentos de coste desconocido y cero violaciones físicas**. Todos los episodios terminaron, lo que no significa que todas las necesidades fueran atendidas. El ejecutor usó tres mundos aislados en paralelo; los brazos dentro de un mundo fueron secuenciales. El reloj principal es modelado; CPU compartida y colas del proveedor impiden usar esa campaña como benchmark de tiempo real industrial.
+
+Resultados que deben acompañar cualquier positivo:
+
+| Contraste | Resultado exploratorio de esa versión |
+|---|---|
+| S19, refugio, B6 vs B5 | Ambos alojaron 50 personas en cada mundo. Déficit medio: 55,77 frente a 34,81 plazas·hora; **37,59% menos** en B6. No demuestra ventaja general ni supervivencia. |
+| S19, agua, B6 vs B5 | Ambos atendieron cero agua en su política de composición de refugio. Ninguna mejora en esa necesidad. |
+| S01/S23, agua, B6 vs B5 | B6 atendió 500/600 L y B5, 600/600 L; B6 perdió en cobertura y déficit acumulado. |
+| S19, agua, B4 vs B3 | B4 atendió 500 L en un mundo y 300 L en otro; B3, 500 L en ambos. El déficit medio de B4 fue **85,64% mayor**. No ocultar esta pérdida. |
+| S09, carga heterogénea | No se resolvieron las demandas adicionales de alimento/refugio/mantas/rescate; el piloto no acreditó escala semántica ni solución masiva. |
+
+[contrasts.json](../reports/evaluations/1791797597750/contrasts.json) conserva todos los contrastes por unidad nativa. Dos mundos por escenario son un piloto de desarrollo: repetir miles de eventos no aumenta ese tamaño muestral.
+
+La traza de agua permitió diagnosticar un defecto del producto: `plan_allocations` solo compilaba stock propio, aunque el modelo veía ofertas de socios. Para completar los 100 L, el modelo intentó una propuesta personalizada con un ID de aprobación inventado y quedó pendiente. El commit `3b2aa2a` incluye proyecciones actuales consentidas en el mismo compilador, copia referencias de oferta exactas, vuelve a comprobar vigencia/versiones antes de preparar y rechaza condiciones de aprobación sin propuesta existente. Cada propietario sigue autorizando y validando sus pasos. Esto es una **corrección de ingeniería**, no evidencia independiente del poder del LLM. La nueva campaña se declara por separado y vuelve a ejecutar las referencias afectadas.
+
+La verificación [1791798901091.json](../reports/verifications/1791798901091.json), huella `c59fc605…`, pasa las 206 pruebas conjuntas sin omitidas, canceladas o cambios del candidato. Durante una prueba de desarrollo anterior se editó el contrato de herramientas: el guard detectó el cambio y rechazó ese resultado como `invalid_candidate_changed`. La repetición congelada pasó; no se presenta la ejecución invalidada como evidencia favorable.
+
+### 9.2 Versión actual: colaboración ejecutable y selección todavía insuficiente
+
+[1791798902847](../reports/evaluations/1791798902847/summary.json) repite tres escenarios, dos mundos por escenario y los cuatro brazos B3/B4/B5/B6 afectados por el cambio, con el mismo cap por episodio de USD 0,25, dos oportunidades programadas, proveedor y herramientas. Huella `c59fc605…`; **24/24 outcomes conservados, 22 completados y dos fallidos**, 145 llamadas, **USD 0,19191844 conocido / USD 0,20702046 cargado al presupuesto con reservas desconocidas**. Las dos respuestas de proveedor sin estructura válida (`PROVIDER_SCHEMA`) permanecen en S19 B3 y B4: no se fabricó mensaje ni se reasignó coste cero. Cero violaciones físicas.
+
+| Pregunta | Resultado actual del piloto |
+|---|---|
+| ¿La red puede ejecutar ayuda combinada? | En S01 y S23, B6 entregó 600/600 L en ambos mundos; B5 también. En B4 aislado llegaron 500/600 L. Las trazas de B6 registran revisión independiente y recibos. |
+| ¿Ese resultado es una ventaja del LLM frente a una red competente? | No. En S01/S23 el déficit de B6 fue 150,37 L·hora frente a 145,37 L·hora de B5, **3,44% mayor**: misma cobertura final con demora adicional de inferencia. Compartir capacidad explica la cobertura, no un logro exclusivo de GenAI. |
+| ¿NEXO gana al investigador con el mismo modelo? | En S01 B4 reduce el déficit 67,48%, pero la comparación depende de un mundo en que B3 atendió cero; son dos mundos de desarrollo. En S23 empatan y en S19 agua la diferencia es 0,027%, con un fallo de proveedor en cada brazo. No acredita generalidad. |
+| ¿La nueva asignación conserva el positivo de refugio anterior? | No en el ensayo sin foco. En S19 B6 priorizó agua (600 L en un mundo, 300 L en otro) y alojó cero; B5 alojó 50 en ambos y atendió cero agua. Es una competencia entre necesidades, no un resultado que se pueda sumar en unidades incompatibles. El déficit de refugio de B6 fue 200 frente a 55,37 plazas·hora. |
+| ¿La composición funciona cuando el operador selecciona la necesidad? | Sí, el ensayo dirigido actual alojó 50 personas sin indicar instalación ni solución. Esto no equivale a descubrir y priorizar todos los casos automáticamente. |
+
+Todos los contrastes están en [contrasts.json](../reports/evaluations/1791798902847/contrasts.json). No combinar las dos huellas como réplicas ni presentar el 37,59% de refugio de la versión anterior como rendimiento del candidato actual. Dos semillas tampoco acreditan variación estructural suficiente: muchas cantidades y restricciones de estos presets son idénticas entre mundos. Hace falta ampliar familias/perturbaciones y sellar un conjunto externo.
+
+**Puerta técnica aún abierta:** seleccionar prioridades y oportunidades de investigación ante necesidades heterogéneas con recursos compartidos, conservar capacidad para dependencias de servicios, evitar que una respuesta parcial monopolice los vehículos y reparar decisiones cuando cambia la situación. Verificarlo con más oportunidades de planificación y políticas de referencia igualmente recurrentes, límites de atención/coste comunes y pérdidas por cada recurso/comunidad. Las prioridades deben provenir de una política revisada y del operador; no ajustar pesos después de ver un resultado ni inventar una equivalencia clínica de litros a camas para declarar victoria.
 
 ## 10. Recuperación y operación
 

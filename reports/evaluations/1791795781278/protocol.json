@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-12T09:03:01.279Z",
+  "scenarios": [
+    "S19",
+    "S09",
+    "S01",
+    "S23"
+  ],
+  "arms": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6"
+  ],
+  "seeds": 2,
+  "plannedRuns": 48,
+  "seedPrefix": "pilot-2026-",
+  "budgetUsd": 2,
+  "episodeBudgetUsd": 0.25,
+  "modelRequestPolicy": {
+    "maxOutputTokens": 8192,
+    "reasoningEnabled": true,
+    "providerSort": "price",
+    "priceMultiplier": 2,
+    "context": "focused received-data preview, scoped retrieval and progressively loaded custom action contracts"
+  },
+  "candidateFingerprint": "1a79792811c1a59c0ca466d531296051fda8461246f0154c74606e99b46df5d5",
+  "evaluatorFingerprint": "4fff93decc2b62aaf34dffd684d0aea9672121842df212ee34bcfab3ff4b5025",
+  "primary": "uncoveredUnitMs by native resource type",
+  "clock": "modeled",
+  "includeFailures": true,
+  "heldOut": false,
+  "operator": "scripted",
+  "planningRounds": 2,
+  "policyIntervalMs": 600000,
+  "planningTopology": "Shared B5/B6 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance.",
+  "scope": "Finite scheduled policy rounds plus physical execution, partner decisions and receipts at a fixed horizon. The model budget is cumulative across rounds. This is a development pilot, not an independently authored disaster calibration.",
+  "costPolicy": "Known provider receipts plus conservative reservations for unknown-cost attempts; actual invoice can differ from estimates."
+}

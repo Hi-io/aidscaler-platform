@@ -14,6 +14,8 @@ Los resultados de asignación se presentan con índices y cantidades exactas. Se
 
 Los contratos de acciones personalizadas se cargan con `read_action_contract` para los tipos necesarios. El catálogo inicial contiene el sobre común; la validación completa del servidor sigue aplicándose. Ahorrar descripción repetida no elimina restricciones físicas, permisos o validación de parámetros.
 
+`plan_allocations` también compila las proyecciones vigentes que socios conectados compartieron expresamente. Usa disponibilidad que ya excluye sus reservas/mínimos y conserva IDs de oferta, versión y dueño; no consulta inventario privado. `prepare_allocation` comprueba de nuevo las ofertas elegidas. El dueño de cada paso sigue autorizando y validando la operación en su propio sistema. Una condición de aprobación solo puede referirse a otra propuesta existente; un texto como «org1_approval» no sustituye el flujo real de revisión.
+
 ## Espacio de respuesta y razonamiento
 
 - `MODEL_MAX_OUTPUT_TOKENS=8192` es la configuración inicial, ajustable dentro del máximo publicado por el proveedor. Es un techo, no una cantidad que se consume obligatoriamente.

@@ -1,9 +1,9 @@
 {
-  "at": "2026-10-12T03:43:01.764Z",
+  "at": "2026-10-12T09:59:12.025Z",
   "kind": "synthetic-byte-integration",
   "notAccuracyValidation": true,
   "model": "google/gemma-4-31b-it",
-  "candidateFingerprint": "077db88a72ee7cee89d63a25712c0e7c265a9c3d13358c7435361ef9e508485c",
+  "candidateFingerprint": "c59fc605c4cd7096e492aa003a498bdf41c776c9f2f4ecce9c892140879546f2",
   "results": [
     {
       "filename": "return-note.wav",
@@ -40,7 +40,7 @@
         "durationSeconds": 9.8376875,
         "engine": "faster-whisper",
         "model": "tiny",
-        "wallMs": 2992.792399949394
+        "wallMs": 2742.382499971427
       },
       "passed": true
     },
@@ -53,51 +53,34 @@
         "observations": {
           "observations": [
             {
-              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
+              "description": "Three blue rectangular containers with rounded corners",
               "region": [
                 362,
                 123,
-                725,
-                235
-              ]
-            },
-            {
-              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
-              "region": [
-                362,
-                310,
-                725,
-                422
-              ]
-            },
-            {
-              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
-              "region": [
-                362,
-                497,
-                725,
-                609
+                726,
+                611
               ]
             }
           ],
           "uncertainties": [
             "Actual volume of containers is unknown",
-            "Actual contents of containers are unverified (labels only)"
+            "Actual contents of containers are unknown (labels only indicate 'WATER')"
           ],
           "textVisible": [
             "TEST FIXTURE - WATER STORAGE",
             "WATER",
             "Three containers. Volume is NOT specified."
           ],
-          "evidence_summary": "The image depicts a diagram of three blue containers labeled 'WATER' under a heading 'TEST FIXTURE - WATER STORAGE'. A caption explicitly states that the volume is not specified."
+          "evidence_summary": "The image is a diagram showing three blue containers labeled 'WATER' under a header 'TEST FIXTURE - WATER STORAGE'. A caption explicitly states that the volume is not specified."
         },
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 350,
-          "outputTokens": 273,
-          "providerCost": 0.00044695,
-          "providerRequestId": "gen-1791776585-HUSpprV073as6ZKAsW9h",
-          "wallMs": 3911.191500000001
+          "outputTokens": 180,
+          "reasoningTokens": 0,
+          "providerCost": 0.000121,
+          "providerRequestId": "gen-1791799155-sv6Wp4tUdWRtkJxBPJAz",
+          "wallMs": 4630.429800000001
         },
         "engine": "model-image-input"
       },
@@ -129,18 +112,19 @@
         "durationSeconds": 5,
         "engine": "model-image-input",
         "sampling": "up to six sampled frames; not exhaustive video coverage",
-        "wallMs": 223.29270001500845,
+        "wallMs": 188.38409997988492,
         "observations": {
-          "summary": "The provided source is a series of static graphic frames depicting a \"TEST FIXTURE - WATER STORAGE\" with three blue containers labeled \"WATER\" and a smaller square element. No real-world disaster-response observations are present.\n\n```json\n{\n  \"observations\": [\n    {\n      \"description\": \"Graphic representation of three blue containers labeled 'WATER'\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box_2d\": [363, 123, 731, 612]\n      }\n    },\n    {\n      \"description\": \"Graphic representation of a small square element\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box_2d\": [496, 780, 644, 859]\n      }\n    }\n  ],\n  \"uncertainties\": [\n    \"The nature of the 'test fixture' is not defined beyond the text labels.\",\n    \"The contents of the containers are inferred from text labels, not visually verified.\"\n  ],\n  \"textVisible\": [\n    \"TEST FIXTURE - WATER STORAGE\",\n    \"WATER\",\n    \"Three containers. Volume is NOT specified.\"\n  ]\n}\n```",
+          "summary": "The provided source is a series of static frames depicting a diagram labeled \"TEST FIXTURE - WATER STORAGE.\" It shows three blue rectangular shapes labeled \"WATER\" and a smaller square that changes color from blue to orange. There are no real-world disaster-response observations present.\n\n```json\n{\n  \"observations\": [\n    {\n      \"description\": \"Diagrammatic representation of three containers labeled 'WATER'\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box\": [363, 123, 731, 612]\n      }\n    },\n    {\n      \"description\": \"A small square element that changes color from blue to orange\",\n      \"visual_region\": {\n        \"frame\": \"3.00s\",\n        \"box\": [492, 776, 641, 858]\n      }\n    }\n  ],\n  \"uncertainties\": [\n    \"The nature of the 'test fixture' is not defined.\",\n    \"The meaning of the color change in the small square is not specified.\"\n  ],\n  \"textVisible\": [\n    \"TEST FIXTURE - WATER STORAGE\",\n    \"WATER\",\n    \"Three containers. Volume is NOT specified.\"\n  ]\n}\n```",
           "requiresStructuredReview": true
         },
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 1464,
-          "outputTokens": 292,
-          "providerCost": 0.00089212,
-          "providerRequestId": "gen-1791776590-R6ZQjBSAIZcRZHkWM0X0",
-          "wallMs": 3702.193500000001
+          "outputTokens": 296,
+          "reasoningTokens": 0,
+          "providerCost": 0.00032336,
+          "providerRequestId": "gen-1791799160-yc3D0B5ewHnXv8J1Yyoe",
+          "wallMs": 3964.2193000000007
         }
       },
       "passed": true
@@ -165,14 +149,15 @@
         "unreadPageCount": 0,
         "engine": "pypdf+pdfium+model-transcription",
         "ocrScope": "at most four scanned pages rendered per analysis; all transcriptions require review",
-        "wallMs": 609.8110999446362,
+        "wallMs": 308.2646999973804,
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 349,
-          "outputTokens": 70,
-          "providerCost": 0.00021312,
-          "providerRequestId": "gen-1791776594-Cmwr5a6KRRCsoy5Wjsio",
-          "wallMs": 4190.5638
+          "outputTokens": 71,
+          "reasoningTokens": 0,
+          "providerCost": 0.00007726,
+          "providerRequestId": "gen-1791799165-fTdGnrpA9QIdS6mGgZfA",
+          "wallMs": 1070.6211000000003
         },
         "text": "Page 1 (model_visual_transcription):\nTEST FIXTURE - WATER STORAGE\nWATER\nWATER\nWATER\nThree containers. Volume is NOT specified.",
         "requiresHumanVerification": true
@@ -197,29 +182,29 @@
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 3911.191500000001,
+      "wall_ms": 4630.429800000001,
       "input_tokens": 350,
-      "output_tokens": 273,
-      "cost_usd": 0.00044695,
-      "provider_id": "gen-1791776585-HUSpprV073as6ZKAsW9h"
+      "output_tokens": 180,
+      "cost_usd": 0.000121,
+      "provider_id": "gen-1791799155-sv6Wp4tUdWRtkJxBPJAz"
     },
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 3702.193500000001,
+      "wall_ms": 3964.2193000000007,
       "input_tokens": 1464,
-      "output_tokens": 292,
-      "cost_usd": 0.00089212,
-      "provider_id": "gen-1791776590-R6ZQjBSAIZcRZHkWM0X0"
+      "output_tokens": 296,
+      "cost_usd": 0.00032336,
+      "provider_id": "gen-1791799160-yc3D0B5ewHnXv8J1Yyoe"
     },
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 4190.5638,
+      "wall_ms": 1070.6211000000003,
       "input_tokens": 349,
-      "output_tokens": 70,
-      "cost_usd": 0.00021312,
-      "provider_id": "gen-1791776594-Cmwr5a6KRRCsoy5Wjsio"
+      "output_tokens": 71,
+      "cost_usd": 0.00007726,
+      "provider_id": "gen-1791799165-fTdGnrpA9QIdS6mGgZfA"
     }
   ]
 }

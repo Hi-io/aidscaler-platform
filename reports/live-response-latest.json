@@ -1,11 +1,11 @@
 {
-  "at": "2026-10-12T03:20:04.243Z",
-  "episode": "live-response-1791774948996",
+  "at": "2026-10-12T10:03:35.868Z",
+  "episode": "live-response-1791799152429",
   "measurementMode": "live",
   "rate": 1,
   "clockPolicy": "World progresses at actual elapsed wall time, including actual provider and HTTP latency; no accelerated advance.",
   "operator": "scripted finite source review, not human UX",
-  "candidateFingerprint": "f0f0e2e0e5e359a196a8bbbbac808e9d86090ea5a2a3f00b6c9cf1c1ce6c25d3",
+  "candidateFingerprint": "c59fc605c4cd7096e492aa003a498bdf41c776c9f2f4ecce9c892140879546f2",
   "candidateChanged": false,
   "manifest": {
     "schemaVersion": 1,
@@ -87,12 +87,12 @@
   "activity": {
     "state": "ready",
     "model": "google/gemma-4-31b-it",
-    "startedAt": 1791774949748,
+    "startedAt": 1791799153159,
     "steps": [
       {
         "type": "tool",
         "tool": "plan_allocations",
-        "at": 1791774950534,
+        "at": 1791799160463,
         "state": "completed",
         "label": "Checked allocations against scarce capacity",
         "params": {},
@@ -104,7 +104,13 @@
               "vehicle": "v-org0-1",
               "quantity": 300,
               "owner": "org0",
-              "needsRouteCheck": true
+              "needsRouteCheck": true,
+              "evidenceIds": [
+                "need-water-main",
+                "r-org0-water",
+                "v-org0-1"
+              ],
+              "offerVersions": []
             },
             {
               "need": "need-water-main",
@@ -112,7 +118,13 @@
               "vehicle": "v-org0-0",
               "quantity": 200,
               "owner": "org0",
-              "needsRouteCheck": true
+              "needsRouteCheck": true,
+              "evidenceIds": [
+                "need-water-main",
+                "r-org0-water",
+                "v-org0-0"
+              ],
+              "offerVersions": []
             }
           ],
           "unserved": [
@@ -153,32 +165,34 @@
             "need-water-main",
             "r-org0-water",
             "v-org0-1",
-            "need-water-main",
-            "r-org0-water",
             "v-org0-0"
           ],
-          "nextTool": "prepare_allocation"
+          "ownerApprovals": [
+            "org0"
+          ],
+          "nextTool": "prepare_allocation",
+          "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
         }
       },
       {
         "type": "tool",
         "tool": "prepare_allocation",
-        "at": 1791774952392,
+        "at": 1791799163833,
         "state": "completed",
         "label": "Prepared checked allocations for human review",
         "params": {
+          "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
           "indices": [
             0,
             1
           ],
-          "title": "Water Delivery to b5",
-          "rationale": "The focus need 'need-water-main' at building b5 requires 600L of water. Available stock from org0 (r-org0-water) is 600L, but the floor is 100L, leaving 500L available. Using two vehicles (v-org0-1 and v-org0-0) with a capacity of 300L each, we can deliver 500L of the requested 600L.",
-          "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the urgent water need."
+          "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
+          "title": "Partial Water Delivery to b5"
         },
         "result": {
           "simId": null,
           "state": "awaiting_review",
-          "title": "Water Delivery to b5",
+          "title": "Partial Water Delivery to b5",
           "actions": [
             {
               "type": "dispatch",
@@ -203,13 +217,13 @@
               "dependsOn": []
             }
           ],
-          "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the urgent water need.",
-          "summary": "Provides 500L of water to 60 people at shelter b5, partially satisfying the urgent water need.",
+          "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
+          "summary": "Provides 500L of water to building b5, partially satisfying the 600L need.",
           "activity": [],
           "priority": "high",
           "repairOf": null,
           "createdBy": "nexo-investigator",
-          "rationale": "The focus need 'need-water-main' at building b5 requires 600L of water. Available stock from org0 (r-org0-water) is 600L, but the floor is 100L, leaving 500L available. Using two vehicles (v-org0-1 and v-org0-0) with a capacity of 300L each, we can deliver 500L of the requested 600L.",
+          "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
           "conditions": [],
           "references": [
             "need-water-main",
@@ -226,17 +240,60 @@
           ],
           "authorization": null,
           "inheritedWork": [],
-          "id": "proposal_3f3747ca-0cee-4bef-aa68-ab5720e7b8d9",
+          "id": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
           "version": 1,
-          "createdAt": 1791774952446,
-          "updatedAt": 1791774952446
+          "createdAt": 1791799163879,
+          "updatedAt": 1791799163879
         }
       }
     ],
-    "proposalId": "proposal_3f3747ca-0cee-4bef-aa68-ab5720e7b8d9",
-    "episode": "live-response-1791774948996",
+    "proposalId": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
+    "episode": "live-response-1791799152429",
     "inputSnapshot": {
-      "hash": "49b5c7edaae948533d2cd24ab85a1f6c6e403091fd4f71b61592a3dba773135c",
+      "hash": "b1b2c580a54c09b5867c50323ca22015bbd18627e1fb3ccb80d95efed6e68072",
+      "context": {
+        "rawCharacters": 8539,
+        "presentedCharacters": 5413,
+        "coverage": {
+          "recordsInReceivedSnapshot": {
+            "need": 1,
+            "signal": 0,
+            "report": 0,
+            "claim": 0,
+            "evidence_group": 0,
+            "resource": 24,
+            "vehicle": 6,
+            "facility": 1,
+            "operation": 0,
+            "peer_offer": 0,
+            "location": 9
+          },
+          "omittedFromInitialPreview": {
+            "need": 0,
+            "signal": 0,
+            "report": 0,
+            "claim": 0,
+            "evidence_group": 0,
+            "resource": 8,
+            "vehicle": 0,
+            "facility": 0,
+            "operation": 0,
+            "peer_offer": 0,
+            "location": 0
+          },
+          "resourceTypesObserved": [
+            "food",
+            "fuel",
+            "staff",
+            "water",
+            "energy",
+            "rescue",
+            "blankets",
+            "sanitation"
+          ],
+          "note": "A preview is not exhaustive. Missing from this preview does NOT mean absent, false, zero demand or unavailable. Read omitted records with read_context; refresh external state with lookup/verify. No hidden world state is supplied."
+        }
+      },
       "policy": "nexo",
       "focusNeed": "need-water-main",
       "focusFacility": null,
@@ -244,14 +301,14 @@
       "signals": [],
       "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
     },
-    "finishedAt": 1791774952454,
+    "finishedAt": 1791799163887,
     "calls": 2,
-    "wallMs": 2695.1778999999997
+    "wallMs": 10717.7544
   },
   "proposal": {
     "simId": "proposal-1",
     "state": "completed",
-    "title": "Water Delivery to b5",
+    "title": "Partial Water Delivery to b5",
     "actions": [
       {
         "type": "dispatch",
@@ -276,13 +333,13 @@
         "dependsOn": []
       }
     ],
-    "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the urgent water need.",
-    "summary": "Provides 500L of water to 60 people at shelter b5, partially satisfying the urgent water need.",
+    "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
+    "summary": "Provides 500L of water to building b5, partially satisfying the 600L need.",
     "activity": [],
     "priority": "high",
     "repairOf": null,
     "createdBy": "nexo-investigator",
-    "rationale": "The focus need 'need-water-main' at building b5 requires 600L of water. Available stock from org0 (r-org0-water) is 600L, but the floor is 100L, leaving 500L available. Using two vehicles (v-org0-1 and v-org0-0) with a capacity of 300L each, we can deliver 500L of the requested 600L.",
+    "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
     "conditions": [],
     "references": [
       "need-water-main",
@@ -299,8 +356,8 @@
       "v-org0-0"
     ],
     "authorization": {
-      "at": 1791774952505,
-      "by": "user_bd9dff6d-e3c3-4a87-8c01-ab890607af1c",
+      "at": 1791799163932,
+      "by": "user_bb4cba3a-ba42-4ac1-b72e-ea2be7125a5a",
       "name": "Alex Morgan",
       "note": "Scripted laboratory operator; not a human UX trial.",
       "evidence": [
@@ -320,8 +377,8 @@
             "deadline": 10800000,
             "quantity": 600,
             "reserved": 0,
-            "createdAt": 1791774949167,
-            "updatedAt": 1791774949167,
+            "createdAt": 1791799152602,
+            "updatedAt": 1791799152602,
             "population": 60,
             "sourceVersion": 1,
             "sourceSnapshot": {
@@ -352,8 +409,8 @@
             "version": 2,
             "quantity": 600,
             "reserved": 0,
-            "createdAt": 1791774949130,
-            "updatedAt": 1791774949609,
+            "createdAt": 1791799152566,
+            "updatedAt": 1791799153038,
             "observedAt": 0,
             "compatibility": null,
             "sourceVersion": 1,
@@ -391,8 +448,8 @@
             "speedMps": 12,
             "volumeM3": 1,
             "weightKg": 3500,
-            "createdAt": 1791774949164,
-            "updatedAt": 1791774949164,
+            "createdAt": 1791799152599,
+            "updatedAt": 1791799152599,
             "maxCargoKg": 1000,
             "fuelMlPerKm": 180,
             "maxWaterDepth": 0.3,
@@ -436,8 +493,8 @@
             "speedMps": 12,
             "volumeM3": 1,
             "weightKg": 3500,
-            "createdAt": 1791774949160,
-            "updatedAt": 1791774949160,
+            "createdAt": 1791799152596,
+            "updatedAt": 1791799152596,
             "maxCargoKg": 1000,
             "fuelMlPerKm": 180,
             "maxWaterDepth": 0.3,
@@ -464,10 +521,10 @@
         }
       ],
       "planHash": "97d9319ecebf938fb03a8825d2284f328916ddb0f504ddf88d995b7db80104d8",
-      "expiresAt": 1791776752505,
+      "expiresAt": 1791800963932,
       "delegation": null,
       "conditional": false,
-      "evidenceHash": "52a36af4e87a076038ce4399bfcec6393393eec8f1ae63745ae74f2bacc65548",
+      "evidenceHash": "a1b88542c875e4b75294f85dc38054049965b64bf8962c2197daad17efe42fca",
       "proposalVersion": 1,
       "delegationVersion": null
     },
@@ -482,8 +539,8 @@
           "type": "delivery",
           "state": "reserved",
           "times": {
-            "reserved": 4689,
-            "authorized": 4689
+            "reserved": 12758,
+            "authorized": 12758
           },
           "vehicle": "v-org0-1",
           "version": 1,
@@ -492,7 +549,7 @@
           "quantity": 300,
           "received": 0,
           "resource": "r-org0-water",
-          "createdAt": 4689,
+          "createdAt": 12758,
           "commitment": "commitment-1",
           "references": [],
           "destination": "n5",
@@ -508,8 +565,8 @@
           "type": "delivery",
           "state": "reserved",
           "times": {
-            "reserved": 4689,
-            "authorized": 4689
+            "reserved": 12838,
+            "authorized": 12838
           },
           "vehicle": "v-org0-0",
           "version": 1,
@@ -518,7 +575,7 @@
           "quantity": 200,
           "received": 0,
           "resource": "r-org0-water",
-          "createdAt": 4689,
+          "createdAt": 12838,
           "commitment": "commitment-2",
           "references": [],
           "destination": "n5",
@@ -572,14 +629,14 @@
         "resourceVersion": 2
       }
     ],
-    "id": "proposal_3f3747ca-0cee-4bef-aa68-ab5720e7b8d9",
+    "id": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
     "version": 55,
-    "createdAt": 1791774952446,
-    "updatedAt": 1791775204217
+    "createdAt": 1791799163879,
+    "updatedAt": 1791799415860
   },
   "finalSourceState": {
     "runId": "460f965f20eca9122be6",
-    "now": 255233,
+    "now": 263429,
     "organization": {
       "id": "org0",
       "name": "Local Response",
@@ -607,7 +664,7 @@
           "deadline": 10800000,
           "population": 60,
           "version": 3,
-          "at": 252890
+          "at": 260959
         }
       },
       "resources": {
@@ -622,7 +679,7 @@
           "unit": "L",
           "compatibility": null,
           "version": 5,
-          "at": 252890
+          "at": 260959
         },
         "r-org0-staff": {
           "id": "r-org0-staff",
@@ -938,7 +995,7 @@
           "id": "v-org0-0",
           "owner": "org0",
           "node": "n5",
-          "at": 251890,
+          "at": 259959,
           "capacity": 300,
           "weightKg": 3500,
           "speedMps": 12,
@@ -956,7 +1013,7 @@
           "id": "v-org0-1",
           "owner": "org0",
           "node": "n5",
-          "at": 168690,
+          "at": 176759,
           "capacity": 300,
           "weightKg": 3500,
           "speedMps": 12,
@@ -1191,27 +1248,27 @@
           "destination": "n5",
           "commitment": "commitment-1",
           "state": "completed",
-          "createdAt": 4689,
+          "createdAt": 12758,
           "version": 1,
           "times": {
-            "authorized": 4689,
-            "reserved": 4689,
-            "orderReceived": 4740,
-            "accepted": 4740,
-            "prepared": 5740,
-            "dispatched": 5740,
-            "arrived": 168690,
-            "unloadingStarted": 168690,
-            "received": 169690,
-            "service": 169690
+            "authorized": 12758,
+            "reserved": 12758,
+            "orderReceived": 12809,
+            "accepted": 12809,
+            "prepared": 13809,
+            "dispatched": 13809,
+            "arrived": 176759,
+            "unloadingStarted": 176759,
+            "received": 177759,
+            "service": 177759
           },
           "received": 300,
           "proposal": "proposal-1",
           "references": [],
-          "eta": 168690,
+          "eta": 176759,
           "unloadingSlot": false,
           "destinationStock": "stock-n5-water",
-          "observedAt": 169690
+          "observedAt": 177759
         },
         "operation-2": {
           "id": "operation-2",
@@ -1226,36 +1283,36 @@
           "destination": "n5",
           "commitment": "commitment-2",
           "state": "completed",
-          "createdAt": 4689,
+          "createdAt": 12838,
           "version": 1,
           "times": {
-            "authorized": 4689,
-            "reserved": 4689,
-            "orderReceived": 4740,
-            "accepted": 4740,
-            "prepared": 5740,
-            "dispatched": 5740,
-            "arrived": 251890,
-            "unloadingStarted": 251890,
-            "received": 252890,
-            "service": 252890
+            "authorized": 12838,
+            "reserved": 12838,
+            "orderReceived": 12889,
+            "accepted": 12889,
+            "prepared": 13889,
+            "dispatched": 13889,
+            "arrived": 259959,
+            "unloadingStarted": 259959,
+            "received": 260959,
+            "service": 260959
           },
           "received": 200,
           "proposal": "proposal-1",
           "references": [],
-          "eta": 168690,
+          "eta": 176839,
           "unloadingSlot": false,
           "destinationStock": "stock-n5-water",
-          "observedAt": 252890
+          "observedAt": 260959
         }
       },
       "population": {},
       "claims": [],
       "lastContact": {
-        "s0": 5791,
-        "v-org0-1": 168741,
-        "v-org0-0": 251941,
-        "s5": 252941
+        "s0": 13940,
+        "v-org0-1": 176810,
+        "v-org0-0": 260010,
+        "s5": 261010
       }
     },
     "operations": [
@@ -1272,27 +1329,27 @@
         "destination": "n5",
         "commitment": "commitment-1",
         "state": "completed",
-        "createdAt": 4689,
+        "createdAt": 12758,
         "version": 1,
         "times": {
-          "authorized": 4689,
-          "reserved": 4689,
-          "orderReceived": 4740,
-          "accepted": 4740,
-          "prepared": 5740,
-          "dispatched": 5740,
-          "arrived": 168690,
-          "unloadingStarted": 168690,
-          "received": 169690,
-          "service": 169690
+          "authorized": 12758,
+          "reserved": 12758,
+          "orderReceived": 12809,
+          "accepted": 12809,
+          "prepared": 13809,
+          "dispatched": 13809,
+          "arrived": 176759,
+          "unloadingStarted": 176759,
+          "received": 177759,
+          "service": 177759
         },
         "received": 300,
         "proposal": "proposal-1",
         "references": [],
-        "eta": 168690,
+        "eta": 176759,
         "unloadingSlot": false,
         "destinationStock": "stock-n5-water",
-        "observedAt": 169690
+        "observedAt": 177759
       },
       {
         "id": "operation-2",
@@ -1307,34 +1364,34 @@
         "destination": "n5",
         "commitment": "commitment-2",
         "state": "completed",
-        "createdAt": 4689,
+        "createdAt": 12838,
         "version": 1,
         "times": {
-          "authorized": 4689,
-          "reserved": 4689,
-          "orderReceived": 4740,
-          "accepted": 4740,
-          "prepared": 5740,
-          "dispatched": 5740,
-          "arrived": 251890,
-          "unloadingStarted": 251890,
-          "received": 252890,
-          "service": 252890
+          "authorized": 12838,
+          "reserved": 12838,
+          "orderReceived": 12889,
+          "accepted": 12889,
+          "prepared": 13889,
+          "dispatched": 13889,
+          "arrived": 259959,
+          "unloadingStarted": 259959,
+          "received": 260959,
+          "service": 260959
         },
         "received": 200,
         "proposal": "proposal-1",
         "references": [],
-        "eta": 168690,
+        "eta": 176839,
         "unloadingSlot": false,
         "destinationStock": "stock-n5-water",
-        "observedAt": 252890
+        "observedAt": 260959
       }
     ],
     "proposals": [
       {
         "id": "proposal-1",
         "org": "org0",
-        "title": "Water Delivery to b5",
+        "title": "Partial Water Delivery to b5",
         "plan": {
           "actions": [
             {
@@ -1364,12 +1421,12 @@
         "conditions": [],
         "references": [],
         "state": "authorized",
-        "createdAt": 3591,
+        "createdAt": 11498,
         "version": 2,
         "reviewPending": false,
-        "reviewQueuedAt": 3591,
+        "reviewQueuedAt": 11579,
         "authorizedBy": "live-scripted-commander",
-        "reviewedAt": 4591
+        "reviewedAt": 12579
       }
     ],
     "commitments": [
@@ -1380,9 +1437,9 @@
         "resource": "r-org0-water",
         "quantity": 300,
         "state": "completed",
-        "expiresAt": 904689,
+        "expiresAt": 912758,
         "conditions": [],
-        "createdAt": 4689,
+        "createdAt": 12758,
         "version": 3,
         "authorizedBy": "live-scripted-commander"
       },
@@ -1393,9 +1450,9 @@
         "resource": "r-org0-water",
         "quantity": 200,
         "state": "completed",
-        "expiresAt": 904689,
+        "expiresAt": 912838,
         "conditions": [],
-        "createdAt": 4689,
+        "createdAt": 12838,
         "version": 3,
         "authorizedBy": "live-scripted-commander"
       }
@@ -2151,15 +2208,15 @@
         "org": "org0",
         "actor": "external-org0",
         "model": "google/gemma-4-31b-it",
-        "requestedAt": 756,
+        "requestedAt": 732,
         "state": "available",
         "policy": "wall",
-        "availableAt": 1387,
-        "wallMs": 538.489,
-        "promptTokens": 8897,
-        "outputTokens": 10,
-        "providerCost": 0.00330355,
-        "providerRequestId": "gen-1791774950-18Qe21hfEAgx8gkOGtL6",
+        "availableAt": 7859,
+        "wallMs": 7078.138599999999,
+        "promptTokens": 4848,
+        "outputTokens": 609,
+        "providerCost": 0.00092232,
+        "providerRequestId": "gen-1791799153-ljW9lapL8VbIWMIeFHs0",
         "failed": false
       },
       {
@@ -2167,46 +2224,46 @@
         "org": "org0",
         "actor": "external-org0",
         "model": "google/gemma-4-31b-it",
-        "requestedAt": 1559,
+        "requestedAt": 8040,
         "state": "available",
         "policy": "wall",
-        "availableAt": 3293,
-        "wallMs": 1788.9991999999997,
-        "promptTokens": 9202,
-        "outputTokens": 172,
-        "providerCost": 0.0022159,
-        "providerRequestId": "gen-1791774950-HU0D25FCQD6iOVQrZTNh",
+        "availableAt": 11280,
+        "wallMs": 3222.8976000000002,
+        "promptTokens": 5142,
+        "outputTokens": 482,
+        "providerCost": 0.00091268,
+        "providerRequestId": "gen-1791799160-4WOuIiJfdZm9RNRZWQTo",
         "failed": false
       }
     ],
     "publicUpdates": []
   },
-  "wallMs": 257320.4743,
+  "wallMs": 265684.5946,
   "usage": [
     {
-      "episode": "live-response-1791774948996",
+      "episode": "live-response-1791799152429",
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 538.489,
-      "input_tokens": 8897,
-      "output_tokens": 10,
-      "cost_usd": 0.00330355,
-      "provider_id": "gen-1791774950-18Qe21hfEAgx8gkOGtL6"
+      "wall_ms": 7078.138599999999,
+      "input_tokens": 4848,
+      "output_tokens": 609,
+      "cost_usd": 0.00092232,
+      "provider_id": "gen-1791799153-ljW9lapL8VbIWMIeFHs0"
     },
     {
-      "episode": "live-response-1791774948996",
+      "episode": "live-response-1791799152429",
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 1788.9991999999997,
-      "input_tokens": 9202,
-      "output_tokens": 172,
-      "cost_usd": 0.0022159,
-      "provider_id": "gen-1791774950-HU0D25FCQD6iOVQrZTNh"
+      "wall_ms": 3222.8976000000002,
+      "input_tokens": 5142,
+      "output_tokens": 482,
+      "cost_usd": 0.00091268,
+      "provider_id": "gen-1791799160-4WOuIiJfdZm9RNRZWQTo"
     }
   ],
-  "costUsd": 0.00551945,
+  "costUsd": 0.001835,
   "metrics": {
-    "simulatedMs": 255233,
+    "simulatedMs": 263429,
     "services": {
       "water": {
         "unit": "L",
@@ -2214,7 +2271,7 @@
         "served": 500,
         "pending": 100,
         "overprovided": 0,
-        "uncoveredUnitMs": 127008300,
+        "uncoveredUnitMs": 131862400,
         "onTime": 0
       }
     },
@@ -2489,22 +2546,22 @@
       },
       "arrived": {
         "p50": 164001,
-        "p95": 247201,
+        "p95": 247121,
         "samples": 2
       },
       "unloadingStarted": {
         "p50": 164001,
-        "p95": 247201,
+        "p95": 247121,
         "samples": 2
       },
       "received": {
         "p50": 165001,
-        "p95": 248201,
+        "p95": 248121,
         "samples": 2
       },
       "service": {
         "p50": 165001,
-        "p95": 248201,
+        "p95": 248121,
         "samples": 2
       }
     },
@@ -2519,13 +2576,13 @@
     "cost": 3,
     "events": 79,
     "modelCalls": 2,
-    "modelWallMs": 2327.4882,
+    "modelWallMs": 10301.036199999999,
     "modelUsage": {
-      "promptTokens": 18099,
-      "outputTokens": 182,
+      "promptTokens": 9990,
+      "outputTokens": 1091,
       "pending": 0,
       "failed": 0,
-      "providerCost": 0.00551945
+      "providerCost": 0.001835
     },
     "platformTransport": {
       "attempts": 0,
