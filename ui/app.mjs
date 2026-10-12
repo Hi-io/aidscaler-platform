@@ -5,6 +5,10 @@ import { createExtras } from "./extras.mjs";
 import { createOperationalDraft } from "./operational.mjs";
 import { createFinanceControls } from "./finance.mjs";
 import { createWorkforceControls } from "./workforce.mjs";
+import { readAttachment, actionBrief } from "./uploads.mjs";
+import { createPublicationControls } from "./publications.mjs";
+import { createCaseControls } from "./casework.mjs";
+import { createOrganizationControls } from "./organization.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
   String(s ?? "").replace(
@@ -206,6 +210,41 @@ const workforceControls = createWorkforceControls({
   render,
   offlineQueue,
   flush,
+  close: () => runAction("close", ""),
+});
+const publicationControls = createPublicationControls({
+  api,
+  record,
+  escape,
+  action,
+  badge,
+  empty,
+  title,
+  state,
+  modal,
+  toast,
+  render,
+  close: () => runAction("close", ""),
+});
+const caseControls = createCaseControls({
+  api,
+  record,
+  escape,
+  action,
+  state,
+  modal,
+  toast,
+  render,
+  close: () => runAction("close", ""),
+});
+const organizationControls = createOrganizationControls({
+  api,
+  escape,
+  action,
+  state,
+  modal,
+  toast,
+  render,
   close: () => runAction("close", ""),
 });
 function title(text, sub, actions = "") {
@@ -607,17 +646,19 @@ async function field() {
       "Capture a need, restriction or receipt. Offline reports remain queued until the server acknowledges them.",
     ) +
     (await workforceControls.field()) +
-    `<div class="grid split"><section class="card"><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="Place name or known location ID" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Delivery status</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon("clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(q.text.slice(0, 150))}</p>${badge("queued")} <span class="small">Saved on this device. Not yet received.</span></div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
+    `<div class="grid split"><section class="card"><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="Place name or known location ID" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Delivery status</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon(q.lastError ? "circle-alert" : "clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(String(q.text ?? "").slice(0, 150))}</p>${badge(q.lastError ? "requires_review" : "queued")} <span class="small">${q.lastError ? escape(q.lastError) : "Saved on this device. Not yet received."}</span>${q.lastError ? action("Resolve pending update", "queue-conflict", q.clientId, "accent") : ""}</div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
   );
 }
 async function settings() {
   const sources = await record("source");
+  const readiness = await organizationControls.summary();
   return (
     title(
       "Sources, permissions & continuity.",
       "Automatic ingestion is the default. Configure access once; operators should not copy every post manually.",
     ) +
-    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<div class="warning">The model is ${escape(state.model)}. These results do not demonstrate Gemini performance; that requires a new evaluation.</div></section></div>`
+    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<div class="warning">The model is ${escape(state.model)}. These results do not demonstrate Gemini performance; that requires a new evaluation.</div></section></div>` +
+    readiness
   );
 }
 async function audit() {
@@ -626,6 +667,9 @@ async function audit() {
     title(
       "Every decision has an owner.",
       "The evidence snapshot and authorization history survive corrections and restarts.",
+      ["admin", "commander", "auditor"].includes(state.user.role)
+        ? action("Export records", "organization-export", "", "accent")
+        : "",
     ) +
     `<section class="card">${table(
       ["Time", "Action", "Responsible actor", "Record", ""],
@@ -668,7 +712,7 @@ const views = {
   operations,
   resources,
   network,
-  publications,
+  publications: publicationControls.view,
   finance,
   field,
   coordination: workforceControls.coordination,
@@ -746,6 +790,20 @@ async function proposal(id) {
       : action("Close", "close"),
   );
   state.currentProposal = p;
+  const scope = document.createElement("section");
+  scope.className = "decision";
+  scope.innerHTML = `<span class="eyebrow">EXACT CURRENT COMMITMENT · VERSION ${p.version}</span><ul class="conditions">${p.actions
+    .slice(0, 3)
+    .map(
+      (a) =>
+        `<li><span><strong>${escape(a.owner)}</strong> · ${escape(actionBrief(a))}</span></li>`,
+    )
+    .join(
+      "",
+    )}</ul>${p.actions.length > 3 ? `<p class="small">${p.actions.length - 3} additional steps are in the action table. Review every owner and dependency before authorizing.</p>` : ""}<p class="note">These current typed actions define the authorization; a descriptive summary cannot override them.</p>`;
+  dialog
+    .querySelector(".dialogbody")
+    .insertBefore(scope, dialog.querySelector(".detailgrid"));
   if (p.repairOf) {
     const summary = document.createElement("details");
     summary.className = "collapse";
@@ -759,11 +817,16 @@ async function proposal(id) {
 }
 async function sourceDetail(id) {
   const s = await record("signal", id);
+  const context = await caseControls.context(id);
   modal(
     "Original source & context",
     `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Simulation timestamp: ${number(s.publishedAt)} ms<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location & version</span><p>${escape(s.location ?? "Not confirmed")}<br>Source version ${s.sourceVersion}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><pre class="trace">${escape(JSON.stringify({ references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre>`,
     action("Investigate this signal", "investigatesignal", id, "primary"),
   );
+  const review = document.createElement("div");
+  review.innerHTML = context;
+  document.querySelector(".dialogbody").append(review);
+  bind(review);
 }
 async function activityDetail(id) {
   const a = await record("activity", id);
@@ -824,7 +887,15 @@ async function flush() {
     if (item.queueOrg !== state.user.org || item.queueActor !== state.user.id)
       continue;
     try {
-      const { queueOrg, queueActor, queueKind, taskPayload, ...payload } = item;
+      const {
+        queueOrg,
+        queueActor,
+        queueKind,
+        taskPayload,
+        lastError,
+        errorCode,
+        ...payload
+      } = item;
       await api(
         queueKind === "task" ? "/api/task/update" : "/api/report",
         queueKind === "task"
@@ -835,6 +906,11 @@ async function flush() {
       sent++;
     } catch (e) {
       if (!navigator.onLine) break;
+      await offlineQueue("put", {
+        ...item,
+        lastError: e.message,
+        errorCode: e.code,
+      });
       toast(e.message);
       break;
     }
@@ -846,6 +922,50 @@ async function flush() {
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
+  if (await organizationControls.run(name, id)) return;
+  if (await caseControls.run(name, id)) return;
+  if (await publicationControls.run(name, id)) return;
+  if (name === "queue-conflict") {
+    const item = (await offlineQueue("all")).find(
+      (r) =>
+        r.clientId === id &&
+        r.queueActor === state.user.id &&
+        r.queueOrg === state.user.org,
+    );
+    if (!item) return;
+    state.queueConflict = item;
+    let current;
+    if (item.queueKind === "task" && navigator.onLine)
+      current = (await api("/api/tasks")).find(
+        (t) => t.id === item.taskPayload.id,
+      );
+    modal(
+      "Resolve a pending update",
+      `<p class="warning">${escape(item.lastError)}</p><h3>Your saved observation</h3><p>${escape(item.text)}</p>${current ? `<p class="sub">Current acknowledged task: ${escape(current.state.replaceAll("_", " "))}, version ${current.version}. The saved update used version ${item.taskPayload.version}.</p>` : ""}<p class="note">No newer instruction will be overwritten automatically. You can preserve this as a field observation, then open the current task to choose the correct next stage.</p>`,
+      `${action("Keep as a field observation", "queue-as-observation", id, "primary")}${action("Close", "close")}`,
+    );
+    return;
+  }
+  if (name === "queue-as-observation") {
+    const item = state.queueConflict;
+    if (!item || item.clientId !== id) return;
+    const observation = {
+      clientId: crypto.randomUUID(),
+      queueOrg: state.user.org,
+      queueActor: state.user.id,
+      kind: "correction",
+      location: item.location,
+      text: `Offline update could not be reconciled automatically: ${item.text}. ${item.lastError}. This is an observation, not a confirmation of physical receipt.`,
+      observedAt: Date.now(),
+      references: [],
+    };
+    await offlineQueue("put", observation);
+    await offlineQueue("delete", item.clientId);
+    dialog.close();
+    await flush();
+    await render();
+    return;
+  }
   if (await workforceControls.run(name, id)) return;
   if (await extras.run(name, id)) return;
   if (name === "operational-draft") {
@@ -1158,14 +1278,30 @@ async function runAction(name, id) {
         ["User", "Role", "Status"],
         users.map(
           (u) =>
-            `<tr><td>${escape(u.email)}</td><td>${escape(u.role)}</td><td>${u.active ? "Active" : "Revoked"}</td></tr>`,
+            `<tr><td>${escape(u.email)}</td><td>${escape(u.role)}</td><td>${u.active ? `Active ${u.id !== state.user.id ? action("Revoke access", "user-revoke", u.id, "quiet") : ""}` : "Revoked"}</td></tr>`,
         ),
-      ),
+      ) +
+        `<details class="collapse"><summary>Add an organization account</summary><form id="newuserform" class="fieldform"><label>Name<input name="name" required maxlength="120"></label><label>Email<input name="email" type="email" required></label><label>Role<select name="role">${["field", "analyst", "dispatcher", "commander", "publisher", "finance", "auditor", "admin"].map((r) => `<option>${r}</option>`).join("")}</select></label><label>Initial local password<input name="password" type="password" minlength="12" required autocomplete="new-password"></label><p class="note">Technical administration does not authorize operational decisions. Assign the smallest suitable role.</p><button class="primary">Create account</button></form></details>`,
     );
+    document.querySelector("#newuserform").onsubmit = async (ev) => {
+      ev.preventDefault();
+      await api("/api/users", Object.fromEntries(new FormData(ev.target)));
+      toast("Account created within this organization.");
+      await runAction("users", "");
+    };
+    return;
+  }
+  if (name === "user-revoke") {
+    await api("/api/users", { revoke: id });
+    toast("Access revoked. Existing sessions are no longer valid.");
+    await runAction("users", "");
     return;
   }
 }
 function bind(root = app) {
+  organizationControls.bind(root);
+  caseControls.bind(root);
+  publicationControls.bind(root);
   workforceControls.bind(root);
   financeControls.bind(root);
   extras.bind(root);
@@ -1225,7 +1361,7 @@ function bind(root = app) {
 }
 async function publicView() {
   const d = await api("/api/public");
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Support the organization and follow shared progress. Clear status, useful evidence and honest uncertainty build informed trust.</p></div><div class="grid cols3">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(p.title)}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · approved ${time(p.publishedAt)}</div></article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div><details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">NEXO · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
+  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Support the organization and follow shared progress. Clear status, useful evidence and honest uncertainty build informed trust.</p></div><div class="grid cols3">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(p.title)}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div><details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">NEXO · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
   document.querySelector("#contributeform").onsubmit = async (e) => {
     e.preventDefault();
     try {
@@ -1243,22 +1379,41 @@ async function publicView() {
   };
 }
 async function communityView() {
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><a href="/public">Response updates</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">COMMUNITY ACCESS</span><h1>Make a need visible.</h1><p>Tell the response team what is happening. Public reports enter a review queue; reporting does not guarantee an immediate dispatch.</p></div><section class="card"><form id="communityform" class="fieldform"><label>Location<input name="location" required placeholder="An approximate place or district"></label><label>What is needed?<textarea name="text" required maxlength="6000" placeholder="Describe the situation and quantities, if known. Avoid names or identifying details."></textarea></label><button class="primary">Submit for review</button></form><p class="note">No account required. Your report is reviewed by the organization and is not automatically published.</p></section></main></div>`;
+  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><a href="/public">Response updates</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">COMMUNITY ACCESS</span><h1>Make a need visible.</h1><p>Tell the response team what is happening. Public reports enter a review queue; reporting does not guarantee an immediate dispatch.</p></div><section class="card"><form id="communityform" class="fieldform"><label>Location<input name="location" required placeholder="An approximate place or district"></label><label>Photo or audio recording<input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg"></label><p class="note">Optional · up to 2 MB. You can send source media without writing a description. Avoid identifiable people and sensitive details.</p><label>What is needed? <span class="small">Optional when attaching media</span><textarea name="text" maxlength="6000" placeholder="Describe the situation and quantities, if known."></textarea></label><button class="primary">Submit for review</button></form><p class="note">No account required. This channel needs an internet connection and is not guaranteed to be monitored continuously. Reports and attachments stay private until the organization reviews them.</p></section></main></div>`;
+  let pendingSubmission;
   document.querySelector("#communityform").onsubmit = async (e) => {
     e.preventDefault();
-    const b = Object.fromEntries(new FormData(e.target));
+    const data = new FormData(e.target);
     try {
+      const attachment = await readAttachment(data.get("attachment"));
+      if (!attachment && !String(data.get("text")).trim())
+        throw new Error("Add a short description or a photo/audio recording.");
+      const signature = JSON.stringify({
+        location: data.get("location"),
+        text: data.get("text"),
+        attachment,
+      });
+      if (pendingSubmission?.signature !== signature)
+        pendingSubmission = {
+          signature,
+          clientId: crypto.randomUUID(),
+          observedAt: Date.now(),
+        };
       const r = await api("/api/community/report", {
-        ...b,
-        clientId: crypto.randomUUID(),
+        location: String(data.get("location")),
+        text: String(data.get("text")),
+        attachment,
+        clientId: pendingSubmission.clientId,
         kind: "need",
-        observedAt: Date.now(),
+        observedAt: pendingSubmission.observedAt,
         references: [],
       });
       modal(
         "Report received for review",
         `<div class="success">${escape(r.notice)}</div>`,
       );
+      pendingSubmission = null;
+      e.target.reset();
     } catch (e) {
       toast(e.message);
     }

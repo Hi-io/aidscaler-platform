@@ -261,15 +261,67 @@ export class Worker {
         }
         continue;
       }
-      const result = await this.connector.action(
-        a.type,
-        {
-          ...resolveParams(a.params, results),
-          ...(a.type === "dispatch" ? { proposal: simId } : {}),
-        },
-        `execute_${id}_${i}`,
-        { human: true },
-      );
+      let result;
+      try {
+        result = await this.connector.action(
+          a.type,
+          {
+            ...resolveParams(a.params, results),
+            ...(a.type === "dispatch" ? { proposal: simId } : {}),
+          },
+          `execute_${id}_${i}`,
+          { human: true },
+        );
+      } catch (e) {
+        if (
+          ![400, 403, 404, 409].includes(e.status) ||
+          ["STEP_PENDING", "REVIEW_PENDING"].includes(e.code)
+        )
+          throw e;
+        const preserved = results
+          .filter((r) => resolution(p.actions[r.index], r, current))
+          .map((r) => r.index);
+        await this.store.transaction(async (tx) => {
+          const row = await tx.get(org, "proposal", id);
+          await tx.put(
+            org,
+            "proposal",
+            id,
+            {
+              ...row,
+              state: "requires_review",
+              previousAuthorization: row.authorization,
+              authorization: null,
+              changedReason:
+                "The operational source refused a prospective command: " +
+                e.code,
+              affectedSteps: [i],
+              preservedSteps: preserved,
+              commandRejection: {
+                step: i,
+                code: e.code,
+                status: e.status,
+                at: Date.now(),
+              },
+            },
+            row.version,
+          );
+          await tx.audit(
+            org,
+            "source-monitor",
+            "proposal.command_rejected",
+            id,
+            { step: i, code: e.code, preservedSteps: preserved },
+          );
+        });
+        if (p.originPartner)
+          await this.network.response(p, "failed", {
+            confirmedBySource: false,
+            reason:
+              "The owner's source refused the prospective command: " + e.code,
+          });
+        return { requiresReview: true, rejectedStep: i, code: e.code };
+      }
       results.push({ index: i, result });
       if (PHYSICAL.has(a.type) && result.id)
         await this.store.upsert(

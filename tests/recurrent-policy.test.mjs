@@ -1,4 +1,6 @@
 import test from "node:test";
+// The competent shared reference must also terminate after an owner declines
+// an infeasible second-round request. Previously it retried the same review.
 import assert from "node:assert/strict";
 import { runEpisode } from "../evaluation/harness.mjs";
 import { Store } from "../src/store.mjs";
@@ -24,6 +26,22 @@ test("recurrent reference policy receives a second scheduled opportunity without
   assert.throws(
     () => pairedBootstrap([r], [unequal]),
     (e) => e.code === "EVALUATION_CONFIG",
+  );
+});
+test("shared owners decline infeasible unchanged requests instead of repeatedly retrying reviews", async () => {
+  const r = await runEpisode({
+    arm: "B5",
+    scenario: "S23",
+    seed: "pilot-2026-01",
+    planningRounds: 2,
+  });
+  assert.equal(r.status, "completed");
+  assert.equal(r.invariants.length, 0);
+  assert.equal(r.errors.filter((e) => e.code === "VEHICLE_BUSY").length, 0);
+  assert.equal(r.metrics.services.water.served, 600);
+  assert.ok(
+    r.wallMs < 120000,
+    "A two-round deterministic development episode should finish within its bounded local budget.",
   );
 });
 test("cumulative model budget covers all rounds and unknown-cost attempts rather than resetting each turn", async (t) => {

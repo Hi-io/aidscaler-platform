@@ -10,6 +10,7 @@ const errors = [],
 try {
   for (const viewport of [
     { width: 1440, height: 900 },
+    { width: 1920, height: 1080 },
     { width: 390, height: 844 },
   ]) {
     const context = await browser.newContext({
@@ -29,6 +30,7 @@ try {
       .waitFor();
     for (const [hash, title] of [
       ["overview", "A clearer picture. A faster response."],
+      ["map", "A map of what your team knows."],
       ["signals", "The world speaks in fragments."],
       ["investigations", "Investigate what could unlock help."],
       ["review", "The decision belongs to you."],
@@ -38,6 +40,7 @@ try {
       ["publications", "Transparency that earns trust."],
       ["finance", "Shared support. Clear accounting."],
       ["field", "Report from the field."],
+      ["coordination", "Keep a responsible person on every pending action."],
       ["settings", "Sources, permissions & continuity."],
       ["audit", "Every decision has an owner."],
       ["media", "Evidence you can inspect."],
@@ -78,6 +81,28 @@ try {
       path: `.local/screenshots/public-${viewport.width}.png`,
       fullPage: true,
     });
+    results.push({
+      page: "public",
+      width: viewport.width,
+      loaded: true,
+      horizontalOverflow: false,
+    });
+    await page.goto(base + "/community");
+    await page
+      .getByRole("heading", { name: "Make a need visible.", exact: true })
+      .waitFor();
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > innerWidth + 1,
+      ),
+      false,
+    );
+    results.push({
+      page: "community",
+      width: viewport.width,
+      loaded: true,
+      horizontalOverflow: false,
+    });
     await context.close();
   }
   assert.equal(errors.length, 0, errors.join("\n"));
@@ -90,7 +115,7 @@ try {
         browser: "Chromium",
         checks: results,
         errors,
-        note: "Automated rendering and navigation checks, not human comprehension evidence.",
+        note: "Automated rendering/navigation at 1440, 1920 and 390 px with reduced motion. Not human comprehension evidence or a full accessibility certification.",
       },
       null,
       2,

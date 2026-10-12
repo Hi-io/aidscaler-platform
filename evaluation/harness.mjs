@@ -18,12 +18,18 @@ export async function buildFingerprint() {
     .sort();
   return hash(
     await Promise.all(
-      ["server.mjs", "package.json", ...files.map((f) => "src/" + f)].map(
-        async (f) => [
-          f,
-          await readFile(new URL("../" + f, import.meta.url), "utf8"),
-        ],
-      ),
+      [
+        "server.mjs",
+        "package.json",
+        "pnpm-lock.yaml",
+        "src/schema.sql",
+        "scripts/media_worker.py",
+        "requirements-media.txt",
+        ...files.map((f) => "src/" + f),
+      ].map(async (f) => [
+        f,
+        await readFile(new URL("../" + f, import.meta.url), "utf8"),
+      ]),
     ),
   );
 }
@@ -245,16 +251,48 @@ export async function scriptedReview(app, p) {
     )
   ).rows[0];
   if (!p.conditions.some((c) => !c.satisfied)) {
-    await app.domain.review(
-      actor,
-      p.id,
-      {
-        version: p.version,
-        decision: "approve",
-        note: "Scripted laboratory operator; not a human UX trial.",
-      },
-      "lab-approve-" + p.id,
-    );
+    try {
+      await app.domain.review(
+        actor,
+        p.id,
+        {
+          version: p.version,
+          decision: "approve",
+          note: "Scripted laboratory operator; not a human UX trial.",
+        },
+        "lab-approve-" + p.id,
+      );
+    } catch (e) {
+      // A competent scripted owner does not approve or retry an infeasible
+      // unchanged request hundreds of times. Retain its explicit rejection;
+      // a repaired/new proposal must be separately investigated and reviewed.
+      if (![400, 403, 409].includes(e.status)) throw e;
+      const current = await app.store.get(app.config.org, "proposal", p.id);
+      if (
+        !["awaiting_review", "requires_review", "needs_clarification"].includes(
+          current.state,
+        )
+      )
+        throw e;
+      await app.domain.review(
+        actor,
+        p.id,
+        {
+          version: current.version,
+          decision: "reject",
+          note:
+            "Scripted owner declined the current plan because its observed feasibility check failed: " +
+            e.code,
+        },
+        "lab-decline-" + p.id + "-" + current.version,
+      );
+      if (p.originPartner)
+        await app.network.response(p, "rejected", {
+          rejectedBy: actor.id,
+          reason: "Current owner feasibility check failed: " + e.code,
+        });
+      return false;
+    }
     return true;
   }
   return false;

@@ -3,6 +3,7 @@ import { configuration } from "../src/config.mjs";
 import { EvidenceStore } from "../src/evidence.mjs";
 import { OpenRouterProvider } from "../src/provider.mjs";
 import { MediaProcessor } from "../src/media.mjs";
+import { PublicEvidence } from "../src/public-evidence.mjs";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import assert from "node:assert/strict";
 const config = await configuration({
@@ -61,6 +62,57 @@ try {
     });
     console.log("Processed actual bytes:", filename);
   }
+  const image = (await store.list(config.org, "media", 20)).find(
+    (m) => m.mime === "image/png",
+  );
+  // Explicit synthetic receipt fixture: tests actual image transformation,
+  // not a delivery, visual privacy detector or clinical evidence.
+  await store.put(
+    config.org,
+    "operation",
+    "byte-smoke-receipt",
+    {
+      state: "completed",
+      confirmedBySource: true,
+      syntheticFixture: true,
+      received: 1,
+    },
+    0,
+  );
+  const publicEvidence = new PublicEvidence(store, evidence, config);
+  const proof = await publicEvidence.approve(
+    { org: config.org, id: "fixture-reviewer", role: "publisher" },
+    {
+      mediaId: image.id,
+      operationId: "byte-smoke-receipt",
+      privacyReviewed: true,
+      caption: "Synthetic container image for byte integration",
+    },
+    "byte-public-proof",
+  );
+  const rendition = await readFile(
+    config.evidenceDir + "/" + config.org + "/" + proof.publicHash,
+  );
+  assert.equal(rendition.subarray(1, 4).toString(), "PNG");
+  assert.equal(proof.metadataStripped, true);
+  assert.ok(proof.dimensions.width <= 1600 && proof.dimensions.height <= 1600);
+  assert.equal(
+    await publicEvidence.publiclyVisible(config.org, proof.id),
+    null,
+  );
+  report.results.push({
+    filename: "reviewed-public-rendition.png",
+    engine: "local-PIL-metadata-free-rendition",
+    syntheticReceiptFixture: true,
+    metadataStripped: proof.metadataStripped,
+    dimensions: proof.dimensions,
+    publicHash: proof.publicHash,
+    notPublishedByDefault: true,
+    passed: true,
+  });
+  console.log(
+    "Processed actual bytes: reviewed public image rendition (private by default)",
+  );
 } catch (e) {
   report.error = e.code ?? e.name;
   process.exitCode = 1;
@@ -72,7 +124,7 @@ try {
   ).rows;
   // Temporary decoder filenames are not portable evidence identifiers.
   for (const r of report.results)
-    for (const f of r.result.frames ?? []) delete f.path;
+    for (const f of r.result?.frames ?? []) delete f.path;
   await mkdir("reports", { recursive: true });
   await writeFile(
     "reports/media-byte-smoke.json",

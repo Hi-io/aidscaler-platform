@@ -27,7 +27,15 @@ export class Auth {
     this.failures = new Map();
   }
   async create(actor, { org, email, name, role: requestedRole, password }) {
-    if (actor) role(actor, ["admin"]);
+    if (actor) {
+      role(actor, ["admin"]);
+      check(
+        actor.org === org,
+        "FORBIDDEN",
+        "Create accounts only in your own organization.",
+        403,
+      );
+    }
     check(ROLES.includes(requestedRole), "ROLE", "Choose a valid role.");
     check(
       typeof password === "string" && password.length >= 12,
@@ -40,18 +48,24 @@ export class Auth {
       "A valid email is required.",
     );
     const id = uid("user");
-    await this.store.query(
-      "INSERT INTO users(id,org,email,name,role,password_hash,created_at) VALUES($1,$2,$3,$4,$5,$6,$7)",
-      [
-        id,
-        org,
-        email.toLowerCase(),
-        name,
-        requestedRole,
-        passwordHash(password),
-        Date.now(),
-      ],
-    );
+    await this.store.transaction(async (tx) => {
+      await tx.query(
+        "INSERT INTO users(id,org,email,name,role,password_hash,created_at) VALUES($1,$2,$3,$4,$5,$6,$7)",
+        [
+          id,
+          org,
+          email.toLowerCase(),
+          name,
+          requestedRole,
+          passwordHash(password),
+          Date.now(),
+        ],
+      );
+      if (actor)
+        await tx.audit(org, actor.id, "account.created", id, {
+          role: requestedRole,
+        });
+    });
     return { id, org, email, name, role: requestedRole };
   }
   async login(email, password, address = "local") {
@@ -112,10 +126,32 @@ export class Auth {
   }
   async revoke(actor, id) {
     role(actor, ["admin"]);
-    await this.store.query(
-      "UPDATE users SET active=false WHERE id=$1 AND org=$2",
-      [id, actor.org],
-    );
-    await this.store.query("DELETE FROM sessions WHERE user_id=$1", [id]);
+    await this.store.transaction(async (tx) => {
+      const target = (
+        await tx.query(
+          "SELECT id FROM users WHERE id=$1 AND org=$2 FOR UPDATE",
+          [id, actor.org],
+        )
+      ).rows[0];
+      check(
+        target,
+        "USER_SCOPE",
+        "This account is not in your organization.",
+        404,
+      );
+      check(
+        id !== actor.id,
+        "SELF_REVOKE",
+        "Ask another administrator to revoke your account.",
+        409,
+      );
+      await tx.query("UPDATE users SET active=false WHERE id=$1 AND org=$2", [
+        id,
+        actor.org,
+      ]);
+      await tx.query("DELETE FROM sessions WHERE user_id=$1", [id]);
+      await tx.audit(actor.org, actor.id, "user.revoked", id, {});
+    });
+    return true;
   }
 }

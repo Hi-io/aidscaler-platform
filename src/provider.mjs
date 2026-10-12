@@ -66,14 +66,23 @@ export class OpenRouterProvider {
           [org, Date.now() - 3600000],
         )
       ).rows[0];
+      const policy = await tx.get(org, "automation", "intake", false);
       check(
-        Number(hourly.calls) < (this.config.hourlyCallLimit ?? 40),
+        Number(hourly.calls) <
+          Math.min(
+            policy?.hourlyCallLimit ?? Infinity,
+            this.config.hourlyCallLimit ?? 40,
+          ),
         "ORGANIZATION_CALL_BUDGET",
         "The organization has reached its hourly model-call limit.",
         429,
       );
       check(
-        Number(hourly.charged) + reserve <= (this.config.hourlyBudgetUsd ?? 2),
+        Number(hourly.charged) + reserve <=
+          Math.min(
+            policy?.hourlyBudgetUsd ?? Infinity,
+            this.config.hourlyBudgetUsd ?? 2,
+          ),
         "ORGANIZATION_MODEL_BUDGET",
         "The organization has reached its hourly model budget. Unknown-cost failures retain their conservative reservation.",
         429,

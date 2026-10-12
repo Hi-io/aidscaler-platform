@@ -51,6 +51,8 @@ export class EvidenceStore {
             state: "unverified",
             receivedAt: Date.now(),
             visibility: "organization",
+            uploadedBy: actor.id,
+            moderationRequired: actor.id === "community-public",
           },
           0,
         );

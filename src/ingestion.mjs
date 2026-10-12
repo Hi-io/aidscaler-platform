@@ -191,7 +191,7 @@ export class Ingestion {
               );
           }
         }
-        if (!old || hash(old.snapshot) !== hash(state))
+        if (!old?.snapshot || hash(old.snapshot) !== hash(state))
           await tx.upsert(org, "context", "operational", {
             snapshot: state,
             observedAt: Date.now(),
@@ -206,7 +206,12 @@ export class Ingestion {
           for (const [sourceId, raw] of Object.entries(items ?? {})) {
             const data = { ...raw, id: raw.id ?? sourceId };
             const previous = await tx.get(org, kind, data.id, false);
-            if (!previous || hash(previous.sourceSnapshot) !== hash(data)) {
+            // A shared/manual record may exist before its owner's first direct
+            // source snapshot. It is not evidence that the source was read.
+            if (
+              !previous?.sourceSnapshot ||
+              hash(previous.sourceSnapshot) !== hash(data)
+            ) {
               await tx.upsert(org, kind, data.id, {
                 ...data,
                 sourceSnapshot: data,

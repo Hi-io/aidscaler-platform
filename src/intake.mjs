@@ -62,25 +62,55 @@ export class Intake {
     );
     return {
       enabled: saved?.enabled ?? this.config.autoInvestigate ?? false,
-      maxGroups: 3,
-      maxSignals: 35,
-      hourlyCallLimit: this.config.hourlyCallLimit ?? 40,
-      hourlyBudgetUsd: this.config.hourlyBudgetUsd ?? 2,
+      maxGroups: saved?.maxGroups ?? 3,
+      maxSignals: saved?.maxSignals ?? 35,
+      hourlyCallLimit: Math.min(
+        saved?.hourlyCallLimit ?? Infinity,
+        this.config.hourlyCallLimit ?? 40,
+      ),
+      hourlyBudgetUsd: Math.min(
+        saved?.hourlyBudgetUsd ?? Infinity,
+        this.config.hourlyBudgetUsd ?? 2,
+      ),
     };
   }
-  async configure(actor, { enabled }, key) {
+  async configure(actor, input, key) {
     role(actor, ["admin", "commander"]);
+    const { enabled } = input;
     check(
       typeof enabled === "boolean",
       "AUTOMATION",
       "Specify enabled or paused.",
     );
-    return this.store.command(actor.org, key, { enabled }, async (tx) => {
+    const limits = {};
+    for (const [name, maximum, integer] of [
+      ["maxGroups", 3, true],
+      ["maxSignals", 35, true],
+      ["hourlyCallLimit", this.config.hourlyCallLimit ?? 40, true],
+      ["hourlyBudgetUsd", this.config.hourlyBudgetUsd ?? 2, false],
+    ]) {
+      if (input[name] == null) continue;
+      check(
+        typeof input[name] === "number" &&
+          Number.isFinite(input[name]) &&
+          input[name] > 0 &&
+          input[name] <= maximum &&
+          (!integer || Number.isSafeInteger(input[name])),
+        "AUTOMATION_LIMIT",
+        "Use positive limits within the server's configured maximum.",
+      );
+      limits[name] = input[name];
+    }
+    return this.store.command(actor.org, key, input, async (tx) => {
       const row = await tx.upsert(actor.org, "automation", "intake", {
         enabled,
+        ...limits,
         changedBy: actor.id,
       });
-      await tx.audit(actor.org, actor.id, "intake.policy", row.id, { enabled });
+      await tx.audit(actor.org, actor.id, "intake.policy", row.id, {
+        enabled,
+        ...limits,
+      });
       return row;
     });
   }

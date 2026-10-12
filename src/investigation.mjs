@@ -215,6 +215,10 @@ export class Investigator {
       fieldReports: (await this.store.list(org, "report", 50)).filter((r) =>
         ["observed", "received"].includes(r.state),
       ),
+      currentInterpretations: await this.store.list(org, "claim", 12),
+      humanEvidenceGroups: (
+        await this.store.list(org, "evidence_group", 12)
+      ).filter((g) => g.state === "active"),
       known: context?.known,
       operations: context?.operations,
       sharedOffers: (await this.store.list(org, "peer_offer", 60)).filter(

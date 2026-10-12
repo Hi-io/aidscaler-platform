@@ -15,6 +15,7 @@ export const EVIDENCE_KINDS = [
   "road",
   "operation",
   "peer_offer",
+  "evidence_group",
 ];
 export async function resolveEvidence(store, org, id) {
   for (const kind of EVIDENCE_KINDS) {

@@ -9,6 +9,12 @@ const { createLabServers } = await import(
   pathToFileURL(path.join(simRoot, "sources/server.mjs")).href
 );
 const scenario = process.env.NEXO_SCENARIO ?? "S01";
+// A reset world must not inherit stale physical operations/source versions from
+// an earlier run. Preserve each prior database under its own private session.
+const sessionId =
+  new Date().toISOString().replace(/[:.]/g, "-") +
+  "-" +
+  randomBytes(3).toString("hex");
 const lab = await createLabServers({
   observerPort: Number(process.env.LAB_OBSERVER_PORT ?? 4328),
   sourcePort: Number(process.env.LAB_SOURCE_PORT ?? 4329),
@@ -60,7 +66,7 @@ for (let i = 0; i < 5; i++) {
   );
   if (!res.ok) throw new Error("Could not provision a scoped operator.");
   const { key: humanKey } = await res.json();
-  const instanceDir = path.join(root, ".local", org);
+  const instanceDir = path.join(root, ".local", "labs", sessionId, org);
   await mkdir(instanceDir, { recursive: true });
   const config = {
     org,
@@ -132,6 +138,7 @@ await writeFile(
   path.join(root, ".local", "lab.json"),
   JSON.stringify(
     {
+      sessionId,
       observerUrl: `http://127.0.0.1:${lab.observerPort}`,
       observerKey: lab.observerKey,
       sourceUrl: `http://127.0.0.1:${lab.sourcePort}`,

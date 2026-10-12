@@ -57,7 +57,7 @@ const store = await Store.open(),
     maxCalls: 8,
   }),
   episode = "live-response-" + Date.now();
-let activity, error, proposal;
+let activity, error, proposal, finalSourceState, stoppedReason;
 try {
   const control = await fetch(
     `http://127.0.0.1:${lab.observerPort}/api/control`,
@@ -94,7 +94,9 @@ try {
   if (activity.proposalId) {
     proposal = await store.get("org0", "proposal", activity.proposalId);
     await scriptedReview(app, proposal);
-    const deadline = Date.now() + 240000;
+    // This is a ten-minute physical observation window, not a promise that
+    // every shipment finishes in four minutes. Keep late/failed trips visible.
+    const deadline = Date.now() + 610000;
     while (Date.now() < deadline) {
       await app.ingestion.sync({ sources: false });
       await app.worker.drain(4);
@@ -102,11 +104,14 @@ try {
       if (["completed", "requires_review"].includes(proposal.state)) break;
       await new Promise((r) => setTimeout(r, 5000));
     }
+    if (proposal.state === "executing")
+      stoppedReason = "observation_window_elapsed";
   }
 } catch (e) {
   error = { code: e.code ?? e.name, message: e.message.slice(0, 300) };
 }
 try {
+  finalSourceState = await app.connector.state().catch(() => null);
   const usage = (
       await store.query(
         "SELECT episode,model,state,wall_ms,input_tokens,output_tokens,cost_usd,provider_id FROM usage",
@@ -126,6 +131,8 @@ try {
       activity,
       proposal,
       error,
+      stoppedReason,
+      finalSourceState,
       wallMs: performance.now() - started,
       usage,
       costUsd: usage.reduce((s, u) => s + Number(u.cost_usd ?? 0), 0),

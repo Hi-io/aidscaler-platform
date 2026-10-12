@@ -6,6 +6,7 @@ import { validatePlan } from "../src/planning.mjs";
 import { Finance } from "../src/finance.mjs";
 import { Network } from "../src/network.mjs";
 import { Domain } from "../src/domain.mjs";
+import { AppError } from "../src/errors.mjs";
 const org = "org0",
   actor = { org, id: "owner", role: "commander" };
 async function setup(t) {
@@ -14,6 +15,61 @@ async function setup(t) {
   t.after(() => store.close());
   return store;
 }
+test("a definitive source-command refusal returns prospective work for review once while retaining completed deliveries", async (t) => {
+  const s = await setup(t),
+    actions = [
+      { type: "dispatch", owner: org, params: {}, dependsOn: [] },
+      {
+        type: "dispatch",
+        owner: org,
+        params: { vehicle: "busy" },
+        dependsOn: [0],
+      },
+    ];
+  await s.put(
+    org,
+    "proposal",
+    "rejected-command",
+    {
+      state: "executing",
+      actions,
+      conditions: [],
+      references: [],
+      simId: "sim",
+      authorization: { by: "owner", planHash: hash(actions) },
+      executionResults: [{ index: 0, result: { id: "completed-delivery" } }],
+    },
+    0,
+  );
+  let attempts = 0;
+  const worker = new Worker({
+    store: s,
+    config: { org },
+    connector: {
+      state: async () => ({
+        organization: { id: org },
+        proposals: [{ id: "sim", state: "authorized" }],
+        operations: [{ id: "completed-delivery", state: "completed" }],
+      }),
+      action: async () => {
+        attempts++;
+        throw new AppError(
+          "VEHICLE_BUSY",
+          "The vehicle has an existing assignment.",
+          409,
+        );
+      },
+    },
+  });
+  const result = await worker.execute("rejected-command");
+  assert.equal(result.requiresReview, true);
+  const p = await s.get(org, "proposal", "rejected-command");
+  assert.equal(p.authorization, null);
+  assert.deepEqual(p.preservedSteps, [0]);
+  assert.equal(p.executionResults[0].result.id, "completed-delivery");
+  assert.equal((await worker.execute(p.id)).skipped, true);
+  assert.equal(attempts, 1);
+});
 test("a failed issued operation invalidates only its plan, retaining completed steps and real receipts", async (t) => {
   const store = await setup(t),
     actions = [

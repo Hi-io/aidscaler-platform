@@ -10,6 +10,7 @@ import { validateConditions, validatePlan } from "./planning.mjs";
 import { resolveEvidence } from "./citations.mjs";
 import { repairContext } from "./repair.mjs";
 import { reviewAuthority } from "./authority.mjs";
+import { publicText } from "./public-safety.mjs";
 const COMMAND = ["commander", "dispatcher"];
 export class Domain {
   constructor(store, config) {
@@ -709,17 +710,29 @@ export class Domain {
     const d = fieldReport.parse(input);
     return this.store.command(
       actor.org,
-      "field_" + d.clientId,
+      "field_" + (d.clientId.length > 174 ? hash(d.clientId) : d.clientId),
       d,
       async (tx) => {
+        for (const ref of d.references ?? [])
+          check(
+            await resolveEvidence(tx, actor.org, ref),
+            "EVIDENCE",
+            "Attached evidence is unavailable to this organization.",
+          );
+        const publicReport = actor.id === "community-public";
         const r = await tx.put(
           actor.org,
           "report",
           d.clientId,
-          { ...d, origin: actor.id, state: "received", receivedAt: Date.now() },
+          {
+            ...d,
+            origin: actor.id,
+            state: publicReport ? "pending_moderation" : "received",
+            receivedAt: Date.now(),
+          },
           0,
         );
-        await this.stageReport(tx, actor.org, r);
+        if (!publicReport) await this.stageReport(tx, actor.org, r);
         await tx.audit(actor.org, actor.id, "field.received", d.clientId, {
           kind: d.kind,
           observedAt: d.observedAt,
@@ -741,7 +754,7 @@ export class Domain {
       permissions: "organization",
       contentHash: hash(report),
       receivedAt: report.receivedAt,
-      originalReferences: [report.id],
+      originalReferences: [report.id, ...(report.references ?? [])],
       sourceUrl: "/api/evidence?id=" + encodeURIComponent(report.id),
       state: report.state === "rejected" ? "withdrawn" : "observed",
       deleted: report.state === "rejected",
@@ -765,7 +778,31 @@ export class Domain {
       "PUBLICATION",
       "Title and update required.",
     );
+    check(
+      ["support_needed", "en_route", "received"].includes(
+        input.status ?? "support_needed",
+      ),
+      "PUBLIC_STATUS",
+      "Choose a supported public status.",
+    );
+    check(
+      Array.isArray(input.operationIds ?? []) &&
+        (input.operationIds ?? []).length <= 30 &&
+        Array.isArray(input.proofIds ?? []) &&
+        (input.proofIds ?? []).length <= 3,
+      "PUBLIC_REFERENCES",
+      "Use at most thirty operation references and three reviewed photos.",
+    );
     return this.store.command(actor.org, key, input, async (tx) => {
+      if (input.corrects) {
+        const old = await tx.get(actor.org, "publication", input.corrects);
+        check(
+          old.state === "published" && old.version === input.correctsVersion,
+          "PUBLICATION_VERSION",
+          "Review the current published version before preparing a correction.",
+          409,
+        );
+      }
       const id = uid("publication");
       return tx.put(
         actor.org,
@@ -776,6 +813,9 @@ export class Domain {
           text: input.text.slice(0, 2000),
           area: input.area ?? "Response area",
           operationIds: input.operationIds ?? [],
+          proofIds: input.proofIds ?? [],
+          corrects: input.corrects ?? null,
+          correctsVersion: input.correctsVersion ?? null,
           state: "draft",
           status: input.status ?? "support_needed",
           createdBy: actor.id,
@@ -794,15 +834,12 @@ export class Domain {
         "Review the latest draft.",
         409,
       );
+      publicText(p.title, p.text, p.area);
       check(
-        !/\bsk-or-|api.?key|\bpassword\b|\bprivate\b/i.test(p.text),
-        "PUBLIC_DATA",
-        "The update contains restricted information.",
-      );
-      check(
-        p.status !== "received" || p.operationIds.length > 0,
+        !["received", "en_route"].includes(p.status) ||
+          p.operationIds.length > 0,
         "PREMATURE_PUBLICATION",
-        "A received update must cite a confirmed operational receipt.",
+        "Progress updates must cite a source-confirmed operation.",
       );
       for (const opid of p.operationIds) {
         const op = await tx.get(actor.org, "operation", opid);
@@ -813,6 +850,44 @@ export class Domain {
             "PREMATURE_PUBLICATION",
             "Receipt has not been confirmed.",
           );
+        if (p.status === "en_route")
+          check(
+            op.confirmedBySource === true &&
+              ["in_transit", "dispatched", "loading"].includes(op.state),
+            "PREMATURE_PUBLICATION",
+            "The cited operation is not confirmed to be loading or in transit.",
+          );
+      }
+      for (const proofId of p.proofIds ?? []) {
+        const proof = await tx.get(actor.org, "public_evidence", proofId);
+        check(
+          proof.state === "approved" &&
+            proof.metadataStripped === true &&
+            p.operationIds.includes(proof.operationId),
+          "PUBLIC_EVIDENCE",
+          "Each photo must be reviewed, stripped of metadata and linked to a cited confirmed receipt.",
+        );
+      }
+      if (p.corrects) {
+        const old = await tx.get(actor.org, "publication", p.corrects);
+        check(
+          old.state === "published" && old.version === p.correctsVersion,
+          "PUBLICATION_VERSION",
+          "The public update changed; review the correction again.",
+          409,
+        );
+        await tx.put(
+          actor.org,
+          "publication",
+          old.id,
+          {
+            ...old,
+            state: "superseded",
+            supersededBy: id,
+            supersededAt: Date.now(),
+          },
+          old.version,
+        );
       }
       const result = await tx.put(
         actor.org,
@@ -832,5 +907,48 @@ export class Domain {
       });
       return result;
     });
+  }
+  async retractPublication(actor, { id, version, reason }, key) {
+    role(actor, ["publisher", ...COMMAND]);
+    check(
+      typeof reason === "string" &&
+        reason.trim().length >= 3 &&
+        reason.length <= 600,
+      "PUBLIC_REASON",
+      "Give an aggregate public correction reason without personal details.",
+    );
+    publicText(reason);
+    return this.store.command(
+      actor.org,
+      key,
+      { id, version, reason },
+      async (tx) => {
+        const old = await tx.get(actor.org, "publication", id);
+        check(
+          old.state === "published",
+          "PUBLICATION_STATE",
+          "Only a currently published update can be withdrawn.",
+          409,
+        );
+        const result = await tx.put(
+          actor.org,
+          "publication",
+          id,
+          {
+            ...old,
+            state: "retracted",
+            retractedBy: actor.id,
+            retractedAt: Date.now(),
+            retractionNotice: reason,
+            proofIds: [],
+          },
+          version,
+        );
+        await tx.audit(actor.org, actor.id, "publication.retracted", id, {
+          reason,
+        });
+        return result;
+      },
+    );
   }
 }

@@ -23,6 +23,9 @@ import { handleMcp } from "./src/mcp-server.mjs";
 import { MediaProcessor } from "./src/media.mjs";
 import { Intake } from "./src/intake.mjs";
 import { Workforce } from "./src/workforce.mjs";
+import { PublicEvidence } from "./src/public-evidence.mjs";
+import { Casework } from "./src/casework.mjs";
+import { Organization } from "./src/organization.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -74,6 +77,10 @@ const KINDS = [
   "external",
   "media",
   "media_analysis",
+  "public_evidence",
+  "evidence_group",
+  "group_history",
+  "claim_history",
 ];
 export async function createPlatform(overrides = {}) {
   const config = await configuration(overrides),
@@ -81,6 +88,8 @@ export async function createPlatform(overrides = {}) {
   await store.organization(config.org, config.orgName);
   const auth = new Auth(store),
     domain = new Domain(store, config),
+    casework = new Casework(store, domain),
+    organization = new Organization(store, config),
     workforce = new Workforce(store, domain),
     connector = overrides.connector ?? new SimulatorConnector(config),
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
@@ -154,6 +163,12 @@ export async function createPlatform(overrides = {}) {
   const evidence = new EvidenceStore(store, config),
     memory = new Memory(store),
     communityLimits = new Map();
+  const publicEvidence = new PublicEvidence(
+    store,
+    evidence,
+    config,
+    overrides.publicImageDecoder,
+  );
   const integrations = new Integrations(store, config);
   const intake = new Intake(store, config);
   ingestion.intake = intake;
@@ -249,23 +264,65 @@ export async function createPlatform(overrides = {}) {
         );
       if (url.pathname === "/api/public") {
         check(req.method === "GET", "METHOD", "GET required.", 405);
-        const publications = (await store.list(config.org, "publication", 100))
-          .filter((p) => p.state === "published")
-          .map(({ id, title, text, area, status, publishedAt }) => ({
-            id,
-            title,
-            text,
-            area,
-            status,
-            publishedAt,
-          }));
+        const publications = (
+          await store.list(config.org, "publication", 100)
+        ).filter((p) => ["published", "retracted"].includes(p.state));
+        const approved = [];
+        for (const p of publications) {
+          const proofs = [];
+          if (p.state === "published")
+            for (const id of p.proofIds ?? []) {
+              const proof = await store.get(
+                config.org,
+                "public_evidence",
+                id,
+                false,
+              );
+              if (proof?.state === "approved")
+                proofs.push({
+                  id,
+                  caption: proof.caption,
+                  approvedAt: proof.approvedAt,
+                  url: "/api/public/media?id=" + encodeURIComponent(id),
+                });
+            }
+          approved.push({
+            id: p.id,
+            title: p.state === "retracted" ? "Update withdrawn" : p.title,
+            text: p.state === "retracted" ? p.retractionNotice : p.text,
+            area: p.area,
+            status: p.state === "retracted" ? "retracted" : p.status,
+            publishedAt: p.retractedAt ?? p.publishedAt,
+            corrected: !!p.corrects,
+            proofs,
+          });
+        }
         return json(res, 200, {
           organization: { id: config.org, name: config.orgName },
-          updates: publications,
+          updates: approved,
           finance: await finance.summary(config.org),
           sandbox: true,
           privacy: "Approved, aggregate updates only.",
         });
+      }
+      if (url.pathname === "/api/public/media") {
+        check(req.method === "GET", "METHOD", "GET required.", 405);
+        const image = await publicEvidence.publiclyVisible(
+          config.org,
+          url.searchParams.get("id"),
+        );
+        check(
+          image,
+          "PUBLIC_MEDIA",
+          "This evidence is not publicly available.",
+          404,
+        );
+        res.writeHead(200, {
+          "Content-Type": image.mime,
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        });
+        return res.end(image.bytes);
       }
       if (url.pathname === "/api/contribute") {
         check(req.method === "POST", "METHOD", "POST required.", 405);
@@ -287,16 +344,64 @@ export async function createPlatform(overrides = {}) {
           429,
         );
         communityLimits.set(k, n);
-        const input = await body(req);
+        const input = await body(req, 3_000_000);
+        check(
+          Number.isSafeInteger(input.observedAt) && input.observedAt >= 0,
+          "REPORT_TIME",
+          "A stable observation timestamp is required so retries preserve the same report.",
+        );
+        // Public media is stored, never analyzed or made operational before
+        // moderation. One bounded attachment avoids unlimited anonymous costs.
+        let mediaRef;
+        if (input.attachment) {
+          const file = input.attachment;
+          check(
+            ["image/png", "image/jpeg", "audio/wav", "audio/mpeg"].includes(
+              file.mime,
+            ),
+            "COMMUNITY_MEDIA",
+            "Use a photo or audio recording.",
+          );
+          check(
+            Buffer.from(file.contentBase64 ?? "", "base64").length <= 2_000_000,
+            "COMMUNITY_MEDIA_SIZE",
+            "Community attachments are limited to 2 MB.",
+            413,
+          );
+          check(
+            typeof input.clientId === "string" &&
+              input.clientId.length >= 3 &&
+              input.clientId.length <= 180,
+            "REPORT_ID",
+            "A stable report identifier is required.",
+          );
+          mediaRef = await evidence.save(
+            { org: config.org, id: "community-public", role: "field" },
+            {
+              ...file,
+              title: "Community attachment",
+              source: "Community report awaiting moderation",
+              observedAt: input.observedAt,
+            },
+            "community_media_" + hash(input.clientId),
+          );
+        }
         const r = await domain.report(
           { org: config.org, id: "community-public", role: "field" },
-          input,
+          {
+            clientId: input.clientId,
+            text:
+              input.text?.trim() ||
+              (mediaRef
+                ? "Community source media; interpretation and location require review."
+                : ""),
+            kind: mediaRef?.mime.startsWith("audio/") ? "voice" : "need",
+            location: input.location,
+            observedAt: input.observedAt,
+            references: mediaRef ? [mediaRef.id] : [],
+          },
           "community_" + input.clientId,
         );
-        await store.upsert(config.org, "report", r.id, {
-          state: "pending_moderation",
-          origin: "community-public",
-        });
         return json(res, 201, {
           id: r.id,
           state: "received_for_review",
@@ -452,6 +557,17 @@ export async function createPlatform(overrides = {}) {
         }
         if (url.pathname === "/api/automation" && req.method === "GET")
           return json(res, 200, await intake.summary());
+        if (url.pathname === "/api/organization" && req.method === "GET")
+          return json(res, 200, await organization.read(actor.org));
+        if (url.pathname === "/api/export" && req.method === "GET")
+          return json(
+            res,
+            200,
+            await organization.export(actor, {
+              kind: url.searchParams.get("kind"),
+              offset: Number(url.searchParams.get("offset") ?? 0),
+            }),
+          );
         if (url.pathname === "/api/decision-queue" && req.method === "GET")
           return json(
             res,
@@ -606,6 +722,8 @@ export async function createPlatform(overrides = {}) {
         }
         if (url.pathname === "/api/automation")
           return json(res, 200, await intake.configure(actor, b, key));
+        if (url.pathname === "/api/organization")
+          return json(res, 200, await organization.configure(actor, b, key));
         if (url.pathname === "/api/task/assign")
           return json(res, 201, await workforce.assign(actor, b, key));
         if (url.pathname === "/api/task/update")
@@ -723,6 +841,13 @@ export async function createPlatform(overrides = {}) {
             "DECISION",
             "Choose accept or reject.",
           );
+          check(
+            typeof b.reason === "string" &&
+              b.reason.trim().length >= 3 &&
+              b.reason.length <= 600,
+            "MODERATION_REASON",
+            "Record the reason and any verification still needed.",
+          );
           const result = await store.command(actor.org, key, b, async (tx) => {
             const updated = await tx.put(
               actor.org,
@@ -732,6 +857,8 @@ export async function createPlatform(overrides = {}) {
                 ...r,
                 state: b.decision === "accept" ? "observed" : "rejected",
                 moderatedBy: actor.id,
+                moderationReason: b.reason,
+                moderatedAt: Date.now(),
               },
               b.version,
             );
@@ -741,7 +868,7 @@ export async function createPlatform(overrides = {}) {
               actor.id,
               "community." + b.decision,
               r.id,
-              {},
+              { reason: b.reason },
             );
             return updated;
           });
@@ -760,7 +887,21 @@ export async function createPlatform(overrides = {}) {
             key,
             { id: b.id },
             async (tx) => {
-              await tx.get(actor.org, "media", b.id);
+              const original = await tx.get(actor.org, "media", b.id);
+              if (original.moderationRequired) {
+                const reviewed = (
+                  await tx.query(
+                    "SELECT id FROM entities WHERE org=$1 AND kind='report' AND data->>'state'='observed' AND data->'references' @> $2::jsonb LIMIT 1",
+                    [actor.org, JSON.stringify([b.id])],
+                  )
+                ).rows[0];
+                check(
+                  reviewed,
+                  "MEDIA_MODERATION",
+                  "Review the community report before spending analysis budget on its attachment.",
+                  409,
+                );
+              }
               const prior = await tx.get(
                 actor.org,
                 "media_analysis",
@@ -799,6 +940,14 @@ export async function createPlatform(overrides = {}) {
           return json(res, 201, await memory.record(actor, b, key));
         if (url.pathname === "/api/claim")
           return json(res, 201, await domain.createClaim(actor, b, key));
+        if (url.pathname === "/api/claim/correct")
+          return json(res, 200, await casework.correctClaim(actor, b, key));
+        if (url.pathname === "/api/evidence/group")
+          return json(res, 201, await casework.group(actor, b, key));
+        if (url.pathname === "/api/evidence/split")
+          return json(res, 200, await casework.split(actor, b, key));
+        if (url.pathname === "/api/evidence/group/restore")
+          return json(res, 200, await casework.restoreGrouping(actor, b, key));
         if (url.pathname === "/api/invalidate")
           return json(
             res,
@@ -811,6 +960,10 @@ export async function createPlatform(overrides = {}) {
           return json(res, 201, await domain.draftPublication(actor, b, key));
         if (url.pathname === "/api/publication/publish")
           return json(res, 200, await domain.publish(actor, b.id, b, key));
+        if (url.pathname === "/api/publication/retract")
+          return json(res, 200, await domain.retractPublication(actor, b, key));
+        if (url.pathname === "/api/publication/proof")
+          return json(res, 201, await publicEvidence.approve(actor, b, key));
         if (url.pathname === "/api/finance/release")
           return json(res, 200, await finance.release(actor, b, key));
         if (url.pathname === "/api/finance/allocate")

@@ -14,6 +14,7 @@ const started = performance.now(),
   });
 const episode = "service-live-" + Date.now();
 const autonomous = process.argv.includes("--autonomous");
+const fromNeed = process.argv.includes("--from-need");
 let activity,
   outcome = { prepared: false, operating: false },
   error;
@@ -62,8 +63,20 @@ try {
   };
   // An operator selects a visible facility. This proves research and execution
   // for that task; it is NOT evidence of unprompted discovery or field accuracy.
+  const shelterNeed = (await a.store.list(org, "need", 2000)).find(
+    (n) => n.type === "shelter" && n.quantity > (n.served ?? 0),
+  );
+  if (fromNeed && !shelterNeed)
+    throw Object.assign(
+      new Error("No received shelter need is available to select."),
+      { code: "NO_OBSERVED_SHELTER_NEED" },
+    );
   activity = await a.investigator.run(
-    autonomous ? {} : { facilityId: building.id },
+    fromNeed
+      ? { needId: shelterNeed.id }
+      : autonomous
+        ? {}
+        : { facilityId: building.id },
     episode,
   );
   if (activity.proposalId) {
@@ -135,7 +148,7 @@ try {
   const result = {
     at: new Date().toISOString(),
     episode,
-    scope: `Actual Gemma provider + four independent scoped HTTP instances + scripted owners + modeled physical laboratory; ${autonomous ? "unfocused investigator input" : "operator-selected facility"}; not a comparative benchmark or independent discovery validation`,
+    scope: `Actual Gemma provider + four independent scoped HTTP instances + scripted owners + modeled physical laboratory; ${fromNeed ? "operator-selected received shelter need, no facility ID or solution supplied" : autonomous ? "unfocused investigator input" : "operator-selected facility"}; not a comparative benchmark or independent discovery validation`,
     candidateFingerprint: fingerprint,
     candidateChanged: fingerprint !== (await buildFingerprint()),
     worldManifest: h.lab.world.manifest,

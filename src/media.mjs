@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { check } from "./errors.mjs";
 import { hash } from "./store.mjs";
 const root = fileURLToPath(new URL("..", import.meta.url));
-async function decode(config, input) {
+export async function decode(config, input) {
   const python =
     config.mediaPython ??
     path.join(
@@ -90,6 +90,20 @@ export class MediaProcessor {
   async process(org, id, episode) {
     const { metadata, bytes } = await this.evidence.read(org, id),
       file = path.join(this.config.evidenceDir, org, metadata.contentHash);
+    if (metadata.moderationRequired) {
+      const reviewed = (
+        await this.store.query(
+          "SELECT id FROM entities WHERE org=$1 AND kind='report' AND data->>'state'='observed' AND data->'references' @> $2::jsonb LIMIT 1",
+          [org, JSON.stringify([id])],
+        )
+      ).rows[0];
+      check(
+        reviewed,
+        "MEDIA_MODERATION",
+        "Review the community report before analyzing its attachment.",
+        409,
+      );
+    }
     let decoded;
     if (metadata.mime.startsWith("audio/"))
       decoded = await decode(this.config, { mode: "audio", path: file });

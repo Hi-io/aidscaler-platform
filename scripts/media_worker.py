@@ -13,6 +13,16 @@ if mode=='audio':
 elif mode=='pdf':
     from pypdf import PdfReader
     reader=PdfReader(request['path']);pages=[{'page':i+1,'text':(p.extract_text() or '')[:20000]} for i,p in enumerate(reader.pages[:20])];result={'pages':pages,'needsOCR':any(not p['text'].strip() for p in pages),'truncated':len(reader.pages)>20,'engine':'pypdf'}
+elif mode=='public_image':
+    from PIL import Image, ImageOps
+    Image.MAX_IMAGE_PIXELS=20000000
+    with Image.open(request['path']) as original:
+        image=ImageOps.exif_transpose(original).convert('RGB')
+        image.thumbnail((1600,1600))
+        # A newly encoded image strips EXIF, location and other original metadata.
+        clean=Image.new('RGB',image.size);clean.paste(image)
+        clean.save(request['output'],format='PNG')
+        result={'width':clean.width,'height':clean.height,'engine':'pillow','metadataStripped':True,'peopleAutomaticallyDetected':False}
 elif mode=='video':
     import av, pathlib
     destination=pathlib.Path(request['output']);destination.mkdir(parents=True,exist_ok=True)

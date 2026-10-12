@@ -1,3 +1,4 @@
+import { actionBrief } from "./uploads.mjs";
 /** Progressive disclosure for evidence, connector setup and manual fallbacks. */
 export function createExtras(h) {
   const {
@@ -162,7 +163,7 @@ export function createExtras(h) {
           .slice(0, 16)
           .map(
             (r) =>
-              `<article class="listrow"><div class="rowicon coral">${icon("message-square")}</div><div class="grow"><h3>${e(r.location ?? "Unconfirmed location")}</h3><p>${e(r.text)}</p>${badge("pending_moderation")}<small>Observed ${new Date(r.observedAt).toLocaleString()}</small></div><div class="actions">${action("Keep for investigation", "report-accept", r.id, "accent")}${action("Reject with reason", "report-reject", r.id)}</div></article>`,
+              `<article class="listrow"><div class="rowicon coral">${icon("message-square")}</div><div class="grow"><h3>${e(r.location ?? "Unconfirmed location")}</h3><p>${e(r.text)}</p>${badge("pending_moderation")}<small>Observed ${new Date(r.observedAt).toLocaleString()}</small>${r.references?.map((ref) => action("Inspect attachment", "media-open", ref, "quiet")).join("") ?? ""}</div><div class="actions">${action("Keep for investigation", "report-accept", r.id, "accent")}${action("Reject with reason", "report-reject", r.id)}</div></article>`,
           )
           .join("") ||
         empty("No community reports are awaiting moderation.", "check")
@@ -218,9 +219,10 @@ export function createExtras(h) {
       return true;
     }
     if (name.startsWith("report-")) {
+      const r = await record("report", id);
       modal(
         "Review community observation",
-        `<form id="moderateform" class="fieldform"><input name="id" type="hidden" value="${e(id)}"><input name="decision" type="hidden" value="${name === "report-accept" ? "accept" : "reject"}"><label>Reason or verification still required<textarea name="reason" required></textarea></label><button class="primary">Record review</button></form>`,
+        `<form id="moderateform" class="fieldform"><input name="id" type="hidden" value="${e(id)}"><input name="version" type="hidden" value="${r.version}"><input name="decision" type="hidden" value="${name === "report-accept" ? "accept" : "reject"}"><label>Reason or verification still required<textarea name="reason" required></textarea></label><button class="primary">Record review</button></form>`,
       );
       return true;
     }
@@ -331,7 +333,7 @@ export function createExtras(h) {
         title: data.title,
         benefit: data.benefit,
         note: data.note,
-        summary: p.summary,
+        summary: actions.map(actionBrief).join("; ").slice(0, 1200),
         references: p.references,
         conditions: p.conditions,
         priority: p.priority,
@@ -344,7 +346,8 @@ export function createExtras(h) {
       await render();
     });
     on("#moderateform", async (form) => {
-      await api("/api/report/moderate", Object.fromEntries(new FormData(form)));
+      const b = Object.fromEntries(new FormData(form));
+      await api("/api/report/moderate", { ...b, version: Number(b.version) });
       dialogClose();
       await render();
     });
