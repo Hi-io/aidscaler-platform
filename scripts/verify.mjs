@@ -2,6 +2,7 @@ import { spawn, execFileSync } from "node:child_process";
 import { readdir, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
+import { verificationPassed } from "./verification-gates.mjs";
 import {
   buildFingerprint,
   evaluatorFingerprint,
@@ -18,6 +19,10 @@ const testFiles = async (cwd) =>
     .sort()
     .map((f) => path.join("tests", f));
 const simulator = path.resolve(root, "..", "disaster-response-simulator");
+// A fresh process avoids ESM caching a simulator build loaded before tests.
+const simulatorFingerprint = () => execFileSync(process.execPath,
+  ["--input-type=module", "-e", "import { ENGINE_BUILD } from './contracts/config.mjs'; process.stdout.write(ENGINE_BUILD)"],
+  { cwd: simulator, encoding: "utf8", windowsHide: true });
 const cases = [
   { name: "platform-syntax", cwd: root, args: ["scripts/check.mjs"] },
   {
@@ -51,6 +56,7 @@ const report = {
   at: new Date().toISOString(),
   candidateFingerprint: await buildFingerprint(),
   evaluatorFingerprint: await evaluatorFingerprint(),
+  simulatorFingerprint: simulatorFingerprint(),
   gitRevisions: {
     platform: gitRevision(root),
     simulator: gitRevision(simulator),
@@ -113,19 +119,13 @@ for (const item of cases) {
   report.cases.push(row);
   console.log(JSON.stringify(row));
 }
-report.candidateChanged =
-  report.candidateFingerprint !== (await buildFingerprint());
-report.passed =
-  !report.candidateChanged &&
-  report.cases.every(
-    (c) =>
-      c.exitCode === 0 &&
-      (!c.tests ||
-        (c.tests.tests > 0 &&
-          c.tests.fail === 0 &&
-          c.tests.cancelled === 0 &&
-          c.tests.skipped === 0)),
-  );
+report.candidateFinalFingerprint = await buildFingerprint();
+report.evaluatorFinalFingerprint = await evaluatorFingerprint();
+report.simulatorFinalFingerprint = simulatorFingerprint();
+report.candidateChanged = report.candidateFingerprint !== report.candidateFinalFingerprint;
+report.evaluatorChanged = report.evaluatorFingerprint !== report.evaluatorFinalFingerprint;
+report.simulatorChanged = report.simulatorFingerprint !== report.simulatorFinalFingerprint;
+report.passed = verificationPassed(report);
 await writeFile(
   path.join(folder, id + ".json"),
   JSON.stringify(report, null, 2),

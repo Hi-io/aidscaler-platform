@@ -56,8 +56,11 @@ test("conventional reference retains a pending unknown facility and still prepar
   assert.equal(r.state, "ready");
   assert.ok(
     r.steps.some(
-      (x) => x.state === "infeasible" && x.result.reason === "FACILITY",
+      (x) => x.tool === "checked-field-assessment" && x.state === "pending" &&
+        x.result.readyToDraft === false &&
+        x.result.missing.some(m => m.type === "qualified_mobile_field_assessor" && m.quantity === 1),
     ),
+    "Received site metadata cannot replace an available competent mobile field assessor",
   );
   const p = await app.store.get(app.config.org, "proposal", r.proposalId);
   const deliveries = p.actions.filter((a) => a.type === "dispatch");

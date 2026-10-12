@@ -2,6 +2,7 @@ import { check } from "./errors.mjs";
 import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
 import { authorizationCurrent } from "./authority.mjs";
+import { assessmentCurrent } from "./assessment-receipts.mjs";
 const PHYSICAL = new Set([
   "dispatch",
   "repair",
@@ -11,6 +12,12 @@ const PHYSICAL = new Set([
 ]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
 function resolution(action, receipt, state) {
+  if (action.type === "verify") {
+    const inspection = receipt?.owner && receipt.owner !== state.organization.id
+      ? receipt.partnerResult : state.inspections?.find(i => i.id === receipt?.result?.id);
+    return assessmentCurrent(inspection, { id: action.params.id,
+      sourceVersion: state.known?.buildings?.[action.params.id]?.version ?? action.params.targetVersion }, state.now);
+  }
   if (receipt?.owner && receipt.owner !== state.organization.id)
     return (
       receipt.state === "completed" &&
@@ -49,6 +56,18 @@ function resolution(action, receipt, state) {
       ) ?? false
     );
   return true; // Ledger/read ack never certifies a physical receipt.
+}
+function assessmentFailed(action, receipt, state) {
+  if (action?.type !== "verify") return false;
+  if (receipt.owner && receipt.owner !== state.organization.id)
+    return receipt.state === "completed" && !!receipt.partnerResult && !resolution(action, receipt, state);
+  if (!receipt.result) return false;
+  const inspection = state.inspections?.find(i => i.id === receipt.result.id),
+    operation = state.operations?.find(o => o.inspection === receipt.result.id ||
+      inspection?.operation && o.id === inspection.operation);
+  return !!(inspection && (["inconclusive", "timeout", "failed", "cancelled"].includes(inspection.state) ||
+    inspection.state === "completed" && !resolution(action, receipt, state)) ||
+    operation && ["blocked", "failed", "cancelled"].includes(operation.state));
 }
 function resolveParams(params, results) {
   return Object.fromEntries(
@@ -139,7 +158,7 @@ export class Worker {
     const issued = p.executionResults ?? [];
     const failed = issued.filter(
       (r) =>
-        r.result &&
+        assessmentFailed(p.actions[r.index], r, current) || r.result &&
         PHYSICAL.has(p.actions[r.index]?.type) &&
         current.operations.some(
           (o) =>
@@ -166,7 +185,9 @@ export class Worker {
             previousAuthorization: row.authorization,
             authorization: null,
             changedReason:
-              "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
+              failed.some(r => p.actions[r.index]?.type === "verify")
+                ? "A field assessment failed, became stale or lost validity. Review affected work; preserve the physical crew operation and historical source receipts."
+                : "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
             affectedSteps: failed.map((r) => r.index),
             preservedSteps: preserved,
           },
@@ -265,7 +286,7 @@ export class Worker {
         continue;
       if (a.owner !== org) {
         if (!results.some((r) => r.index === i)) {
-          const request = await this.network.requestStep(p, i);
+          const request = await this.network.requestStep({ ...p, simId }, i);
           results.push({
             index: i,
             state: "awaiting_partner",
@@ -286,6 +307,8 @@ export class Worker {
           {
             ...resolveParams(a.params, results),
             ...(a.type === "dispatch" ? { proposal: simId } : {}),
+            ...(a.type === "verify" ? { proposal: simId, step: i,
+              ...(p.originPartner ? { requestProposal: p.originSourceProposal, requestStep: p.originStep } : {}) } : {}),
           },
           `execute_${id}_${i}`,
           { human: true },
@@ -373,6 +396,10 @@ export class Worker {
         uid("facility_status"),
       );
     current = await this.connector.state();
+    for (const a of p.actions.filter(a => a.type === "verify")) {
+      for (const inspection of current.inspections?.filter(i => i.entity === a.params.id && i.target === "building") ?? [])
+        await this.store.upsert(org, "verification", inspection.id, inspection);
+    }
     const latest = await this.store.get(org, "proposal", id);
     results = latest.executionResults ?? results;
     const complete = p.actions.every((a, i) =>
@@ -446,17 +473,27 @@ export class Worker {
     });
     if (p.originPartner) {
       const r = results.find((r) => r.result)?.result,
-        o = current.operations.find((o) => o.id === r?.id);
+        o = current.operations.find((o) => o.id === (r?.operation ?? r?.id)),
+        inspection = p.actions[0].type === "verify" ? current.inspections?.find(i => i.id === r?.id) : null;
       await this.network.response(
         { ...p, version: latest.version },
         complete ? "completed" : "in_transit",
-        {
-          id: r?.id,
-          type: p.actions[0].type,
+        inspection ? { ...inspection, confirmedBySource: inspection.confirmedBySource === true } : {
+          id: o?.id ?? r?.id,
+          type: o?.type ?? p.actions[0].type,
+          org,
+          need: o?.need ?? null,
+          building: o?.building ?? null,
+          destination: o?.destination ?? null,
+          vehicle: o?.vehicle ?? null,
+          resource: o?.resource ?? null,
+          resourceType: o?.resourceType ?? null,
           quantity: o?.quantity,
+          received: o?.received ?? (o?.type === "evacuation" && DONE.has(o.state) ? o.quantity : 0),
+          times: o?.times ?? {},
           unit: o?.unit,
           state: o?.state ?? r?.state,
-          confirmedBySource: complete,
+          confirmedBySource: !!o || complete,
           observedAt: current.now,
         },
       );
@@ -505,6 +542,10 @@ export class Worker {
       } else if (job.kind === "ingest") result = await this.ingestion.sync();
       else if (job.kind === "investigate")
         result = await this.investigator.run(job.payload, job.id);
+      else if (job.kind === "discover_response")
+        result = await this.discovery.run(job.payload, job.payload.resumeOf ?? job.id);
+      else if (job.kind === "compile_response")
+        result = await this.discovery.compile(job.id);
       else if (job.kind === "analyze_media")
         result = await this.media.analyze(job.org, job.payload.id, job.id, {
           pages: job.payload.pages,
@@ -533,11 +574,11 @@ export class Worker {
         );
       else throw new Error("Unknown durable job kind.");
       await this.store.finishJob(job.id, result, job.lease_token);
-      if (job.kind === "investigate" && this.intake)
+      if (["investigate", "discover_response", "compile_response"].includes(job.kind) && this.intake)
         await this.intake.complete(job.payload, result);
       return true;
     } catch (e) {
-      if (job.kind === "investigate" && this.intake)
+      if (["investigate", "discover_response", "compile_response"].includes(job.kind) && this.intake)
         await this.intake.complete(job.payload, null, e);
       await this.store.failJob(job, e);
       return true;

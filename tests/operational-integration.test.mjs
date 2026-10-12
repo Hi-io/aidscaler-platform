@@ -4,6 +4,7 @@ import { createLabServers } from "../../disaster-response-simulator/sources/serv
 import { createPlatform } from "../server.mjs";
 import { Store } from "../src/store.mjs";
 import { sign } from "../src/network.mjs";
+import { effectiveNeed } from "../src/response-receipts.mjs";
 
 async function laboratory(t, organizations = 1) {
   const lab = await createLabServers({
@@ -239,6 +240,10 @@ test("two independent databases communicate over signed HTTP and each owner must
   const finalized = await a.worker.execute(p.id);
   assert.equal(finalized.complete, true);
   assert.equal(lab.world.need("need-water-main").served, 300);
+  const peerOperations = (await a.store.list("org0", "operation")).filter((o) => o.peerOwner === "org1");
+  assert.equal(peerOperations.length, 1);
+  assert.equal(peerOperations[0].received, 300);
+  assert.equal(effectiveNeed(await a.store.get("org0", "need", "need-water-main"), peerOperations).served, 300);
   assert.deepEqual(lab.world.invariants(), []);
   const malicious = {
     message: {

@@ -30,6 +30,7 @@ import { configureResponsePolicy, responsePolicy, responseQueue } from "./src/re
 import { responseOptions } from "./src/response-options.mjs";
 import { Retention } from "./src/retention.mjs";
 import { SemanticIngestion } from "./src/semantic-ingestion.mjs";
+import { DiscoveryResponse } from "./src/discovery-response.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -102,6 +103,7 @@ export async function createPlatform(overrides = {}) {
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
     semantic = new SemanticIngestion({ store, provider, connector, config }),
     ingestion = new Ingestion(store, connector, config),
+    discovery = new DiscoveryResponse({ store, domain, connector, semantic, ingestion, config }),
     network = new Network(store, config, overrides.networkFetcher ?? fetch),
     finance = new Finance(store, config),
     investigator = new Investigator({
@@ -120,6 +122,7 @@ export async function createPlatform(overrides = {}) {
       network,
       retention,
       semantic,
+      discovery,
       config,
     });
   if (
@@ -200,6 +203,7 @@ export async function createPlatform(overrides = {}) {
   ingestion.afterSync = async () => {
     await network.refresh();
     await integrations.pollDue();
+    await discovery.resumePending();
     await intake.kick();
   };
   integrations.afterRead = async (signals) => {
@@ -762,6 +766,19 @@ export async function createPlatform(overrides = {}) {
           });
           return json(res, 202, queued);
         }
+        if (url.pathname === "/api/discover-response") {
+          role(actor, ["analyst", "commander", "dispatcher"]);
+          check(Array.isArray(b.ids) && b.ids.length > 0 && b.ids.length <= 35 && new Set(b.ids).size === b.ids.length, "SEMANTIC_BATCH", "Select one to thirty-five received sources.");
+          const queued = await store.command(actor.org, key, b, async (tx) => {
+            for (const id of b.ids) check((await tx.get(actor.org, "signal", id)).state !== "erased", "SOURCE_ERASED", "The source is no longer available.", 409);
+            const id = uid("discovery");
+            await tx.enqueue(actor.org, "discover_response", { ids: b.ids }, id);
+            await tx.put(actor.org, "activity", id, { state: "queued", kind: "source_response", model: config.modelId, steps: [], startedAt: Date.now(), requestedBy: actor.id }, 0);
+            await tx.audit(actor.org, actor.id, "sources.response_discovery_queued", id, { sourceCount: b.ids.length });
+            return { id, queued: true };
+          });
+          return json(res, 202, queued);
+        }
         if (url.pathname === "/api/task/assign")
           return json(res, 201, await workforce.assign(actor, b, key));
         if (url.pathname === "/api/task/update")
@@ -782,7 +799,7 @@ export async function createPlatform(overrides = {}) {
           role(actor, ["analyst", "commander", "dispatcher"]);
           const activity = await store.get(actor.org, "activity", b.id);
           check(
-            ["queued", "reading", "checking"].includes(activity.state),
+            ["queued", "reading", "checking", "waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(activity.state),
             "ACTIVITY_STATE",
             "This investigation has already ended.",
             409,
@@ -1127,6 +1144,7 @@ export async function createPlatform(overrides = {}) {
     intake,
     memory,
     semantic,
+    discovery,
     retention,
     config,
     url: `http://${config.host}:${server.address().port}`,

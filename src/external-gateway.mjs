@@ -342,8 +342,17 @@ export async function createExternalGateway({
         });
         await queueReceipt(w, "completed", {
           id: o.id,
-          type: "dispatch",
+          type: o.type,
+          org: o.org,
+          need: o.need,
+          building: o.building,
+          destination: o.destination,
+          vehicle: o.vehicle,
+          resource: o.resource,
+          resourceType: o.resourceType,
           quantity: o.quantity,
+          received: o.received,
+          times: o.times,
           unit: o.unit,
           state: o.state,
           observedAt: s.now,

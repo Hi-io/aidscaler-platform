@@ -15,7 +15,7 @@ export async function responseOptions(
   });
   const focus = needId
     ? queue.rows.find((n) => n.id === needId)
-    : queue.rows.find((n) => !n.pendingProposals.length);
+    : queue.rows.find((n) => (n.planningOutstanding ?? n.outstanding) > 0);
   const allocation = await receivedAllocationPlan(store, config, {
     ...(focus ? { needIds: [focus.id] } : {}),
     excludeProposal,

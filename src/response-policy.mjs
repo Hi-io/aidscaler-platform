@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { check, role } from "./errors.mjs";
 import { hash } from "./store.mjs";
+import { effectiveNeed } from "./response-receipts.mjs";
 
 const schema = z
   .object({
@@ -99,8 +100,10 @@ export async function responseQueue(
     "Use a finite response page.",
   );
   const policy = await responsePolicy(store, org),
-    needs = await store.list(org, "need", 10000),
     operations = await store.list(org, "operation", 10000),
+    needs = (await store.list(org, "need", 10000)).map((need) =>
+      effectiveNeed(need, operations),
+    ),
     proposals = (await store.list(org, "proposal", 2000)).filter(
       (p) =>
         p.id !== excludeProposal &&
@@ -113,9 +116,10 @@ export async function responseQueue(
           "awaiting_partner",
         ].includes(p.state),
     ),
-    covered = new Map();
+    covered = new Map(),
+    planningHolds = [];
   for (const p of proposals)
-    for (const a of p.actions) {
+    for (const [index, a] of p.actions.entries()) {
       const needIds = a.params.need
         ? [a.params.need]
         : a.type === "evacuate"
@@ -127,20 +131,53 @@ export async function responseQueue(
           : [];
       for (const id of needIds)
         covered.set(id, [...(covered.get(id) ?? []), p.id]);
+      if (!["dispatch", "evacuate"].includes(a.type)) continue;
+      const receipt = p.executionResults?.find((r) => r.index === index),
+        sourceId = receipt?.result?.operation ?? receipt?.result?.id ??
+          receipt?.partnerResult?.operation ?? receipt?.partnerResult?.id,
+        operation = operations.find((o) =>
+          o.proposalId === p.id && o.step === index ||
+          sourceId && (o.id === sourceId || o.sourceId === sourceId) &&
+            (!o.owner || o.owner === a.owner),
+        ),
+        physicallyComplete = operation &&
+          ["completed", "received", "service", "cancelled", "failed"].includes(operation.state);
+      if (physicallyComplete) continue;
+      // A draft hold only guides subsequent planning. It is not stock reserved
+      // at the owner, owner consent, a dispatch or a physical receipt. Once the
+      // operation is observed, its incoming quantity is already counted below.
+      planningHolds.push({
+        proposal: p.id,
+        step: index,
+        owner: a.owner,
+        vehicle: a.params.vehicle,
+        resource: a.type === "dispatch" ? a.params.resource : null,
+        needIds,
+        quantity: operation ? 0 : Math.max(0, a.params.quantity ?? 0),
+        operation: operation?.id ?? null,
+      });
     }
   const eligible = needs
     .filter((n) => outstanding(n, operations) > 0)
     .sort((a, b) => compareNeeds(a, b, policy));
-  const rows = eligible.slice(0, limit).map((n) => ({
-    ...n,
-    outstanding: outstanding(n, operations),
-    pendingProposals: [...new Set(covered.get(n.id) ?? [])],
-    selectionReason:
-      policy.order === "deadline_then_priority"
-        ? "Earliest declared useful window, then source priority"
-        : "Source priority, then declared useful window",
-    policyVersion: policy.version,
-  }));
+  const rows = eligible.slice(0, limit).map((n) => {
+    const missing = outstanding(n, operations),
+      draftHeldQuantity = planningHolds
+        .filter((h) => h.needIds.includes(n.id))
+        .reduce((sum, h) => sum + h.quantity, 0);
+    return {
+      ...n,
+      outstanding: missing,
+      draftHeldQuantity,
+      planningOutstanding: Math.max(0, missing - draftHeldQuantity),
+      pendingProposals: [...new Set(covered.get(n.id) ?? [])],
+      selectionReason:
+        policy.order === "deadline_then_priority"
+          ? "Earliest declared useful window, then source priority"
+          : "Source priority, then declared useful window",
+      policyVersion: policy.version,
+    };
+  });
   // Ignore changing wall time/telemetry; only changed material observations may
   // restart the same inquiry. Versions and busy/available resources matter.
   const material = [
@@ -151,6 +188,7 @@ export async function responseQueue(
       n.deadline,
       n.priority,
       n.outstanding,
+      n.planningOutstanding,
       n.pendingProposals,
     ]),
     ...(await Promise.all(
@@ -217,6 +255,7 @@ export async function responseQueue(
   return {
     policy,
     rows,
+    planningHolds,
     total: eligible.length,
     openReviews: proposals.filter((p) =>
       [

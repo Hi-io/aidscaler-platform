@@ -1,4 +1,73 @@
 import { check } from "./errors.mjs";
+import { assessmentCurrent } from "./assessment-receipts.mjs";
+import { responseQueue } from "./response-policy.mjs";
+
+/** Prepare only the finite, owner-approved physical assessment. An incomplete
+ * assessment cannot be used to draft activation. The same helper is available
+ * to a competent conventional planner. */
+export async function assessmentPlan(store, org, building, { peers, validForMs = 21600000 } = {}) {
+  check(Number.isSafeInteger(validForMs) && validForMs >= 1000 && validForMs <= 86400000,
+    "ASSESSMENT_TTL", "Assessment validity must be between one second and one day.");
+  const facility = await store.get(org, "facility", building, false),
+    sourceNow = (await store.get(org, "source", "simulator", false))?.simulatedAt ?? 0,
+    inspections = (await store.list(org, "verification", 2000)).filter(v => v.target === "building" && v.entity === building),
+    current = inspections.find(v => assessmentCurrent(v, facility, sourceNow));
+  const base = { building, purpose: "facility_safety", sourceNow, readyToDraft: false, actions: [], references: facility ? [building] : [], ownerApprovals: [], missing: [], pending: [] };
+  if (!facility || !Number.isSafeInteger(facility.sourceVersion))
+    return { ...base, missing: [{ type: "facility_metadata", quantity: 1 }],
+      note: "Receive the site's current metadata through a clarification first. A location on a public map is not a safety assessment." };
+  check(["shelter", "plant"].includes(facility.use) && facility.capacity > 0,
+    "FACILITY_PURPOSE", "An assessment needs an eligible service site with useful capacity.");
+  if (current) return { ...base, satisfied: true, assessment: current.id,
+    references: [building, current.id], note: "A current competent physical assessment has already reached this organization." };
+  const pending = inspections.filter(v => !["completed", "inconclusive", "timeout", "failed", "cancelled"].includes(v.state) &&
+    v.method === "field" && v.purpose === "facility_safety" &&
+    (v.targetVersion === undefined || v.targetVersion === facility.sourceVersion));
+  const openProposals = (await store.list(org, "proposal", 2000)).filter(p =>
+    ["awaiting_review", "needs_clarification", "conditionally_authorized", "authorized", "executing", "awaiting_partner"].includes(p.state));
+  const proposals = openProposals.filter(p =>
+    !["completed", "cancelled", "rejected", "requires_review", "repaired"].includes(p.state) &&
+    p.actions?.some(a => a.type === "verify" && a.params.id === building && a.params.targetVersion === facility.sourceVersion));
+  if (pending.length || proposals.length) return { ...base,
+    pending: [...pending.map(v => ({ inspection: v.id, owner: v.sourceOwner ?? v.org, state: v.state })),
+      ...proposals.map(p => ({ proposal: p.id, state: p.state }))],
+    note: "The current assessment is pending. Do not allocate a second crew or assume a positive result." };
+  const queue = await responseQueue(store, org, { limit: 2000 }),
+    holds = [...queue.planningHolds];
+  for (const p of openProposals) for (const [index, action] of p.actions.entries()) {
+    if (action.type !== "verify") continue;
+    const receipt = p.executionResults?.find(r => r.index === index),
+      i = inspections.find(i => i.id === receipt?.result?.id || i.sourceId === receipt?.partnerResult?.id);
+    if (i && ["completed", "inconclusive", "timeout", "failed", "cancelled"].includes(i.state)) continue;
+    holds.push({ owner: action.owner, resource: action.params.staff,
+      vehicle: action.params.vehicle, quantity: i?.staff ? 0 : 1 });
+  }
+  const offers = (await store.list(org, "peer_offer", 2000)).filter(o =>
+    o.active && o.expiresAt > Date.now() && (!peers || peers.some(p => p.org === o.from))),
+    resources = [...(await store.list(org, "resource", 2000)).filter(r => r.owner === org)
+      .map(r => ({ ...r, available: Math.max(0, r.quantity - (r.reserved ?? 0) - (r.floor ?? 0)), evidence: r.id })),
+      ...offers.filter(o => o.kind === "resource").map(o => ({ ...o.projection, owner: o.from, evidence: o.id }))],
+    vehicles = [...(await store.list(org, "vehicle", 2000)).filter(v => v.owner === org).map(v => ({ ...v, evidence: v.id })),
+      ...offers.filter(o => o.kind === "vehicle").map(o => ({ ...o.projection, owner: o.from, evidence: o.id }))];
+  const choices = resources.filter(r => r.type === "staff" &&
+      r.available - holds.filter(h => h.owner === r.owner && h.resource === r.id).reduce((s, h) => s + h.quantity, 0) >= 1 &&
+      r.qualifications?.includes("field_assessment"))
+    .map(r => ({ resource: r, vehicle: vehicles.find(v => v.owner === r.owner && ["idle", "arrived"].includes(v.state) &&
+      !holds.some(h => h.owner === v.owner && h.vehicle === v.id)) }))
+    .filter(c => c.vehicle).sort((a, b) => Number(b.resource.owner === org) - Number(a.resource.owner === org) || a.resource.owner.localeCompare(b.resource.owner));
+  if (!choices.length) return { ...base, missing: [{ type: "qualified_mobile_field_assessor", quantity: 1 }],
+    note: "Receive a consented offer for qualified field staff and an available crew vehicle. Headcount or radio confirmation is insufficient." };
+  const { resource, vehicle } = choices[0];
+  return { ...base, readyToDraft: true, actions: [{ type: "verify", owner: resource.owner, dependsOn: [], params: {
+    target: "building", id: building, method: "field", purpose: "facility_safety", reportTo: org,
+    staff: resource.id, vehicle: vehicle.id,
+    targetVersion: facility.sourceVersion, validForMs,
+  } }], references: [building, resource.evidence, vehicle.evidence], ownerApprovals: [...new Set([org, resource.owner])],
+    crew: { owner: resource.owner, resource: resource.id, vehicle: vehicle.id },
+    offerVersions: offers.filter(o => [resource.evidence, vehicle.evidence].includes(o.id))
+      .map(o => ({ id: o.id, version: o.version, permissionVersion: o.permissionVersion })),
+    note: "The responsible organization and crew owner approve independently. The owner source assigns qualified staff, real road travel and field work; activation waits for a current received assessment." };
+}
 
 /** Build a checked dependency draft from RECEIVED inspections and consented
  * owner projections. This is a formal feasibility aid, not LLM discovery and
@@ -21,15 +90,13 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
       v.entity === building &&
       v.state === "completed",
   );
-  const assessment = inspections.sort(
+  const sourceNow = (await store.get(org, "source", "simulator", false))?.simulatedAt ?? 0;
+  const assessment = inspections.filter(v => assessmentCurrent(v, facility, sourceNow)).sort(
     (a, b) =>
       (b.completedAt ?? b.observedAt ?? b.at ?? 0) -
       (a.completedAt ?? a.observedAt ?? a.at ?? 0),
   )[0];
-  const safe =
-    facility.safe === true &&
-    assessment?.result?.safe === true &&
-    (assessment.result.version === facility.sourceVersion || facility.state === "operating");
+  const safe = facility.safe === true && !!assessment;
   const dependencies =
     facility.dependencies ?? assessment?.result?.dependencies;
   check(
@@ -194,6 +261,8 @@ export async function servicePlan(store, org, building, { needId, peers } = {}) 
     affectedNeeds: [...new Set(actions.flatMap((a) => a.params.need ? [a.params.need] : []))],
     offerVersions: offers.filter((o) => references.has(o.id)).map((o) => ({ id: o.id, version: o.version, permissionVersion: o.permissionVersion })),
     ownerApprovals: [...new Set(actions.map((a) => a.owner))],
+    assessment: { current: safe, id: assessment?.id ?? null, sourceNow,
+      ...(safe ? {} : { next: "plan_assessment" }) },
     note: "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status.",
   };
 }

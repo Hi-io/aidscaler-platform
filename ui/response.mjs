@@ -1,12 +1,12 @@
 /** Decision options and explicit source erasure use progressive disclosure. */
 export function createResponseControls({ api, escape: e, action, state, modal, toast }) {
   async function run(name, id) {
-    if (name === "interpret-page") {
+    if (name === "interpret-page" || name === "discover-page") {
       const ids = state.signalRows.filter((s) => s.state !== "erased").slice(0, 35).map((s) => s.id);
       if (!ids.length) { toast("No received sources are available."); return true; }
-      await api("/api/interpret-sources", { ids });
+      await api(name === "discover-page" ? "/api/discover-response" : "/api/interpret-sources", { ids });
       location.hash = "investigations"; state.page = "investigations";
-      toast("Received-source batch queued. Interpretations remain unverified.");
+      toast(name === "discover-page" ? "Discovery queued: interpret sources, request checks, then draft for owner review." : "Received-source batch queued. Interpretations remain unverified.");
       return true;
     }
     if (name === "semantic-receipt") {

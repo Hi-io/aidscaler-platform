@@ -261,6 +261,7 @@ function action(label, act, id = "", cls = "") {
     sync: ["admin", "analyst", "commander", "dispatcher"],
     investigate: ["analyst", "commander", "dispatcher"],
     investigatesignal: ["analyst", "commander", "dispatcher"],
+    "discover-page": ["analyst", "commander", "dispatcher"],
     "investigate-facility": ["analyst", "commander", "dispatcher"],
     "stop-inquiry": ["analyst", "commander", "dispatcher"],
     automation: ["admin", "commander"],
@@ -324,9 +325,11 @@ function shell(content) {
 }
 function activityCard(a) {
   const active = ["reading", "checking", "queued"].includes(a?.state);
+  const waitLabels = { waiting_evidence: "Waiting for field confirmation", waiting_capacity: "Waiting for eligible response capacity", waiting_review: "Waiting for owner review", waiting_receipt: "Waiting for physical delivery" };
+  const waiting = Object.hasOwn(waitLabels, a?.state ?? ""), stoppable = active || waiting;
   if (!a)
     return `<div class="card soft"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">Ready to investigate</h3><p class="sub">Select a case. The model checks what could unlock useful help.</p></div></div><p class="small">No inference is running. Every tool call and result will appear here.</p></div>`;
-  return `<div class="card soft ${active ? "processing" : ""}"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">${escape(active ? "Gemma is " + { reading: "reading the evidence", checking: "checking a possibility", queued: "queued for investigation" }[a.state] : a.state === "ready" ? (a.kind === "source_interpretation" ? "Sourced interpretations are ready to review" : "A response is ready to review") : a.state === "failed" ? "Investigation needs attention" : "Evidence remains incomplete")}</h3><p class="small">${escape(a.model ?? state.model)} · ${badge(a.state)}</p></div></div>${
+  return `<div class="card soft ${active ? "processing" : ""}"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">${escape(active ? "Gemma is " + { reading: "reading the evidence", checking: "checking a possibility", queued: "queued for investigation" }[a.state] : waiting ? waitLabels[a.state] : a.state === "cancelled" ? "Inquiry stopped" : a.state === "ready" ? (a.kind === "source_interpretation" ? "Sourced interpretations are ready to review" : "A response is ready to review") : a.state === "failed" ? "Investigation needs attention" : "Evidence remains incomplete")}</h3><p class="small">${escape(a.model ?? state.model)} · ${badge(a.state)}</p></div></div>${
     a.steps
       ?.slice(-2)
       .map(
@@ -334,7 +337,7 @@ function activityCard(a) {
           `<div class="activitystep">${icon(s.state === "failed" ? "circle-alert" : "check")} ${escape(s.label ?? s.tool)}<small>${escape(s.state)} · ${time(s.at)}</small></div>`,
       )
       .join("") ?? ""
-  }${a.cancelRequested ? '<p class="small">Stop requested. Waiting for the current call to finish.</p>' : a.reason ? `<p class="small">${escape(a.reason)}</p>` : ""}<div class="toolbar">${action("Open activity & evidence", "activity", a.id, "quiet")}${a.proposalId ? action("Review response", "proposal", a.proposalId, "accent") : ""}${active && !a.cancelRequested && ["analyst", "commander", "dispatcher"].includes(state.user.role) ? action("Stop inquiry", "stop-inquiry", a.id) : ""}</div></div>`;
+  }${a.cancelRequested ? `<p class="small">${a.state === "cancelled" ? "Stopped. Previously completed calls remain recorded." : "Stop requested. Waiting for the current call to finish."}</p>` : a.reason ? `<p class="small">${escape(a.reason)}</p>` : ""}<div class="toolbar">${action("Open activity & evidence", "activity", a.id, "quiet")}${a.proposalId ? action("Review response", "proposal", a.proposalId, "accent") : ""}${stoppable && !a.cancelRequested && ["analyst", "commander", "dispatcher"].includes(state.user.role) ? action("Stop inquiry", "stop-inquiry", a.id) : ""}</div></div>`;
 }
 async function overview() {
   const d = await api("/api/dashboard");
@@ -418,7 +421,7 @@ async function signals() {
       "The world speaks in fragments.",
       "Public posts, media and authorized reports arrive automatically. Keep the original evidence and its uncertainty.",
       action(`${icon("refresh-cw")} Sync`, "sync") +
-        action("Interpret received batch", "interpret-page", "", "accent") + action("Investigate this evidence", "investigate", "", "primary"),
+        action("Discover a response", "discover-page", "", "primary") + action("Interpret only", "interpret-page", "", "accent"),
     ) +
     `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="badge">${filtered.length} collected signals</span></div><div class="card">${
       filtered

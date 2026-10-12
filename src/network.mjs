@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { check, role } from "./errors.mjs";
+import { recordResponseReceipt } from "./response-receipts.mjs";
+import { recordAssessmentReceipt } from "./assessment-receipts.mjs";
 import { uid, hash } from "./store.mjs";
 import { actionSchema } from "./contracts.mjs";
 import { Domain } from "./domain.mjs";
@@ -265,6 +267,7 @@ export class Network {
         action: { ...action, dependsOn: [] },
         originProposal: proposal.id,
         originStep: index,
+        originSourceProposal: proposal.simId ?? null,
         requestedBy: proposal.authorization.by,
         targetNeed: targetNeed
           ? {
@@ -449,6 +452,7 @@ export class Network {
           originPartner: from,
           originProposal: p.originProposal,
           originStep: p.originStep,
+          originSourceProposal: p.originSourceProposal ?? null,
         });
       }
       if (m.kind === "response_receipt" && !m.revoke) {
@@ -487,6 +491,12 @@ export class Network {
                 "PEER_RECEIPT",
                 "Completion requires the owner source receipt.",
               );
+            const physical = await recordResponseReceipt(tx, this.config.org, from,
+              proposal, p.originStep, p.state, p.operation);
+            if (physical?.stale) return { accepted: true, stale: true };
+            const assessment = await recordAssessmentReceipt(tx, this.config.org, from,
+              proposal, p.originStep, p.state, p.operation);
+            if (assessment?.stale) return { accepted: true, stale: true };
             result.state = p.state;
             result.partnerResult = p.operation;
             await tx.put(

@@ -58,3 +58,29 @@ test("location lookup ignores sentence punctuation without exposing an unrelated
  };
  assert.equal((await f.semantic.process({ ids: ["request"] }, "bounded-directory")).coverage.omittedLocations, 300);
 });
+
+test("provider failure retains its measured waiting time and settles its timing receipt once", async t => {
+ const f = await fixture(t, [observation]), receipts = [];
+ f.semantic.connector = { startModel: async () => ({ id: "failed-timing" }), finishModel: async (id, usage) => { receipts.push({ id, usage }); } };
+ f.semantic.provider.complete = async () => {
+  await new Promise(resolve => setTimeout(resolve, 12));
+  throw Object.assign(Error("Synthetic provider unavailable"), { code: "PROVIDER_UNAVAILABLE" });
+ };
+ await assert.rejects(f.semantic.process({ ids: ["request"] }, "failed-provider"), { code: "PROVIDER_UNAVAILABLE" });
+ assert.equal(receipts.length, 1);
+ assert.equal(receipts[0].usage.failed, true);
+ assert.ok(receipts[0].usage.wallMs >= 1);
+ assert.equal((await f.store.list("org0", "semantic_receipt")).length, 0);
+});
+
+test("truncated model output records one failed timing receipt with its known cost, without accepting partial claims", async t => {
+ const f = await fixture(t, [observation]), receipts = [];
+ f.semantic.connector = { startModel: async () => ({ id: "truncated-timing" }), finishModel: async (id, usage) => { receipts.push({ id, usage }); } };
+ f.semantic.provider.complete = async () => ({ finishReason: "length", usage: { providerCost: 0.001, wallMs: 30 }, message: { content: '{"observations":[' } });
+ await assert.rejects(f.semantic.process({ ids: ["request"] }, "truncated-provider"), { code: "SEMANTIC_INCOMPLETE" });
+ assert.equal(receipts.length, 1);
+ assert.equal(receipts[0].usage.failed, true);
+ assert.equal(receipts[0].usage.providerCost, 0.001);
+ assert.ok(receipts[0].usage.wallMs >= 30);
+ assert.equal((await f.store.list("org0", "claim")).length, 0);
+});

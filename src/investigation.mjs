@@ -14,7 +14,7 @@ import {
   validateAllocationOffers,
 } from "./received-allocation.mjs";
 import { composeService } from "./planning.mjs";
-import { servicePlan } from "./services.mjs";
+import { servicePlan, assessmentPlan } from "./services.mjs";
 import { responseQueue } from "./response-policy.mjs";
 import { responseOptions } from "./response-options.mjs";
 import { checkedRepairPlan } from "./response-repair.mjs";
@@ -151,6 +151,16 @@ export const researchTools = [
     },
   ),
   tool(
+    "plan_assessment",
+    "Find a qualified, consented owner for an actual field assessment of a received facility. Does not certify safety, start a trip or authorize another owner. A pending assessment is reused; clarification is not safety inspection.",
+    { ...obj({ building: STR }), required: ["building"] },
+  ),
+  tool(
+    "prepare_assessment",
+    "Prepare the last checked field-assessment plan for separate human owner review. The team must travel and perform the work before a current source receipt can unlock service planning.",
+    { ...obj({ title: STR, rationale: STR, benefit: STR }), required: ["title", "rationale", "benefit"] },
+  ),
+  tool(
     "lookup",
     "Read an authorized operational system. A query may require waiting for its result.",
     {
@@ -160,7 +170,7 @@ export const researchTools = [
   ),
   tool(
     "verify",
-    "Request field verification of a need, building, road, or resource. This costs time and may be inconclusive.",
+    "Request an available verification channel for a need, building, road or resource. field is the default; radio/clarification may remain inconclusive and do not bypass service safety. Reuses an existing pending check of the same target and method. This costs time.",
     {
       ...obj({
         target: {
@@ -169,6 +179,7 @@ export const researchTools = [
         },
         id: STR,
         reason: STR,
+        method: { type: "string", enum: ["field", "radio", "clarification"] },
       }),
       required: ["target", "id", "reason"],
     },
@@ -292,7 +303,7 @@ export class Investigator {
     if (!needId && !facilityId && !repairOf && queue.policy.approved)
       needId =
         queue.rows.find(
-          (n) => !n.pendingProposals.length && !n.investigationDeferred,
+          (n) => n.planningOutstanding > 0 && !n.investigationDeferred,
         )?.id ?? null;
     const signals = ids.length
       ? (
@@ -328,7 +339,7 @@ export class Investigator {
       queue.total &&
       !queue.nextOffset &&
       queue.rows.every(
-        (n) => n.pendingProposals.length || n.investigationDeferred,
+        (n) => n.planningOutstanding <= 0 || n.investigationDeferred,
       ) &&
       previousSources?.signature === presentedSourceSignature
     ) {
@@ -455,6 +466,7 @@ export class Investigator {
         role: "system",
         content:
           EXECUTION_CONTRACT +
+          "Facility assessments are a separate physical task. If the site has only directory metadata, verify the building using method clarification to receive its current version and requirements; this cannot certify safety. Use plan_assessment to find a qualified, consented mobile crew, then prepare_assessment when readyToDraft. Stop that episode after preparing the assessment request: its human owners must approve and the crew must travel and finish the field work. A later current source receipt can unlock plan_service and prepare_service. A pending assessment, radio answer or missing assessor never counts as safe.\n" +
           "The responsePolicy belongs to the human coordinator. When approved, follow its ordering and focusNeed. Competing needs remain separate native-unit goals. Before committing scarce vehicles, use compare_responses when materially different options exist. Record the alternatives and postponed needs in your short rationale. Do not mix liters and shelter places into an invented score. If a higher-priority option is impossible now, preserve it and prepare a useful partial response instead.\n" +
           "The input is a focused preview, NOT all records. Missing from preview is not absent or false. Use read_context for omitted received data; lookup/verify for fresh observations. Preserve source versions and conflicting evidence.\n" +
           (policy === "general"
@@ -487,6 +499,7 @@ export class Investigator {
         checkpoint?.outputTokens ?? this.config.modelMaxOutputTokens ?? 8192,
       allocation = checkpoint?.allocation ?? null,
       service = checkpoint?.service ?? null,
+      assessment = checkpoint?.assessment ?? null,
       repairPlan = checkpoint?.repairPlan ?? null,
       pendingMessage = checkpoint?.pendingMessage ?? null,
       toolOffset = checkpoint?.toolOffset ?? 0;
@@ -500,6 +513,7 @@ export class Investigator {
         outputTokens,
         allocation,
         service,
+        assessment,
         repairPlan,
         messages,
         pendingMessage,
@@ -657,8 +671,19 @@ export class Investigator {
           activity.steps.push(step);
           await this.activity(jobId, activity);
           try {
-            args = JSON.parse(call.function.arguments);
             const name = call.function.name;
+            const rawArguments = call.function.arguments,
+              emptyArguments = rawArguments == null ||
+                typeof rawArguments === "string" && !rawArguments.trim(),
+              contract = researchTools.find((t) => t.function.name === name)?.function.parameters;
+            check(
+              !emptyArguments || contract && !contract.required?.length,
+              "TOOL_ARGUMENTS",
+              "This tool requires explicit arguments; an empty optional-tool object does not satisfy required fields.",
+            );
+            args = emptyArguments ? {} : JSON.parse(rawArguments);
+            check(args && typeof args === "object" && !Array.isArray(args),
+              "TOOL_ARGUMENTS", "Tool arguments must be a JSON object.");
             if (name === "read_action_contract") {
               check(
                 Array.isArray(args.types) &&
@@ -778,6 +803,21 @@ export class Investigator {
                 note: "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning.",
               };
               step.label = "Found candidate service sites in the received map";
+            } else if (name === "plan_assessment") {
+              await this.ingestKnown?.();
+              assessment = await assessmentPlan(this.store, org, args.building, { peers: this.config.peers });
+              response = { ...assessment, nextTool: assessment.readyToDraft ? "prepare_assessment" : "wait_for_current_receipt_or_plan_service" };
+              step.label = "Checked a qualified owner's field-assessment capacity";
+            } else if (name === "prepare_assessment") {
+              check(assessment?.readyToDraft, "ASSESSMENT_PENDING", "Run plan_assessment and resolve its pending conditions first.");
+              const current = await assessmentPlan(this.store, org, assessment.building, { peers: this.config.peers });
+              check(current.readyToDraft && hash([current.actions, current.references, current.offerVersions]) === hash([assessment.actions, assessment.references, assessment.offerVersions]), "ASSESSMENT_CHANGED", "The target, owner capacity or sharing permission changed. Recheck the assessment plan before preparing a request.", 409);
+              const draft = { title: args.title, summary: args.benefit, benefit: args.benefit, rationale: args.rationale, references: current.references, actions: current.actions, conditions: [], alternatives: [] };
+              await validatePlan(this.store, org, draft);
+              response = await this.domain.propose(actor, draft, "draft_" + jobId);
+              activity.proposalId = response.id;
+              step.label = "Prepared a field-assessment request for owner review";
+              done = true;
             } else if (name === "plan_service") {
               await this.ingestKnown?.();
               service = await servicePlan(this.store, org, args.building, {
@@ -881,7 +921,11 @@ export class Investigator {
                 "lookup_" + hash([jobId, args]),
               );
               response = await this.wait(q.id);
-              await this.store.upsert(org, "query", q.id, response);
+              await this.store.upsert(org, "query", q.id, {
+                ...response,
+                sourceCreatedAt: response.createdAt,
+                sourceCompletedAt: response.completedAt,
+              });
               await this.ingestKnown?.();
               step.label = "Checked " + args.target;
             } else if (name === "verify") {
@@ -890,12 +934,17 @@ export class Investigator {
                 "TOOL_SCOPE",
                 "Unknown verification target.",
               );
-              const q = await this.connector.action(
+              const method = args.method ?? "field";
+              check(["field", "radio", "clarification"].includes(method), "VERIFICATION_METHOD", "Choose an available verification channel.");
+              const pending = (await this.connector.state()).inspections?.find(i =>
+                i.target === args.target && i.entity === args.id &&
+                (i.method ?? "field") === method && !["completed", "inconclusive", "timeout", "failed", "cancelled"].includes(i.state));
+              const q = pending ?? await this.connector.action(
                 "verify",
-                { target: args.target, id: args.id },
-                "verify_" + hash([jobId, args]),
+                { target: args.target, id: args.id, method },
+                "verify_" + hash([jobId, args.target, args.id, method]),
               );
-              response = await this.wait(q.id, "inspections", 6000);
+              response = pending ? { ...pending, reusedPending: true, note: "Existing check is still pending; no duplicate inquiry or authority was created." } : await this.wait(q.id, "inspections", 6000);
               await this.ingestKnown?.();
               if (response.state === "completed")
                 await this.store.upsert(
@@ -938,11 +987,10 @@ export class Investigator {
               response = await receivedAllocationPlan(this.store, this.config, {
                 ...args,
                 excludeProposal: repairOf,
-                ...(args.needIds
-                  ? {}
-                  : needId && focusMode === "manual"
-                    ? { needIds: [needId] }
-                    : {}),
+                // Automatic response is a concurrent queue, not a model-picked
+                // single-case filter. An explicit operator focus stays scoped.
+                needIds: focusMode === "automatic" ? undefined :
+                  needId ? [needId] : args.needIds,
               });
               allocation = response;
               step.label = "Checked allocations against scarce capacity";
@@ -964,6 +1012,14 @@ export class Investigator {
               );
               const selected = indices.map((i) => allocation.allocations[i]);
               await validateAllocationOffers(this.store, this.config, selected);
+              const current = await receivedAllocationPlan(this.store, this.config, allocation.scope);
+              check(selected.every((old) => current.allocations.some((a) =>
+                a.owner === old.owner && a.need === old.need &&
+                a.resource === old.resource && a.vehicle === old.vehicle &&
+                a.quantity === old.quantity)),
+                "ALLOCATION_CHANGED",
+                "A need, pending draft or capacity changed while preparing this response. Rebuild the checked allocation; no overlapping draft was prepared.",
+                409);
               const actions = indices.map((i) => allocation.actions[i]),
                 references = [
                   ...new Set(selected.flatMap((a) => a.evidenceIds)),
@@ -1096,6 +1152,7 @@ export class Investigator {
           calls,
           allocation: null,
           service: null,
+          assessment: null,
         });
       await this.store.transaction((tx) =>
         tx.audit(org, actor.id, "investigation.finished", jobId, {

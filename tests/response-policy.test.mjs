@@ -347,7 +347,7 @@ test("automatic planning batches concurrent native needs while a manual focus re
                   name: calls === 1 ? "plan_allocations" : "prepare_allocation",
                   arguments: JSON.stringify(
                     calls === 1
-                      ? {}
+                      ? { needIds: [automatic ? "one" : "two"] }
                       : {
                           indices,
                           title: "A useful reviewed batch",
@@ -378,5 +378,6 @@ test("automatic planning batches concurrent native needs while a manual focus re
     assert.equal(proposal.state, "awaiting_review");
     assert.equal(proposal.actions.length, automatic ? 2 : 1);
     assert.equal(proposal.authorization, null);
+    assert.deepEqual(proposal.actions.map((a) => a.params.need).sort(), automatic ? ["one", "two"] : ["one"]);
   }
 });

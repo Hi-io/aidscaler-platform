@@ -17,8 +17,30 @@ try {
  await page.locator("#response-policy [name=order]").selectOption("deadline_then_priority"); await page.getByText("Protected need types", { exact: true }).click(); await page.getByLabel("water", { exact: true }).check();
  await page.locator("#response-policy [name=reason]").fill("Explicit coordinator policy for this synthetic UI exercise"); await page.getByRole("button", { name: "Approve this policy version", exact: true }).click(); await page.locator("dialog").waitFor({ state: "detached" });
  const policy = await app.store.get("org0", "response_policy", "active"); assert.equal(policy.approved, true); assert.deepEqual(policy.protectedTypes, ["water"]); checks.push("Coordinator approves priorities and protected types through the UI; native units and delivery authority remain separate");
- await page.goto(app.url + "/#signals"); await page.getByRole("button", { name: "Interpret received batch", exact: true }).click(); await app.worker.drain(); await page.reload();
+ await page.goto(app.url + "/#signals"); await page.getByRole("button", { name: "Interpret only", exact: true }).click(); await app.worker.drain(); await page.reload();
  assert.equal((await app.store.list("org0", "semantic_receipt", 10)).length, 1); assert.equal((await app.store.list("org0", "proposal", 10)).length, 0); checks.push("Received-source batch is queued through the UI; sourced interpretations do not create operational authority or a proposal");
+ await page.goto(app.url + "/#signals"); await page.getByRole("button", { name: "Discover a response", exact: true }).click(); await app.worker.drain();
+ const discovery = (await app.store.list("org0", "discovery_run", 10))[0];
+ assert.ok(discovery.sourceIds.length); assert.equal(discovery.state,"inconclusive"); assert.equal((await app.store.list("org0","proposal",10)).length,0);
+ checks.push("Discover a response invokes the durable source pipeline; unresolved locations stay inconclusive without fabricated delivery authority");
+ for (const [waitState, title] of [["waiting_review", "Waiting for owner review"], ["waiting_receipt", "Waiting for physical delivery"]]) {
+  const id = "ui-state-" + waitState;
+  await app.store.upsert("org0", "discovery_run", id, { ...discovery, id, state: waitState, finishedAt: null });
+  await app.store.upsert("org0", "activity", id, { state: waitState, kind: "source_response", model: "recorded-UI-contract", steps: [], startedAt: Date.now() });
+  await page.goto(app.url + "/#investigations");
+  const heading = page.getByRole("heading", { name: title, exact: true });
+  await heading.waitFor();
+  await heading.locator("xpath=ancestor::div[contains(@class,'card')]").getByRole("button", { name: "Stop inquiry", exact: true }).click();
+  await app.discovery.resumePending();
+  assert.equal((await app.store.get("org0", "discovery_run", id)).state, "cancelled");
+  checks.push(title + " is visible and stoppable; synthetic UI state fixture, not a physical-delivery claim");
+ }
+ await app.store.upsert("org0","discovery_run",discovery.id,{state:"waiting_evidence",finishedAt:null});
+ await app.store.upsert("org0","activity",discovery.id,{state:"waiting_evidence",finishedAt:null});
+ await page.goto(app.url+"/#investigations"); await page.getByRole("button",{name:"Stop inquiry",exact:true}).click();
+ await app.discovery.resumePending();
+ assert.equal((await app.store.get("org0","discovery_run",discovery.id)).state,"cancelled");
+ checks.push("A waiting field-confirmation inquiry exposes Stop and cannot be resumed after operator cancellation");
  await page.goto(app.url + "/#signals"); await page.getByRole("heading", { name: "The world speaks in fragments.", exact: true }).waitFor();
  let startedRead; const startedReading = new Promise(resolve => { startedRead = resolve; });
  await page.route(/\/api\/records\?kind=activity/, async route => { startedRead(); await new Promise(resolve => setTimeout(resolve, 400)); await route.continue(); });

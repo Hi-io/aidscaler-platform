@@ -4,6 +4,7 @@ import { createPlatform } from "../server.mjs";
 import { Store } from "../src/store.mjs";
 import { SimulatorConnector } from "../src/connector.mjs";
 import { hash } from "../src/store.mjs";
+import { check } from "../src/errors.mjs";
 import { readFile } from "node:fs/promises";
 import { allocationPlan } from "../src/planning.mjs";
 import { servicePlan } from "../src/services.mjs";
@@ -59,6 +60,10 @@ export async function evaluatorFingerprint() {
         "scripts/blocked-repair.mjs",
         "evaluation/campaign-summary.mjs",
         "src/evaluation.mjs",
+        "evaluation/discovery-benchmark.mjs",
+        "evaluation/physical-trace.mjs",
+        "evaluation/conventional-source.mjs",
+        "scripts/discovery-benchmark.mjs",
       ].map(async (f) => [
         f,
         await readFile(new URL("../" + f, import.meta.url), "utf8"),
@@ -102,6 +107,7 @@ export async function createHarness({
   maxCalls = 8,
   budgetUsd = 1,
   platformConfig = {},
+  awaitVerifications = true,
 } = {}) {
   const lab = await createLabServers({
       observerPort: 0,
@@ -153,7 +159,7 @@ export async function createHarness({
               ?.reviewPending,
           300000,
         );
-      if (request.type === "verify")
+      if (request.type === "verify" && awaitVerifications)
         advanceUntil(
           () =>
             ["completed", "inconclusive", "timeout"].includes(
@@ -388,6 +394,7 @@ export async function refreshResearchContext(app, episode, targets) {
 }
 
 export async function conventionalSharedProposal(app, episode) {
+  const { assessmentPlan } = await import("../src/services.mjs");
   const org = app.config.org,
     steps = [],
     queue = await responseQueue(app.store, org, { limit: 2000 }),
@@ -398,12 +405,28 @@ export async function conventionalSharedProposal(app, episode) {
   // each team's stock independently. It still needs every owner to approve.
   if (needs[0]?.type === "shelter") {
     for (const b of map?.places?.filter((b) => b.use === "shelter") ?? []) {
-      await app.connector.action(
-        "verify",
-        { target: "building", id: b.id },
-        episode + "-inspect-" + b.id,
-      );
+      if (!(await app.store.get(org, "facility", b.id, false)))
+        await app.connector.action(
+          "verify",
+          { target: "building", id: b.id, method: "clarification" },
+          episode + "-describe-" + b.id,
+        );
       await app.ingestion.sync({ sources: false });
+      const assessment = await assessmentPlan(app.store, org, b.id, { peers: app.config.peers });
+      steps.push({ tool: "checked-field-assessment", state: assessment.satisfied ? "completed" : "pending", result: assessment });
+      if (assessment.readyToDraft) {
+        const p = await app.domain.propose(
+          { id: "shared-rules-reference", org, role: "agent" },
+          { title: "Request a competent field assessment from an available crew",
+            summary: "The site owner and qualified crew owner approve independently before physical travel and work.",
+            benefit: "A current received assessment, never an assumed safe site",
+            rationale: "The same conventional rule may use consented peer crew and transport offers. This is not credited to an LLM.",
+            actions: assessment.actions, references: assessment.references, conditions: [], alternatives: [] },
+          episode + "-assessment-" + b.id,
+        );
+        return { state: "ready", proposalId: p.id, steps };
+      }
+      if (!assessment.satisfied) continue;
       let service;
       try {
         service = await servicePlan(app.store, org, b.id, {
@@ -659,6 +682,8 @@ export async function runEpisode({
           // Extraction is a real model call with sources, but does not grant human authority.
           const timing = await app.connector.startModel(app.config.modelId);
           let extraction;
+          const callStartedAt = performance.now();
+          let timingSubmitted = false;
           try {
             const signals = await app.store.list(app.config.org, "signal", 35),
               snapshot = await app.connector.state();
@@ -687,7 +712,13 @@ export async function runEpisode({
               ],
               tools: [],
             });
-            await app.connector.finishModel(timing.id, result.usage);
+            timingSubmitted = true;
+            await app.connector.finishModel(timing.id, {
+              ...result.usage,
+              wallMs: Math.max(result.usage?.wallMs ?? 0, performance.now() - callStartedAt),
+              ...(result.finishReason === "length" ? { failed: true } : {}),
+            });
+            check(result.finishReason !== "length", "SEMANTIC_INCOMPLETE", "Extraction output was incomplete.", 409);
             extraction = normalizeExtraction(
               result.message.content,
               signals,
@@ -719,8 +750,8 @@ export async function runEpisode({
               kind: "extraction_only",
             });
           } catch (e) {
-            await app.connector
-              .finishModel(timing.id, { failed: true })
+            if (!timingSubmitted) await app.connector
+              .finishModel(timing.id, { failed: true, wallMs: performance.now() - callStartedAt })
               .catch(() => {});
             throw e;
           }
@@ -944,6 +975,11 @@ export async function runEpisode({
         org: app.config.org,
         counts: counts.map((r) => ({ ...r, n: Number(r.n) })),
         claimCount: claims.length,
+        // Received owner-scoped evidence, separate from evaluator-only truth.
+        assessments: (await app.store.list(app.config.org, "verification", 2000))
+          .filter(v => v.purpose === "facility_safety"),
+        operations: await app.store.list(app.config.org, "operation", 2000),
+        facilities: await app.store.list(app.config.org, "facility", 2000),
         investigatorQueries: activities
           .filter((a) => a.org === app.config.org)
           .flatMap((a) => a.steps ?? [])

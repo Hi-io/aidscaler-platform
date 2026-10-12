@@ -11,6 +11,22 @@ async function setup(t) {
   t.after(() => s.close());
   return s;
 }
+
+test("discovery automation batches distinct source groups without thirty-five separate model jobs", async t => {
+  const s = await setup(t), intake = new Intake(s, { org, autoInvestigate: true, modelId: "fixture" });
+  await intake.configure({ org, id: "owner", role: "commander" }, { enabled: true, discoveryMode: true }, "discover-mode");
+  for (let i = 0; i < 40; i++) await intake.stage(org, { id: "post-" + i, sourceVersion: 1, group: "origin-" + i });
+  const first = await intake.kick();
+  assert.equal(first.signals, 35);
+  assert.equal(first.groups, 35);
+  const job = (await s.query("SELECT * FROM jobs WHERE id=$1", [first.id])).rows[0];
+  assert.equal(job.kind, "discover_response");
+  assert.equal(job.payload.ids.length, 35);
+  assert.equal((await intake.kick()).busy, true);
+  await s.finishJob(first.id, {});
+  await intake.complete(job.payload, { state: "inconclusive" });
+  assert.equal((await intake.kick()).signals, 5);
+});
 test("automatic intake consumes bounded batches without claiming unseen source versions were interpreted", async (t) => {
   const s = await setup(t),
     intake = new Intake(s, { org, autoInvestigate: true, modelId: "fixture" });

@@ -3,7 +3,7 @@ import path from "node:path";
 import { role, check } from "./errors.mjs";
 import { hash, uid } from "./store.mjs";
 const originals = ["signal", "media"],
-  derived = new Set(["signal", "source_version", "media", "media_analysis", "claim", "claim_history", "group_history", "external", "report", "pattern", "evidence_group", "investigation_checkpoint", "semantic_receipt"]);
+  derived = new Set(["signal", "source_version", "media", "media_analysis", "claim", "claim_history", "group_history", "external", "report", "pattern", "evidence_group", "investigation_checkpoint", "semantic_receipt", "discovery_run"]);
 const refers = (v, ids) => typeof v === "string" ? ids.has(v) : v && typeof v === "object" && Object.values(v).some((x) => refers(x, ids));
 function fragmentsOf(value, into = new Set()) {
   if (value && typeof value === "object") for (const [key, v] of Object.entries(value)) {
@@ -88,7 +88,7 @@ export class Retention {
         if (refers(row.result, affectedIds) || hash(scrub(row.result, fragments)) !== hash(row.result))
           await tx.query("UPDATE idempotency SET result=$3 WHERE org=$1 AND key=$2", [actor.org, row.key, JSON.stringify({ redacted: true, erasure: id })]);
       await tx.query("UPDATE usage SET result=jsonb_build_object('erased',true,'receiptPreserved',true) WHERE org=$1", [actor.org]);
-      await tx.query("UPDATE jobs SET state='cancelled',payload=jsonb_build_object('erased',true),result=NULL,lease_token=NULL WHERE org=$1 AND kind IN ('investigate','analyze_media') AND state IN ('queued','running','retry')", [actor.org]);
+      await tx.query("UPDATE jobs SET state='cancelled',payload=jsonb_build_object('erased',true),result=NULL,lease_token=NULL WHERE org=$1 AND kind IN ('investigate','analyze_media','discover_response','compile_response','interpret_sources') AND state IN ('queued','running','retry')", [actor.org]);
       // Source text is not an immutable privacy exemption. Chain migration is
       // explicit: preserve the former head and redacted row hashes in the receipt.
       const audits = (await tx.query("SELECT * FROM audit WHERE org=$1 ORDER BY sequence", [actor.org])).rows;

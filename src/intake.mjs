@@ -64,7 +64,8 @@ export class Intake {
     return {
       enabled: saved?.enabled ?? this.config.autoInvestigate ?? false,
       interpretSources: saved?.interpretSources ?? false,
-      maxGroups: saved?.maxGroups ?? 3,
+      discoveryMode: saved?.discoveryMode ?? false,
+      maxGroups: saved?.maxGroups ?? (saved?.discoveryMode ? 35 : 3),
       maxSignals: saved?.maxSignals ?? 35,
       hourlyCallLimit: Math.min(
         saved?.hourlyCallLimit ?? Infinity,
@@ -86,7 +87,7 @@ export class Intake {
     );
     const limits = {};
     for (const [name, maximum, integer] of [
-      ["maxGroups", 3, true],
+      ["maxGroups", 35, true],
       ["maxSignals", 35, true],
       ["hourlyCallLimit", this.config.hourlyCallLimit ?? 40, true],
       ["hourlyBudgetUsd", this.config.hourlyBudgetUsd ?? 2, false],
@@ -109,6 +110,7 @@ export class Intake {
         ...(typeof input.interpretSources === "boolean"
           ? { interpretSources: input.interpretSources }
           : {}),
+        ...(typeof input.discoveryMode === "boolean" ? { discoveryMode: input.discoveryMode } : {}),
         ...limits,
         changedBy: actor.id,
       });
@@ -132,7 +134,7 @@ export class Intake {
       ]);
       const pending = (
         await tx.query(
-          "SELECT COUNT(*) AS n FROM jobs WHERE org=$1 AND kind='investigate' AND state IN ('queued','running','retry')",
+          "SELECT COUNT(*) AS n FROM jobs WHERE org=$1 AND kind IN ('investigate','discover_response','compile_response') AND state IN ('queued','running','retry')",
           [org],
         )
       ).rows[0];
@@ -191,7 +193,7 @@ export class Intake {
         attempt = await tx.get(org, "response_attempt", "active", false),
         focus = queue.policy.approved
           ? queue.rows.find(
-              (n) => !n.pendingProposals.length && !n.investigationDeferred,
+              (n) => (n.planningOutstanding ?? n.outstanding) > 0 && !n.investigationDeferred,
             )
           : null,
         responseChanged = repair
@@ -237,7 +239,7 @@ export class Intake {
       );
       await tx.enqueue(
         org,
-        "investigate",
+        policy.discoveryMode && !repair ? (ids.length ? "discover_response" : focus?.type !== "shelter" ? "compile_response" : "investigate") : "investigate",
         {
           ids,
           intakeGroups: selected.map((g) => ({

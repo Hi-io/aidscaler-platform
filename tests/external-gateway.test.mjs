@@ -194,6 +194,15 @@ test("a contractor without NEXO independently approves and physically completes 
     (await store.get(org, "external_work", work.id)).receipt.confirmedBySource,
     true,
   );
+  const physicalReceipt = (await app.store.list("org0", "operation"))
+    .find((o) => o.peerOwner === org && o.need === need.id);
+  assert.ok(physicalReceipt, "The coordinator records the owner's physical receipt");
+  assert.equal(physicalReceipt.type, "delivery");
+  assert.equal(physicalReceipt.received, 5);
+  assert.equal(physicalReceipt.vehicle, vehicle.id);
+  assert.equal(physicalReceipt.resource, resource.id);
+  assert.ok(Number.isFinite(physicalReceipt.times.service));
+  assert.ok(physicalReceipt.times.service <= physicalReceipt.sourceObservedAt);
   assert.deepEqual(h.lab.world.invariants(), []);
   const signature = sign(peer.key, { message: {}, sentAt: Date.now() });
   await assert.rejects(

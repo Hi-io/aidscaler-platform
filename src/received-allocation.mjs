@@ -6,9 +6,28 @@ const key = (owner, id) => JSON.stringify([owner, id]);
 
 /** Compile only owned observations and explicitly consented, current peer
  * projections. A projection grants visibility, never permission to dispatch. */
-export async function receivedAllocationPlan(store, config, { needIds, excludeVehicles = [], excludeProposal = null } = {}) {
-  check(needIds === undefined || (Array.isArray(needIds) && needIds.length <= 100 && needIds.every((id) => typeof id === "string")), "ALLOCATION_SCOPE", "Use received need IDs.");
-  check(Array.isArray(excludeVehicles) && excludeVehicles.length <= 100 && excludeVehicles.every((v) => typeof v.id === "string" && typeof v.owner === "string"), "ALLOCATION_SCOPE", "Excluded vehicles need an exact owner and ID.");
+export async function receivedAllocationPlan(
+  store,
+  config,
+  { needIds, excludeVehicles = [], excludeProposal = null } = {},
+) {
+  check(
+    needIds === undefined ||
+      (Array.isArray(needIds) &&
+        needIds.length <= 100 &&
+        needIds.every((id) => typeof id === "string")),
+    "ALLOCATION_SCOPE",
+    "Use received need IDs.",
+  );
+  check(
+    Array.isArray(excludeVehicles) &&
+      excludeVehicles.length <= 100 &&
+      excludeVehicles.every(
+        (v) => typeof v.id === "string" && typeof v.owner === "string",
+      ),
+    "ALLOCATION_SCOPE",
+    "Excluded vehicles need an exact owner and ID.",
+  );
   const org = config.org,
     peers = new Set((config.peers ?? []).map((p) => p.org)),
     offers = (await store.list(org, "peer_offer", 2000)).filter(
@@ -40,17 +59,47 @@ export async function receivedAllocationPlan(store, config, { needIds, excludeVe
     ...(await store.list(org, "vehicle", 2000)).filter((v) => v.owner === org),
     ...project("vehicle"),
   ];
-  const queue = await responseQueue(store, org, { excludeProposal, limit: 2000 }),
+  const queue = await responseQueue(store, org, {
+      excludeProposal,
+      limit: 2000,
+    }),
     policy = await responsePolicy(store, org),
-    selectedNeeds = queue.rows.filter((n) => !n.pendingProposals.length && (!needIds || needIds.includes(n.id))),
-    excluded = new Set(excludeVehicles.map((v) => key(v.owner, v.id)));
+    selectedNeeds = queue.rows
+      .filter(
+        (n) =>
+          n.planningOutstanding > 0 && (!needIds || needIds.includes(n.id)),
+      )
+      // Keep source records unchanged. Only the internal planning copy removes
+      // quantities already included in another unissued draft.
+      .map((n) => ({ ...n, quantity: n.quantity - n.draftHeldQuantity })),
+    excluded = new Set([
+      ...excludeVehicles.map((v) => key(v.owner, v.id)),
+      ...queue.planningHolds
+        .filter((h) => h.vehicle)
+        .map((h) => key(h.owner, h.vehicle)),
+    ]);
+  for (const r of resources)
+    r.quantity -= queue.planningHolds
+      .filter(
+        (h) => h.resource && key(h.owner, h.resource) === key(r.owner, r.id),
+      )
+      .reduce((sum, h) => sum + h.quantity, 0);
   const resourceIndex = new Map(resources.map((r) => [key(r.owner, r.id), r])),
     vehicleIndex = new Map(vehicles.map((v) => [key(v.owner, v.id), v])),
+    map = (await store.get(org, "context", "geography", false))?.map,
+    observedRoads = Object.fromEntries(
+      (await store.list(org, "road", 5000)).map((r) => [r.id, r]),
+    ),
+    now =
+      (await store.get(org, "source", "simulator", false))?.simulatedAt ?? 0,
     plan = allocationPlan({
       needs: selectedNeeds,
       resources,
       vehicles: vehicles.filter((v) => !excluded.has(key(v.owner, v.id))),
       operations: await store.list(org, "operation", 2000),
+      map,
+      observedRoads,
+      now,
       policy,
     });
   plan.allocations = plan.allocations.map((a) => {
@@ -86,8 +135,20 @@ export async function receivedAllocationPlan(store, config, { needIds, excludeVe
   ];
   plan.ownerApprovals = [...new Set(plan.allocations.map((a) => a.owner))];
   plan.nextTool = "prepare_allocation";
-  plan.policy = { version: policy.version, order: policy.order, approved: policy.approved };
-  plan.deferred = queue.rows.filter((n) => n.pendingProposals.length).map((n) => ({ need: n.id, pendingProposals: n.pendingProposals }));
+  plan.policy = {
+    version: policy.version,
+    order: policy.order,
+    approved: policy.approved,
+  };
+  plan.deferred = queue.rows
+    .filter((n) => n.pendingProposals.length)
+    .map((n) => ({
+      need: n.id,
+      pendingProposals: n.pendingProposals,
+      draftHeldQuantity: n.draftHeldQuantity,
+      planningOutstanding: n.planningOutstanding,
+    }));
+  plan.scope = { needIds, excludeVehicles, excludeProposal };
   plan.note =
     "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review.";
   return plan;
