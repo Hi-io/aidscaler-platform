@@ -17,16 +17,17 @@ Los contratos de acciones personalizadas se cargan con `read_action_contract` pa
 ## Espacio de respuesta y razonamiento
 
 - `MODEL_MAX_OUTPUT_TOKENS=8192` es la configuración inicial, ajustable dentro del máximo publicado por el proveedor. Es un techo, no una cantidad que se consume obligatoriamente.
-- `MODEL_REASONING=true` habilita el modo de razonamiento cuando el catálogo confirma soporte.
+- `MODEL_REASONING=true` habilita el modo de razonamiento cuando el catálogo confirma soporte. La transcripción/percepción de bytes usa un perfil separado: extrae contenido y conserva revisión humana; el investigador razona posteriormente sobre esa evidencia.
 - El razonamiento privado se excluye de la respuesta y no se almacena. La UI muestra herramientas realmente utilizadas, evidencia, restricciones comprobadas, incertidumbre y una justificación breve.
 - Si `finish_reason=length`, el fragmento no se interpreta como una acción válida. El siguiente intento recibe más espacio, hasta el máximo publicado, y sigue contando dentro de los límites de coste/llamadas.
 - No se reintenta por falta de saldo en cada caso: el circuito se pausa tras una negativa de financiación. Recargar y reiniciar el backend permite continuar; el trabajo manual permanece disponible.
+- El timeout inicial por llamada es 120 segundos y la investigación tiene una ventana de 360 segundos, configurables. Un plazo de espera no es un presupuesto de pensamiento. Un timeout se registra como `PROVIDER_TIMEOUT`, mantiene su reserva y no produce una decisión ficticia.
 
 El proveedor documenta que los tokens de razonamiento pueden compartir el presupuesto de salida. Por eso no se impone un máximo pequeño a una investigación compleja. [OpenRouter: reasoning tokens](https://openrouter.ai/docs/guides/best-practices/reasoning-tokens).
 
 ## Precio y recibos
 
-La configuración inicial prioriza precio (`MODEL_PROVIDER_SORT=price`) y permite proveedores hasta dos veces las tarifas de tokens publicadas del modelo (`MODEL_PRICE_MULTIPLIER=2`). Así puede haber alternativas de proveedor sin recurrir automáticamente al endpoint más caro. Si no existe proveedor compatible bajo ese precio, se registra el fallo; no se amplía silenciosamente el gasto. Ambos valores son configurables.
+La configuración inicial busca baja latencia **entre proveedores económicos** (`MODEL_PROVIDER_SORT=latency`) y permite proveedores hasta dos veces las tarifas de tokens publicadas del modelo (`MODEL_PRICE_MULTIPLIER=2`). Así puede haber alternativas de proveedor sin recurrir automáticamente al endpoint más caro. Se solicitan preferencias de latencia/throughput, sin confundirlas con garantías. Si no existe proveedor compatible bajo ese precio, se registra el fallo; no se amplía silenciosamente el gasto. Ambos valores son configurables.
 
 La reserva usa ese techo de tarifas y una estimación conservadora del contexto. El recibo real tiene prioridad. Un intento sin coste conocido conserva la reserva; no se convierte en coste cero. Si solo se conocen tokens, se conserva una estimación al techo de precio y se identifica como estimación. Las preferencias de precio no garantizan latencia ni exactitud: ambas se miden. [OpenRouter: provider routing](https://openrouter.ai/docs/guides/routing/provider-selection).
 
@@ -46,3 +47,5 @@ La clave solo vive en la configuración privada del servidor. Las herramientas n
 Se registra el tamaño del contexto original recibido y del presentado en `activity.inputSnapshot.context`, más tokens, precio, límite de salida y configuración del request en el recibo del proveedor. Los tamaños de caracteres no son tokens ni calidad semántica. Una reducción respecto del snapshot completo no equivale a una reducción respecto de una versión anterior que ya lo acotaba.
 
 El resultado dirigido `service-live-1791795241572` conservado en `reports/runs/` mostró 50 ocupantes simulados con un contexto inicial de 10.959 caracteres frente a 35.180 del snapshot recibido. Fue una prueba de funcionamiento con una necesidad seleccionada, no una comparación causal de ahorro, un holdout ni evidencia de vidas salvadas reales. Los resultados posteriores y las comparaciones completas se documentan en [VALIDACION.md](VALIDACION.md).
+
+La primera repetición con razonamiento y enrutamiento por precio encontró timeouts reales del proveedor bajo el plazo anterior de 60 segundos. El piloto `1791795781278` se detuvo en un checkpoint con nueve outcomes intactos y 39 faltantes para corregir ese plazo y revisar la conservación de descripciones, correcciones y relaciones entre fuentes. Esa campaña y el smoke multimodal fallido permanecen registrados. No se mezclan sus resultados con la versión revisada.

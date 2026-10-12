@@ -362,7 +362,7 @@ export class Investigator {
       while (
         calls < this.config.maxCalls &&
         performance.now() - started <
-          (this.config.investigationTimeoutMs ?? 180000)
+          (this.config.investigationTimeoutMs ?? 360000)
       ) {
         if (
           (await this.store.get(org, "activity", jobId, false))?.cancelRequested

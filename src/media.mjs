@@ -294,6 +294,7 @@ export class MediaProcessor {
         episode,
         messages: [{ role: "user", content }],
         tools: [],
+        task: "perception",
       });
       if (timing) await this.connector.finishModel(timing.id, response.usage);
       return response;

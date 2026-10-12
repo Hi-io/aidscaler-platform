@@ -17,6 +17,8 @@ This directory contains local prototype measurements. It is separate from the fi
 | `ui-*.json` | Automated viewport, keyboard, mobile, offline and review workflows; not human comprehension |
 | `real-source.json` | Real read-only external source access; not an institutional agreement |
 
+Current investigations record received versus presented context sizes and explicit omissions in `activity.inputSnapshot.context`. Provider receipts include output allowance, supported reasoning mode, finish reason and routing price ceiling. Characters are not token counts or semantic quality; paid tokens and receipts remain the cost evidence. See `docs/CONTEXTO_MODELO.md` for scoped retrieval, progressive action contracts and the incomplete-output guard.
+
 Read `docs/VALIDACION.md` and `docs/ESTADO_IMPLEMENTACION.md` before citing a result. Inspect its fingerprint and scope: model/prompt/code changes do not inherit previous measurements. Never treat a workflow acknowledgement as semantic accuracy, an arriving truck as received aid, an empty shelter as occupied service, or a simulated health curve as real lives saved.
 
 Provider IDs and local fictional identifiers are included for provenance. API keys, actor keys, login credentials, private working databases, original media and backup bundles stay in ignored local storage. The repository is private. Do not publish reports containing real sensitive information without a separate review.

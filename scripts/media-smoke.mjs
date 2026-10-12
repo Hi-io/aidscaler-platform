@@ -11,7 +11,7 @@ const config = await configuration({
   org: "media-test",
   evidenceDir: ".local/media-test-evidence",
   maxCalls: 6,
-  episodeBudgetUsd: 0.25,
+  budgetUsd: 0.25,
 });
 const store = await Store.open();
 await store.organization(config.org);

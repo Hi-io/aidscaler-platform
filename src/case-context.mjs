@@ -15,6 +15,8 @@ export const CONTEXT_KINDS = [
   "peer_offer",
   "evidence_group",
   "verification",
+  "road",
+  "query",
   "location",
 ];
 const common = [
@@ -36,8 +38,27 @@ const common = [
   "conditions",
   "validUntil",
   "ownerConfirmation",
+  "name",
+  "description",
+  "notes",
+  "purpose",
+  "tags",
+  "contradicts",
+  "sourceRelations",
 ];
 const fields = {
+  road: [
+    "from",
+    "to",
+    "open",
+    "waterDepth",
+    "maxWeight",
+    "speedMps",
+    "lengthM",
+    "restriction",
+    "reason",
+  ],
+  query: ["target", "result", "requestedAt", "completedAt"],
   need: [
     "type",
     "unit",
@@ -148,6 +169,9 @@ const fields = {
     "independentSources",
     "contradictions",
     "changedBy",
+    "snapshots",
+    "classifiedBy",
+    "classifiedAt",
   ],
   verification: ["target", "entity", "result", "completedAt", "reason"],
   location: ["name", "use", "node", "x", "y", "capacity"],
@@ -181,7 +205,7 @@ export function recordPreview(kind, record, { detail = false } = {}) {
           .map((key) => [key, record[key]]),
       );
   return boundedContext(redact(selected), {
-    arrayLimit: 40,
+    arrayLimit: detail ? 100 : 40,
     stringLimit: detail ? 12000 : 3500,
   });
 }

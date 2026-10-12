@@ -88,6 +88,8 @@ test("irrelevant histories do not bury a focused urgent case, provenance or prot
     compatibility: { connector: "C1", powerKw: 20 },
     sourceVersion: 3,
     owner: "org0",
+    description:
+      "Backup for a telecommunications mast; potentially usable elsewhere after compatibility checks",
   };
   const raw = {
     organization: "org0",
@@ -123,6 +125,16 @@ test("irrelevant histories do not bury a focused urgent case, provenance or prot
         reason: "Do not merge these witnesses",
       },
     ],
+    currentInterpretations: [
+      {
+        id: "cl1",
+        text: "A report was contradicted",
+        references: ["post1"],
+        contradicts: ["older"],
+        sourceRelations: [{ id: "post1", relation: "refutes" }],
+        state: "contradicted",
+      },
+    ],
     knownLocations: Array.from({ length: 1000 }, (_, i) => ({
       id: "b" + i,
       name: "Community " + i,
@@ -138,7 +150,13 @@ test("irrelevant histories do not bury a focused urgent case, provenance or prot
     stock.compatibility,
   );
   assert.equal(focused.known.resources[0].floor, 2);
+  assert.equal(focused.known.resources[0].description, stock.description);
   assert.equal(focused.signals[0].sourceVersion, 3);
+  assert.deepEqual(focused.currentInterpretations[0].contradicts, ["older"]);
+  assert.equal(
+    focused.currentInterpretations[0].sourceRelations[0].relation,
+    "refutes",
+  );
   assert.deepEqual(focused.signals[0].originalReferences, ["original"]);
   assert.equal(
     focused.humanEvidenceGroups[0].reason,

@@ -119,6 +119,8 @@ La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas 
 
 ## Ejecutar pruebas y recoger evidencia
 
+El contexto del modelo se centra en el caso; los historiales siguen disponibles mediante herramientas. `MODEL_MAX_OUTPUT_TOKENS=8192` y `MODEL_REASONING=true` permiten razonar sin un máximo pequeño. `MODEL_PROVIDER_SORT=latency` busca rapidez dentro del techo de tarifa de `MODEL_PRICE_MULTIPLIER=2`. Si un resultado queda cortado, no se ejecuta parcialmente. La espera por llamada es 120 s y la ventana de investigación 360 s; revisar también valores antiguos de `.env.local` que anulen los defaults nuevos. Detalles y límites en [CONTEXTO_MODELO.md](CONTEXTO_MODELO.md).
+
 ```powershell
 pnpm check
 pnpm test

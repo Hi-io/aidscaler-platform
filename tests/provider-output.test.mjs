@@ -48,7 +48,7 @@ test("reasoning gets a sufficient configurable allowance and private reasoning i
     messages: [],
   });
   assert.equal(payloads[0].max_tokens, 8192);
-  assert.equal(payloads[0].provider.sort, "price");
+  assert.equal(payloads[0].provider.sort, "latency");
   assert.deepEqual(payloads[0].provider.max_price, {
     prompt: 2,
     completion: 2,
@@ -61,8 +61,10 @@ test("reasoning gets a sufficient configurable allowance and private reasoning i
     episode: "case",
     messages: [],
     maxOutputTokens: 32768,
+    task: "perception",
   });
   assert.equal(payloads[1].max_tokens, 16384);
+  assert.equal(payloads[1].reasoning.enabled, false);
   const rows = (
     await store.query(
       "SELECT result,cost_usd,input_tokens,output_tokens FROM usage",

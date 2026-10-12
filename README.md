@@ -23,6 +23,8 @@ Role accounts and generated local passwords are saved in ignored `.local/access-
 
 Each laboratory restart creates a new private session directory, retaining earlier databases. Resetting the physical world never silently reuses stale operations from an old run. See [LOCAL.md](docs/LOCAL.md) for roles, budgets, offline operation, moderation, publication and backup/restore.
 
+Investigations receive a focused, sourced preview and can retrieve omitted records with scoped tools. Custom action contracts load only when needed. Reasoning is enabled for supported models with an initial 8,192-token output allowance; private reasoning is never displayed or stored. Provider routing seeks low latency under an explicit tariff ceiling. See [model context and spending](docs/CONTEXTO_MODELO.md).
+
 For one standalone instance, provision its scoped source configuration in `.local/bootstrap.json`, then run `pnpm start`. Use `DATABASE_URL` for a server PostgreSQL database. Without it, the local prototype uses filesystem-persistent embedded PostgreSQL (PGlite); its exclusive connection is not evidence of multi-host database throughput.
 
 ## Workspaces

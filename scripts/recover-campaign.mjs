@@ -9,6 +9,7 @@ if (
   ![
     "summary_failure_EVALUATION_CONFIG_recovered_from_raw_reports",
     "provider_http_402_account_credit_exhausted",
+    "development_model_latency_and_context_audit",
   ].includes(reason)
 )
   throw Error("Use an explicit supported stopped-campaign reason.");
@@ -34,7 +35,9 @@ report.recovery = {
   note:
     reason === "provider_http_402_account_credit_exhausted"
       ? "The operator stopped this runner after real HTTP 402 responses and a read-only account check confirming unavailable credit. Completed raw outcomes are unchanged; unfinished episodes remain missing. No extra inference was attempted to fill them, and unknown-cost reservations are retained."
-      : "The terminated original runner threw during summary generation after shrinking the last episode budget. Its original summary and every raw outcome remain retained; incomparable outcomes are explicitly rejected.",
+      : reason === "development_model_latency_and_context_audit"
+        ? "Stopped at a durable completed-episode checkpoint to correct provider waiting time and contextual field coverage after real inference timeouts. Paid receipts and failed outcomes are unchanged. This is an incomplete development pilot; unfinished episodes are missing, not imputed or mixed with the revised build."
+        : "The terminated original runner threw during summary generation after shrinking the last episode budget. Its original summary and every raw outcome remain retained; incomparable outcomes are explicitly rejected.",
 };
 await copyFile(
   path.join(folder, "summary.json"),

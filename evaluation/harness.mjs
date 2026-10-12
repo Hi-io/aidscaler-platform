@@ -41,6 +41,7 @@ export async function evaluatorFingerprint() {
         "evaluation/harness.mjs",
         "scripts/evaluate.mjs",
         "scripts/campaign.mjs",
+        "scripts/parallel-campaign.mjs",
         "evaluation/campaign-summary.mjs",
         "src/evaluation.mjs",
       ].map(async (f) => [
@@ -839,6 +840,8 @@ export async function runEpisode({
       modelConfig: {
         modelId: h.apps[0].config.modelId,
         maxOutputTokens: h.apps[0].config.modelMaxOutputTokens,
+        modelTimeoutMs: h.apps[0].config.modelTimeoutMs,
+        investigationTimeoutMs: h.apps[0].config.investigationTimeoutMs,
         reasoningEnabled: h.apps[0].config.modelReasoning,
         providerSort: h.apps[0].config.modelProviderSort,
         priceMultiplier: h.apps[0].config.modelPriceMultiplier,

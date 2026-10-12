@@ -37,6 +37,7 @@ export class OpenRouterProvider {
     tools = [],
     signal,
     maxOutputTokens,
+    task = "investigation",
   }) {
     // A funding refusal requires operator intervention, not a retry per case.
     // Restart this backend after restoring provider credit; manual work stays available.
@@ -67,10 +68,16 @@ export class OpenRouterProvider {
       "MODEL_OUTPUT_BUDGET",
       "Use an output allowance between 1024 and 32768 tokens, within the provider's published limit.",
     );
+    check(
+      ["investigation", "perception"].includes(task),
+      "MODEL_TASK",
+      "Choose a supported server-side task.",
+    );
     const reasoningEnabled =
       !!pricing.parameters?.includes("reasoning") &&
-      this.config.modelReasoning !== false;
-    const providerSort = this.config.modelProviderSort ?? "price";
+      this.config.modelReasoning !== false &&
+      task !== "perception";
+    const providerSort = this.config.modelProviderSort ?? "latency";
     const priceMultiplier = this.config.modelPriceMultiplier ?? 2;
     check(
       ["price", "throughput", "latency"].includes(providerSort) &&
@@ -99,6 +106,7 @@ export class OpenRouterProvider {
       reasoningEnabled,
       providerSort,
       maximumRates,
+      task,
     });
     const approxIn = Math.ceil(JSON.stringify({ messages, tools }).length / 2),
       reserve =
@@ -201,13 +209,15 @@ export class OpenRouterProvider {
             provider: {
               require_parameters: true,
               sort: providerSort,
+              preferred_max_latency: 4,
+              preferred_min_throughput: 50,
               max_price: {
                 prompt: maximumRates.prompt * 1000000,
                 completion: maximumRates.completion * 1000000,
               },
             },
             reasoning: pricing.parameters?.includes("reasoning")
-              ? { enabled: this.config.modelReasoning !== false, exclude: true }
+              ? { enabled: reasoningEnabled, exclude: true }
               : undefined,
           }),
         },
@@ -261,6 +271,7 @@ export class OpenRouterProvider {
           reasoningEnabled,
           providerSort,
           maximumTokenRates: maximumRates,
+          task,
         },
         pricing,
         costSource:
@@ -287,12 +298,26 @@ export class OpenRouterProvider {
       if (poolReservation !== undefined) pool.settle(poolReservation, cost);
       return result;
     } catch (e) {
+      const failure =
+        e.name === "TimeoutError"
+          ? new AppError(
+              "PROVIDER_TIMEOUT",
+              "The model call exceeded its configured waiting time; no response was fabricated. The unknown-cost reservation remains charged.",
+              504,
+            )
+          : e.name === "AbortError"
+            ? new AppError(
+                "PROVIDER_CANCELLED",
+                "The model call was cancelled; its unknown-cost reservation remains charged.",
+                499,
+              )
+            : e;
       if (poolReservation !== undefined) pool.settle(poolReservation, null);
       await this.store.query(
         "UPDATE usage SET state='failed',wall_ms=$2,error=$3 WHERE id=$1",
-        [id, performance.now() - start, e.code ?? e.name],
+        [id, performance.now() - start, failure.code ?? failure.name],
       );
-      throw e;
+      throw failure;
     }
   }
 }
