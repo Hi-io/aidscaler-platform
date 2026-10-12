@@ -54,7 +54,12 @@ export class Network {
       async (tx) => {
         const record = await tx.get(actor.org, kind, id);
         if (["resource", "vehicle"].includes(kind))
-          check(record.owner === actor.org, "OWNER", "Only the actual owner may publish inventory or transport capacity. Observed partner stock cannot be rebranded as local capacity.", 403);
+          check(
+            record.owner === actor.org,
+            "OWNER",
+            "Only the actual owner may publish inventory or transport capacity. Observed partner stock cannot be rebranded as local capacity.",
+            403,
+          );
         check(
           record.version === version,
           "VERSION_CONFLICT",
@@ -194,7 +199,12 @@ export class Network {
         permission.recordId,
         false,
       );
-      if (!row || row.owner !== org || row.version === permission.lastSharedVersion) continue;
+      if (
+        !row ||
+        row.owner !== org ||
+        row.version === permission.lastSharedVersion
+      )
+        continue;
       let projection;
       if (permission.kind === "resource")
         projection = {
@@ -295,7 +305,33 @@ export class Network {
   }
   async response(proposal, state, result = {}) {
     if (!proposal.originPartner) return;
-    const id = `receipt_${proposal.id}_${state}_${hash(result).slice(0, 16)}`;
+    // A transport status poll is not another physical event. Preserve the
+    // first payload for an unchanged event, including its observation time.
+    // Assessment source times certify validity and must remain material.
+    const material = { ...result };
+    if (
+      proposal.actions?.[0]?.type !== "verify" &&
+      [
+        "delivery",
+        "evacuation",
+        "repair",
+        "crew",
+        "dispatch",
+        "activate",
+      ].includes(result.type)
+    )
+      delete material.observedAt;
+    const identity = {
+      from: this.config.org,
+      to: proposal.originPartner,
+      proposal: proposal.originProposal,
+      step: proposal.originStep,
+      actionScope: proposal.actions,
+      authorization: proposal.authorization ?? null,
+      state,
+      material,
+    };
+    const id = `receipt_${proposal.id}_${state}_${hash(identity).slice(0, 16)}`;
     const message = {
       id,
       from: this.config.org,
@@ -491,11 +527,25 @@ export class Network {
                 "PEER_RECEIPT",
                 "Completion requires the owner source receipt.",
               );
-            const physical = await recordResponseReceipt(tx, this.config.org, from,
-              proposal, p.originStep, p.state, p.operation);
+            const physical = await recordResponseReceipt(
+              tx,
+              this.config.org,
+              from,
+              proposal,
+              p.originStep,
+              p.state,
+              p.operation,
+            );
             if (physical?.stale) return { accepted: true, stale: true };
-            const assessment = await recordAssessmentReceipt(tx, this.config.org, from,
-              proposal, p.originStep, p.state, p.operation);
+            const assessment = await recordAssessmentReceipt(
+              tx,
+              this.config.org,
+              from,
+              proposal,
+              p.originStep,
+              p.state,
+              p.operation,
+            );
             if (assessment?.stale) return { accepted: true, stale: true };
             result.state = p.state;
             result.partnerResult = p.operation;
@@ -518,12 +568,9 @@ export class Network {
               proposal.version,
             );
             if (p.state === "completed")
-              await tx.enqueue(
-                this.config.org,
-                "continue_proposal",
-                { id: proposal.id },
-                "peer_continue_" + m.id,
-              );
+              await tx.enqueueContinuation(this.config.org, proposal.id, {
+                due: Date.now(),
+              });
           }
         }
       }

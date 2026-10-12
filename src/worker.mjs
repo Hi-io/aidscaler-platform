@@ -13,10 +13,20 @@ const PHYSICAL = new Set([
 const DONE = new Set(["received", "completed", "service", "operating"]);
 function resolution(action, receipt, state) {
   if (action.type === "verify") {
-    const inspection = receipt?.owner && receipt.owner !== state.organization.id
-      ? receipt.partnerResult : state.inspections?.find(i => i.id === receipt?.result?.id);
-    return assessmentCurrent(inspection, { id: action.params.id,
-      sourceVersion: state.known?.buildings?.[action.params.id]?.version ?? action.params.targetVersion }, state.now);
+    const inspection =
+      receipt?.owner && receipt.owner !== state.organization.id
+        ? receipt.partnerResult
+        : state.inspections?.find((i) => i.id === receipt?.result?.id);
+    return assessmentCurrent(
+      inspection,
+      {
+        id: action.params.id,
+        sourceVersion:
+          state.known?.buildings?.[action.params.id]?.version ??
+          action.params.targetVersion,
+      },
+      state.now,
+    );
   }
   if (receipt?.owner && receipt.owner !== state.organization.id)
     return (
@@ -60,14 +70,27 @@ function resolution(action, receipt, state) {
 function assessmentFailed(action, receipt, state) {
   if (action?.type !== "verify") return false;
   if (receipt.owner && receipt.owner !== state.organization.id)
-    return receipt.state === "completed" && !!receipt.partnerResult && !resolution(action, receipt, state);
+    return (
+      receipt.state === "completed" &&
+      !!receipt.partnerResult &&
+      !resolution(action, receipt, state)
+    );
   if (!receipt.result) return false;
-  const inspection = state.inspections?.find(i => i.id === receipt.result.id),
-    operation = state.operations?.find(o => o.inspection === receipt.result.id ||
-      inspection?.operation && o.id === inspection.operation);
-  return !!(inspection && (["inconclusive", "timeout", "failed", "cancelled"].includes(inspection.state) ||
-    inspection.state === "completed" && !resolution(action, receipt, state)) ||
-    operation && ["blocked", "failed", "cancelled"].includes(operation.state));
+  const inspection = state.inspections?.find((i) => i.id === receipt.result.id),
+    operation = state.operations?.find(
+      (o) =>
+        o.inspection === receipt.result.id ||
+        (inspection?.operation && o.id === inspection.operation),
+    );
+  return !!(
+    (inspection &&
+      (["inconclusive", "timeout", "failed", "cancelled"].includes(
+        inspection.state,
+      ) ||
+        (inspection.state === "completed" &&
+          !resolution(action, receipt, state)))) ||
+    (operation && ["blocked", "failed", "cancelled"].includes(operation.state))
+  );
 }
 function resolveParams(params, results) {
   return Object.fromEntries(
@@ -86,12 +109,110 @@ function resolveParams(params, results) {
     }),
   );
 }
+const ACTIVE_EXECUTION = ["authorized", "executing", "awaiting_partner"];
+const sameExecutionScope = (current, issued) =>
+  ACTIVE_EXECUTION.includes(current.state) &&
+  current.authorization &&
+  hash(current.authorization) === hash(issued.authorization) &&
+  hash(current.actions) === hash(issued.actions);
+function mergeExecutionResults(current = [], issued = []) {
+  const results = current.map((r) => ({ ...r }));
+  for (const receipt of issued) {
+    const at = results.findIndex((r) => r.index === receipt.index);
+    if (at < 0) results.push(receipt);
+    // Preserve more recent peer receipt/status data written during an await.
+    else results[at] = { ...receipt, ...results[at] };
+  }
+  return results;
+}
 export class Worker {
   constructor(options) {
     Object.assign(this, options);
     this.running = false;
     this.timer = null;
     this.loopPromise = null;
+  }
+  async recordIssuedResults(proposal, issued, state) {
+    const org = this.config.org;
+    return this.store.transaction(async (tx) => {
+      const row = await tx.get(org, "proposal", proposal.id);
+      const current =
+        sameExecutionScope(row, proposal) &&
+        (await authorizationCurrent(tx, org, row.authorization));
+      await tx.put(
+        org,
+        "proposal",
+        row.id,
+        {
+          ...row,
+          executionResults: mergeExecutionResults(row.executionResults, issued),
+          ...(current ? { state } : {}),
+        },
+        row.version,
+      );
+      if (!current)
+        await tx.completeContinuation(org, row.id, {
+          state: row.state,
+          authorityChanged: true,
+        });
+      return current;
+    });
+  }
+  async refreshActivationStatus(proposal, state, results) {
+    for (const [index, action] of proposal.actions.entries()) {
+      if (action.type !== "activate" || action.owner !== this.config.org)
+        continue;
+      const receipt = results.find((r) => r.index === index)?.result;
+      if (!receipt) continue;
+      const facility = state.known?.buildings?.[action.params.building];
+      if (
+        facility?.state === "operating" ||
+        (Number.isFinite(receipt.readyAt) && state.now < receipt.readyAt)
+      )
+        continue;
+      const row = await this.store.get(
+        this.config.org,
+        "proposal",
+        proposal.id,
+      );
+      if (!sameExecutionScope(row, proposal)) return;
+      const signature = hash([
+        action.params.building,
+        receipt,
+        facility ?? null,
+      ]);
+      const previous = row.facilityStatusQueries?.[index];
+      if (
+        previous?.signature === signature ||
+        (previous?.id &&
+          state.queries?.some(
+            (q) => q.id === previous.id && q.state === "pending",
+          ))
+      )
+        continue;
+      const result = await this.connector.action(
+        "query",
+        { target: "facility", id: action.params.building },
+        "facility_status_" +
+          hash([this.config.org, proposal.id, index, signature]),
+      );
+      await this.store.transaction(async (tx) => {
+        const current = await tx.get(this.config.org, "proposal", proposal.id);
+        await tx.put(
+          this.config.org,
+          "proposal",
+          proposal.id,
+          {
+            ...current,
+            facilityStatusQueries: {
+              ...current.facilityStatusQueries,
+              [index]: { id: result.id, signature, requestedAt: state.now },
+            },
+          },
+          current.version,
+        );
+      });
+    }
   }
   async execute(id) {
     const org = this.config.org,
@@ -104,8 +225,11 @@ export class Worker {
         "requires_review",
         "needs_clarification",
       ].includes(p.state)
-    )
-      return { skipped: true, state: p.state };
+    ) {
+      const result = { skipped: true, state: p.state };
+      await this.store.completeContinuation(org, id, result);
+      return result;
+    }
     check(
       ["authorized", "executing", "awaiting_partner"].includes(p.state) &&
         p.authorization &&
@@ -136,6 +260,7 @@ export class Worker {
             p.authorization.planHash !== hash(p.actions),
         },
       );
+      await this.store.completeContinuation(org, id, { requiresReview: true });
       return { requiresReview: true };
     }
     let simId = p.simId;
@@ -158,16 +283,17 @@ export class Worker {
     const issued = p.executionResults ?? [];
     const failed = issued.filter(
       (r) =>
-        assessmentFailed(p.actions[r.index], r, current) || r.result &&
-        PHYSICAL.has(p.actions[r.index]?.type) &&
-        current.operations.some(
-          (o) =>
-            o.id === (r.result.operation ?? r.result.id) &&
-            (p.actions[r.index]?.type === "cancel"
-              ? ["failed", "blocked"]
-              : ["failed", "cancelled", "blocked"]
-            ).includes(o.state),
-        ),
+        assessmentFailed(p.actions[r.index], r, current) ||
+        (r.result &&
+          PHYSICAL.has(p.actions[r.index]?.type) &&
+          current.operations.some(
+            (o) =>
+              o.id === (r.result.operation ?? r.result.id) &&
+              (p.actions[r.index]?.type === "cancel"
+                ? ["failed", "blocked"]
+                : ["failed", "cancelled", "blocked"]
+              ).includes(o.state),
+          )),
     );
     if (failed.length) {
       const preserved = issued
@@ -184,10 +310,11 @@ export class Worker {
             state: "requires_review",
             previousAuthorization: row.authorization,
             authorization: null,
-            changedReason:
-              failed.some(r => p.actions[r.index]?.type === "verify")
-                ? "A field assessment failed, became stale or lost validity. Review affected work; preserve the physical crew operation and historical source receipts."
-                : "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
+            changedReason: failed.some(
+              (r) => p.actions[r.index]?.type === "verify",
+            )
+              ? "A field assessment failed, became stale or lost validity. Review affected work; preserve the physical crew operation and historical source receipts."
+              : "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
             affectedSteps: failed.map((r) => r.index),
             preservedSteps: preserved,
           },
@@ -210,6 +337,7 @@ export class Worker {
           reason:
             "Owner source reports interrupted physical work requiring a new decision; a blocked shipment is not released or cancelled",
         });
+      await this.store.completeContinuation(org, id, { requiresReview: true });
       return {
         requiresReview: true,
         affectedSteps: failed.map((r) => r.index),
@@ -271,6 +399,9 @@ export class Worker {
           changedReason:
             "Current authorization or partner evidence expired before issuing the next step.",
         });
+        await this.store.completeContinuation(org, id, {
+          requiresReview: true,
+        });
         return { requiresReview: true };
       }
       if (
@@ -293,10 +424,12 @@ export class Worker {
             owner: a.owner,
             requestId: request.id,
           });
-          await this.store.upsert(org, "proposal", id, {
-            executionResults: results,
-            state: "awaiting_partner",
-          });
+          if (!(await this.recordIssuedResults(p, results, "awaiting_partner")))
+            return {
+              authorityChanged: true,
+              results,
+              state: (await this.store.get(org, "proposal", id)).state,
+            };
         }
         continue;
       }
@@ -307,8 +440,18 @@ export class Worker {
           {
             ...resolveParams(a.params, results),
             ...(a.type === "dispatch" ? { proposal: simId } : {}),
-            ...(a.type === "verify" ? { proposal: simId, step: i,
-              ...(p.originPartner ? { requestProposal: p.originSourceProposal, requestStep: p.originStep } : {}) } : {}),
+            ...(a.type === "verify"
+              ? {
+                  proposal: simId,
+                  step: i,
+                  ...(p.originPartner
+                    ? {
+                        requestProposal: p.originSourceProposal,
+                        requestStep: p.originStep,
+                      }
+                    : {}),
+                }
+              : {}),
           },
           `execute_${id}_${i}`,
           { human: true },
@@ -361,6 +504,11 @@ export class Worker {
             reason:
               "The owner's source refused the prospective command: " + e.code,
           });
+        await this.store.completeContinuation(org, id, {
+          requiresReview: true,
+          rejectedStep: i,
+          code: e.code,
+        });
         return { requiresReview: true, rejectedStep: i, code: e.code };
       }
       results.push({ index: i, result });
@@ -378,26 +526,20 @@ export class Worker {
             confirmedBySource: false,
           },
         );
-      await this.store.upsert(org, "proposal", id, {
-        executionResults: results,
-        state: "executing",
-      });
+      if (!(await this.recordIssuedResults(p, results, "executing")))
+        return {
+          authorityChanged: true,
+          results,
+          state: (await this.store.get(org, "proposal", id)).state,
+        };
       current = await this.connector.state();
     }
-    if (
-      p.actions.some((a) => a.type === "activate") &&
-      !current.queries?.some(
-        (q) => q.target === "facility" && q.state === "pending",
-      )
-    )
-      await this.connector.action(
-        "query",
-        { target: "facility" },
-        uid("facility_status"),
-      );
+    await this.refreshActivationStatus(p, current, results);
     current = await this.connector.state();
-    for (const a of p.actions.filter(a => a.type === "verify")) {
-      for (const inspection of current.inspections?.filter(i => i.entity === a.params.id && i.target === "building") ?? [])
+    for (const a of p.actions.filter((a) => a.type === "verify")) {
+      for (const inspection of current.inspections?.filter(
+        (i) => i.entity === a.params.id && i.target === "building",
+      ) ?? [])
         await this.store.upsert(org, "verification", inspection.id, inspection);
     }
     const latest = await this.store.get(org, "proposal", id);
@@ -409,8 +551,28 @@ export class Worker {
         current,
       ),
     );
-    await this.store.transaction(async (tx) => {
+    const recorded = await this.store.transaction(async (tx) => {
       const row = await tx.get(org, "proposal", id);
+      results = mergeExecutionResults(row.executionResults, results);
+      if (
+        !sameExecutionScope(row, p) ||
+        !(await authorizationCurrent(tx, org, row.authorization))
+      ) {
+        // A command may already have reached its physical source before a
+        // concurrent cancellation. Keep its receipt, never undo the decision.
+        await tx.put(
+          org,
+          "proposal",
+          id,
+          { ...row, executionResults: results },
+          row.version,
+        );
+        await tx.completeContinuation(org, id, {
+          state: row.state,
+          authorityChanged: true,
+        });
+        return { authorityChanged: true, state: row.state };
+      }
       await tx.put(
         org,
         "proposal",
@@ -462,40 +624,48 @@ export class Worker {
           })),
         },
       );
-      if (!complete)
-        await tx.enqueue(
-          org,
-          "continue_proposal",
-          { id },
-          uid("continue"),
-          Date.now() + 1000,
-        );
+      if (!complete) await tx.enqueueContinuation(org, id);
+      else await tx.completeContinuation(org, id, { complete: true });
+      return { authorityChanged: false };
     });
+    if (recorded.authorityChanged) return { ...recorded, simId, results };
     if (p.originPartner) {
       const r = results.find((r) => r.result)?.result,
         o = current.operations.find((o) => o.id === (r?.operation ?? r?.id)),
-        inspection = p.actions[0].type === "verify" ? current.inspections?.find(i => i.id === r?.id) : null;
+        inspection =
+          p.actions[0].type === "verify"
+            ? current.inspections?.find((i) => i.id === r?.id)
+            : null;
       await this.network.response(
         { ...p, version: latest.version },
         complete ? "completed" : "in_transit",
-        inspection ? { ...inspection, confirmedBySource: inspection.confirmedBySource === true } : {
-          id: o?.id ?? r?.id,
-          type: o?.type ?? p.actions[0].type,
-          org,
-          need: o?.need ?? null,
-          building: o?.building ?? null,
-          destination: o?.destination ?? null,
-          vehicle: o?.vehicle ?? null,
-          resource: o?.resource ?? null,
-          resourceType: o?.resourceType ?? null,
-          quantity: o?.quantity,
-          received: o?.received ?? (o?.type === "evacuation" && DONE.has(o.state) ? o.quantity : 0),
-          times: o?.times ?? {},
-          unit: o?.unit,
-          state: o?.state ?? r?.state,
-          confirmedBySource: !!o || complete,
-          observedAt: current.now,
-        },
+        inspection
+          ? {
+              ...inspection,
+              confirmedBySource: inspection.confirmedBySource === true,
+            }
+          : {
+              id: o?.id ?? r?.id,
+              type: o?.type ?? p.actions[0].type,
+              org,
+              need: o?.need ?? null,
+              building: o?.building ?? null,
+              destination: o?.destination ?? null,
+              vehicle: o?.vehicle ?? null,
+              resource: o?.resource ?? null,
+              resourceType: o?.resourceType ?? null,
+              quantity: o?.quantity,
+              received:
+                o?.received ??
+                (o?.type === "evacuation" && DONE.has(o.state)
+                  ? o.quantity
+                  : 0),
+              times: o?.times ?? {},
+              unit: o?.unit,
+              state: o?.state ?? r?.state,
+              confirmedBySource: !!o || complete,
+              observedAt: current.now,
+            },
       );
     }
     return { simId, results, complete };
@@ -543,7 +713,10 @@ export class Worker {
       else if (job.kind === "investigate")
         result = await this.investigator.run(job.payload, job.id);
       else if (job.kind === "discover_response")
-        result = await this.discovery.run(job.payload, job.payload.resumeOf ?? job.id);
+        result = await this.discovery.run(
+          job.payload,
+          job.payload.resumeOf ?? job.id,
+        );
       else if (job.kind === "compile_response")
         result = await this.discovery.compile(job.id);
       else if (job.kind === "analyze_media")
@@ -573,14 +746,76 @@ export class Worker {
           job.id,
         );
       else throw new Error("Unknown durable job kind.");
-      await this.store.finishJob(job.id, result, job.lease_token);
-      if (["investigate", "discover_response", "compile_response"].includes(job.kind) && this.intake)
+      if (job.kind === "continue_proposal" && result?.complete === false)
+        await this.store.rescheduleJob(job, { result });
+      else await this.store.finishJob(job.id, result, job.lease_token);
+      if (
+        ["investigate", "discover_response", "compile_response"].includes(
+          job.kind,
+        ) &&
+        this.intake
+      )
         await this.intake.complete(job.payload, result);
       return true;
     } catch (e) {
-      if (["investigate", "discover_response", "compile_response"].includes(job.kind) && this.intake)
+      if (
+        ["investigate", "discover_response", "compile_response"].includes(
+          job.kind,
+        ) &&
+        this.intake
+      )
         await this.intake.complete(job.payload, null, e);
-      await this.store.failJob(job, e);
+      if (job.kind === "continue_proposal" && job.attempts >= 5)
+        await this.store.transaction(async (tx) => {
+          // The lease fence and attention state change are one transaction:
+          // an obsolete worker cannot invalidate a reclaimed owner's work.
+          if (!(await tx.failJob(job, e))) return;
+          const proposal = await tx.get(
+            job.org,
+            "proposal",
+            job.payload.id,
+            false,
+          );
+          if (
+            !proposal ||
+            !["authorized", "executing", "awaiting_partner"].includes(
+              proposal.state,
+            )
+          )
+            return;
+          const monitoringFailure = {
+            job: job.id,
+            attempts: job.attempts,
+            code: e.code ?? e.name ?? "WORKER_ERROR",
+            at: Date.now(),
+            physicalStatus: "unconfirmed",
+            issuedWorkPreserved: true,
+          };
+          await tx.put(
+            job.org,
+            "proposal",
+            proposal.id,
+            {
+              ...proposal,
+              state: "requires_review",
+              previousAuthorization:
+                proposal.authorization ?? proposal.previousAuthorization,
+              authorization: null,
+              monitoringFailure,
+              changedReason:
+                "Monitoring stopped after five unsuccessful checks. Review the owner's source and already issued work before continuing. Physical cargo and execution receipts are preserved; this does not declare that the operation failed.",
+            },
+            proposal.version,
+          );
+          await tx.audit(
+            job.org,
+            "source-monitor",
+            "proposal.monitoring_exhausted",
+            proposal.id,
+            monitoringFailure,
+          );
+        });
+      else await this.store.failJob(job, e);
       return true;
     } finally {
       clearInterval(heartbeat);

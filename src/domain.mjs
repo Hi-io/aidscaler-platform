@@ -216,13 +216,42 @@ export class Domain {
           evidenceHash: authorization?.evidenceHash ?? null,
           note,
         });
-        if (decision === "approve" && !unsatisfied.length)
+        if (decision === "approve" && !unsatisfied.length) {
+          const continuation = "continue_" + hash([actor.org, id]);
+          if (p.monitoringFailure?.job === continuation) {
+            // Only a new, valid human approval can reopen an exhausted monitor.
+            // Ordinary polling and source receipts must preserve its retry budget.
+            // Execution receipts stay on the proposal, so recovery never replays
+            // an already issued command or treats loaded cargo as available stock.
+            const resumed = await tx.query(
+              `UPDATE jobs SET state='queued',attempts=0,due_at=$3,created_at=$3,
+                 leased_until=NULL,lease_token=NULL,last_error=NULL,result=NULL
+               WHERE id=$1 AND org=$2 AND kind='continue_proposal'
+                 AND state='failed' AND attempts>=5
+                 AND payload->>'id'=$4 RETURNING id`,
+              [continuation, actor.org, Date.now(), id],
+            );
+            if (resumed.rows.length)
+              await tx.audit(
+                actor.org,
+                actor.id,
+                "proposal.monitoring_resumed",
+                id,
+                {
+                  job: continuation,
+                  approvalVersion: result.version,
+                  previousFailure: p.monitoringFailure,
+                  issuedWorkPreserved: true,
+                },
+              );
+          }
           await tx.enqueue(
             actor.org,
             "execute_proposal",
             { id },
             "execute_" + id + "_" + result.version,
           );
+        }
         return result;
       },
     );

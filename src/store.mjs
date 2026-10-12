@@ -264,6 +264,63 @@ export class Store {
     );
     return id;
   }
+  async enqueueContinuation(
+    org,
+    proposalId,
+    { due = Date.now() + 1000, revive = true } = {},
+  ) {
+    const id = "continue_" + hash([org, proposalId]);
+    // Coalesce direct execution, source receipts and worker polling into one
+    // durable record. A live lease and a failed retry budget are never reset.
+    await this.query(
+      `INSERT INTO jobs(id,org,kind,payload,state,due_at,created_at)
+       VALUES($1,$2,'continue_proposal',$3,'queued',$4,$5)
+       ON CONFLICT(id) DO UPDATE SET
+         state=CASE WHEN jobs.state='completed' THEN 'queued' ELSE jobs.state END,
+         due_at=CASE WHEN jobs.state='completed' THEN EXCLUDED.due_at ELSE LEAST(jobs.due_at,EXCLUDED.due_at) END,
+         attempts=CASE WHEN jobs.state='completed' THEN 0 ELSE jobs.attempts END,
+         leased_until=CASE WHEN jobs.state='completed' THEN NULL ELSE jobs.leased_until END,
+         lease_token=CASE WHEN jobs.state='completed' THEN NULL ELSE jobs.lease_token END,
+         result=CASE WHEN jobs.state='completed' THEN NULL ELSE jobs.result END,
+         last_error=CASE WHEN jobs.state='completed' THEN NULL ELSE jobs.last_error END,
+         created_at=CASE WHEN jobs.state='completed' THEN EXCLUDED.created_at ELSE jobs.created_at END
+       WHERE jobs.org=EXCLUDED.org AND jobs.kind='continue_proposal'
+         AND ((jobs.state='completed' AND $6) OR
+              (jobs.state='queued' AND EXCLUDED.due_at<jobs.due_at))`,
+      [id, org, JSON.stringify({ id: proposalId }), due, Date.now(), revive],
+    );
+    return id;
+  }
+  async rescheduleJob(job, { due = Date.now() + 1000, result = null } = {}) {
+    const changed = await this.query(
+      `UPDATE jobs SET state='queued',due_at=$4,result=$5,attempts=0,created_at=$6,
+         last_error=NULL,leased_until=NULL,lease_token=NULL
+       WHERE id=$1 AND org=$2 AND state='running' AND lease_token=$3 RETURNING id`,
+      [
+        job.id,
+        job.org,
+        job.lease_token,
+        due,
+        JSON.stringify(result),
+        Date.now(),
+      ],
+    );
+    check(
+      changed.rows.length,
+      "JOB_LEASE_LOST",
+      "This worker cannot reschedule a reclaimed job.",
+      409,
+    );
+  }
+  async completeContinuation(org, proposalId, result = null) {
+    // A running owner must finish through its lease fence. A direct terminal
+    // observation can safely retire a pending poll without stealing that lease.
+    await this.query(
+      `UPDATE jobs SET state='completed',result=$3,leased_until=NULL,lease_token=NULL
+       WHERE id=$1 AND org=$2 AND kind='continue_proposal' AND state IN ('queued','retry')`,
+      ["continue_" + hash([org, proposalId]), org, JSON.stringify(result)],
+    );
+  }
   async lease(org, leaseMs = 180000, asOf = Date.now()) {
     return this.transaction(async (tx) => {
       const { rows } = await tx.query(
@@ -280,19 +337,32 @@ export class Store {
     });
   }
   async renewJob(job, leaseMs = 180000) {
-    const result = await this.query("UPDATE jobs SET leased_until=$4 WHERE id=$1 AND org=$2 AND state='running' AND lease_token=$3 RETURNING id", [job.id, job.org, job.lease_token, Date.now() + leaseMs]);
-    check(result.rows.length, "JOB_LEASE_LOST", "Another worker now owns this job.", 409);
+    const result = await this.query(
+      "UPDATE jobs SET leased_until=$4 WHERE id=$1 AND org=$2 AND state='running' AND lease_token=$3 RETURNING id",
+      [job.id, job.org, job.lease_token, Date.now() + leaseMs],
+    );
+    check(
+      result.rows.length,
+      "JOB_LEASE_LOST",
+      "Another worker now owns this job.",
+      409,
+    );
   }
   async finishJob(id, result, token = null) {
     const changed = await this.query(
       "UPDATE jobs SET state='completed',result=$2,leased_until=NULL WHERE id=$1 AND ($3::text IS NULL OR lease_token=$3) RETURNING id",
       [id, JSON.stringify(result), token],
     );
-    check(changed.rows.length, "JOB_LEASE_LOST", "This worker cannot finish a reclaimed job.", 409);
+    check(
+      changed.rows.length,
+      "JOB_LEASE_LOST",
+      "This worker cannot finish a reclaimed job.",
+      409,
+    );
   }
   async failJob(job, error) {
-    await this.query(
-      "UPDATE jobs SET state=$2,last_error=$3,due_at=$4,leased_until=NULL WHERE id=$1 AND ($5::text IS NULL OR lease_token=$5)",
+    const changed = await this.query(
+      "UPDATE jobs SET state=$2,last_error=$3,due_at=$4,leased_until=NULL WHERE id=$1 AND org=$6 AND state='running' AND ($5::text IS NULL OR lease_token=$5) RETURNING id",
       [
         job.id,
         job.attempts >= 5 ? "failed" : "retry",
@@ -301,8 +371,10 @@ export class Store {
           error.message.slice(0, 180),
         Date.now() + Math.min(60000, 1000 * 2 ** job.attempts),
         job.lease_token ?? null,
+        job.org,
       ],
     );
+    return changed.rows.length > 0;
   }
   async close() {
     return this.postgres ? this.db.end() : this.db.close();
