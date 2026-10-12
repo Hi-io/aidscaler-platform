@@ -1,0 +1,22 @@
+{
+  "organizations": 1,
+  "generatedNeeds": 1000,
+  "generatedRumours": 200,
+  "wallMs": 74670.28670000001,
+  "cpuMs": 75594,
+  "rssBytes": 538046464,
+  "sourceRequests": null,
+  "pages": [
+    {
+      "org": "org0",
+      "expectedPublicVersions": 1564,
+      "storedSignals": 1564,
+      "ingestionPasses": 15,
+      "pendingInvestigations": 1,
+      "visibleDecisionPageSize": 0
+    }
+  ],
+  "invariants": [],
+  "modelCalls": 0,
+  "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+}

@@ -13,6 +13,8 @@ const options = Object.fromEntries(
   seeds = Number(options.seeds ?? 2),
   limit = Number(options.budget ?? 1),
   perEpisode = Number(options["episode-budget"] ?? 0.25),
+  planningRounds = Number(options.rounds ?? 1),
+  policyIntervalMs = Number(options["interval-ms"] ?? 600000),
   rows = [],
   planned = [],
   run = Date.now(),
@@ -25,6 +27,11 @@ if (
   limit <= 0 ||
   !Number.isFinite(perEpisode) ||
   perEpisode <= 0 ||
+  !Number.isSafeInteger(planningRounds) ||
+  planningRounds < 1 ||
+  planningRounds > 24 ||
+  !Number.isSafeInteger(policyIntervalMs) ||
+  policyIntervalMs < 60000 ||
   !scenarios.every((s) => /^S(0[1-9]|1[0-9]|2[0-4])$/.test(s)) ||
   !arms.every((a) => /^B[1-6]$/.test(a)) ||
   new Set(arms).size !== arms.length
@@ -55,9 +62,10 @@ const protocol = {
   includeFailures: true,
   heldOut: false,
   operator: "scripted",
-  planningRounds: 1,
+  planningRounds,
+  policyIntervalMs,
   scope:
-    "Initial policy episode plus ongoing physical execution, partner decisions and receipts at a fixed horizon. Not a recurrent full-disaster policy benchmark.",
+    "Finite scheduled policy rounds plus physical execution, partner decisions and receipts at a fixed horizon. The model budget is cumulative across rounds. This is a development pilot, not an independently authored disaster calibration.",
   costPolicy:
     "Known provider receipts plus conservative reservations for unknown-cost attempts; actual invoice can differ from estimates.",
 };
@@ -65,6 +73,10 @@ await writeFile(folder + "/protocol.json", JSON.stringify(protocol, null, 2));
 let cost = 0,
   charged = 0,
   stoppedReason = null;
+let stopRequested = false;
+process.on("SIGINT", () => {
+  stopRequested = true;
+});
 async function saveSummary() {
   const comparisons = [],
     missing = planned.filter(
@@ -134,6 +146,10 @@ async function saveSummary() {
 }
 try {
   for (const p of planned) {
+    if (stopRequested) {
+      stoppedReason = "interrupted_after_current_episode";
+      break;
+    }
     if (limit - charged < 0.025) {
       stoppedReason = "campaign_budget_exhausted";
       break;
@@ -149,6 +165,8 @@ try {
     const report = await runEpisode({
       ...p,
       episodeBudgetUsd: Math.min(perEpisode, limit - charged),
+      planningRounds,
+      policyIntervalMs,
     });
     cost += report.costUsd;
     charged += report.chargedBudgetUsd;

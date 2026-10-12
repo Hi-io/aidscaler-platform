@@ -185,13 +185,39 @@ export class MediaProcessor {
       evidenceId: id,
     };
     await this.store.upsert(org, "media_analysis", id, record);
-    await this.store.transaction((tx) =>
-      tx.audit(org, "media-processor", "media.interpreted", id, {
+    await this.store.transaction(async (tx) => {
+      const text =
+        decoded.text ??
+        decoded.observations?.summary ??
+        decoded.observations?.observations
+          ?.map((o) => (typeof o === "string" ? o : o.description))
+          .join("\n");
+      if (typeof text === "string" && text.trim()) {
+        const signal = await tx.upsert(
+          org,
+          "signal",
+          "media_interpretation_" + id,
+          {
+            text: text.slice(0, 12000),
+            source: metadata.source,
+            sourceVersion: record.processedAt,
+            modality: metadata.mime,
+            permissions: "organization",
+            originalReferences: [id],
+            state: "unverified",
+            sourceUrl: "/api/media?id=" + encodeURIComponent(id),
+            contentHash: metadata.contentHash,
+            receivedAt: record.processedAt,
+          },
+        );
+        if (this.intake) await this.intake.stage(org, signal, tx);
+      }
+      return tx.audit(org, "media-processor", "media.interpreted", id, {
         engine: decoded.engine,
         contentHash: metadata.contentHash,
         wallMs: decoded.wallMs,
-      }),
-    );
+      });
+    });
     return record;
   }
 }

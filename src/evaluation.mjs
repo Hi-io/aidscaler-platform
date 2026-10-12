@@ -22,6 +22,12 @@ function fingerprint(r) {
     contentVersion: r.manifest?.contentVersion,
     clock: r.measurementMode ?? r.clockPolicy,
     horizon: r.metrics?.simulatedMs,
+    candidate: r.candidateFingerprint,
+    evaluator: r.evaluatorFingerprint,
+    modelConfig: r.modelConfig,
+    planningRounds: r.planningRounds ?? 1,
+    policyIntervalMs: r.policyIntervalMs ?? 600000,
+    episodeBudgetUsd: r.episodeBudgetUsd,
   });
 }
 export function pairedBootstrap(

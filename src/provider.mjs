@@ -30,6 +30,13 @@ export class OpenRouterProvider {
   }
   async complete({ org, episode, messages, tools = [], signal }) {
     check(
+      !this.config.modelScopePrefix ||
+        episode.startsWith(this.config.modelScopePrefix),
+      "MODEL_SCOPE",
+      "This call is outside the bounded evaluation episode.",
+      403,
+    );
+    check(
       this.config.apiKey,
       "PROVIDER_KEY",
       "No model key is configured on the server.",
@@ -48,8 +55,10 @@ export class OpenRouterProvider {
         org,
       ]);
       const { rows } = await tx.query(
-        "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
-        [org, episode],
+        this.config.modelScopePrefix
+          ? "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND substring(episode,1,length($2))=$2"
+          : "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
+        [org, this.config.modelScopePrefix ?? episode],
       );
       const hourly = (
         await tx.query(
@@ -76,7 +85,8 @@ export class OpenRouterProvider {
         429,
       );
       check(
-        Number(rows[0].calls) < this.config.maxCalls,
+        Number(rows[0].calls) <
+          (this.config.modelScopeCalls ?? this.config.maxCalls),
         "MODEL_CALL_BUDGET",
         "Investigation call limit reached.",
         429,

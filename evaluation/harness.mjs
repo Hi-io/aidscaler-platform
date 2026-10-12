@@ -77,6 +77,7 @@ export async function createHarness({
   provider,
   maxCalls = 8,
   budgetUsd = 1,
+  platformConfig = {},
 } = {}) {
   const lab = await createLabServers({
       observerPort: 0,
@@ -213,6 +214,7 @@ export async function createHarness({
         bootstrapPassword: "evaluation-password",
         maxCalls,
         budgetUsd,
+        ...platformConfig,
       }),
     );
   }
@@ -451,7 +453,20 @@ export async function runEpisode({
   maxCalls = 8,
   replicate = 0,
   episodeBudgetUsd = 0.25,
+  planningRounds = 1,
+  policyIntervalMs = 600000,
 } = {}) {
+  if (
+    !Number.isSafeInteger(planningRounds) ||
+    planningRounds < 1 ||
+    planningRounds > 24 ||
+    !Number.isSafeInteger(policyIntervalMs) ||
+    policyIntervalMs < 60000
+  )
+    throw Error(
+      "Use one to twenty-four finite policy rounds with at least a minute between opportunities.",
+    );
+  const episodePrefix = `pilot-${arm}-${scenario}-${seed}-${replicate}-`;
   const fingerprint = await buildFingerprint(),
     evaluatorBuild = await evaluatorFingerprint(),
     start = performance.now(),
@@ -463,10 +478,16 @@ export async function runEpisode({
       provider,
       maxCalls,
       budgetUsd: episodeBudgetUsd / (["B5", "B6"].includes(arm) ? 4 : 1),
+      platformConfig: {
+        modelScopePrefix: episodePrefix,
+        modelScopeCalls: maxCalls * planningRounds,
+      },
     }),
     activities = [],
     errors = [];
   let status = "completed";
+  let planRound,
+    roundsExecuted = 0;
   try {
     h.lab.world.advance(60000);
     for (const app of h.apps) {
@@ -494,108 +515,124 @@ export async function runEpisode({
               await app.worker.drain();
             }
       }
-    for (const app of h.apps) {
-      if (arm === "B5" && app !== h.apps[0]) continue;
-      const episode = `pilot-${arm}-${scenario}-${seed}-${replicate}-${app.config.org}`;
-      let activity;
-      if (arm === "B1") activity = await ruleProposal(app, episode);
-      else if (arm === "B5")
-        activity = await conventionalSharedProposal(app, episode);
-      else if (arm === "B2") {
-        // Extraction is a real model call with sources, but does not grant human authority.
-        const timing = await app.connector.startModel(app.config.modelId);
-        let extraction;
-        try {
-          const signals = await app.store.list(app.config.org, "signal", 35),
-            snapshot = await app.connector.state();
-          const result = await app.provider.complete({
-            org: app.config.org,
-            episode,
-            messages: [
-              {
-                role: "system",
-                content: EXTRACTION_INSTRUCTIONS,
-              },
-              {
-                role: "user",
-                content: JSON.stringify({
-                  signals,
-                  knownLocations: (
-                    await app.store.get(
-                      app.config.org,
-                      "context",
-                      "geography",
-                      false,
-                    )
-                  )?.map?.places,
-                }),
-              },
-            ],
-            tools: [],
-          });
-          await app.connector.finishModel(timing.id, result.usage);
-          extraction = normalizeExtraction(
-            result.message.content,
-            signals,
-            Object.values(snapshot.known.needs),
-          );
-          for (const [index, o] of extraction.observations.entries())
-            await app.domain.createClaim(
-              {
-                id: "extraction-reference",
-                org: app.config.org,
-                role: "agent",
-              },
-              {
-                text: o.text,
-                references: o.sourceIds,
-                state: "observed",
-                ...(o.location ? { location: o.location } : {}),
-              },
-              episode + "-claim-" + index,
-            );
-          await app.store.upsert(app.config.org, "activity", episode, {
-            state: "ready",
-            result: {
-              observations: extraction.observations,
-              unresolved: extraction.unresolved,
-            },
-            model: result.model,
-            steps: [],
-            kind: "extraction_only",
-          });
-        } catch (e) {
-          await app.connector
-            .finishModel(timing.id, { failed: true })
-            .catch(() => {});
-          throw e;
-        }
-        activity = await ruleProposal(app, episode, extraction);
-      } else
-        activity = await app.investigator.run(
-          { policy: arm === "B3" ? "general" : "nexo" },
-          episode,
-        );
-      activities.push({ org: app.config.org, ...activity });
-      if (activity.proposalId) {
-        const p = await app.store.get(
-          app.config.org,
-          "proposal",
-          activity.proposalId,
-        );
-        if (await scriptedReview(app, p)) {
+    planRound = async () => {
+      const round = roundsExecuted++;
+      for (const app of h.apps) {
+        if (arm === "B5" && app !== h.apps[0]) continue;
+        const episode = `${episodePrefix}${app.config.org}-round${round}`;
+        let activity;
+        if (arm === "B1") activity = await ruleProposal(app, episode);
+        else if (arm === "B5")
+          activity = await conventionalSharedProposal(app, episode);
+        else if (arm === "B2") {
+          // Extraction is a real model call with sources, but does not grant human authority.
+          const timing = await app.connector.startModel(app.config.modelId);
+          let extraction;
           try {
-            await app.worker.execute(p.id);
-          } catch (e) {
-            errors.push({
+            const signals = await app.store.list(app.config.org, "signal", 35),
+              snapshot = await app.connector.state();
+            const result = await app.provider.complete({
               org: app.config.org,
-              phase: "execute",
-              code: e.code ?? e.name,
+              episode,
+              messages: [
+                {
+                  role: "system",
+                  content: EXTRACTION_INSTRUCTIONS,
+                },
+                {
+                  role: "user",
+                  content: JSON.stringify({
+                    signals,
+                    knownLocations: (
+                      await app.store.get(
+                        app.config.org,
+                        "context",
+                        "geography",
+                        false,
+                      )
+                    )?.map?.places,
+                  }),
+                },
+              ],
+              tools: [],
             });
+            await app.connector.finishModel(timing.id, result.usage);
+            extraction = normalizeExtraction(
+              result.message.content,
+              signals,
+              Object.values(snapshot.known.needs),
+            );
+            for (const [index, o] of extraction.observations.entries())
+              await app.domain.createClaim(
+                {
+                  id: "extraction-reference",
+                  org: app.config.org,
+                  role: "agent",
+                },
+                {
+                  text: o.text,
+                  references: o.sourceIds,
+                  state: "observed",
+                  ...(o.location ? { location: o.location } : {}),
+                },
+                episode + "-claim-" + index,
+              );
+            await app.store.upsert(app.config.org, "activity", episode, {
+              state: "ready",
+              result: {
+                observations: extraction.observations,
+                unresolved: extraction.unresolved,
+              },
+              model: result.model,
+              steps: [],
+              kind: "extraction_only",
+            });
+          } catch (e) {
+            await app.connector
+              .finishModel(timing.id, { failed: true })
+              .catch(() => {});
+            throw e;
+          }
+          activity = await ruleProposal(app, episode, extraction);
+        } else {
+          const repair = (
+            await app.store.list(app.config.org, "proposal", 100)
+          ).find((p) => p.state === "requires_review");
+          activity = await app.investigator.run(
+            {
+              policy: arm === "B3" ? "general" : "nexo",
+              ...(repair ? { repairOf: repair.id } : {}),
+            },
+            episode,
+          );
+        }
+        activities.push({
+          org: app.config.org,
+          round,
+          atSim: h.lab.world.now,
+          ...activity,
+        });
+        if (activity.proposalId) {
+          const p = await app.store.get(
+            app.config.org,
+            "proposal",
+            activity.proposalId,
+          );
+          if (await scriptedReview(app, p)) {
+            try {
+              await app.worker.execute(p.id);
+            } catch (e) {
+              errors.push({
+                org: app.config.org,
+                phase: "execute",
+                code: e.code ?? e.name,
+              });
+            }
           }
         }
       }
-    }
+    };
+    await planRound();
   } catch (e) {
     status = "failed";
     errors.push({ phase: "episode", code: e.code ?? e.name });
@@ -603,9 +640,30 @@ export async function runEpisode({
   try {
     // Fixed horizon also applies to failed/inconclusive runs; they are never excluded.
     while (h.lab.world.now < h.lab.world.config.durationMs) {
+      const nextRoundAt = 60000 + roundsExecuted * policyIntervalMs;
+      if (
+        roundsExecuted < planningRounds &&
+        h.lab.world.now >= nextRoundAt &&
+        planRound
+      ) {
+        for (const app of h.apps) await app.ingestion.sync();
+        try {
+          await planRound();
+        } catch (e) {
+          status = "failed";
+          errors.push({
+            phase: "policy_round",
+            round: roundsExecuted - 1,
+            code: e.code ?? e.name,
+          });
+        }
+      }
       const target = Math.min(
         h.lab.world.config.durationMs,
         h.lab.world.now + 60000,
+        planRound && roundsExecuted < planningRounds
+          ? Math.max(h.lab.world.now, 60000 + roundsExecuted * policyIntervalMs)
+          : Infinity,
       );
       const progress = h.lab.world.advance(target, { maxEvents: 100000 });
       if (progress.blocked) {
@@ -646,7 +704,7 @@ export async function runEpisode({
           ["authorized", "executing", "awaiting_partner"].includes(p.state),
         );
       }
-      if (!pending) {
+      if (!pending && (!planRound || roundsExecuted >= planningRounds)) {
         h.lab.world.advance(h.lab.world.config.durationMs, {
           maxEvents: 1000000,
         });
@@ -724,6 +782,14 @@ export async function runEpisode({
       measurementMode: "modeled",
       clockPolicy: "declared delays; no accelerated wall-time charging",
       operator: "scripted; human comprehension not measured",
+      planningRounds,
+      roundsExecuted,
+      policyIntervalMs,
+      episodeBudgetUsd,
+      modelConfig: {
+        modelId: h.apps[0].config.modelId,
+        maxCallsPerRound: maxCalls,
+      },
       wallMs: performance.now() - start,
       activities,
       platformEvidence,

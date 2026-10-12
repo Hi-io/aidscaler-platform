@@ -111,7 +111,6 @@ try {
   checks.push(
     "Actual source file upload → processing → unverified interpretation",
   );
-  await context.close();
   const mobile = await browser.newContext({
       viewport: { width: 390, height: 844 },
       reducedMotion: "reduce",
@@ -176,7 +175,137 @@ try {
     path: ".local/screenshots/field-offline-recovered.png",
     fullPage: true,
   });
+  const users = (
+    await h.apps[0].store.query("SELECT id,role FROM users WHERE org='org0'")
+  ).rows;
+  const fieldUser = users.find((u) => u.role === "field"),
+    analyst = users.find((u) => u.role === "analyst");
+  await h.apps[0].store.put(
+    "org0",
+    "operation",
+    "journey-field-operation",
+    {
+      type: "dispatch",
+      owner: "org0",
+      from: "depot",
+      to: "Shelter North",
+      quantity: 30,
+      unit: "L",
+      state: "in_transit",
+    },
+    0,
+  );
+  await page.goto(base + "/#coordination");
+  await page
+    .getByRole("button", { name: "Assign an operation", exact: true })
+    .click();
+  await page
+    .locator("#coordinationform [name=operation]")
+    .selectOption("journey-field-operation");
+  await page
+    .locator("#coordinationform [name=assignee]")
+    .selectOption(fieldUser.id);
+  await page
+    .locator("#coordinationform [name=instructions]")
+    .fill("Check the destination with the receiving team.");
+  await page.getByRole("button", { name: "Assign task", exact: true }).click();
+  await page.locator("dialog").waitFor({ state: "detached" });
+  await field.reload();
+  await field
+    .getByRole("button", { name: "Open current task", exact: true })
+    .click();
+  await field
+    .getByRole("button", { name: "Save & send update", exact: true })
+    .click();
+  await field.locator("dialog").waitFor({ state: "detached" });
+  assert.equal(
+    (await h.apps[0].store.get("org0", "task", "task_journey-field-operation"))
+      .state,
+    "acknowledged",
+  );
+  await mobile.setOffline(true);
+  await field
+    .getByRole("button", { name: "Open current task", exact: true })
+    .click();
+  await field.locator("#taskupdateform [name=stage]").selectOption("departed");
+  await field
+    .getByRole("button", { name: "Save & send update", exact: true })
+    .click();
+  await field.locator("dialog").waitFor({ state: "detached" });
+  await field.reload();
+  await mobile.setOffline(false);
+  for (let i = 0; i < 80; i++) {
+    if (
+      (
+        await h.apps[0].store.get(
+          "org0",
+          "task",
+          "task_journey-field-operation",
+        )
+      ).state === "departed"
+    )
+      break;
+    await field.waitForTimeout(100);
+  }
+  assert.equal(
+    (await h.apps[0].store.get("org0", "task", "task_journey-field-operation"))
+      .state,
+    "departed",
+  );
+  assert.equal(
+    (await h.apps[0].store.get("org0", "operation", "journey-field-operation"))
+      .state,
+    "in_transit",
+  );
+  checks.push(
+    "Dispatcher assignment → field acknowledgement → offline departure → restart/reconnect; no invented physical receipt",
+  );
+  await page
+    .getByRole("button", { name: "Delegate a decision", exact: true })
+    .click();
+  await page.locator("#coordinationform [name=item]").selectOption(draft.id);
+  await page.locator("#coordinationform [name=to]").selectOption(analyst.id);
+  await page
+    .locator("#coordinationform [name=note]")
+    .fill("Review this exact allocation during the current shift.");
+  await page
+    .getByRole("button", { name: "Record scoped delegation", exact: true })
+    .click();
+  await page.locator("dialog").waitFor({ state: "detached" });
+  const analystContext = await browser.newContext(),
+    analystPage = await analystContext.newPage();
+  await login(analystPage, "analyst");
+  await analystPage.goto(base + "/#review");
+  await analystPage
+    .getByRole("button", { name: "Review", exact: true })
+    .first()
+    .click();
+  await analystPage.getByRole("button", { name: "Authorize response", exact: true }).waitFor({ state: "visible" });
+  await analystPage
+    .getByRole("button", { name: "Close dialog", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Revoke", exact: true })
+    .first()
+    .click();
+  await analystPage.reload();
+  await analystPage
+    .getByRole("button", { name: "Review", exact: true })
+    .first()
+    .click();
+  await analystPage.getByRole("heading", { name: "Review a response", exact: true }).waitFor();
+  assert.equal(
+    await analystPage
+      .getByRole("button", { name: "Authorize response", exact: true })
+      .count(),
+    0,
+  );
+  await analystContext.close();
+  checks.push(
+    "Scoped delegation exposes one analyst approval and revocation removes it without changing the user's role",
+  );
   await mobile.close();
+  await context.close();
   for (const role of [
     "admin",
     "analyst",

@@ -1,11 +1,13 @@
 {
-  "at": "2026-10-12T00:33:36.468Z",
+  "at": "2026-10-12T02:00:10.220Z",
   "browser": "Chromium",
   "checks": [
     "Case → manual draft → versioned revision; no dispatch",
     "Received operational map and keyboard fallback render",
     "Actual source file upload → processing → unverified interpretation",
     "Field offline write → reload → reconnect → one durable acknowledged report",
+    "Dispatcher assignment → field acknowledgement → offline departure → restart/reconnect; no invented physical receipt",
+    "Scoped delegation exposes one analyst approval and revocation removes it without changing the user's role",
     "Role workspace: admin",
     "Role workspace: analyst",
     "Role workspace: dispatcher",

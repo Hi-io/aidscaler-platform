@@ -4,6 +4,7 @@ import { operationalMap, bindMap } from "./map.mjs";
 import { createExtras } from "./extras.mjs";
 import { createOperationalDraft } from "./operational.mjs";
 import { createFinanceControls } from "./finance.mjs";
+import { createWorkforceControls } from "./workforce.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
   String(s ?? "").replace(
@@ -49,6 +50,7 @@ const nav = [
   ["publications", "globe", "Public updates", "Communicate"],
   ["finance", "wallet", "Pooled funds"],
   ["field", "map-pin", "Field workspace"],
+  ["coordination", "users", "People & handovers"],
   ["settings", "settings", "Sources & access", "Manage"],
   ["connections", "plug", "External connections"],
   ["audit", "shield-check", "Decision history"],
@@ -91,6 +93,7 @@ const pageRoles = {
     "resources",
     "network",
     "field",
+    "coordination",
     "settings",
     "connections",
   ],
@@ -106,6 +109,7 @@ const pageRoles = {
     "resources",
     "network",
     "field",
+    "coordination",
     "settings",
     "connections",
   ],
@@ -138,7 +142,8 @@ async function api(url, body) {
       ? {
           "Content-Type": "application/json",
           "X-CSRF-Token": state.csrf,
-          "Idempotency-Key": crypto.randomUUID(),
+          "Idempotency-Key":
+            body.idempotencyKey ?? body.clientId ?? crypto.randomUUID(),
         }
       : {},
     body: body ? JSON.stringify(body) : undefined,
@@ -187,6 +192,22 @@ const financeControls = createFinanceControls({
   toast,
   render,
 });
+const workforceControls = createWorkforceControls({
+  api,
+  record,
+  escape,
+  action,
+  badge,
+  empty,
+  title,
+  state,
+  modal,
+  toast,
+  render,
+  offlineQueue,
+  flush,
+  close: () => runAction("close", ""),
+});
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -231,6 +252,7 @@ function login(error = "") {
       state.user = r.user;
       state.csrf = r.csrf;
       const me = await api("/api/me");
+      state.delegatedReviews = me.delegatedReviews;
       state.model = me.model;
       cacheSession();
       await render();
@@ -584,6 +606,7 @@ async function field() {
       "Report from the field.",
       "Capture a need, restriction or receipt. Offline reports remain queued until the server acknowledges them.",
     ) +
+    (await workforceControls.field()) +
     `<div class="grid split"><section class="card"><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="Place name or known location ID" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Delivery status</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon("clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(q.text.slice(0, 150))}</p>${badge("queued")} <span class="small">Saved on this device. Not yet received.</span></div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
   );
 }
@@ -648,6 +671,7 @@ const views = {
   publications,
   finance,
   field,
+  coordination: workforceControls.coordination,
   settings,
   audit,
 };
@@ -699,8 +723,11 @@ function modal(name, content, footer = "") {
   bind(dialog);
 }
 async function proposal(id) {
+  state.delegatedReviews = (await api("/api/me")).delegatedReviews;
   const p = await record("proposal", id),
-    canReview = ["commander", "dispatcher"].includes(state.user.role),
+    canReview =
+      ["commander", "dispatcher"].includes(state.user.role) ||
+      state.delegatedReviews?.includes(id),
     pending = p.conditions.filter((c) => !c.satisfied);
   modal(
     "Review a response",
@@ -764,9 +791,17 @@ async function operationDetail(id) {
   modal(
     "Follow the operation",
     `<div class="cardheader"><h2>${escape(o.type ?? "Aid delivery")}</h2>${badge(o.state)}</div><div class="stepper">${stages.map((s, i) => `<div class="step ${i <= last ? "done" : ""} ${i === last ? "active" : ""}">${s.replace("dispatched", "In transit").replace("acknowledged", "Accepted")}</div>`).join("")}</div><div class="detailgrid"><div class="decision"><span class="eyebrow">What is confirmed?</span><p>${o.times?.received != null ? "Receipt recorded by the operational source." : o.times?.arrived != null ? "Vehicle has arrived. Receipt is still pending." : "The operation has not yet reached confirmed receipt."}</p></div><div class="decision"><span class="eyebrow">Responsible owner</span><p>${escape(o.authorizedBy ?? "Source authority")}<br>${escape(o.owner ?? state.user.org)}</p></div></div>${o.requiresRepair ? `<div class="warning" style="margin-top:20px">${escape(o.changedReason ?? "A dependency changed. Review the affected plan.")}</div>` : ""}<details class="collapse"><summary>Operational record & timestamps</summary><pre class="trace">${escape(JSON.stringify(o, null, 2))}</pre></details>`,
-    o.proposalId
-      ? action("Re-investigate affected plan", "repair", o.proposalId, "accent")
-      : action("Close", "close"),
+    (["commander", "dispatcher"].includes(state.user.role)
+      ? action("Assign field task", "task-assign", o.id, "accent")
+      : "") +
+      (o.proposalId
+        ? action(
+            "Re-investigate affected plan",
+            "repair",
+            o.proposalId,
+            "accent",
+          )
+        : action("Close", "close")),
   );
 }
 async function flush() {
@@ -789,8 +824,13 @@ async function flush() {
     if (item.queueOrg !== state.user.org || item.queueActor !== state.user.id)
       continue;
     try {
-      const { queueOrg, queueActor, ...payload } = item;
-      await api("/api/report", payload);
+      const { queueOrg, queueActor, queueKind, taskPayload, ...payload } = item;
+      await api(
+        queueKind === "task" ? "/api/task/update" : "/api/report",
+        queueKind === "task"
+          ? { ...taskPayload, idempotencyKey: item.clientId }
+          : payload,
+      );
       await offlineQueue("delete", item.clientId);
       sent++;
     } catch (e) {
@@ -801,11 +841,12 @@ async function flush() {
   }
   if (sent)
     toast(
-      `${sent} field report${sent === 1 ? "" : "s"} received by the server.`,
+      `${sent} field update${sent === 1 ? "" : "s"} received by the server.`,
     );
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
+  if (await workforceControls.run(name, id)) return;
   if (await extras.run(name, id)) return;
   if (name === "operational-draft") {
     await operational.open();
@@ -1125,6 +1166,7 @@ async function runAction(name, id) {
   }
 }
 function bind(root = app) {
+  workforceControls.bind(root);
   financeControls.bind(root);
   extras.bind(root);
   root.querySelectorAll("[data-page]").forEach(

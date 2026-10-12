@@ -1,0 +1,46 @@
+{
+  "organizations": 4,
+  "generatedNeeds": 10,
+  "generatedRumours": 2,
+  "wallMs": 6922.260000000009,
+  "cpuMs": 7750,
+  "rssBytes": 1358172160,
+  "sourceRequests": null,
+  "pages": [
+    {
+      "org": "org0",
+      "expectedPublicVersions": 15,
+      "storedSignals": 15,
+      "ingestionPasses": 1,
+      "pendingInvestigations": 1,
+      "visibleDecisionPageSize": 0
+    },
+    {
+      "org": "org1",
+      "expectedPublicVersions": 15,
+      "storedSignals": 15,
+      "ingestionPasses": 1,
+      "pendingInvestigations": 1,
+      "visibleDecisionPageSize": 0
+    },
+    {
+      "org": "org2",
+      "expectedPublicVersions": 15,
+      "storedSignals": 15,
+      "ingestionPasses": 1,
+      "pendingInvestigations": 1,
+      "visibleDecisionPageSize": 0
+    },
+    {
+      "org": "org3",
+      "expectedPublicVersions": 15,
+      "storedSignals": 15,
+      "ingestionPasses": 1,
+      "pendingInvestigations": 1,
+      "visibleDecisionPageSize": 0
+    }
+  ],
+  "invariants": [],
+  "modelCalls": 0,
+  "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+}

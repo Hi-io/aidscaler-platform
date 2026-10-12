@@ -1,6 +1,7 @@
 import { check } from "./errors.mjs";
 import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
+import { authorizationCurrent } from "./authority.mjs";
 const PHYSICAL = new Set(["dispatch", "repair", "evacuate", "reroute"]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
 function resolution(action, receipt, state) {
@@ -87,7 +88,7 @@ export class Worker {
       403,
     );
     if (
-      (p.authorization.expiresAt ?? Infinity) <= Date.now() ||
+      !(await authorizationCurrent(this.store, org, p.authorization)) ||
       (p.authorization.planHash && p.authorization.planHash !== hash(p.actions))
     ) {
       await this.store.upsert(org, "proposal", id, {
@@ -209,7 +210,7 @@ export class Worker {
         409,
       );
       const obsolete =
-        latest.authorization.expiresAt <= Date.now() ||
+        !(await authorizationCurrent(this.store, org, latest.authorization)) ||
         (latest.authorization.planHash &&
           latest.authorization.planHash !== hash(latest.actions));
       const expiredEvidence =

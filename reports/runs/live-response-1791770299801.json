@@ -1,0 +1,1041 @@
+{
+  "at": "2026-10-12T02:02:24.008Z",
+  "episode": "live-response-1791770299801",
+  "measurementMode": "live",
+  "rate": 1,
+  "clockPolicy": "World progresses at actual elapsed wall time, including actual provider and HTTP latency; no accelerated advance.",
+  "operator": "scripted finite source review, not human UX",
+  "candidateFingerprint": "a33117753b88712868566d82e89361dd488fa6e28be95562d23563aa23e8a183",
+  "candidateChanged": false,
+  "manifest": {
+    "schemaVersion": 1,
+    "engineVersion": "0.2.0",
+    "engineBuild": "2425df696087a961ff53c12dc531a259bbd21db1b447c7a994243ce982dd71f4",
+    "randomVersion": "fnv-avalanche-v1",
+    "runtimeMajor": 24,
+    "config": {
+      "seed": "live-response-2026-01",
+      "scenario": "S23",
+      "hazard": "none",
+      "variant": "standard",
+      "grid": 3,
+      "extentKm": 1,
+      "organizations": 4,
+      "durationMs": 600000,
+      "populationPerSector": 60,
+      "backgroundTraffic": 0,
+      "postsPerHour": 0,
+      "falseRate": 0.12,
+      "observationRate": 0.8,
+      "operatorCount": 2,
+      "reviewMs": 1000,
+      "inspectionMs": 1000,
+      "loadMs": 1000,
+      "unloadMs": 1000,
+      "setupMs": 1000,
+      "networkLatencyMs": 50,
+      "packetLoss": 0,
+      "networkCapacity": 30,
+      "sourceIndexMs": 10000,
+      "queryLatencyMs": 50,
+      "bandwidthBytesPerSecond": 1000000,
+      "toolQuota": 60,
+      "funds": 5000,
+      "stockWater": 2400,
+      "reservedWater": 100,
+      "policy": "none",
+      "mode": "live",
+      "clockLatency": "wall",
+      "split": "development",
+      "language": "mixed",
+      "logMode": "compact",
+      "maxEvents": 2000000,
+      "maxPosts": 1000000,
+      "topology": "regional",
+      "bridgeCount": 3,
+      "healthTickMs": 600000,
+      "waterMlPerPersonDay": 3000,
+      "foodKcalPerPersonDay": 2100,
+      "initialWaterHours": 6,
+      "initialFoodHours": 12,
+      "waterCriticalHours": 30,
+      "foodCriticalHours": 72,
+      "injuryCriticalHours": 2,
+      "exposureCriticalHours": 4,
+      "waterFatalityBpPerHour": 150,
+      "foodFatalityBpPerHour": 25,
+      "injuryFatalityBpPerHour": 1000,
+      "exposureFatalityBpPerHour": 600,
+      "injuryFractionBp": 1500,
+      "temperatureC": 24,
+      "healthReports": false,
+      "recurringNeeds": true,
+      "resupplyReviewHours": 6,
+      "resupplyHorizonHours": 24,
+      "authorshipMs": 1000,
+      "staffShiftMs": 28800000,
+      "staffRestMs": 3600000,
+      "vehicleFuelMl": 80000,
+      "fuelMlPerKm": 180,
+      "sourceRequestLimit": 120,
+      "modelLatencyMs": 5000,
+      "modelCallLimit": 1000,
+      "subsystemSeeds": {}
+    },
+    "contentVersion": "presets-v1+social-v1"
+  },
+  "activity": {
+    "state": "ready",
+    "model": "google/gemma-4-31b-it",
+    "startedAt": 1791770300660,
+    "steps": [
+      {
+        "type": "tool",
+        "tool": "plan_allocations",
+        "at": 1791770301551,
+        "state": "completed",
+        "label": "Checked allocations against scarce capacity",
+        "params": {},
+        "result": {
+          "allocations": [
+            {
+              "need": "need-water-main",
+              "resource": "r-org0-water",
+              "vehicle": "v-org0-1",
+              "quantity": 300,
+              "owner": "org0",
+              "needsRouteCheck": true
+            },
+            {
+              "need": "need-water-main",
+              "resource": "r-org0-water",
+              "vehicle": "v-org0-0",
+              "quantity": 200,
+              "owner": "org0",
+              "needsRouteCheck": true
+            }
+          ],
+          "unserved": [
+            {
+              "need": "need-water-main",
+              "remaining": 100,
+              "unit": "L",
+              "reason": "No uncommitted eligible capacity in this planning round"
+            }
+          ],
+          "algorithm": "deterministic constrained greedy reference",
+          "doesNotDispatch": true,
+          "actions": [
+            {
+              "type": "dispatch",
+              "owner": "org0",
+              "params": {
+                "vehicle": "v-org0-1",
+                "resource": "r-org0-water",
+                "need": "need-water-main",
+                "quantity": 300
+              },
+              "dependsOn": []
+            },
+            {
+              "type": "dispatch",
+              "owner": "org0",
+              "params": {
+                "vehicle": "v-org0-0",
+                "resource": "r-org0-water",
+                "need": "need-water-main",
+                "quantity": 200
+              },
+              "dependsOn": []
+            }
+          ],
+          "evidenceIds": [
+            "need-water-main",
+            "r-org0-water",
+            "v-org0-1",
+            "need-water-main",
+            "r-org0-water",
+            "v-org0-0"
+          ],
+          "nextTool": "prepare_allocation"
+        }
+      },
+      {
+        "type": "tool",
+        "tool": "prepare_allocation",
+        "at": 1791770302546,
+        "state": "completed",
+        "label": "Prepared checked allocations for human review",
+        "params": {
+          "indices": [
+            0,
+            1
+          ],
+          "title": "Water Delivery to Shelter b5",
+          "rationale": "The shelter at b5 has an urgent need for 600L of water. Org0 has 600L available (minus 100L floor reserve = 500L usable). Two vehicles from Org0 (v-org0-0 and v-org0-1) can transport a combined 500L. This is the maximum possible delivery from the identified stock.",
+          "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the 600L requirement."
+        },
+        "result": {
+          "simId": null,
+          "state": "awaiting_review",
+          "title": "Water Delivery to Shelter b5",
+          "actions": [
+            {
+              "type": "dispatch",
+              "owner": "org0",
+              "params": {
+                "need": "need-water-main",
+                "vehicle": "v-org0-1",
+                "quantity": 300,
+                "resource": "r-org0-water"
+              },
+              "dependsOn": []
+            },
+            {
+              "type": "dispatch",
+              "owner": "org0",
+              "params": {
+                "need": "need-water-main",
+                "vehicle": "v-org0-0",
+                "quantity": 200,
+                "resource": "r-org0-water"
+              },
+              "dependsOn": []
+            }
+          ],
+          "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the 600L requirement.",
+          "summary": "Provides 500L of water to 60 people at shelter b5, partially satisfying the 600L requirement.",
+          "activity": [],
+          "priority": "high",
+          "repairOf": null,
+          "createdBy": "nexo-investigator",
+          "rationale": "The shelter at b5 has an urgent need for 600L of water. Org0 has 600L available (minus 100L floor reserve = 500L usable). Two vehicles from Org0 (v-org0-0 and v-org0-1) can transport a combined 500L. This is the maximum possible delivery from the identified stock.",
+          "conditions": [],
+          "references": [
+            "need-water-main",
+            "r-org0-water",
+            "v-org0-1",
+            "v-org0-0"
+          ],
+          "alternatives": [],
+          "dependencies": [
+            "need-water-main",
+            "r-org0-water",
+            "v-org0-1",
+            "v-org0-0"
+          ],
+          "authorization": null,
+          "inheritedWork": [],
+          "id": "proposal_ae64e616-3cd1-4e1f-beb0-64483d71567f",
+          "version": 1,
+          "createdAt": 1791770302612,
+          "updatedAt": 1791770302612
+        }
+      }
+    ],
+    "proposalId": "proposal_ae64e616-3cd1-4e1f-beb0-64483d71567f",
+    "episode": "live-response-1791770299801",
+    "inputSnapshot": {
+      "hash": "2514a9ce562589d62d0cdfe469aed56aad8acd1ee0f7aef15cbcef83f0a49de1",
+      "policy": "nexo",
+      "focusNeed": "need-water-main",
+      "focusFacility": null,
+      "sourceObservedAt": 575,
+      "signals": [],
+      "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
+    },
+    "finishedAt": 1791770302621,
+    "calls": 2,
+    "wallMs": 1947.2093
+  },
+  "proposal": {
+    "simId": "proposal-1",
+    "state": "executing",
+    "title": "Water Delivery to Shelter b5",
+    "actions": [
+      {
+        "type": "dispatch",
+        "owner": "org0",
+        "params": {
+          "need": "need-water-main",
+          "vehicle": "v-org0-1",
+          "quantity": 300,
+          "resource": "r-org0-water"
+        },
+        "dependsOn": []
+      },
+      {
+        "type": "dispatch",
+        "owner": "org0",
+        "params": {
+          "need": "need-water-main",
+          "vehicle": "v-org0-0",
+          "quantity": 200,
+          "resource": "r-org0-water"
+        },
+        "dependsOn": []
+      }
+    ],
+    "benefit": "Provides 500L of water to 60 people at shelter b5, partially satisfying the 600L requirement.",
+    "summary": "Provides 500L of water to 60 people at shelter b5, partially satisfying the 600L requirement.",
+    "activity": [],
+    "priority": "high",
+    "repairOf": null,
+    "createdBy": "nexo-investigator",
+    "rationale": "The shelter at b5 has an urgent need for 600L of water. Org0 has 600L available (minus 100L floor reserve = 500L usable). Two vehicles from Org0 (v-org0-0 and v-org0-1) can transport a combined 500L. This is the maximum possible delivery from the identified stock.",
+    "conditions": [],
+    "references": [
+      "need-water-main",
+      "r-org0-water",
+      "v-org0-1",
+      "v-org0-0"
+    ],
+    "reviewNote": "Scripted laboratory operator; not a human UX trial.",
+    "alternatives": [],
+    "dependencies": [
+      "need-water-main",
+      "r-org0-water",
+      "v-org0-1",
+      "v-org0-0"
+    ],
+    "authorization": {
+      "at": 1791770302693,
+      "by": "user_1594d561-731f-4783-bc97-9b63822f01ff",
+      "name": "Alex Morgan",
+      "note": "Scripted laboratory operator; not a human UX trial.",
+      "evidence": [
+        {
+          "ref": "need-water-main",
+          "kind": "need",
+          "snapshot": {
+            "at": 0,
+            "id": "need-water-main",
+            "type": "water",
+            "unit": "L",
+            "floor": 0,
+            "owner": "org0",
+            "served": 0,
+            "version": 1,
+            "building": "b5",
+            "deadline": 10800000,
+            "quantity": 600,
+            "reserved": 0,
+            "createdAt": 1791770300008,
+            "updatedAt": 1791770300008,
+            "population": 60,
+            "sourceVersion": 1,
+            "sourceSnapshot": {
+              "at": 0,
+              "id": "need-water-main",
+              "type": "water",
+              "unit": "L",
+              "served": 0,
+              "version": 1,
+              "building": "b5",
+              "deadline": 10800000,
+              "quantity": 600,
+              "population": 60
+            }
+          }
+        },
+        {
+          "ref": "r-org0-water",
+          "kind": "resource",
+          "snapshot": {
+            "at": 0,
+            "id": "r-org0-water",
+            "node": "n0",
+            "type": "water",
+            "unit": "L",
+            "floor": 100,
+            "owner": "org0",
+            "version": 2,
+            "quantity": 600,
+            "reserved": 0,
+            "createdAt": 1791770299953,
+            "updatedAt": 1791770300474,
+            "observedAt": 0,
+            "compatibility": null,
+            "sourceVersion": 1,
+            "sourceSnapshot": {
+              "at": 0,
+              "id": "r-org0-water",
+              "node": "n0",
+              "type": "water",
+              "floor": 100,
+              "owner": "org0",
+              "version": 1,
+              "quantity": 600,
+              "reserved": 0,
+              "observedAt": 0,
+              "compatibility": null
+            }
+          }
+        },
+        {
+          "ref": "v-org0-1",
+          "kind": "vehicle",
+          "snapshot": {
+            "at": 0,
+            "id": "v-org0-1",
+            "fuel": 80000,
+            "node": "n0",
+            "floor": 0,
+            "owner": "org0",
+            "seats": 20,
+            "state": "idle",
+            "version": 1,
+            "capacity": 300,
+            "reserved": 0,
+            "shiftEnd": 600000,
+            "speedMps": 12,
+            "volumeM3": 1,
+            "weightKg": 3500,
+            "createdAt": 1791770300002,
+            "updatedAt": 1791770300002,
+            "maxCargoKg": 1000,
+            "fuelMlPerKm": 180,
+            "maxWaterDepth": 0.3,
+            "sourceVersion": 1,
+            "sourceSnapshot": {
+              "at": 0,
+              "id": "v-org0-1",
+              "fuel": 80000,
+              "node": "n0",
+              "owner": "org0",
+              "seats": 20,
+              "state": "idle",
+              "version": 1,
+              "capacity": 300,
+              "shiftEnd": 600000,
+              "speedMps": 12,
+              "volumeM3": 1,
+              "weightKg": 3500,
+              "maxCargoKg": 1000,
+              "fuelMlPerKm": 180,
+              "maxWaterDepth": 0.3
+            }
+          }
+        },
+        {
+          "ref": "v-org0-0",
+          "kind": "vehicle",
+          "snapshot": {
+            "at": 0,
+            "id": "v-org0-0",
+            "fuel": 80000,
+            "node": "n0",
+            "floor": 0,
+            "owner": "org0",
+            "seats": 20,
+            "state": "idle",
+            "version": 1,
+            "capacity": 300,
+            "reserved": 0,
+            "shiftEnd": 600000,
+            "speedMps": 12,
+            "volumeM3": 1,
+            "weightKg": 3500,
+            "createdAt": 1791770299996,
+            "updatedAt": 1791770299996,
+            "maxCargoKg": 1000,
+            "fuelMlPerKm": 180,
+            "maxWaterDepth": 0.3,
+            "sourceVersion": 1,
+            "sourceSnapshot": {
+              "at": 0,
+              "id": "v-org0-0",
+              "fuel": 80000,
+              "node": "n0",
+              "owner": "org0",
+              "seats": 20,
+              "state": "idle",
+              "version": 1,
+              "capacity": 300,
+              "shiftEnd": 600000,
+              "speedMps": 12,
+              "volumeM3": 1,
+              "weightKg": 3500,
+              "maxCargoKg": 1000,
+              "fuelMlPerKm": 180,
+              "maxWaterDepth": 0.3
+            }
+          }
+        }
+      ],
+      "planHash": "97d9319ecebf938fb03a8825d2284f328916ddb0f504ddf88d995b7db80104d8",
+      "expiresAt": 1791772102693,
+      "delegation": null,
+      "conditional": false,
+      "evidenceHash": "aeb509942e8d6fb637e316f94322d76b5ca37a209b576703a6309b7757c1abcc",
+      "proposalVersion": 1,
+      "delegationVersion": null
+    },
+    "inheritedWork": [],
+    "executionResults": [
+      {
+        "index": 0,
+        "result": {
+          "id": "operation-1",
+          "org": "org0",
+          "need": "need-water-main",
+          "type": "delivery",
+          "state": "reserved",
+          "times": {
+            "reserved": 4009,
+            "authorized": 4009
+          },
+          "vehicle": "v-org0-1",
+          "version": 1,
+          "building": "b5",
+          "proposal": "proposal-1",
+          "quantity": 300,
+          "received": 0,
+          "resource": "r-org0-water",
+          "createdAt": 4009,
+          "commitment": "commitment-1",
+          "references": [],
+          "destination": "n5",
+          "resourceType": "water"
+        }
+      },
+      {
+        "index": 1,
+        "result": {
+          "id": "operation-2",
+          "org": "org0",
+          "need": "need-water-main",
+          "type": "delivery",
+          "state": "reserved",
+          "times": {
+            "reserved": 4094,
+            "authorized": 4094
+          },
+          "vehicle": "v-org0-0",
+          "version": 1,
+          "building": "b5",
+          "proposal": "proposal-1",
+          "quantity": 200,
+          "received": 0,
+          "resource": "r-org0-water",
+          "createdAt": 4094,
+          "commitment": "commitment-2",
+          "references": [],
+          "destination": "n5",
+          "resourceType": "water"
+        }
+      }
+    ],
+    "checkedConstraints": [
+      {
+        "type": "route",
+        "index": 0,
+        "nodes": [
+          "n0",
+          "n1",
+          "n4",
+          "n5"
+        ],
+        "state": "checked",
+        "seconds": 162.95,
+        "distanceM": 1610,
+        "unknownEdges": []
+      },
+      {
+        "type": "quantity_capacity",
+        "index": 0,
+        "state": "checked",
+        "quantity": 300,
+        "vehicleVersion": 1,
+        "resourceVersion": 2
+      },
+      {
+        "type": "route",
+        "index": 1,
+        "nodes": [
+          "n0",
+          "n1",
+          "n4",
+          "n5"
+        ],
+        "state": "checked",
+        "seconds": 162.95,
+        "distanceM": 1610,
+        "unknownEdges": []
+      },
+      {
+        "type": "quantity_capacity",
+        "index": 1,
+        "state": "checked",
+        "quantity": 200,
+        "vehicleVersion": 1,
+        "resourceVersion": 2
+      }
+    ],
+    "id": "proposal_ae64e616-3cd1-4e1f-beb0-64483d71567f",
+    "version": 52,
+    "createdAt": 1791770302612,
+    "updatedAt": 1791770538989
+  },
+  "wallMs": 246485.57520000002,
+  "usage": [
+    {
+      "episode": "live-response-1791770299801",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 638.6310000000003,
+      "input_tokens": 8707,
+      "output_tokens": 10,
+      "cost_usd": 0.00316105,
+      "provider_id": "gen-1791770301-88sih0F6rRiF8QEIsw3U"
+    },
+    {
+      "episode": "live-response-1791770299801",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 816.8186999999998,
+      "input_tokens": 9012,
+      "output_tokens": 154,
+      "cost_usd": 0.0021962,
+      "provider_id": "gen-1791770301-cwM9b5j7tH8v2P1zCLn7"
+    }
+  ],
+  "costUsd": 0.00535725,
+  "metrics": {
+    "simulatedMs": 244175,
+    "services": {
+      "water": {
+        "unit": "L",
+        "demand": 600,
+        "served": 300,
+        "pending": 300,
+        "overprovided": 0,
+        "uncoveredUnitMs": 123955500,
+        "onTime": 0
+      }
+    },
+    "collective": {
+      "shelterPlaceHours": 0,
+      "operatingHours": 0,
+      "waterProduced": 0,
+      "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+    },
+    "population": {
+      "model": "experimental-v1",
+      "clinicallyValidated": false,
+      "alive": 540,
+      "deceased": 0,
+      "injured": 0,
+      "waterDeficitPersonHours": 0,
+      "foodDeficitPersonHours": 0,
+      "exposurePersonHours": 0,
+      "untreatedInjuryPersonHours": 0,
+      "communities": [
+        {
+          "id": "community-s0",
+          "sector": "s0",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s1",
+          "sector": "s1",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s2",
+          "sector": "s2",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s3",
+          "sector": "s3",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s4",
+          "sector": "s4",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s5",
+          "sector": "s5",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s6",
+          "sector": "s6",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s7",
+          "sector": "s7",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s8",
+          "sector": "s8",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        }
+      ]
+    },
+    "perCommunity": [
+      {
+        "id": "need-water-main",
+        "building": "b5",
+        "type": "water",
+        "quantity": 600,
+        "served": 300,
+        "completedAt": null,
+        "createdAt": 0,
+        "deadline": 10800000,
+        "silent": false,
+        "firstSignalAt": 31051,
+        "remote": false,
+        "knownBy": [
+          "org0",
+          "org1",
+          "org2",
+          "org3"
+        ]
+      }
+    ],
+    "latency": {
+      "authorized": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 2
+      },
+      "reserved": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 2
+      },
+      "orderReceived": {
+        "p50": 51,
+        "p95": 51,
+        "samples": 2
+      },
+      "accepted": {
+        "p50": 51,
+        "p95": 51,
+        "samples": 2
+      },
+      "prepared": {
+        "p50": 1051,
+        "p95": 1051,
+        "samples": 2
+      },
+      "dispatched": {
+        "p50": 1051,
+        "p95": 1051,
+        "samples": 2
+      },
+      "arrived": {
+        "p50": 164001,
+        "p95": 164001,
+        "samples": 1
+      },
+      "unloadingStarted": {
+        "p50": 164001,
+        "p95": 164001,
+        "samples": 1
+      },
+      "received": {
+        "p50": 165001,
+        "p95": 165001,
+        "samples": 1
+      },
+      "service": {
+        "p50": 165001,
+        "p95": 165001,
+        "samples": 1
+      }
+    },
+    "posts": 2,
+    "ingested": 0,
+    "operations": 2,
+    "operatorReviewMs": 1000,
+    "conflicts": 0,
+    "failedTrips": 0,
+    "staleOrders": 0,
+    "queries": 3,
+    "cost": 3,
+    "events": 64,
+    "modelCalls": 2,
+    "modelWallMs": 1455.4497000000001,
+    "modelUsage": {
+      "promptTokens": 17719,
+      "outputTokens": 164,
+      "pending": 0,
+      "failed": 0,
+      "providerCost": 0.00535725
+    },
+    "platformTransport": {
+      "attempts": 0,
+      "disconnected": 0,
+      "bytes": 0,
+      "note": "Actual platform peer HTTP is charged by the laboratory transport adapter; this is distinct from source-system messages."
+    },
+    "invalidActions": 0,
+    "ledgerValid": true,
+    "source": {
+      "created": 2,
+      "published": 2,
+      "falseSignals": 0,
+      "deleted": 0,
+      "capped": false
+    },
+    "information": {
+      "downloaded": 0,
+      "accepted": 0,
+      "interpreted": 0,
+      "discarded": 0,
+      "downloadLatencyMs": {
+        "p50": null,
+        "p95": null
+      },
+      "confirmedFalse": 0,
+      "rejectedObservedTrue": 0,
+      "falseMerges": 0,
+      "unobservedNeeds": 0,
+      "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+    },
+    "coordination": {
+      "expired": 0,
+      "withdrawn": 0,
+      "orphanReservations": 0,
+      "clarifications": 0,
+      "reviewQueued": 0,
+      "loansOverdue": 0
+    },
+    "physical": {
+      "closedCrossings": 0,
+      "trafficQueue": 0,
+      "overprovidedByType": {
+        "water": {
+          "quantity": 0,
+          "unit": "L"
+        }
+      },
+      "distanceM": 2710,
+      "fuelMl": 490,
+      "arrivedNotReceived": 0,
+      "facilitiesOperating": 0,
+      "blocked": 0
+    },
+    "finance": {
+      "sandbox": true,
+      "available": 20000,
+      "spent": 0,
+      "received": 0
+    },
+    "subgroups": {
+      "silent": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 300,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 1,
+            "rightCensored": 1
+          }
+        }
+      },
+      "remote": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 300,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 1,
+            "rightCensored": 1
+          }
+        }
+      }
+    },
+    "response": {
+      "completed": 0,
+      "rightCensored": 1,
+      "needToServiceMs": {
+        "p50": null,
+        "p95": null,
+        "note": "Completed cases only; report right-censored cases alongside these percentiles."
+      }
+    },
+    "eventCounts": {
+      "need_created": 1,
+      "world_initialized": 1,
+      "action_accepted": 7,
+      "message_delivered": 18,
+      "query_completed": 3,
+      "model_requested": 2,
+      "model_available": 2,
+      "review_completed": 1,
+      "vehicle_dispatched": 2,
+      "signal_created": 2,
+      "post_published": 2,
+      "vehicle_arrived": 1,
+      "delivery_received": 1,
+      "need_changed": 1,
+      "service_delivered": 1
+    }
+  },
+  "invariants": []
+}

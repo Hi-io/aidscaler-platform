@@ -9,6 +9,7 @@ import {
 import { validateConditions, validatePlan } from "./planning.mjs";
 import { resolveEvidence } from "./citations.mjs";
 import { repairContext } from "./repair.mjs";
+import { reviewAuthority } from "./authority.mjs";
 const COMMAND = ["commander", "dispatcher"];
 export class Domain {
   constructor(store, config) {
@@ -111,7 +112,6 @@ export class Domain {
     { decision, version, note = "", allowConditional = false },
     key,
   ) {
-    role(actor, COMMAND);
     check(
       ["approve", "reject", "clarify"].includes(decision),
       "DECISION",
@@ -123,6 +123,7 @@ export class Domain {
       { id, decision, version, note, allowConditional },
       async (tx) => {
         const p = await tx.get(actor.org, "proposal", id);
+        const delegation = await reviewAuthority(tx, actor, p);
         check(
           p.version === version,
           "VERSION_CONFLICT",
@@ -180,8 +181,12 @@ export class Domain {
                 conditional: !!unsatisfied.length,
                 evidenceHash: hash(evidence),
                 planHash: hash(p.actions),
-                expiresAt:
+                expiresAt: Math.min(
                   Date.now() + (this.config.authorizationTtlMs ?? 1800000),
+                  delegation?.expiresAt ?? Infinity,
+                ),
+                delegation: delegation?.id ?? null,
+                delegationVersion: delegation?.version ?? null,
                 evidence,
               }
             : null;
@@ -189,7 +194,19 @@ export class Domain {
           actor.org,
           "proposal",
           id,
-          { ...p, state, authorization, checkedConstraints, reviewNote: note },
+          {
+            ...p,
+            state,
+            authorization,
+            checkedConstraints,
+            reviewNote: note,
+            dependencies: [
+              ...new Set([
+                ...p.dependencies,
+                ...(delegation ? [delegation.id] : []),
+              ]),
+            ],
+          },
           version,
         );
         await tx.audit(actor.org, actor.id, "proposal." + decision, id, {
@@ -702,6 +719,7 @@ export class Domain {
           { ...d, origin: actor.id, state: "received", receivedAt: Date.now() },
           0,
         );
+        await this.stageReport(tx, actor.org, r);
         await tx.audit(actor.org, actor.id, "field.received", d.clientId, {
           kind: d.kind,
           observedAt: d.observedAt,
@@ -709,6 +727,36 @@ export class Domain {
         return r;
       },
     );
+  }
+  async stageReport(tx, org, report) {
+    const signal = await tx.upsert(org, "signal", "report_" + report.id, {
+      text: report.text,
+      location: report.location,
+      observedAt: report.observedAt,
+      sourceVersion: report.version,
+      source:
+        report.origin === "community-public"
+          ? "Reviewed community report"
+          : "Authorized field report",
+      permissions: "organization",
+      contentHash: hash(report),
+      receivedAt: report.receivedAt,
+      originalReferences: [report.id],
+      sourceUrl: "/api/evidence?id=" + encodeURIComponent(report.id),
+      state: report.state === "rejected" ? "withdrawn" : "observed",
+      deleted: report.state === "rejected",
+      modality: report.kind === "voice" ? "audio_transcript" : "text",
+      physicalConfirmation: false,
+    });
+    if (this.intake) await this.intake.stage(org, signal, tx);
+    if (report.state === "rejected")
+      await this.invalidateTx(
+        tx,
+        org,
+        signal.id,
+        "The report was withdrawn from operational intake",
+      );
+    return signal;
   }
   async draftPublication(actor, input, key) {
     role(actor, ["publisher", ...COMMAND]);

@@ -32,6 +32,7 @@ const fingerprint = await buildFingerprint(),
       setupMs: 1000,
       durationMs: 600000,
       healthReports: false,
+      sourceRequestLimit: 120,
     },
   });
 const key = Object.entries(lab.actorKeys).find(([, v]) => v.org === "org0")[0],
@@ -92,16 +93,14 @@ try {
   activity = await app.investigator.run({ needId: need.id }, episode);
   if (activity.proposalId) {
     proposal = await store.get("org0", "proposal", activity.proposalId);
-    if (await scriptedReview(app, proposal))
-      await app.worker.execute(proposal.id);
+    await scriptedReview(app, proposal);
     const deadline = Date.now() + 240000;
     while (Date.now() < deadline) {
       await app.ingestion.sync({ sources: false });
-      await app.worker.execute(proposal.id);
-      await app.worker.drain();
+      await app.worker.drain(4);
       proposal = await store.get("org0", "proposal", proposal.id);
       if (["completed", "requires_review"].includes(proposal.state)) break;
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 5000));
     }
   }
 } catch (e) {
@@ -155,6 +154,13 @@ try {
       violations: result.invariants.length,
     }),
   );
+  if (
+    error ||
+    result.candidateChanged ||
+    result.invariants.length ||
+    proposal?.state !== "completed"
+  )
+    process.exitCode = 1;
 } finally {
   await app.close();
   await store.close();

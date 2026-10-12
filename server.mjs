@@ -22,6 +22,7 @@ import { Integrations } from "./src/integrations.mjs";
 import { handleMcp } from "./src/mcp-server.mjs";
 import { MediaProcessor } from "./src/media.mjs";
 import { Intake } from "./src/intake.mjs";
+import { Workforce } from "./src/workforce.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -80,6 +81,7 @@ export async function createPlatform(overrides = {}) {
   await store.organization(config.org, config.orgName);
   const auth = new Auth(store),
     domain = new Domain(store, config),
+    workforce = new Workforce(store, domain),
     connector = overrides.connector ?? new SimulatorConnector(config),
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
     ingestion = new Ingestion(store, connector, config),
@@ -155,6 +157,7 @@ export async function createPlatform(overrides = {}) {
   const integrations = new Integrations(store, config);
   const intake = new Intake(store, config);
   ingestion.intake = intake;
+  domain.intake = intake;
   worker.intake = intake;
   investigator.integrations = integrations;
   const media = new MediaProcessor({
@@ -165,6 +168,7 @@ export async function createPlatform(overrides = {}) {
     connector,
   });
   worker.media = media;
+  media.intake = intake;
   investigator.media = media;
   investigator.ingestKnown = () => ingestion.sync({ sources: false });
   ingestion.afterSync = async () => {
@@ -338,6 +342,14 @@ export async function createPlatform(overrides = {}) {
         if (url.pathname === "/api/me")
           return json(res, 200, {
             user: actor,
+            delegatedReviews: (await workforce.grants(actor))
+              .filter(
+                (g) =>
+                  g.to === actor.id &&
+                  g.state === "active" &&
+                  g.expiresAt > Date.now(),
+              )
+              .map((g) => g.proposal),
             model: config.modelId,
             intake: await intake.summary(),
             organization: { id: config.org, name: config.orgName },
@@ -351,6 +363,42 @@ export async function createPlatform(overrides = {}) {
           );
           return json(res, 200, { signedOut: true });
         }
+        if (actor.role === "field") {
+          const permitted = [
+            "/api/tasks",
+            "/api/task/update",
+            "/api/handovers",
+            "/api/handover/acknowledge",
+            "/api/report",
+            "/api/media",
+            "/api/media/upload",
+            "/api/media/analyze",
+            "/api/records",
+          ];
+          check(
+            permitted.includes(url.pathname),
+            "FIELD_SCOPE",
+            "Field access is limited to assigned tasks, reports and source media.",
+            403,
+          );
+          if (url.pathname === "/api/records")
+            check(
+              ["report", "media", "media_analysis"].includes(
+                url.searchParams.get("kind"),
+              ),
+              "FIELD_SCOPE",
+              "This operational record is outside field access.",
+              403,
+            );
+        }
+        if (url.pathname === "/api/people" && req.method === "GET")
+          return json(res, 200, await workforce.people(actor));
+        if (url.pathname === "/api/tasks" && req.method === "GET")
+          return json(res, 200, await workforce.tasks(actor));
+        if (url.pathname === "/api/delegations" && req.method === "GET")
+          return json(res, 200, await workforce.grants(actor));
+        if (url.pathname === "/api/handovers" && req.method === "GET")
+          return json(res, 200, await workforce.handovers(actor));
         if (url.pathname === "/api/dashboard") {
           const kinds = [
             "need",
@@ -558,6 +606,22 @@ export async function createPlatform(overrides = {}) {
         }
         if (url.pathname === "/api/automation")
           return json(res, 200, await intake.configure(actor, b, key));
+        if (url.pathname === "/api/task/assign")
+          return json(res, 201, await workforce.assign(actor, b, key));
+        if (url.pathname === "/api/task/update")
+          return json(res, 200, await workforce.update(actor, b, key));
+        if (url.pathname === "/api/handover")
+          return json(res, 201, await workforce.handover(actor, b, key));
+        if (url.pathname === "/api/handover/acknowledge")
+          return json(
+            res,
+            200,
+            await workforce.acknowledgeHandover(actor, b, key),
+          );
+        if (url.pathname === "/api/delegation")
+          return json(res, 201, await workforce.delegate(actor, b, key));
+        if (url.pathname === "/api/delegation/revoke")
+          return json(res, 200, await workforce.revoke(actor, b, key));
         if (url.pathname === "/api/investigation/stop") {
           role(actor, ["analyst", "commander", "dispatcher"]);
           const activity = await store.get(actor.org, "activity", b.id);
@@ -671,6 +735,7 @@ export async function createPlatform(overrides = {}) {
               },
               b.version,
             );
+            await domain.stageReport(tx, actor.org, updated);
             await tx.audit(
               actor.org,
               actor.id,
@@ -856,6 +921,7 @@ export async function createPlatform(overrides = {}) {
     store,
     auth,
     domain,
+    workforce,
     connector,
     ingestion,
     provider,
