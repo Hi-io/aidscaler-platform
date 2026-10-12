@@ -17,6 +17,8 @@ const limit = Number(options.budget ?? 2),
   perEpisode = Number(options["episode-budget"] ?? 0.25);
 const planningRounds = Number(options.rounds ?? 2),
   policyIntervalMs = Number(options["interval-ms"] ?? 600000);
+const compositionVariants = (options["composition-variants"] ?? "standard").split(","),
+  seedPrefix = options["seed-prefix"] ?? "pilot-2026-";
 if (
   !Number.isSafeInteger(seeds) ||
   seeds < 1 ||
@@ -35,23 +37,29 @@ if (
   policyIntervalMs < 60000 ||
   !scenarios.every((s) => /^S(0[1-9]|1[0-9]|2[0-4])$/.test(s)) ||
   new Set(scenarios).size !== scenarios.length ||
-  !arms.every((s) => /^B[1-6]$/.test(s)) ||
+  !arms.every((s) => /^B[1-7]$/.test(s)) ||
   new Set(arms).size !== arms.length
+  || !compositionVariants.every((v) => ["standard", "distributed", "incompatible", "unsafe", "insufficient_staff", "occupied", "delayed"].includes(v))
+  || new Set(compositionVariants).size !== compositionVariants.length
+  || !/^[a-zA-Z0-9_-]{3,60}$/.test(seedPrefix)
 )
   throw Error("Invalid parallel evaluation configuration.");
 const folder = `reports/evaluations/${Date.now()}`,
   rows = [],
   worlds = [];
 for (const scenario of scenarios)
-  for (let i = 1; i <= seeds; i++)
-    worlds.push({ scenario, seed: "pilot-2026-" + String(i).padStart(2, "0") });
+  for (const compositionVariant of compositionVariants)
+    for (let i = 1; i <= seeds; i++)
+      worlds.push({ scenario, seed: seedPrefix + (compositionVariants.length > 1 ? compositionVariant + "-" : "") + String(i).padStart(2, "0"), config: { compositionVariant } });
 await mkdir(folder, { recursive: true });
 const protocol = {
   at: new Date().toISOString(),
   scenarios,
   arms,
   seeds,
-  seedPrefix: "pilot-2026-",
+  seedPrefix,
+  compositionVariants,
+  structuralScope: "Predeclared internal variations of dependency quantities, complementary owners, incompatible equipment, staff qualifications, unavailable capacity and safety. Not externally authored or secret holdout.",
   plannedRuns: worlds.length * arms.length,
   budgetUsd: limit,
   episodeBudgetUsd: perEpisode,
@@ -70,6 +78,8 @@ const protocol = {
   operator: "scripted",
   planningRounds,
   policyIntervalMs,
+  responseOrder: "deadline_then_priority",
+  idlePolicy: "B3/B4/B6/B7 retain finite review and physical monitoring but skip another model call when no uncovered received need, repair, or new source version remains. This common attention policy never reads evaluator truth.",
   execution: {
     workers,
     isolation:
@@ -78,7 +88,7 @@ const protocol = {
       "Shared-host contention and provider queues can affect actual latency. This pilot compares declared modeled delays, not an industrial real-time throughput claim.",
   },
   planningTopology:
-    "Shared B5/B6 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance.",
+    "Shared B5/B6/B7 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance. B7 and B6 have identical received sources, tools and owner permissions.",
   scope:
     "Development pilot, not independent disaster calibration. All scheduled outcomes and failures are retained; no missing outcome is imputed.",
   costPolicy:

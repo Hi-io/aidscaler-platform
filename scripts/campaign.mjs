@@ -33,7 +33,7 @@ if (
   !Number.isSafeInteger(policyIntervalMs) ||
   policyIntervalMs < 60000 ||
   !scenarios.every((s) => /^S(0[1-9]|1[0-9]|2[0-4])$/.test(s)) ||
-  !arms.every((a) => /^B[1-6]$/.test(a)) ||
+  !arms.every((a) => /^B[1-7]$/.test(a)) ||
   new Set(arms).size !== arms.length
 )
   throw Error("Invalid evaluation configuration.");
@@ -72,8 +72,9 @@ const protocol = {
   operator: "scripted",
   planningRounds,
   policyIntervalMs,
+  responseOrder: "deadline_then_priority",
   planningTopology:
-    "Shared B5/B6 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance.",
+    "Shared B5/B6/B7 use one incident research coordinator and independently authorized partner execution; isolated arms use one instance. B7 and B6 have identical received sources, tools and owner permissions.",
   scope:
     "Finite scheduled policy rounds plus physical execution, partner decisions and receipts at a fixed horizon. The model budget is cumulative across rounds. This is a development pilot, not an independently authored disaster calibration.",
   costPolicy:

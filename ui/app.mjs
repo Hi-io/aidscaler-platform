@@ -9,6 +9,7 @@ import { readAttachment, actionBrief } from "./uploads.mjs";
 import { createPublicationControls } from "./publications.mjs";
 import { createCaseControls } from "./casework.mjs";
 import { createOrganizationControls } from "./organization.mjs";
+import { createResponseControls } from "./response.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
   String(s ?? "").replace(
@@ -70,7 +71,8 @@ let state = {
     offline: !navigator.onLine,
   },
   polling = false,
-  dialog = null;
+  dialog = null,
+  renderVersion = 0;
 const pageRoles = {
   field: ["field", "media"],
   publisher: ["publications", "media", "overview"],
@@ -247,6 +249,7 @@ const organizationControls = createOrganizationControls({
   render,
   close: () => runAction("close", ""),
 });
+const responseControls = createResponseControls({ api, escape, action, state, modal, toast });
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -323,7 +326,7 @@ function activityCard(a) {
   const active = ["reading", "checking", "queued"].includes(a?.state);
   if (!a)
     return `<div class="card soft"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">Ready to investigate</h3><p class="sub">Select a case. The model checks what could unlock useful help.</p></div></div><p class="small">No inference is running. Every tool call and result will appear here.</p></div>`;
-  return `<div class="card soft ${active ? "processing" : ""}"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">${escape(active ? "Gemma is " + { reading: "reading the evidence", checking: "checking a possibility", queued: "queued for investigation" }[a.state] : a.state === "ready" ? "A response is ready to review" : a.state === "failed" ? "Investigation needs attention" : "Evidence remains incomplete")}</h3><p class="small">${escape(a.model ?? state.model)} · ${badge(a.state)}</p></div></div>${
+  return `<div class="card soft ${active ? "processing" : ""}"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">${escape(active ? "Gemma is " + { reading: "reading the evidence", checking: "checking a possibility", queued: "queued for investigation" }[a.state] : a.state === "ready" ? (a.kind === "source_interpretation" ? "Sourced interpretations are ready to review" : "A response is ready to review") : a.state === "failed" ? "Investigation needs attention" : "Evidence remains incomplete")}</h3><p class="small">${escape(a.model ?? state.model)} · ${badge(a.state)}</p></div></div>${
     a.steps
       ?.slice(-2)
       .map(
@@ -402,7 +405,7 @@ async function overview() {
   );
 }
 async function signals() {
-  const rows = await record("signal");
+  const rows = (await record("signal")).filter((s) => s.state !== "erased");
   state.signalRows = rows;
   const filtered = rows.filter((s) =>
       `${s.text} ${s.source} ${s.location}`
@@ -415,7 +418,7 @@ async function signals() {
       "The world speaks in fragments.",
       "Public posts, media and authorized reports arrive automatically. Keep the original evidence and its uncertainty.",
       action(`${icon("refresh-cw")} Sync`, "sync") +
-        action("Investigate this evidence", "investigate", "", "primary"),
+        action("Interpret received batch", "interpret-page", "", "accent") + action("Investigate this evidence", "investigate", "", "primary"),
     ) +
     `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="badge">${filtered.length} collected signals</span></div><div class="card">${
       filtered
@@ -720,6 +723,7 @@ const views = {
   audit,
 };
 async function render() {
+  const version = ++renderVersion;
   const focused = document.activeElement,
     focusKey = focused?.dataset?.action
       ? { action: focused.dataset.action, id: focused.dataset.id ?? "" }
@@ -730,7 +734,11 @@ async function render() {
         state.user?.role === "field"
           ? "field"
           : (visibleNav()[0]?.[0] ?? "field");
-    const content = await (views[state.page] ?? overview)();
+    const page = state.page;
+    const content = await (views[page] ?? overview)();
+    // Navigation, sign-out or another refresh may finish before this request.
+    // Never put stale content under the new page's navigation and heading.
+    if (version !== renderVersion || page !== state.page || !state.user) return;
     shell(content);
     bindMap();
     if (focusKey)
@@ -740,6 +748,7 @@ async function render() {
         )
         ?.focus({ preventScroll: true });
   } catch (e) {
+    if (version !== renderVersion || !state.user) return;
     if (e.code === "AUTHENTICATION") {
       state.user = null;
       login();
@@ -821,7 +830,7 @@ async function sourceDetail(id) {
   modal(
     "Original source & context",
     `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Simulation timestamp: ${number(s.publishedAt)} ms<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location & version</span><p>${escape(s.location ?? "Not confirmed")}<br>Source version ${s.sourceVersion}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><pre class="trace">${escape(JSON.stringify({ references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre>`,
-    action("Investigate this signal", "investigatesignal", id, "primary"),
+    action("Investigate this signal", "investigatesignal", id, "primary") + (["admin", "commander"].includes(state.user.role) ? action("Review local erasure", "erase-source", id) : ""),
   );
   const review = document.createElement("div");
   review.innerHTML = context;
@@ -835,7 +844,7 @@ async function activityDetail(id) {
     `<div class="cardheader">${badge(a.state)}<span class="small">${escape(a.model)} · ${a.calls ?? "…"} calls</span></div><p class="sub">These are tool requests, returned results and a short decision rationale. They are not a private chain of thought.</p>${a.steps.map((s) => `<details class="collapse"><summary>${escape(s.label ?? s.tool)} · ${escape(s.state)}</summary><pre class="trace">${escape(JSON.stringify({ parameters: s.params, result: s.result }, null, 2))}</pre></details>`).join("")}${a.reason ? `<div class="warning">${escape(a.reason)}</div>` : ""}`,
     a.proposalId
       ? action("Review response", "proposal", a.proposalId, "primary")
-      : action("Close", "close"),
+      : a.semanticReceipt ? action("Inspect interpretations", "semantic-receipt", a.semanticReceipt, "primary") : action("Close", "close"),
   );
 }
 async function operationDetail(id) {
@@ -922,6 +931,7 @@ async function flush() {
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
+  if (await responseControls.run(name, id)) return;
   if (await organizationControls.run(name, id)) return;
   if (await caseControls.run(name, id)) return;
   if (await publicationControls.run(name, id)) return;

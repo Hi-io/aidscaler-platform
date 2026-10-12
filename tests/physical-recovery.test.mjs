@@ -275,6 +275,7 @@ test("vehicle sharing and subsequent refresh preserve technical limits without l
       fuelMlPerKm: 200,
       maxWaterDepth: 0.2,
       privateNotes: "Never share",
+      owner: org,
     },
     0,
   );

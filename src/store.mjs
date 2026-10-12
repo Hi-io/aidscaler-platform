@@ -271,22 +271,28 @@ export class Store {
         [org, asOf, asOf],
       );
       if (!rows[0]) return null;
+      const token = uid("lease");
       await tx.query(
-        "UPDATE jobs SET state='running',attempts=attempts+1,leased_until=$2 WHERE id=$1",
-        [rows[0].id, Date.now() + leaseMs],
+        "UPDATE jobs SET state='running',attempts=attempts+1,leased_until=$2,lease_token=$3 WHERE id=$1",
+        [rows[0].id, Date.now() + leaseMs, token],
       );
-      return { ...rows[0], attempts: rows[0].attempts + 1 };
+      return { ...rows[0], lease_token: token, attempts: rows[0].attempts + 1 };
     });
   }
-  async finishJob(id, result) {
-    await this.query(
-      "UPDATE jobs SET state='completed',result=$2,leased_until=NULL WHERE id=$1",
-      [id, JSON.stringify(result)],
+  async renewJob(job, leaseMs = 180000) {
+    const result = await this.query("UPDATE jobs SET leased_until=$4 WHERE id=$1 AND org=$2 AND state='running' AND lease_token=$3 RETURNING id", [job.id, job.org, job.lease_token, Date.now() + leaseMs]);
+    check(result.rows.length, "JOB_LEASE_LOST", "Another worker now owns this job.", 409);
+  }
+  async finishJob(id, result, token = null) {
+    const changed = await this.query(
+      "UPDATE jobs SET state='completed',result=$2,leased_until=NULL WHERE id=$1 AND ($3::text IS NULL OR lease_token=$3) RETURNING id",
+      [id, JSON.stringify(result), token],
     );
+    check(changed.rows.length, "JOB_LEASE_LOST", "This worker cannot finish a reclaimed job.", 409);
   }
   async failJob(job, error) {
     await this.query(
-      "UPDATE jobs SET state=$2,last_error=$3,due_at=$4,leased_until=NULL WHERE id=$1",
+      "UPDATE jobs SET state=$2,last_error=$3,due_at=$4,leased_until=NULL WHERE id=$1 AND ($5::text IS NULL OR lease_token=$5)",
       [
         job.id,
         job.attempts >= 5 ? "failed" : "retry",
@@ -294,6 +300,7 @@ export class Store {
           ": " +
           error.message.slice(0, 180),
         Date.now() + Math.min(60000, 1000 * 2 ** job.attempts),
+        job.lease_token ?? null,
       ],
     );
   }

@@ -13,7 +13,9 @@ if mode=='audio':
 elif mode=='pdf':
     from pypdf import PdfReader
     reader=PdfReader(request['path'])
-    pages=[{'page':i+1,'text':(p.extract_text() or '')[:20000],'textProvenance':'embedded_pdf_text'} for i,p in enumerate(reader.pages[:20])]
+    selected=request.get('pages') or list(range(1,min(len(reader.pages),20)+1))
+    if len(selected)>20 or any(not isinstance(n,int) or n<1 or n>len(reader.pages) for n in selected):raise ValueError('Invalid bounded source page selection')
+    pages=[{'page':n,'text':(reader.pages[n-1].extract_text() or '')[:20000],'textProvenance':'embedded_pdf_text'} for n in selected]
     scanned=[p for p in pages if not p['text'].strip()]
     if scanned:
         import pypdfium2 as pdfium
@@ -30,7 +32,7 @@ elif mode=='pdf':
             image.close();bitmap.close();page.close()
         document.close()
         for p in scanned[4:]:p['ocrState']='pending_context_limit'
-    result={'pages':pages,'needsOCR':bool(scanned),'truncated':len(reader.pages)>20,'unreadPageCount':max(0,len(reader.pages)-20),'engine':'pypdf','ocrScope':'at most four scanned pages rendered per analysis; all transcriptions require review'}
+    result={'pages':pages,'totalPageCount':len(reader.pages),'needsOCR':bool(scanned),'truncated':len(reader.pages)>len(pages),'unreadPageCount':max(0,len(reader.pages)-len(pages)),'engine':'pypdf','ocrScope':'at most four scanned pages rendered per batch; remaining pages can be requested explicitly; all transcriptions require review'}
 elif mode=='public_image':
     from PIL import Image, ImageOps
     Image.MAX_IMAGE_PIXELS=20000000

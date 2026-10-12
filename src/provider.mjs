@@ -55,6 +55,7 @@ export class OpenRouterProvider {
       "No model key is configured on the server.",
       503,
     );
+    const retentionVersion = (await this.store.get(org, "retention_epoch", "active", false))?.version ?? 0;
     const pricing = await this.catalogue(),
       id = uid("usage"),
       maxTokens = Math.min(
@@ -112,7 +113,7 @@ export class OpenRouterProvider {
       reserve =
         approxIn * maximumRates.prompt + maxTokens * maximumRates.completion;
     const pool = this.config.modelBudgetPool;
-    const poolReservation = pool?.reserve(reserve);
+    let poolReservation = pool?.reserve(reserve);
     try {
       await this.store.transaction(async (tx) => {
         await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
@@ -238,12 +239,6 @@ export class OpenRouterProvider {
         response.status === 429 ? 429 : 502,
       );
       const data = await response.json();
-      check(
-        data.choices?.[0]?.message,
-        "PROVIDER_SCHEMA",
-        "The model returned an invalid response.",
-        502,
-      );
       const u = data.usage ?? {},
         cost = Number.isFinite(u.cost)
           ? u.cost
@@ -252,6 +247,14 @@ export class OpenRouterProvider {
             ? u.prompt_tokens * maximumRates.prompt +
               u.completion_tokens * maximumRates.completion
             : null;
+      if (!data.choices?.[0]?.message) {
+        // A malformed/error body can still contain a billable receipt. Keep
+        // it, and a bounded code, without logging untrusted content or keys.
+        const diagnostic = String(data.error?.code ?? "missing_message").replace(/[^a-zA-Z0-9_.-]/g, "").slice(0, 80);
+        await this.store.query("UPDATE usage SET provider_id=$2,input_tokens=$3,output_tokens=$4,cost_usd=$5,result=$6 WHERE id=$1", [id, typeof data.id === "string" ? data.id.slice(0, 160) : null, u.prompt_tokens ?? null, u.completion_tokens ?? null, cost, JSON.stringify({ diagnostic, costSource: cost == null ? "unknown; reservation retained" : "receipt or routing ceiling" })]);
+        if (poolReservation !== undefined && cost !== null) { pool.settle(poolReservation, cost); poolReservation = undefined; }
+        throw new AppError("PROVIDER_SCHEMA", "The model provider returned no usable message (code: " + diagnostic + ").", 502);
+      }
       const result = {
         message: data.choices[0].message,
         usage: {
@@ -283,6 +286,7 @@ export class OpenRouterProvider {
       };
       delete result.message.reasoning;
       delete result.message.reasoning_details;
+      const erasedDuringCall = ((await this.store.get(org, "retention_epoch", "active", false))?.version ?? 0) !== retentionVersion;
       await this.store.query(
         "UPDATE usage SET state='completed',wall_ms=$2,input_tokens=$3,output_tokens=$4,cost_usd=$5,provider_id=$6,result=$7 WHERE id=$1",
         [
@@ -292,10 +296,11 @@ export class OpenRouterProvider {
           result.usage.outputTokens,
           cost,
           data.id,
-          JSON.stringify(result),
+          JSON.stringify(erasedDuringCall ? { erased: true, receiptPreserved: true } : result),
         ],
       );
-      if (poolReservation !== undefined) pool.settle(poolReservation, cost);
+      if (poolReservation !== undefined) { pool.settle(poolReservation, cost); poolReservation = undefined; }
+      check(!erasedDuringCall, "SOURCE_ERASED", "A source was erased during this call; the returned content was not retained or used.", 409);
       return result;
     } catch (e) {
       const failure =

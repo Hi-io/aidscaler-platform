@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS audit(sequence bigserial PRIMARY KEY, org text NOT NU
 CREATE INDEX IF NOT EXISTS audit_scope ON audit(org,sequence);
 CREATE TABLE IF NOT EXISTS jobs(id text PRIMARY KEY, org text NOT NULL, kind text NOT NULL, payload jsonb NOT NULL, state text NOT NULL, attempts integer NOT NULL DEFAULT 0, due_at bigint NOT NULL, leased_until bigint, last_error text, result jsonb, created_at bigint NOT NULL);
 CREATE INDEX IF NOT EXISTS jobs_ready ON jobs(state,due_at);
+ALTER TABLE jobs ADD COLUMN IF NOT EXISTS lease_token text;
 CREATE TABLE IF NOT EXISTS inbox(org text NOT NULL, message_id text NOT NULL, sender text NOT NULL, received_at bigint NOT NULL, PRIMARY KEY(org,message_id));
 CREATE TABLE IF NOT EXISTS usage(id text PRIMARY KEY, org text NOT NULL, episode text NOT NULL, model text NOT NULL, request_hash text NOT NULL, state text NOT NULL, started_at bigint NOT NULL, wall_ms double precision, input_tokens bigint, output_tokens bigint, cost_usd double precision, reserved_usd double precision NOT NULL DEFAULT 0, provider_id text, pricing jsonb, result jsonb, error text);
 CREATE TABLE IF NOT EXISTS finance(org text NOT NULL, id text NOT NULL, provider_event text UNIQUE, type text NOT NULL, amount_cents bigint NOT NULL, currency text NOT NULL, reference text, created_at bigint NOT NULL, PRIMARY KEY(org,id));

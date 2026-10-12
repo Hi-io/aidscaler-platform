@@ -10,6 +10,7 @@ if (
     "summary_failure_EVALUATION_CONFIG_recovered_from_raw_reports",
     "provider_http_402_account_credit_exhausted",
     "development_model_latency_and_context_audit",
+    "development_ui_and_blocked_operation_correction",
   ].includes(reason)
 )
   throw Error("Use an explicit supported stopped-campaign reason.");
@@ -20,7 +21,7 @@ const protocol = JSON.parse(
 );
 const rows = await Promise.all(
   (await readdir(folder))
-    .filter((f) => /^S\d\d-.+-B[1-6]\.json$/.test(f))
+    .filter((f) => /^S\d\d-.+-B[1-7]\.json$/.test(f))
     .map(async (f) => JSON.parse(await readFile(path.join(folder, f), "utf8"))),
 );
 const report = summarizeCampaign({
@@ -35,6 +36,8 @@ report.recovery = {
   note:
     reason === "provider_http_402_account_credit_exhausted"
       ? "The operator stopped this runner after real HTTP 402 responses and a read-only account check confirming unavailable credit. Completed raw outcomes are unchanged; unfinished episodes remain missing. No extra inference was attempted to fill them, and unknown-cost reservations are retained."
+      : reason === "development_ui_and_blocked_operation_correction"
+        ? "The runner was interrupted for UI navigation/offline defects or retired for a blocked-operation recovery defect. Raw outcomes remain unchanged; unfinished episodes are missing, not imputed. Source changes during an active episode make that result incomparable. Unpersisted active episode charges are unavailable and must not be reported as zero spending."
       : reason === "development_model_latency_and_context_audit"
         ? "Stopped at a durable completed-episode checkpoint to correct provider waiting time and contextual field coverage after real inference timeouts. Paid receipts and failed outcomes are unchanged. This is an incomplete development pilot; unfinished episodes are missing, not imputed or mixed with the revised build."
         : "The terminated original runner threw during summary generation after shrinking the last episode budget. Its original summary and every raw outcome remain retained; incomparable outcomes are explicitly rejected.",

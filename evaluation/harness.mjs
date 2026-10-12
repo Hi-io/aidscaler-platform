@@ -7,6 +7,8 @@ import { hash } from "../src/store.mjs";
 import { readFile } from "node:fs/promises";
 import { allocationPlan } from "../src/planning.mjs";
 import { servicePlan } from "../src/services.mjs";
+import { responsePolicy, responseQueue, configureResponsePolicy } from "../src/response-policy.mjs";
+import { receivedAllocationPlan } from "../src/received-allocation.mjs";
 import { ModelBudgetPool } from "../src/budget-pool.mjs";
 import { readdir } from "node:fs/promises";
 import {
@@ -27,6 +29,7 @@ export async function buildFingerprint() {
         "scripts/media_worker.py",
         "requirements-media.txt",
         ...files.map((f) => "src/" + f),
+        ...(await readdir(new URL("../ui/", import.meta.url))).filter((f) => /\.(mjs|css|html)$/.test(f)).sort().map((f) => "ui/" + f),
       ].map(async (f) => [
         f,
         await readFile(new URL("../" + f, import.meta.url), "utf8"),
@@ -42,6 +45,11 @@ export async function evaluatorFingerprint() {
         "scripts/evaluate.mjs",
         "scripts/campaign.mjs",
         "scripts/parallel-campaign.mjs",
+        "scripts/research-ablation.mjs",
+        "scripts/semantic-load.mjs",
+        "scripts/pdf-byte-continuation.mjs",
+        "evaluation/blocked-repair.mjs",
+        "scripts/blocked-repair.mjs",
         "evaluation/campaign-summary.mjs",
         "src/evaluation.mjs",
       ].map(async (f) => [
@@ -313,6 +321,7 @@ export async function ruleProposal(app, episode, extraction = null) {
     ),
     operations: snapshot.operations,
     now: snapshot.now,
+    policy: await responsePolicy(app.store, org),
   });
   if (!plan.allocations.length)
     return {
@@ -364,12 +373,13 @@ export async function ruleProposal(app, episode, extraction = null) {
 export async function conventionalSharedProposal(app, episode) {
   const org = app.config.org,
     steps = [],
-    needs = await app.store.list(org, "need", 2000),
+    queue = await responseQueue(app.store, org, { limit: 2000 }),
+    needs = queue.rows.filter((n) => !n.pendingProposals.length),
     map = (await app.store.get(org, "context", "geography", false))?.map;
   // This conventional reference receives the SAME consented projections and
   // dependency validator. It may open a recognized shelter, not just dispatch
   // each team's stock independently. It still needs every owner to approve.
-  if (needs.some((n) => n.type === "shelter" && n.quantity > (n.served ?? 0))) {
+  if (needs[0]?.type === "shelter") {
     for (const b of map?.places?.filter((b) => b.use === "shelter") ?? []) {
       await app.connector.action(
         "verify",
@@ -377,13 +387,19 @@ export async function conventionalSharedProposal(app, episode) {
         episode + "-inspect-" + b.id,
       );
       await app.ingestion.sync({ sources: false });
-      const service = await servicePlan(app.store, org, b.id);
+      let service;
+      try { service = await servicePlan(app.store, org, b.id, { needId: needs[0].id, peers: app.config.peers }); }
+      catch (error) {
+        if (!["FACILITY_PURPOSE", "FACILITY_UNSAFE", "FACILITY_CAPACITY", "QUALIFICATION", "SERVICE_CAPACITY"].includes(error.code)) throw error;
+        steps.push({ tool: "checked-service-composition", state: "infeasible", result: { building: b.id, reason: error.code } });
+        continue;
+      }
       steps.push({
         tool: "checked-service-composition",
         state: "completed",
         result: service,
       });
-      if (service.readyToDraft) {
+      if (service.readyToDraft && service.actions.some((a) => a.type === "evacuate")) {
         const p = await app.domain.propose(
           { id: "shared-rules-reference", org, role: "agent" },
           {
@@ -430,12 +446,7 @@ export async function conventionalSharedProposal(app, episode) {
         .filter((o) => o.kind === "vehicle")
         .map((o) => ({ ...o.projection, owner: o.from, evidence: o.id })),
     ];
-  const plan = allocationPlan({
-      needs,
-      resources,
-      vehicles,
-      operations: await app.store.list(org, "operation", 2000),
-    }),
+  const plan = await receivedAllocationPlan(app.store, app.config, { needIds: needs.map((n) => n.id) }),
     selected = plan.allocations.slice(0, 30);
   steps.push({
     tool: "shared-constrained-allocation",
@@ -496,7 +507,11 @@ export async function runEpisode({
   episodeBudgetUsd = 0.25,
   planningRounds = 1,
   policyIntervalMs = 600000,
+  responseOrder = "deadline_then_priority",
+  repairStrategy = "selective",
+  inquiryStrategy = "active",
 } = {}) {
+  if (!["selective", "full_refresh"].includes(repairStrategy) || !["active", "broad_refresh"].includes(inquiryStrategy)) throw Error("Unknown declared research strategy.");
   if (
     !Number.isSafeInteger(planningRounds) ||
     planningRounds < 1 ||
@@ -514,7 +529,7 @@ export async function runEpisode({
     h = await createHarness({
       scenario,
       seed,
-      organizations: ["B5", "B6"].includes(arm) ? 4 : 1,
+      organizations: ["B5", "B6", "B7"].includes(arm) ? 4 : 1,
       config,
       provider,
       maxCalls,
@@ -529,7 +544,8 @@ export async function runEpisode({
       },
     }),
     activities = [],
-    errors = [];
+    errors = [],
+    researchedSources = new Map();
   let status = "completed";
   let planRound,
     roundsExecuted = 0;
@@ -539,9 +555,11 @@ export async function runEpisode({
       for (const target of ["inventory", "vehicles", "map"])
         await app.connector.action("query", { target }, `initial-${target}`);
       await app.ingestion.sync();
+      const actor = (await app.store.query("SELECT id,org,role FROM users WHERE org=$1 AND role='commander'", [app.config.org])).rows[0];
+      await configureResponsePolicy(app.store, actor, { version: 0, order: responseOrder, maxOpenReviews: 8, investigationCooldownMs: 60000, protectedTypes: [], reason: "Predeclared laboratory owner policy, identical for every evaluation arm" }, episodePrefix + "response-policy-" + app.config.org);
     }
     // Public and explicit owner-approved projections travel over signed HTTP.
-    if (["B5", "B6"].includes(arm))
+    if (["B5", "B6", "B7"].includes(arm))
       for (const app of h.apps) {
         const actor = (
           await app.store.query(
@@ -550,7 +568,7 @@ export async function runEpisode({
           )
         ).rows[0];
         for (const kind of ["resource", "vehicle"])
-          for (const r of await app.store.list(app.config.org, kind, 100))
+          for (const r of (await app.store.list(app.config.org, kind, 100)).filter((r) => r.owner === app.config.org))
             for (const peer of app.config.peers) {
               await app.network.share(
                 actor,
@@ -566,7 +584,7 @@ export async function runEpisode({
         // Both shared arms assign this incident's research to one coordinator.
         // Each partner still owns its stock, authority, execution and receipt.
         // This is a declared deployment policy, not distributed leader election.
-        if (["B5", "B6"].includes(arm) && app !== h.apps[0]) continue;
+        if (["B5", "B6", "B7"].includes(arm) && app !== h.apps[0]) continue;
         const episode = `${episodePrefix}${app.config.org}-round${round}`;
         let activity;
         if (arm === "B1") activity = await ruleProposal(app, episode);
@@ -646,13 +664,35 @@ export async function runEpisode({
           const repair = (
             await app.store.list(app.config.org, "proposal", 100)
           ).find((p) => p.state === "requires_review");
+          const currentQueue = await responseQueue(app.store, app.config.org),
+            sourceSignature = hash((await app.store.list(app.config.org, "signal", 10000)).map(s => [s.id, s.sourceVersion, s.state]).sort((a, b) => a[0].localeCompare(b[0])));
+          if (!repair && !currentQueue.total && researchedSources.get(app.config.org) === sourceSignature) {
+            activity = { state: "idle", kind: "unchanged_received_scope", calls: 0,
+              reason: "No uncovered received need, invalidated response or new source version. Existing physical work remains tracked without another model call." };
+          } else {
+          // Explicit ablations, never credited as competitive references. Both
+          // strategies preserve physical receipts and independent owner review.
+          // A full refresh reads all operational classes again; selective
+          // repair consumes the material invalidation already received.
+          const refreshStart = h.lab.world.now, refreshWall = performance.now();
+          const refreshTargets = inquiryStrategy === "broad_refresh" ? ["inventory", "vehicles", "roads", "documents", "map", "capabilities"] :
+            repair && repairStrategy === "full_refresh" ? ["inventory", "vehicles", "roads", "map"] : [];
+          for (const target of refreshTargets) await app.connector.action("query", { target }, episode + "-refresh-" + target);
+          if (refreshTargets.length) await app.ingestion.sync({ sources: false });
+          const refreshModelledMs = h.lab.world.now - refreshStart, refreshWallMs = performance.now() - refreshWall;
           activity = await app.investigator.run(
             {
-              policy: arm === "B3" ? "general" : "nexo",
+              policy: ["B3", "B7"].includes(arm) ? "general" : "nexo",
               ...(repair ? { repairOf: repair.id } : {}),
             },
             episode,
           );
+          activity = { ...activity, researchAblation: { inquiryStrategy, repairStrategy, repairOf: repair?.id ?? null, refreshTargets,
+            refreshModelledMs, refreshWallMs, modelledDraftMs: h.lab.world.now - refreshStart,
+            changedScope: repair?.affectedSteps ?? [], preservedSteps: repair?.preservedSteps ?? [],
+            physicalHistoryPreserved: true } };
+          researchedSources.set(app.config.org, sourceSignature);
+          }
         }
         activities.push({
           org: app.config.org,
@@ -831,10 +871,13 @@ export async function runEpisode({
       clockPolicy: "declared delays; no accelerated wall-time charging",
       operator: "scripted; human comprehension not measured",
       planningRounds,
+      responseOrder,
+      repairStrategy,
+      inquiryStrategy,
       roundsExecuted,
       policyIntervalMs,
       episodeBudgetUsd,
-      planningTopology: ["B5", "B6"].includes(arm)
+      planningTopology: ["B5", "B6", "B7"].includes(arm)
         ? "one_incident_coordinator_independent_owner_review"
         : "one_isolated_instance",
       modelConfig: {

@@ -46,7 +46,24 @@ export async function repairContext(store, org, id, actions) {
         receipt: receipt.partnerResult ?? operation,
         state: "completed",
       });
-    } else if (operation && !["failed", "cancelled"].includes(operation.state))
+    } else if (
+      operation &&
+      !["failed", "cancelled"].includes(operation.state)
+    ) {
+      if (operation.confirmedBySource && operation.state === "blocked") {
+        check(
+          actions.some(
+            (a) =>
+              a.owner === action.owner &&
+              ((a.type === "reroute" &&
+                a.params.vehicle === operation.vehicle) ||
+                (a.type === "cancel" && a.params.id === operation.id)),
+          ),
+          "REPAIR_UNADDRESSED",
+          "This repair must address the existing blocked trip. A different dispatch does not recover its loaded cargo. Reroute the same vehicle, or request cancellation of this exact operation and wait for physical recovery.",
+          409,
+        );
+      }
       inherited.push({
         index: receipt.index,
         action,
@@ -54,6 +71,7 @@ export async function repairContext(store, org, id, actions) {
         receipt: operation,
         state: "still_in_progress",
       });
+    }
   }
   return {
     repairOf: id,

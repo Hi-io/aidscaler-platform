@@ -21,9 +21,15 @@ const observation = z
         "sanitation",
         "staff",
         "shelter",
+        "blankets",
+        "rescue",
+        "transport",
+        "communication",
       ])
       .nullable(),
     quantity: z.number().nonnegative().nullable(),
+    unit: z.string().max(40).nullable().optional(),
+    timeStatus: z.enum(["current", "historical", "unknown"]).optional(),
   })
   .strict();
 export const extractionSchema = z

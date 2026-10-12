@@ -3,7 +3,7 @@ import { check } from "./errors.mjs";
 /** Build a checked dependency draft from RECEIVED inspections and consented
  * owner projections. This is a formal feasibility aid, not LLM discovery and
  * never activation or authorization. Other owners still approve their steps. */
-export async function servicePlan(store, org, building) {
+export async function servicePlan(store, org, building, { needId, peers } = {}) {
   const facility = await store.get(org, "facility", building, false);
   check(
     facility,
@@ -29,7 +29,7 @@ export async function servicePlan(store, org, building) {
   const safe =
     facility.safe === true &&
     assessment?.result?.safe === true &&
-    assessment.result.version === facility.sourceVersion;
+    (assessment.result.version === facility.sourceVersion || facility.state === "operating");
   const dependencies =
     facility.dependencies ?? assessment?.result?.dependencies;
   check(
@@ -38,7 +38,7 @@ export async function servicePlan(store, org, building) {
     "A received assessment must describe dependencies and location.",
   );
   const offers = (await store.list(org, "peer_offer", 2000)).filter(
-    (o) => o.active && o.expiresAt > Date.now(),
+    (o) => o.active && o.expiresAt > Date.now() && (!peers || peers.some((p) => p.org === o.from)),
   );
   const resources = [
     ...(await store.list(org, "resource", 2000))
@@ -71,9 +71,11 @@ export async function servicePlan(store, org, building) {
   if (assessment) references.add(assessment.id);
   const usedStock = new Map(),
     lastVehicle = new Map();
+  const scopedKey = (r) => JSON.stringify([r.owner, r.id]);
   for (const [type, required] of Object.entries(dependencies)) {
     let remaining = Math.max(0, required - (facility.provisioned?.[type] ?? 0));
     for (const r of resources.filter((r) => r.type === type)) {
+      if (type === "staff" && (facility.requiredStaffSkills ?? assessment?.result?.requiredStaffSkills ?? []).some((skill) => !r.qualifications?.includes(skill))) continue;
       const power = facility.requiredPower ?? assessment?.result?.requiredPower;
       if (
         type === "energy" &&
@@ -86,12 +88,12 @@ export async function servicePlan(store, org, building) {
         const quantity = Math.floor(
           Math.min(
             remaining,
-            r.available - (usedStock.get(r.id) ?? 0),
+            r.available - (usedStock.get(scopedKey(r)) ?? 0),
             v.capacity ?? 0,
           ),
         );
         if (quantity <= 0) continue;
-        const previous = lastVehicle.get(v.id),
+        const previous = lastVehicle.get(scopedKey(v)),
           index = actions.length;
         actions.push({
           type: "dispatch",
@@ -105,8 +107,8 @@ export async function servicePlan(store, org, building) {
           },
           dependsOn: previous === undefined ? [] : [previous],
         });
-        usedStock.set(r.id, (usedStock.get(r.id) ?? 0) + quantity);
-        lastVehicle.set(v.id, index);
+        usedStock.set(scopedKey(r), (usedStock.get(scopedKey(r)) ?? 0) + quantity);
+        lastVehicle.set(scopedKey(v), index);
         references.add(r.evidence);
         references.add(v.evidence);
         remaining -= quantity;
@@ -118,8 +120,8 @@ export async function servicePlan(store, org, building) {
   }
   if (!safe) missing.push({ type: "current_safety_assessment", quantity: 1 });
   if (!missing.length) {
-    const activation = actions.length;
-    actions.push({
+    const activation = facility.state === "operating" ? null : actions.length;
+    if (activation !== null) actions.push({
       type: "activate",
       owner: facility.ownerOrg ?? org,
       params: { building, permit: true },
@@ -133,6 +135,7 @@ export async function servicePlan(store, org, building) {
       const needs = (await store.list(org, "need", 2000)).filter(
         (n) =>
           n.type === "shelter" &&
+          (!needId || n.id === needId) &&
           n.building !== building &&
           n.quantity > (n.served ?? 0),
       );
@@ -152,7 +155,7 @@ export async function servicePlan(store, org, building) {
             trip++
           ) {
             const quantity = Math.min(remaining, v.seats),
-              previous = lastVehicle.get(v.id),
+              previous = lastVehicle.get(scopedKey(v)),
               index = actions.length;
             actions.push({
               type: "evacuate",
@@ -165,12 +168,12 @@ export async function servicePlan(store, org, building) {
               },
               dependsOn: [
                 ...new Set([
-                  activation,
+                  ...(activation === null ? [] : [activation]),
                   ...(previous === undefined ? [] : [previous]),
                 ]),
               ],
             });
-            lastVehicle.set(v.id, index);
+            lastVehicle.set(scopedKey(v), index);
             references.add(n.id);
             references.add(v.evidence);
             places -= quantity;
@@ -188,6 +191,8 @@ export async function servicePlan(store, org, building) {
     references: [...references],
     missing,
     requirements: dependencies,
+    affectedNeeds: [...new Set(actions.flatMap((a) => a.params.need ? [a.params.need] : []))],
+    offerVersions: offers.filter((o) => references.has(o.id)).map((o) => ({ id: o.id, version: o.version, permissionVersion: o.permissionVersion })),
     ownerApprovals: [...new Set(actions.map((a) => a.owner))],
     note: "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status.",
   };

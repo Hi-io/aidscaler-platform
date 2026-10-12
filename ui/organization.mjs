@@ -1,14 +1,20 @@
 export function createOrganizationControls(h) {
   const { api, escape: e, action, state, modal, toast, render, close } = h;
   let profile;
+  let responsePolicy;
   const manages = () => ["admin", "commander"].includes(state.user.role);
   async function summary() {
     const p = await api("/api/organization"),
       { policy } = await api("/api/automation");
     state.organizationProfile = p;
-    return `<section class="card" style="margin-top:22px"><div class="cardheader"><h2>Organization readiness</h2>${manages() ? action("Configure response", "organization-edit", "", "accent") : ""}</div><p class="sub">${e(p.name)} · ${e(p.response)}</p><details class="collapse"><summary>Responsibilities, coverage & processing policy</summary><p class="small">Coordinator: ${e(p.coordinator)}<br>Coverage: ${e(p.zones.join(" · ") || "Not specified")}<br>Retention review period: ${p.retentionDays} days. This is a documented review policy; data is not silently deleted.<br>Automatic intake: ${policy.enabled ? "enabled" : "paused"} · ${policy.maxSignals} signals per batch · ${policy.hourlyCallLimit} model calls/hour · $${policy.hourlyBudgetUsd}/hour maximum.</p>${manages() ? action("Edit processing limits", "organization-policy", "") : ""}</details></section>`;
+    return `<section class="card" style="margin-top:22px"><div class="cardheader"><h2>Organization readiness</h2>${manages() ? action("Configure response", "organization-edit", "", "accent") : ""}</div><p class="sub">${e(p.name)} · ${e(p.response)}</p><details class="collapse"><summary>Responsibilities, coverage & processing policy</summary><p class="small">Coordinator: ${e(p.coordinator)}<br>Coverage: ${e(p.zones.join(" · ") || "Not specified")}<br>Retention review period: ${p.retentionDays} days.<br>Automatic intake: ${policy.enabled ? "enabled" : "paused"} · ${policy.maxSignals} signals per batch · ${policy.hourlyCallLimit} model calls/hour · $${policy.hourlyBudgetUsd}/hour maximum.</p>${manages() ? action("Edit processing limits", "organization-policy", "") : ""}${state.user.role === "commander" ? action("Set response priorities", "response-policy", "") : ""}</details></section>`;
   }
   async function run(name) {
+    if (name === "response-policy") {
+      responsePolicy = await api("/api/response-policy");
+      modal("Set response priorities", `<form id="response-policy" class="fieldform"><label>Order of unmet needs<select name="order"><option value="deadline_then_priority" ${responsePolicy.order === "deadline_then_priority" ? "selected" : ""}>Useful window first, then declared priority</option><option value="priority_then_deadline" ${responsePolicy.order === "priority_then_deadline" ? "selected" : ""}>Declared priority first, then useful window</option></select></label><details class="collapse"><summary>Protected need types</summary><p class="note">Select only when your operational mandate explicitly gives these needs precedence.</p>${["water", "food", "medicine", "shelter", "rescue", "blankets", "transport", "communication"].map((type) => `<label class="checkbox"><input name="protectedTypes" type="checkbox" value="${type}" ${responsePolicy.protectedTypes.includes(type) ? "checked" : ""}>${e(type)}</label>`).join("")}</details><label>Maximum open reviews<input name="maxOpenReviews" type="number" min="1" max="100" value="${responsePolicy.maxOpenReviews}" required></label><label>Minimum time before a changed case is reconsidered · seconds<input name="cooldown" type="number" min="1" max="3600" value="${responsePolicy.investigationCooldownMs / 1000}" required></label><label>Reason and operational mandate<textarea name="reason" minlength="5" maxlength="500" required>${e(responsePolicy.reason)}</textarea></label><p class="note">Quantities remain in their own units. This policy guides inquiry and finite resources; it does not authorize a delivery or turn an unknown area into zero demand.</p><button class="primary">Approve this policy version</button></form>`);
+      return true;
+    }
     if (name === "organization-edit") {
       profile = await api("/api/organization");
       modal(
@@ -21,7 +27,7 @@ export function createOrganizationControls(h) {
       const { policy: p } = await api("/api/automation");
       modal(
         "Set finite processing limits",
-        `<form id="organization-policy" class="fieldform"><label class="checkbox"><input name="enabled" type="checkbox" ${p.enabled ? "checked" : ""}>Enable automatic investigation of received sources</label><label>Signals per batch<input name="maxSignals" type="number" min="1" max="35" value="${p.maxSignals}" required></label><label>Source groups per batch<input name="maxGroups" type="number" min="1" max="3" value="${p.maxGroups}" required></label><label>Model calls per organization/hour<input name="hourlyCallLimit" type="number" min="1" value="${p.hourlyCallLimit}" required></label><label>USD budget per organization/hour<input name="hourlyBudgetUsd" type="number" min="0.001" step="0.001" value="${p.hourlyBudgetUsd}" required></label><p class="note">These may lower the server's maximum, never raise it. Unknown-cost calls keep their conservative reservation. The model never receives dispatch authority.</p><button class="primary">Apply audited policy</button></form>`,
+        `<form id="organization-policy" class="fieldform"><label class="checkbox"><input name="enabled" type="checkbox" ${p.enabled ? "checked" : ""}>Enable automatic investigation of received sources</label><label class="checkbox"><input name="interpretSources" type="checkbox" ${p.interpretSources ? "checked" : ""}>Create sourced interpretations before researching a batch</label><label>Signals per batch<input name="maxSignals" type="number" min="1" max="35" value="${p.maxSignals}" required></label><label>Source groups per batch<input name="maxGroups" type="number" min="1" max="3" value="${p.maxGroups}" required></label><label>Model calls per organization/hour<input name="hourlyCallLimit" type="number" min="1" value="${p.hourlyCallLimit}" required></label><label>USD budget per organization/hour<input name="hourlyBudgetUsd" type="number" min="0.001" step="0.001" value="${p.hourlyBudgetUsd}" required></label><p class="note">These may lower the server's maximum, never raise it. Unknown-cost calls keep their conservative reservation. The model never receives dispatch authority.</p><button class="primary">Apply audited policy</button></form>`,
       );
       return true;
     }
@@ -62,9 +68,11 @@ export function createOrganizationControls(h) {
         version: profile.version,
       }),
     );
+    on("#response-policy", (d) => api("/api/response-policy", { version: responsePolicy.version, order: d.get("order"), maxOpenReviews: Number(d.get("maxOpenReviews")), investigationCooldownMs: Number(d.get("cooldown")) * 1000, protectedTypes: d.getAll("protectedTypes"), reason: d.get("reason") }));
     on("#organization-policy", (d) =>
       api("/api/automation", {
         enabled: d.get("enabled") === "on",
+        interpretSources: d.get("interpretSources") === "on",
         ...Object.fromEntries(
           ["maxSignals", "maxGroups", "hourlyCallLimit", "hourlyBudgetUsd"].map(
             (k) => [k, Number(d.get(k))],

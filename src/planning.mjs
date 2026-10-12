@@ -1,4 +1,5 @@
 import { check } from "./errors.mjs";
+import { compareNeeds, outstanding } from "./response-policy.mjs";
 export function shortestRoute(map, from, to, vehicle = {}, observed = {}) {
   if (from === to)
     return { nodes: [from], distanceM: 0, seconds: 0, unknownEdges: [] };
@@ -56,6 +57,7 @@ export function allocationPlan({
   vehicles,
   operations = [],
   now = 0,
+  policy = { order: "priority_then_deadline" },
 }) {
   const ownedKey = (record) => JSON.stringify([record.owner, record.id]);
   const stock = new Map(
@@ -67,22 +69,8 @@ export function allocationPlan({
     usedVehicles = new Set(),
     allocations = [],
     unserved = [];
-  for (const need of [...needs].sort(
-    (a, b) =>
-      (b.priority ?? 0) - (a.priority ?? 0) ||
-      (a.deadline ?? Infinity) - (b.deadline ?? Infinity) ||
-      a.id.localeCompare(b.id),
-  )) {
-    const incoming = operations
-      .filter(
-        (o) =>
-          o.need === need.id &&
-          !["failed", "cancelled", "completed", "received", "service"].includes(
-            o.state,
-          ),
-      )
-      .reduce((n, o) => n + (o.quantity ?? 0), 0);
-    let remaining = Math.max(0, need.quantity - (need.served ?? 0) - incoming);
+  for (const need of [...needs].sort((a, b) => compareNeeds(a, b, policy))) {
+    let remaining = outstanding(need, operations);
     for (const resource of resources.filter((r) => r.type === need.type)) {
       for (const vehicle of vehicles.filter(
         (v) =>
@@ -299,6 +287,37 @@ export async function validatePlan(store, org, proposal) {
         owner: a.owner,
       });
       continue;
+    }
+    if (a.type === "reroute") {
+      const vehicle = await store.get(org, "vehicle", a.params.vehicle, false),
+        operation = (await store.list(org, "operation", 10000)).find(o => o.vehicle === a.params.vehicle && o.confirmedBySource &&
+          !["failed", "cancelled", "received", "completed", "service"].includes(o.state)),
+        map = (await store.get(org, "context", "geography", false))?.map,
+        need = a.params.need ? await store.get(org, "need", a.params.need, false) : null,
+        facility = a.params.building ? await store.get(org, "facility", a.params.building, false) : null;
+      check(vehicle?.owner === org, "RESOURCE_OWNER", "Only a received vehicle's owner may authorize rerouting.", 403);
+      check(operation, "ACTIVE_OPERATION", "Rerouting requires a current source-confirmed trip, not a new stock allocation.", 409);
+      check(map?.nodes?.some(n => n.id === a.params.destination), "DESTINATION_LOCATION", "A reroute needs a received road node.");
+      check(!active.some(p => p.actions.some(other => other.owner === org && other.type === "reroute" && other.params.vehicle === vehicle.id)),
+        "VEHICLE_CONFLICT", "Another reviewed reroute for this vehicle is still active.", 409);
+      if (operation.type === "evacuation" && operation.phase === "pickup") {
+        check(!need && !facility && a.params.destination === operation.destination, "DESTINATION", "An empty pickup reroute must preserve its assigned pickup and shelter.");
+      } else if (operation.type === "evacuation") {
+        const ownReservation = operation.building === facility?.id ? operation.quantity : 0;
+        check(facility?.state === "operating" && facility.safe === true && facility.node === a.params.destination &&
+          facility.capacity - (facility.occupancy ?? 0) - (facility.reservedPlaces ?? 0) + ownReservation >= operation.quantity,
+          "SHELTER_CAPACITY", "An evacuation reroute needs a safe operating shelter with available places.");
+      } else {
+        check(a.params.destination === operation.destination || need && need.type === operation.resourceType &&
+          (need.node ?? map.places?.find(b => b.id === need.building)?.node) === a.params.destination ||
+          facility?.node === a.params.destination && facility.safe === true,
+          "DESTINATION", "Changing a loaded delivery's destination requires matching received need or assessed facility evidence.");
+      }
+      const roads = Object.fromEntries((await store.list(org, "road", 5000)).map(e => [e.id, e]));
+      const route = shortestRoute(map, vehicle.node, a.params.destination, vehicle, roads);
+      check(route, "NO_KNOWN_ROUTE", "No received accessible route supports this reroute.", 409);
+      checks.push({ index, type: "reroute", state: "checked", sourceOperation: operation.id, vehicleVersion: vehicle.version,
+        operationVersion: operation.version, ...route });
     }
     if (a.type === "dispatch") {
       const r = await store.get(org, "resource", a.params.resource, false),

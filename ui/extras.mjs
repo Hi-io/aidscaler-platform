@@ -23,7 +23,7 @@ export function createExtras(h) {
       .join("");
   const allowed = (roles) => roles.includes(state.user?.role);
   async function media() {
-    const rows = await record("media"),
+    const rows = (await record("media")).filter((m) => m.state !== "erased"),
       canUpload = allowed(["field", "analyst", "commander", "dispatcher"]);
     return (
       title(
@@ -63,7 +63,7 @@ export function createExtras(h) {
     modal(
       "Inspect original evidence",
       `<h2>${e(m.title)}</h2><p class="sub">${e(m.source)} · ${badge(m.state)}</p>${preview}<p class="note">Original hash: ${e(m.contentHash.slice(0, 20))}</p>${a ? `<section class="decision"><span class="eyebrow">INTERPRETED · NEEDS VERIFICATION</span><p class="preserve-lines">${e(summary || "Decoded source available in details below.")}</p></section><details class="collapse"><summary>Transcript, observations & processing receipt</summary><pre class="trace">${e(JSON.stringify(result, null, 2))}</pre></details>` : ["queued", "processing"].includes(m.state) ? '<div class="card processing"><span class="spark">✦</span> Processing source bytes. The original stays available.</div>' : `<p class="sub">${m.state === "failed" ? "Processing failed. You can retry; the failure and any provider costs remain recorded." : "No interpretation has completed yet. The original remains available."}</p>`}`,
-      `${!a && !["queued", "processing"].includes(m.state) && allowed(["field", "analyst", "commander", "dispatcher"]) ? action(m.state === "failed" ? "Retry source analysis" : "Analyze source bytes", "media-analyze", id, "primary") : ""}${action("Close", "close")}`,
+      `${result?.pendingPageNumbers?.length && !["queued", "processing"].includes(m.state) && allowed(["field", "analyst", "commander", "dispatcher"]) ? action(`Read next ${Math.min(4, result.pendingPageNumbers.length)} pending pages`, "media-continue", id, "primary") : !a && !["queued", "processing"].includes(m.state) && allowed(["field", "analyst", "commander", "dispatcher"]) ? action(m.state === "failed" ? "Retry source analysis" : "Analyze source bytes", "media-analyze", id, "primary") : ""}${allowed(["admin", "commander"]) ? action("Review local erasure", "erase-media", id) : ""}${action("Close", "close")}`,
     );
   }
   async function connections() {
@@ -102,7 +102,7 @@ export function createExtras(h) {
     modal(
       "Response case",
       `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(n.type)} · ${e(n.building ?? n.node)}</h2><div class="stats cols3"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div><p class="note">Unknown is not zero. Received observations can lag behind physical events.</p><section class="decision"><h3>Responses and responsible owners</h3>${related.map((p) => `<div class="listrow"><div class="grow"><strong>${e(p.title)}</strong><p>${e(p.benefit)}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response is linked yet.</p>"}</section><details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
-      `${allowed(["analyst", "commander", "dispatcher"]) ? action("Investigate options", "investigatecase", id, "primary") + action("Prepare a manual response", "manual-response", id) : ""}${action("Close", "close")}`,
+      `${allowed(["analyst", "commander", "dispatcher"]) ? action("Investigate options", "investigatecase", id, "primary") + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}${action("Close", "close")}`,
     );
   }
   async function manual(id) {
@@ -171,6 +171,12 @@ export function createExtras(h) {
     );
   }
   async function run(name, id) {
+    if (name === "media-continue") {
+      const a = await record("media_analysis", id);
+      await api("/api/media/analyze", { id, pages: a.result.pendingPageNumbers.slice(0, 4) });
+      toast("Next page batch queued. Existing transcriptions stay available.");
+      return true;
+    }
     if (name === "media-open") {
       await mediaOpen(id);
       return true;

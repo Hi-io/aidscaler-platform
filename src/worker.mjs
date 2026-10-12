@@ -2,7 +2,13 @@ import { check } from "./errors.mjs";
 import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
 import { authorizationCurrent } from "./authority.mjs";
-const PHYSICAL = new Set(["dispatch", "repair", "evacuate", "reroute"]);
+const PHYSICAL = new Set([
+  "dispatch",
+  "repair",
+  "evacuate",
+  "reroute",
+  "cancel",
+]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
 function resolution(action, receipt, state) {
   if (receipt?.owner && receipt.owner !== state.organization.id)
@@ -15,7 +21,9 @@ function resolution(action, receipt, state) {
     return state.operations.some(
       (o) =>
         o.id === (receipt.result.operation ?? receipt.result.id) &&
-        DONE.has(o.state),
+        (action.type === "cancel"
+          ? o.state === "cancelled"
+          : DONE.has(o.state)),
     );
   if (action.type === "activate")
     return Object.values(state.known.buildings ?? {}).some(
@@ -136,7 +144,10 @@ export class Worker {
         current.operations.some(
           (o) =>
             o.id === (r.result.operation ?? r.result.id) &&
-            ["failed", "cancelled"].includes(o.state),
+            (p.actions[r.index]?.type === "cancel"
+              ? ["failed", "blocked"]
+              : ["failed", "cancelled", "blocked"]
+            ).includes(o.state),
         ),
     );
     if (failed.length) {
@@ -155,7 +166,7 @@ export class Worker {
             previousAuthorization: row.authorization,
             authorization: null,
             changedReason:
-              "An issued physical operation failed or was cancelled. Review only affected work.",
+              "An issued physical operation was blocked, failed or cancelled. Review affected work; preserve loaded cargo and completed receipts.",
             affectedSteps: failed.map((r) => r.index),
             preservedSteps: preserved,
           },
@@ -164,12 +175,19 @@ export class Worker {
         await tx.audit(org, "source-monitor", "proposal.physical_failure", id, {
           affectedSteps: failed.map((r) => r.index),
           preservedSteps: preserved,
+          operationStates: failed.map(
+            (r) =>
+              current.operations.find(
+                (o) => o.id === (r.result.operation ?? r.result.id),
+              )?.state,
+          ),
         });
       });
       if (p.originPartner)
         await this.network.response(p, "failed", {
           confirmedBySource: true,
-          reason: "Owner source reports failed physical work",
+          reason:
+            "Owner source reports interrupted physical work requiring a new decision; a blocked shipment is not released or cancelled",
         });
       return {
         requiresReview: true,
@@ -381,6 +399,28 @@ export class Worker {
         },
         row.version,
       );
+      if (complete && row.repairOf) {
+        const parent = await tx.get(org, "proposal", row.repairOf, false);
+        const unresolved = (row.inheritedWork ?? [])
+          .filter((w) => w.state === "still_in_progress")
+          .filter((w) => {
+            const op = current.operations?.find((o) => o.id === w.operationId);
+            return !op || ![...DONE, "cancelled"].includes(op.state);
+          });
+        if (parent?.state === "requires_review" && unresolved.length === 0) {
+          await tx.upsert(org, "proposal", parent.id, {
+            state: "repaired",
+            repairedBy: id,
+          });
+          await tx.audit(
+            org,
+            p.authorization.by,
+            "proposal.repaired",
+            parent.id,
+            { replacement: id, receiptsPreserved: true },
+          );
+        }
+      }
       await tx.audit(
         org,
         p.authorization.by,
@@ -426,13 +466,27 @@ export class Worker {
   async once({ asOf = Date.now() } = {}) {
     const job = await this.store.lease(this.config.org, 180000, asOf);
     if (!job) return false;
+    const heartbeat = setInterval(
+      () => this.store.renewJob(job).catch(() => {}),
+      30000,
+    );
+    heartbeat.unref();
     try {
       let result;
       if (job.kind === "ingest") result = await this.ingestion.sync();
       else if (job.kind === "investigate")
         result = await this.investigator.run(job.payload, job.id);
       else if (job.kind === "analyze_media")
-        result = await this.media.analyze(job.org, job.payload.id, job.id);
+        result = await this.media.analyze(job.org, job.payload.id, job.id, {
+          pages: job.payload.pages,
+        });
+      else if (job.kind === "erase_source_files")
+        result = await this.retention.cleanup(job.org, job.payload.id);
+      else if (job.kind === "interpret_sources")
+        result = await this.semantic.process(
+          { ids: job.payload.ids, org: job.org },
+          job.id,
+        );
       else if (["execute_proposal", "continue_proposal"].includes(job.kind))
         result = await this.execute(job.payload.id);
       else if (job.kind === "expire_commitment")
@@ -449,7 +503,7 @@ export class Worker {
           job.id,
         );
       else throw new Error("Unknown durable job kind.");
-      await this.store.finishJob(job.id, result);
+      await this.store.finishJob(job.id, result, job.lease_token);
       if (job.kind === "investigate" && this.intake)
         await this.intake.complete(job.payload, result);
       return true;
@@ -458,6 +512,8 @@ export class Worker {
         await this.intake.complete(job.payload, null, e);
       await this.store.failJob(job, e);
       return true;
+    } finally {
+      clearInterval(heartbeat);
     }
   }
   async drain(limit = 32) {

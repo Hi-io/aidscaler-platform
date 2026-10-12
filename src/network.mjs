@@ -51,6 +51,8 @@ export class Network {
       { kind, id, to, version, revoke },
       async (tx) => {
         const record = await tx.get(actor.org, kind, id);
+        if (["resource", "vehicle"].includes(kind))
+          check(record.owner === actor.org, "OWNER", "Only the actual owner may publish inventory or transport capacity. Observed partner stock cannot be rebranded as local capacity.", 403);
         check(
           record.version === version,
           "VERSION_CONFLICT",
@@ -84,6 +86,7 @@ export class Network {
                 unit: record.unit,
                 node: record.node,
                 compatibility: record.compatibility,
+                qualifications: record.qualifications,
                 owner: actor.org,
                 sourceVersion: record.version,
               }
@@ -189,7 +192,7 @@ export class Network {
         permission.recordId,
         false,
       );
-      if (!row || row.version === permission.lastSharedVersion) continue;
+      if (!row || row.owner !== org || row.version === permission.lastSharedVersion) continue;
       let projection;
       if (permission.kind === "resource")
         projection = {
@@ -199,6 +202,7 @@ export class Network {
           node: row.node,
           available: Math.max(0, row.quantity - row.reserved - row.floor),
           compatibility: row.compatibility,
+          qualifications: row.qualifications,
           unit: row.unit,
         };
       else if (permission.kind === "vehicle")

@@ -17,7 +17,7 @@ const protocol = JSON.parse(
 );
 const rows = await Promise.all(
   (await readdir(folder))
-    .filter((f) => /^S\d\d-.+-B[1-6]\.json$/.test(f))
+    .filter((f) => /^S\d\d-.+-B[1-7]\.json$/.test(f))
     .map(async (f) => JSON.parse(await readFile(path.join(folder, f), "utf8"))),
 );
 const comparisons = [];
@@ -28,6 +28,7 @@ const contrasts = [
   ["B1", "B5", "Conventional sharing benefit; not a GenAI contribution"],
   ["B4", "B6", "Network NEXO versus a single NEXO instance"],
   ["B5", "B6", "GenAI contribution beyond conventional sharing"],
+  ["B7", "B6", "NEXO versus same-model general investigator with the SAME shared owners and tools"],
 ];
 for (const scenario of protocol.scenarios)
   for (const [baseline, candidate, question] of contrasts) {

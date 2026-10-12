@@ -1,5 +1,6 @@
 import { hash, uid } from "./store.mjs";
 import { check, role } from "./errors.mjs";
+import { responseQueue } from "./response-policy.mjs";
 /** Persistent, bounded intake. Grouping is a queue aid, not a truth verdict. */
 export class Intake {
   constructor(store, config) {
@@ -62,6 +63,7 @@ export class Intake {
     );
     return {
       enabled: saved?.enabled ?? this.config.autoInvestigate ?? false,
+      interpretSources: saved?.interpretSources ?? false,
       maxGroups: saved?.maxGroups ?? 3,
       maxSignals: saved?.maxSignals ?? 35,
       hourlyCallLimit: Math.min(
@@ -104,6 +106,7 @@ export class Intake {
     return this.store.command(actor.org, key, input, async (tx) => {
       const row = await tx.upsert(actor.org, "automation", "intake", {
         enabled,
+        ...(typeof input.interpretSources === "boolean" ? { interpretSources: input.interpretSources } : {}),
         ...limits,
         changedBy: actor.id,
       });
@@ -118,6 +121,8 @@ export class Intake {
     const org = this.config.org,
       policy = await this.policy();
     if (!policy.enabled) return { paused: true };
+    const queue = await responseQueue(this.store, org, { limit: 100 });
+    if (queue.openReviews >= queue.policy.maxOpenReviews) return { humanBackpressure: true, openReviews: queue.openReviews };
     return this.store.transaction(async (tx) => {
       await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
         org,
@@ -148,7 +153,16 @@ export class Intake {
           (a, b) => b.priority - a.priority || a.firstSeenAt - b.firstSeenAt,
         )
         .slice(0, policy.maxGroups);
-      if (!groups.length) return { empty: true };
+      const proposals = await tx.list(org, "proposal", 2000),
+        repair = proposals.find(p => p.state === "requires_review" && !proposals.some(replacement => replacement.repairOf === p.id &&
+          ["awaiting_review", "needs_clarification", "conditionally_authorized", "authorized", "executing", "awaiting_partner", "requires_review", "completed", "repaired"].includes(replacement.state))),
+        repairSignature = repair ? hash([queue.signature, repair.id, repair.version, repair.changedReason, repair.affectedSteps,
+          proposals.filter(p => p.repairOf === repair.id).map(p => [p.id, p.version, p.state])]) : null,
+        attempt = await tx.get(org, "response_attempt", "active", false),
+        focus = queue.policy.approved ? queue.rows.find((n) => !n.pendingProposals.length) : null,
+        responseChanged = repair ? attempt?.signature !== repairSignature || attempt?.repairOf !== repair.id : focus && (attempt?.signature !== queue.signature || attempt?.needId !== focus.id),
+        cooldownElapsed = !attempt || Date.now() - attempt.at >= queue.policy.investigationCooldownMs;
+      if (!groups.length && !(responseChanged && cooldownElapsed)) return { empty: true };
       const id = uid("intake"),
         ids = groups
           .flatMap((g) =>
@@ -158,7 +172,7 @@ export class Intake {
           )
           .slice(0, policy.maxSignals),
         selected = groups.filter((g) => ids.some((s) => s in g.versions));
-      if (!ids.length) return { empty: true };
+      if (!ids.length && !focus && !repair) return { empty: true };
       for (const g of selected)
         await tx.upsert(org, "intake", g.id, {
           state: "queued",
@@ -190,9 +204,12 @@ export class Intake {
             ids: ids.filter((s) => s in g.versions),
           })),
           automatic: true,
+          interpretSources: policy.interpretSources,
+          ...(repair ? { repairOf: repair.id } : focus ? { needId: focus.id, responsePolicyVersion: queue.policy.version } : {}),
         },
         id,
       );
+      if (repair || focus) await tx.upsert(org, "response_attempt", "active", { needId: repair ? null : focus.id, repairOf: repair?.id ?? null, signature: repairSignature ?? queue.signature, at: Date.now(), jobId: id });
       return { queued: true, id, groups: selected.length, signals: ids.length };
     });
   }

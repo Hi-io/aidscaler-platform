@@ -26,6 +26,7 @@ function fingerprint(r) {
     evaluator: r.evaluatorFingerprint,
     modelConfig: r.modelConfig,
     planningRounds: r.planningRounds ?? 1,
+    responseOrder: r.responseOrder ?? "unspecified",
     policyIntervalMs: r.policyIntervalMs ?? 600000,
     episodeBudgetUsd: r.episodeBudgetUsd,
   });

@@ -62,7 +62,7 @@ export const parameterSchemas = {
     })
     .strict(),
   activate: z.object({ building: ID, permit: z.boolean() }).strict(),
-  reroute: z.object({ vehicle: ID, destination: ID }).strict(),
+  reroute: z.object({ vehicle: ID, destination: ID, need: ID.optional(), building: ID.optional() }).strict(),
   repair: z.object({ edge: ID, engineering: z.boolean().optional() }).strict(),
   evacuate: z.object({ from: ID, to: ID, vehicle: ID, quantity: POS }).strict(),
   purchase: z

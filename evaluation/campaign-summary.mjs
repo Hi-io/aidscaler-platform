@@ -8,13 +8,14 @@ export function summarizeCampaign({
 }) {
   const planned = [];
   for (const scenario of protocol.scenarios)
+    for (const variant of protocol.compositionVariants ?? ["standard"])
     for (let i = 1; i <= protocol.seeds; i++)
       for (const arm of protocol.arms)
         planned.push({
           scenario,
           arm,
           seed:
-            (protocol.seedPrefix ?? "pilot-2026-") + String(i).padStart(2, "0"),
+            (protocol.seedPrefix ?? "pilot-2026-") + ((protocol.compositionVariants?.length ?? 1) > 1 ? variant + "-" : "") + String(i).padStart(2, "0"),
         });
   const missing = planned.filter(
     (p) =>

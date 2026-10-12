@@ -63,25 +63,38 @@ export class MediaProcessor {
   constructor(options) {
     Object.assign(this, options);
   }
-  async analyze(org, id, episode = "media-" + id) {
+  async stage(org, id, patch) {
+    return this.store.transaction(async (tx) => {
+      const m = await tx.get(org, "media", id);
+      if (m.state === "erased") return m;
+      return tx.upsert(org, "media", id, patch);
+    });
+  }
+  async analyze(org, id, episode = "media-" + id, { pages } = {}) {
     // Do not create a phantom upload for a social post's descriptive video ID.
     requireMediaBytes(await this.store.get(org, "media", id, false));
     const existing = await this.store.get(org, "media_analysis", id, false);
-    if (existing?.state === "interpreted_unverified") return existing;
-    await this.store.upsert(org, "media", id, {
+    if (pages !== undefined) check(Array.isArray(pages) && pages.length > 0 && pages.length <= 4 && pages.every((p) => Number.isSafeInteger(p) && p > 0) && new Set(pages).size === pages.length, "PDF_PAGES", "Choose one to four distinct positive page numbers.");
+    if (existing?.state === "interpreted_unverified" && !pages) return existing;
+    if (pages) check((await this.store.get(org, "media", id)).mime === "application/pdf", "PDF_PAGES", "Page selection is only valid for a PDF.");
+    if (pages && existing) {
+      check(pages.every((p) => p <= existing.result.totalPageCount), "PDF_PAGES", "This page is outside the source document.");
+      if (pages.every((p) => existing.result.pages.some((r) => r.page === p && r.text?.trim()))) return existing;
+    }
+    await this.stage(org, id, {
       state: "processing",
       processingAt: Date.now(),
     });
     try {
-      const result = await this.process(org, id, episode);
-      await this.store.upsert(org, "media", id, {
+      const result = await this.process(org, id, episode, { pages, existing });
+      await this.stage(org, id, {
         state: "interpreted_unverified",
         processedAt: Date.now(),
         error: null,
       });
       return result;
     } catch (e) {
-      await this.store.upsert(org, "media", id, {
+      await this.stage(org, id, {
         state: "failed",
         error: e.code ?? "MEDIA_PROCESSING",
         failedAt: Date.now(),
@@ -89,7 +102,7 @@ export class MediaProcessor {
       throw e;
     }
   }
-  async process(org, id, episode) {
+  async process(org, id, episode, { pages, existing } = {}) {
     const { metadata, bytes } = await this.evidence.read(org, id),
       file = path.join(this.config.evidenceDir, org, metadata.contentHash);
     if (metadata.moderationRequired) {
@@ -108,11 +121,12 @@ export class MediaProcessor {
     }
     let decoded;
     if (metadata.mime.startsWith("audio/"))
-      decoded = await decode(this.config, { mode: "audio", path: file });
+      decoded = await (this.decoder ?? decode)(this.config, { mode: "audio", path: file });
     else if (metadata.mime === "application/pdf") {
-      decoded = await decode(this.config, {
+      decoded = await (this.decoder ?? decode)(this.config, {
         mode: "pdf",
         path: file,
+        ...(pages ? { pages } : {}),
         output: path.join(
           this.config.evidenceDir,
           org,
@@ -171,11 +185,20 @@ export class MediaProcessor {
         decoded.usage = response.usage;
         decoded.engine = "pypdf+pdfium+model-transcription";
       }
+      if (existing?.result?.pages) {
+        const merged = new Map(existing.result.pages.map((p) => [p.page, p]));
+        for (const page of decoded.pages) merged.set(page.page, page);
+        decoded.pages = [...merged.values()].sort((a, b) => a.page - b.page);
+      }
       decoded.text = decoded.pages
         .filter((p) => p.text.trim())
         .map((p) => `Page ${p.page} (${p.textProvenance}):\n${p.text}`)
         .join("\n\n");
       decoded.needsOCR = decoded.pages.some((p) => !p.text.trim());
+      decoded.unreadPageCount = Math.max(0, decoded.totalPageCount - decoded.pages.length);
+      decoded.pendingPageNumbers = Array.from({ length: decoded.totalPageCount }, (_, i) => i + 1).filter((n) => !decoded.pages.some((p) => p.page === n && p.text?.trim()));
+      decoded.truncated = decoded.pendingPageNumbers.length > 0;
+      decoded.analysisBatches = [...(existing?.result?.analysisBatches ?? []), { pages: pages ?? decoded.pages.map((p) => p.page), episode, at: Date.now() }];
       decoded.requiresHumanVerification = true;
     } else if (metadata.mime === "text/plain")
       decoded = {
@@ -250,8 +273,9 @@ export class MediaProcessor {
       processedAt: Date.now(),
       evidenceId: id,
     };
-    await this.store.upsert(org, "media_analysis", id, record);
     await this.store.transaction(async (tx) => {
+      check((await tx.get(org, "media", id)).state !== "erased", "SOURCE_ERASED", "The original source was erased during interpretation.", 409);
+      await tx.upsert(org, "media_analysis", id, record);
       const text =
         decoded.text ??
         decoded.observations?.summary ??
@@ -296,6 +320,7 @@ export class MediaProcessor {
         tools: [],
         task: "perception",
       });
+      check(response.finishReason !== "length", "MEDIA_INCOMPLETE", "The transcription reached its output limit. No incomplete analysis is accepted; retry a smaller page batch.", 409);
       if (timing) await this.connector.finishModel(timing.id, response.usage);
       return response;
     } catch (e) {

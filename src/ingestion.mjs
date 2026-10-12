@@ -30,6 +30,7 @@ export class Ingestion {
           const fresh = [];
           for (const p of feed.posts) {
             downloaded++;
+            if (await this.store.get(org, "erased_source", p.id, false)) continue;
             const old = await this.store.get(org, "signal", p.id, false);
             if (old?.sourceVersion >= p.version) continue;
             fresh.push(p);
@@ -121,6 +122,7 @@ export class Ingestion {
         }
       const team = sources ? await this.connector.inbox() : { posts: [] };
       for (const p of team.posts ?? []) {
+        if (await this.store.get(org, "erased_source", p.id, false)) continue;
         const old = await this.store.get(org, "signal", p.id, false);
         if (old?.sourceVersion >= p.version) continue;
         await this.store.upsert(org, "signal", p.id, {

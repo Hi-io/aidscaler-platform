@@ -26,6 +26,10 @@ import { Workforce } from "./src/workforce.mjs";
 import { PublicEvidence } from "./src/public-evidence.mjs";
 import { Casework } from "./src/casework.mjs";
 import { Organization } from "./src/organization.mjs";
+import { configureResponsePolicy, responsePolicy, responseQueue } from "./src/response-policy.mjs";
+import { responseOptions } from "./src/response-options.mjs";
+import { Retention } from "./src/retention.mjs";
+import { SemanticIngestion } from "./src/semantic-ingestion.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -81,6 +85,8 @@ const KINDS = [
   "evidence_group",
   "group_history",
   "claim_history",
+  "semantic_receipt",
+  "erasure",
 ];
 export async function createPlatform(overrides = {}) {
   const config = await configuration(overrides),
@@ -90,9 +96,11 @@ export async function createPlatform(overrides = {}) {
     domain = new Domain(store, config),
     casework = new Casework(store, domain),
     organization = new Organization(store, config),
+    retention = new Retention(store, domain, config),
     workforce = new Workforce(store, domain),
     connector = overrides.connector ?? new SimulatorConnector(config),
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
+    semantic = new SemanticIngestion({ store, provider, connector, config }),
     ingestion = new Ingestion(store, connector, config),
     network = new Network(store, config, overrides.networkFetcher ?? fetch),
     finance = new Finance(store, config),
@@ -110,6 +118,8 @@ export async function createPlatform(overrides = {}) {
       ingestion,
       investigator,
       network,
+      retention,
+      semantic,
       config,
     });
   if (
@@ -181,6 +191,7 @@ export async function createPlatform(overrides = {}) {
     evidence,
     provider,
     connector,
+    decoder: overrides.mediaDecoder,
   });
   worker.media = media;
   media.intake = intake;
@@ -559,6 +570,16 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await intake.summary());
         if (url.pathname === "/api/organization" && req.method === "GET")
           return json(res, 200, await organization.read(actor.org));
+        if (url.pathname === "/api/response-policy" && req.method === "GET") {
+          role(actor, ["admin", "commander", "dispatcher", "analyst", "auditor"]);
+          return json(res, 200, await responsePolicy(store, actor.org));
+        }
+        if (url.pathname === "/api/retention-preview" && req.method === "GET")
+          return json(res, 200, await retention.preview(actor, { kind: url.searchParams.get("kind"), id: url.searchParams.get("id") }));
+        if (url.pathname === "/api/response-options" && req.method === "GET") {
+          role(actor, ["commander", "dispatcher", "analyst", "auditor"]);
+          return json(res, 200, await responseOptions(store, config, { needId: url.searchParams.get("needId") || undefined }));
+        }
         if (url.pathname === "/api/export" && req.method === "GET")
           return json(
             res,
@@ -724,6 +745,23 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await intake.configure(actor, b, key));
         if (url.pathname === "/api/organization")
           return json(res, 200, await organization.configure(actor, b, key));
+        if (url.pathname === "/api/response-policy")
+          return json(res, 200, await configureResponsePolicy(store, actor, b, key));
+        if (url.pathname === "/api/retention-erase")
+          return json(res, 200, await retention.erase(actor, b, key));
+        if (url.pathname === "/api/interpret-sources") {
+          role(actor, ["analyst", "commander", "dispatcher"]);
+          check(Array.isArray(b.ids) && b.ids.length > 0 && b.ids.length <= 35 && new Set(b.ids).size === b.ids.length, "SEMANTIC_BATCH", "Select one to thirty-five received sources.");
+          const queued = await store.command(actor.org, key, b, async (tx) => {
+            for (const id of b.ids) check((await tx.get(actor.org, "signal", id)).state !== "erased", "SOURCE_ERASED", "The source is no longer available.", 409);
+            const id = uid("interpret");
+            await tx.enqueue(actor.org, "interpret_sources", { ids: b.ids }, id);
+            await tx.put(actor.org, "activity", id, { state: "queued", kind: "source_interpretation", model: config.modelId, steps: [], startedAt: Date.now(), requestedBy: actor.id }, 0);
+            await tx.audit(actor.org, actor.id, "sources.interpretation_queued", id, { sourceCount: b.ids.length });
+            return { id, queued: true };
+          });
+          return json(res, 202, queued);
+        }
         if (url.pathname === "/api/task/assign")
           return json(res, 201, await workforce.assign(actor, b, key));
         if (url.pathname === "/api/task/update")
@@ -885,7 +923,7 @@ export async function createPlatform(overrides = {}) {
           const result = await store.command(
             actor.org,
             key,
-            { id: b.id },
+            { id: b.id, ...(b.pages ? { pages: b.pages } : {}) },
             async (tx) => {
               const original = await tx.get(actor.org, "media", b.id);
               if (original.moderationRequired) {
@@ -908,7 +946,8 @@ export async function createPlatform(overrides = {}) {
                 b.id,
                 false,
               );
-              if (prior) return { completed: true, id: b.id };
+              if (b.pages) check(original.mime === "application/pdf" && Array.isArray(b.pages) && b.pages.length > 0 && b.pages.length <= 4 && b.pages.every((p) => Number.isSafeInteger(p) && p > 0 && (!prior || p <= prior.result.totalPageCount)), "PDF_PAGES", "Select up to four pending pages in this document.");
+              if (prior && (!b.pages || b.pages.every((p) => prior.result.pages?.some((r) => r.page === p && r.text?.trim())))) return { completed: true, id: b.id };
               const pending = (
                 await tx.query(
                   "SELECT id FROM jobs WHERE org=$1 AND kind='analyze_media' AND payload->>'id'=$2 AND state IN ('queued','running','retry')",
@@ -921,7 +960,7 @@ export async function createPlatform(overrides = {}) {
                 state: "queued",
                 error: null,
               });
-              await tx.enqueue(actor.org, "analyze_media", { id: b.id }, id);
+              await tx.enqueue(actor.org, "analyze_media", { id: b.id, ...(b.pages ? { pages: b.pages } : {}) }, id);
               await tx.audit(
                 actor.org,
                 actor.id,
@@ -1087,6 +1126,8 @@ export async function createPlatform(overrides = {}) {
     integrations,
     intake,
     memory,
+    semantic,
+    retention,
     config,
     url: `http://${config.host}:${server.address().port}`,
     async close() {

@@ -42,7 +42,7 @@ try {
       )
     ).rows[0];
     for (const kind of ["resource", "vehicle"])
-      for (const r of await app.store.list(app.config.org, kind, 100))
+      for (const r of (await app.store.list(app.config.org, kind, 100)).filter((r) => r.owner === app.config.org))
         await app.network.share(
           actor,
           { kind, id: r.id, version: r.version, to: org },
