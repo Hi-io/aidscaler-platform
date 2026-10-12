@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-12T01:17:22.747Z",
-  "candidateFingerprint": "7089844da710872d537a80f53728a6493f4692686df0ec0e846909d0e423e4b2",
+  "at": "2026-10-12T02:15:14.563Z",
+  "candidateFingerprint": "a33117753b88712868566d82e89361dd488fa6e28be95562d23563aa23e8a183",
   "candidateChanged": false,
   "hardware": {
     "platform": "win32",
@@ -13,9 +13,9 @@
       "organizations": 1,
       "generatedNeeds": 10,
       "generatedRumours": 2,
-      "wallMs": 2277.7549,
-      "cpuMs": 4297,
-      "rssBytes": 368373760,
+      "wallMs": 3096.4285,
+      "cpuMs": 6094,
+      "rssBytes": 364867584,
       "sourceRequests": null,
       "pages": [
         {
@@ -23,6 +23,518 @@
           "expectedPublicVersions": 15,
           "storedSignals": 15,
           "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 1,
+      "generatedNeeds": 100,
+      "generatedRumours": 20,
+      "wallMs": 3812.6688,
+      "cpuMs": 4390,
+      "rssBytes": 621498368,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 1,
+      "generatedNeeds": 1000,
+      "generatedRumours": 200,
+      "wallMs": 74670.28670000001,
+      "cpuMs": 75594,
+      "rssBytes": 538046464,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 4,
+      "generatedNeeds": 10,
+      "generatedRumours": 2,
+      "wallMs": 6922.260000000009,
+      "cpuMs": 7750,
+      "rssBytes": 1358172160,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 4,
+      "generatedNeeds": 100,
+      "generatedRumours": 20,
+      "wallMs": 12893.531799999997,
+      "cpuMs": 13860,
+      "rssBytes": 1994657792,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 4,
+      "generatedNeeds": 1000,
+      "generatedRumours": 200,
+      "wallMs": 256402.5712,
+      "cpuMs": 261906,
+      "rssBytes": 1308487680,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 12,
+      "generatedNeeds": 10,
+      "generatedRumours": 2,
+      "wallMs": 18846.714999999967,
+      "cpuMs": 22328,
+      "rssBytes": 3772346368,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org4",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org5",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org6",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org7",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org8",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org9",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org10",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org11",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 12,
+      "generatedNeeds": 100,
+      "generatedRumours": 20,
+      "wallMs": 35568.02250000002,
+      "cpuMs": 40141,
+      "rssBytes": 5429669888,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org4",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org5",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org6",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org7",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org8",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org9",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org10",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org11",
+          "expectedPublicVersions": 152,
+          "storedSignals": 152,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    },
+    {
+      "organizations": 12,
+      "generatedNeeds": 1000,
+      "generatedRumours": 200,
+      "wallMs": 765104.9224,
+      "cpuMs": 793375,
+      "rssBytes": 3282690048,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org1",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org2",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org3",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org4",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org5",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org6",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org7",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org8",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org9",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org10",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        },
+        {
+          "org": "org11",
+          "expectedPublicVersions": 1564,
+          "storedSignals": 1564,
+          "ingestionPasses": 15,
           "pendingInvestigations": 1,
           "visibleDecisionPageSize": 0
         }

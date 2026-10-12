@@ -46,6 +46,12 @@ Cada arranque crea `.local/labs/<sesión>/org*/pgdata`: un mundo nuevo no hereda
 
 Las investigaciones tienen hasta ocho llamadas por defecto, herramientas acotadas y posibilidad de parar. Un error con coste desconocido mantiene una reserva conservadora; no se convierte en coste cero. Las trazas muestran llamadas, resultados y razones breves, sin inventar pensamiento privado del modelo.
 
+En un incidente compartido, configurar una instancia coordinadora para la investigación y mantener la revisión/ejecución de aportes en cada propietario. Habilitar intake de ese mismo caso en todas las instancias puede duplicar consultas físicas y gastar cuotas. Cada instancia puede investigar sus casos locales; no existe todavía elección automática de líder o exclusión distribuida universal de casos. El evaluador posterior compara B5/B6 con la misma asignación de coordinación.
+
+Si OpenRouter responde HTTP 402, la instancia pausa nuevas llamadas y la campaña se detiene, conservando fallos y costes desconocidos. Restaurar el crédito de la **cuenta**, no solo aumentar el límite de la clave, y reiniciar el backend de la instancia con su mismo directorio/credenciales. No resetear un mundo operativo ni abrir una DB activa en otro proceso para conseguir ese reinicio. La UI y las acciones humanas no dependen de que vuelva la inferencia. Las pruebas unitarias/contratos no necesitan saldo.
+
+La sesión interactiva arranca a ×10 para que el mundo no termine antes de abrir el workspace. Cambiar velocidad/pausa desde el observador o configurar `NEXO_LAB_RATE` entre un valor positivo y 1000. Esta velocidad de presentación no convierte el recorrido en medición live ×1 ni permite comparar inferencia acelerada con inferencia en tiempo real.
+
 Tres modos de prueba son diferentes:
 
 - **Fixtures/replay:** no generan una nueva inferencia ni demuestran capacidad del modelo.
@@ -109,13 +115,14 @@ Para analizar bytes de audio, video y documentos:
 pnpm setup:media
 ```
 
-La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas muestreados usan el modelo configurado; los PDFs sin texto quedan marcados para OCR adicional. Registrar tipos no admitidos y partes no observadas. No llamar «percepción probada» a las descripciones sintéticas del laboratorio.
+La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas muestreados usan el modelo configurado. Para PDF se extraen hasta 20 páginas de texto; se renderizan hasta cuatro páginas escaneadas y el modelo propone su transcripción. Cada página distingue texto embebido de transcripción visual no verificada; las páginas restantes quedan pendientes. Registrar tipos no admitidos y partes no observadas. No llamar «percepción probada» a las descripciones sintéticas del laboratorio. Un medio sin archivo o con hash distinto no entra a inferencia ni publicación.
 
 ## Ejecutar pruebas y recoger evidencia
 
 ```powershell
 pnpm check
 pnpm test
+node scripts/verify.mjs # plataforma + simulador, huellas y reporte conjunto
 pnpm hygiene
 pnpm test:live       # smoke del proveedor, no entrega física
 pnpm demo            # composición y servicio con proveedor real, reloj modelado
@@ -128,7 +135,7 @@ pnpm test:media      # bytes sintéticos autorizados, no corpus de campo
 pnpm test:load       # nueve perfiles; el mayor puede tardar unos trece minutos
 ```
 
-En el simulador ejecutar por separado `pnpm test` y `pnpm check`. Las pruebas automáticas no realizan llamadas pagadas salvo los comandos que indican proveedor/medios reales. `pnpm demo -- --autonomous` retira la selección de instalación del operador para un episodio exploratorio; no lo transforma en un holdout independiente.
+En el simulador ejecutar por separado `pnpm test` y `pnpm check`. Las pruebas automáticas no realizan llamadas pagadas salvo los comandos que indican proveedor/medios reales. `pnpm demo -- --autonomous` retira la selección de instalación del operador para un episodio exploratorio; no lo transforma en un holdout independiente. `node --env-file-if-exists=.env.local scripts/service-demo.mjs --from-need` selecciona solo una necesidad recibida, sin indicar instalación o solución.
 
 Para el piloto comparativo:
 

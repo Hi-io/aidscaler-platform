@@ -1,22 +1,12 @@
 {
-  "at": "2026-10-12T02:00:43.746Z",
-  "protocol": "reports/evaluations/1791770328001/protocol.json",
+  "at": "2026-10-12T03:51:12.284Z",
+  "protocol": "reports/evaluations/1791776579865/protocol.json",
   "complete": false,
-  "stoppedReason": "ERR_INVALID_ARG_TYPE",
-  "runs": 10,
-  "plannedRuns": 24,
+  "stoppedReason": "provider_http_402_account_credit_exhausted",
+  "runs": 12,
+  "plannedRuns": 48,
   "missing": [
     {
-      "scenario": "S01",
-      "arm": "B5",
-      "seed": "pilot-2026-01"
-    },
-    {
-      "scenario": "S01",
-      "arm": "B6",
-      "seed": "pilot-2026-01"
-    },
-    {
       "scenario": "S09",
       "arm": "B1",
       "seed": "pilot-2026-01"
@@ -47,228 +37,396 @@
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S09",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
       "arm": "B1",
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S01",
       "arm": "B2",
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S01",
       "arm": "B3",
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S01",
       "arm": "B4",
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S01",
       "arm": "B5",
       "seed": "pilot-2026-01"
     },
     {
-      "scenario": "S19",
+      "scenario": "S01",
       "arm": "B6",
       "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B1",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B2",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B3",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B4",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
     }
   ],
-  "costUsd": 0.0920594,
-  "chargedBudgetUsd": 0.0920594,
-  "unknownCostCalls": 0,
+  "costUsd": 0.17714365,
+  "chargedBudgetUsd": 0.19182865000000002,
+  "unknownCostCalls": 7,
   "comparisons": [
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "baseline": "B1",
       "candidate": "B2",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
       "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
       "field": "uncoveredUnitMs",
       "baselineMean": 1662402500,
-      "candidateMean": 1669902500,
-      "delta": -7500000,
-      "improvement": -0.004511542782208222,
+      "candidateMean": 5154951250,
+      "delta": -3492548750,
+      "improvement": -2.1009044139430735,
       "interval95": [
-        -7500000,
+        -6977597500,
         -7500000
       ],
       "relativeInterval95": [
-        -0.004511542782208222,
+        -4.1972972851039385,
         -0.004511542782208222
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
       "baseline": "B1",
       "candidate": "B3",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
       "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
       "field": "uncoveredUnitMs",
       "baselineMean": 1662402500,
-      "candidateMean": 1677402500,
-      "delta": -15000000,
-      "improvement": -0.009023085564416666,
+      "candidateMean": 3272451700,
+      "delta": -1610049200,
+      "improvement": -0.9685074463013621,
       "interval95": [
-        -15000000,
-        -15000000
+        -2908099900,
+        -311998500
       ],
       "relativeInterval95": [
-        -0.009023085564416666,
-        -0.009023085564416666
+        -1.749335615171416,
+        -0.18767927743130808
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
       "baseline": "B1",
       "candidate": "B4",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
       "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
       "field": "uncoveredUnitMs",
       "baselineMean": 1662402500,
-      "candidateMean": 1677402500,
-      "delta": -15000000,
-      "improvement": -0.009023085564416666,
+      "candidateMean": 5158701250,
+      "delta": -3496298750,
+      "improvement": -2.1031601853341777,
       "interval95": [
-        -15000000,
+        -6977597500,
         -15000000
       ],
       "relativeInterval95": [
-        -0.009023085564416666,
+        -4.1972972851039385,
         -0.009023085564416666
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
       "baseline": "B1",
       "candidate": "B5",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
       "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
       "field": "uncoveredUnitMs",
       "baselineMean": 1662402500,
-      "candidateMean": 523341700,
-      "delta": 1139060800,
-      "improvement": 0.6851895374315186,
+      "candidateMean": 8640000000,
+      "delta": -6977597500,
+      "improvement": -4.1972972851039385,
       "interval95": [
-        1139060800,
-        1139060800
+        -6977597500,
+        -6977597500
       ],
       "relativeInterval95": [
-        0.6851895374315186,
-        0.6851895374315186
+        -4.1972972851039385,
+        -4.1972972851039385
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 199580965,
+      "delta": 520419035,
+      "improvement": 0.7228042152777778,
+      "interval95": [
+        520043870,
+        520794200
+      ],
+      "relativeInterval95": [
+        0.7222831527777778,
+        0.7233252777777778
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
       "baseline": "B1",
       "candidate": "B6",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
       "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
       "field": "uncoveredUnitMs",
       "baselineMean": 1662402500,
-      "candidateMean": 521441400,
-      "delta": 1140961100,
-      "improvement": 0.6863326420647227,
+      "candidateMean": 8640000000,
+      "delta": -6977597500,
+      "improvement": -4.1972972851039385,
       "interval95": [
-        1140961100,
-        1140961100
+        -6977597500,
+        -6977597500
       ],
       "relativeInterval95": [
-        0.6863326420647227,
-        0.6863326420647227
+        -4.1972972851039385,
+        -4.1972972851039385
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
     },
     {
-      "scenario": "S01",
+      "scenario": "S19",
       "baseline": "B1",
-      "candidate": "B2",
+      "candidate": "B6",
+      "resource": "shelter",
       "missingWorldPairs": 0,
-      "pairs": 1,
+      "pairs": 2,
       "unit": "resource units × milliseconds",
-      "resource": "water",
       "field": "uncoveredUnitMs",
-      "baselineMean": 1662402500,
-      "candidateMean": 1669902500,
-      "delta": -7500000,
-      "improvement": -0.004511542782208222,
+      "baselineMean": 720000000,
+      "candidateMean": 420018295,
+      "delta": 299981705,
+      "improvement": 0.4166412569444444,
       "interval95": [
-        -7500000,
-        -7500000
+        0,
+        599963410
       ],
       "relativeInterval95": [
-        -0.004511542782208222,
-        -0.004511542782208222
-      ],
-      "evidenceLevel": "exploratory_pilot",
-      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
-    },
-    {
-      "scenario": "S01",
-      "baseline": "B1",
-      "candidate": "B3",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
-      "resource": "water",
-      "field": "uncoveredUnitMs",
-      "baselineMean": 1662402500,
-      "candidateMean": 1677402500,
-      "delta": -15000000,
-      "improvement": -0.009023085564416666,
-      "interval95": [
-        -15000000,
-        -15000000
-      ],
-      "relativeInterval95": [
-        -0.009023085564416666,
-        -0.009023085564416666
-      ],
-      "evidenceLevel": "exploratory_pilot",
-      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
-    },
-    {
-      "scenario": "S01",
-      "baseline": "B1",
-      "candidate": "B4",
-      "missingWorldPairs": 0,
-      "pairs": 1,
-      "unit": "resource units × milliseconds",
-      "resource": "water",
-      "field": "uncoveredUnitMs",
-      "baselineMean": 1662402500,
-      "candidateMean": 1677402500,
-      "delta": -15000000,
-      "improvement": -0.009023085564416666,
-      "interval95": [
-        -15000000,
-        -15000000
-      ],
-      "relativeInterval95": [
-        -0.009023085564416666,
-        -0.009023085564416666
+        0,
+        0.8332825138888889
       ],
       "evidenceLevel": "exploratory_pilot",
       "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
@@ -276,7 +434,7 @@
   ],
   "gates": [
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B1",
       "status": "completed",
@@ -288,7 +446,7 @@
       "invariantViolations": 0
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B2",
       "status": "completed",
@@ -300,56 +458,56 @@
       "invariantViolations": 0
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B3",
       "status": "completed",
       "integrity": true,
       "noOrphanReservations": true,
       "modelFailures": 0,
-      "pendingReceipts": 0,
+      "pendingReceipts": 1,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B4",
       "status": "completed",
       "integrity": true,
       "noOrphanReservations": true,
       "modelFailures": 0,
-      "pendingReceipts": 0,
+      "pendingReceipts": 2,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B5",
       "status": "completed",
       "integrity": true,
       "noOrphanReservations": true,
       "modelFailures": 0,
-      "pendingReceipts": 0,
+      "pendingReceipts": 1,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S23",
+      "scenario": "S19",
       "seed": "pilot-2026-01",
       "arm": "B6",
       "status": "completed",
       "integrity": true,
       "noOrphanReservations": true,
       "modelFailures": 0,
-      "pendingReceipts": 0,
+      "pendingReceipts": 1,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S01",
-      "seed": "pilot-2026-01",
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
       "arm": "B1",
       "status": "completed",
       "integrity": true,
@@ -360,38 +518,62 @@
       "invariantViolations": 0
     },
     {
-      "scenario": "S01",
-      "seed": "pilot-2026-01",
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
       "arm": "B2",
-      "status": "completed",
+      "status": "failed",
       "integrity": true,
       "noOrphanReservations": true,
-      "modelFailures": 0,
+      "modelFailures": 2,
       "pendingReceipts": 0,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S01",
-      "seed": "pilot-2026-01",
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
       "arm": "B3",
-      "status": "completed",
+      "status": "failed",
       "integrity": true,
       "noOrphanReservations": true,
-      "modelFailures": 0,
+      "modelFailures": 1,
       "pendingReceipts": 0,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     },
     {
-      "scenario": "S01",
-      "seed": "pilot-2026-01",
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
       "arm": "B4",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B5",
       "status": "completed",
       "integrity": true,
       "noOrphanReservations": true,
       "modelFailures": 0,
-      "pendingReceipts": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 1,
       "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
       "invariantViolations": 0
     }
@@ -403,5 +585,10 @@
     "Institutional calibration and adoption",
     "Gemini remeasurement after changing models",
     "Recurrent policies across evolving emergencies"
-  ]
+  ],
+  "recovery": {
+    "at": "2026-10-12T03:51:12.285Z",
+    "rawOutcomesUnchanged": true,
+    "note": "The operator stopped this runner after real HTTP 402 responses and a read-only account check confirming unavailable credit. Completed raw outcomes are unchanged; unfinished episodes remain missing. No extra inference was attempted to fill them, and unknown-cost reservations are retained."
+  }
 }

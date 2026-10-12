@@ -1,0 +1,128 @@
+# NEXO — Resultados, fallos conservados y alcance de la evidencia
+
+12 de octubre de 2026. Leer junto a [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md). Este documento describe pruebas ejecutadas, no los números inventados de la landing ni una garantía de clasificación en una competición.
+
+## 1. Resumen que se puede defender
+
+- Plataforma local real, con proveedor **Gemma 4 31B mediante OpenRouter**. No hubo Gemini ni despliegue GCP.
+- **76/76 pruebas de plataforma y 117/117 del simulador**, cero fallos, omitidas o canceladas en la última verificación conjunta.
+- **57 verificaciones de render/navegación** en 1440, 1920 y 390 píxeles; **12 recorridos operativos y seis de corrección/publicación**, sin errores de página u overflow en esas pruebas.
+- **Cuatro formatos de entrada con bytes reales** procesados: imagen, audio, video y PDF, más una foto pública derivada y revisada. Los conectores JSON se prueban por separado. Es funcionamiento, no precisión sobre un corpus de campo.
+- **Nueve perfiles de carga**: 1/4/12 organizaciones y 10/100/1.000 necesidades. La ingesta/persistencia funciona; no se midió inferencia semántica a esa escala.
+- Un ensayo dirigido desde una necesidad de refugio, sin indicar instalación o solución, produjo **50 ocupantes** después de aportes y aprobaciones de cuatro propietarios. Los primeros intentos fallidos se conservan.
+- La ventaja general de GenAI sobre referencias competentes **todavía no está demostrada**. Las comparaciones incluyen pérdidas, errores de presupuesto y campañas interrumpidas.
+
+## 2. Procedencia y reproducción
+
+Los reportes tienen fecha, huella del candidato, modelo, seed/manifiesto del mundo, configuración, costes y resultados. Los comparativos también tienen huella del evaluador. El fingerprint de contenido identifica el código probado aunque la ejecución empezara antes del commit que lo publica. No mezclar huellas diferentes como si fueran réplicas del mismo candidato.
+
+La verificación conjunta se conserva en [verification-latest.json](../reports/verification-latest.json), con copia fechada en `reports/verifications/`. Su comando es `node scripts/verify.mjs`: chequea sintaxis/contratos y las dos suites. Los logs completos quedan en `.local/verification/`, fuera de Git; no hay llamadas pagadas en este comando.
+
+Los recibos físicos/modelo se conservan en `reports/runs/`; las campañas en `reports/evaluations/<fecha-numérica>/`. Los archivos `*-latest.json` son accesos al resultado más reciente; las copias fechadas permiten examinar fallos anteriores. Un archivo con estado `failed` no se elimina ni se convierte en éxito porque parte de la ayuda haya llegado.
+
+Para probarlo de nuevo, utilizar [LOCAL.md](LOCAL.md). Cambiar modelo, prompt, algoritmo, contrato físico o presupuesto exige una nueva evaluación; no copiar un porcentaje de la versión anterior.
+
+## 3. Integridad y flujo operacional
+
+Las suites comprueban aislamiento de organización/rol, CSRF, fuentes maliciosas, referencias verificables, concurrencia de reservas/stock, mínimos protegidos, idempotencia, TTL y versión de autorizaciones, delegación finita, ownership de socios, retirada y reparación, recibos físicos, reinicio y backups.
+
+Las pruebas nuevas cubren:
+
+1. Moderación antes de activar un reporte comunitario o analizar su medio; retry con identidad estable.
+2. Corrección/agrupación reversible de evidencia, con historial y alcance por organización.
+3. Foto pública derivada solo después de revisión humana y recibo de origen; eliminación de metadatos, original privado, corrección/retiro trazables.
+4. Revocación de cuentas y exports que no cruzan organizaciones.
+5. Política persistente que puede reducir límites sin aumentar los topes del servidor ni conceder despacho.
+6. Recuperación consistente sin sesiones/credenciales de origen en el bundle; restore solo en destino nuevo y validación de hashes.
+7. Rechazos físicos definitivos que detienen el paso y exigen nueva revisión, conservando trabajo recibido; no repetir indefinidamente un vehículo ocupado.
+8. Elegibilidad de instalación: un edificio residencial seguro con cero plazas no puede activarse como refugio por un título convincente del modelo.
+9. Comparaciones con presupuesto distinto que se rechazan explícitamente sin perder outcomes ni romper el reporte final.
+10. Medios inexistentes/descriptivos/de otro propietario que no crean uploads ficticios ni gastan inferencia; bytes alterados que fallan integridad.
+11. Un coordinador de investigación por incidente compartido, sin perder las cuatro instancias ni sus aprobaciones individuales.
+12. Falta de crédito del proveedor que pausa nuevas llamadas sin falsear coste cero ni eliminar trabajo previo; la prueba usa una respuesta HTTP controlada, no un nuevo gasto real.
+
+El motor acumula plazas·hora **ocupadas**, no horas de apertura de un refugio vacío. Integra consumo fraccional sin redondear cada minuto hacia arriba, detiene acumulación al cerrar y conserva efectos físicos del tiempo. La aritmética no certifica necesidades sanitarias reales.
+
+## 4. Proveedor y multimodalidad
+
+[provider-smoke.json](../reports/provider-smoke.json) registra la disponibilidad/configuración del modelo; [media-byte-smoke.json](../reports/media-byte-smoke.json) registra cuatro entradas y una derivación pública. Imágenes y fotogramas usan inferencia real; audio usa ASR local; PDF usa extracción/render/transcripción y conserva originales. HTTP/JSON se comprueba con conectores, contratos e ingesta por separado.
+
+El smoke anterior completó dos llamadas visuales con coste recibido de **USD 0,0018055**. Su primer intento encontró un fallo al serializar el reporte después de procesar medios; se corrigió el serializer y se repitió. La repetición con PDF escaneado, guardada en [media-byte-1791776581764.json](../reports/runs/media-byte-1791776581764.json), completó tres llamadas visuales, **USD 0,00155219**, y convirtió el texto de la página en una señal privada no verificada. El número de formatos de entrada no incluye la imagen pública derivada como una nueva modalidad. No se usa ese smoke como una medida de recall, lectura completa de videos o comprensión bajo ruido.
+
+No se ha suministrado un corpus independiente permitido de desastres. Los videos del simulador son objetos descriptivos; no cuentan como percepción. El recorrido posterior renderiza PDFs escaneados con PDFium y pide transcripción visual al modelo: hasta cuatro páginas escaneadas por análisis, con texto embebido separado, pendientes explícitos y revisión humana. El smoke posterior incluye un PDF de imagen sin capa de texto. Los formatos, segmentos o páginas no observados conservan esa limitación.
+
+## 5. Composición de refugio: positivo y negativos
+
+Ensayo con selección de instalación, versión anterior: `service-live-1791769227292.json`. Cinco llamadas reales, USD 0,03361985, cuatro propietarios, 50 personas evacuadas/alojadas y seguimiento posterior. Demuestra ejecución para una instalación elegida por el operador; no elección autónoma del sitio.
+
+Ensayo sin foco: `service-live-1791773661660.json`. Tres llamadas, USD 0,01890582. El modelo eligió una asignación de agua; **no abrió el refugio**. No se etiqueta como éxito de composición.
+
+Primer ensayo seleccionando solo necesidad: `service-live-1791773816509.json`. Cuatro llamadas, USD 0,0249717. El modelo trató el edificio de la necesidad como instalación, con cero capacidad útil. No hubo ocupantes. Este fallo originó una corrección: directorio de candidatos recibido y validación de elegibilidad en plataforma y sistema físico.
+
+Ensayo posterior: [service-live-1791774820679.json](../reports/runs/service-live-1791774820679.json). El operador selecciona una necesidad recibida de refugio, **sin darle al modelo instalación ni solución**. Cinco llamadas reales, USD 0,0340366, 50 ocupantes y **22,4254 plazas·hora** acumuladas hasta el horizonte del episodio, con diez minutos de seguimiento tras la fase de ejecución. Cero violaciones de invariantes; candidate sin cambios durante el ensayo.
+
+Esta mejora entre versiones es una prueba dirigida de regresión/funcionamiento. No es un ensayo emparejado de eficacia, un holdout ni demostración de que el modelo descubrirá composiciones desconocidas en cualquier desastre. Las herramientas contienen recetas acotadas de refugio/planta; no se afirma síntesis arbitraria de infraestructura.
+
+## 6. Tiempo real ×1
+
+`pnpm demo:live` ejecuta fuente HTTP, modelo real, aprobación del proxy identificado, carga/viaje/descarga y recibos con el mundo avanzando a ×1. Se reportan reloj físico y latencia de proveedor; no se multiplica inferencia por ×1000.
+
+Ensayo anterior positivo: [live-response-1791771412685.json](../reports/runs/live-response-1791771412685.json). Dos llamadas reales, USD 0,01344325; alrededor de 254 segundos simulados y 256 segundos de pared; dos entregas que suman **500 L de 600 L necesarios**. Los 100 L pendientes permanecen como faltante. No prueba una mejora temporal frente a una referencia ni atención total.
+
+También se conservan los intentos previos de quota/ventana insuficiente en `reports/runs/`. No contar una llegada sin recibo como entrega. El último ensayo de la versión actual se identifica en [live-response-latest.json](../reports/live-response-latest.json), cuya copia fechada es la evidencia a utilizar si se presenta esta versión.
+
+La repetición en el build corregido es [live-response-1791774948996.json](../reports/runs/live-response-1791774948996.json): **257,32 segundos de pared, 255,233 segundos simulados, dos llamadas y USD 0,00551945**. Confirmó 500 de 600 L, sin exceso ni violaciones; mantuvo 100 L pendientes. No hubo cambios de candidato durante el episodio.
+
+## 7. UI, privacidad y comprensión
+
+[ui-verification.json](../reports/ui-verification.json) contiene 57 checks; [ui-journeys.json](../reports/ui-journeys.json), 12; [ui-review-journeys.json](../reports/ui-review-journeys.json), seis. Cubren pantallas por rol, teclado/móvil, cola offline, conflicto de versión, reintentos, moderación, foto pública, corrección y retirada.
+
+El recorrido de foto pública utiliza un recibo sintético explícito para probar la UI; **no es evidencia de una entrega física**. La prueba de recepción física pertenece a otros episodios. La revisión de privacidad es humana; quitar metadatos no garantiza anonimizar personas visibles.
+
+Estos tests no prueban minutos ahorrados, comprensión ≥90%, confianza del público ni accesibilidad certificada. Faltan ejercicios con personas independientes y condiciones de uso reales.
+
+## 8. Carga y límites
+
+[load-latest.json](../reports/load-latest.json) contiene hardware, huella y los nueve perfiles. El mayor —12 organizaciones y 1.000 necesidades— tardó aproximadamente **765 segundos** y alcanzó alrededor de **3,1 GB de RSS** en el proceso de prueba. Recibió/persistió **1.564 de 1.564 señales por organización** en ese perfil, sin inferencia ni violaciones de invariantes.
+
+No equivale a resolver 12.000 necesidades ni interpretar cada publicación. El sistema usa contexto acotado, intake de hasta 35 señales/grupo y tres grupos por batch, cuotas y backpressure. La escala semántica y la calidad bajo carga aún deben medirse. ×1000 solicitado es control de reloj, no garantía de throughput físico ×1000 con todas las herramientas.
+
+El benchmark del motor anterior conserva su hardware/build y alcance en `disaster-response-simulator/docs/PERFORMANCE.md`. No atribuir rendimiento headless del motor a toda la plataforma.
+
+## 9. Comparaciones y campañas incompletas
+
+Los brazos son B1 reglas; B2 extracción real seguida por planificador; B3 investigador general con mismo modelo/herramientas; B4 NEXO aislado; B5 coordinación compartida convencional; B6 NEXO en red. El recurso físico y el mundo siguen existiendo en todos los brazos. Se compara K01 por unidad nativa, no un score combinado de litros/plazas.
+
+En campañas antiguas, el presupuesto de inferencia de la red se dividía en cuartos. En las posteriores se comparte un solo cap total de dinero y llamadas entre propietarios. No mezclar esos evaluadores. Los límites locales por organización siguen siendo obligatorios.
+
+Registro de fallos conservados:
+
+- `1791770328001`: diez de 24 episodios, 14 faltantes; bug de snapshot/ingesta. Coste conocido USD 0,0920594.
+- `1791773011769`: cinco de 48; detenido después de finalizar el episodio con repetición de rechazos `VEHICLE_BUSY`. Su B5 atendió 600 L, pero acumuló 228 errores y unos 402 segundos de pared. Se corrigió la revisión/reintento y se añadió una regresión: el nuevo caso termina en unos 26 segundos sin esa repetición. No vender ese cambio como mejora humanitaria.
+- `1791773644230`: 40 de 48, ocho faltantes; coste USD 1,28876127. La campaña redujo el budget del último episodio a USD 0,23973783 frente a USD 0,25 de su par. El comparador rechazó esa configuración. Se preservó el summary previo, se recuperó desde los outcomes intactos y se marcan los contrastes no comparables sin mejora asignada.
+
+El runner corregido no reduce un cap para completar artificialmente la campaña: termina y conserva faltantes si no puede financiar otro episodio con el cap preregistrado. El summary nunca pierde outcomes porque una comparación sea inválida.
+
+`scripts/compare-campaign.mjs reports/evaluations/<run>` genera `contrasts.json`. Resalta B4/B3 y B6/B5, además de la ganancia convencional de compartir. Conserva resultados negativos y presupuesto, sin presentar un bootstrap de dos mundos como evidencia confirmatoria.
+
+La campaña `1791774855620` completó los 48 episodios, con coste conocido USD 1,47281355 y cero violaciones físicas. La variante B6 dejaba investigar el mismo caso a las cuatro instancias; consumió su cap compartido en comprobaciones repetidas y registra fallos, aunque en algún episodio llegó ayuda. Una entrega parcial no borra un fallo de planificación. Los resultados no establecen una ventaja general del LLM.
+
+La siguiente versión asigna un coordinador de investigación a cada incidente compartido, tanto en B5 como en B6. Los socios siguen usando bases, recursos, autoridad y recibos independientes. Es una política de despliegue explícita para este experimento, no una elección distribuida de líder ni una solución universal a duplicación de casos. Los dos protocolos no se combinan como réplicas. La prueba de regresión conserva cuatro instancias y exige dos investigaciones del coordinador en dos rondas, en lugar de ocho investigaciones duplicadas.
+
+La campaña posterior, [1791776579865](../reports/evaluations/1791776579865/summary.json), conserva **12 de 48 episodios**, cuatro con fallos, **36 pendientes**, USD 0,17714365 de coste conocido y siete intentos con coste desconocido conservadoramente reservado. Se detuvo después de respuestas HTTP 402 y un chequeo de cuenta de solo lectura que confirmó falta de saldo; el summary previo y los outcomes se conservaron intactos. No se imputan resultados a los mundos que faltan.
+
+En el primer mundo S19 de ese protocolo, B6 investigó sin instalación predeterminada, coordinó cuatro propietarios y alojó 50 personas; B5 también alojó 50. B6 acumuló 120.036.590 plazas·ms de déficit frente a 199.956.130 de B5 en ese episodio, aproximadamente **40% menos**. Es un resultado de un solo mundo de desarrollo, dentro de una campaña incompleta; **no es una ventaja general acreditada ni un intervalo confirmatorio**. La segunda seed B6 quedó afectada por el rechazo del proveedor y registra cero atención, sin ser eliminada del contraste.
+
+La repetición dirigida `service-live-1791776847917.json` también quedó sin proveedor durante la búsqueda: dos intentos, USD 0,0114431 conocido, sin propuesta ni ocupación. Se conserva junto a los positivos anteriores. El backend posterior pausa la inferencia de esa instancia ante HTTP 402 y el runner detiene la campaña: no fabricar nuevas respuestas ni repetir llamadas en cada caso mientras falte saldo. El operador restaura crédito y reinicia el backend para volver a probar. Trabajos/recibos y acciones manuales permanecen disponibles.
+
+## 10. Recuperación y operación
+
+`tests/backup.test.mjs` conserva SQL, IDs de comandos, jobs pendientes, finanzas, auditoría y archivos privados/derivados con checksum. No exporta sesiones ni claves de origen/modelo. Rechaza destino ya existente, bundle alterado y restauración sobre la instancia activa.
+
+El RTO pequeño bajo cinco minutos cubre un fixture local, no una base industrial completa ni pérdida de toda la infraestructura. El launcher crea una sesión nueva al reiniciar un mundo y conserva DBs antiguas. Una recuperación operativa retoma la misma fuente/identidad; no lanzar dos copias activas que ejecuten los mismos compromisos.
+
+## 11. Lo que ninguna simulación propia puede cerrar por sí sola
+
+Independencia del corpus/holdout, competencia de B0/B1–B6, precisión multimodal real, comprensión/tiempo humano, validez de parámetros clínicos, adopción institucional, permisos de redes reales y confianza del público necesitan evidencia externa. [VALIDACION_EXTERNA.md](VALIDACION_EXTERNA.md) define cómo obtenerla.
+
+Gemma puede producir una mejora o una pérdida. Cambiar a Gemini obliga a repetir y no garantiza corregir las pérdidas. No se acredita supervivencia, vidas salvadas, despliegue de campo, top 1 ni 100/100 mediante un simulador propio o una presentación.

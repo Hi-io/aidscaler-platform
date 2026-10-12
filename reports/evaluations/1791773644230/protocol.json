@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-12T02:54:04.232Z",
+  "scenarios": [
+    "S23",
+    "S01",
+    "S09",
+    "S19"
+  ],
+  "arms": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6"
+  ],
+  "seeds": 2,
+  "plannedRuns": 48,
+  "seedPrefix": "pilot-2026-",
+  "budgetUsd": 1.5,
+  "episodeBudgetUsd": 0.25,
+  "candidateFingerprint": "5f356b99de55669496be3e936bad93b150dda3c017452b1ca476a585e0d5156c",
+  "evaluatorFingerprint": "f12cbf7b8d803ffe36218e325e386265da19dfed5cf20acb84742559d0907fc3",
+  "primary": "uncoveredUnitMs by native resource type",
+  "clock": "modeled",
+  "includeFailures": true,
+  "heldOut": false,
+  "operator": "scripted",
+  "planningRounds": 2,
+  "policyIntervalMs": 600000,
+  "scope": "Finite scheduled policy rounds plus physical execution, partner decisions and receipts at a fixed horizon. The model budget is cumulative across rounds. This is a development pilot, not an independently authored disaster calibration.",
+  "costPolicy": "Known provider receipts plus conservative reservations for unknown-cost attempts; actual invoice can differ from estimates."
+}

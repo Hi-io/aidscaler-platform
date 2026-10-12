@@ -4,6 +4,8 @@ Documento de trabajo · 11 de octubre de 2026.
 
 **Estado actualizado · 12 de octubre de 2026:** este archivo conserva el diseño funcional. Ya existe una implementación en el repositorio vecino `disaster-response-simulator`; la [auditoría del simulador](AUDITORIA_SIMULADOR.md) distingue lo implementado, lo probado y lo pendiente. Las cifras de la web siguen siendo conceptuales; el motor construido no las valida automáticamente.
 
+**Seguimiento de ejecución local:** consultar [estado por requisito](ESTADO_IMPLEMENTACION.md) y [resultados medidos](VALIDACION.md). El motor posterior tiene 117 pruebas. NEXO se desarrolló en su repositorio propio con Gemma 4, bases independientes y fuentes HTTP; el diseño Gemini/GCP sigue siendo posterior. Preservar protocolos, costes y fallos, incluidos los episodios interrumpidos por saldo del proveedor. No tratar la política coordinadora de un experimento como una elección automática de líder en producción.
+
 Relacionados: [plataforma y KPIs de aceptación](PLATAFORMA.md) · [auditoría actual](AUDITORIA_SIMULADOR.md) · [demo](DEMO.md).
 
 **Cómo leer este documento:** las secciones 1–15 conservan los criterios de evaluación y los escenarios acordados. Las secciones 16–39 convierten esos criterios en un diseño funcional: contratos de entrada/salida, mundo causal, desastres, red social, vista 3D, relojes, semillas, rendimiento y pruebas de aceptación. Es una especificación; consultar la auditoría para cobertura actual. Ninguna cifra de capacidad o velocidad de este documento es por sí sola un resultado medido.

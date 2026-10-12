@@ -1,0 +1,225 @@
+{
+  "at": "2026-10-12T03:43:01.764Z",
+  "kind": "synthetic-byte-integration",
+  "notAccuracyValidation": true,
+  "model": "google/gemma-4-31b-it",
+  "candidateFingerprint": "077db88a72ee7cee89d63a25712c0e7c265a9c3d13358c7435361ef9e508485c",
+  "results": [
+    {
+      "filename": "return-note.wav",
+      "mime": "audio/wav",
+      "contentHash": "db5bb5c18fe99457daa4e3d098bf01fc9d07256e9b39960402721a7e36a95f05",
+      "engine": "faster-whisper",
+      "result": {
+        "text": "We are returning empty at 1030. There is room for 300 liters of water. Check the shift and road before sending us to the shelter.",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "We are returning empty at 1030.",
+            "avgLogProbability": -0.3063619260986646,
+            "noSpeechProbability": 0.012654853984713554
+          },
+          {
+            "start": 2.8,
+            "end": 5.28,
+            "text": "There is room for 300 liters of water.",
+            "avgLogProbability": -0.3063619260986646,
+            "noSpeechProbability": 0.012654853984713554
+          },
+          {
+            "start": 6.08,
+            "end": 9.04,
+            "text": "Check the shift and road before sending us to the shelter.",
+            "avgLogProbability": -0.3063619260986646,
+            "noSpeechProbability": 0.012654853984713554
+          }
+        ],
+        "language": "en",
+        "languageProbability": 0.9949394464492798,
+        "durationSeconds": 9.8376875,
+        "engine": "faster-whisper",
+        "model": "tiny",
+        "wallMs": 2992.792399949394
+      },
+      "passed": true
+    },
+    {
+      "filename": "water-storage.png",
+      "mime": "image/png",
+      "contentHash": "36798ce1a97289f7d654873f0c6c97844a27fbd56e83c50d305e076616cef1f5",
+      "engine": "model-image-input",
+      "result": {
+        "observations": {
+          "observations": [
+            {
+              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
+              "region": [
+                362,
+                123,
+                725,
+                235
+              ]
+            },
+            {
+              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
+              "region": [
+                362,
+                310,
+                725,
+                422
+              ]
+            },
+            {
+              "description": "Blue rectangular container with rounded corners labeled 'WATER'",
+              "region": [
+                362,
+                497,
+                725,
+                609
+              ]
+            }
+          ],
+          "uncertainties": [
+            "Actual volume of containers is unknown",
+            "Actual contents of containers are unverified (labels only)"
+          ],
+          "textVisible": [
+            "TEST FIXTURE - WATER STORAGE",
+            "WATER",
+            "Three containers. Volume is NOT specified."
+          ],
+          "evidence_summary": "The image depicts a diagram of three blue containers labeled 'WATER' under a heading 'TEST FIXTURE - WATER STORAGE'. A caption explicitly states that the volume is not specified."
+        },
+        "model": "google/gemma-4-31b-it",
+        "usage": {
+          "promptTokens": 350,
+          "outputTokens": 273,
+          "providerCost": 0.00044695,
+          "providerRequestId": "gen-1791776585-HUSpprV073as6ZKAsW9h",
+          "wallMs": 3911.191500000001
+        },
+        "engine": "model-image-input"
+      },
+      "passed": true
+    },
+    {
+      "filename": "access.mp4",
+      "mime": "video/mp4",
+      "contentHash": "06d42fee1aa2f914bf796570460702d6ded397fdb0ff1d01b11dd553fa409511",
+      "engine": "model-image-input",
+      "result": {
+        "frames": [
+          {
+            "seconds": 0
+          },
+          {
+            "seconds": 1
+          },
+          {
+            "seconds": 2
+          },
+          {
+            "seconds": 3
+          },
+          {
+            "seconds": 4
+          }
+        ],
+        "durationSeconds": 5,
+        "engine": "model-image-input",
+        "sampling": "up to six sampled frames; not exhaustive video coverage",
+        "wallMs": 223.29270001500845,
+        "observations": {
+          "summary": "The provided source is a series of static graphic frames depicting a \"TEST FIXTURE - WATER STORAGE\" with three blue containers labeled \"WATER\" and a smaller square element. No real-world disaster-response observations are present.\n\n```json\n{\n  \"observations\": [\n    {\n      \"description\": \"Graphic representation of three blue containers labeled 'WATER'\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box_2d\": [363, 123, 731, 612]\n      }\n    },\n    {\n      \"description\": \"Graphic representation of a small square element\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box_2d\": [496, 780, 644, 859]\n      }\n    }\n  ],\n  \"uncertainties\": [\n    \"The nature of the 'test fixture' is not defined beyond the text labels.\",\n    \"The contents of the containers are inferred from text labels, not visually verified.\"\n  ],\n  \"textVisible\": [\n    \"TEST FIXTURE - WATER STORAGE\",\n    \"WATER\",\n    \"Three containers. Volume is NOT specified.\"\n  ]\n}\n```",
+          "requiresStructuredReview": true
+        },
+        "model": "google/gemma-4-31b-it",
+        "usage": {
+          "promptTokens": 1464,
+          "outputTokens": 292,
+          "providerCost": 0.00089212,
+          "providerRequestId": "gen-1791776590-R6ZQjBSAIZcRZHkWM0X0",
+          "wallMs": 3702.193500000001
+        }
+      },
+      "passed": true
+    },
+    {
+      "filename": "field-note.pdf",
+      "mime": "application/pdf",
+      "contentHash": "b1b27e6db0bcf4a9d18a3ebbbb310778ea46a26bbbc50203b6048614b8eba93c",
+      "engine": "pypdf+pdfium+model-transcription",
+      "result": {
+        "pages": [
+          {
+            "page": 1,
+            "text": "TEST FIXTURE - WATER STORAGE\nWATER\nWATER\nWATER\nThree containers. Volume is NOT specified.",
+            "textProvenance": "model_visual_transcription",
+            "ocrState": "interpreted_unverified",
+            "uncertainties": []
+          }
+        ],
+        "needsOCR": false,
+        "truncated": false,
+        "unreadPageCount": 0,
+        "engine": "pypdf+pdfium+model-transcription",
+        "ocrScope": "at most four scanned pages rendered per analysis; all transcriptions require review",
+        "wallMs": 609.8110999446362,
+        "model": "google/gemma-4-31b-it",
+        "usage": {
+          "promptTokens": 349,
+          "outputTokens": 70,
+          "providerCost": 0.00021312,
+          "providerRequestId": "gen-1791776594-Cmwr5a6KRRCsoy5Wjsio",
+          "wallMs": 4190.5638
+        },
+        "text": "Page 1 (model_visual_transcription):\nTEST FIXTURE - WATER STORAGE\nWATER\nWATER\nWATER\nThree containers. Volume is NOT specified.",
+        "requiresHumanVerification": true
+      },
+      "passed": true
+    },
+    {
+      "filename": "reviewed-public-rendition.png",
+      "engine": "local-PIL-metadata-free-rendition",
+      "syntheticReceiptFixture": true,
+      "metadataStripped": true,
+      "dimensions": {
+        "width": 640,
+        "height": 360
+      },
+      "publicHash": "36798ce1a97289f7d654873f0c6c97844a27fbd56e83c50d305e076616cef1f5",
+      "notPublishedByDefault": true,
+      "passed": true
+    }
+  ],
+  "usage": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3911.191500000001,
+      "input_tokens": 350,
+      "output_tokens": 273,
+      "cost_usd": 0.00044695,
+      "provider_id": "gen-1791776585-HUSpprV073as6ZKAsW9h"
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3702.193500000001,
+      "input_tokens": 1464,
+      "output_tokens": 292,
+      "cost_usd": 0.00089212,
+      "provider_id": "gen-1791776590-R6ZQjBSAIZcRZHkWM0X0"
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 4190.5638,
+      "input_tokens": 349,
+      "output_tokens": 70,
+      "cost_usd": 0.00021312,
+      "provider_id": "gen-1791776594-Cmwr5a6KRRCsoy5Wjsio"
+    }
+  ]
+}

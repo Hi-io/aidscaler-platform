@@ -1,0 +1,1680 @@
+{
+  "at": "2026-10-12T03:36:46.707Z",
+  "protocol": "reports/evaluations/1791774855620/protocol.json",
+  "complete": true,
+  "stoppedReason": null,
+  "runs": 48,
+  "plannedRuns": 48,
+  "missing": [],
+  "costUsd": 1.47281355,
+  "chargedBudgetUsd": 1.47281355,
+  "unknownCostCalls": 0,
+  "comparisons": [
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1669902500,
+      "delta": -7500000,
+      "improvement": -0.004511542782208222,
+      "interval95": [
+        -7500000,
+        -7500000
+      ],
+      "relativeInterval95": [
+        -0.004511542782208222,
+        -0.004511542782208222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 4593302400,
+      "delta": -2930899900,
+      "improvement": -1.7630507052293294,
+      "interval95": [
+        -2958800200,
+        -2902999600
+      ],
+      "relativeInterval95": [
+        -1.7798338248408552,
+        -1.7462675856178032
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 3121702450,
+      "delta": -1459299950,
+      "improvement": -0.8778258875332539,
+      "interval95": [
+        -2903599900,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -1.7466286895020913,
+        -0.009023085564416666
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 8640000000,
+      "delta": -6977597500,
+      "improvement": -4.1972972851039385,
+      "interval95": [
+        -6977597500,
+        -6977597500
+      ],
+      "relativeInterval95": [
+        -4.1972972851039385,
+        -4.1972972851039385
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 198875665,
+      "delta": 521124335,
+      "improvement": 0.7237837986111111,
+      "interval95": [
+        520834190,
+        521414480
+      ],
+      "relativeInterval95": [
+        0.7233808194444444,
+        0.7241867777777777
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 8640000000,
+      "delta": -6977597500,
+      "improvement": -4.1972972851039385,
+      "interval95": [
+        -6977597500,
+        -6977597500
+      ],
+      "relativeInterval95": [
+        -4.1972972851039385,
+        -4.1972972851039385
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 720000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 59262402500,
+      "candidateMean": 59269902500,
+      "delta": -7500000,
+      "improvement": -0.00012655578720410787,
+      "interval95": [
+        -7500000,
+        -7500000
+      ],
+      "relativeInterval95": [
+        -0.00012655578720410787,
+        -0.00012655578720410787
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "food",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 28800000000,
+      "candidateMean": 28800000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 14400000000,
+      "candidateMean": 14400000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "blankets",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "rescue",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 59262402500,
+      "candidateMean": 59292402500,
+      "delta": -30000000,
+      "improvement": -0.0005062231488168756,
+      "interval95": [
+        -45000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.0007593347232253134,
+        -0.0002531115744084378
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "food",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 28800000000,
+      "candidateMean": 28800000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 14400000000,
+      "candidateMean": 14400000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "blankets",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "rescue",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 59262402500,
+      "candidateMean": 59277402500,
+      "delta": -15000000,
+      "improvement": -0.0002531115744084378,
+      "interval95": [
+        -15000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.0002531115744084378,
+        -0.0002531115744084378
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "food",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 28800000000,
+      "candidateMean": 28800000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 14400000000,
+      "candidateMean": 14400000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "blankets",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "rescue",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 59262402500,
+      "candidateMean": 58123341700,
+      "delta": 1139060800,
+      "improvement": 0.019220631495660334,
+      "interval95": [
+        1139060800,
+        1139060800
+      ],
+      "relativeInterval95": [
+        0.019220631495660334,
+        0.019220631495660334
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "food",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 28800000000,
+      "candidateMean": 28800000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 14400000000,
+      "candidateMean": 14400000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "blankets",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "rescue",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 59262402500,
+      "candidateMean": 59481407000,
+      "delta": -219004500,
+      "improvement": -0.0036955049198350576,
+      "interval95": [
+        -219004500,
+        -219004500
+      ],
+      "relativeInterval95": [
+        -0.0036955049198350576,
+        -0.0036955049198350576
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "food",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 28800000000,
+      "candidateMean": 28800000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 14400000000,
+      "candidateMean": 14400000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "blankets",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S09",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "rescue",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 5760000000,
+      "candidateMean": 5760000000,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1669902500,
+      "delta": -7500000,
+      "improvement": -0.004511542782208222,
+      "interval95": [
+        -7500000,
+        -7500000
+      ],
+      "relativeInterval95": [
+        -0.004511542782208222,
+        -0.004511542782208222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1699902500,
+      "delta": -37500000,
+      "improvement": -0.022557713911041333,
+      "interval95": [
+        -37500000,
+        -37500000
+      ],
+      "relativeInterval95": [
+        -0.022557713911041333,
+        -0.022557713911041333
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1677402500,
+      "delta": -15000000,
+      "improvement": -0.009023085564416666,
+      "interval95": [
+        -15000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.009023085564416666,
+        -0.009023085564416666
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 523341700,
+      "delta": 1139060800,
+      "improvement": 0.6851895374315186,
+      "interval95": [
+        1139060800,
+        1139060800
+      ],
+      "relativeInterval95": [
+        0.6851895374315186,
+        0.6851895374315186
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1881407000,
+      "delta": -219004500,
+      "improvement": -0.13173975616615108,
+      "interval95": [
+        -219004500,
+        -219004500
+      ],
+      "relativeInterval95": [
+        -0.13173975616615108,
+        -0.13173975616615108
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B2",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1669902500,
+      "delta": -7500000,
+      "improvement": -0.004511542782208222,
+      "interval95": [
+        -7500000,
+        -7500000
+      ],
+      "relativeInterval95": [
+        -0.004511542782208222,
+        -0.004511542782208222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B3",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1707402500,
+      "delta": -45000000,
+      "improvement": -0.027069256693249777,
+      "interval95": [
+        -45000000,
+        -45000000
+      ],
+      "relativeInterval95": [
+        -0.027069256693249777,
+        -0.027069256693249777
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B4",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1677402500,
+      "delta": -15000000,
+      "improvement": -0.009023085564416666,
+      "interval95": [
+        -15000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.009023085564416666,
+        -0.009023085564416666
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 523341700,
+      "delta": 1139060800,
+      "improvement": 0.6851895374315186,
+      "interval95": [
+        1139060800,
+        1139060800
+      ],
+      "relativeInterval95": [
+        0.6851895374315186,
+        0.6851895374315186
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 521441400,
+      "delta": 1140961100,
+      "improvement": 0.6863326420647227,
+      "interval95": [
+        1140961100,
+        1140961100
+      ],
+      "relativeInterval95": [
+        0.6863326420647227,
+        0.6863326420647227
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    }
+  ],
+  "gates": [
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 2,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 2,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-01",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 3,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "pilot-2026-02",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 2,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-01",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S09",
+      "seed": "pilot-2026-02",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-01",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "pilot-2026-02",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-02",
+      "arm": "B6",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    }
+  ],
+  "notAClaimOfSuperiority": true,
+  "remainingValidation": [
+    "Independent sealed structural holdout",
+    "Human operator and public comprehension trials",
+    "Institutional calibration and adoption",
+    "Gemini remeasurement after changing models",
+    "Recurrent policies across evolving emergencies"
+  ]
+}

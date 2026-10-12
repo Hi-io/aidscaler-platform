@@ -1,0 +1,396 @@
+{
+  "at": "2026-10-12T02:50:49.907Z",
+  "protocol": "reports/evaluations/1791773011769/protocol.json",
+  "complete": false,
+  "stoppedReason": "interrupted_after_current_episode",
+  "runs": 5,
+  "plannedRuns": 48,
+  "missing": [
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B1",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B2",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B3",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B4",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B1",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B2",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B3",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B4",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B5",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B6",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S09",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B1",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B2",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B3",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B4",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B5",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B6",
+      "seed": "pilot-2026-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B1",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B2",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B3",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B4",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B5",
+      "seed": "pilot-2026-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B6",
+      "seed": "pilot-2026-02"
+    }
+  ],
+  "costUsd": 0.07808955000000001,
+  "chargedBudgetUsd": 0.07808955000000001,
+  "unknownCostCalls": 0,
+  "comparisons": [
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B2",
+      "missingWorldPairs": 1,
+      "pairs": 1,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1669902500,
+      "delta": -7500000,
+      "improvement": -0.004511542782208222,
+      "interval95": [
+        -7500000,
+        -7500000
+      ],
+      "relativeInterval95": [
+        -0.004511542782208222,
+        -0.004511542782208222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B3",
+      "missingWorldPairs": 1,
+      "pairs": 1,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1677402500,
+      "delta": -15000000,
+      "improvement": -0.009023085564416666,
+      "interval95": [
+        -15000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.009023085564416666,
+        -0.009023085564416666
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B4",
+      "missingWorldPairs": 1,
+      "pairs": 1,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 1677402500,
+      "delta": -15000000,
+      "improvement": -0.009023085564416666,
+      "interval95": [
+        -15000000,
+        -15000000
+      ],
+      "relativeInterval95": [
+        -0.009023085564416666,
+        -0.009023085564416666
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B1",
+      "candidate": "B5",
+      "missingWorldPairs": 1,
+      "pairs": 1,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1662402500,
+      "candidateMean": 523341700,
+      "delta": 1139060800,
+      "improvement": 0.6851895374315186,
+      "interval95": [
+        1139060800,
+        1139060800
+      ],
+      "relativeInterval95": [
+        0.6851895374315186,
+        0.6851895374315186
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    }
+  ],
+  "gates": [
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B1",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B2",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B3",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "pilot-2026-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    }
+  ],
+  "notAClaimOfSuperiority": true,
+  "remainingValidation": [
+    "Independent sealed structural holdout",
+    "Human operator and public comprehension trials",
+    "Institutional calibration and adoption",
+    "Gemini remeasurement after changing models",
+    "Recurrent policies across evolving emergencies"
+  ]
+}
