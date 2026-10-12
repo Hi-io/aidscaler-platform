@@ -130,7 +130,12 @@ export const actionSchema = z.discriminatedUnion(
         type: z.literal(type),
         params,
         owner: ID,
-        dependsOn: z.array(z.number().int().nonnegative()).default([]),
+        dependsOn: z
+          .array(z.number().int().nonnegative())
+          .default([])
+          .describe(
+            "Zero-based indices of strictly EARLIER actions. The first action must use []. Never reference the action's own index. Prefer prepare_service or prepare_allocation for already computed plans.",
+          ),
       })
       .strict(),
   ),
@@ -148,6 +153,7 @@ export const proposalSchema = z
             "evidence",
             "inspection",
             "resource",
+            "vehicle",
             "owner",
             "time",
             "commitment",

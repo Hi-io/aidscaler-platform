@@ -14,6 +14,7 @@ const lab = await createLabServers({
   sourcePort: Number(process.env.LAB_SOURCE_PORT ?? 4329),
   config: {
     scenario,
+    organizations: 5,
     seed: process.env.NEXO_SEED ?? "nexo-development-001",
     grid: 9,
     extentKm: 12,
@@ -33,10 +34,10 @@ const lab = await createLabServers({
 const configs = [],
   children = [],
   links = new Map();
-for (let a = 0; a < 4; a++)
-  for (let b = a + 1; b < 4; b++)
+for (let a = 0; a < 5; a++)
+  for (let b = a + 1; b < 5; b++)
     links.set(`${a}-${b}`, randomBytes(32).toString("hex"));
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 5; i++) {
   const org = `org${i}`,
     agentKey = Object.entries(lab.actorKeys).find(
       ([, a]) => a.org === org && a.role === "agent",
@@ -63,9 +64,13 @@ for (let i = 0; i < 4; i++) {
   await mkdir(instanceDir, { recursive: true });
   const config = {
     org,
-    orgName: ["Relief North", "Community East", "Rescue South", "Medical West"][
-      i
-    ],
+    orgName: [
+      "Relief North",
+      "Community East",
+      "Rescue South",
+      "Medical West",
+      "Independent contractor",
+    ][i],
     port: 4400 + i,
     sourceUrl: `http://127.0.0.1:${lab.sourcePort}`,
     sourceAgentKey: agentKey,
@@ -73,7 +78,7 @@ for (let i = 0; i < 4; i++) {
     autoIngest: true,
     autoInvestigate: false,
     pollMs: 6000,
-    peers: Array.from({ length: 4 }, (_, j) => j)
+    peers: Array.from({ length: 5 }, (_, j) => j)
       .filter((j) => j !== i)
       .map((j) => ({
         org: `org${j}`,
@@ -89,7 +94,10 @@ for (let i = 0; i < 4; i++) {
   configs.push({ org, url: `http://127.0.0.1:${4400 + i}` });
   const child = spawn(
     process.execPath,
-    ["--env-file-if-exists=.env.local", "server.mjs"],
+    [
+      "--env-file-if-exists=.env.local",
+      i === 4 ? "scripts/partner.mjs" : "server.mjs",
+    ],
     {
       cwd: root,
       env: {
@@ -135,7 +143,7 @@ await writeFile(
   { mode: 0o600 },
 );
 console.log(
-  `Laboratory observer: http://127.0.0.1:${lab.observerPort}\nFour isolated NEXO instances: http://127.0.0.1:4400–4403\nRole credentials are saved under ignored .local/access-org*.json.\nUse the observer only for controlling and evaluating the world, never inside NEXO.`,
+  `Laboratory observer: http://127.0.0.1:${lab.observerPort}\nFour isolated NEXO instances: http://127.0.0.1:4400–4403\nIndependent contractor bridge (no model): http://127.0.0.1:4404\nRole credentials are saved under ignored .local/access-org*.json; contractor in .local/access-partner-org4.json.\nUse the observer only for controlling and evaluating the world, never inside NEXO.`,
 );
 for (const s of ["SIGINT", "SIGTERM"])
   process.on(s, async () => {

@@ -6,7 +6,8 @@ export async function syncReservation(worker, { id, action }) {
     c = await store.get(org, "commitment", id);
   if (action === "reserve") {
     if (c.sourceId) return { duplicate: true, id: c.sourceId };
-    if(!['reserved','confirmed'].includes(c.state))return {skipped:true,state:c.state};
+    if (!["reserved", "confirmed"].includes(c.state))
+      return { skipped: true, state: c.state };
     try {
       const receipt = await connector.action(
         "commitment",
@@ -39,7 +40,13 @@ export async function syncReservation(worker, { id, action }) {
         await tx.audit(org, "reservation-worker", "commitment.source_ack", id, {
           sourceId: receipt.id,
         });
-        if(!['reserved','confirmed'].includes(current.state))await tx.enqueue(org,'source_commitment',{id,action:'release'},'source_release_'+id);
+        if (!["reserved", "confirmed"].includes(current.state))
+          await tx.enqueue(
+            org,
+            "source_commitment",
+            { id, action: "release" },
+            "source_release_" + id,
+          );
       });
       return receipt;
     } catch (e) {
@@ -99,6 +106,23 @@ export async function syncReservation(worker, { id, action }) {
     "Wait for the source to acknowledge the reservation.",
     409,
   );
+  if (action === "release") {
+    const known = (await connector.state()).commitments.find(
+      (row) => row.id === c.sourceId,
+    );
+    if (
+      known &&
+      ["released", "expired", "withdrawn", "rejected", "failed"].includes(
+        known.state,
+      )
+    ) {
+      await store.upsert(org, "commitment", id, {
+        sourceState: known.state,
+        syncState: "acknowledged",
+      });
+      return { id: known.id, state: known.state, reconciled: true };
+    }
+  }
   const receipt = await connector.action(
     "commitment",
     { id: c.sourceId, action },

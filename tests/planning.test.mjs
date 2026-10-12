@@ -96,3 +96,29 @@ test("a model cannot self-certify inspection, compatibility or owner conditions"
     await s.close();
   }
 });
+test("vehicle preconditions use received fleet state and reject stock-resource mislabelling", async () => {
+  const s = await Store.open();
+  await s.organization("org0");
+  try {
+    const v = await s.upsert("org0", "vehicle", "van", { state: "idle" });
+    const [ready] = await validateConditions(s, "org0", [
+      { type: "vehicle", id: "van", version: v.version },
+    ]);
+    assert.equal(ready.satisfied, true);
+    const [stale] = await validateConditions(s, "org0", [
+      { type: "vehicle", id: "van", version: v.version + 1, satisfied: true },
+    ]);
+    assert.equal(stale.satisfied, false);
+    await s.upsert("org0", "vehicle", "van", { state: "in_transit" });
+    const [busy] = await validateConditions(s, "org0", [
+      { type: "vehicle", id: "van", satisfied: true },
+    ]);
+    assert.equal(busy.satisfied, false);
+    await assert.rejects(
+      validateConditions(s, "org0", [{ type: "resource", id: "van" }]),
+      (e) => e.code === "CONDITION_KIND",
+    );
+  } finally {
+    await s.close();
+  }
+});

@@ -4,6 +4,96 @@ import { Store } from "../src/store.mjs";
 import { Network, sign } from "../src/network.mjs";
 import { mkdtemp, rm, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+test("partner changes stop uncovered future work while retaining deliveries already requested or completed", async (t) => {
+  const store = await Store.open();
+  await store.organization("org0");
+  t.after(() => store.close());
+  const n = new Network(store, {
+      org: "org0",
+      peers: [{ org: "org1", key: "changes-key", url: "http://localhost" }],
+    }),
+    offer = "org1_resource_r";
+  const message = {
+    id: "first",
+    from: "org1",
+    to: "org0",
+    kind: "resource",
+    entityId: "r",
+    version: 1,
+    permissionVersion: 1,
+    at: Date.now(),
+    expiresAt: Date.now() + 60000,
+    projection: { id: "r", type: "water", available: 10 },
+  };
+  const send = async (m) => {
+    const e = { message: m, sentAt: Date.now() };
+    return n.receive("org1", sign("changes-key", e), e);
+  };
+  await send(message);
+  const action = {
+    owner: "org1",
+    type: "dispatch",
+    params: { resource: "r", vehicle: "v", need: "n", quantity: 10 },
+    dependsOn: [],
+  };
+  for (const [id, state, results] of [
+    ["future", "authorized", []],
+    ["issued", "awaiting_partner", [{ index: 0, requestId: "work-issued" }]],
+    ["historical", "completed", [{ index: 0, state: "completed" }]],
+  ])
+    await store.put(
+      "org0",
+      "proposal",
+      id,
+      {
+        state,
+        actions: [action],
+        dependencies: [offer],
+        authorization: { by: "owner" },
+        executionResults: results,
+      },
+      0,
+    );
+  await send({
+    ...message,
+    id: "lower",
+    version: 2,
+    projection: { ...message.projection, available: 5 },
+  });
+  assert.equal(
+    (await store.get("org0", "proposal", "future")).state,
+    "requires_review",
+  );
+  assert.equal(
+    (await store.get("org0", "proposal", "future")).previousAuthorization.by,
+    "owner",
+  );
+  assert.equal(
+    (await store.get("org0", "proposal", "issued")).state,
+    "awaiting_partner",
+  );
+  await send({
+    ...message,
+    id: "withdrawn",
+    version: 3,
+    permissionVersion: 2,
+    revoke: true,
+    projection: null,
+  });
+  assert.equal(
+    (await store.get("org0", "proposal", "issued")).state,
+    "requires_review",
+  );
+  assert.equal(
+    (await store.get("org0", "proposal", "historical")).state,
+    "completed",
+  );
+  assert.equal(
+    (await store.get("org0", "proposal", "historical")).executionResults[0]
+      .state,
+    "completed",
+  );
+});
 test("signed network updates deduplicate, preserve revisions, revoke and cannot leak an unshared document", async (t) => {
   const store = await Store.open();
   await store.organization("org0");

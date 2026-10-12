@@ -8,6 +8,7 @@ import {
 } from "./contracts.mjs";
 import { validateConditions, validatePlan } from "./planning.mjs";
 import { resolveEvidence } from "./citations.mjs";
+import { repairContext } from "./repair.mjs";
 const COMMAND = ["commander", "dispatcher"];
 export class Domain {
   constructor(store, config) {
@@ -45,54 +46,64 @@ export class Domain {
       return c;
     });
   }
-  async propose(actor, input, key) {
+  async propose(actor, input, key, { repairOf = null } = {}) {
     role(actor, ["analyst", "commander", "dispatcher", "agent"]);
     const d = proposalSchema.parse(input);
-    return this.store.command(actor.org, key, d, async (tx) => {
-      for (const ref of d.references)
-        check(
-          await resolveEvidence(tx, actor.org, ref),
-          "EVIDENCE",
-          "A proposal must cite accessible evidence. Copy the exact evidence IDs returned by tools.",
-        );
-      for (let i = 0; i < d.actions.length; i++) {
-        check(
-          d.actions[i].dependsOn.every((j) => j < i),
-          "DEPENDENCY_CYCLE",
-          "Action dependencies must be acyclic and refer to earlier actions.",
-        );
-        check(
-          d.actions[i].owner === actor.org ||
-            this.config.peers.some((p) => p.org === d.actions[i].owner),
-          "OWNER",
-          "An action requires a known responsible organization.",
-        );
-      }
-      const conditions = await validateConditions(tx, actor.org, d.conditions);
-      const id = uid("proposal"),
-        proposal = await tx.put(
+    return this.store.command(
+      actor.org,
+      key,
+      { draft: d, repairOf },
+      async (tx) => {
+        const repair = await repairContext(tx, actor.org, repairOf, d.actions);
+        for (const ref of d.references)
+          check(
+            await resolveEvidence(tx, actor.org, ref),
+            "EVIDENCE",
+            "A proposal must cite accessible evidence. Copy the exact evidence IDs returned by tools.",
+          );
+        for (let i = 0; i < d.actions.length; i++) {
+          check(
+            d.actions[i].dependsOn.every((j) => j < i),
+            "DEPENDENCY_CYCLE",
+            "Action dependencies must be acyclic and refer to earlier actions.",
+          );
+          check(
+            d.actions[i].owner === actor.org ||
+              this.config.peers.some((p) => p.org === d.actions[i].owner),
+            "OWNER",
+            "An action requires a known responsible organization.",
+          );
+        }
+        const conditions = await validateConditions(
+          tx,
           actor.org,
-          "proposal",
-          id,
-          {
-            ...d,
-            conditions,
-            state: "awaiting_review",
-            createdBy: actor.id,
-            authorization: null,
-            simId: null,
-            dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
-            activity: [],
-            repairOf: null,
-          },
-          0,
+          d.conditions,
         );
-      await tx.audit(actor.org, actor.id, "proposal.created", id, {
-        requestHash: hash(d),
-        references: d.references,
-      });
-      return proposal;
-    });
+        const id = uid("proposal"),
+          proposal = await tx.put(
+            actor.org,
+            "proposal",
+            id,
+            {
+              ...d,
+              conditions,
+              state: "awaiting_review",
+              createdBy: actor.id,
+              authorization: null,
+              simId: null,
+              dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
+              activity: [],
+              ...repair,
+            },
+            0,
+          );
+        await tx.audit(actor.org, actor.id, "proposal.created", id, {
+          requestHash: hash(d),
+          references: d.references,
+        });
+        return proposal;
+      },
+    );
   }
   async review(
     actor,
@@ -129,6 +140,11 @@ export class Domain {
           409,
         );
         p.conditions = await validateConditions(tx, actor.org, p.conditions);
+        if (p.repairOf)
+          Object.assign(
+            p,
+            await repairContext(tx, actor.org, p.repairOf, p.actions),
+          );
         const unsatisfied = p.conditions.filter((c) => !c.satisfied);
         check(
           decision !== "approve" || !unsatisfied.length || allowConditional,
@@ -163,6 +179,9 @@ export class Domain {
                 note,
                 conditional: !!unsatisfied.length,
                 evidenceHash: hash(evidence),
+                planHash: hash(p.actions),
+                expiresAt:
+                  Date.now() + (this.config.authorizationTtlMs ?? 1800000),
                 evidence,
               }
             : null;
@@ -217,13 +236,24 @@ export class Domain {
         );
         const c = p.conditions.find((c) => c.id === conditionId);
         check(c, "CONDITION", "Condition not found.");
+        check(
+          ["inspection", "owner", "compatibility"].includes(c.type) &&
+            c.id === evidenceId,
+          "CHECK_RELEVANCE",
+          "The verification must be the exact check referenced by this condition.",
+        );
         c.satisfied = true;
         c.evidenceId = evidenceId;
         const r = await tx.put(
           actor.org,
           "proposal",
           id,
-          { ...p, state: p.authorization ? "requires_review" : p.state },
+          {
+            ...p,
+            state: p.authorization ? "requires_review" : p.state,
+            previousAuthorization: p.authorization ?? p.previousAuthorization,
+            authorization: null,
+          },
           version,
         );
         await tx.audit(actor.org, actor.id, "condition.updated", id, {
@@ -234,19 +264,83 @@ export class Domain {
       },
     );
   }
-  async revise(actor,id,input,key){
-    role(actor,['analyst',...COMMAND]);
-    const {version,note, ...values}=input,d=proposalSchema.parse(values);
-    check(typeof note==='string'&&note.trim().length>0,'REVISION_NOTE','Explain what changed.');
-    return this.store.command(actor.org,key,{id,...input},async tx=>{
-      const p=await tx.get(actor.org,'proposal',id);
-      check(p.version===version,'VERSION_CONFLICT','This response changed. Read the latest version.',409);
-      check(!p.executionResults?.length&&['awaiting_review','authorized','conditionally_authorized','needs_clarification','requires_review'].includes(p.state),'EXECUTION_STARTED','An issued operation requires a separate repair plan; editing cannot erase physical work.',409);
-      for(const ref of d.references)check(await resolveEvidence(tx,actor.org,ref),'EVIDENCE','A cited source is unavailable.');
-      for(const [i,a]of d.actions.entries()){check(a.dependsOn.every(j=>j<i),'DEPENDENCY_CYCLE','Action dependencies must refer to earlier steps.');check(a.owner===actor.org||this.config.peers.some(p=>p.org===a.owner),'OWNER','Unknown responsible owner.');}
-      const conditions=await validateConditions(tx,actor.org,d.conditions);
-      const result=await tx.put(actor.org,'proposal',id,{...p,...d,conditions,state:'awaiting_review',previousAuthorization:p.authorization??p.previousAuthorization,authorization:null,simId:null,dependencies:[...d.references,...d.conditions.map(c=>c.id)],changedReason:note,revisedBy:actor.id,revisionOf:version},version);
-      await tx.audit(actor.org,actor.id,'proposal.revised',id,{from:version,note,oldPlanHash:hash(p.actions),newPlanHash:hash(d.actions),authorizationInvalidated:true});return result;
+  async revise(actor, id, input, key) {
+    role(actor, ["analyst", ...COMMAND]);
+    const { version, note, ...values } = input,
+      d = proposalSchema.parse(values);
+    check(
+      typeof note === "string" && note.trim().length > 0,
+      "REVISION_NOTE",
+      "Explain what changed.",
+    );
+    return this.store.command(actor.org, key, { id, ...input }, async (tx) => {
+      const p = await tx.get(actor.org, "proposal", id);
+      check(
+        p.version === version,
+        "VERSION_CONFLICT",
+        "This response changed. Read the latest version.",
+        409,
+      );
+      check(
+        !p.executionResults?.length &&
+          [
+            "awaiting_review",
+            "authorized",
+            "conditionally_authorized",
+            "needs_clarification",
+            "requires_review",
+          ].includes(p.state),
+        "EXECUTION_STARTED",
+        "An issued operation requires a separate repair plan; editing cannot erase physical work.",
+        409,
+      );
+      for (const ref of d.references)
+        check(
+          await resolveEvidence(tx, actor.org, ref),
+          "EVIDENCE",
+          "A cited source is unavailable.",
+        );
+      for (const [i, a] of d.actions.entries()) {
+        check(
+          a.dependsOn.every((j) => j < i),
+          "DEPENDENCY_CYCLE",
+          "Action dependencies must refer to earlier steps.",
+        );
+        check(
+          a.owner === actor.org ||
+            this.config.peers.some((p) => p.org === a.owner),
+          "OWNER",
+          "Unknown responsible owner.",
+        );
+      }
+      const conditions = await validateConditions(tx, actor.org, d.conditions);
+      const result = await tx.put(
+        actor.org,
+        "proposal",
+        id,
+        {
+          ...p,
+          ...d,
+          conditions,
+          state: "awaiting_review",
+          previousAuthorization: p.authorization ?? p.previousAuthorization,
+          authorization: null,
+          simId: null,
+          dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
+          changedReason: note,
+          revisedBy: actor.id,
+          revisionOf: version,
+        },
+        version,
+      );
+      await tx.audit(actor.org, actor.id, "proposal.revised", id, {
+        from: version,
+        note,
+        oldPlanHash: hash(p.actions),
+        newPlanHash: hash(d.actions),
+        authorizationInvalidated: true,
+      });
+      return result;
     });
   }
   async resource(actor, input, key) {
@@ -263,6 +357,12 @@ export class Domain {
     const { id = uid("resource"), version = 0, ...d } = input;
     return this.store.command(actor.org, key, input, async (tx) => {
       const old = await tx.get(actor.org, "resource", id, false);
+      check(
+        !old?.sourceSnapshot,
+        "RESOURCE_SOURCE",
+        "Update imported stock at its operational source and sync the received record.",
+        409,
+      );
       check(
         (old?.reserved ?? 0) <= d.quantity - (d.floor ?? 0),
         "RESOURCE_RESERVED",
@@ -300,12 +400,12 @@ export class Domain {
       ttlMs = 900000,
     } = input;
     check(
-      Number.isFinite(quantity) && quantity > 0,
+      Number.isSafeInteger(quantity) && quantity > 0,
       "QUANTITY",
       "Choose a positive quantity.",
     );
     check(
-      ttlMs >= 1000 && ttlMs <= 86400000,
+      Number.isSafeInteger(ttlMs) && ttlMs >= 1000 && ttlMs <= 86400000,
       "EXPIRY",
       "Reservation validity must be between one second and one day.",
     );
@@ -466,7 +566,7 @@ export class Domain {
           actor.org,
           "commitment",
           id,
-          { ...c, state, syncState:c.sourceId?'pending':c.syncState },
+          { ...c, state, syncState: c.sourceId ? "pending" : c.syncState },
           version,
         );
         await tx.audit(actor.org, actor.id, "commitment." + state, id, {});
@@ -506,14 +606,20 @@ export class Domain {
         c.version,
       );
       await this.invalidateTx(tx, org, id, "Reservation expired");
-      if(c.sourceId)await tx.enqueue(org,'source_commitment',{id,action:'release'},'source_release_'+id);
+      if (c.sourceId)
+        await tx.enqueue(
+          org,
+          "source_commitment",
+          { id, action: "release" },
+          "source_release_" + id,
+        );
       await tx.audit(org, "system", "commitment.expired", id, {});
       return { expired: true };
     });
   }
   async invalidateTx(tx, org, dependency, reason) {
     const affected = [];
-    for (const p of await tx.list(org, "proposal", 2000))
+    for (const p of await tx.dependents(org, "proposal", dependency))
       if (
         p.dependencies.includes(dependency) &&
         !["rejected", "completed", "cancelled"].includes(p.state)
@@ -527,17 +633,24 @@ export class Domain {
             state: "requires_review",
             changedReason: reason,
             invalidatedDependency: dependency,
-            previousAuthorization: p.authorization,
+            previousAuthorization: p.authorization ?? p.previousAuthorization,
             authorization: null,
           },
           p.version,
         );
         affected.push(p.id);
       }
-    for (const o of await tx.list(org, "operation", 2000))
+    for (const o of await tx.dependents(org, "operation", dependency))
       if (
         o.dependencies?.includes(dependency) &&
-        !["completed", "cancelled", "failed"].includes(o.state)
+        ![
+          "received",
+          "service",
+          "operating",
+          "completed",
+          "cancelled",
+          "failed",
+        ].includes(o.state)
       ) {
         await tx.put(
           org,

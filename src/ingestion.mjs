@@ -17,24 +17,35 @@ export class Ingestion {
         "The source key belongs to a different organization.",
         403,
       );
-      const priorCursor = (await this.store.get(org,'source','simulator',false))?.backfillCursor ?? 100;
-      let backfillCursor=priorCursor;
+      const priorCursor =
+        (await this.store.get(org, "source", "simulator", false))
+          ?.backfillCursor ?? 100;
+      let backfillCursor = priorCursor;
       const receiptIds = [];
       if (sources)
-        for(const cursor of [0,priorCursor]) {
+        for (const cursor of [0, priorCursor]) {
           const feed = await this.connector.feed(cursor, 100);
-          if(cursor!==0)backfillCursor=feed.nextCursor??feed.next??100;
-          const fresh=[];
+          if (cursor !== 0)
+            backfillCursor = feed.nextCursor ?? feed.next ?? 100;
+          const fresh = [];
           for (const p of feed.posts) {
             downloaded++;
             const old = await this.store.get(org, "signal", p.id, false);
             if (old?.sourceVersion >= p.version) continue;
             fresh.push(p);
           }
-          if(this.connector.ackBatch){const receipts=await this.connector.ackBatch(fresh,'downloaded');check(receipts.every(r=>r.ok),'SOURCE_RECEIPT','The source did not acknowledge every downloaded record.',502);}
-          else for(const p of fresh)await this.connector.ack(p,'downloaded');
-          for(const p of fresh){
-            const old=await this.store.get(org,'signal',p.id,false);
+          if (this.connector.ackBatch) {
+            const receipts = await this.connector.ackBatch(fresh, "downloaded");
+            check(
+              receipts.every((r) => r.ok),
+              "SOURCE_RECEIPT",
+              "The source did not acknowledge every downloaded record.",
+              502,
+            );
+          } else
+            for (const p of fresh) await this.connector.ack(p, "downloaded");
+          for (const p of fresh) {
+            const old = await this.store.get(org, "signal", p.id, false);
             const group = hash(
               p.references?.[0] ??
                 p.text.toLowerCase().replace(/\s+/g, " ").trim(),
@@ -53,17 +64,60 @@ export class Ingestion {
                 permissions: "organization",
                 originalReferences: p.references ?? [],
               });
+              await tx.upsert(org, "source_version", `${p.id}_${p.version}`, {
+                snapshot: p,
+                sourceVersion: p.version,
+                contentHash: hash(p),
+                receivedAt: Date.now(),
+              });
+              if (this.intake)
+                await this.intake.stage(
+                  org,
+                  { ...p, sourceVersion: p.version, group },
+                  tx,
+                );
               if (old)
                 await tx.audit(org, "connector", "signal.revised", p.id, {
                   from: old.sourceVersion,
                   to: p.version,
                 });
+              if (
+                old &&
+                hash({
+                  text: old.text,
+                  deleted: old.deleted,
+                  attachments: old.attachments,
+                }) !==
+                  hash({
+                    text: p.text,
+                    deleted: p.deleted,
+                    attachments: p.attachments,
+                  })
+              )
+                await tx.enqueue(
+                  org,
+                  "invalidate",
+                  {
+                    dependency: p.id,
+                    reason: p.deleted
+                      ? "A cited source was withdrawn"
+                      : "A cited source changed; inspect the correction",
+                  },
+                  `signal_change_${p.id}_${p.version}`,
+                );
             });
             changed++;
             receiptIds.push(p.id);
           }
-          if(this.connector.ackBatch){const receipts=await this.connector.ackBatch(fresh,'accepted');check(receipts.every(r=>r.ok),'SOURCE_RECEIPT','The source did not acknowledge every accepted record.',502);}
-          else for(const p of fresh)await this.connector.ack(p,'accepted');
+          if (this.connector.ackBatch) {
+            const receipts = await this.connector.ackBatch(fresh, "accepted");
+            check(
+              receipts.every((r) => r.ok),
+              "SOURCE_RECEIPT",
+              "The source did not acknowledge every accepted record.",
+              502,
+            );
+          } else for (const p of fresh) await this.connector.ack(p, "accepted");
         }
       const team = sources ? await this.connector.inbox() : { posts: [] };
       for (const p of team.posts ?? []) {
@@ -81,6 +135,14 @@ export class Ingestion {
           modality: p.attachments?.[0]?.kind ?? "text",
           permissions: "organization",
         });
+        if (this.intake)
+          await this.intake.stage(org, {
+            ...p,
+            sourceVersion: p.version,
+            group: hash(
+              p.references?.[0] ?? [p.text, p.location, p.observedAt],
+            ),
+          });
         changed++;
         receiptIds.push(p.id);
       }
@@ -197,7 +259,7 @@ export class Ingestion {
           simulatedAt: state.now,
           wallMs: performance.now() - began,
         });
-        if (changed && this.config.autoInvestigate)
+        if (changed && this.config.autoInvestigate && !this.intake)
           await tx.enqueue(
             org,
             "investigate",
@@ -205,7 +267,7 @@ export class Ingestion {
             `investigate_${state.runId}_${hash(receiptIds)}`,
           );
       });
-      if(this.afterSync)await this.afterSync();
+      if (this.afterSync) await this.afterSync();
       return { downloaded, changed, now: state.now };
     } catch (e) {
       await this.store.upsert(org, "source", "simulator", {

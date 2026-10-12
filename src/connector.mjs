@@ -102,7 +102,17 @@ export class SimulatorConnector {
   }
   async ackBatch(posts, stage) {
     if (!posts.length) return [];
-    return this.request('/api/actor/ingestion/batch', {method:'POST',body:{items:posts.map(p=>({id:p.id,version:p.version,stage,contentHash:hash(p)}))}});
+    return this.request("/api/actor/ingestion/batch", {
+      method: "POST",
+      body: {
+        items: posts.map((p) => ({
+          id: p.id,
+          version: p.version,
+          stage,
+          contentHash: hash(p),
+        })),
+      },
+    });
   }
   startModel(model) {
     return this.request("/api/actor/model/start", {
@@ -117,13 +127,17 @@ export class SimulatorConnector {
     });
     // A received provider response is not yet available to the simulated actor
     // when another organization still holds a modeled-clock barrier.
-    const until=Date.now()+30000;
-    while(Date.now()<until){
-      const row=(await this.state()).modelRequests?.find(r=>r.id===id);
-      if(row && ['available','failed'].includes(row.state))return row;
-      await new Promise(r=>setTimeout(r,80));
+    const until = Date.now() + 30000;
+    while (Date.now() < until) {
+      const row = (await this.state()).modelRequests?.find((r) => r.id === id);
+      if (row && ["available", "failed"].includes(row.state)) return row;
+      await new Promise((r) => setTimeout(r, 80));
     }
-    throw new AppError('MODEL_CLOCK_PENDING','The provider response has not become available on the episode clock.',409);
+    throw new AppError(
+      "MODEL_CLOCK_PENDING",
+      "The provider response has not become available on the episode clock.",
+      409,
+    );
   }
 }
 export class HttpJsonConnector {

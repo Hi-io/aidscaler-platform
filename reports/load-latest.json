@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-12T01:17:22.747Z",
+  "candidateFingerprint": "7089844da710872d537a80f53728a6493f4692686df0ec0e846909d0e423e4b2",
+  "candidateChanged": false,
+  "hardware": {
+    "platform": "win32",
+    "node": "v24.19.0",
+    "cpus": 12,
+    "totalMemoryBytes": 68644159488
+  },
+  "profiles": [
+    {
+      "organizations": 1,
+      "generatedNeeds": 10,
+      "generatedRumours": 2,
+      "wallMs": 2277.7549,
+      "cpuMs": 4297,
+      "rssBytes": 368373760,
+      "sourceRequests": null,
+      "pages": [
+        {
+          "org": "org0",
+          "expectedPublicVersions": 15,
+          "storedSignals": 15,
+          "ingestionPasses": 1,
+          "pendingInvestigations": 1,
+          "visibleDecisionPageSize": 0
+        }
+      ],
+      "invariants": [],
+      "modelCalls": 0,
+      "scope": "HTTP ingestion, version storage, bounded automatic intake and SQL paging. Not semantic accuracy, provider concurrency or human throughput."
+    }
+  ],
+  "semanticThroughputNotMeasured": true
+}

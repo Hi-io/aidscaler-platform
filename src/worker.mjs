@@ -1,5 +1,5 @@
 import { check } from "./errors.mjs";
-import { uid } from "./store.mjs";
+import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
 const PHYSICAL = new Set(["dispatch", "repair", "evacuate", "reroute"]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
@@ -86,6 +86,30 @@ export class Worker {
       "A current human authorization is required.",
       403,
     );
+    if (
+      (p.authorization.expiresAt ?? Infinity) <= Date.now() ||
+      (p.authorization.planHash && p.authorization.planHash !== hash(p.actions))
+    ) {
+      await this.store.upsert(org, "proposal", id, {
+        state: "requires_review",
+        previousAuthorization: p.authorization,
+        authorization: null,
+        changedReason:
+          "Authorization expired or the authorized action scope changed.",
+      });
+      await this.store.audit(
+        org,
+        "authority-monitor",
+        "proposal.authorization_invalidated",
+        id,
+        {
+          scopeChanged:
+            !!p.authorization.planHash &&
+            p.authorization.planHash !== hash(p.actions),
+        },
+      );
+      return { requiresReview: true };
+    }
     let simId = p.simId;
     if (!simId) {
       const sp = await this.connector.action(
@@ -103,13 +127,54 @@ export class Worker {
     }
     let current = await this.connector.state(),
       sim = current.proposals.find((x) => x.id === simId);
-    const issued=p.executionResults??[];
-    const failed=issued.filter(r=>r.result&&PHYSICAL.has(p.actions[r.index]?.type)&&current.operations.some(o=>o.id===(r.result.operation??r.result.id)&&['failed','cancelled'].includes(o.state)));
-    if(failed.length){
-      const preserved=issued.filter(r=>resolution(p.actions[r.index],r,current)).map(r=>r.index);
-      await this.store.transaction(async tx=>{const row=await tx.get(org,'proposal',id);await tx.put(org,'proposal',id,{...row,state:'requires_review',previousAuthorization:row.authorization,authorization:null,changedReason:'An issued physical operation failed or was cancelled. Review only affected work.',affectedSteps:failed.map(r=>r.index),preservedSteps:preserved},row.version);await tx.audit(org,'source-monitor','proposal.physical_failure',id,{affectedSteps:failed.map(r=>r.index),preservedSteps:preserved});});
-      if(p.originPartner)await this.network.response(p,'failed',{confirmedBySource:true,reason:'Owner source reports failed physical work'});
-      return {requiresReview:true,affectedSteps:failed.map(r=>r.index),preservedSteps:preserved};
+    const issued = p.executionResults ?? [];
+    const failed = issued.filter(
+      (r) =>
+        r.result &&
+        PHYSICAL.has(p.actions[r.index]?.type) &&
+        current.operations.some(
+          (o) =>
+            o.id === (r.result.operation ?? r.result.id) &&
+            ["failed", "cancelled"].includes(o.state),
+        ),
+    );
+    if (failed.length) {
+      const preserved = issued
+        .filter((r) => resolution(p.actions[r.index], r, current))
+        .map((r) => r.index);
+      await this.store.transaction(async (tx) => {
+        const row = await tx.get(org, "proposal", id);
+        await tx.put(
+          org,
+          "proposal",
+          id,
+          {
+            ...row,
+            state: "requires_review",
+            previousAuthorization: row.authorization,
+            authorization: null,
+            changedReason:
+              "An issued physical operation failed or was cancelled. Review only affected work.",
+            affectedSteps: failed.map((r) => r.index),
+            preservedSteps: preserved,
+          },
+          row.version,
+        );
+        await tx.audit(org, "source-monitor", "proposal.physical_failure", id, {
+          affectedSteps: failed.map((r) => r.index),
+          preservedSteps: preserved,
+        });
+      });
+      if (p.originPartner)
+        await this.network.response(p, "failed", {
+          confirmedBySource: true,
+          reason: "Owner source reports failed physical work",
+        });
+      return {
+        requiresReview: true,
+        affectedSteps: failed.map((r) => r.index),
+        preservedSteps: preserved,
+      };
     }
     if (sim?.state === "awaiting_approval")
       await this.connector.action(
@@ -143,6 +208,31 @@ export class Worker {
         "A dependency changed after authorization.",
         409,
       );
+      const obsolete =
+        latest.authorization.expiresAt <= Date.now() ||
+        (latest.authorization.planHash &&
+          latest.authorization.planHash !== hash(latest.actions));
+      const expiredEvidence =
+        latest.conditions.some(
+          (c) => c.type === "time" && c.expiresAt <= Date.now(),
+        ) ||
+        (
+          await Promise.all(
+            latest.references.map((r) =>
+              this.store.get(org, "peer_offer", r, false),
+            ),
+          )
+        ).some((o) => o && (!o.active || o.expiresAt <= Date.now()));
+      if (obsolete || expiredEvidence) {
+        await this.store.upsert(org, "proposal", id, {
+          state: "requires_review",
+          previousAuthorization: latest.authorization,
+          authorization: null,
+          changedReason:
+            "Current authorization or partner evidence expired before issuing the next step.",
+        });
+        return { requiresReview: true };
+      }
       if (
         a.dependsOn.some(
           (j) =>
@@ -280,15 +370,16 @@ export class Worker {
     }
     return { simId, results, complete };
   }
-  async once() {
-    const job = await this.store.lease(this.config.org);
+  async once({ asOf = Date.now() } = {}) {
+    const job = await this.store.lease(this.config.org, 180000, asOf);
     if (!job) return false;
     try {
       let result;
       if (job.kind === "ingest") result = await this.ingestion.sync();
       else if (job.kind === "investigate")
         result = await this.investigator.run(job.payload, job.id);
-      else if(job.kind==='analyze_media')result=await this.media.analyze(job.org,job.payload.id,job.id);
+      else if (job.kind === "analyze_media")
+        result = await this.media.analyze(job.org, job.payload.id, job.id);
       else if (["execute_proposal", "continue_proposal"].includes(job.kind))
         result = await this.execute(job.payload.id);
       else if (job.kind === "expire_commitment")
@@ -306,18 +397,30 @@ export class Worker {
         );
       else throw new Error("Unknown durable job kind.");
       await this.store.finishJob(job.id, result);
+      if (job.kind === "investigate" && this.intake)
+        await this.intake.complete(job.payload, result);
       return true;
     } catch (e) {
+      if (job.kind === "investigate" && this.intake)
+        await this.intake.complete(job.payload, null, e);
       await this.store.failJob(job, e);
       return true;
     }
+  }
+  async drain(limit = 32) {
+    // A finite snapshot prevents a continuation from perpetually consuming its
+    // own newly created jobs while the modeled world has no chance to advance.
+    const asOf = Date.now();
+    let count = 0;
+    while (count < limit && (await this.once({ asOf }))) count++;
+    return { processed: count, limited: count === limit };
   }
   start() {
     if (this.running) return;
     this.running = true;
     const loop = async () => {
       try {
-        while (this.running && (await this.once())) {}
+        if (this.running) await this.drain();
       } catch (e) {
         this.lastError = e.code ?? "WORKER";
       } finally {

@@ -40,9 +40,9 @@ try {
       ["field", "Report from the field."],
       ["settings", "Sources, permissions & continuity."],
       ["audit", "Every decision has an owner."],
-      ['media','Evidence you can inspect.'],
-      ['connections','Connect the sources your team trusts.'],
-      ['moderation','Community reports need context.'],
+      ["media", "Evidence you can inspect."],
+      ["connections", "Connect the sources your team trusts."],
+      ["moderation", "Community reports need context."],
     ]) {
       await page.goto(base + "/#" + hash);
       await page.getByRole("heading", { name: title, exact: true }).waitFor();

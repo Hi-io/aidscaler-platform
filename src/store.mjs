@@ -3,9 +3,22 @@ import pg from "pg";
 import { readFile } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { AppError, check } from "./errors.mjs";
+const canonical = (value) => {
+  if (value?.toJSON) return canonical(value.toJSON());
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((k) => [k, canonical(value[k])]),
+    );
+  return value;
+};
 export const hash = (value) =>
   createHash("sha256")
-    .update(typeof value === "string" ? value : JSON.stringify(value))
+    .update(
+      typeof value === "string" ? value : JSON.stringify(canonical(value)),
+    )
     .digest("hex");
 export const uid = (prefix) => `${prefix}_${randomUUID()}`;
 export class Store {
@@ -82,6 +95,19 @@ export class Store {
       updatedAt: Number(r.updated_at),
     }));
   }
+  async dependents(org, kind, dependency) {
+    const { rows } = await this.query(
+      "SELECT id,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND data->'dependencies' @> $3::jsonb ORDER BY id",
+      [org, kind, JSON.stringify([dependency])],
+    );
+    return rows.map((r) => ({
+      ...r.data,
+      id: r.id,
+      version: r.version,
+      createdAt: Number(r.created_at),
+      updatedAt: Number(r.updated_at),
+    }));
+  }
   async put(org, kind, id, data, expectedVersion) {
     const clean = { ...data };
     delete clean.id;
@@ -120,6 +146,51 @@ export class Store {
   async upsert(org, kind, id, data) {
     const old = await this.get(org, kind, id, false);
     return this.put(org, kind, id, { ...old, ...data }, old?.version ?? 0);
+  }
+  async decisionPage(org, { offset = 0, limit = 12, history = false } = {}) {
+    check(
+      Number.isSafeInteger(offset) &&
+        offset >= 0 &&
+        offset <= 1000000 &&
+        Number.isSafeInteger(limit) &&
+        limit > 0 &&
+        limit <= 50,
+      "PAGINATION",
+      "Invalid decision page.",
+    );
+    const states = [
+      "awaiting_review",
+      "requires_review",
+      "needs_clarification",
+      "conditionally_authorized",
+    ];
+    const predicate = history
+      ? "NOT (data->>'state'=ANY($2::text[]))"
+      : "data->>'state'=ANY($2::text[])";
+    const total = Number(
+      (
+        await this.query(
+          `SELECT COUNT(*) AS total FROM entities WHERE org=$1 AND kind='proposal' AND ${predicate}`,
+          [org, states],
+        )
+      ).rows[0].total,
+    );
+    const { rows } = await this.query(
+      `SELECT id,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind='proposal' AND ${predicate} ORDER BY CASE data->>'priority' WHEN 'urgent' THEN 3 WHEN 'high' THEN 2 ELSE 1 END DESC,created_at,id LIMIT $3 OFFSET $4`,
+      [org, states, limit, offset],
+    );
+    return {
+      rows: rows.map((r) => ({
+        ...r.data,
+        id: r.id,
+        version: r.version,
+        createdAt: Number(r.created_at),
+        updatedAt: Number(r.updated_at),
+      })),
+      total,
+      offset,
+      limit,
+    };
   }
   async audit(org, actor, action, entity, detail = {}) {
     await this.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
@@ -193,11 +264,11 @@ export class Store {
     );
     return id;
   }
-  async lease(org, leaseMs = 180000) {
+  async lease(org, leaseMs = 180000, asOf = Date.now()) {
     return this.transaction(async (tx) => {
       const { rows } = await tx.query(
-        "SELECT * FROM jobs WHERE org=$1 AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY due_at LIMIT 1 FOR UPDATE SKIP LOCKED",
-        [org, Date.now()],
+        "SELECT * FROM jobs WHERE org=$1 AND created_at<=$3 AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY due_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",
+        [org, asOf, asOf],
       );
       if (!rows[0]) return null;
       await tx.query(

@@ -1,3 +1,68 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {allocationPlan,validatePlan} from '../src/planning.mjs';import {Store} from '../src/store.mjs';
-test('one stock can use multiple vehicles and cannot overfill a need or consume protected reserves',()=>{const result=allocationPlan({needs:[{id:'need',type:'water',quantity:600}],resources:[{id:'water',owner:'a',type:'water',quantity:600,floor:100,reserved:0}],vehicles:[0,1].map(i=>({id:'v'+i,owner:'a',state:'idle',capacity:300}))});assert.deepEqual(result.allocations.map(a=>a.quantity),[300,200]);assert.equal(result.unserved[0].remaining,100);});
-test('an irrelevant dependency cannot justify assigning a busy vehicle',async()=>{const s=await Store.open();await s.organization('a');try{await s.put('a','resource','r',{owner:'a',type:'water',quantity:500,reserved:0,floor:0},0);await s.put('a','vehicle','v',{owner:'a',state:'travelling',capacity:300},0);await s.put('a','need','n',{type:'water',quantity:100},0);await assert.rejects(()=>validatePlan(s,'a',{actions:[{type:'coverage',owner:'a',params:{},dependsOn:[]},{type:'dispatch',owner:'a',params:{need:'n',vehicle:'v',resource:'r',quantity:100},dependsOn:[0]}]}),/checked dependency/);}finally{await s.close();}});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { allocationPlan, validatePlan } from "../src/planning.mjs";
+import { Store } from "../src/store.mjs";
+test("one stock can use multiple vehicles and cannot overfill a need or consume protected reserves", () => {
+  const result = allocationPlan({
+    needs: [{ id: "need", type: "water", quantity: 600 }],
+    resources: [
+      {
+        id: "water",
+        owner: "a",
+        type: "water",
+        quantity: 600,
+        floor: 100,
+        reserved: 0,
+      },
+    ],
+    vehicles: [0, 1].map((i) => ({
+      id: "v" + i,
+      owner: "a",
+      state: "idle",
+      capacity: 300,
+    })),
+  });
+  assert.deepEqual(
+    result.allocations.map((a) => a.quantity),
+    [300, 200],
+  );
+  assert.equal(result.unserved[0].remaining, 100);
+});
+test("an irrelevant dependency cannot justify assigning a busy vehicle", async () => {
+  const s = await Store.open();
+  await s.organization("a");
+  try {
+    await s.put(
+      "a",
+      "resource",
+      "r",
+      { owner: "a", type: "water", quantity: 500, reserved: 0, floor: 0 },
+      0,
+    );
+    await s.put(
+      "a",
+      "vehicle",
+      "v",
+      { owner: "a", state: "travelling", capacity: 300 },
+      0,
+    );
+    await s.put("a", "need", "n", { type: "water", quantity: 100 }, 0);
+    await assert.rejects(
+      () =>
+        validatePlan(s, "a", {
+          actions: [
+            { type: "coverage", owner: "a", params: {}, dependsOn: [] },
+            {
+              type: "dispatch",
+              owner: "a",
+              params: { need: "n", vehicle: "v", resource: "r", quantity: 100 },
+              dependsOn: [0],
+            },
+          ],
+        }),
+      /checked dependency/,
+    );
+  } finally {
+    await s.close();
+  }
+});

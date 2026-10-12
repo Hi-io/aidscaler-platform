@@ -1,6 +1,8 @@
 // Resolve only records visible to this organization. A citation never grants access.
 export const EVIDENCE_KINDS = [
-  'media','media_analysis','external',
+  "media",
+  "media_analysis",
+  "external",
   "signal",
   "report",
   "claim",
@@ -11,6 +13,7 @@ export const EVIDENCE_KINDS = [
   "vehicle",
   "facility",
   "road",
+  "operation",
   "peer_offer",
 ];
 export async function resolveEvidence(store, org, id) {

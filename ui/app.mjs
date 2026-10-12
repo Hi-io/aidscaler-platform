@@ -1,7 +1,9 @@
 import { offlineQueue } from "./offline.mjs";
 import { icons } from "./icons.mjs";
 import { operationalMap, bindMap } from "./map.mjs";
-import {createExtras} from './extras.mjs';
+import { createExtras } from "./extras.mjs";
+import { createOperationalDraft } from "./operational.mjs";
+import { createFinanceControls } from "./finance.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
   String(s ?? "").replace(
@@ -21,12 +23,14 @@ const money = (c) =>
     Number(c ?? 0) / 100,
   );
 const time = (t) =>
-  t
-    ? new Date(Number(t)).toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "Not confirmed";
+  t != null && Number(t) < 946684800000
+    ? `Lab +${Math.floor(Number(t) / 3600000)}h ${Math.floor(Number(t) / 60000) % 60}m`
+    : t != null
+      ? new Date(Number(t)).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Not confirmed";
 const ago = (t) =>
   t
     ? `${Math.max(0, Math.round((Date.now() - Number(t)) / 60000))} min ago`
@@ -35,8 +39,8 @@ const nav = [
   ["overview", "layout-dashboard", "Response overview", "Respond"],
   ["map", "map-pin", "Operational map"],
   ["signals", "radio", "Signals & evidence"],
-  ['media','image','Source media'],
-  ['moderation','message-square','Community reports'],
+  ["media", "image", "Source media"],
+  ["moderation", "message-square", "Community reports"],
   ["investigations", "sparkles", "Investigations"],
   ["review", "clipboard-check", "Decision queue"],
   ["operations", "truck", "Operations"],
@@ -46,7 +50,7 @@ const nav = [
   ["finance", "wallet", "Pooled funds"],
   ["field", "map-pin", "Field workspace"],
   ["settings", "settings", "Sources & access", "Manage"],
-  ['connections','plug','External connections'],
+  ["connections", "plug", "External connections"],
   ["audit", "shield-check", "Decision history"],
 ];
 let state = {
@@ -61,9 +65,66 @@ let state = {
   },
   polling = false,
   dialog = null;
-const pageRoles={field:['field','media'],publisher:['publications','media','overview'],finance:['finance','overview'],auditor:['overview','audit','operations','signals','review','network','resources'],admin:['overview','settings','connections','audit','signals','media'],analyst:['overview','map','signals','media','moderation','investigations','review','operations','resources','network','field','settings','connections'],dispatcher:['overview','map','signals','media','moderation','investigations','review','operations','resources','network','field','settings','connections']};
-const visibleNav=()=>nav.filter(n=>!pageRoles[state.user?.role]||pageRoles[state.user.role].includes(n[0]));
-function cacheSession(){sessionStorage.setItem('nexo-workspace',JSON.stringify({user:state.user,model:state.model,expiresAt:Number(state.user.expiresAt)||Date.now()+8*3600000}));}
+const pageRoles = {
+  field: ["field", "media"],
+  publisher: ["publications", "media", "overview"],
+  finance: ["finance", "overview"],
+  auditor: [
+    "overview",
+    "audit",
+    "operations",
+    "signals",
+    "review",
+    "network",
+    "resources",
+  ],
+  admin: ["overview", "settings", "connections", "audit", "signals", "media"],
+  analyst: [
+    "overview",
+    "map",
+    "signals",
+    "media",
+    "moderation",
+    "investigations",
+    "review",
+    "operations",
+    "resources",
+    "network",
+    "field",
+    "settings",
+    "connections",
+  ],
+  dispatcher: [
+    "overview",
+    "map",
+    "signals",
+    "media",
+    "moderation",
+    "investigations",
+    "review",
+    "operations",
+    "resources",
+    "network",
+    "field",
+    "settings",
+    "connections",
+  ],
+};
+const visibleNav = () =>
+  nav.filter(
+    (n) =>
+      !pageRoles[state.user?.role] || pageRoles[state.user.role].includes(n[0]),
+  );
+function cacheSession() {
+  sessionStorage.setItem(
+    "nexo-workspace",
+    JSON.stringify({
+      user: state.user,
+      model: state.model,
+      expiresAt: Number(state.user.expiresAt) || Date.now() + 8 * 3600000,
+    }),
+  );
+}
 function toast(s) {
   const el = document.querySelector("#toast");
   el.textContent = s;
@@ -94,7 +155,38 @@ const record = (kind, id) =>
   api("/api/records?" + new URLSearchParams({ kind, ...(id ? { id } : {}) }));
 const empty = (text, name = "inbox") =>
   `<div class="empty">${icon(name)}${escape(text)}</div>`;
-const extras=createExtras({api,record,escape,icon,badge,title,action,table,empty,state,modal,render,toast});
+const extras = createExtras({
+  api,
+  record,
+  escape,
+  icon,
+  badge,
+  title,
+  action,
+  table,
+  empty,
+  state,
+  modal,
+  render,
+  toast,
+});
+const operational = createOperationalDraft({
+  api,
+  record,
+  escape,
+  state,
+  modal,
+  toast,
+  render,
+});
+const financeControls = createFinanceControls({
+  api,
+  escape,
+  state,
+  table,
+  toast,
+  render,
+});
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -102,8 +194,31 @@ function table(headers, rows) {
   return `<div class="tablewrap"><table class="table"><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 function action(label, act, id = "", cls = "") {
-  const permissions={sync:['admin','analyst','commander','dispatcher'],investigate:['analyst','commander','dispatcher'],investigatesignal:['analyst','commander','dispatcher'],repair:['analyst','commander','dispatcher'],verifyneed:['analyst','commander','dispatcher'],verifyform:['analyst','commander','dispatcher'],lookup:['admin','analyst','commander','dispatcher'],addresource:['admin','commander','dispatcher'],reserve:['commander','dispatcher'],share:['commander','dispatcher'],revoke:['commander','dispatcher'],withdraw:['commander','dispatcher'],confirmcommitment:['commander','dispatcher'],draftpublication:['publisher','commander'],publish:['publisher','commander'],publishconfirm:['publisher','commander'],users:['admin']};
-  if(permissions[act]&&!permissions[act].includes(state.user?.role))return '';
+  const permissions = {
+    sync: ["admin", "analyst", "commander", "dispatcher"],
+    investigate: ["analyst", "commander", "dispatcher"],
+    investigatesignal: ["analyst", "commander", "dispatcher"],
+    "investigate-facility": ["analyst", "commander", "dispatcher"],
+    "stop-inquiry": ["analyst", "commander", "dispatcher"],
+    automation: ["admin", "commander"],
+    "operational-draft": ["analyst", "commander", "dispatcher"],
+    repair: ["analyst", "commander", "dispatcher"],
+    verifyneed: ["analyst", "commander", "dispatcher"],
+    verifyform: ["analyst", "commander", "dispatcher"],
+    lookup: ["admin", "analyst", "commander", "dispatcher"],
+    addresource: ["admin", "commander", "dispatcher"],
+    reserve: ["commander", "dispatcher"],
+    share: ["commander", "dispatcher"],
+    revoke: ["commander", "dispatcher"],
+    withdraw: ["commander", "dispatcher"],
+    confirmcommitment: ["commander", "dispatcher"],
+    draftpublication: ["publisher", "commander"],
+    publish: ["publisher", "commander"],
+    publishconfirm: ["publisher", "commander"],
+    users: ["admin"],
+  };
+  if (permissions[act] && !permissions[act].includes(state.user?.role))
+    return "";
   return `<button class="${cls}" data-action="${act}" data-id="${escape(id)}">${label}</button>`;
 }
 function login(error = "") {
@@ -126,7 +241,21 @@ function login(error = "") {
 }
 function shell(content) {
   const active = nav.find((n) => n[0] === state.page);
-  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><div class="org"><span>RESPONSE WORKSPACE</span>${escape(state.user.org)} · Disaster operations</div><nav aria-label="Workspace">${visibleNav().map(([id, i, label, group]) => `${group ? `<div class="navlabel">${group}</div>` : ""}<button class="navitem ${state.page === id ? "active" : ""}" data-page="${id}" ${state.page === id ? 'aria-current="page"' : ""}>${icon(i)}${label}</button>`).join("")}</nav><div class="sidebarfooter"><strong>${escape(state.user.name)}</strong>${escape(state.user.role)} · ${escape(state.user.org)}<br>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span> / </span><b>${active?.[2] ?? "Workspace"}</b></div><div class="topstatus"><span><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Local workspace connected"}</span><a href="/public" target="_blank" rel="noopener">Public portal ${icon("external-link")}</a><span class="avatar" aria-label="${escape(state.user.name)}">${escape(state.user.name.slice(0, 1))}</span></div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main">${content}<div class="footnote">NEXO local prototype · ${escape(state.model ?? "Model not connected")} · Sources and simulation results remain distinct from real-world outcomes.</div></main></div></div>`;
+  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><div class="org"><span>RESPONSE WORKSPACE</span>${escape(state.user.org)} · Disaster operations</div><nav aria-label="Workspace">${visibleNav()
+    .map(
+      ([id, i, label, group]) =>
+        `${group ? `<div class="navlabel">${group}</div>` : ""}<button class="navitem ${state.page === id ? "active" : ""}" data-page="${id}" ${state.page === id ? 'aria-current="page"' : ""}>${icon(i)}${label}</button>`,
+    )
+    .join(
+      "",
+    )}</nav><div class="sidebarfooter"><strong>${escape(state.user.name)}</strong>${escape(state.user.role)} · ${escape(state.user.org)}<br>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span> / </span><b>${active?.[2] ?? "Workspace"}</b></div><div class="topstatus"><span><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Local workspace connected"}</span><a href="/public" target="_blank" rel="noopener">Public portal ${icon("external-link")}</a><span class="avatar" aria-label="${escape(state.user.name)}">${escape(state.user.name.slice(0, 1))}</span></div><select class="mobile-nav" aria-label="Workspace page">${visibleNav()
+    .map(
+      ([id, , label]) =>
+        `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`,
+    )
+    .join(
+      "",
+    )}</select></header><main id="main">${content}<div class="footnote">NEXO local prototype · ${escape(state.model ?? "Model not connected")} · Sources and simulation results remain distinct from real-world outcomes.</div></main></div></div>`;
   bind();
 }
 function activityCard(a) {
@@ -141,7 +270,7 @@ function activityCard(a) {
           `<div class="activitystep">${icon(s.state === "failed" ? "circle-alert" : "check")} ${escape(s.label ?? s.tool)}<small>${escape(s.state)} · ${time(s.at)}</small></div>`,
       )
       .join("") ?? ""
-  }${a.reason ? `<p class="small">${escape(a.reason)}</p>` : ""}<div class="toolbar">${action("Open activity & evidence", "activity", a.id, "quiet")}${a.proposalId ? action("Review response", "proposal", a.proposalId, "accent") : ""}</div></div>`;
+  }${a.cancelRequested ? '<p class="small">Stop requested. Waiting for the current call to finish.</p>' : a.reason ? `<p class="small">${escape(a.reason)}</p>` : ""}<div class="toolbar">${action("Open activity & evidence", "activity", a.id, "quiet")}${a.proposalId ? action("Review response", "proposal", a.proposalId, "accent") : ""}${active && !a.cancelRequested && ["analyst", "commander", "dispatcher"].includes(state.user.role) ? action("Stop inquiry", "stop-inquiry", a.id) : ""}</div></div>`;
 }
 async function overview() {
   const d = await api("/api/dashboard");
@@ -167,10 +296,10 @@ async function overview() {
     `<div class="metricrow">${[
       [
         "Active needs",
-        unresolved.length,
+        d.activeNeedCount,
         "Known needs, not total affected population",
       ],
-      ["Decisions waiting", queue.length, "Human authorization required"],
+      ["Decisions waiting", d.decisionCount, "Human authorization required"],
       [
         "Signals collected",
         d.signalCount,
@@ -178,9 +307,7 @@ async function overview() {
       ],
       [
         "Operations in progress",
-        d.operation.filter(
-          (o) => !["completed", "failed", "cancelled"].includes(o.state),
-        ).length,
+        d.activeOperationCount,
         "Dispatch is separate from confirmed receipt",
       ],
     ]
@@ -245,7 +372,8 @@ async function signals() {
   );
 }
 async function investigations() {
-  const rows = await record("activity");
+  const rows = await record("activity"),
+    intake = await api("/api/automation");
   return (
     title(
       "Investigate what could unlock help.",
@@ -257,11 +385,31 @@ async function investigations() {
         "primary",
       ),
     ) +
-    `<div class="grid cols2">${rows.map(activityCard).join("") || activityCard(null)}</div>`
+    `<div class="toolbar"><span class="small">Automatic intake ${intake.policy.enabled ? "enabled" : "paused"} · ${intake.counts.pending ?? 0} source groups pending · ${intake.policy.hourlyCallLimit} calls / hour limit</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Enable automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}</div>${activityCard(rows[0])}<section class="card" style="margin-top:22px"><h2>Recent investigations</h2>${
+      rows
+        .slice(1, 7)
+        .map(
+          (a) =>
+            `<div class="listrow"><div class="grow"><strong>${escape(a.state === "ready" ? "Response prepared" : a.state.replaceAll("_", " "))}</strong><p>${escape(a.reason ?? a.steps?.at(-1)?.label ?? "Recorded activity")}</p></div>${badge(a.state)}${action("Inspect", "activity", a.id)}</div>`,
+        )
+        .join("") || '<p class="sub">Earlier work will appear here.</p>'
+    }<p class="note">A processing state describes model activity, never physical help or confirmed truth.</p></section>`
   );
 }
 async function review() {
-  const rows = await record("proposal");
+  let page = state.reviewPage ?? 0,
+    queue = await api("/api/decision-queue?offset=" + page * 12);
+  if (page && queue.offset >= queue.total) {
+    page = Math.max(0, Math.ceil(queue.total / 12) - 1);
+    queue = await api("/api/decision-queue?offset=" + page * 12);
+  }
+  state.reviewPage = page;
+  const rows = queue.rows,
+    history = await api(
+      "/api/decision-queue?history=true&offset=" +
+        (state.historyPage ?? 0) * 12,
+    ),
+    total = queue.total;
   return (
     title(
       "The decision belongs to you.",
@@ -273,7 +421,7 @@ async function review() {
         (p) =>
           `<tr><td><strong>${escape(p.title)}</strong><small>${escape(p.benefit)}</small></td><td>${badge(p.priority)}</td><td>${badge(p.state)}</td><td>${p.conditions.filter((c) => !c.satisfied).length}</td><td>${action("Review", "proposal", p.id)}</td></tr>`,
       ),
-    )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}</section>`
+    )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}${total > 12 ? `<div class="toolbar"><span class="small">${page * 12 + 1}–${Math.min(total, page * 12 + 12)} of ${total} actionable responses</span>${page ? action("Previous", "review-page", String(page - 1), "quiet") : ""}${(page + 1) * 12 < total ? action("Next", "review-page", String(page + 1), "quiet") : ""}</div>` : ""}<details class="collapse" ${state.historyOpen ? "open" : ""}><summary>Decision & execution history · ${history.total} responses</summary>${history.rows.map((p) => `<div class="listrow"><div class="grow"><strong>${escape(p.title)}</strong>${badge(p.state)}</div>${action("Inspect", "proposal", p.id)}</div>`).join("")}${history.offset ? action("Earlier page", "history-page", String((state.historyPage ?? 0) - 1), "quiet") : ""}${history.offset + 12 < history.total ? action("Next history page", "history-page", String((state.historyPage ?? 0) + 1), "quiet") : ""}</details></section>`
   );
 }
 async function operations() {
@@ -282,6 +430,12 @@ async function operations() {
     title(
       "From an order to useful help.",
       "Follow acknowledgements, travel and receipt. Arrival is not the same as service.",
+      action(
+        "Prepare an operational action",
+        "operational-draft",
+        "",
+        "accent",
+      ),
     ) +
     `<section class="card">${table(
       ["Operation", "State", "Authorized by", "Latest confirmation", ""],
@@ -313,7 +467,7 @@ async function resources() {
         .slice(0, 8)
         .map(
           (f) =>
-            `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(f.id)} · ${escape(f.use ?? "Facility")}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"} · ${escape(f.state ?? "Unknown operating state")}</p></div>${badge(f.state ?? "unknown")}</div>`,
+            `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(f.id)} · ${escape(f.use ?? "Facility")}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"} · ${escape(f.state ?? "Unknown operating state")}</p></div>${action("Investigate", "investigate-facility", f.id)}${badge(f.state ?? "unknown")}</div>`,
         )
         .join("") ||
       empty(
@@ -376,6 +530,7 @@ async function publications() {
 async function finance() {
   const data = await api("/api/public"),
     usage = await api("/api/usage");
+  const controls = await financeControls.view();
   return (
     title(
       "Shared support. Clear accounting.",
@@ -409,7 +564,7 @@ async function finance() {
       )
       .join(
         "",
-      )}</div><section class="card"><div class="cardheader"><h2>Real model usage</h2><span class="small">Provider receipts, including failed attempts</span></div>${table(
+      )}</div>${controls}<section class="card"><div class="cardheader"><h2>Real model usage</h2><span class="small">Provider receipts, including failed attempts</span></div>${table(
       ["Episode", "Model", "State", "Tokens in / out", "Cost", "Wall time"],
       usage
         .slice(0, 15)
@@ -459,9 +614,9 @@ async function audit() {
   );
 }
 const views = {
-  media:extras.media,
-  connections:extras.connections,
-  moderation:extras.moderation,
+  media: extras.media,
+  connections: extras.connections,
+  moderation: extras.moderation,
   map: async () => {
     const data = await api("/api/map");
     return (
@@ -497,11 +652,25 @@ const views = {
   audit,
 };
 async function render() {
+  const focused = document.activeElement,
+    focusKey = focused?.dataset?.action
+      ? { action: focused.dataset.action, id: focused.dataset.id ?? "" }
+      : null;
   try {
-    if(!visibleNav().some(n=>n[0]===state.page))state.page=visibleNav()[0]?.[0]??'field';
+    if (!visibleNav().some((n) => n[0] === state.page))
+      state.page =
+        state.user?.role === "field"
+          ? "field"
+          : (visibleNav()[0]?.[0] ?? "field");
     const content = await (views[state.page] ?? overview)();
     shell(content);
     bindMap();
+    if (focusKey)
+      app
+        .querySelector(
+          `[data-action="${CSS.escape(focusKey.action)}"][data-id="${CSS.escape(focusKey.id)}"]`,
+        )
+        ?.focus({ preventScroll: true });
   } catch (e) {
     if (e.code === "AUTHENTICATION") {
       state.user = null;
@@ -546,10 +715,20 @@ async function proposal(id) {
       ["awaiting_review", "requires_review", "needs_clarification"].includes(
         p.state,
       )
-      ? `${!p.executionResults?.length?action('Edit draft','edit-response',id):''}${action("Ask for clarification", "reviewclarify", id)}${action("Reject", "reviewreject", id, "danger")}${action(pending.length ? "Authorize conditionally" : "Authorize response", "reviewapprove", id, "primary")}`
+      ? `${p.state === "requires_review" ? action("Investigate a repair", "repair", id) : ""}${!p.executionResults?.length ? action("Edit draft", "edit-response", id) : ""}${action("Ask for clarification", "reviewclarify", id)}${action("Reject", "reviewreject", id, "danger")}${action(pending.length ? "Authorize conditionally" : "Authorize response", "reviewapprove", id, "primary")}`
       : action("Close", "close"),
   );
   state.currentProposal = p;
+  if (p.repairOf) {
+    const summary = document.createElement("details");
+    summary.className = "collapse";
+    summary.innerHTML = `<summary>Repair of an earlier response · ${(p.inheritedWork ?? []).length} physical steps preserved</summary><p class="sub">${escape(p.repairReason)}. Completed work remains historical; the new decision authorizes only prospective actions.</p>${(p.inheritedWork ?? []).map((w) => `<p class="small">${escape(w.action.type)} · ${escape(w.state.replaceAll("_", " "))} · source receipt ${escape(w.operationId ?? w.receipt?.id ?? "partner confirmation")}</p>`).join("")}`;
+    const body = dialog.querySelector(".dialogbody");
+    body.insertBefore(
+      summary,
+      body.querySelector("#reviewnote")?.closest("label") ?? null,
+    );
+  }
 }
 async function sourceDetail(id) {
   const s = await record("signal", id);
@@ -591,8 +770,19 @@ async function operationDetail(id) {
   );
 }
 async function flush() {
-  if(!navigator.onLine)return;
-  try{const me=await api('/api/me');state.user=me.user;state.csrf=me.user.csrf;state.model=me.model;cacheSession();}catch(e){toast('Sign in again before sending saved reports. Your queued observations remain on this device.');return;}
+  if (!navigator.onLine) return;
+  try {
+    const me = await api("/api/me");
+    state.user = me.user;
+    state.csrf = me.user.csrf;
+    state.model = me.model;
+    cacheSession();
+  } catch (e) {
+    toast(
+      "Sign in again before sending saved reports. Your queued observations remain on this device.",
+    );
+    return;
+  }
   const q = await offlineQueue("all");
   let sent = 0;
   for (const item of q) {
@@ -616,7 +806,23 @@ async function flush() {
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
-  if(await extras.run(name,id))return;
+  if (await extras.run(name, id)) return;
+  if (name === "operational-draft") {
+    await operational.open();
+    return;
+  }
+  if (name === "review-page") {
+    state.reviewPage = Math.max(0, Number(id) || 0);
+    await render();
+    document.querySelector("#main h1")?.focus();
+    return;
+  }
+  if (name === "history-page") {
+    state.historyPage = Math.max(0, Number(id) || 0);
+    state.historyOpen = true;
+    await render();
+    return;
+  }
   if (name === "close") {
     dialog?.close();
     return;
@@ -629,7 +835,7 @@ async function runAction(name, id) {
   }
   if (name === "logout") {
     await api("/api/logout", {});
-    sessionStorage.removeItem('nexo-workspace');
+    sessionStorage.removeItem("nexo-workspace");
     state.user = null;
     login();
     return;
@@ -637,6 +843,29 @@ async function runAction(name, id) {
   if (name === "sync") {
     await api("/api/sync", {});
     toast("Source sync queued. Original reports arrive automatically.");
+    return;
+  }
+  if (name === "automation") {
+    await api("/api/automation", { enabled: id === "true" });
+    toast(
+      id === "true"
+        ? "Automatic, budgeted inquiry enabled. Human decisions remain required."
+        : "Automatic intake paused. Current inquiries can be stopped individually.",
+    );
+    await render();
+    return;
+  }
+  if (name === "stop-inquiry") {
+    await api("/api/investigation/stop", { id });
+    toast("Stop requested. Completed reads and costs remain recorded.");
+    await render();
+    return;
+  }
+  if (name === "investigate-facility") {
+    await api("/api/investigate", { facilityId: id });
+    state.page = "investigations";
+    location.hash = state.page;
+    await render();
     return;
   }
   if (["investigate", "investigatesignal", "repair"].includes(name)) {
@@ -656,27 +885,21 @@ async function runAction(name, id) {
   if (name === "activity") return activityDetail(id);
   if (name === "operation") return operationDetail(id);
   if (name === "evidence") {
-    for (const k of [
-      "signal",
-      "claim",
-      "report",
-      "verification",
-      "need",
-      "resource",
-      "vehicle",
-      "facility",
-      "road",
-      "peer_offer",
-    ])
-      try {
-        const r = await record(k, id);
-        if (k === "signal") return sourceDetail(id);
-        modal(
-          "Evidence record",
-          `<pre class="trace">${escape(JSON.stringify(r, null, 2))}</pre>`,
+    try {
+      const found = await api("/api/evidence?" + new URLSearchParams({ id })),
+        r = found.record;
+      if (found.kind === "signal") return sourceDetail(id);
+      if (found.kind === "media" || found.kind === "media_analysis")
+        return extras.run(
+          "media-open",
+          found.kind === "media" ? id : r.mediaId,
         );
-        return;
-      } catch {}
+      modal(
+        "Evidence record",
+        `<pre class="trace">${escape(JSON.stringify(r, null, 2))}</pre>`,
+      );
+      return;
+    } catch {}
     toast(
       "Source is no longer accessible. Its decision snapshot remains in the audit record.",
     );
@@ -716,7 +939,7 @@ async function runAction(name, id) {
     await render();
     return;
   }
-  if (name === "need") return extras.run('case',id);
+  if (name === "need") return extras.run("case", id);
   if (name === "legacyneed") {
     const n = await record("need", id);
     modal(
@@ -902,6 +1125,7 @@ async function runAction(name, id) {
   }
 }
 function bind(root = app) {
+  financeControls.bind(root);
   extras.bind(root);
   root.querySelectorAll("[data-page]").forEach(
     (b) =>

@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-12T00:33:36.468Z",
+  "browser": "Chromium",
+  "checks": [
+    "Case → manual draft → versioned revision; no dispatch",
+    "Received operational map and keyboard fallback render",
+    "Actual source file upload → processing → unverified interpretation",
+    "Field offline write → reload → reconnect → one durable acknowledged report",
+    "Role workspace: admin",
+    "Role workspace: analyst",
+    "Role workspace: dispatcher",
+    "Role workspace: publisher",
+    "Role workspace: finance",
+    "Role workspace: auditor"
+  ],
+  "errors": [],
+  "scope": "Automated workflows and keyboard/mobile/offline checks; not a human comprehension or accessibility certification"
+}

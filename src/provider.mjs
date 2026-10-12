@@ -48,12 +48,29 @@ export class OpenRouterProvider {
         org,
       ]);
       const { rows } = await tx.query(
-        "SELECT COALESCE(SUM(cost_usd),0) AS spent,COALESCE(SUM(CASE WHEN state='running' THEN reserved_usd ELSE 0 END),0) AS reserved,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
+        "SELECT COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged,COUNT(*) AS calls FROM usage WHERE org=$1 AND episode=$2",
         [org, episode],
       );
+      const hourly = (
+        await tx.query(
+          "SELECT COUNT(*) AS calls,COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS charged FROM usage WHERE org=$1 AND started_at>$2",
+          [org, Date.now() - 3600000],
+        )
+      ).rows[0];
       check(
-        Number(rows[0].spent) + Number(rows[0].reserved) + reserve <=
-          this.config.budgetUsd,
+        Number(hourly.calls) < (this.config.hourlyCallLimit ?? 40),
+        "ORGANIZATION_CALL_BUDGET",
+        "The organization has reached its hourly model-call limit.",
+        429,
+      );
+      check(
+        Number(hourly.charged) + reserve <= (this.config.hourlyBudgetUsd ?? 2),
+        "ORGANIZATION_MODEL_BUDGET",
+        "The organization has reached its hourly model budget. Unknown-cost failures retain their conservative reservation.",
+        429,
+      );
+      check(
+        Number(rows[0].charged) + reserve <= this.config.budgetUsd,
         "MODEL_BUDGET",
         "This episode has reached its model budget.",
         429,
@@ -124,8 +141,11 @@ export class OpenRouterProvider {
       const u = data.usage ?? {},
         cost = Number.isFinite(u.cost)
           ? u.cost
-          : Number(u.prompt_tokens ?? 0) * Number(pricing.rates.prompt) +
-            Number(u.completion_tokens ?? 0) * Number(pricing.rates.completion);
+          : Number.isFinite(u.prompt_tokens) &&
+              Number.isFinite(u.completion_tokens)
+            ? u.prompt_tokens * Number(pricing.rates.prompt) +
+              u.completion_tokens * Number(pricing.rates.completion)
+            : null;
       const result = {
         message: data.choices[0].message,
         usage: {
@@ -137,9 +157,12 @@ export class OpenRouterProvider {
         },
         model: data.model ?? this.config.modelId,
         pricing,
-        costSource: Number.isFinite(u.cost)
-          ? "provider receipt"
-          : "catalogue estimate",
+        costSource:
+          cost == null
+            ? "unknown; conservative reservation retained"
+            : Number.isFinite(u.cost)
+              ? "provider receipt"
+              : "catalogue estimate",
       };
       delete result.message.reasoning;
       delete result.message.reasoning_details;

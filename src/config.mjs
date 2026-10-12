@@ -48,6 +48,11 @@ export async function configuration(overrides = {}) {
     pollMs: 5000,
     autoIngest: true,
     autoInvestigate: false,
+    hourlyCallLimit: Number(process.env.MODEL_HOURLY_CALL_LIMIT ?? 40),
+    hourlyBudgetUsd: Number(process.env.MODEL_HOURLY_BUDGET_USD ?? 2),
+    investigationTimeoutMs: Number(
+      process.env.INVESTIGATION_TIMEOUT_MS ?? 180000,
+    ),
     ...local,
     ...overrides,
   };

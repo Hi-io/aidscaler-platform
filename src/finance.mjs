@@ -101,7 +101,11 @@ export class Finance {
   async allocate(actor, { amountCents, reason }, key) {
     role(actor, ["finance", "commander"]);
     check(
-      Number.isSafeInteger(amountCents) && amountCents > 0,
+      Number.isSafeInteger(amountCents) &&
+        amountCents > 0 &&
+        typeof reason === "string" &&
+        reason.trim().length > 0 &&
+        reason.length <= 1200,
       "AMOUNT",
       "Positive amount required.",
     );
@@ -143,13 +147,70 @@ export class Finance {
       currency: "USD",
       receivedCents: totals.received ?? 0,
       refundedCents: totals.refunded ?? 0,
-      allocatedCents: totals.allocated ?? 0,
+      allocatedCents: (totals.allocated ?? 0) - (totals.released ?? 0),
+      grossAllocatedCents: totals.allocated ?? 0,
+      releasedCents: totals.released ?? 0,
       availableCents:
         (totals.received ?? 0) -
         (totals.refunded ?? 0) -
-        (totals.allocated ?? 0),
+        (totals.allocated ?? 0) +
+        (totals.released ?? 0),
       notice:
         "Pooled organizational funds. No donation is tied to a specific item.",
     };
+  }
+  async release(actor, { allocationId, amountCents, reason }, key) {
+    role(actor, ["finance", "commander"]);
+    check(
+      Number.isSafeInteger(amountCents) &&
+        amountCents > 0 &&
+        typeof reason === "string" &&
+        reason.trim(),
+      "AMOUNT",
+      "A positive amount and release reason are required.",
+    );
+    return this.store.command(
+      actor.org,
+      key,
+      { allocationId, amountCents, reason },
+      async (tx) => {
+        const row = (
+          await tx.query(
+            "SELECT amount_cents FROM finance WHERE org=$1 AND id=$2 AND type='allocated'",
+            [actor.org, allocationId],
+          )
+        ).rows[0];
+        check(
+          row,
+          "ALLOCATION",
+          "This allocation is not in your organization.",
+        );
+        const released = Number(
+          (
+            await tx.query(
+              "SELECT COALESCE(SUM(amount_cents),0) AS total FROM finance WHERE org=$1 AND reference=$2 AND type='released'",
+              [actor.org, allocationId],
+            )
+          ).rows[0].total,
+        );
+        check(
+          amountCents <= Number(row.amount_cents) - released,
+          "RELEASE_AMOUNT",
+          "Released funds cannot exceed the remaining allocation.",
+          409,
+        );
+        const id = uid("release");
+        await tx.query(
+          "INSERT INTO finance(org,id,type,amount_cents,currency,reference,created_at) VALUES($1,$2,'released',$3,'USD',$4,$5)",
+          [actor.org, id, amountCents, allocationId, Date.now()],
+        );
+        await tx.audit(actor.org, actor.id, "funds.released", id, {
+          allocationId,
+          amountCents,
+          reason,
+        });
+        return { id, allocationId, amountCents };
+      },
+    );
   }
 }

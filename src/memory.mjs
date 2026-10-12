@@ -13,7 +13,8 @@ export class Memory {
       async (tx) => {
         const op = await tx.get(actor.org, "operation", operation);
         check(
-          op.confirmedBySource === true && ["received", "completed", "service"].includes(op.state),
+          op.confirmedBySource === true &&
+            ["received", "completed", "service"].includes(op.state),
           "OUTCOME_REQUIRED",
           "A precedent requires a recorded physical outcome.",
         );

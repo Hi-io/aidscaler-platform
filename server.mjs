@@ -20,7 +20,8 @@ import { AppError, check, role } from "./src/errors.mjs";
 import { resolveEvidence } from "./src/citations.mjs";
 import { Integrations } from "./src/integrations.mjs";
 import { handleMcp } from "./src/mcp-server.mjs";
-import {MediaProcessor} from './src/media.mjs';
+import { MediaProcessor } from "./src/media.mjs";
+import { Intake } from "./src/intake.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -67,7 +68,11 @@ const KINDS = [
   "pattern",
   "activity",
   "permission",
-  'query','integration','external','media','media_analysis',
+  "query",
+  "integration",
+  "external",
+  "media",
+  "media_analysis",
 ];
 export async function createPlatform(overrides = {}) {
   const config = await configuration(overrides),
@@ -78,7 +83,7 @@ export async function createPlatform(overrides = {}) {
     connector = overrides.connector ?? new SimulatorConnector(config),
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
     ingestion = new Ingestion(store, connector, config),
-    network = new Network(store, config),
+    network = new Network(store, config, overrides.networkFetcher ?? fetch),
     finance = new Finance(store, config),
     investigator = new Investigator({
       store,
@@ -148,10 +153,29 @@ export async function createPlatform(overrides = {}) {
     memory = new Memory(store),
     communityLimits = new Map();
   const integrations = new Integrations(store, config);
+  const intake = new Intake(store, config);
+  ingestion.intake = intake;
+  worker.intake = intake;
   investigator.integrations = integrations;
-  const media=new MediaProcessor({store,config,evidence,provider,connector});worker.media=media;investigator.media=media;
+  const media = new MediaProcessor({
+    store,
+    config,
+    evidence,
+    provider,
+    connector,
+  });
+  worker.media = media;
+  investigator.media = media;
   investigator.ingestKnown = () => ingestion.sync({ sources: false });
-  ingestion.afterSync=()=>network.refresh();
+  ingestion.afterSync = async () => {
+    await network.refresh();
+    await integrations.pollDue();
+    await intake.kick();
+  };
+  integrations.afterRead = async (signals) => {
+    for (const s of signals) await intake.stage(config.org, s);
+    await intake.kick();
+  };
   let pollTimer;
   const server = http.createServer(async (req, res) => {
     const began = performance.now();
@@ -315,6 +339,7 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, {
             user: actor,
             model: config.modelId,
+            intake: await intake.summary(),
             organization: { id: config.org, name: config.orgName },
             provider: config.provider,
           });
@@ -343,6 +368,24 @@ export async function createPlatform(overrides = {}) {
           );
           return json(res, 200, {
             ...rows,
+            decisionCount: (await store.decisionPage(actor.org, { limit: 4 }))
+              .total,
+            activeNeedCount: Number(
+              (
+                await store.query(
+                  "SELECT COUNT(*) AS n FROM entities WHERE org=$1 AND kind='need' AND (data->>'quantity')::numeric > COALESCE((data->>'served')::numeric,0)",
+                  [actor.org],
+                )
+              ).rows[0].n,
+            ),
+            activeOperationCount: Number(
+              (
+                await store.query(
+                  "SELECT COUNT(*) AS n FROM entities WHERE org=$1 AND kind='operation' AND COALESCE(data->>'state','unknown') NOT IN ('received','service','operating','completed','failed','cancelled')",
+                  [actor.org],
+                )
+              ).rows[0].n,
+            ),
             signalCount: Number(
               (
                 await store.query(
@@ -353,10 +396,36 @@ export async function createPlatform(overrides = {}) {
             ),
             model: config.modelId,
             organization: config.orgName,
+            previewLimit: 100,
             simulatedAt:
               (await store.get(actor.org, "source", "simulator", false))
                 ?.simulatedAt ?? null,
           });
+        }
+        if (url.pathname === "/api/automation" && req.method === "GET")
+          return json(res, 200, await intake.summary());
+        if (url.pathname === "/api/decision-queue" && req.method === "GET")
+          return json(
+            res,
+            200,
+            await store.decisionPage(actor.org, {
+              offset: Number(url.searchParams.get("offset") ?? 0),
+              limit: 12,
+              history: url.searchParams.get("history") === "true",
+            }),
+          );
+        if (url.pathname === "/api/finance/ledger" && req.method === "GET") {
+          role(actor, ["finance", "commander", "auditor"]);
+          return json(
+            res,
+            200,
+            (
+              await store.query(
+                "SELECT id,type,amount_cents,currency,reference,created_at FROM finance WHERE org=$1 ORDER BY created_at DESC LIMIT 200",
+                [actor.org],
+              )
+            ).rows,
+          );
         }
         if (url.pathname === "/api/context")
           return json(
@@ -487,25 +556,91 @@ export async function createPlatform(overrides = {}) {
           );
           return json(res, 202, { queued: true });
         }
+        if (url.pathname === "/api/automation")
+          return json(res, 200, await intake.configure(actor, b, key));
+        if (url.pathname === "/api/investigation/stop") {
+          role(actor, ["analyst", "commander", "dispatcher"]);
+          const activity = await store.get(actor.org, "activity", b.id);
+          check(
+            ["queued", "reading", "checking"].includes(activity.state),
+            "ACTIVITY_STATE",
+            "This investigation has already ended.",
+            409,
+          );
+          await store.upsert(actor.org, "activity", b.id, {
+            cancelRequested: true,
+            stoppedBy: actor.id,
+          });
+          await store.audit(
+            actor.org,
+            actor.id,
+            "investigation.stop_requested",
+            b.id,
+            {},
+          );
+          return json(res, 202, {
+            stopRequested: true,
+            notice:
+              "The current provider call may finish and incur cost. No further tools will be requested.",
+          });
+        }
         if (url.pathname === "/api/investigate") {
           role(actor, ["analyst", "commander", "dispatcher"]);
           const id = uid("investigation");
+          await store.put(
+            actor.org,
+            "activity",
+            id,
+            {
+              state: "queued",
+              model: config.modelId,
+              steps: [],
+              startedAt: Date.now(),
+              proposalId: null,
+            },
+            0,
+          );
           await store.enqueue(
             actor.org,
             "investigate",
-            { ids: b.ids ?? [], repairOf: b.repairOf ?? null, needId: b.needId ?? null, facilityId:b.facilityId??null },
+            {
+              ids: b.ids ?? [],
+              repairOf: b.repairOf ?? null,
+              needId: b.needId ?? null,
+              facilityId: b.facilityId ?? null,
+            },
             id,
           );
           return json(res, 202, { queued: true, id });
         }
-        if (url.pathname === "/api/propose")
-          return json(res, 201, await domain.propose(actor, b, key));
-        if (url.pathname === "/api/review") {
-          const result=await domain.review(actor,b.id,b,key);
-          if(b.decision==='reject'&&result.originPartner)await network.response(result,'rejected',{rejectedBy:actor.id,reason:b.note});
-          return json(res,200,result);
+        if (url.pathname === "/api/propose") {
+          const { repairOf, ...draft } = b;
+          return json(
+            res,
+            201,
+            await domain.propose(actor, draft, key, { repairOf }),
+          );
         }
-        if(url.pathname==='/api/proposal/revise')return json(res,200,await domain.revise(actor,b.id,Object.fromEntries(Object.entries(b).filter(([k])=>k!=='id')),key));
+        if (url.pathname === "/api/review") {
+          const result = await domain.review(actor, b.id, b, key);
+          if (b.decision === "reject" && result.originPartner)
+            await network.response(result, "rejected", {
+              rejectedBy: actor.id,
+              reason: b.note,
+            });
+          return json(res, 200, result);
+        }
+        if (url.pathname === "/api/proposal/revise")
+          return json(
+            res,
+            200,
+            await domain.revise(
+              actor,
+              b.id,
+              Object.fromEntries(Object.entries(b).filter(([k]) => k !== "id")),
+              key,
+            ),
+          );
         if (url.pathname === "/api/condition")
           return json(res, 200, await domain.satisfy(actor, b.id, b, key));
         if (url.pathname === "/api/resource")
@@ -547,9 +682,52 @@ export async function createPlatform(overrides = {}) {
           });
           return json(res, 200, result);
         }
-        if(url.pathname==='/api/integration/configure')return json(res,201,await integrations.configure(actor,b,key));
-        if(url.pathname==='/api/integration/read'){role(actor,['admin','analyst','commander','dispatcher']);return json(res,200,await integrations.read(actor.org,b.id,b));}
-        if(url.pathname==='/api/media/analyze'){role(actor,['field','analyst','commander','dispatcher']);await store.get(actor.org,'media',b.id);const id='mediajob_'+b.id;await store.enqueue(actor.org,'analyze_media',{id:b.id},id);return json(res,202,{queued:true,id});}
+        if (url.pathname === "/api/integration/configure")
+          return json(res, 201, await integrations.configure(actor, b, key));
+        if (url.pathname === "/api/integration/read") {
+          role(actor, ["admin", "analyst", "commander", "dispatcher"]);
+          return json(res, 200, await integrations.read(actor.org, b.id, b));
+        }
+        if (url.pathname === "/api/media/analyze") {
+          role(actor, ["field", "analyst", "commander", "dispatcher"]);
+          const result = await store.command(
+            actor.org,
+            key,
+            { id: b.id },
+            async (tx) => {
+              await tx.get(actor.org, "media", b.id);
+              const prior = await tx.get(
+                actor.org,
+                "media_analysis",
+                b.id,
+                false,
+              );
+              if (prior) return { completed: true, id: b.id };
+              const pending = (
+                await tx.query(
+                  "SELECT id FROM jobs WHERE org=$1 AND kind='analyze_media' AND payload->>'id'=$2 AND state IN ('queued','running','retry')",
+                  [actor.org, b.id],
+                )
+              ).rows[0];
+              if (pending) return { queued: true, id: pending.id };
+              const id = uid("mediajob");
+              await tx.upsert(actor.org, "media", b.id, {
+                state: "queued",
+                error: null,
+              });
+              await tx.enqueue(actor.org, "analyze_media", { id: b.id }, id);
+              await tx.audit(
+                actor.org,
+                actor.id,
+                "media.analysis_requested",
+                b.id,
+                { job: id },
+              );
+              return { queued: true, id };
+            },
+          );
+          return json(res, 202, result);
+        }
         if (url.pathname === "/api/media/upload")
           return json(res, 201, await evidence.save(actor, b, key));
         if (url.pathname === "/api/memory")
@@ -568,6 +746,8 @@ export async function createPlatform(overrides = {}) {
           return json(res, 201, await domain.draftPublication(actor, b, key));
         if (url.pathname === "/api/publication/publish")
           return json(res, 200, await domain.publish(actor, b.id, b, key));
+        if (url.pathname === "/api/finance/release")
+          return json(res, 200, await finance.release(actor, b, key));
         if (url.pathname === "/api/finance/allocate")
           return json(res, 200, await finance.allocate(actor, b, key));
         if (url.pathname === "/api/verify") {
@@ -684,7 +864,9 @@ export async function createPlatform(overrides = {}) {
     network,
     finance,
     evidence,
-    media,integrations,
+    media,
+    integrations,
+    intake,
     memory,
     config,
     url: `http://${config.host}:${server.address().port}`,

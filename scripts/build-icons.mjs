@@ -29,7 +29,13 @@ const names = [
   "lock-keyhole",
   "heart-handshake",
   "package-check",
-  'upload','volume-2','play','file-text','plug','message-circle','message-square',
+  "upload",
+  "volume-2",
+  "play",
+  "file-text",
+  "plug",
+  "message-circle",
+  "message-square",
 ];
 const icons = {};
 for (const n of names) {

@@ -2,8 +2,29 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { check, role } from "./errors.mjs";
 import { uid, hash } from "./store.mjs";
 import { actionSchema } from "./contracts.mjs";
+import { Domain } from "./domain.mjs";
 export const sign = (key, payload) =>
   createHmac("sha256", key).update(JSON.stringify(payload)).digest("hex");
+const vehicleProjection = (row, owner) =>
+  Object.fromEntries(
+    Object.entries({
+      id: row.id,
+      owner,
+      node: row.node,
+      state: row.state,
+      capacity: row.capacity,
+      weightKg: row.weightKg,
+      speedMps: row.speedMps,
+      maxCargoKg: row.maxCargoKg,
+      volumeM3: row.volumeM3,
+      seats: row.seats,
+      fuelMlPerKm: row.fuelMlPerKm,
+      maxWaterDepth: row.maxWaterDepth,
+      shiftEnd: row.shiftEnd,
+      fuel: row.fuel,
+      at: row.at,
+    }).filter(([, v]) => v !== undefined),
+  );
 export class Network {
   constructor(store, config, fetcher = fetch) {
     Object.assign(this, { store, config, fetcher });
@@ -13,9 +34,14 @@ export class Network {
     const peer = this.config.peers.find((p) => p.org === to);
     check(peer, "PEER", "This organization is not a connected partner.");
     check(
-      ["resource", "claim", "commitment", "operation", "facility",'vehicle'].includes(
-        kind,
-      ),
+      [
+        "resource",
+        "claim",
+        "commitment",
+        "operation",
+        "facility",
+        "vehicle",
+      ].includes(kind),
       "SHARING_SCOPE",
       "This record type cannot be shared.",
     );
@@ -40,9 +66,9 @@ export class Network {
           to,
           active: !revoke,
           permissionVersion,
-          actorId:actor.id,
-          expiresAt:Date.now()+86400000,
-          lastSharedVersion:record.version,
+          actorId: actor.id,
+          expiresAt: Date.now() + 86400000,
+          lastSharedVersion: record.version,
         });
         // Explicit public offer projection excludes confidential source text and victim locations.
         const projection = revoke
@@ -79,12 +105,14 @@ export class Network {
                     requester: record.requester,
                     owner: actor.org,
                   }
-                : kind==='vehicle'?{id:record.id,owner:actor.org,node:record.node,state:record.state,capacity:record.capacity,weightKg:record.weightKg,speedMps:record.speedMps,maxCargoKg:record.maxCargoKg,shiftEnd:record.shiftEnd,fuel:record.fuel,at:record.at} : {
-                    id: record.id,
-                    state: record.state,
-                    type: record.type,
-                    owner: actor.org,
-                  };
+                : kind === "vehicle"
+                  ? vehicleProjection(record, actor.org)
+                  : {
+                      id: record.id,
+                      state: record.state,
+                      type: record.type,
+                      owner: actor.org,
+                    };
         const message = {
           id: uid("message"),
           from: actor.org,
@@ -138,22 +166,69 @@ export class Network {
     );
     return response.json();
   }
-  async refresh(){
-    const org=this.config.org;
-    for(const offer of await this.store.list(org,'peer_offer',2000))if(offer.active&&offer.expiresAt<=Date.now()){
-      await this.store.upsert(org,'peer_offer',offer.id,{active:false,state:'expired'});
-      await this.store.enqueue(org,'invalidate',{dependency:offer.id,reason:'Partner offer expired'},'expired_'+offer.id+'_'+offer.sourceVersion);
-    }
-    for(const permission of await this.store.list(org,'permission',2000)){
-      if(!permission.active||permission.expiresAt<=Date.now())continue;
-      const row=await this.store.get(org,permission.kind,permission.recordId,false);
-      if(!row||row.version===permission.lastSharedVersion)continue;
+  async refresh() {
+    const org = this.config.org;
+    for (const offer of await this.store.list(org, "peer_offer", 2000))
+      if (offer.active && offer.expiresAt <= Date.now()) {
+        await this.store.upsert(org, "peer_offer", offer.id, {
+          active: false,
+          state: "expired",
+        });
+        await this.store.enqueue(
+          org,
+          "invalidate",
+          { dependency: offer.id, reason: "Partner offer expired" },
+          "expired_" + offer.id + "_" + offer.sourceVersion,
+        );
+      }
+    for (const permission of await this.store.list(org, "permission", 2000)) {
+      if (!permission.active || permission.expiresAt <= Date.now()) continue;
+      const row = await this.store.get(
+        org,
+        permission.kind,
+        permission.recordId,
+        false,
+      );
+      if (!row || row.version === permission.lastSharedVersion) continue;
       let projection;
-      if(permission.kind==='resource')projection={id:row.id,owner:org,type:row.type,node:row.node,available:Math.max(0,row.quantity-row.reserved-row.floor),compatibility:row.compatibility,unit:row.unit};
-      else if(permission.kind==='vehicle')projection={id:row.id,owner:org,node:row.node,state:row.state,capacity:row.capacity,weightKg:row.weightKg,speedMps:row.speedMps,at:row.at};
+      if (permission.kind === "resource")
+        projection = {
+          id: row.id,
+          owner: org,
+          type: row.type,
+          node: row.node,
+          available: Math.max(0, row.quantity - row.reserved - row.floor),
+          compatibility: row.compatibility,
+          unit: row.unit,
+        };
+      else if (permission.kind === "vehicle")
+        projection = vehicleProjection(row, org);
       else continue;
-      const message={id:uid('message'),from:org,to:permission.to,kind:permission.kind,entityId:row.id,version:row.version,permissionVersion:permission.permissionVersion,permissionId:permission.id,at:Date.now(),expiresAt:permission.expiresAt,projection,revoke:false};
-      await this.store.transaction(async tx=>{await tx.enqueue(org,'peer_send',{to:permission.to,message},'send_'+message.id);await tx.upsert(org,'permission',permission.id,{lastSharedVersion:row.version});});
+      const message = {
+        id: uid("message"),
+        from: org,
+        to: permission.to,
+        kind: permission.kind,
+        entityId: row.id,
+        version: row.version,
+        permissionVersion: permission.permissionVersion,
+        permissionId: permission.id,
+        at: Date.now(),
+        expiresAt: permission.expiresAt,
+        projection,
+        revoke: false,
+      };
+      await this.store.transaction(async (tx) => {
+        await tx.enqueue(
+          org,
+          "peer_send",
+          { to: permission.to, message },
+          "send_" + message.id,
+        );
+        await tx.upsert(org, "permission", permission.id, {
+          lastSharedVersion: row.version,
+        });
+      });
     }
   }
   async requestStep(proposal, index) {
@@ -304,7 +379,7 @@ export class Network {
           "commitment",
           "operation",
           "facility",
-          'vehicle',
+          "vehicle",
           "response_request",
           "response_receipt",
         ].includes(m.kind),
@@ -438,12 +513,43 @@ export class Network {
           }
         }
       }
-      if (m.revoke)
-        for (const p of await tx.list(this.config.org, "proposal", 2000))
-          if (
-            p.dependencies?.includes(id) ||
-            p.dependencies?.includes(m.entityId)
-          )
+      if (m.revoke) {
+        const domain = new Domain(this.store, this.config);
+        for (const dependency of [id, m.entityId])
+          await domain.invalidateTx(
+            tx,
+            this.config.org,
+            dependency,
+            "Partner revoked a shared dependency",
+          );
+      } else if (old && ["resource", "vehicle"].includes(m.kind)) {
+        // Expected consumption of a step already requested is not a reason to
+        // cancel its response. Recheck only future, unissued work using an offer.
+        for (const p of await tx.dependents(this.config.org, "proposal", id)) {
+          if (["completed", "cancelled", "rejected"].includes(p.state))
+            continue;
+          const future = p.actions.filter(
+            (a, index) =>
+              a.owner === from &&
+              a.params[m.kind] === m.entityId &&
+              !p.executionResults?.some(
+                (r) => r.index === index && (r.result || r.requestId),
+              ),
+          );
+          const resourceLost =
+            m.kind === "resource" &&
+            future.length &&
+            (future.reduce((s, a) => s + (a.params.quantity ?? 0), 0) >
+              (m.projection?.available ?? 0) ||
+              hash(old.projection?.compatibility ?? {}) !==
+                hash(m.projection?.compatibility ?? {}));
+          const vehicleLost =
+            m.kind === "vehicle" &&
+            future.length &&
+            ["disabled", "broken", "retired", "failed"].includes(
+              m.projection?.state,
+            );
+          if (resourceLost || vehicleLost)
             await tx.put(
               this.config.org,
               "proposal",
@@ -452,10 +558,16 @@ export class Network {
                 ...p,
                 state: "requires_review",
                 authorization: null,
-                changedReason: "Partner revoked a shared dependency",
+                previousAuthorization:
+                  p.authorization ?? p.previousAuthorization,
+                changedReason:
+                  "A partner's current capability no longer covers an unissued step",
+                invalidatedDependency: id,
               },
               p.version,
             );
+        }
+      }
       await tx.audit(this.config.org, "peer:" + from, "network.received", id, {
         kind: m.kind,
         permissionVersion: m.permissionVersion,

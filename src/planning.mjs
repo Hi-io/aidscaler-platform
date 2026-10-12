@@ -10,6 +10,7 @@ export function shortestRoute(map, from, to, vehicle = {}, observed = {}) {
     const state = observed[e.id] ?? e;
     if (
       state.open === false ||
+      (state.waterDepth ?? 0) > (vehicle.maxWaterDepth ?? Infinity) ||
       (e.maxWeight ?? Infinity) < (vehicle.weightKg ?? 0)
     )
       continue;
@@ -59,7 +60,7 @@ export function allocationPlan({
   const stock = new Map(
       resources.map((r) => [
         r.id,
-        Math.max(0, r.quantity - (r.reserved??0) - (r.floor ?? 0)),
+        Math.max(0, r.quantity - (r.reserved ?? 0) - (r.floor ?? 0)),
       ]),
     ),
     usedVehicles = new Set(),
@@ -75,43 +76,45 @@ export function allocationPlan({
       .filter(
         (o) =>
           o.need === need.id &&
-          !["failed", "cancelled", "completed",'received','service'].includes(o.state),
+          !["failed", "cancelled", "completed", "received", "service"].includes(
+            o.state,
+          ),
       )
       .reduce((n, o) => n + (o.quantity ?? 0), 0);
     let remaining = Math.max(0, need.quantity - (need.served ?? 0) - incoming);
     for (const resource of resources.filter((r) => r.type === need.type)) {
-      for(const vehicle of vehicles.filter(
+      for (const vehicle of vehicles.filter(
         (v) =>
           v.owner === resource.owner &&
           !usedVehicles.has(v.id) &&
           ["idle", "arrived"].includes(v.state),
       )) {
-      const quantity = Math.floor(
-        Math.min(
-          remaining,
-          stock.get(resource.id),
-          vehicle.capacity ?? 0,
-          (vehicle.maxCargoKg ?? Infinity) /
-            (resource.type === "water"
-              ? 1
-              : resource.type === "energy"
-                ? 150
-                : 1),
-        ),
-      );
-      if (quantity <= 0) continue;
-      allocations.push({
-        need: need.id,
-        resource: resource.id,
-        vehicle: vehicle.id,
-        quantity,
-        owner: resource.owner,
-        needsRouteCheck: true,
-      });
-      stock.set(resource.id, stock.get(resource.id) - quantity);
-      usedVehicles.add(vehicle.id);
-      remaining -= quantity;
-      if (!remaining) break;
+        const quantity = Math.floor(
+          Math.min(
+            remaining,
+            stock.get(resource.id),
+            vehicle.capacity ?? 0,
+            (vehicle.maxCargoKg ?? Infinity) /
+              (resource.type === "water"
+                ? 1
+                : resource.type === "energy"
+                  ? 150
+                  : 1),
+          ),
+        );
+        if (quantity <= 0) continue;
+        allocations.push({
+          need: need.id,
+          resource: resource.id,
+          vehicle: vehicle.id,
+          quantity,
+          owner: resource.owner,
+          needsRouteCheck: true,
+        });
+        stock.set(resource.id, stock.get(resource.id) - quantity);
+        usedVehicles.add(vehicle.id);
+        remaining -= quantity;
+        if (!remaining) break;
       }
       if (!remaining) break;
     }
@@ -193,11 +196,24 @@ export async function validateConditions(store, org, conditions) {
       }
       if (c.type === "resource") {
         const r = await store.get(org, "resource", c.id, false);
+        check(
+          r || !(await store.get(org, "vehicle", c.id, false)),
+          "CONDITION_KIND",
+          "A vehicle is not a stock resource. Use the vehicle condition type, or use prepare_allocation to reuse the already checked plan.",
+        );
         satisfied =
           !!r &&
           (c.version === undefined || r.version === c.version) &&
           r.quantity - r.reserved - r.floor > 0;
         evidenceId = r?.id;
+      }
+      if (c.type === "vehicle") {
+        const v = await store.get(org, "vehicle", c.id, false);
+        satisfied =
+          !!v &&
+          ["idle", "arrived"].includes(v.state) &&
+          (c.version === undefined || v.version === c.version);
+        evidenceId = v?.id;
       }
       if (c.type === "commitment") {
         const v = await store.get(org, "commitment", c.id, false);
@@ -232,15 +248,35 @@ export async function validatePlan(store, org, proposal) {
   const checks = [],
     usedStock = new Map(),
     usedVehicles = new Set(),
-    externalVehicles = new Set();
+    externalVehicles = new Set(),
+    usedPlaces = new Map(),
+    usedPeople = new Map();
   const active = (await store.list(org, "proposal", 2000)).filter(
     (p) =>
       p.id !== proposal.id &&
       ["authorized", "executing", "awaiting_partner"].includes(p.state),
   );
   for (const p of active)
-    for (const [index,a] of p.actions.entries()) {
-      if(a.owner!==org||a.type!=='dispatch'||p.executionResults?.some(r=>r.index===index&&r.result))continue;
+    for (const [index, a] of p.actions.entries()) {
+      if (
+        a.owner !== org ||
+        !["dispatch", "evacuate"].includes(a.type) ||
+        p.executionResults?.some((r) => r.index === index && r.result)
+      )
+        continue;
+      if (a.type === "evacuate") {
+        usedPlaces.set(
+          a.params.to,
+          (usedPlaces.get(a.params.to) ?? 0) + a.params.quantity,
+        );
+        usedPeople.set(
+          a.params.from,
+          (usedPeople.get(a.params.from) ?? 0) + a.params.quantity,
+        );
+        usedVehicles.add(a.params.vehicle);
+        externalVehicles.add(a.params.vehicle);
+        continue;
+      }
       usedStock.set(
         a.params.resource,
         (usedStock.get(a.params.resource) ?? 0) + (a.params.quantity ?? 0),
@@ -301,14 +337,41 @@ export async function validatePlan(store, org, proposal) {
         "VEHICLE_CAPACITY",
         "Vehicle capacity is insufficient.",
       );
+      const massPerUnit = r.type === "energy" ? 150 : 1,
+        volumePerUnit = r.type === "energy" ? 0.2 : 0.001;
       check(
-        !externalVehicles.has(v.id) && (!usedVehicles.has(v.id) || a.dependsOn.some(j=>proposal.actions[j]?.params.vehicle===v.id && ['dispatch','evacuate','reroute'].includes(proposal.actions[j]?.type))),
+        q * massPerUnit <= (v.maxCargoKg ?? Infinity),
+        "CARGO_WEIGHT",
+        "The vehicle cannot carry this cargo mass.",
+      );
+      check(
+        q * volumePerUnit <= (v.volumeM3 ?? Infinity),
+        "CARGO_VOLUME",
+        "The vehicle cannot carry this cargo volume.",
+      );
+      check(
+        !externalVehicles.has(v.id) &&
+          (!usedVehicles.has(v.id) ||
+            a.dependsOn.some(
+              (j) =>
+                proposal.actions[j]?.params.vehicle === v.id &&
+                ["dispatch", "evacuate", "reroute"].includes(
+                  proposal.actions[j]?.type,
+                ),
+            )),
         "VEHICLE_CONFLICT",
         "A vehicle is already assigned to another concurrent operation.",
         409,
       );
       check(
-        ["idle", "arrived"].includes(v.state) || a.dependsOn.some(j=>proposal.actions[j]?.params.vehicle===v.id && ['dispatch','evacuate','reroute'].includes(proposal.actions[j]?.type)),
+        ["idle", "arrived"].includes(v.state) ||
+          a.dependsOn.some(
+            (j) =>
+              proposal.actions[j]?.params.vehicle === v.id &&
+              ["dispatch", "evacuate", "reroute"].includes(
+                proposal.actions[j]?.type,
+              ),
+          ),
         "VEHICLE_BUSY",
         "A busy vehicle requires a checked dependency before it can be reused.",
         409,
@@ -320,8 +383,36 @@ export async function validatePlan(store, org, proposal) {
       );
       usedStock.set(r.id, (usedStock.get(r.id) ?? 0) + q);
       usedVehicles.add(v.id);
-      const map=(await store.get(org,'context','geography',false))?.map;
-      if(map?.roads){const roads=Object.fromEntries((await store.list(org,'road',5000)).map(e=>[e.id,e]));const destination=a.params.destination??n?.node??map.places?.find(b=>b.id===(n?.building??a.params.building))?.node;check(destination,'DESTINATION_LOCATION','Query the destination location before checking a route.');const route=shortestRoute(map,r.node,destination,v,roads);check(route,'NO_KNOWN_ROUTE','No accessible known route can carry this vehicle to the destination.',409);check((v.fuel??Infinity)>=route.distanceM/1000*(v.fuelMlPerKm??0),'FUEL','Fuel is insufficient for this checked route.');checks.push({index,type:'route',state:'checked',...route});}
+      const map = (await store.get(org, "context", "geography", false))?.map;
+      if (map?.roads) {
+        const roads = Object.fromEntries(
+          (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
+        );
+        const destination =
+          a.params.destination ??
+          n?.node ??
+          map.places?.find((b) => b.id === (n?.building ?? a.params.building))
+            ?.node;
+        check(
+          destination,
+          "DESTINATION_LOCATION",
+          "Query the destination location before checking a route.",
+        );
+        const route = shortestRoute(map, r.node, destination, v, roads);
+        check(
+          route,
+          "NO_KNOWN_ROUTE",
+          "No accessible known route can carry this vehicle to the destination.",
+          409,
+        );
+        check(
+          (v.fuel ?? Infinity) >=
+            (route.distanceM / 1000) * (v.fuelMlPerKm ?? 0),
+          "FUEL",
+          "Fuel is insufficient for this checked route.",
+        );
+        checks.push({ index, type: "route", state: "checked", ...route });
+      }
       checks.push({
         index,
         type: "quantity_capacity",
@@ -331,12 +422,125 @@ export async function validatePlan(store, org, proposal) {
         quantity: q,
       });
     }
+    if (a.type === "evacuate") {
+      const v = await store.get(org, "vehicle", a.params.vehicle, false),
+        to = await store.get(org, "facility", a.params.to, false),
+        n = (await store.list(org, "need", 2000)).find(
+          (n) => n.building === a.params.from && n.type === "shelter",
+        );
+      check(
+        v && v.owner === org,
+        "RESOURCE_OWNER",
+        "Only the vehicle owner can authorize an evacuation.",
+        403,
+      );
+      check(
+        n && to,
+        "EVACUATION_OBSERVATION",
+        "Pickup demand and receiving shelter must be observed before review.",
+      );
+      check(
+        a.params.quantity <= v.seats,
+        "SEATS",
+        "Not enough observed passenger seats.",
+      );
+      const activation = a.dependsOn.some(
+        (j) =>
+          proposal.actions[j]?.type === "activate" &&
+          proposal.actions[j]?.params.building === to.id,
+      );
+      check(
+        to.state === "operating" || (activation && to.safe === true),
+        "SHELTER",
+        "The shelter must be operating, or depend on a current safety-checked activation.",
+      );
+      check(
+        a.params.quantity + (usedPlaces.get(to.id) ?? 0) <=
+          (to.capacity ?? 0) - (to.occupancy ?? 0) - (to.reservedPlaces ?? 0),
+        "SHELTER_CAPACITY",
+        "Receiving shelter places are already occupied or committed.",
+        409,
+      );
+      check(
+        a.params.quantity + (usedPeople.get(n.building) ?? 0) <=
+          n.quantity - (n.served ?? 0) - (n.inTransit ?? 0),
+        "POPULATION",
+        "The observed group is already served or assigned.",
+        409,
+      );
+      const previous = a.dependsOn.some(
+        (j) =>
+          proposal.actions[j]?.params.vehicle === v.id &&
+          ["dispatch", "evacuate", "reroute"].includes(
+            proposal.actions[j]?.type,
+          ),
+      );
+      check(
+        !externalVehicles.has(v.id) && (!usedVehicles.has(v.id) || previous),
+        "VEHICLE_CONFLICT",
+        "A vehicle is assigned to another concurrent operation.",
+        409,
+      );
+      check(
+        ["idle", "arrived"].includes(v.state) || previous,
+        "VEHICLE_BUSY",
+        "Reusing a busy vehicle requires a checked physical dependency.",
+        409,
+      );
+      const map = (await store.get(org, "context", "geography", false))?.map;
+      if (map?.roads) {
+        const roads = Object.fromEntries(
+            (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
+          ),
+          from = map.places.find((b) => b.id === a.params.from)?.node;
+        check(
+          from && to.node,
+          "EVACUATION_LOCATION",
+          "Query both shelter and pickup locations.",
+        );
+        const pickup = shortestRoute(map, v.node, from, v, roads),
+          dropoff = shortestRoute(map, from, to.node, v, roads);
+        check(
+          pickup && dropoff,
+          "NO_KNOWN_ROUTE",
+          "No accessible pickup and evacuation route is known.",
+          409,
+        );
+        checks.push({
+          index,
+          type: "evacuation_route",
+          state: "checked",
+          pickup,
+          dropoff,
+        });
+      }
+      usedVehicles.add(v.id);
+      usedPlaces.set(to.id, (usedPlaces.get(to.id) ?? 0) + a.params.quantity);
+      usedPeople.set(
+        n.building,
+        (usedPeople.get(n.building) ?? 0) + a.params.quantity,
+      );
+      checks.push({
+        index,
+        type: "passenger_capacity",
+        state: "checked",
+        quantity: a.params.quantity,
+        vehicleVersion: v.version,
+        facilityVersion: to.version,
+        needVersion: n.version,
+      });
+    }
     if (a.type === "activate") {
       const f = await store.get(org, "facility", a.params.building, false);
       check(
         f?.safe === true,
         "SAFETY_INSPECTION",
         "A completed safety assessment is required before activation.",
+      );
+      check(
+        a.params.permit === true,
+        "OWNER_PERMISSION",
+        "Explicit responsible owner permission is required for activation.",
       );
       checks.push({
         index,

@@ -17,6 +17,7 @@ const schema = z
     purpose: z.string().min(5).max(1000),
     license: z.string().max(1000),
     enabled: z.boolean().default(true),
+    pollMs: z.number().int().min(30000).max(3600000).optional(),
   })
   .strict();
 export class Integrations {
@@ -27,7 +28,11 @@ export class Integrations {
     role(actor, ["admin"]);
     const d = schema.parse(input);
     const u = new URL(d.url);
-    check(!u.username && !u.password,'CONNECTOR_CREDENTIALS','Use a dedicated server-side connector credential, never credentials in URLs.');
+    check(
+      !u.username && !u.password,
+      "CONNECTOR_CREDENTIALS",
+      "Use a dedicated server-side connector credential, never credentials in URLs.",
+    );
     check(
       u.origin === d.allowedOrigin,
       "CONNECTOR_ORIGIN",
@@ -125,19 +130,25 @@ export class Integrations {
         lastSuccessAt: Date.now(),
         contentHash: observation.contentHash,
       });
-      const candidate = Array.isArray(data)?data:(data?.results ?? data?.data ?? [data]);
-      const items = Array.isArray(candidate)?candidate:[candidate];
+      const candidate = Array.isArray(data)
+        ? data
+        : (data?.results ?? data?.data ?? [data]);
+      const items = Array.isArray(candidate) ? candidate : [candidate];
+      const fresh = [];
       for (const item of items.slice(0, 100)) {
         const entryId = id + "_" + hash(item.id ?? item).slice(0, 24);
-        await this.store.upsert(org, "signal", entryId, {
+        const previous = await this.store.get(org, "signal", entryId, false),
+          contentHash = hash(item);
+        if (previous?.contentHash === contentHash) continue;
+        const row = await this.store.upsert(org, "signal", entryId, {
           text:
             typeof item === "string"
               ? item
               : JSON.stringify(item).slice(0, 18000),
           source: c.name,
           sourceUrl: c.url,
-          sourceVersion: 1,
-          contentHash: hash(item),
+          sourceVersion: (previous?.sourceVersion ?? 0) + 1,
+          contentHash,
           receivedAt: Date.now(),
           state: "unverified",
           group: hash(item),
@@ -146,6 +157,23 @@ export class Integrations {
           permissions: "organization",
           external: true,
         });
+        fresh.push(row);
+        await this.store.upsert(
+          org,
+          "source_version",
+          `${entryId}_${row.sourceVersion}`,
+          { snapshot: row, contentHash, sourceVersion: row.sourceVersion },
+        );
+        if (previous)
+          await this.store.enqueue(
+            org,
+            "invalidate",
+            {
+              dependency: entryId,
+              reason: "An external source supplied a revised observation",
+            },
+            `external_change_${entryId}_${row.sourceVersion}`,
+          );
       }
       await this.store.transaction((tx) =>
         tx.audit(org, "connector", "integration.read", id, {
@@ -154,6 +182,7 @@ export class Integrations {
           items: items.length,
         }),
       );
+      if (this.afterRead) await this.afterRead(fresh);
       return observation;
     } catch (e) {
       await this.store.upsert(org, "integration", id, {
@@ -163,5 +192,17 @@ export class Integrations {
       });
       throw e;
     }
+  }
+  async pollDue() {
+    const now = Date.now();
+    for (const c of await this.store.list(this.config.org, "integration", 100))
+      if (
+        c.enabled &&
+        c.pollMs &&
+        now - Math.max(c.lastSuccessAt ?? 0, c.lastFailureAt ?? 0) >= c.pollMs
+      ) {
+        if (c.type === "mcp") continue;
+        await this.read(this.config.org, c.id).catch(() => {});
+      }
   }
 }

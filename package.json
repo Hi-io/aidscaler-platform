@@ -3,17 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "packageManager": "pnpm@11.25.0",
   "scripts": {
     "start": "node --env-file-if-exists=.env.local server.mjs",
     "lab": "node --env-file-if-exists=.env.local scripts/lab.mjs",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "check": "node scripts/check.mjs",
-    "demo": "node --env-file-if-exists=.env.local scripts/demo.mjs",
+    "demo": "node --env-file-if-exists=.env.local scripts/service-demo.mjs",
+    "demo:live": "node --env-file-if-exists=.env.local scripts/live-response.mjs",
+    "partner": "node --env-file-if-exists=.env.local scripts/partner.mjs",
     "evaluate": "node --env-file-if-exists=.env.local scripts/evaluate.mjs",
     "test:live": "node --env-file-if-exists=.env.local scripts/live.mjs",
     "test:ui": "node scripts/ui-test.mjs",
+    "test:journeys": "node scripts/journey-test.mjs",
+    "test:load": "node --max-old-space-size=8192 scripts/load.mjs",
+    "test:sources": "node scripts/source-smoke.mjs",
+    "hygiene": "node scripts/hygiene.mjs",
     "setup:media": "node scripts/setup-media.mjs",
     "test:media": "node --env-file-if-exists=.env.local scripts/media-smoke.mjs"
   },
@@ -23,5 +31,8 @@
     "zod": "^4.1.12",
     "lucide-static": "^0.574.0"
   },
-  "devDependencies": { "@playwright/test": "^1.56.1", "prettier": "^3.6.2" }
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "prettier": "^3.6.2"
+  }
 }
