@@ -29,6 +29,9 @@ export class OpenRouterProvider {
     return this.pricing;
   }
   async complete({ org, episode, messages, tools = [], signal }) {
+    // A funding refusal requires operator intervention, not a retry per case.
+    // Restart this backend after restoring provider credit; manual work stays available.
+    if (this.fundingError) throw this.fundingError;
     check(
       !this.config.modelScopePrefix ||
         episode.startsWith(this.config.modelScopePrefix),
@@ -151,6 +154,14 @@ export class OpenRouterProvider {
         },
       );
       // Provider error payloads may contain echoed requests; never log them.
+      if (response.status === 402) {
+        this.fundingError = new AppError(
+          "PROVIDER_FUNDS",
+          "Model inference is paused because the provider requires available account credit. Restore credit and restart this backend. Manual review and operations remain available.",
+          503,
+        );
+        throw this.fundingError;
+      }
       check(
         response.ok,
         "PROVIDER_HTTP",

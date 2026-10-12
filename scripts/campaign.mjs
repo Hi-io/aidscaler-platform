@@ -134,6 +134,10 @@ try {
         violations: report.invariants.length,
       }),
     );
+    if (report.errors.some((e) => e.code === "PROVIDER_FUNDS")) {
+      stoppedReason = "provider_credit_exhausted";
+      break;
+    }
   }
 } catch (e) {
   stoppedReason = e.code ?? e.name;
