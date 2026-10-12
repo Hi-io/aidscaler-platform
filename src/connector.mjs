@@ -13,6 +13,7 @@ export class SimulatorConnector {
     this.agentKey = sourceAgentKey;
     this.humanKey = sourceHumanKey;
     this.fetcher = fetcher;
+    this.transportRetries = 0;
   }
   async request(endpoint, { method = "GET", body, human = false } = {}) {
     check(
@@ -22,7 +23,7 @@ export class SimulatorConnector {
       "This connector cannot access observer data.",
       403,
     );
-    const res = await this.fetcher(this.url + endpoint, {
+    const options = {
       method,
       headers: {
         Authorization: `Bearer ${human ? this.humanKey : this.agentKey}`,
@@ -30,8 +31,12 @@ export class SimulatorConnector {
       },
       body: body ? JSON.stringify(body) : undefined,
       redirect: "error",
-      signal: AbortSignal.timeout(10000),
-    });
+    };
+    const res = await this.readOrIdempotentFetch(
+      endpoint,
+      options,
+      method === "GET" || Boolean(body?.idempotencyKey),
+    );
     const data = await res.json();
     if (!res.ok)
       throw new AppError(
@@ -40,6 +45,33 @@ export class SimulatorConnector {
         res.status,
       );
     return data;
+  }
+  async readOrIdempotentFetch(endpoint, options, repeatable = false) {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        return await this.fetcher(this.url + endpoint, {
+          ...options,
+          signal: AbortSignal.timeout(10000),
+        });
+      } catch (e) {
+        const code = e.cause?.code ?? e.code ?? e.name;
+        if (
+          !repeatable ||
+          attempt >= 1 ||
+          ![
+            "ECONNRESET",
+            "ECONNREFUSED",
+            "ETIMEDOUT",
+            "UND_ERR_SOCKET",
+            "TimeoutError",
+          ].includes(code)
+        )
+          throw e;
+        this.transportRetries++;
+        this.lastTransientCode = code;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    }
   }
   state() {
     return this.request("/api/actor/state");
@@ -60,9 +92,11 @@ export class SimulatorConnector {
     return this.request("/api/actor/inbox");
   }
   async scrape(cursor = 0) {
-    const r = await this.fetcher(this.url + "/feed?cursor=" + cursor, {
-      signal: AbortSignal.timeout(10000),
-    });
+    const r = await this.readOrIdempotentFetch(
+      "/feed?cursor=" + cursor,
+      {},
+      true,
+    );
     check(r.ok, "SOURCE_HTTP", "Timeline unavailable.", 502);
     const html = await r.text();
     return {

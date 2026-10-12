@@ -205,6 +205,8 @@ export class Ingestion {
           downloaded,
           changed,
           backfillCursor,
+          transportRetries: this.connector.transportRetries ?? 0,
+          lastTransientCode: this.connector.lastTransientCode ?? null,
           wallMs: performance.now() - began,
         });
         const old = await tx.get(org, "context", "operational", false);
