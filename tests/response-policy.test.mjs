@@ -254,6 +254,9 @@ test("an inconclusive automatic focus stays visible but does not starve another 
     (await new Intake(s, { org, autoInvestigate: true }).kick()).empty,
     true,
   );
+  const unchanged = await investigator.run({}, "unchanged-deferred");
+  assert.equal(unchanged.calls, 0);
+  assert.equal(inputs.length, 2);
   await s.put(
     org,
     "resource",

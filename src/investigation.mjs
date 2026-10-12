@@ -305,6 +305,47 @@ export class Investigator {
       : (await this.store.list(org, "signal", 35)).filter(
           (s) => s.state !== "erased",
         );
+    const fieldReports = (await this.store.list(org, "report", 50)).filter(
+        (r) => ["observed", "received"].includes(r.state),
+      ),
+      presentedSourceSignature = hash([
+        signals.map((s) => [s.id, s.sourceVersion, s.state]),
+        fieldReports.map((r) => [r.id, r.version, r.state]),
+      ]),
+      previousSources = await this.store.get(
+        org,
+        "context",
+        "last_investigated_sources",
+        false,
+      );
+    if (
+      focusMode === "automatic" &&
+      !needId &&
+      !repairOf &&
+      !facilityId &&
+      !ids.length &&
+      queue.policy.approved &&
+      queue.total &&
+      !queue.nextOffset &&
+      queue.rows.every(
+        (n) => n.pendingProposals.length || n.investigationDeferred,
+      ) &&
+      previousSources?.signature === presentedSourceSignature
+    ) {
+      const deferred = {
+        state: "inconclusive",
+        kind: "unchanged_deferred_scope",
+        model: this.config.modelId,
+        calls: 0,
+        steps: [],
+        startedAt: Date.now(),
+        finishedAt: Date.now(),
+        reason:
+          "The current received needs already have reviews or unchanged deferred investigations. Keep them visible; await new evidence or an explicit operator retry without another model call.",
+      };
+      await this.activity(jobId, deferred);
+      return deferred;
+    }
     const context = (await this.store.get(org, "context", "operational", false))
       ?.snapshot;
     const prior = repairOf
@@ -367,9 +408,7 @@ export class Investigator {
           originalReferences,
         }),
       ),
-      fieldReports: (await this.store.list(org, "report", 50)).filter((r) =>
-        ["observed", "received"].includes(r.state),
-      ),
+      fieldReports,
       currentInterpretations: (await this.store.list(org, "claim", 12)).filter(
         (c) => c.state !== "erased",
       ),
@@ -1024,6 +1063,11 @@ export class Investigator {
       activity.calls = calls;
       if (perceptionReceipt) activity.perceptionReceipt = perceptionReceipt.id;
       activity.wallMs = performance.now() - started;
+      if (!activity.cancelled)
+        await this.store.upsert(org, "context", "last_investigated_sources", {
+          signature: presentedSourceSignature,
+          note: "Versions presented in the last bounded investigation, not independently verified interpretation.",
+        });
       if (
         activity.state === "inconclusive" &&
         needId &&
