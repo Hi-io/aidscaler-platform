@@ -1,9 +1,9 @@
 {
-  "at": "2026-10-12T09:59:12.025Z",
+  "at": "2026-10-12T13:34:43.731Z",
   "kind": "synthetic-byte-integration",
   "notAccuracyValidation": true,
   "model": "google/gemma-4-31b-it",
-  "candidateFingerprint": "c59fc605c4cd7096e492aa003a498bdf41c776c9f2f4ecce9c892140879546f2",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
   "results": [
     {
       "filename": "return-note.wav",
@@ -40,7 +40,7 @@
         "durationSeconds": 9.8376875,
         "engine": "faster-whisper",
         "model": "tiny",
-        "wallMs": 2742.382499971427
+        "wallMs": 2428.8450001040474
       },
       "passed": true
     },
@@ -64,23 +64,23 @@
           ],
           "uncertainties": [
             "Actual volume of containers is unknown",
-            "Actual contents of containers are unknown (labels only indicate 'WATER')"
+            "Actual contents of containers are unknown (labels are text-based)"
           ],
           "textVisible": [
             "TEST FIXTURE - WATER STORAGE",
             "WATER",
             "Three containers. Volume is NOT specified."
           ],
-          "evidence_summary": "The image is a diagram showing three blue containers labeled 'WATER' under a header 'TEST FIXTURE - WATER STORAGE'. A caption explicitly states that the volume is not specified."
+          "evidenceSummary": "The image depicts a test fixture for water storage containing three blue containers labeled 'WATER'. Text explicitly states that the volume is not specified."
         },
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 350,
-          "outputTokens": 180,
+          "outputTokens": 170,
           "reasoningTokens": 0,
-          "providerCost": 0.000121,
-          "providerRequestId": "gen-1791799155-sv6Wp4tUdWRtkJxBPJAz",
-          "wallMs": 4630.429800000001
+          "providerCost": 0.000117,
+          "providerRequestId": "gen-1791812086-PgJJ9p6xsbxHztKc5qzL",
+          "wallMs": 2199.0801
         },
         "engine": "model-image-input"
       },
@@ -112,19 +112,19 @@
         "durationSeconds": 5,
         "engine": "model-image-input",
         "sampling": "up to six sampled frames; not exhaustive video coverage",
-        "wallMs": 188.38409997988492,
+        "wallMs": 198.00680002663285,
         "observations": {
-          "summary": "The provided source is a series of static frames depicting a diagram labeled \"TEST FIXTURE - WATER STORAGE.\" It shows three blue rectangular shapes labeled \"WATER\" and a smaller square that changes color from blue to orange. There are no real-world disaster-response observations present.\n\n```json\n{\n  \"observations\": [\n    {\n      \"description\": \"Diagrammatic representation of three containers labeled 'WATER'\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box\": [363, 123, 731, 612]\n      }\n    },\n    {\n      \"description\": \"A small square element that changes color from blue to orange\",\n      \"visual_region\": {\n        \"frame\": \"3.00s\",\n        \"box\": [492, 776, 641, 858]\n      }\n    }\n  ],\n  \"uncertainties\": [\n    \"The nature of the 'test fixture' is not defined.\",\n    \"The meaning of the color change in the small square is not specified.\"\n  ],\n  \"textVisible\": [\n    \"TEST FIXTURE - WATER STORAGE\",\n    \"WATER\",\n    \"Three containers. Volume is NOT specified.\"\n  ]\n}\n```",
+          "summary": "The provided source is a static graphic depicting a \"TEST FIXTURE - WATER STORAGE\" with three blue containers labeled \"WATER\" and a small square that changes color from blue to orange. There are no real-world disaster-response observations present.\n\n```json\n{\n  \"observations\": [\n    {\n      \"description\": \"Graphic depicting three blue containers labeled 'WATER'\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box\": [362, 123, 731, 612]\n      }\n    },\n    {\n      \"description\": \"Text indicating water storage test fixture\",\n      \"visual_region\": {\n        \"frame\": \"0.00s\",\n        \"box\": [108, 61, 233, 938]\n      }\n    }\n  ],\n  \"uncertainties\": [\n    \"The nature of the 'test fixture' is not defined; it is a schematic, not a real-world scene.\"\n  ],\n  \"textVisible\": [\n    \"TEST FIXTURE - WATER STORAGE\",\n    \"WATER\",\n    \"Three containers. Volume is NOT specified.\"\n  ]\n}\n```",
           "requiresStructuredReview": true
         },
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 1464,
-          "outputTokens": 296,
+          "outputTokens": 278,
           "reasoningTokens": 0,
-          "providerCost": 0.00032336,
-          "providerRequestId": "gen-1791799160-yc3D0B5ewHnXv8J1Yyoe",
-          "wallMs": 3964.2193000000007
+          "providerCost": 0.00031616,
+          "providerRequestId": "gen-1791812089-qLlp38XsjMTThufW2Rxm",
+          "wallMs": 2663.4572
         }
       },
       "passed": true
@@ -132,7 +132,7 @@
     {
       "filename": "field-note.pdf",
       "mime": "application/pdf",
-      "contentHash": "b1b27e6db0bcf4a9d18a3ebbbb310778ea46a26bbbc50203b6048614b8eba93c",
+      "contentHash": "0daa0d166882414edd33d37466f903d09c0ba850e7b272a76760e437058e9351",
       "engine": "pypdf+pdfium+model-transcription",
       "result": {
         "pages": [
@@ -144,22 +144,33 @@
             "uncertainties": []
           }
         ],
+        "totalPageCount": 1,
         "needsOCR": false,
         "truncated": false,
         "unreadPageCount": 0,
         "engine": "pypdf+pdfium+model-transcription",
-        "ocrScope": "at most four scanned pages rendered per analysis; all transcriptions require review",
-        "wallMs": 308.2646999973804,
+        "ocrScope": "at most four scanned pages rendered per batch; remaining pages can be requested explicitly; all transcriptions require review",
+        "wallMs": 315.81960001494735,
         "model": "google/gemma-4-31b-it",
         "usage": {
           "promptTokens": 349,
           "outputTokens": 71,
           "reasoningTokens": 0,
           "providerCost": 0.00007726,
-          "providerRequestId": "gen-1791799165-fTdGnrpA9QIdS6mGgZfA",
-          "wallMs": 1070.6211000000003
+          "providerRequestId": "gen-1791812092-kFGhGZxBFcK1lcUbPoY8",
+          "wallMs": 1066.0529000000006
         },
         "text": "Page 1 (model_visual_transcription):\nTEST FIXTURE - WATER STORAGE\nWATER\nWATER\nWATER\nThree containers. Volume is NOT specified.",
+        "pendingPageNumbers": [],
+        "analysisBatches": [
+          {
+            "pages": [
+              1
+            ],
+            "episode": "byte-smoke",
+            "at": 1791812093421
+          }
+        ],
         "requiresHumanVerification": true
       },
       "passed": true
@@ -182,29 +193,29 @@
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 4630.429800000001,
+      "wall_ms": 2199.0801,
       "input_tokens": 350,
-      "output_tokens": 180,
-      "cost_usd": 0.000121,
-      "provider_id": "gen-1791799155-sv6Wp4tUdWRtkJxBPJAz"
+      "output_tokens": 170,
+      "cost_usd": 0.000117,
+      "provider_id": "gen-1791812086-PgJJ9p6xsbxHztKc5qzL"
     },
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 3964.2193000000007,
+      "wall_ms": 2663.4572,
       "input_tokens": 1464,
-      "output_tokens": 296,
-      "cost_usd": 0.00032336,
-      "provider_id": "gen-1791799160-yc3D0B5ewHnXv8J1Yyoe"
+      "output_tokens": 278,
+      "cost_usd": 0.00031616,
+      "provider_id": "gen-1791812089-qLlp38XsjMTThufW2Rxm"
     },
     {
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 1070.6211000000003,
+      "wall_ms": 1066.0529000000006,
       "input_tokens": 349,
       "output_tokens": 71,
       "cost_usd": 0.00007726,
-      "provider_id": "gen-1791799165-fTdGnrpA9QIdS6mGgZfA"
+      "provider_id": "gen-1791812092-kFGhGZxBFcK1lcUbPoY8"
     }
   ]
 }

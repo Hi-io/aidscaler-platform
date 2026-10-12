@@ -1,10 +1,10 @@
 {
-  "at": "2026-10-12T09:55:01.094Z",
-  "candidateFingerprint": "c59fc605c4cd7096e492aa003a498bdf41c776c9f2f4ecce9c892140879546f2",
-  "evaluatorFingerprint": "63bc8e205d0355573d1868b9e9c7ca48f28bc8b8dccc9032c39d059695f68b87",
+  "at": "2026-10-12T13:14:56.002Z",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
   "gitRevisions": {
-    "platform": "3b2aa2a13a6ca3fba3021bb45581d4fd4d27bf57",
-    "simulator": "118d04753cfb8ae18cb154b060acc8be9d8d555a"
+    "platform": "a99bf8f826b58373c32bacf5e232c0a095bc92f0",
+    "simulator": "6c75ae51e5592c64e3d74df2ab94a20f7fc6d9b2"
   },
   "node": "v24.19.0",
   "platform": "win32",
@@ -19,19 +19,19 @@
       "name": "platform-syntax",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 8085.643500000001,
+      "wallMs": 9913.966699999999,
       "summary": [
-        "Syntax verified: 111 JavaScript modules."
+        "Syntax verified: 138 JavaScript modules."
       ]
     },
     {
       "name": "platform-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 195487.3456,
+      "wallMs": 197734.3162,
       "tests": {
-        "tests": 89,
-        "pass": 89,
+        "tests": 116,
+        "pass": 116,
         "fail": 0,
         "cancelled": 0,
         "skipped": 0,
@@ -42,19 +42,19 @@
       "name": "simulator-syntax-contracts",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 4824.683699999994,
+      "wallMs": 4931.724800000025,
       "summary": [
-        "65 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
+        "67 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
       ]
     },
     {
       "name": "simulator-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 7080.900699999998,
+      "wallMs": 7918.211500000005,
       "tests": {
-        "tests": 117,
-        "pass": 117,
+        "tests": 120,
+        "pass": 120,
         "fail": 0,
         "cancelled": 0,
         "skipped": 0,

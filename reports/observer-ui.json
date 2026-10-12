@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-12T13:31:33.957Z",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "candidateChanged": false,
+  "checks": [
+    "Observer authentication and live 3D WebGL canvas",
+    "Independent organization information perspective",
+    "Measurements drawer with live observer state"
+  ],
+  "errors": [],
+  "dimensions": {
+    "width": 1920,
+    "height": 702
+  },
+  "scope": "Automated observer visual integration, not realism calibration or human comprehension"
+}

@@ -51,3 +51,16 @@ Se registra el tamaño del contexto original recibido y del presentado en `activ
 El resultado dirigido `service-live-1791795241572` conservado en `reports/runs/` mostró 50 ocupantes simulados con un contexto inicial de 10.959 caracteres frente a 35.180 del snapshot recibido. Fue una prueba de funcionamiento con una necesidad seleccionada, no una comparación causal de ahorro, un holdout ni evidencia de vidas salvadas reales. Los resultados posteriores y las comparaciones completas se documentan en [VALIDACION.md](VALIDACION.md).
 
 La primera repetición con razonamiento y enrutamiento por precio encontró timeouts reales del proveedor bajo el plazo anterior de 60 segundos. El piloto `1791795781278` se detuvo en un checkpoint con nueve outcomes intactos y 39 faltantes para corregir ese plazo y revisar la conservación de descripciones, correcciones y relaciones entre fuentes. Esa campaña y el smoke multimodal fallido permanecen registrados. No se mezclan sus resultados con la versión revisada.
+
+
+## Interpretación masiva, concurrencia y recuperación del cierre local
+
+La interpretación de fuentes es una tarea distinta de la investigación operacional. Recibe lotes de hasta 35 fragmentos, referencias cortas S1…Sn y un directorio recibido de ubicaciones pertinentes. El servidor conserva el mapa a IDs/versiones originales. Valida citas, unidades, cantidad, ubicación y antigüedad; conserva resultados válidos y registra rechazos/cobertura, sin inventar una afirmación para cada fragmento. Una salida vacía puede ser correcta; una salida truncada o completamente inválida no se presenta como interpretación exitosa. El intérprete no tiene autoridad de despacho.
+
+La política aprobada selecciona el siguiente caso revisable. Una investigación automática puede preparar asignaciones para necesidades concurrentes con la misma política, capacidad y ofertas vigentes. Una investigación dirigida mantiene el foco seleccionado por el operador. Una necesidad inconclusa queda visible y solo se aplaza automáticamente mientras la firma de la evidencia relevante no cambia; nueva información reabre el trabajo. Un retry manual explícito está permitido. No se vuelven a cobrar inferencias por reenviar un acuse ni por hacer polling de fuentes idénticas.
+
+La reparación usa datos recibidos del viaje afectado, posición/flota y accesos actuales. El compilador preserva la misma carga y destino cuando una ruta válida existe; el modelo no vuelve a escribir un JSON de todos los vehículos ni transcribe un nuevo envío para aparentar reparación. La evidencia/versión se valida de nuevo antes de preparar y el dueño sigue aprobando.
+
+Checkpoints privados conservan herramientas terminadas y offsets/idempotencia; leases renovables y fencing impiden finalizaciones desde un worker antiguo. El estado visible indica consulta, comprobación, preparación, inconcluso o error reales. No se almacena razonamiento privado ni se simula una cadena de pensamientos.
+
+Los recibos de fuente y la calidad semántica tienen métricas diferentes. Ver [CIERRE_LOCAL.md](CIERRE_LOCAL.md) y [VALIDACION.md](VALIDACION.md) para el contraste y la carga real del build final.

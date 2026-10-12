@@ -1,0 +1,144 @@
+{
+  "at": "2026-10-12T11:41:44.296Z",
+  "protocol": {
+    "run": "semantic-load-1791805093047",
+    "seed": "semantic-transfer-2026-01",
+    "count": 100,
+    "organizations": 4,
+    "copies": 23,
+    "budgetUsd": 0.5,
+    "clocks": "CPU/HTTP/model wall time separated from controlled source publication time",
+    "scorer": "Exact structured tuples from an evaluator-generated corpus; no model judges or evaluator labels in candidate input",
+    "independence": "Internal synthetic transfer test, not independently annotated real disaster data",
+    "model": "Configured OpenRouter model, never assumed Gemini"
+  },
+  "candidateFingerprint": "8b4e18552900c4d2ae1c56f19e91f33615d7b3c501c67a2af34f4a7283bb08d4",
+  "evaluatorFingerprint": "0a89e0a35232ff1484ef0149688a6f9297f074ea269fa060804d49638301ad4f",
+  "candidateChanged": false,
+  "status": "failed",
+  "error": {
+    "code": "EXTRACTION_REFERENCE",
+    "message": "Every interpretation must cite sources actually presented."
+  },
+  "wallMs": 204724.99120000002,
+  "hardware": {
+    "cpus": 12,
+    "memoryBytes": 68644159488,
+    "rssBytes": 1176666112
+  },
+  "sourcePublications": 3445,
+  "deduplication": "Reposts were persisted and grouped by public original references; the model received original requests plus independent historical/hostile sources. No private truth labels selected a request's factual content.",
+  "measurements": [],
+  "findings": [],
+  "usage": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066886,
+      "reserved_usd": 0.00650332,
+      "input_tokens": 2869,
+      "output_tokens": 668,
+      "wall_ms": 19167.826300000015,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00067912,
+      "reserved_usd": 0.006504039999999999,
+      "input_tokens": 2928,
+      "output_tokens": 673,
+      "wall_ms": 11997.187999999995,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00068696,
+      "reserved_usd": 0.00650962,
+      "input_tokens": 2924,
+      "output_tokens": 694,
+      "wall_ms": 3221.175499999983,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00068916,
+      "reserved_usd": 0.006504759999999999,
+      "input_tokens": 2934,
+      "output_tokens": 696,
+      "wall_ms": 6347.8077999999805,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00068578,
+      "reserved_usd": 0.00651034,
+      "input_tokens": 2927,
+      "output_tokens": 690,
+      "wall_ms": 7502.332200000004,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00070786,
+      "reserved_usd": 0.006504759999999999,
+      "input_tokens": 2939,
+      "output_tokens": 741,
+      "wall_ms": 7101.509099999996,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00068472,
+      "reserved_usd": 0.006509979999999999,
+      "input_tokens": 2928,
+      "output_tokens": 687,
+      "wall_ms": 7451.876900000003,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00070186,
+      "reserved_usd": 0.00651106,
+      "input_tokens": 2999,
+      "output_tokens": 705,
+      "wall_ms": 6507.845899999986,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00069588,
+      "reserved_usd": 0.0065160999999999995,
+      "input_tokens": 3002,
+      "output_tokens": 689,
+      "wall_ms": 5810.519700000004,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0007047,
+      "reserved_usd": 0.006510879999999999,
+      "input_tokens": 3005,
+      "output_tokens": 710,
+      "wall_ms": 6309.111999999994,
+      "error": null
+    }
+  ],
+  "costUsd": 0.0069049,
+  "chargedBudgetUsd": 0.0069049,
+  "invariants": [],
+  "limitations": [
+    "Synthetic internally authored cases, not independently annotated field accuracy",
+    "Only exact structured request recall/precision was scored. No claim of lives saved or human comprehension.",
+    "Acknowledgement and stored reposts do not count as new independent tasks.",
+    "Finite completed batches measure semantic processing, not real-time arrival/review stability at 10k/hour."
+  ]
+}

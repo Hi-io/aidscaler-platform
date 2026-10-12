@@ -1,0 +1,12 @@
+{
+  "run": "semantic-load-1791805093047",
+  "seed": "semantic-transfer-2026-01",
+  "count": 100,
+  "organizations": 4,
+  "copies": 23,
+  "budgetUsd": 0.5,
+  "clocks": "CPU/HTTP/model wall time separated from controlled source publication time",
+  "scorer": "Exact structured tuples from an evaluator-generated corpus; no model judges or evaluator labels in candidate input",
+  "independence": "Internal synthetic transfer test, not independently annotated real disaster data",
+  "model": "Configured OpenRouter model, never assumed Gemini"
+}

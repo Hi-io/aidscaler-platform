@@ -1,0 +1,204 @@
+{
+  "at": "2026-10-12T12:07:11.506Z",
+  "protocol": {
+    "run": "semantic-load-1791806825967",
+    "seed": "semantic-alias-01",
+    "count": 10,
+    "organizations": 1,
+    "copies": 2,
+    "budgetUsd": 0.1,
+    "clocks": "CPU/HTTP/model wall time separated from controlled source publication time",
+    "scorer": "Exact structured tuples from an evaluator-generated corpus; no model judges or evaluator labels in candidate input",
+    "independence": "Internal synthetic transfer test, not independently annotated real disaster data",
+    "model": "Configured OpenRouter model, never assumed Gemini"
+  },
+  "candidateFingerprint": "25ec8e1c812df7eb9f2ac3754317721f213efb706817d9c3dc18138868980271",
+  "evaluatorFingerprint": "adb9770cbaaece75fc11922d4435caefcae82db4ba3f2a579303635c02cefb85",
+  "candidateChanged": false,
+  "status": "completed",
+  "error": null,
+  "wallMs": 4037.4134,
+  "hardware": {
+    "cpus": 12,
+    "memoryBytes": 68644159488,
+    "rssBytes": 371855360
+  },
+  "sourcePublications": 78,
+  "deduplication": "Reposts were persisted and grouped by public original references; the model received original requests plus independent historical/hostile sources. No private truth labels selected a request's factual content.",
+  "measurements": [
+    {
+      "org": "org0",
+      "sourceRecordsReceived": 78,
+      "evaluatedSources": 30,
+      "nativeNeeds": 10,
+      "detected": 10,
+      "recall": 1,
+      "preciseNeedObservations": 10,
+      "currentNeedObservations": 10,
+      "precision": 1,
+      "conservativeReturnedNeedPrecision": 1,
+      "rejectedNeedObservations": 0,
+      "rejectedObservations": [],
+      "failedBatches": [],
+      "falseMergeCandidates": 0,
+      "batches": 1,
+      "modelBatchMsP50": 2784.6032,
+      "modelBatchMsP95": 2784.6032,
+      "sourceThroughInterpretationWallMs": 3991.7282999999998,
+      "inferenceWritesAuthoritativeNeed": false,
+      "pendingResearch": 10,
+      "omissions": []
+    }
+  ],
+  "findings": [
+    {
+      "org": "org0",
+      "observations": [
+        {
+          "kind": "need",
+          "text": "need 80 L of water",
+          "unit": "L",
+          "location": "b0",
+          "quantity": 80,
+          "sourceIds": [
+            "99c77fa84187672b57f24e18"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 81 portions de comida hoy",
+          "unit": "portions",
+          "location": "b1",
+          "quantity": 81,
+          "sourceIds": [
+            "70a94de8aa18e9badc051a88"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 82 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b2",
+          "quantity": 82,
+          "sourceIds": [
+            "fc59b3e4f7657922f88f24bf"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が83 places必要です",
+          "unit": "places",
+          "location": "b3",
+          "quantity": 83,
+          "sourceIds": [
+            "ebc938d05d08b77422b067a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 84 blankets of blankets",
+          "unit": "blankets",
+          "location": "b4",
+          "quantity": 84,
+          "sourceIds": [
+            "9ad691643dce45a313f158c0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 85 L de agua hoy",
+          "unit": "L",
+          "location": "b7",
+          "quantity": 85,
+          "sourceIds": [
+            "eda73c83dc793466280920cd"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 86 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b9",
+          "quantity": 86,
+          "sourceIds": [
+            "face3b4693fe117e767a3bc5"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が87 packs必要です",
+          "unit": "packs",
+          "location": "b10",
+          "quantity": 87,
+          "sourceIds": [
+            "bff181a0de57eb2336bb1cef"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 88 places of shelter",
+          "unit": "places",
+          "location": "b11",
+          "quantity": 88,
+          "sourceIds": [
+            "bf0d60be5e14639b36c9a4de"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 89 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b12",
+          "quantity": 89,
+          "sourceIds": [
+            "8e0521a8fc7153c54ffec192"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        }
+      ],
+      "rejected": [],
+      "failedBatches": []
+    }
+  ],
+  "usage": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00061996,
+      "reserved_usd": 0.00658018,
+      "input_tokens": 3054,
+      "output_tokens": 481,
+      "wall_ms": 2591.1751000000004,
+      "error": null
+    }
+  ],
+  "costUsd": 0.00061996,
+  "chargedBudgetUsd": 0.00061996,
+  "invariants": [],
+  "limitations": [
+    "Synthetic internally authored cases, not independently annotated field accuracy",
+    "Exact tuples include native unit and current-time interpretation. Accepted-need precision and a conservative denominator including rejected need observations are reported separately; invalid citations do not become evidence.",
+    "No claim of lives saved or human comprehension.",
+    "Acknowledgement and stored reposts do not count as new independent tasks.",
+    "Finite completed batches measure semantic processing, not real-time arrival/review stability at 10k/hour."
+  ]
+}

@@ -181,3 +181,38 @@ El RTO pequeño bajo cinco minutos cubre un fixture local, no una base industria
 Independencia del corpus/holdout, competencia de B0/B1–B6, precisión multimodal real, comprensión/tiempo humano, validez de parámetros clínicos, adopción institucional, permisos de redes reales y confianza del público necesitan evidencia externa. [VALIDACION_EXTERNA.md](VALIDACION_EXTERNA.md) define cómo obtenerla.
 
 Gemma puede producir una mejora o una pérdida. Cambiar a Gemini obliga a repetir y no garantiza corregir las pérdidas. No se acredita supervivencia, vidas salvadas, despliegue de campo, top 1 ni 100/100 mediante un simulador propio o una presentación.
+
+## 12. Cierre local: pruebas estables del candidato — 12 de octubre de 2026
+
+El candidato de esta fase tiene huella `27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f` y commits de plataforma hasta `a99bf8f`; el simulador está en `6c75ae5`. La huella del evaluador para estas ejecuciones es `0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717`. Los documentos y reportes no alteran la huella del candidato. GCP está excluido y el modelo configurado es Gemma 4 31B/OpenRouter. Consultar [CIERRE_LOCAL.md](CIERRE_LOCAL.md) para cada mecanismo.
+
+| Prueba | Resultado medido | Artefacto y límite |
+|---|---|---|
+| Verificación completa | 116 pruebas de plataforma + 120 del simulador, sin fallo, huella estable | [Reporte](../reports/verifications/1791810895999.json); prueba local de mecanismos/invariantes, no certificación clínica/industrial. |
+| Navegador | 57 checks de escritorio/móvil + 12 recorridos interactivos + 6 de evidencia/público/admin + 5 de respuesta/retención | [UI](../reports/ui-verification.json), [recorridos](../reports/ui-journeys.json), [revisión](../reports/ui-review-journeys.json), [respuesta](../reports/ui-response-journeys.json); automatización, no comprensión de personas. |
+| Observador 3D | Canvas WebGL de 1920×702, cambio de organización y panel de medidas, sin errores JS | [Reporte](../reports/observer-ui.json); screenshot inspeccionado localmente, sin extrapolar fidelidad operativa de la imagen. |
+| C1 desde una necesidad | 50 personas ocupan el refugio, 22,37 plazas·hora, cinco llamadas, USD 0,006189 y cero violaciones | [Ejecución](../reports/runs/service-live-1791811631830.json); necesidad seleccionada, sin ID de instalación/solución. Catálogo finito; no descubrimiento universal. |
+| Reparación física | 4/4 tratamientos completados: mismos 300 L cargados y misma operación resueltos; cero violaciones | [Ablación](../reports/ablations/repair-1791811333136/summary.json); dos seeds, cuatro ejecuciones, USD 0,017433. |
+| Episodio ×1 | 500/600 L recibidos, 100 L pendientes, 367 s reales/366 s del mundo, cuatro llamadas, USD 0,007200, cero violaciones | [Ejecución](../reports/runs/live-response-1791811661272.json); reloj real, revisión programada, entrega parcial y plazo incumplido incluidos. No claim de respuesta en milisegundos. |
+| Interpretación semántica | Cada una de cuatro organizaciones recuperó las 100 necesidades objetivo; precisión y recall 1,0 en el corpus interno; 40 llamadas, USD 0,026134 y huella estable | [Reporte](../reports/semantic/semantic-load-1791811089756.json); 3.444 publicaciones al final, idiomas, republicaciones, archivo e inyección. Gold del evaluador separado. No precisión sobre redes/fotos reales ni 100 entregas/min. |
+| Bytes reales | Audio, imagen, video muestreado y PDF, más derivado visual público revisado | [Reporte](../reports/runs/media-byte-1791812083731.json); fixtures internos permitidos, no dataset multimodal independiente. |
+| PDF escaneado largo | 23 páginas recorridas mediante continuación, seis llamadas, USD 0,001537, huella estable | [Reporte](../reports/runs/pdf-bytes-1791812095305.json); procedencia y pendientes por lote, no exactitud OCR certificada. |
+| Transporte/UX nominal | 1.000 publicaciones emitidas en bursts finitos, 3.200 versiones durables observadas, cero pérdidas entre publicaciones medidas, cero violaciones | [Reporte](../reports/flow/nominal-flow-1791810599616.json); equivalencia de llegada 10.000/h, cuatro workers concurrentes en un host con cuatro bases embebidas en el mismo proceso. El polling se informa aparte. |
+
+El probe nominal registró p95 de disponibilidad a persistencia **7.877 ms**, frente al objetivo de 5.000 ms: **no cumplido** en esa topología/hardware. Comando durable 9,85 ms, navegación a contenido visible 101,24 ms y filtro a dos frames 33,5 ms sí cumplen sus objetivos locales. No extrapolar esos tres éxitos a inferencia, plataforma industrial ni comprensión humana. Las versiones durables no equivalen a comprensión: esa se puntúa en el ensayo semántico separado.
+
+En repair, refresco completo usó ocho consultas frente a cuatro en selectivo. Los drafts modelados fueron 38.004/53.004 ms frente a 45.000/45.000 ms: la mejora de tiempo del 30% (K07) **no está demostrada**. Una seed perdió tiempo y coste; otra mejoró. Se conservan las latencias reales 18,2/157,4 s frente a 29,7/39,5 s, que tampoco acreditan robustez con dos seeds. La conservación física es un resultado diferente de la ventaja de rendimiento.
+
+### 12.1 Fallos anteriores conservados
+
+Los ensayos interrumpidos por cambios de código en `1791804389075`, `1791805164090`, `1791807577489` y `1791808563331` se conservan en reports/evaluations/. La verificación `1791809841431` pasó 114+120 tests, pero cambió el candidato durante ella: su gate global es falso. No usarla como verificación estable de esta versión.
+
+Los probes de flujo previos registraron latencias superiores al objetivo y resets de transporte. La recuperación acotada corrige el corte funcional; no se borra el resultado de rendimiento ni se convierte automáticamente en un p95 menor de 5 s. La ablación de reparación anterior que llegó otro camión mientras quedaba bloqueada la carga original se mantiene como regresión: no fue una reparación válida.
+
+### 12.2 Referencias defectuosas y recuperación diagnóstica
+
+La campaña estructural inicial [protocol](../reports/evaluations/1791811091548/protocol.json) conserva cuatro outcomes y una interrupción no clasificada. Una repetición independiente del caso distribuido terminó, pero no se reemplaza silenciosamente la ejecución fallida por ese éxito. La continuación registra la reserva conservadora de coste desconocido del abort y su alcance diagnóstico.
+
+La referencia convencional de aquella variante abortó con FACILITY al no tener evaluación recibida del sitio; una referencia competente debe conservarlo pendiente y seguir preparando ayuda factible. La ablación de consulta [informe inicial](../reports/ablations/inquiry-1791811331183/summary.json) completó 12 outcomes, pero broad_refresh omitía el org requerido en la consulta capabilities y falló con NOT_FOUND. **Sus mejoras numéricas frente a ese error no prueban utilidad marginal de GenAI.** La corrección y repetición del evaluador se documentan separadamente cuando concluyan.
+
+Los contrastes finales tienen que conservar pérdidas, inconclusos, timeouts, coste desconocido y referencias con debilidades. La regla del producto es preparar ayuda verificable, no elegir un subconjunto de gráficos favorables. Los gates estadísticos, independientes y humanos permanecen separados de los mecanismos implementados.

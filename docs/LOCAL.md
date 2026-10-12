@@ -115,7 +115,7 @@ Para analizar bytes de audio, video y documentos:
 pnpm setup:media
 ```
 
-La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas muestreados usan el modelo configurado. Para PDF se extraen hasta 20 páginas de texto; se renderizan hasta cuatro páginas escaneadas y el modelo propone su transcripción. Cada página distingue texto embebido de transcripción visual no verificada; las páginas restantes quedan pendientes. Registrar tipos no admitidos y partes no observadas. No llamar «percepción probada» a las descripciones sintéticas del laboratorio. Un medio sin archivo o con hash distinto no entra a inferencia ni publicación.
+La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas muestreados usan el modelo configurado. El primer análisis de PDF registra hasta 20 páginas y transcribe hasta cuatro escaneadas por lote. La UI permite continuar páginas pendientes, incluyendo las posteriores al primer tramo de 20; el modelo propone transcripciones con procedencia por página. Cada página distingue texto embebido de transcripción visual no verificada; las páginas restantes quedan pendientes. Registrar tipos no admitidos y partes no observadas. No llamar «percepción probada» a las descripciones sintéticas del laboratorio. Un medio sin archivo o con hash distinto no entra a inferencia ni publicación.
 
 ## Ejecutar pruebas y recoger evidencia
 
@@ -164,3 +164,26 @@ RPO local esperado: cero transacciones confirmadas desde la instantánea consist
 ## Cambiar de modelo o migrar
 
 Cambiar `MODEL_ID` configura otro modelo disponible; no garantiza el mismo soporte de herramientas, visión o precisión. Conservar y repetir tests de proveedor, multimodalidad, investigación y comparación. Gemini requiere su adaptador/configuración y una nueva campaña. La migración posterior a GCP debe repetir conformidad de DB, autenticación, cola, almacenamiento, contratos, despliegue y latencias; los servicios locales no heredan automáticamente las propiedades cloud.
+
+
+## Política, ingesta y recuperación del cierre local
+
+En Response, el coordinador aprueba una política versionada de prioridades, límites de revisión y tipos protegidos. La cola distingue necesidad pendiente, propuesta ya en revisión y caso inconcluso aplazado sin cambios; este último no desaparece. En Signals, la interpretación por lotes registra fuente/versiones, cobertura y rechazos. La fuente se sincroniza automáticamente; no se exige copiar manualmente tweets al workspace.
+
+La investigación automática usa el próximo caso elegible y permite asignar recursos entre necesidades concurrentes. Una investigación desde un caso/necesidad conserva su foco manual. Si no hay evidencia nueva tras una investigación inconclusa, la repetición automática se detiene para ahorrar coste; el dueño puede solicitar un nuevo intento. Un cambio material recibido reactiva la elegibilidad.
+
+En una operación bloqueada, Repair debe resolver o cancelar la operación original, con su cargo e historial. Un envío alternativo puede ser útil pero no resuelve por sí solo el bloqueo anterior. El estado reparado espera confirmación física del origen.
+
+En Organization, Retention muestra una vista previa del alcance y exige confirmación de dueño sobre esa versión. Ejecuta redacción/tombstones locales y bloquea resurrecciones de ingesta/inferencia en vuelo. No borra obligaciones físicas/decisorias, backups externos, proveedor ni copias de otra organización; revisar por separado esas retenciones. Una publicación pública derivada se retira cuando corresponda.
+
+Para pruebas reproducibles adicionales:
+
+```powershell
+node --env-file-if-exists=.env.local scripts/service-demo.mjs --from-need
+node --env-file-if-exists=.env.local scripts/blocked-repair.mjs --seed=blocked-transfer-01 --budget=.15
+node --env-file-if-exists=.env.local scripts/semantic-load.mjs --needs=100 --orgs=4 --copies=23 --budget=.3
+node scripts/nominal-flow.mjs
+node scripts/response-journey.mjs
+```
+
+Las campañas y ablaciones tienen presupuesto explícito y un protocolo previo. No ejecutar todas las campañas con proveedor por rutina: repetir cuando cambia el mecanismo, la versión o existe una incertidumbre concreta. Las ejecuciones pagadas del cierre ya se conservan en reports/. Ver [CIERRE_LOCAL.md](CIERRE_LOCAL.md).

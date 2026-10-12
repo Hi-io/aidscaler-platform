@@ -1,0 +1,5364 @@
+{
+  "at": "2026-10-12T13:28:26.412Z",
+  "protocol": {
+    "run": "semantic-load-1791811089756",
+    "seed": "final-semantic-2026-10-12",
+    "count": 100,
+    "organizations": 4,
+    "copies": 23,
+    "budgetUsd": 0.3,
+    "clocks": "CPU/HTTP/model wall time separated from controlled source publication time",
+    "scorer": "Exact structured tuples from an evaluator-generated corpus; no model judges or evaluator labels in candidate input",
+    "independence": "Internal synthetic transfer test, not independently annotated real disaster data",
+    "model": "Configured OpenRouter model, never assumed Gemini"
+  },
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "candidateChanged": false,
+  "status": "completed",
+  "error": null,
+  "wallMs": 611497.9506999999,
+  "hardware": {
+    "cpus": 12,
+    "memoryBytes": 68644159488,
+    "rssBytes": 1271521280
+  },
+  "sourcePublications": 3444,
+  "deduplication": "Reposts were persisted and grouped by public original references; the model received original requests plus independent historical/hostile sources. No private truth labels selected a request's factual content.",
+  "measurements": [
+    {
+      "org": "org0",
+      "sourceRecordsReceived": 2959,
+      "evaluatedSources": 300,
+      "nativeNeeds": 100,
+      "detected": 100,
+      "recall": 1,
+      "preciseNeedObservations": 100,
+      "currentNeedObservations": 100,
+      "precision": 1,
+      "conservativeReturnedNeedPrecision": 1,
+      "rejectedNeedObservations": 0,
+      "rejectedObservations": [],
+      "failedBatches": [],
+      "falseMergeCandidates": 0,
+      "batches": 10,
+      "modelBatchMsP50": 4269.608299999993,
+      "modelBatchMsP95": 6770.193299999999,
+      "sourceThroughInterpretationWallMs": 121513.7165,
+      "inferenceWritesAuthoritativeNeed": false,
+      "pendingResearch": 100,
+      "omissions": []
+    },
+    {
+      "org": "org1",
+      "sourceRecordsReceived": 3429,
+      "evaluatedSources": 300,
+      "nativeNeeds": 100,
+      "detected": 100,
+      "recall": 1,
+      "preciseNeedObservations": 100,
+      "currentNeedObservations": 100,
+      "precision": 1,
+      "conservativeReturnedNeedPrecision": 1,
+      "rejectedNeedObservations": 0,
+      "rejectedObservations": [],
+      "failedBatches": [],
+      "falseMergeCandidates": 0,
+      "batches": 10,
+      "modelBatchMsP50": 4332.0945000000065,
+      "modelBatchMsP95": 7753.094599999982,
+      "sourceThroughInterpretationWallMs": 143684.2926,
+      "inferenceWritesAuthoritativeNeed": false,
+      "pendingResearch": 100,
+      "omissions": []
+    },
+    {
+      "org": "org2",
+      "sourceRecordsReceived": 3444,
+      "evaluatedSources": 300,
+      "nativeNeeds": 100,
+      "detected": 100,
+      "recall": 1,
+      "preciseNeedObservations": 100,
+      "currentNeedObservations": 100,
+      "precision": 1,
+      "conservativeReturnedNeedPrecision": 1,
+      "rejectedNeedObservations": 0,
+      "rejectedObservations": [],
+      "failedBatches": [],
+      "falseMergeCandidates": 0,
+      "batches": 10,
+      "modelBatchMsP50": 5079.186400000006,
+      "modelBatchMsP95": 10496.699000000022,
+      "sourceThroughInterpretationWallMs": 172551.60210000002,
+      "inferenceWritesAuthoritativeNeed": false,
+      "pendingResearch": 100,
+      "omissions": []
+    },
+    {
+      "org": "org3",
+      "sourceRecordsReceived": 3444,
+      "evaluatedSources": 300,
+      "nativeNeeds": 100,
+      "detected": 100,
+      "recall": 1,
+      "preciseNeedObservations": 100,
+      "currentNeedObservations": 100,
+      "precision": 1,
+      "conservativeReturnedNeedPrecision": 1,
+      "rejectedNeedObservations": 0,
+      "rejectedObservations": [],
+      "failedBatches": [],
+      "falseMergeCandidates": 0,
+      "batches": 10,
+      "modelBatchMsP50": 5670.482000000076,
+      "modelBatchMsP95": 9435.291499999934,
+      "sourceThroughInterpretationWallMs": 172989.749,
+      "inferenceWritesAuthoritativeNeed": false,
+      "pendingResearch": 100,
+      "omissions": []
+    }
+  ],
+  "findings": [
+    {
+      "org": "org0",
+      "observations": [
+        {
+          "kind": "need",
+          "text": "need 80 L of water",
+          "unit": "L",
+          "location": "b2",
+          "quantity": 80,
+          "sourceIds": [
+            "b9df26cd906c75a6c5b467f3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 81 portions de comida hoy",
+          "unit": "portions",
+          "location": "b4",
+          "quantity": 81,
+          "sourceIds": [
+            "a4849f58b60361b8f9118e93"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 82 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b5",
+          "quantity": 82,
+          "sourceIds": [
+            "e6ba8dab9299cc0e3c3cfc8f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が83 places必要です",
+          "unit": "places",
+          "location": "b6",
+          "quantity": 83,
+          "sourceIds": [
+            "4668474a669f8d082af14ad0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 84 blankets of blankets",
+          "unit": "blankets",
+          "location": "b7",
+          "quantity": 84,
+          "sourceIds": [
+            "62916b2d071270792d17eff1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 85 L de agua hoy",
+          "unit": "L",
+          "location": "b8",
+          "quantity": 85,
+          "sourceIds": [
+            "50b8ca6dfe6dae6bf9ba111f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 86 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b10",
+          "quantity": 86,
+          "sourceIds": [
+            "44494f8ecad9eb49aca1d6f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が87 packs必要です",
+          "unit": "packs",
+          "location": "b13",
+          "quantity": 87,
+          "sourceIds": [
+            "838659e869743a90fd9db0b0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 88 places of shelter",
+          "unit": "places",
+          "location": "b14",
+          "quantity": 88,
+          "sourceIds": [
+            "d0b52a42d57a13fd1fc515b9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 89 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b16",
+          "quantity": 89,
+          "sourceIds": [
+            "209c5efd788a11aa5e0b7092"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 90 L de eau aujourd'hui",
+          "unit": "L",
+          "location": "b17",
+          "quantity": 90,
+          "sourceIds": [
+            "fe7bc5bb0e156a2ce7fefb03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "食料が91 portions必要です",
+          "unit": "portions",
+          "location": "b18",
+          "quantity": 91,
+          "sourceIds": [
+            "539b5a7a3734ee9f0de451d8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 92 packs of medicine",
+          "unit": "packs",
+          "location": "b19",
+          "quantity": 92,
+          "sourceIds": [
+            "cda4a4415b82a97a2d00646e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 93 places de refugio hoy",
+          "unit": "places",
+          "location": "b22",
+          "quantity": 93,
+          "sourceIds": [
+            "923ec2a796344087c841ad3a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 94 blankets de couvertures aujourd'hui",
+          "unit": "blankets",
+          "location": "b23",
+          "quantity": 94,
+          "sourceIds": [
+            "b893b2b6bf856ff39b2db29d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "水が95 L必要です",
+          "unit": "L",
+          "location": "b25",
+          "quantity": 95,
+          "sourceIds": [
+            "ed9e9938f67c14e9893b00a9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 96 portions of food",
+          "unit": "portions",
+          "location": "b27",
+          "quantity": 96,
+          "sourceIds": [
+            "fcbd58fda2be28d5ddd05c24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 97 packs de medicamentos hoy",
+          "unit": "packs",
+          "location": "b28",
+          "quantity": 97,
+          "sourceIds": [
+            "e8d96b98ee2aaa8f5ac8ff64"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 98 places de abri aujourd'hui",
+          "unit": "places",
+          "location": "b29",
+          "quantity": 98,
+          "sourceIds": [
+            "f590cb02996d3df039acb046"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "毛布が99 blankets必要です",
+          "unit": "blankets",
+          "location": "b30",
+          "quantity": 99,
+          "sourceIds": [
+            "1748724e0eec02dd546d0c48"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 100 L of water",
+          "unit": "L",
+          "location": "b31",
+          "quantity": 100,
+          "sourceIds": [
+            "71bf3acfa339631be34796be"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 101 portions de comida hoy",
+          "unit": "portions",
+          "location": "b33",
+          "quantity": 101,
+          "sourceIds": [
+            "d44936067e8c34dffcc5845e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 102 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b34",
+          "quantity": 102,
+          "sourceIds": [
+            "af9cf3fd0d2b749660cf555a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が103 places必要です",
+          "unit": "places",
+          "location": "b35",
+          "quantity": 103,
+          "sourceIds": [
+            "d1e84a2bfa43c37b8373ffab"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 104 blankets of blankets",
+          "unit": "blankets",
+          "location": "b36",
+          "quantity": 104,
+          "sourceIds": [
+            "d14bfc0e946692da161226a6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 105 L de agua hoy",
+          "unit": "L",
+          "location": "b37",
+          "quantity": 105,
+          "sourceIds": [
+            "969d4845c2eae4624e6754ad"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 106 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b38",
+          "quantity": 106,
+          "sourceIds": [
+            "be5042b87a410dd48fb8500f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が107 packs必要です",
+          "unit": "packs",
+          "location": "b39",
+          "quantity": 107,
+          "sourceIds": [
+            "bc83ce4c8bb0fbbe48d58ead"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 108 places of shelter",
+          "unit": "places",
+          "location": "b42",
+          "quantity": 108,
+          "sourceIds": [
+            "874f1ab0f6d954d43d51c9b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 109 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b43",
+          "quantity": 109,
+          "sourceIds": [
+            "6dac28b0375568819e533c03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 110 L of water",
+          "unit": "L",
+          "location": "b44",
+          "quantity": 110,
+          "sourceIds": [
+            "492df8848ab10b324a8d9cef"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 111 portions of food",
+          "unit": "portions",
+          "location": "b45",
+          "quantity": 111,
+          "sourceIds": [
+            "353afb2516a16ee9bc4264f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 112 packs of medicine",
+          "unit": "packs",
+          "location": "b47",
+          "quantity": 112,
+          "sourceIds": [
+            "e2eedfb48622b0da4d0e94b4"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 113 places of shelter",
+          "unit": "places",
+          "location": "b49",
+          "quantity": 113,
+          "sourceIds": [
+            "dd3378c6d2db8520f13cba26"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 114 blankets",
+          "unit": "blankets",
+          "location": "b51",
+          "quantity": 114,
+          "sourceIds": [
+            "0110475ae1ccbb89dab460b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 115 L of water",
+          "unit": "L",
+          "location": "b52",
+          "quantity": 115,
+          "sourceIds": [
+            "533697177855d23188c7ff05"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 116 portions of food",
+          "unit": "portions",
+          "location": "b53",
+          "quantity": 116,
+          "sourceIds": [
+            "c770ee42cab497a74d6b144c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 117 packs of medicine",
+          "unit": "packs",
+          "location": "b55",
+          "quantity": 117,
+          "sourceIds": [
+            "779dd6a34a488744de02c91b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 118 places of shelter",
+          "unit": "places",
+          "location": "b57",
+          "quantity": 118,
+          "sourceIds": [
+            "43c38b48b366903d73585639"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 119 blankets",
+          "unit": "blankets",
+          "location": "b58",
+          "quantity": 119,
+          "sourceIds": [
+            "eb15a75493c9198fa45620ac"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 120 L of water",
+          "unit": "L",
+          "location": "b59",
+          "quantity": 120,
+          "sourceIds": [
+            "b611e69f703b3061f61a3e9d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 121 portions de comida hoy",
+          "unit": "portions",
+          "location": "b60",
+          "quantity": 121,
+          "sourceIds": [
+            "c98006cdcdd4945f576aac3d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 122 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b61",
+          "quantity": 122,
+          "sourceIds": [
+            "79da6deafcc9ec298eca0c4a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が123 places必要です",
+          "unit": "places",
+          "location": "b63",
+          "quantity": 123,
+          "sourceIds": [
+            "ee4ba3a8f2f79cb5a8d5fcda"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 124 blankets of blankets",
+          "unit": "blankets",
+          "location": "b64",
+          "quantity": 124,
+          "sourceIds": [
+            "0cd51b197d6cc3b79e702505"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 125 L de agua hoy",
+          "unit": "L",
+          "location": "b67",
+          "quantity": 125,
+          "sourceIds": [
+            "c7533aeda1c72440547c6e49"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 126 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b69",
+          "quantity": 126,
+          "sourceIds": [
+            "5a0b9ab016a6a0bdca779a1f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が127 packs必要です",
+          "unit": "packs",
+          "location": "b71",
+          "quantity": 127,
+          "sourceIds": [
+            "714729710da6c15027b4b93f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 128 places of shelter",
+          "unit": "places",
+          "location": "b72",
+          "quantity": 128,
+          "sourceIds": [
+            "1a1dd70267244d16b2afbed7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 129 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b73",
+          "quantity": 129,
+          "sourceIds": [
+            "ef05358688f54760abb7ba24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 130 L of water",
+          "unit": "L",
+          "location": "b74",
+          "quantity": 130,
+          "sourceIds": [
+            "07bb8bf43ebaa1279b3cdd63"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 131 portions of food",
+          "unit": "portions",
+          "location": "b75",
+          "quantity": 131,
+          "sourceIds": [
+            "8383b4669354718c544af215"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 132 packs of medicine",
+          "unit": "packs",
+          "location": "b76",
+          "quantity": 132,
+          "sourceIds": [
+            "99552d7211c491693de95e8e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 133 places of shelter",
+          "unit": "places",
+          "location": "b78",
+          "quantity": 133,
+          "sourceIds": [
+            "b8abd1dbca8c54133ddc179d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 134 blankets",
+          "unit": "blankets",
+          "location": "b79",
+          "quantity": 134,
+          "sourceIds": [
+            "8ad84d428c66ad566693deb0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 135 L of water",
+          "unit": "L",
+          "location": "b80",
+          "quantity": 135,
+          "sourceIds": [
+            "89190ae470f3f3c2db37012f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 136 portions of food",
+          "unit": "portions",
+          "location": "b81",
+          "quantity": 136,
+          "sourceIds": [
+            "f6b8f7d26982c808f41693a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 137 packs of medicine",
+          "unit": "packs",
+          "location": "b84",
+          "quantity": 137,
+          "sourceIds": [
+            "c3c0ed6a6caa3bb8e3811dc0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 138 places of shelter",
+          "unit": "places",
+          "location": "b85",
+          "quantity": 138,
+          "sourceIds": [
+            "3f5ff733972e181264415002"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 139 blankets",
+          "unit": "blankets",
+          "location": "b86",
+          "quantity": 139,
+          "sourceIds": [
+            "2fee7860c19086c9d45c4f58"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 140 L of water",
+          "unit": "L",
+          "location": "b87",
+          "quantity": 140,
+          "sourceIds": [
+            "ceab2df1fda950c8aefd43f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 141 portions de comida hoy",
+          "unit": "portions",
+          "location": "b88",
+          "quantity": 141,
+          "sourceIds": [
+            "58ae15c85431b4749cbdda18"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 142 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b89",
+          "quantity": 142,
+          "sourceIds": [
+            "1ac39dc025851152c4fc16ba"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が143 places必要です",
+          "unit": "places",
+          "location": "b91",
+          "quantity": 143,
+          "sourceIds": [
+            "d0aecd98e3735421847f90d2"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 144 blankets of blankets",
+          "unit": "blankets",
+          "location": "b92",
+          "quantity": 144,
+          "sourceIds": [
+            "a7366d560b25bfdfb25526f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 145 L de agua hoy",
+          "unit": "L",
+          "location": "b93",
+          "quantity": 145,
+          "sourceIds": [
+            "996d0c7fbab32e5cde303d8b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 146 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b95",
+          "quantity": 146,
+          "sourceIds": [
+            "c8d92ad1b053f7a875723563"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が147 packs必要です",
+          "unit": "packs",
+          "location": "b96",
+          "quantity": 147,
+          "sourceIds": [
+            "6dbcd14c45ab055aeb04b271"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 148 places of shelter",
+          "unit": "places",
+          "location": "b98",
+          "quantity": 148,
+          "sourceIds": [
+            "b70dd037e5d380b6d7611560"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 149 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b100",
+          "quantity": 149,
+          "sourceIds": [
+            "e86e2a924672f5033c13379b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 150 L of water",
+          "unit": "L",
+          "location": "b101",
+          "quantity": 150,
+          "sourceIds": [
+            "255c0d8ccb0727337a6ad81c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 151 portions of food",
+          "unit": "portions",
+          "location": "b102",
+          "quantity": 151,
+          "sourceIds": [
+            "aab76c3d99895e03aeaecb2e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 152 packs of medicine",
+          "unit": "packs",
+          "location": "b103",
+          "quantity": 152,
+          "sourceIds": [
+            "1b4e91d8293f69cfdf8c9bb1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 153 places of shelter",
+          "unit": "places",
+          "location": "b104",
+          "quantity": 153,
+          "sourceIds": [
+            "4825c54c1847ad2154a798b8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 154 blankets",
+          "unit": "blankets",
+          "location": "b105",
+          "quantity": 154,
+          "sourceIds": [
+            "639d09177cbc57e54f57c493"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 155 L of water",
+          "unit": "L",
+          "location": "b106",
+          "quantity": 155,
+          "sourceIds": [
+            "e155f6ab44e9a4b60edcc8ca"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 156 portions of food",
+          "unit": "portions",
+          "location": "b109",
+          "quantity": 156,
+          "sourceIds": [
+            "6dc8081478bab8e3dce2ead3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 157 packs of medicine",
+          "unit": "packs",
+          "location": "b110",
+          "quantity": 157,
+          "sourceIds": [
+            "282031673c0a7195e97e2404"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 158 places of shelter",
+          "unit": "places",
+          "location": "b111",
+          "quantity": 158,
+          "sourceIds": [
+            "8895beade18bfa6992f346c9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 159 blankets",
+          "unit": "blankets",
+          "location": "b114",
+          "quantity": 159,
+          "sourceIds": [
+            "d88e2dcd6ee6dae1921596a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 160 L of water",
+          "unit": "L",
+          "location": "b116",
+          "quantity": 160,
+          "sourceIds": [
+            "8ecf3aab2c48307dd6a94e1b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 161 portions de comida hoy",
+          "unit": "portions",
+          "location": "b117",
+          "quantity": 161,
+          "sourceIds": [
+            "c12433e46adb99e25b8b6e83"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 162 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b118",
+          "quantity": 162,
+          "sourceIds": [
+            "80c3204038b191d8d6086173"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が163 places必要です",
+          "unit": "places",
+          "location": "b119",
+          "quantity": 163,
+          "sourceIds": [
+            "5f627e87f98c06fbe5803339"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 164 blankets of blankets",
+          "unit": "blankets",
+          "location": "b120",
+          "quantity": 164,
+          "sourceIds": [
+            "e4a2d1a4ebc97444b7812f70"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 165 L de agua hoy",
+          "unit": "L",
+          "location": "b121",
+          "quantity": 165,
+          "sourceIds": [
+            "a780721b51681a7fd735eb27"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 166 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b123",
+          "quantity": 166,
+          "sourceIds": [
+            "41ad1fe8d906973a71753f91"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が167 packs必要です",
+          "unit": "packs",
+          "location": "b124",
+          "quantity": 167,
+          "sourceIds": [
+            "f467e30d95c4d6efa062c447"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 168 places of shelter",
+          "unit": "places",
+          "location": "b125",
+          "quantity": 168,
+          "sourceIds": [
+            "628fda0abda970e00849fab7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 169 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b126",
+          "quantity": 169,
+          "sourceIds": [
+            "87d74b40041a91de071e51b5"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 170 L of water",
+          "unit": "L",
+          "location": "b127",
+          "quantity": 170,
+          "sourceIds": [
+            "db09e1a8275f0738e6c02501"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 171 portions of food",
+          "unit": "portions",
+          "location": "b129",
+          "quantity": 171,
+          "sourceIds": [
+            "260ea5a2ae5280d2a6e812e9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 172 packs of medicine",
+          "unit": "packs",
+          "location": "b130",
+          "quantity": 172,
+          "sourceIds": [
+            "9c877229b6d270247d7e6e0f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 173 places of shelter",
+          "unit": "places",
+          "location": "b131",
+          "quantity": 173,
+          "sourceIds": [
+            "8f3cd443e5f471a0bcfac252"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 174 blankets",
+          "unit": "blankets",
+          "location": "b132",
+          "quantity": 174,
+          "sourceIds": [
+            "5d33edd455207f4847f7916f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 175 L of water",
+          "unit": "L",
+          "location": "b133",
+          "quantity": 175,
+          "sourceIds": [
+            "f006bbc1f3e00c37deda1415"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 176 portions of food",
+          "unit": "portions",
+          "location": "b136",
+          "quantity": 176,
+          "sourceIds": [
+            "0b4807a530bff25541c39f6c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 177 packs of medicine",
+          "unit": "packs",
+          "location": "b138",
+          "quantity": 177,
+          "sourceIds": [
+            "1496f51fff1ead6e8301cc97"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 178 places of shelter",
+          "unit": "places",
+          "location": "b139",
+          "quantity": 178,
+          "sourceIds": [
+            "e063025c793a625c8353c554"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 179 blankets",
+          "unit": "blankets",
+          "location": "b140",
+          "quantity": 179,
+          "sourceIds": [
+            "cf0ef05ed543781e12dfb736"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        }
+      ],
+      "rejected": [],
+      "failedBatches": []
+    },
+    {
+      "org": "org1",
+      "observations": [
+        {
+          "kind": "need",
+          "text": "need 80 L of water",
+          "unit": "L",
+          "location": "b2",
+          "quantity": 80,
+          "sourceIds": [
+            "b9df26cd906c75a6c5b467f3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 81 portions de comida hoy",
+          "unit": "portions",
+          "location": "b4",
+          "quantity": 81,
+          "sourceIds": [
+            "a4849f58b60361b8f9118e93"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 82 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b5",
+          "quantity": 82,
+          "sourceIds": [
+            "e6ba8dab9299cc0e3c3cfc8f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が83 places必要です",
+          "unit": "places",
+          "location": "b6",
+          "quantity": 83,
+          "sourceIds": [
+            "4668474a669f8d082af14ad0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 84 blankets of blankets",
+          "unit": "blankets",
+          "location": "b7",
+          "quantity": 84,
+          "sourceIds": [
+            "62916b2d071270792d17eff1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 85 L de agua hoy",
+          "unit": "L",
+          "location": "b8",
+          "quantity": 85,
+          "sourceIds": [
+            "50b8ca6dfe6dae6bf9ba111f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 86 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b10",
+          "quantity": 86,
+          "sourceIds": [
+            "44494f8ecad9eb49aca1d6f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が87 packs必要です",
+          "unit": "packs",
+          "location": "b13",
+          "quantity": 87,
+          "sourceIds": [
+            "838659e869743a90fd9db0b0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 88 places of shelter",
+          "unit": "places",
+          "location": "b14",
+          "quantity": 88,
+          "sourceIds": [
+            "d0b52a42d57a13fd1fc515b9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 89 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b16",
+          "quantity": 89,
+          "sourceIds": [
+            "209c5efd788a11aa5e0b7092"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 90 L of water",
+          "unit": "L",
+          "location": "b17",
+          "quantity": 90,
+          "sourceIds": [
+            "fe7bc5bb0e156a2ce7fefb03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 91 portions of food",
+          "unit": "portions",
+          "location": "b18",
+          "quantity": 91,
+          "sourceIds": [
+            "539b5a7a3734ee9f0de451d8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 92 packs of medicine",
+          "unit": "packs",
+          "location": "b19",
+          "quantity": 92,
+          "sourceIds": [
+            "cda4a4415b82a97a2d00646e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 93 places of shelter",
+          "unit": "places",
+          "location": "b22",
+          "quantity": 93,
+          "sourceIds": [
+            "923ec2a796344087c841ad3a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 94 blankets",
+          "unit": "blankets",
+          "location": "b23",
+          "quantity": 94,
+          "sourceIds": [
+            "b893b2b6bf856ff39b2db29d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 95 L of water",
+          "unit": "L",
+          "location": "b25",
+          "quantity": 95,
+          "sourceIds": [
+            "ed9e9938f67c14e9893b00a9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 96 portions of food",
+          "unit": "portions",
+          "location": "b27",
+          "quantity": 96,
+          "sourceIds": [
+            "fcbd58fda2be28d5ddd05c24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 97 packs of medicine",
+          "unit": "packs",
+          "location": "b28",
+          "quantity": 97,
+          "sourceIds": [
+            "e8d96b98ee2aaa8f5ac8ff64"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 98 places of shelter",
+          "unit": "places",
+          "location": "b29",
+          "quantity": 98,
+          "sourceIds": [
+            "f590cb02996d3df039acb046"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 99 blankets",
+          "unit": "blankets",
+          "location": "b30",
+          "quantity": 99,
+          "sourceIds": [
+            "1748724e0eec02dd546d0c48"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 100 L of water",
+          "unit": "L",
+          "location": "b31",
+          "quantity": 100,
+          "sourceIds": [
+            "71bf3acfa339631be34796be"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 101 portions de comida hoy",
+          "unit": "portions",
+          "location": "b33",
+          "quantity": 101,
+          "sourceIds": [
+            "d44936067e8c34dffcc5845e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 102 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b34",
+          "quantity": 102,
+          "sourceIds": [
+            "af9cf3fd0d2b749660cf555a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が103 places必要です",
+          "unit": "places",
+          "location": "b35",
+          "quantity": 103,
+          "sourceIds": [
+            "d1e84a2bfa43c37b8373ffab"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 104 blankets of blankets",
+          "unit": "blankets",
+          "location": "b36",
+          "quantity": 104,
+          "sourceIds": [
+            "d14bfc0e946692da161226a6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 105 L de agua hoy",
+          "unit": "L",
+          "location": "b37",
+          "quantity": 105,
+          "sourceIds": [
+            "969d4845c2eae4624e6754ad"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 106 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b38",
+          "quantity": 106,
+          "sourceIds": [
+            "be5042b87a410dd48fb8500f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が107 packs必要です",
+          "unit": "packs",
+          "location": "b39",
+          "quantity": 107,
+          "sourceIds": [
+            "bc83ce4c8bb0fbbe48d58ead"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 108 places of shelter",
+          "unit": "places",
+          "location": "b42",
+          "quantity": 108,
+          "sourceIds": [
+            "874f1ab0f6d954d43d51c9b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 109 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b43",
+          "quantity": 109,
+          "sourceIds": [
+            "6dac28b0375568819e533c03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 110 L of water",
+          "unit": "L",
+          "location": "b44",
+          "quantity": 110,
+          "sourceIds": [
+            "492df8848ab10b324a8d9cef"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 111 portions of food",
+          "unit": "portions",
+          "location": "b45",
+          "quantity": 111,
+          "sourceIds": [
+            "353afb2516a16ee9bc4264f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 112 packs of medicine",
+          "unit": "packs",
+          "location": "b47",
+          "quantity": 112,
+          "sourceIds": [
+            "e2eedfb48622b0da4d0e94b4"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 113 places of shelter",
+          "unit": "places",
+          "location": "b49",
+          "quantity": 113,
+          "sourceIds": [
+            "dd3378c6d2db8520f13cba26"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 114 blankets",
+          "unit": "blankets",
+          "location": "b51",
+          "quantity": 114,
+          "sourceIds": [
+            "0110475ae1ccbb89dab460b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 115 L of water",
+          "unit": "L",
+          "location": "b52",
+          "quantity": 115,
+          "sourceIds": [
+            "533697177855d23188c7ff05"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 116 portions of food",
+          "unit": "portions",
+          "location": "b53",
+          "quantity": 116,
+          "sourceIds": [
+            "c770ee42cab497a74d6b144c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 117 packs of medicine",
+          "unit": "packs",
+          "location": "b55",
+          "quantity": 117,
+          "sourceIds": [
+            "779dd6a34a488744de02c91b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 118 places of shelter",
+          "unit": "places",
+          "location": "b57",
+          "quantity": 118,
+          "sourceIds": [
+            "43c38b48b366903d73585639"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 119 blankets",
+          "unit": "blankets",
+          "location": "b58",
+          "quantity": 119,
+          "sourceIds": [
+            "eb15a75493c9198fa45620ac"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 120 L of water",
+          "unit": "L",
+          "location": "b59",
+          "quantity": 120,
+          "sourceIds": [
+            "b611e69f703b3061f61a3e9d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 121 portions de comida hoy",
+          "unit": "portions",
+          "location": "b60",
+          "quantity": 121,
+          "sourceIds": [
+            "c98006cdcdd4945f576aac3d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 122 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b61",
+          "quantity": 122,
+          "sourceIds": [
+            "79da6deafcc9ec298eca0c4a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が123 places必要です",
+          "unit": "places",
+          "location": "b63",
+          "quantity": 123,
+          "sourceIds": [
+            "ee4ba3a8f2f79cb5a8d5fcda"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 124 blankets of blankets",
+          "unit": "blankets",
+          "location": "b64",
+          "quantity": 124,
+          "sourceIds": [
+            "0cd51b197d6cc3b79e702505"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 125 L de agua hoy",
+          "unit": "L",
+          "location": "b67",
+          "quantity": 125,
+          "sourceIds": [
+            "c7533aeda1c72440547c6e49"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 126 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b69",
+          "quantity": 126,
+          "sourceIds": [
+            "5a0b9ab016a6a0bdca779a1f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が127 packs必要です",
+          "unit": "packs",
+          "location": "b71",
+          "quantity": 127,
+          "sourceIds": [
+            "714729710da6c15027b4b93f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 128 places of shelter",
+          "unit": "places",
+          "location": "b72",
+          "quantity": 128,
+          "sourceIds": [
+            "1a1dd70267244d16b2afbed7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 129 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b73",
+          "quantity": 129,
+          "sourceIds": [
+            "ef05358688f54760abb7ba24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 130 L of water",
+          "unit": "L",
+          "location": "b74",
+          "quantity": 130,
+          "sourceIds": [
+            "07bb8bf43ebaa1279b3cdd63"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 131 portions of food",
+          "unit": "portions",
+          "location": "b75",
+          "quantity": 131,
+          "sourceIds": [
+            "8383b4669354718c544af215"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 132 packs of medicine",
+          "unit": "packs",
+          "location": "b76",
+          "quantity": 132,
+          "sourceIds": [
+            "99552d7211c491693de95e8e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 133 places of shelter",
+          "unit": "places",
+          "location": "b78",
+          "quantity": 133,
+          "sourceIds": [
+            "b8abd1dbca8c54133ddc179d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 134 blankets",
+          "unit": "blankets",
+          "location": "b79",
+          "quantity": 134,
+          "sourceIds": [
+            "8ad84d428c66ad566693deb0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 135 L of water",
+          "unit": "L",
+          "location": "b80",
+          "quantity": 135,
+          "sourceIds": [
+            "89190ae470f3f3c2db37012f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 136 portions of food",
+          "unit": "portions",
+          "location": "b81",
+          "quantity": 136,
+          "sourceIds": [
+            "f6b8f7d26982c808f41693a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 137 packs of medicine",
+          "unit": "packs",
+          "location": "b84",
+          "quantity": 137,
+          "sourceIds": [
+            "c3c0ed6a6caa3bb8e3811dc0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 138 places of shelter",
+          "unit": "places",
+          "location": "b85",
+          "quantity": 138,
+          "sourceIds": [
+            "3f5ff733972e181264415002"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 139 blankets",
+          "unit": "blankets",
+          "location": "b86",
+          "quantity": 139,
+          "sourceIds": [
+            "2fee7860c19086c9d45c4f58"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 140 L of water",
+          "unit": "L",
+          "location": "b87",
+          "quantity": 140,
+          "sourceIds": [
+            "ceab2df1fda950c8aefd43f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 141 portions de comida hoy",
+          "unit": "portions",
+          "location": "b88",
+          "quantity": 141,
+          "sourceIds": [
+            "58ae15c85431b4749cbdda18"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 142 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b89",
+          "quantity": 142,
+          "sourceIds": [
+            "1ac39dc025851152c4fc16ba"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が143 places必要です",
+          "unit": "places",
+          "location": "b91",
+          "quantity": 143,
+          "sourceIds": [
+            "d0aecd98e3735421847f90d2"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 144 blankets of blankets",
+          "unit": "blankets",
+          "location": "b92",
+          "quantity": 144,
+          "sourceIds": [
+            "a7366d560b25bfdfb25526f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 145 L de agua hoy",
+          "unit": "L",
+          "location": "b93",
+          "quantity": 145,
+          "sourceIds": [
+            "996d0c7fbab32e5cde303d8b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 146 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b95",
+          "quantity": 146,
+          "sourceIds": [
+            "c8d92ad1b053f7a875723563"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が147 packs必要です",
+          "unit": "packs",
+          "location": "b96",
+          "quantity": 147,
+          "sourceIds": [
+            "6dbcd14c45ab055aeb04b271"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 148 places of shelter",
+          "unit": "places",
+          "location": "b98",
+          "quantity": 148,
+          "sourceIds": [
+            "b70dd037e5d380b6d7611560"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 149 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b100",
+          "quantity": 149,
+          "sourceIds": [
+            "e86e2a924672f5033c13379b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 150 L of water",
+          "unit": "L",
+          "location": "b101",
+          "quantity": 150,
+          "sourceIds": [
+            "255c0d8ccb0727337a6ad81c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 151 portions of food",
+          "unit": "portions",
+          "location": "b102",
+          "quantity": 151,
+          "sourceIds": [
+            "aab76c3d99895e03aeaecb2e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 152 packs of medicine",
+          "unit": "packs",
+          "location": "b103",
+          "quantity": 152,
+          "sourceIds": [
+            "1b4e91d8293f69cfdf8c9bb1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 153 places of shelter",
+          "unit": "places",
+          "location": "b104",
+          "quantity": 153,
+          "sourceIds": [
+            "4825c54c1847ad2154a798b8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 154 blankets",
+          "unit": "blankets",
+          "location": "b105",
+          "quantity": 154,
+          "sourceIds": [
+            "639d09177cbc57e54f57c493"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 155 L of water",
+          "unit": "L",
+          "location": "b106",
+          "quantity": 155,
+          "sourceIds": [
+            "e155f6ab44e9a4b60edcc8ca"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 156 portions of food",
+          "unit": "portions",
+          "location": "b109",
+          "quantity": 156,
+          "sourceIds": [
+            "6dc8081478bab8e3dce2ead3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 157 packs of medicine",
+          "unit": "packs",
+          "location": "b110",
+          "quantity": 157,
+          "sourceIds": [
+            "282031673c0a7195e97e2404"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 158 places of shelter",
+          "unit": "places",
+          "location": "b111",
+          "quantity": 158,
+          "sourceIds": [
+            "8895beade18bfa6992f346c9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 159 blankets",
+          "unit": "blankets",
+          "location": "b114",
+          "quantity": 159,
+          "sourceIds": [
+            "d88e2dcd6ee6dae1921596a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 160 L of water",
+          "unit": "L",
+          "location": "b116",
+          "quantity": 160,
+          "sourceIds": [
+            "8ecf3aab2c48307dd6a94e1b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 161 portions de comida hoy",
+          "unit": "portions",
+          "location": "b117",
+          "quantity": 161,
+          "sourceIds": [
+            "c12433e46adb99e25b8b6e83"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 162 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b118",
+          "quantity": 162,
+          "sourceIds": [
+            "80c3204038b191d8d6086173"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が163 places必要です",
+          "unit": "places",
+          "location": "b119",
+          "quantity": 163,
+          "sourceIds": [
+            "5f627e87f98c06fbe5803339"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 164 blankets of blankets",
+          "unit": "blankets",
+          "location": "b120",
+          "quantity": 164,
+          "sourceIds": [
+            "e4a2d1a4ebc97444b7812f70"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 165 L de agua hoy",
+          "unit": "L",
+          "location": "b121",
+          "quantity": 165,
+          "sourceIds": [
+            "a780721b51681a7fd735eb27"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 166 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b123",
+          "quantity": 166,
+          "sourceIds": [
+            "41ad1fe8d906973a71753f91"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が167 packs必要です",
+          "unit": "packs",
+          "location": "b124",
+          "quantity": 167,
+          "sourceIds": [
+            "f467e30d95c4d6efa062c447"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 168 places of shelter",
+          "unit": "places",
+          "location": "b125",
+          "quantity": 168,
+          "sourceIds": [
+            "628fda0abda970e00849fab7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 169 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b126",
+          "quantity": 169,
+          "sourceIds": [
+            "87d74b40041a91de071e51b5"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 170 L of water",
+          "unit": "L",
+          "location": "b127",
+          "quantity": 170,
+          "sourceIds": [
+            "db09e1a8275f0738e6c02501"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 171 portions of food",
+          "unit": "portions",
+          "location": "b129",
+          "quantity": 171,
+          "sourceIds": [
+            "260ea5a2ae5280d2a6e812e9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 172 packs of medicine",
+          "unit": "packs",
+          "location": "b130",
+          "quantity": 172,
+          "sourceIds": [
+            "9c877229b6d270247d7e6e0f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 173 places of shelter",
+          "unit": "places",
+          "location": "b131",
+          "quantity": 173,
+          "sourceIds": [
+            "8f3cd443e5f471a0bcfac252"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 174 blankets",
+          "unit": "blankets",
+          "location": "b132",
+          "quantity": 174,
+          "sourceIds": [
+            "5d33edd455207f4847f7916f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 175 L of water",
+          "unit": "L",
+          "location": "b133",
+          "quantity": 175,
+          "sourceIds": [
+            "f006bbc1f3e00c37deda1415"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 176 portions of food",
+          "unit": "portions",
+          "location": "b136",
+          "quantity": 176,
+          "sourceIds": [
+            "0b4807a530bff25541c39f6c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 177 packs of medicine",
+          "unit": "packs",
+          "location": "b138",
+          "quantity": 177,
+          "sourceIds": [
+            "1496f51fff1ead6e8301cc97"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 178 places of shelter",
+          "unit": "places",
+          "location": "b139",
+          "quantity": 178,
+          "sourceIds": [
+            "e063025c793a625c8353c554"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 179 blankets",
+          "unit": "blankets",
+          "location": "b140",
+          "quantity": 179,
+          "sourceIds": [
+            "cf0ef05ed543781e12dfb736"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        }
+      ],
+      "rejected": [],
+      "failedBatches": []
+    },
+    {
+      "org": "org2",
+      "observations": [
+        {
+          "kind": "need",
+          "text": "need 80 L of water",
+          "unit": "L",
+          "location": "b2",
+          "quantity": 80,
+          "sourceIds": [
+            "b9df26cd906c75a6c5b467f3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 81 portions de comida hoy",
+          "unit": "portions",
+          "location": "b4",
+          "quantity": 81,
+          "sourceIds": [
+            "a4849f58b60361b8f9118e93"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 82 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b5",
+          "quantity": 82,
+          "sourceIds": [
+            "e6ba8dab9299cc0e3c3cfc8f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が83 places必要です",
+          "unit": "places",
+          "location": "b6",
+          "quantity": 83,
+          "sourceIds": [
+            "4668474a669f8d082af14ad0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 84 blankets of blankets",
+          "unit": "blankets",
+          "location": "b7",
+          "quantity": 84,
+          "sourceIds": [
+            "62916b2d071270792d17eff1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 85 L de agua hoy",
+          "unit": "L",
+          "location": "b8",
+          "quantity": 85,
+          "sourceIds": [
+            "50b8ca6dfe6dae6bf9ba111f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 86 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b10",
+          "quantity": 86,
+          "sourceIds": [
+            "44494f8ecad9eb49aca1d6f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が87 packs必要です",
+          "unit": "packs",
+          "location": "b13",
+          "quantity": 87,
+          "sourceIds": [
+            "838659e869743a90fd9db0b0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 88 places of shelter",
+          "unit": "places",
+          "location": "b14",
+          "quantity": 88,
+          "sourceIds": [
+            "d0b52a42d57a13fd1fc515b9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 89 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b16",
+          "quantity": 89,
+          "sourceIds": [
+            "209c5efd788a11aa5e0b7092"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 90 L of water",
+          "unit": "L",
+          "location": "b17",
+          "quantity": 90,
+          "sourceIds": [
+            "fe7bc5bb0e156a2ce7fefb03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 91 portions of food",
+          "unit": "portions",
+          "location": "b18",
+          "quantity": 91,
+          "sourceIds": [
+            "539b5a7a3734ee9f0de451d8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 92 packs of medicine",
+          "unit": "packs",
+          "location": "b19",
+          "quantity": 92,
+          "sourceIds": [
+            "cda4a4415b82a97a2d00646e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 93 places of shelter",
+          "unit": "places",
+          "location": "b22",
+          "quantity": 93,
+          "sourceIds": [
+            "923ec2a796344087c841ad3a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 94 blankets",
+          "unit": "blankets",
+          "location": "b23",
+          "quantity": 94,
+          "sourceIds": [
+            "b893b2b6bf856ff39b2db29d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 95 L of water",
+          "unit": "L",
+          "location": "b25",
+          "quantity": 95,
+          "sourceIds": [
+            "ed9e9938f67c14e9893b00a9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 96 portions of food",
+          "unit": "portions",
+          "location": "b27",
+          "quantity": 96,
+          "sourceIds": [
+            "fcbd58fda2be28d5ddd05c24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 97 packs of medicine",
+          "unit": "packs",
+          "location": "b28",
+          "quantity": 97,
+          "sourceIds": [
+            "e8d96b98ee2aaa8f5ac8ff64"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 98 places of shelter",
+          "unit": "places",
+          "location": "b29",
+          "quantity": 98,
+          "sourceIds": [
+            "f590cb02996d3df039acb046"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 99 blankets",
+          "unit": "blankets",
+          "location": "b30",
+          "quantity": 99,
+          "sourceIds": [
+            "1748724e0eec02dd546d0c48"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 100 L of water",
+          "unit": "L",
+          "location": "b31",
+          "quantity": 100,
+          "sourceIds": [
+            "71bf3acfa339631be34796be"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 101 portions de comida hoy",
+          "unit": "portions",
+          "location": "b33",
+          "quantity": 101,
+          "sourceIds": [
+            "d44936067e8c34dffcc5845e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 102 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b34",
+          "quantity": 102,
+          "sourceIds": [
+            "af9cf3fd0d2b749660cf555a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が103 places必要です",
+          "unit": "places",
+          "location": "b35",
+          "quantity": 103,
+          "sourceIds": [
+            "d1e84a2bfa43c37b8373ffab"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 104 blankets of blankets",
+          "unit": "blankets",
+          "location": "b36",
+          "quantity": 104,
+          "sourceIds": [
+            "d14bfc0e946692da161226a6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 105 L de agua hoy",
+          "unit": "L",
+          "location": "b37",
+          "quantity": 105,
+          "sourceIds": [
+            "969d4845c2eae4624e6754ad"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 106 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b38",
+          "quantity": 106,
+          "sourceIds": [
+            "be5042b87a410dd48fb8500f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が107 packs必要です",
+          "unit": "packs",
+          "location": "b39",
+          "quantity": 107,
+          "sourceIds": [
+            "bc83ce4c8bb0fbbe48d58ead"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 108 places of shelter",
+          "unit": "places",
+          "location": "b42",
+          "quantity": 108,
+          "sourceIds": [
+            "874f1ab0f6d954d43d51c9b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 109 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b43",
+          "quantity": 109,
+          "sourceIds": [
+            "6dac28b0375568819e533c03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 110 L of water",
+          "unit": "L",
+          "location": "b44",
+          "quantity": 110,
+          "sourceIds": [
+            "492df8848ab10b324a8d9cef"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 111 portions of food",
+          "unit": "portions",
+          "location": "b45",
+          "quantity": 111,
+          "sourceIds": [
+            "353afb2516a16ee9bc4264f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 112 packs of medicine",
+          "unit": "packs",
+          "location": "b47",
+          "quantity": 112,
+          "sourceIds": [
+            "e2eedfb48622b0da4d0e94b4"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 113 places of shelter",
+          "unit": "places",
+          "location": "b49",
+          "quantity": 113,
+          "sourceIds": [
+            "dd3378c6d2db8520f13cba26"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 114 blankets",
+          "unit": "blankets",
+          "location": "b51",
+          "quantity": 114,
+          "sourceIds": [
+            "0110475ae1ccbb89dab460b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 115 L of water",
+          "unit": "L",
+          "location": "b52",
+          "quantity": 115,
+          "sourceIds": [
+            "533697177855d23188c7ff05"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 116 portions of food",
+          "unit": "portions",
+          "location": "b53",
+          "quantity": 116,
+          "sourceIds": [
+            "c770ee42cab497a74d6b144c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 117 packs of medicine",
+          "unit": "packs",
+          "location": "b55",
+          "quantity": 117,
+          "sourceIds": [
+            "779dd6a34a488744de02c91b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 118 places of shelter",
+          "unit": "places",
+          "location": "b57",
+          "quantity": 118,
+          "sourceIds": [
+            "43c38b48b366903d73585639"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 119 blankets",
+          "unit": "blankets",
+          "location": "b58",
+          "quantity": 119,
+          "sourceIds": [
+            "eb15a75493c9198fa45620ac"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 120 L of water",
+          "unit": "L",
+          "location": "b59",
+          "quantity": 120,
+          "sourceIds": [
+            "b611e69f703b3061f61a3e9d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 121 portions de comida hoy",
+          "unit": "portions",
+          "location": "b60",
+          "quantity": 121,
+          "sourceIds": [
+            "c98006cdcdd4945f576aac3d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 122 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b61",
+          "quantity": 122,
+          "sourceIds": [
+            "79da6deafcc9ec298eca0c4a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が123 places必要です",
+          "unit": "places",
+          "location": "b63",
+          "quantity": 123,
+          "sourceIds": [
+            "ee4ba3a8f2f79cb5a8d5fcda"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 124 blankets of blankets",
+          "unit": "blankets",
+          "location": "b64",
+          "quantity": 124,
+          "sourceIds": [
+            "0cd51b197d6cc3b79e702505"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 125 L de agua hoy",
+          "unit": "L",
+          "location": "b67",
+          "quantity": 125,
+          "sourceIds": [
+            "c7533aeda1c72440547c6e49"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 126 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b69",
+          "quantity": 126,
+          "sourceIds": [
+            "5a0b9ab016a6a0bdca779a1f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が127 packs必要です",
+          "unit": "packs",
+          "location": "b71",
+          "quantity": 127,
+          "sourceIds": [
+            "714729710da6c15027b4b93f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 128 places of shelter",
+          "unit": "places",
+          "location": "b72",
+          "quantity": 128,
+          "sourceIds": [
+            "1a1dd70267244d16b2afbed7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 129 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b73",
+          "quantity": 129,
+          "sourceIds": [
+            "ef05358688f54760abb7ba24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 130 L de eau aujourd'hui",
+          "unit": "L",
+          "location": "b74",
+          "quantity": 130,
+          "sourceIds": [
+            "07bb8bf43ebaa1279b3cdd63"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "食料が131 portions必要です",
+          "unit": "portions",
+          "location": "b75",
+          "quantity": 131,
+          "sourceIds": [
+            "8383b4669354718c544af215"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 132 packs of medicine",
+          "unit": "packs",
+          "location": "b76",
+          "quantity": 132,
+          "sourceIds": [
+            "99552d7211c491693de95e8e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 133 places de refugio hoy",
+          "unit": "places",
+          "location": "b78",
+          "quantity": 133,
+          "sourceIds": [
+            "b8abd1dbca8c54133ddc179d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 134 blankets de couvertures aujourd'hui",
+          "unit": "blankets",
+          "location": "b79",
+          "quantity": 134,
+          "sourceIds": [
+            "8ad84d428c66ad566693deb0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "水が135 L必要です",
+          "unit": "L",
+          "location": "b80",
+          "quantity": 135,
+          "sourceIds": [
+            "89190ae470f3f3c2db37012f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 136 portions of food",
+          "unit": "portions",
+          "location": "b81",
+          "quantity": 136,
+          "sourceIds": [
+            "f6b8f7d26982c808f41693a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 137 packs de medicamentos hoy",
+          "unit": "packs",
+          "location": "b84",
+          "quantity": 137,
+          "sourceIds": [
+            "c3c0ed6a6caa3bb8e3811dc0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 138 places de abri aujourd'hui",
+          "unit": "places",
+          "location": "b85",
+          "quantity": 138,
+          "sourceIds": [
+            "3f5ff733972e181264415002"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "毛布が139 blankets必要です",
+          "unit": "blankets",
+          "location": "b86",
+          "quantity": 139,
+          "sourceIds": [
+            "2fee7860c19086c9d45c4f58"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 140 L of water",
+          "unit": "L",
+          "location": "b87",
+          "quantity": 140,
+          "sourceIds": [
+            "ceab2df1fda950c8aefd43f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 141 portions de comida hoy",
+          "unit": "portions",
+          "location": "b88",
+          "quantity": 141,
+          "sourceIds": [
+            "58ae15c85431b4749cbdda18"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 142 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b89",
+          "quantity": 142,
+          "sourceIds": [
+            "1ac39dc025851152c4fc16ba"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が143 places必要です",
+          "unit": "places",
+          "location": "b91",
+          "quantity": 143,
+          "sourceIds": [
+            "d0aecd98e3735421847f90d2"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 144 blankets of blankets",
+          "unit": "blankets",
+          "location": "b92",
+          "quantity": 144,
+          "sourceIds": [
+            "a7366d560b25bfdfb25526f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 145 L de agua hoy",
+          "unit": "L",
+          "location": "b93",
+          "quantity": 145,
+          "sourceIds": [
+            "996d0c7fbab32e5cde303d8b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 146 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b95",
+          "quantity": 146,
+          "sourceIds": [
+            "c8d92ad1b053f7a875723563"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が147 packs必要です",
+          "unit": "packs",
+          "location": "b96",
+          "quantity": 147,
+          "sourceIds": [
+            "6dbcd14c45ab055aeb04b271"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 148 places of shelter",
+          "unit": "places",
+          "location": "b98",
+          "quantity": 148,
+          "sourceIds": [
+            "b70dd037e5d380b6d7611560"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 149 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b100",
+          "quantity": 149,
+          "sourceIds": [
+            "e86e2a924672f5033c13379b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 150 L of water",
+          "unit": "L",
+          "location": "b101",
+          "quantity": 150,
+          "sourceIds": [
+            "255c0d8ccb0727337a6ad81c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 151 portions of food",
+          "unit": "portions",
+          "location": "b102",
+          "quantity": 151,
+          "sourceIds": [
+            "aab76c3d99895e03aeaecb2e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 152 packs of medicine",
+          "unit": "packs",
+          "location": "b103",
+          "quantity": 152,
+          "sourceIds": [
+            "1b4e91d8293f69cfdf8c9bb1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 153 places of shelter",
+          "unit": "places",
+          "location": "b104",
+          "quantity": 153,
+          "sourceIds": [
+            "4825c54c1847ad2154a798b8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 154 blankets",
+          "unit": "blankets",
+          "location": "b105",
+          "quantity": 154,
+          "sourceIds": [
+            "639d09177cbc57e54f57c493"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 155 L of water",
+          "unit": "L",
+          "location": "b106",
+          "quantity": 155,
+          "sourceIds": [
+            "e155f6ab44e9a4b60edcc8ca"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 156 portions of food",
+          "unit": "portions",
+          "location": "b109",
+          "quantity": 156,
+          "sourceIds": [
+            "6dc8081478bab8e3dce2ead3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 157 packs of medicine",
+          "unit": "packs",
+          "location": "b110",
+          "quantity": 157,
+          "sourceIds": [
+            "282031673c0a7195e97e2404"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 158 places of shelter",
+          "unit": "places",
+          "location": "b111",
+          "quantity": 158,
+          "sourceIds": [
+            "8895beade18bfa6992f346c9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 159 blankets",
+          "unit": "blankets",
+          "location": "b114",
+          "quantity": 159,
+          "sourceIds": [
+            "d88e2dcd6ee6dae1921596a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 160 L of water",
+          "unit": "L",
+          "location": "b116",
+          "quantity": 160,
+          "sourceIds": [
+            "8ecf3aab2c48307dd6a94e1b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 161 portions de comida hoy",
+          "unit": "portions",
+          "location": "b117",
+          "quantity": 161,
+          "sourceIds": [
+            "c12433e46adb99e25b8b6e83"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 162 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b118",
+          "quantity": 162,
+          "sourceIds": [
+            "80c3204038b191d8d6086173"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が163 places必要です",
+          "unit": "places",
+          "location": "b119",
+          "quantity": 163,
+          "sourceIds": [
+            "5f627e87f98c06fbe5803339"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 164 blankets of blankets",
+          "unit": "blankets",
+          "location": "b120",
+          "quantity": 164,
+          "sourceIds": [
+            "e4a2d1a4ebc97444b7812f70"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 165 L de agua hoy",
+          "unit": "L",
+          "location": "b121",
+          "quantity": 165,
+          "sourceIds": [
+            "a780721b51681a7fd735eb27"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 166 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b123",
+          "quantity": 166,
+          "sourceIds": [
+            "41ad1fe8d906973a71753f91"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が167 packs必要です",
+          "unit": "packs",
+          "location": "b124",
+          "quantity": 167,
+          "sourceIds": [
+            "f467e30d95c4d6efa062c447"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 168 places of shelter",
+          "unit": "places",
+          "location": "b125",
+          "quantity": 168,
+          "sourceIds": [
+            "628fda0abda970e00849fab7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 169 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b126",
+          "quantity": 169,
+          "sourceIds": [
+            "87d74b40041a91de071e51b5"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 170 L of water",
+          "unit": "L",
+          "location": "b127",
+          "quantity": 170,
+          "sourceIds": [
+            "db09e1a8275f0738e6c02501"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 171 portions of food",
+          "unit": "portions",
+          "location": "b129",
+          "quantity": 171,
+          "sourceIds": [
+            "260ea5a2ae5280d2a6e812e9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 172 packs of medicine",
+          "unit": "packs",
+          "location": "b130",
+          "quantity": 172,
+          "sourceIds": [
+            "9c877229b6d270247d7e6e0f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 173 places of shelter",
+          "unit": "places",
+          "location": "b131",
+          "quantity": 173,
+          "sourceIds": [
+            "8f3cd443e5f471a0bcfac252"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 174 blankets",
+          "unit": "blankets",
+          "location": "b132",
+          "quantity": 174,
+          "sourceIds": [
+            "5d33edd455207f4847f7916f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 175 L of water",
+          "unit": "L",
+          "location": "b133",
+          "quantity": 175,
+          "sourceIds": [
+            "f006bbc1f3e00c37deda1415"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 176 portions of food",
+          "unit": "portions",
+          "location": "b136",
+          "quantity": 176,
+          "sourceIds": [
+            "0b4807a530bff25541c39f6c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 177 packs of medicine",
+          "unit": "packs",
+          "location": "b138",
+          "quantity": 177,
+          "sourceIds": [
+            "1496f51fff1ead6e8301cc97"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 178 places of shelter",
+          "unit": "places",
+          "location": "b139",
+          "quantity": 178,
+          "sourceIds": [
+            "e063025c793a625c8353c554"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 179 blankets",
+          "unit": "blankets",
+          "location": "b140",
+          "quantity": 179,
+          "sourceIds": [
+            "cf0ef05ed543781e12dfb736"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        }
+      ],
+      "rejected": [],
+      "failedBatches": []
+    },
+    {
+      "org": "org3",
+      "observations": [
+        {
+          "kind": "need",
+          "text": "need 80 L of water",
+          "unit": "L",
+          "location": "b2",
+          "quantity": 80,
+          "sourceIds": [
+            "b9df26cd906c75a6c5b467f3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 81 portions de comida hoy",
+          "unit": "portions",
+          "location": "b4",
+          "quantity": 81,
+          "sourceIds": [
+            "a4849f58b60361b8f9118e93"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 82 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b5",
+          "quantity": 82,
+          "sourceIds": [
+            "e6ba8dab9299cc0e3c3cfc8f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が83 places必要です",
+          "unit": "places",
+          "location": "b6",
+          "quantity": 83,
+          "sourceIds": [
+            "4668474a669f8d082af14ad0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 84 blankets of blankets",
+          "unit": "blankets",
+          "location": "b7",
+          "quantity": 84,
+          "sourceIds": [
+            "62916b2d071270792d17eff1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 85 L de agua hoy",
+          "unit": "L",
+          "location": "b8",
+          "quantity": 85,
+          "sourceIds": [
+            "50b8ca6dfe6dae6bf9ba111f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 86 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b10",
+          "quantity": 86,
+          "sourceIds": [
+            "44494f8ecad9eb49aca1d6f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が87 packs必要です",
+          "unit": "packs",
+          "location": "b13",
+          "quantity": 87,
+          "sourceIds": [
+            "838659e869743a90fd9db0b0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 88 places of shelter",
+          "unit": "places",
+          "location": "b14",
+          "quantity": 88,
+          "sourceIds": [
+            "d0b52a42d57a13fd1fc515b9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 89 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b16",
+          "quantity": 89,
+          "sourceIds": [
+            "209c5efd788a11aa5e0b7092"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 90 L of water",
+          "unit": "L",
+          "location": "b17",
+          "quantity": 90,
+          "sourceIds": [
+            "fe7bc5bb0e156a2ce7fefb03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 91 portions of food",
+          "unit": "portions",
+          "location": "b18",
+          "quantity": 91,
+          "sourceIds": [
+            "539b5a7a3734ee9f0de451d8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 92 packs of medicine",
+          "unit": "packs",
+          "location": "b19",
+          "quantity": 92,
+          "sourceIds": [
+            "cda4a4415b82a97a2d00646e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 93 places of shelter",
+          "unit": "places",
+          "location": "b22",
+          "quantity": 93,
+          "sourceIds": [
+            "923ec2a796344087c841ad3a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 94 blankets",
+          "unit": "blankets",
+          "location": "b23",
+          "quantity": 94,
+          "sourceIds": [
+            "b893b2b6bf856ff39b2db29d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 95 L of water",
+          "unit": "L",
+          "location": "b25",
+          "quantity": 95,
+          "sourceIds": [
+            "ed9e9938f67c14e9893b00a9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 96 portions of food",
+          "unit": "portions",
+          "location": "b27",
+          "quantity": 96,
+          "sourceIds": [
+            "fcbd58fda2be28d5ddd05c24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 97 packs of medicine",
+          "unit": "packs",
+          "location": "b28",
+          "quantity": 97,
+          "sourceIds": [
+            "e8d96b98ee2aaa8f5ac8ff64"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 98 places of shelter",
+          "unit": "places",
+          "location": "b29",
+          "quantity": 98,
+          "sourceIds": [
+            "f590cb02996d3df039acb046"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 99 blankets",
+          "unit": "blankets",
+          "location": "b30",
+          "quantity": 99,
+          "sourceIds": [
+            "1748724e0eec02dd546d0c48"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 100 L of water",
+          "unit": "L",
+          "location": "b31",
+          "quantity": 100,
+          "sourceIds": [
+            "71bf3acfa339631be34796be"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 101 portions de comida hoy",
+          "unit": "portions",
+          "location": "b33",
+          "quantity": 101,
+          "sourceIds": [
+            "d44936067e8c34dffcc5845e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 102 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b34",
+          "quantity": 102,
+          "sourceIds": [
+            "af9cf3fd0d2b749660cf555a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が103 places必要です",
+          "unit": "places",
+          "location": "b35",
+          "quantity": 103,
+          "sourceIds": [
+            "d1e84a2bfa43c37b8373ffab"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 104 blankets of blankets",
+          "unit": "blankets",
+          "location": "b36",
+          "quantity": 104,
+          "sourceIds": [
+            "d14bfc0e946692da161226a6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 105 L de agua hoy",
+          "unit": "L",
+          "location": "b37",
+          "quantity": 105,
+          "sourceIds": [
+            "969d4845c2eae4624e6754ad"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 106 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b38",
+          "quantity": 106,
+          "sourceIds": [
+            "be5042b87a410dd48fb8500f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が107 packs必要です",
+          "unit": "packs",
+          "location": "b39",
+          "quantity": 107,
+          "sourceIds": [
+            "bc83ce4c8bb0fbbe48d58ead"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 108 places of shelter",
+          "unit": "places",
+          "location": "b42",
+          "quantity": 108,
+          "sourceIds": [
+            "874f1ab0f6d954d43d51c9b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 109 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b43",
+          "quantity": 109,
+          "sourceIds": [
+            "6dac28b0375568819e533c03"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 110 L de eau aujourd'hui",
+          "unit": "L",
+          "location": "b44",
+          "quantity": 110,
+          "sourceIds": [
+            "492df8848ab10b324a8d9cef"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "食料が111 portions必要です",
+          "unit": "portions",
+          "location": "b45",
+          "quantity": 111,
+          "sourceIds": [
+            "353afb2516a16ee9bc4264f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 112 packs of medicine",
+          "unit": "packs",
+          "location": "b47",
+          "quantity": 112,
+          "sourceIds": [
+            "e2eedfb48622b0da4d0e94b4"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 113 places de refugio hoy",
+          "unit": "places",
+          "location": "b49",
+          "quantity": 113,
+          "sourceIds": [
+            "dd3378c6d2db8520f13cba26"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 114 blankets de couvertures aujourd'hui",
+          "unit": "blankets",
+          "location": "b51",
+          "quantity": 114,
+          "sourceIds": [
+            "0110475ae1ccbb89dab460b6"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "水が115 L必要です",
+          "unit": "L",
+          "location": "b52",
+          "quantity": 115,
+          "sourceIds": [
+            "533697177855d23188c7ff05"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 116 portions of food",
+          "unit": "portions",
+          "location": "b53",
+          "quantity": 116,
+          "sourceIds": [
+            "c770ee42cab497a74d6b144c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 117 packs de medicamentos hoy",
+          "unit": "packs",
+          "location": "b55",
+          "quantity": 117,
+          "sourceIds": [
+            "779dd6a34a488744de02c91b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 118 places de abri aujourd'hui",
+          "unit": "places",
+          "location": "b57",
+          "quantity": 118,
+          "sourceIds": [
+            "43c38b48b366903d73585639"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "毛布が119 blankets必要です",
+          "unit": "blankets",
+          "location": "b58",
+          "quantity": 119,
+          "sourceIds": [
+            "eb15a75493c9198fa45620ac"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 120 L of water",
+          "unit": "L",
+          "location": "b59",
+          "quantity": 120,
+          "sourceIds": [
+            "b611e69f703b3061f61a3e9d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 121 portions de comida hoy",
+          "unit": "portions",
+          "location": "b60",
+          "quantity": 121,
+          "sourceIds": [
+            "c98006cdcdd4945f576aac3d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 122 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b61",
+          "quantity": 122,
+          "sourceIds": [
+            "79da6deafcc9ec298eca0c4a"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が123 places必要です",
+          "unit": "places",
+          "location": "b63",
+          "quantity": 123,
+          "sourceIds": [
+            "ee4ba3a8f2f79cb5a8d5fcda"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 124 blankets of blankets",
+          "unit": "blankets",
+          "location": "b64",
+          "quantity": 124,
+          "sourceIds": [
+            "0cd51b197d6cc3b79e702505"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 125 L de agua hoy",
+          "unit": "L",
+          "location": "b67",
+          "quantity": 125,
+          "sourceIds": [
+            "c7533aeda1c72440547c6e49"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 126 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b69",
+          "quantity": 126,
+          "sourceIds": [
+            "5a0b9ab016a6a0bdca779a1f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が127 packs必要です",
+          "unit": "packs",
+          "location": "b71",
+          "quantity": 127,
+          "sourceIds": [
+            "714729710da6c15027b4b93f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 128 places of shelter",
+          "unit": "places",
+          "location": "b72",
+          "quantity": 128,
+          "sourceIds": [
+            "1a1dd70267244d16b2afbed7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 129 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b73",
+          "quantity": 129,
+          "sourceIds": [
+            "ef05358688f54760abb7ba24"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 130 L of water",
+          "unit": "L",
+          "location": "b74",
+          "quantity": 130,
+          "sourceIds": [
+            "07bb8bf43ebaa1279b3cdd63"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 131 portions of food",
+          "unit": "portions",
+          "location": "b75",
+          "quantity": 131,
+          "sourceIds": [
+            "8383b4669354718c544af215"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 132 packs of medicine",
+          "unit": "packs",
+          "location": "b76",
+          "quantity": 132,
+          "sourceIds": [
+            "99552d7211c491693de95e8e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 133 places of shelter",
+          "unit": "places",
+          "location": "b78",
+          "quantity": 133,
+          "sourceIds": [
+            "b8abd1dbca8c54133ddc179d"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 134 blankets",
+          "unit": "blankets",
+          "location": "b79",
+          "quantity": 134,
+          "sourceIds": [
+            "8ad84d428c66ad566693deb0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 135 L of water",
+          "unit": "L",
+          "location": "b80",
+          "quantity": 135,
+          "sourceIds": [
+            "89190ae470f3f3c2db37012f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 136 portions of food",
+          "unit": "portions",
+          "location": "b81",
+          "quantity": 136,
+          "sourceIds": [
+            "f6b8f7d26982c808f41693a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 137 packs of medicine",
+          "unit": "packs",
+          "location": "b84",
+          "quantity": 137,
+          "sourceIds": [
+            "c3c0ed6a6caa3bb8e3811dc0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 138 places of shelter",
+          "unit": "places",
+          "location": "b85",
+          "quantity": 138,
+          "sourceIds": [
+            "3f5ff733972e181264415002"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 139 blankets",
+          "unit": "blankets",
+          "location": "b86",
+          "quantity": 139,
+          "sourceIds": [
+            "2fee7860c19086c9d45c4f58"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 140 L of water",
+          "unit": "L",
+          "location": "b87",
+          "quantity": 140,
+          "sourceIds": [
+            "ceab2df1fda950c8aefd43f0"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 141 portions de comida hoy",
+          "unit": "portions",
+          "location": "b88",
+          "quantity": 141,
+          "sourceIds": [
+            "58ae15c85431b4749cbdda18"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 142 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b89",
+          "quantity": 142,
+          "sourceIds": [
+            "1ac39dc025851152c4fc16ba"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が143 places必要です",
+          "unit": "places",
+          "location": "b91",
+          "quantity": 143,
+          "sourceIds": [
+            "d0aecd98e3735421847f90d2"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 144 blankets of blankets",
+          "unit": "blankets",
+          "location": "b92",
+          "quantity": 144,
+          "sourceIds": [
+            "a7366d560b25bfdfb25526f9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 145 L de agua hoy",
+          "unit": "L",
+          "location": "b93",
+          "quantity": 145,
+          "sourceIds": [
+            "996d0c7fbab32e5cde303d8b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 146 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b95",
+          "quantity": 146,
+          "sourceIds": [
+            "c8d92ad1b053f7a875723563"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が147 packs必要です",
+          "unit": "packs",
+          "location": "b96",
+          "quantity": 147,
+          "sourceIds": [
+            "6dbcd14c45ab055aeb04b271"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 148 places of shelter",
+          "unit": "places",
+          "location": "b98",
+          "quantity": 148,
+          "sourceIds": [
+            "b70dd037e5d380b6d7611560"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 149 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b100",
+          "quantity": 149,
+          "sourceIds": [
+            "e86e2a924672f5033c13379b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 150 L of water",
+          "unit": "L",
+          "location": "b101",
+          "quantity": 150,
+          "sourceIds": [
+            "255c0d8ccb0727337a6ad81c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 151 portions of food",
+          "unit": "portions",
+          "location": "b102",
+          "quantity": 151,
+          "sourceIds": [
+            "aab76c3d99895e03aeaecb2e"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 152 packs of medicine",
+          "unit": "packs",
+          "location": "b103",
+          "quantity": 152,
+          "sourceIds": [
+            "1b4e91d8293f69cfdf8c9bb1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 153 places of shelter",
+          "unit": "places",
+          "location": "b104",
+          "quantity": 153,
+          "sourceIds": [
+            "4825c54c1847ad2154a798b8"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 154 blankets",
+          "unit": "blankets",
+          "location": "b105",
+          "quantity": 154,
+          "sourceIds": [
+            "639d09177cbc57e54f57c493"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 155 L of water",
+          "unit": "L",
+          "location": "b106",
+          "quantity": 155,
+          "sourceIds": [
+            "e155f6ab44e9a4b60edcc8ca"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 156 portions of food",
+          "unit": "portions",
+          "location": "b109",
+          "quantity": 156,
+          "sourceIds": [
+            "6dc8081478bab8e3dce2ead3"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 157 packs of medicine",
+          "unit": "packs",
+          "location": "b110",
+          "quantity": 157,
+          "sourceIds": [
+            "282031673c0a7195e97e2404"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 158 places of shelter",
+          "unit": "places",
+          "location": "b111",
+          "quantity": 158,
+          "sourceIds": [
+            "8895beade18bfa6992f346c9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 159 blankets",
+          "unit": "blankets",
+          "location": "b114",
+          "quantity": 159,
+          "sourceIds": [
+            "d88e2dcd6ee6dae1921596a1"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 160 L of water",
+          "unit": "L",
+          "location": "b116",
+          "quantity": 160,
+          "sourceIds": [
+            "8ecf3aab2c48307dd6a94e1b"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 161 portions de comida hoy",
+          "unit": "portions",
+          "location": "b117",
+          "quantity": 161,
+          "sourceIds": [
+            "c12433e46adb99e25b8b6e83"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 162 packs de médicaments aujourd'hui",
+          "unit": "packs",
+          "location": "b118",
+          "quantity": 162,
+          "sourceIds": [
+            "80c3204038b191d8d6086173"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "避難場所が163 places必要です",
+          "unit": "places",
+          "location": "b119",
+          "quantity": 163,
+          "sourceIds": [
+            "5f627e87f98c06fbe5803339"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 164 blankets of blankets",
+          "unit": "blankets",
+          "location": "b120",
+          "quantity": 164,
+          "sourceIds": [
+            "e4a2d1a4ebc97444b7812f70"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 165 L de agua hoy",
+          "unit": "L",
+          "location": "b121",
+          "quantity": 165,
+          "sourceIds": [
+            "a780721b51681a7fd735eb27"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "besoin de 166 portions de nourriture aujourd'hui",
+          "unit": "portions",
+          "location": "b123",
+          "quantity": 166,
+          "sourceIds": [
+            "41ad1fe8d906973a71753f91"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "医薬品が167 packs必要です",
+          "unit": "packs",
+          "location": "b124",
+          "quantity": 167,
+          "sourceIds": [
+            "f467e30d95c4d6efa062c447"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 168 places of shelter",
+          "unit": "places",
+          "location": "b125",
+          "quantity": 168,
+          "sourceIds": [
+            "628fda0abda970e00849fab7"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "Necesitamos 169 blankets de mantas hoy",
+          "unit": "blankets",
+          "location": "b126",
+          "quantity": 169,
+          "sourceIds": [
+            "87d74b40041a91de071e51b5"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 170 L of water",
+          "unit": "L",
+          "location": "b127",
+          "quantity": 170,
+          "sourceIds": [
+            "db09e1a8275f0738e6c02501"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 171 portions of food",
+          "unit": "portions",
+          "location": "b129",
+          "quantity": 171,
+          "sourceIds": [
+            "260ea5a2ae5280d2a6e812e9"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 172 packs of medicine",
+          "unit": "packs",
+          "location": "b130",
+          "quantity": 172,
+          "sourceIds": [
+            "9c877229b6d270247d7e6e0f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 173 places of shelter",
+          "unit": "places",
+          "location": "b131",
+          "quantity": 173,
+          "sourceIds": [
+            "8f3cd443e5f471a0bcfac252"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 174 blankets",
+          "unit": "blankets",
+          "location": "b132",
+          "quantity": 174,
+          "sourceIds": [
+            "5d33edd455207f4847f7916f"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        },
+        {
+          "kind": "need",
+          "text": "need 175 L of water",
+          "unit": "L",
+          "location": "b133",
+          "quantity": 175,
+          "sourceIds": [
+            "f006bbc1f3e00c37deda1415"
+          ],
+          "timeStatus": "current",
+          "resourceType": "water"
+        },
+        {
+          "kind": "need",
+          "text": "need 176 portions of food",
+          "unit": "portions",
+          "location": "b136",
+          "quantity": 176,
+          "sourceIds": [
+            "0b4807a530bff25541c39f6c"
+          ],
+          "timeStatus": "current",
+          "resourceType": "food"
+        },
+        {
+          "kind": "need",
+          "text": "need 177 packs of medicine",
+          "unit": "packs",
+          "location": "b138",
+          "quantity": 177,
+          "sourceIds": [
+            "1496f51fff1ead6e8301cc97"
+          ],
+          "timeStatus": "current",
+          "resourceType": "medicine"
+        },
+        {
+          "kind": "need",
+          "text": "need 178 places of shelter",
+          "unit": "places",
+          "location": "b139",
+          "quantity": 178,
+          "sourceIds": [
+            "e063025c793a625c8353c554"
+          ],
+          "timeStatus": "current",
+          "resourceType": "shelter"
+        },
+        {
+          "kind": "need",
+          "text": "need 179 blankets",
+          "unit": "blankets",
+          "location": "b140",
+          "quantity": 179,
+          "sourceIds": [
+            "cf0ef05ed543781e12dfb736"
+          ],
+          "timeStatus": "current",
+          "resourceType": "blankets"
+        }
+      ],
+      "rejected": [],
+      "failedBatches": []
+    }
+  ],
+  "usage": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00062638,
+      "reserved_usd": 0.00658414,
+      "input_tokens": 3097,
+      "output_tokens": 482,
+      "wall_ms": 3799.6515999999974,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006346,
+      "reserved_usd": 0.0065834199999999996,
+      "input_tokens": 3130,
+      "output_tokens": 491,
+      "wall_ms": 6059.614200000011,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064406,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3149,
+      "output_tokens": 508,
+      "wall_ms": 5757.516400000008,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066218,
+      "reserved_usd": 0.006584319999999999,
+      "input_tokens": 3147,
+      "output_tokens": 554,
+      "wall_ms": 2731.6184000000067,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064224,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3136,
+      "output_tokens": 508,
+      "wall_ms": 2507.203699999998,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066134,
+      "reserved_usd": 0.00658396,
+      "input_tokens": 3141,
+      "output_tokens": 554,
+      "wall_ms": 4890.670599999998,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064712,
+      "reserved_usd": 0.006589899999999999,
+      "input_tokens": 3168,
+      "output_tokens": 509,
+      "wall_ms": 4794.933600000004,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006764,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3220,
+      "output_tokens": 564,
+      "wall_ms": 4073.5255999999936,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006594,
+      "reserved_usd": 0.0065951199999999995,
+      "input_tokens": 3230,
+      "output_tokens": 518,
+      "wall_ms": 3448.4563999999955,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00067556,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3214,
+      "output_tokens": 564,
+      "wall_ms": 6574.001199999999,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00062638,
+      "reserved_usd": 0.00658414,
+      "input_tokens": 3097,
+      "output_tokens": 482,
+      "wall_ms": 3378.582699999999,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006518,
+      "reserved_usd": 0.0065834199999999996,
+      "input_tokens": 3130,
+      "output_tokens": 534,
+      "wall_ms": 7586.400599999994,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064406,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3149,
+      "output_tokens": 508,
+      "wall_ms": 3884.6022999999986,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066218,
+      "reserved_usd": 0.006584319999999999,
+      "input_tokens": 3147,
+      "output_tokens": 554,
+      "wall_ms": 2934.5331000000006,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064224,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3136,
+      "output_tokens": 508,
+      "wall_ms": 4120.838799999998,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066134,
+      "reserved_usd": 0.00658396,
+      "input_tokens": 3141,
+      "output_tokens": 554,
+      "wall_ms": 5599.6838999999745,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064712,
+      "reserved_usd": 0.006589899999999999,
+      "input_tokens": 3168,
+      "output_tokens": 509,
+      "wall_ms": 2930.221900000004,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006764,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3220,
+      "output_tokens": 564,
+      "wall_ms": 6276.55720000001,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006594,
+      "reserved_usd": 0.0065951199999999995,
+      "input_tokens": 3230,
+      "output_tokens": 518,
+      "wall_ms": 4201.088900000032,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00067556,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3214,
+      "output_tokens": 564,
+      "wall_ms": 4130.945000000007,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00062638,
+      "reserved_usd": 0.00658414,
+      "input_tokens": 3097,
+      "output_tokens": 482,
+      "wall_ms": 10178.039400000009,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006518,
+      "reserved_usd": 0.0065834199999999996,
+      "input_tokens": 3130,
+      "output_tokens": 534,
+      "wall_ms": 6156.491500000004,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064406,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3149,
+      "output_tokens": 508,
+      "wall_ms": 6037.165399999998,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066218,
+      "reserved_usd": 0.006584319999999999,
+      "input_tokens": 3147,
+      "output_tokens": 554,
+      "wall_ms": 4575.196900000039,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064224,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3136,
+      "output_tokens": 508,
+      "wall_ms": 4806.15260000003,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064414,
+      "reserved_usd": 0.00658396,
+      "input_tokens": 3141,
+      "output_tokens": 511,
+      "wall_ms": 3167.856599999999,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064712,
+      "reserved_usd": 0.006589899999999999,
+      "input_tokens": 3168,
+      "output_tokens": 509,
+      "wall_ms": 5860.5843999999925,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006764,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3220,
+      "output_tokens": 564,
+      "wall_ms": 8265.962499999965,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006594,
+      "reserved_usd": 0.0065951199999999995,
+      "input_tokens": 3230,
+      "output_tokens": 518,
+      "wall_ms": 4549.234600000025,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00067556,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3214,
+      "output_tokens": 564,
+      "wall_ms": 4871.542100000021,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00062638,
+      "reserved_usd": 0.00658414,
+      "input_tokens": 3097,
+      "output_tokens": 482,
+      "wall_ms": 6858.503099999973,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006518,
+      "reserved_usd": 0.0065834199999999996,
+      "input_tokens": 3130,
+      "output_tokens": 534,
+      "wall_ms": 3746.2530999999726,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064406,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3149,
+      "output_tokens": 508,
+      "wall_ms": 5283.5158999999985,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064498,
+      "reserved_usd": 0.006584319999999999,
+      "input_tokens": 3147,
+      "output_tokens": 511,
+      "wall_ms": 9254.75569999998,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064224,
+      "reserved_usd": 0.006588999999999999,
+      "input_tokens": 3136,
+      "output_tokens": 508,
+      "wall_ms": 9094.091000000015,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00066134,
+      "reserved_usd": 0.00658396,
+      "input_tokens": 3141,
+      "output_tokens": 554,
+      "wall_ms": 5376.098800000036,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00064712,
+      "reserved_usd": 0.006589899999999999,
+      "input_tokens": 3168,
+      "output_tokens": 509,
+      "wall_ms": 4540.918000000063,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006764,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3220,
+      "output_tokens": 564,
+      "wall_ms": 6654.025900000008,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.0006594,
+      "reserved_usd": 0.0065951199999999995,
+      "input_tokens": 3230,
+      "output_tokens": 518,
+      "wall_ms": 6164.672799999942,
+      "error": null
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "cost_usd": 0.00067556,
+      "reserved_usd": 0.0065904399999999995,
+      "input_tokens": 3214,
+      "output_tokens": 564,
+      "wall_ms": 4030.045700000017,
+      "error": null
+    }
+  ],
+  "costUsd": 0.02613432,
+  "chargedBudgetUsd": 0.02613432,
+  "invariants": [],
+  "limitations": [
+    "Synthetic internally authored cases, not independently annotated field accuracy",
+    "Exact tuples include native unit and current-time interpretation. Accepted-need precision and a conservative denominator including rejected need observations are reported separately; invalid citations do not become evidence.",
+    "No claim of lives saved or human comprehension.",
+    "Acknowledgement and stored reposts do not count as new independent tasks.",
+    "Finite completed batches measure semantic processing, not real-time arrival/review stability at 10k/hour."
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "at": "2026-10-12T12:38:41.130Z",
+  "run": "pdf-bytes-1791808721126",
+  "candidateFingerprint": "444db2a12b555bfa3b99fc0b76e75ef66e9b5bfa84c67f4e68a5e650573aba96",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "scope": "23-page internally generated scanned PDF with actual bytes, local page rendering and real configured model transcription. Not independent OCR accuracy.",
+  "batches": [
+    {
+      "completedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "pending": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "requestedPages": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "completedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "pending": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "requestedPages": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "completedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "pending": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "requestedPages": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "completedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "pending": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "requestedPages": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "completedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "pending": [
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "requestedPages": [
+        21,
+        22,
+        23
+      ],
+      "completedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "pending": []
+    }
+  ],
+  "contentHash": "02100b98caa2bd82eed32b9e92cdd59e7a074efadc7568981e9eb82de7915be4",
+  "status": "passed",
+  "pageCount": 23,
+  "usage": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 1162,
+      "output_tokens": 254,
+      "cost_usd": 0.00026428,
+      "reserved_usd": 0.03141748,
+      "provider_id": "gen-1791808722-E5Ex0dI1Eu7XmSsF47M1",
+      "wall_ms": 9141.933400000002
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 1162,
+      "output_tokens": 254,
+      "cost_usd": 0.00026428,
+      "reserved_usd": 0.03145852,
+      "provider_id": "gen-1791808732-7HY4ZU1jI8Ctjpe0mtrv",
+      "wall_ms": 2809.356599999999
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 1165,
+      "output_tokens": 260,
+      "cost_usd": 0.0002671,
+      "reserved_usd": 0.03173284,
+      "provider_id": "gen-1791808736-w6rV2FrrKku2SZsj9sH5",
+      "wall_ms": 3218.4061
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 1166,
+      "output_tokens": 262,
+      "cost_usd": 0.00026804,
+      "reserved_usd": 0.03186964,
+      "provider_id": "gen-1791808740-Y7LMCLFaOVYWPR1gZpTQ",
+      "wall_ms": 2932.5226999999977
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 1166,
+      "output_tokens": 262,
+      "cost_usd": 0.00026804,
+      "reserved_usd": 0.03188548,
+      "provider_id": "gen-1791808743-kFSqnK4ojLZ2edeQ6R4u",
+      "wall_ms": 4822.621600000002
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "input_tokens": 894,
+      "output_tokens": 201,
+      "cost_usd": 0.00020556,
+      "reserved_usd": 0.025363899999999998,
+      "provider_id": "gen-1791808748-r0GeVxxjNNnbNTUkbdpM",
+      "wall_ms": 2036.4071000000004
+    }
+  ],
+  "costUsd": 0.0015373,
+  "wallMs": 29482.964900000003,
+  "candidateChanged": false
+}

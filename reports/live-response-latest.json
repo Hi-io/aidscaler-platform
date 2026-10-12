@@ -1,16 +1,16 @@
 {
-  "at": "2026-10-12T10:03:35.868Z",
-  "episode": "live-response-1791799152429",
+  "at": "2026-10-12T13:33:46.768Z",
+  "episode": "live-response-1791811661272",
   "measurementMode": "live",
   "rate": 1,
   "clockPolicy": "World progresses at actual elapsed wall time, including actual provider and HTTP latency; no accelerated advance.",
   "operator": "scripted finite source review, not human UX",
-  "candidateFingerprint": "c59fc605c4cd7096e492aa003a498bdf41c776c9f2f4ecce9c892140879546f2",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
   "candidateChanged": false,
   "manifest": {
     "schemaVersion": 1,
     "engineVersion": "0.2.0",
-    "engineBuild": "1fa4604774a9bc71af49cd4464d47de7cd242222d64d1978e53bef9bf3f5a18c",
+    "engineBuild": "56f9a98912e85669b8695861e1afd7d2ff4ec37af5b80e2c5dbd707213bce757",
     "randomVersion": "fnv-avalanche-v1",
     "runtimeMajor": 24,
     "config": {
@@ -18,6 +18,7 @@
       "scenario": "S23",
       "hazard": "none",
       "variant": "standard",
+      "compositionVariant": "standard",
       "grid": 3,
       "extentKm": 1,
       "organizations": 4,
@@ -87,15 +88,49 @@
   "activity": {
     "state": "ready",
     "model": "google/gemma-4-31b-it",
-    "startedAt": 1791799153159,
+    "startedAt": 1791811661914,
     "steps": [
       {
         "type": "tool",
+        "tool": "read_context",
+        "at": 1791811678525,
+        "state": "completed",
+        "label": "Read focused received peer_offer records",
+        "params": {
+          "kind": "peer_offer"
+        },
+        "result": {
+          "kind": "peer_offer",
+          "records": [],
+          "totalAvailable": 0,
+          "offset": 0,
+          "nextOffset": null,
+          "source": "organization_received_store",
+          "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+        }
+      },
+      {
+        "type": "tool",
         "tool": "plan_allocations",
-        "at": 1791799160463,
+        "at": 1791811738875,
+        "state": "failed",
+        "result": {
+          "error": "VALIDATION",
+          "message": "Unexpected end of JSON input"
+        },
+        "label": "A check needs attention"
+      },
+      {
+        "type": "tool",
+        "tool": "plan_allocations",
+        "at": 1791811747006,
         "state": "completed",
         "label": "Checked allocations against scarce capacity",
-        "params": {},
+        "params": {
+          "needIds": [
+            "need-water-main"
+          ]
+        },
         "result": {
           "allocations": [
             {
@@ -171,22 +206,28 @@
             "org0"
           ],
           "nextTool": "prepare_allocation",
+          "policy": {
+            "version": 0,
+            "order": "priority_then_deadline",
+            "approved": false
+          },
+          "deferred": [],
           "note": "Only received owned data and consented current peer projections. Each owner must approve its exact steps; sharing is not authorization. Owner routes/stock/versions are rechecked before execution. Do not invent an approval condition for this built-in owner review."
         }
       },
       {
         "type": "tool",
         "tool": "prepare_allocation",
-        "at": 1791799163833,
+        "at": 1791811774616,
         "state": "completed",
         "label": "Prepared checked allocations for human review",
         "params": {
-          "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
+          "benefit": "Delivers 500L of water to building b5, partially satisfying the 600L requirement using available org0 stock.",
           "indices": [
             0,
             1
           ],
-          "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
+          "rationale": "Utilizes all available water from org0 (600L total minus 100L floor) via two available vehicles. No peer offers are currently available to cover the remaining 100L.",
           "title": "Partial Water Delivery to b5"
         },
         "result": {
@@ -217,13 +258,13 @@
               "dependsOn": []
             }
           ],
-          "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
-          "summary": "Provides 500L of water to building b5, partially satisfying the 600L need.",
+          "benefit": "Delivers 500L of water to building b5, partially satisfying the 600L requirement using available org0 stock.",
+          "summary": "Delivers 500L of water to building b5, partially satisfying the 600L requirement using available org0 stock.",
           "activity": [],
           "priority": "high",
           "repairOf": null,
           "createdBy": "nexo-investigator",
-          "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
+          "rationale": "Utilizes all available water from org0 (600L total minus 100L floor) via two available vehicles. No peer offers are currently available to cover the remaining 100L.",
           "conditions": [],
           "references": [
             "need-water-main",
@@ -240,20 +281,20 @@
           ],
           "authorization": null,
           "inheritedWork": [],
-          "id": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
+          "id": "proposal_d44ab5b2-b362-4a5a-b791-5be6b04f0389",
           "version": 1,
-          "createdAt": 1791799163879,
-          "updatedAt": 1791799163879
+          "createdAt": 1791811774702,
+          "updatedAt": 1791811774702
         }
       }
     ],
-    "proposalId": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
-    "episode": "live-response-1791799152429",
+    "proposalId": "proposal_d44ab5b2-b362-4a5a-b791-5be6b04f0389",
+    "episode": "live-response-1791811661272",
     "inputSnapshot": {
-      "hash": "b1b2c580a54c09b5867c50323ca22015bbd18627e1fb3ccb80d95efed6e68072",
+      "hash": "40f4b9b1a8e662b4376927623d5717f45f81c646a4f52fbfdd937d55b8631602",
       "context": {
-        "rawCharacters": 8539,
-        "presentedCharacters": 5413,
+        "rawCharacters": 9399,
+        "presentedCharacters": 6273,
         "coverage": {
           "recordsInReceivedSnapshot": {
             "need": 1,
@@ -295,15 +336,16 @@
         }
       },
       "policy": "nexo",
+      "focusMode": "manual",
       "focusNeed": "need-water-main",
       "focusFacility": null,
-      "sourceObservedAt": 519,
+      "sourceObservedAt": 474,
       "signals": [],
       "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
     },
-    "finishedAt": 1791799163887,
-    "calls": 2,
-    "wallMs": 10717.7544
+    "finishedAt": 1791811774730,
+    "calls": 4,
+    "wallMs": 112806.4682
   },
   "proposal": {
     "simId": "proposal-1",
@@ -333,13 +375,13 @@
         "dependsOn": []
       }
     ],
-    "benefit": "Provides 500L of water to building b5, partially satisfying the 600L need.",
-    "summary": "Provides 500L of water to building b5, partially satisfying the 600L need.",
+    "benefit": "Delivers 500L of water to building b5, partially satisfying the 600L requirement using available org0 stock.",
+    "summary": "Delivers 500L of water to building b5, partially satisfying the 600L requirement using available org0 stock.",
     "activity": [],
     "priority": "high",
     "repairOf": null,
     "createdBy": "nexo-investigator",
-    "rationale": "Utilizes all available water from org0 (500L after floor) using two available vehicles. Remaining 100L cannot be fulfilled with current owned or consented resources.",
+    "rationale": "Utilizes all available water from org0 (600L total minus 100L floor) via two available vehicles. No peer offers are currently available to cover the remaining 100L.",
     "conditions": [],
     "references": [
       "need-water-main",
@@ -356,8 +398,8 @@
       "v-org0-0"
     ],
     "authorization": {
-      "at": 1791799163932,
-      "by": "user_bb4cba3a-ba42-4ac1-b72e-ea2be7125a5a",
+      "at": 1791811774803,
+      "by": "user_44670cf4-b675-4429-a29a-3bde895feb30",
       "name": "Alex Morgan",
       "note": "Scripted laboratory operator; not a human UX trial.",
       "evidence": [
@@ -377,8 +419,8 @@
             "deadline": 10800000,
             "quantity": 600,
             "reserved": 0,
-            "createdAt": 1791799152602,
-            "updatedAt": 1791799152602,
+            "createdAt": 1791811661418,
+            "updatedAt": 1791811661418,
             "population": 60,
             "sourceVersion": 1,
             "sourceSnapshot": {
@@ -409,11 +451,12 @@
             "version": 2,
             "quantity": 600,
             "reserved": 0,
-            "createdAt": 1791799152566,
-            "updatedAt": 1791799153038,
+            "createdAt": 1791811661392,
+            "updatedAt": 1791811661801,
             "observedAt": 0,
             "compatibility": null,
             "sourceVersion": 1,
+            "qualifications": [],
             "sourceSnapshot": {
               "at": 0,
               "id": "r-org0-water",
@@ -438,6 +481,7 @@
             "fuel": 80000,
             "node": "n0",
             "floor": 0,
+            "order": null,
             "owner": "org0",
             "seats": 20,
             "state": "idle",
@@ -448,9 +492,11 @@
             "speedMps": 12,
             "volumeM3": 1,
             "weightKg": 3500,
-            "createdAt": 1791799152599,
-            "updatedAt": 1791799152599,
+            "createdAt": 1791811661415,
+            "operation": null,
+            "updatedAt": 1791811661415,
             "maxCargoKg": 1000,
+            "destination": null,
             "fuelMlPerKm": 180,
             "maxWaterDepth": 0.3,
             "sourceVersion": 1,
@@ -459,6 +505,7 @@
               "id": "v-org0-1",
               "fuel": 80000,
               "node": "n0",
+              "order": null,
               "owner": "org0",
               "seats": 20,
               "state": "idle",
@@ -468,10 +515,14 @@
               "speedMps": 12,
               "volumeM3": 1,
               "weightKg": 3500,
+              "operation": null,
               "maxCargoKg": 1000,
+              "destination": null,
               "fuelMlPerKm": 180,
-              "maxWaterDepth": 0.3
-            }
+              "maxWaterDepth": 0.3,
+              "receivedOrderVersion": 0
+            },
+            "receivedOrderVersion": 0
           }
         },
         {
@@ -483,6 +534,7 @@
             "fuel": 80000,
             "node": "n0",
             "floor": 0,
+            "order": null,
             "owner": "org0",
             "seats": 20,
             "state": "idle",
@@ -493,9 +545,11 @@
             "speedMps": 12,
             "volumeM3": 1,
             "weightKg": 3500,
-            "createdAt": 1791799152596,
-            "updatedAt": 1791799152596,
+            "createdAt": 1791811661412,
+            "operation": null,
+            "updatedAt": 1791811661412,
             "maxCargoKg": 1000,
+            "destination": null,
             "fuelMlPerKm": 180,
             "maxWaterDepth": 0.3,
             "sourceVersion": 1,
@@ -504,6 +558,7 @@
               "id": "v-org0-0",
               "fuel": 80000,
               "node": "n0",
+              "order": null,
               "owner": "org0",
               "seats": 20,
               "state": "idle",
@@ -513,18 +568,22 @@
               "speedMps": 12,
               "volumeM3": 1,
               "weightKg": 3500,
+              "operation": null,
               "maxCargoKg": 1000,
+              "destination": null,
               "fuelMlPerKm": 180,
-              "maxWaterDepth": 0.3
-            }
+              "maxWaterDepth": 0.3,
+              "receivedOrderVersion": 0
+            },
+            "receivedOrderVersion": 0
           }
         }
       ],
       "planHash": "97d9319ecebf938fb03a8825d2284f328916ddb0f504ddf88d995b7db80104d8",
-      "expiresAt": 1791800963932,
+      "expiresAt": 1791813574804,
       "delegation": null,
       "conditional": false,
-      "evidenceHash": "a1b88542c875e4b75294f85dc38054049965b64bf8962c2197daad17efe42fca",
+      "evidenceHash": "460e0a4c57a6fafb89bc3687cbc1b09bea8352eae0c4b5dcba35db96c6a9e347",
       "proposalVersion": 1,
       "delegationVersion": null
     },
@@ -539,8 +598,8 @@
           "type": "delivery",
           "state": "reserved",
           "times": {
-            "reserved": 12758,
-            "authorized": 12758
+            "reserved": 114908,
+            "authorized": 114908
           },
           "vehicle": "v-org0-1",
           "version": 1,
@@ -549,7 +608,7 @@
           "quantity": 300,
           "received": 0,
           "resource": "r-org0-water",
-          "createdAt": 12758,
+          "createdAt": 114908,
           "commitment": "commitment-1",
           "references": [],
           "destination": "n5",
@@ -565,8 +624,8 @@
           "type": "delivery",
           "state": "reserved",
           "times": {
-            "reserved": 12838,
-            "authorized": 12838
+            "reserved": 114908,
+            "authorized": 114908
           },
           "vehicle": "v-org0-0",
           "version": 1,
@@ -575,7 +634,7 @@
           "quantity": 200,
           "received": 0,
           "resource": "r-org0-water",
-          "createdAt": 12838,
+          "createdAt": 114908,
           "commitment": "commitment-2",
           "references": [],
           "destination": "n5",
@@ -629,14 +688,14 @@
         "resourceVersion": 2
       }
     ],
-    "id": "proposal_67e497a5-d42b-46ef-84d6-b9c118c174a1",
+    "id": "proposal_d44ab5b2-b362-4a5a-b791-5be6b04f0389",
     "version": 55,
-    "createdAt": 1791799163879,
-    "updatedAt": 1791799415860
+    "createdAt": 1791811774702,
+    "updatedAt": 1791812026754
   },
   "finalSourceState": {
-    "runId": "460f965f20eca9122be6",
-    "now": 263429,
+    "runId": "dff365db8067fa4a78a8",
+    "now": 365521,
     "organization": {
       "id": "org0",
       "name": "Local Response",
@@ -664,7 +723,7 @@
           "deadline": 10800000,
           "population": 60,
           "version": 3,
-          "at": 260959
+          "at": 363109
         }
       },
       "resources": {
@@ -678,8 +737,9 @@
           "floor": 100,
           "unit": "L",
           "compatibility": null,
+          "qualifications": [],
           "version": 5,
-          "at": 260959
+          "at": 363109
         },
         "r-org0-staff": {
           "id": "r-org0-staff",
@@ -995,7 +1055,7 @@
           "id": "v-org0-0",
           "owner": "org0",
           "node": "n5",
-          "at": 259959,
+          "at": 362109,
           "capacity": 300,
           "weightKg": 3500,
           "speedMps": 12,
@@ -1007,13 +1067,17 @@
           "fuel": 79709,
           "shiftEnd": 600000,
           "state": "en_route",
-          "version": 2
+          "version": 2,
+          "operation": "operation-2",
+          "destination": "n5",
+          "receivedOrderVersion": 0,
+          "order": null
         },
         "v-org0-1": {
           "id": "v-org0-1",
           "owner": "org0",
           "node": "n5",
-          "at": 176759,
+          "at": 278909,
           "capacity": 300,
           "weightKg": 3500,
           "speedMps": 12,
@@ -1025,7 +1089,11 @@
           "fuel": 79709,
           "shiftEnd": 600000,
           "state": "en_route",
-          "version": 2
+          "version": 2,
+          "operation": "operation-1",
+          "destination": "n5",
+          "receivedOrderVersion": 0,
+          "order": null
         },
         "v-org1-0": {
           "id": "v-org1-0",
@@ -1043,7 +1111,11 @@
           "fuel": 80000,
           "shiftEnd": 600000,
           "state": "idle",
-          "version": 1
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
         },
         "v-org1-1": {
           "id": "v-org1-1",
@@ -1061,7 +1133,11 @@
           "fuel": 80000,
           "shiftEnd": 600000,
           "state": "idle",
-          "version": 1
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
         },
         "v-org2-0": {
           "id": "v-org2-0",
@@ -1079,7 +1155,11 @@
           "fuel": 80000,
           "shiftEnd": 600000,
           "state": "idle",
-          "version": 1
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
         },
         "v-org2-1": {
           "id": "v-org2-1",
@@ -1097,7 +1177,11 @@
           "fuel": 80000,
           "shiftEnd": 600000,
           "state": "idle",
-          "version": 1
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
         }
       },
       "edges": {
@@ -1248,27 +1332,27 @@
           "destination": "n5",
           "commitment": "commitment-1",
           "state": "completed",
-          "createdAt": 12758,
+          "createdAt": 114908,
           "version": 1,
           "times": {
-            "authorized": 12758,
-            "reserved": 12758,
-            "orderReceived": 12809,
-            "accepted": 12809,
-            "prepared": 13809,
-            "dispatched": 13809,
-            "arrived": 176759,
-            "unloadingStarted": 176759,
-            "received": 177759,
-            "service": 177759
+            "authorized": 114908,
+            "reserved": 114908,
+            "orderReceived": 114959,
+            "accepted": 114959,
+            "prepared": 115959,
+            "dispatched": 115959,
+            "arrived": 278909,
+            "unloadingStarted": 278909,
+            "received": 279909,
+            "service": 279909
           },
           "received": 300,
           "proposal": "proposal-1",
           "references": [],
-          "eta": 176759,
+          "eta": 278909,
           "unloadingSlot": false,
           "destinationStock": "stock-n5-water",
-          "observedAt": 177759
+          "observedAt": 279909
         },
         "operation-2": {
           "id": "operation-2",
@@ -1283,36 +1367,36 @@
           "destination": "n5",
           "commitment": "commitment-2",
           "state": "completed",
-          "createdAt": 12838,
+          "createdAt": 114908,
           "version": 1,
           "times": {
-            "authorized": 12838,
-            "reserved": 12838,
-            "orderReceived": 12889,
-            "accepted": 12889,
-            "prepared": 13889,
-            "dispatched": 13889,
-            "arrived": 259959,
-            "unloadingStarted": 259959,
-            "received": 260959,
-            "service": 260959
+            "authorized": 114908,
+            "reserved": 114908,
+            "orderReceived": 114959,
+            "accepted": 114959,
+            "prepared": 115959,
+            "dispatched": 115959,
+            "arrived": 362109,
+            "unloadingStarted": 362109,
+            "received": 363109,
+            "service": 363109
           },
           "received": 200,
           "proposal": "proposal-1",
           "references": [],
-          "eta": 176839,
+          "eta": 278909,
           "unloadingSlot": false,
           "destinationStock": "stock-n5-water",
-          "observedAt": 260959
+          "observedAt": 363109
         }
       },
       "population": {},
       "claims": [],
       "lastContact": {
-        "s0": 13940,
-        "v-org0-1": 176810,
-        "v-org0-0": 260010,
-        "s5": 261010
+        "s0": 116010,
+        "s5": 363160,
+        "v-org0-1": 278960,
+        "v-org0-0": 362160
       }
     },
     "operations": [
@@ -1329,27 +1413,27 @@
         "destination": "n5",
         "commitment": "commitment-1",
         "state": "completed",
-        "createdAt": 12758,
+        "createdAt": 114908,
         "version": 1,
         "times": {
-          "authorized": 12758,
-          "reserved": 12758,
-          "orderReceived": 12809,
-          "accepted": 12809,
-          "prepared": 13809,
-          "dispatched": 13809,
-          "arrived": 176759,
-          "unloadingStarted": 176759,
-          "received": 177759,
-          "service": 177759
+          "authorized": 114908,
+          "reserved": 114908,
+          "orderReceived": 114959,
+          "accepted": 114959,
+          "prepared": 115959,
+          "dispatched": 115959,
+          "arrived": 278909,
+          "unloadingStarted": 278909,
+          "received": 279909,
+          "service": 279909
         },
         "received": 300,
         "proposal": "proposal-1",
         "references": [],
-        "eta": 176759,
+        "eta": 278909,
         "unloadingSlot": false,
         "destinationStock": "stock-n5-water",
-        "observedAt": 177759
+        "observedAt": 279909
       },
       {
         "id": "operation-2",
@@ -1364,27 +1448,27 @@
         "destination": "n5",
         "commitment": "commitment-2",
         "state": "completed",
-        "createdAt": 12838,
+        "createdAt": 114908,
         "version": 1,
         "times": {
-          "authorized": 12838,
-          "reserved": 12838,
-          "orderReceived": 12889,
-          "accepted": 12889,
-          "prepared": 13889,
-          "dispatched": 13889,
-          "arrived": 259959,
-          "unloadingStarted": 259959,
-          "received": 260959,
-          "service": 260959
+          "authorized": 114908,
+          "reserved": 114908,
+          "orderReceived": 114959,
+          "accepted": 114959,
+          "prepared": 115959,
+          "dispatched": 115959,
+          "arrived": 362109,
+          "unloadingStarted": 362109,
+          "received": 363109,
+          "service": 363109
         },
         "received": 200,
         "proposal": "proposal-1",
         "references": [],
-        "eta": 176839,
+        "eta": 278909,
         "unloadingSlot": false,
         "destinationStock": "stock-n5-water",
-        "observedAt": 260959
+        "observedAt": 363109
       }
     ],
     "proposals": [
@@ -1421,12 +1505,12 @@
         "conditions": [],
         "references": [],
         "state": "authorized",
-        "createdAt": 11498,
+        "createdAt": 113660,
         "version": 2,
         "reviewPending": false,
-        "reviewQueuedAt": 11579,
+        "reviewQueuedAt": 113660,
         "authorizedBy": "live-scripted-commander",
-        "reviewedAt": 12579
+        "reviewedAt": 114660
       }
     ],
     "commitments": [
@@ -1437,9 +1521,9 @@
         "resource": "r-org0-water",
         "quantity": 300,
         "state": "completed",
-        "expiresAt": 912758,
+        "expiresAt": 1014908,
         "conditions": [],
-        "createdAt": 12758,
+        "createdAt": 114908,
         "version": 3,
         "authorizedBy": "live-scripted-commander"
       },
@@ -1450,9 +1534,9 @@
         "resource": "r-org0-water",
         "quantity": 200,
         "state": "completed",
-        "expiresAt": 912838,
+        "expiresAt": 1014908,
         "conditions": [],
-        "createdAt": 12838,
+        "createdAt": 114908,
         "version": 3,
         "authorizedBy": "live-scripted-commander"
       }
@@ -1794,7 +1878,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           },
           {
             "id": "v-org0-1",
@@ -1812,7 +1900,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           },
           {
             "id": "v-org1-0",
@@ -1830,7 +1922,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           },
           {
             "id": "v-org1-1",
@@ -1848,7 +1944,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           },
           {
             "id": "v-org2-0",
@@ -1866,7 +1966,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           },
           {
             "id": "v-org2-1",
@@ -1884,7 +1988,11 @@
             "fuel": 80000,
             "shiftEnd": 600000,
             "state": "idle",
-            "version": 1
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
           }
         ],
         "completedAt": 101
@@ -2208,15 +2316,15 @@
         "org": "org0",
         "actor": "external-org0",
         "model": "google/gemma-4-31b-it",
-        "requestedAt": 732,
+        "requestedAt": 647,
         "state": "available",
         "policy": "wall",
-        "availableAt": 7859,
-        "wallMs": 7078.138599999999,
-        "promptTokens": 4848,
-        "outputTokens": 609,
-        "providerCost": 0.00092232,
-        "providerRequestId": "gen-1791799153-ljW9lapL8VbIWMIeFHs0",
+        "availableAt": 17114,
+        "wallMs": 16372.827500000001,
+        "promptTokens": 5577,
+        "outputTokens": 1068,
+        "providerCost": 0.00120798,
+        "providerRequestId": "gen-1791811662-rc7ncWKh5R0HkcnJvzxD",
         "failed": false
       },
       {
@@ -2224,46 +2332,98 @@
         "org": "org0",
         "actor": "external-org0",
         "model": "google/gemma-4-31b-it",
-        "requestedAt": 8040,
+        "requestedAt": 17207,
         "state": "available",
         "policy": "wall",
-        "availableAt": 11280,
-        "wallMs": 3222.8976000000002,
-        "promptTokens": 5142,
-        "outputTokens": 482,
-        "providerCost": 0.00091268,
-        "providerRequestId": "gen-1791799160-4WOuIiJfdZm9RNRZWQTo",
+        "availableAt": 77462,
+        "wallMs": 60193.4938,
+        "promptTokens": 5663,
+        "outputTokens": 8192,
+        "providerCost": 0.00406962,
+        "providerRequestId": "gen-1791811678-Lie5S77cVsMRib2n0eDH",
+        "failed": false
+      },
+      {
+        "id": "model-request-3",
+        "org": "org0",
+        "actor": "external-org0",
+        "model": "google/gemma-4-31b-it",
+        "requestedAt": 77554,
+        "state": "available",
+        "policy": "wall",
+        "availableAt": 85557,
+        "wallMs": 7943.100699999995,
+        "promptTokens": 5697,
+        "outputTokens": 101,
+        "providerCost": 0.00083798,
+        "providerRequestId": "gen-1791811739-CGmSvVqr9uphnBjvQCPZ",
+        "failed": false
+      },
+      {
+        "id": "model-request-4",
+        "org": "org0",
+        "actor": "external-org0",
+        "model": "google/gemma-4-31b-it",
+        "requestedAt": 85787,
+        "state": "available",
+        "policy": "wall",
+        "availableAt": 113154,
+        "wallMs": 27404.064499999993,
+        "promptTokens": 6020,
+        "outputTokens": 604,
+        "providerCost": 0.0010844,
+        "providerRequestId": "gen-1791811747-uESLZNbZLkryW9X1Go99",
         "failed": false
       }
     ],
     "publicUpdates": []
   },
-  "wallMs": 265684.5946,
+  "wallMs": 367022.9423,
   "usage": [
     {
-      "episode": "live-response-1791799152429",
+      "episode": "live-response-1791811661272",
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 7078.138599999999,
-      "input_tokens": 4848,
-      "output_tokens": 609,
-      "cost_usd": 0.00092232,
-      "provider_id": "gen-1791799153-ljW9lapL8VbIWMIeFHs0"
+      "wall_ms": 16372.827500000001,
+      "input_tokens": 5577,
+      "output_tokens": 1068,
+      "cost_usd": 0.00120798,
+      "provider_id": "gen-1791811662-rc7ncWKh5R0HkcnJvzxD"
     },
     {
-      "episode": "live-response-1791799152429",
+      "episode": "live-response-1791811661272",
       "model": "google/gemma-4-31b-it",
       "state": "completed",
-      "wall_ms": 3222.8976000000002,
-      "input_tokens": 5142,
-      "output_tokens": 482,
-      "cost_usd": 0.00091268,
-      "provider_id": "gen-1791799160-4WOuIiJfdZm9RNRZWQTo"
+      "wall_ms": 60193.4938,
+      "input_tokens": 5663,
+      "output_tokens": 8192,
+      "cost_usd": 0.00406962,
+      "provider_id": "gen-1791811678-Lie5S77cVsMRib2n0eDH"
+    },
+    {
+      "episode": "live-response-1791811661272",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7943.100699999995,
+      "input_tokens": 5697,
+      "output_tokens": 101,
+      "cost_usd": 0.00083798,
+      "provider_id": "gen-1791811739-CGmSvVqr9uphnBjvQCPZ"
+    },
+    {
+      "episode": "live-response-1791811661272",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 27404.064499999993,
+      "input_tokens": 6020,
+      "output_tokens": 604,
+      "cost_usd": 0.0010844,
+      "provider_id": "gen-1791811747-uESLZNbZLkryW9X1Go99"
     }
   ],
-  "costUsd": 0.001835,
+  "costUsd": 0.007199980000000001,
   "metrics": {
-    "simulatedMs": 263429,
+    "simulatedMs": 365521,
     "services": {
       "water": {
         "unit": "L",
@@ -2271,7 +2431,7 @@
         "served": 500,
         "pending": 100,
         "overprovided": 0,
-        "uncoveredUnitMs": 131862400,
+        "uncoveredUnitMs": 193146600,
         "onTime": 0
       }
     },
@@ -2546,22 +2706,22 @@
       },
       "arrived": {
         "p50": 164001,
-        "p95": 247121,
+        "p95": 247201,
         "samples": 2
       },
       "unloadingStarted": {
         "p50": 164001,
-        "p95": 247121,
+        "p95": 247201,
         "samples": 2
       },
       "received": {
         "p50": 165001,
-        "p95": 248121,
+        "p95": 248201,
         "samples": 2
       },
       "service": {
         "p50": 165001,
-        "p95": 248121,
+        "p95": 248201,
         "samples": 2
       }
     },
@@ -2574,15 +2734,15 @@
     "staleOrders": 0,
     "queries": 3,
     "cost": 3,
-    "events": 79,
-    "modelCalls": 2,
-    "modelWallMs": 10301.036199999999,
+    "events": 81,
+    "modelCalls": 4,
+    "modelWallMs": 111913.48649999998,
     "modelUsage": {
-      "promptTokens": 9990,
-      "outputTokens": 1091,
+      "promptTokens": 22957,
+      "outputTokens": 9965,
       "pending": 0,
       "failed": 0,
-      "providerCost": 0.001835
+      "providerCost": 0.007199980000000001
     },
     "platformTransport": {
       "attempts": 0,
@@ -2686,12 +2846,12 @@
       "action_accepted": 7,
       "message_delivered": 23,
       "query_completed": 3,
-      "model_requested": 2,
-      "model_available": 2,
-      "review_completed": 1,
-      "vehicle_dispatched": 2,
+      "model_requested": 4,
+      "model_available": 4,
       "signal_created": 3,
       "post_published": 3,
+      "review_completed": 1,
+      "vehicle_dispatched": 2,
       "vehicle_arrived": 2,
       "delivery_received": 2,
       "need_changed": 2,

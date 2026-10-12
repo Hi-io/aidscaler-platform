@@ -1,0 +1,173 @@
+{
+  "protocol": {
+    "at": "2026-10-12T12:36:03.296Z",
+    "kind": "repair",
+    "scenarios": [
+      "S23"
+    ],
+    "seeds": 2,
+    "budgetUsd": 0.6,
+    "episodeBudgetUsd": 0.15,
+    "candidateFingerprint": "444db2a12b555bfa3b99fc0b76e75ef66e9b5bfa84c67f4e68a5e650573aba96",
+    "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+    "arm": "B6",
+    "planningRounds": 1,
+    "policyIntervalMs": 1200000,
+    "responseOrder": "deadline_then_priority",
+    "includeFailures": true,
+    "treatments": [
+      "full_refresh",
+      "selective"
+    ],
+    "scope": "Internal mechanism ablation. Repair physically blocks a pre-existing loaded trip and compares four-class refresh with using received changes, then requires the same original cargo to arrive. Broad inquiry refreshes six classes. Treatments preserve physical work with the same model, sources, budgets, tools, owners and finite review. Not a professional baseline or independent annotation of marginal query utility.",
+    "metrics": [
+      "native-unit deficit and delivery",
+      "query/inspection counts and cost",
+      "repair draft delay when an actual invalidation occurs",
+      "preserved physical work",
+      "cost and failed/abstaining episodes"
+    ]
+  },
+  "cases": [
+    {
+      "treatment": "full_refresh",
+      "scenario": "S23",
+      "seed": "research-ablation-01",
+      "status": "completed",
+      "queries": 8,
+      "toolCost": 8,
+      "repairAttempts": [
+        {
+          "state": "completed",
+          "calls": 3,
+          "wallMs": 25728.4551,
+          "modelledDraftMs": 53004,
+          "refreshTargets": [
+            "inventory",
+            "vehicles",
+            "roads",
+            "map"
+          ],
+          "repairOf": "proposal_0aa23a06-5e98-465c-a47b-f04ee3aa0916",
+          "preservedOperationId": "operation-1",
+          "delivered": 300,
+          "originalLoaded": 300
+        }
+      ],
+      "inconclusive": 0,
+      "costUsd": 0.00418706,
+      "violations": 0
+    },
+    {
+      "treatment": "selective",
+      "scenario": "S23",
+      "seed": "research-ablation-01",
+      "status": "completed",
+      "queries": 4,
+      "toolCost": 4,
+      "repairAttempts": [
+        {
+          "state": "completed",
+          "calls": 5,
+          "wallMs": 327022.0221,
+          "modelledDraftMs": 75000,
+          "refreshTargets": [],
+          "repairOf": "proposal_b15601a9-e822-419b-8a18-b55aaaab9bcd",
+          "preservedOperationId": "operation-1",
+          "delivered": 300,
+          "originalLoaded": 300
+        }
+      ],
+      "inconclusive": 0,
+      "costUsd": 0.008801,
+      "violations": 0
+    },
+    {
+      "treatment": "full_refresh",
+      "scenario": "S23",
+      "seed": "research-ablation-02",
+      "status": "completed",
+      "queries": 8,
+      "toolCost": 8,
+      "repairAttempts": [
+        {
+          "state": "completed",
+          "calls": 4,
+          "wallMs": 177605.10319999995,
+          "modelledDraftMs": 68004,
+          "refreshTargets": [
+            "inventory",
+            "vehicles",
+            "roads",
+            "map"
+          ],
+          "repairOf": "proposal_a742e0bb-04b0-4268-95ff-9e9050d7201a",
+          "preservedOperationId": "operation-1",
+          "delivered": 300,
+          "originalLoaded": 300
+        }
+      ],
+      "inconclusive": 0,
+      "costUsd": 0.007054240000000001,
+      "violations": 0
+    },
+    {
+      "treatment": "selective",
+      "scenario": "S23",
+      "seed": "research-ablation-02",
+      "status": "completed",
+      "queries": 4,
+      "toolCost": 4,
+      "repairAttempts": [
+        {
+          "state": "completed",
+          "calls": 5,
+          "wallMs": 182292.54940000002,
+          "modelledDraftMs": 75000,
+          "refreshTargets": [],
+          "repairOf": "proposal_b3b311d6-5648-4421-9e55-c7912ff10a3c",
+          "preservedOperationId": "operation-1",
+          "delivered": 300,
+          "originalLoaded": 300
+        }
+      ],
+      "inconclusive": 0,
+      "costUsd": 0.00797386,
+      "violations": 0
+    }
+  ],
+  "contrasts": [
+    {
+      "scenario": "S23",
+      "resource": "water",
+      "pairs": 2,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 4442853300,
+      "candidateMean": 4447202100,
+      "delta": -4348800,
+      "improvement": -0.0009788304286346694,
+      "interval95": [
+        -6598800,
+        -2098800
+      ],
+      "relativeInterval95": [
+        -0.001486014299002969,
+        -0.00047216000582039896
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    }
+  ],
+  "incomplete": [],
+  "stoppedReason": null,
+  "completed": 4,
+  "costUsd": 0.02801616,
+  "chargedBudgetUsd": 0.052528500000000006,
+  "limitations": [
+    "No invalidation means no repair result; an absent attempt is not a zero-minute successful repair.",
+    "A draft or query is not executed service. Outcomes are counted by physical receipts.",
+    "Internally defined refresh ablations do not prove that every competent planner would make those queries.",
+    "Query usefulness is not independently judged by this test; informative changes and physical outcomes remain separate evidence."
+  ]
+}

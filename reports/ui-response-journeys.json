@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-12T13:20:40.939Z",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "candidateChanged": false,
+  "checks": [
+    "Coordinator approves priorities and protected types through the UI; native units and delivery authority remain separate",
+    "Received-source batch is queued through the UI; sourced interpretations do not create operational authority or a proposal",
+    "A delayed investigation response cannot replace the newly selected sources screen",
+    "Explicit local erasure review removes linked source content, completes durable cleanup and pauses automatic investigation without deleting physical history",
+    "Response-policy dialog remains usable at 390px with reduced motion and without page overflow"
+  ],
+  "errors": [],
+  "scope": "Automated browser mechanism exercise with a recorded semantic provider fixture; not real-model accuracy or human understanding"
+}

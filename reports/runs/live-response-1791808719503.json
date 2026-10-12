@@ -1,0 +1,1958 @@
+{
+  "at": "2026-10-12T12:40:18.608Z",
+  "episode": "live-response-1791808719503",
+  "measurementMode": "live",
+  "rate": 1,
+  "clockPolicy": "World progresses at actual elapsed wall time, including actual provider and HTTP latency; no accelerated advance.",
+  "operator": "scripted finite source review, not human UX",
+  "candidateFingerprint": "444db2a12b555bfa3b99fc0b76e75ef66e9b5bfa84c67f4e68a5e650573aba96",
+  "candidateChanged": false,
+  "manifest": {
+    "schemaVersion": 1,
+    "engineVersion": "0.2.0",
+    "engineBuild": "56f9a98912e85669b8695861e1afd7d2ff4ec37af5b80e2c5dbd707213bce757",
+    "randomVersion": "fnv-avalanche-v1",
+    "runtimeMajor": 24,
+    "config": {
+      "seed": "live-response-2026-01",
+      "scenario": "S23",
+      "hazard": "none",
+      "variant": "standard",
+      "compositionVariant": "standard",
+      "grid": 3,
+      "extentKm": 1,
+      "organizations": 4,
+      "durationMs": 600000,
+      "populationPerSector": 60,
+      "backgroundTraffic": 0,
+      "postsPerHour": 0,
+      "falseRate": 0.12,
+      "observationRate": 0.8,
+      "operatorCount": 2,
+      "reviewMs": 1000,
+      "inspectionMs": 1000,
+      "loadMs": 1000,
+      "unloadMs": 1000,
+      "setupMs": 1000,
+      "networkLatencyMs": 50,
+      "packetLoss": 0,
+      "networkCapacity": 30,
+      "sourceIndexMs": 10000,
+      "queryLatencyMs": 50,
+      "bandwidthBytesPerSecond": 1000000,
+      "toolQuota": 60,
+      "funds": 5000,
+      "stockWater": 2400,
+      "reservedWater": 100,
+      "policy": "none",
+      "mode": "live",
+      "clockLatency": "wall",
+      "split": "development",
+      "language": "mixed",
+      "logMode": "compact",
+      "maxEvents": 2000000,
+      "maxPosts": 1000000,
+      "topology": "regional",
+      "bridgeCount": 3,
+      "healthTickMs": 600000,
+      "waterMlPerPersonDay": 3000,
+      "foodKcalPerPersonDay": 2100,
+      "initialWaterHours": 6,
+      "initialFoodHours": 12,
+      "waterCriticalHours": 30,
+      "foodCriticalHours": 72,
+      "injuryCriticalHours": 2,
+      "exposureCriticalHours": 4,
+      "waterFatalityBpPerHour": 150,
+      "foodFatalityBpPerHour": 25,
+      "injuryFatalityBpPerHour": 1000,
+      "exposureFatalityBpPerHour": 600,
+      "injuryFractionBp": 1500,
+      "temperatureC": 24,
+      "healthReports": false,
+      "recurringNeeds": true,
+      "resupplyReviewHours": 6,
+      "resupplyHorizonHours": 24,
+      "authorshipMs": 1000,
+      "staffShiftMs": 28800000,
+      "staffRestMs": 3600000,
+      "vehicleFuelMl": 80000,
+      "fuelMlPerKm": 180,
+      "sourceRequestLimit": 120,
+      "modelLatencyMs": 5000,
+      "modelCallLimit": 1000,
+      "subsystemSeeds": {}
+    },
+    "contentVersion": "presets-v1+social-v1"
+  },
+  "error": {
+    "code": "PROVIDER_SCHEMA",
+    "message": "The model provider returned no usable message (code: 400)."
+  },
+  "finalSourceState": {
+    "runId": "dff365db8067fa4a78a8",
+    "now": 99016,
+    "organization": {
+      "id": "org0",
+      "name": "Local Response",
+      "sharing": "public",
+      "funds": 5000
+    },
+    "known": {
+      "buildings": {
+        "b5": {
+          "id": "b5",
+          "node": "n5",
+          "use": "shelter",
+          "state": "candidate",
+          "at": 0
+        }
+      },
+      "needs": {
+        "need-water-main": {
+          "id": "need-water-main",
+          "building": "b5",
+          "type": "water",
+          "quantity": 600,
+          "served": 0,
+          "unit": "L",
+          "deadline": 10800000,
+          "population": 60,
+          "version": 1,
+          "at": 30000
+        }
+      },
+      "resources": {
+        "r-org0-water": {
+          "id": "r-org0-water",
+          "owner": "org0",
+          "node": "n0",
+          "type": "water",
+          "quantity": 600,
+          "reserved": 0,
+          "floor": 100,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-staff": {
+          "id": "r-org0-staff",
+          "owner": "org0",
+          "node": "n0",
+          "type": "staff",
+          "quantity": 6,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-sanitation": {
+          "id": "r-org0-sanitation",
+          "owner": "org0",
+          "node": "n0",
+          "type": "sanitation",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-energy": {
+          "id": "r-org0-energy",
+          "owner": "org0",
+          "node": "n0",
+          "type": "energy",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": {
+            "powerKw": 12,
+            "connector": "A"
+          },
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-blankets": {
+          "id": "r-org0-blankets",
+          "owner": "org0",
+          "node": "n0",
+          "type": "blankets",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-fuel": {
+          "id": "r-org0-fuel",
+          "owner": "org0",
+          "node": "n0",
+          "type": "fuel",
+          "quantity": 300,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-food": {
+          "id": "r-org0-food",
+          "owner": "org0",
+          "node": "n0",
+          "type": "food",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org0-rescue": {
+          "id": "r-org0-rescue",
+          "owner": "org0",
+          "node": "n0",
+          "type": "rescue",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-water": {
+          "id": "r-org1-water",
+          "owner": "org1",
+          "node": "n2",
+          "type": "water",
+          "quantity": 600,
+          "reserved": 0,
+          "floor": 100,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-staff": {
+          "id": "r-org1-staff",
+          "owner": "org1",
+          "node": "n2",
+          "type": "staff",
+          "quantity": 6,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-sanitation": {
+          "id": "r-org1-sanitation",
+          "owner": "org1",
+          "node": "n2",
+          "type": "sanitation",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-energy": {
+          "id": "r-org1-energy",
+          "owner": "org1",
+          "node": "n2",
+          "type": "energy",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": {
+            "powerKw": 12,
+            "connector": "A"
+          },
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-blankets": {
+          "id": "r-org1-blankets",
+          "owner": "org1",
+          "node": "n2",
+          "type": "blankets",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-fuel": {
+          "id": "r-org1-fuel",
+          "owner": "org1",
+          "node": "n2",
+          "type": "fuel",
+          "quantity": 300,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-food": {
+          "id": "r-org1-food",
+          "owner": "org1",
+          "node": "n2",
+          "type": "food",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org1-rescue": {
+          "id": "r-org1-rescue",
+          "owner": "org1",
+          "node": "n2",
+          "type": "rescue",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-water": {
+          "id": "r-org2-water",
+          "owner": "org2",
+          "node": "n6",
+          "type": "water",
+          "quantity": 600,
+          "reserved": 0,
+          "floor": 100,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-staff": {
+          "id": "r-org2-staff",
+          "owner": "org2",
+          "node": "n6",
+          "type": "staff",
+          "quantity": 6,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-sanitation": {
+          "id": "r-org2-sanitation",
+          "owner": "org2",
+          "node": "n6",
+          "type": "sanitation",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-energy": {
+          "id": "r-org2-energy",
+          "owner": "org2",
+          "node": "n6",
+          "type": "energy",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": {
+            "powerKw": 12,
+            "connector": "A"
+          },
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-blankets": {
+          "id": "r-org2-blankets",
+          "owner": "org2",
+          "node": "n6",
+          "type": "blankets",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-fuel": {
+          "id": "r-org2-fuel",
+          "owner": "org2",
+          "node": "n6",
+          "type": "fuel",
+          "quantity": 300,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-food": {
+          "id": "r-org2-food",
+          "owner": "org2",
+          "node": "n6",
+          "type": "food",
+          "quantity": 200,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        },
+        "r-org2-rescue": {
+          "id": "r-org2-rescue",
+          "owner": "org2",
+          "node": "n6",
+          "type": "rescue",
+          "quantity": 2,
+          "reserved": 0,
+          "floor": 0,
+          "compatibility": null,
+          "version": 1,
+          "observedAt": 0,
+          "at": 0
+        }
+      },
+      "vehicles": {
+        "v-org0-0": {
+          "id": "v-org0-0",
+          "owner": "org0",
+          "node": "n0",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        },
+        "v-org0-1": {
+          "id": "v-org0-1",
+          "owner": "org0",
+          "node": "n0",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        },
+        "v-org1-0": {
+          "id": "v-org1-0",
+          "owner": "org1",
+          "node": "n2",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        },
+        "v-org1-1": {
+          "id": "v-org1-1",
+          "owner": "org1",
+          "node": "n2",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        },
+        "v-org2-0": {
+          "id": "v-org2-0",
+          "owner": "org2",
+          "node": "n6",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        },
+        "v-org2-1": {
+          "id": "v-org2-1",
+          "owner": "org2",
+          "node": "n6",
+          "at": 0,
+          "capacity": 300,
+          "weightKg": 3500,
+          "speedMps": 12,
+          "maxWaterDepth": 0.3,
+          "maxCargoKg": 1000,
+          "volumeM3": 1,
+          "seats": 20,
+          "fuelMlPerKm": 180,
+          "fuel": 80000,
+          "shiftEnd": 600000,
+          "state": "idle",
+          "version": 1,
+          "operation": null,
+          "destination": null,
+          "receivedOrderVersion": 0,
+          "order": null
+        }
+      },
+      "edges": {
+        "n3:n6": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n6:n3": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n5:n8": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n8:n5": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n7:n8": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n8:n7": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n0:n1": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n1:n0": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n4:n5": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n5:n4": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n2:n4": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n4:n2": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n0:n3": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n3:n0": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n2:n7": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n7:n2": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n1:n4": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n4:n1": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n3:n7": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n7:n3": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n6:n8": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        },
+        "n8:n6": {
+          "open": true,
+          "waterDepth": 0,
+          "version": 1,
+          "at": 0
+        }
+      },
+      "operations": {},
+      "population": {},
+      "claims": [],
+      "lastContact": {
+        "s0": 194,
+        "s5": 30051
+      }
+    },
+    "operations": [],
+    "proposals": [],
+    "commitments": [],
+    "offers": [],
+    "transfers": [],
+    "sharedCommitments": [],
+    "inspections": [],
+    "queries": [
+      {
+        "id": "query-1",
+        "org": "org0",
+        "target": "inventory",
+        "state": "ready",
+        "createdAt": 0,
+        "readyAt": 50,
+        "result": [
+          {
+            "id": "r-org0-water",
+            "owner": "org0",
+            "node": "n0",
+            "type": "water",
+            "quantity": 600,
+            "reserved": 0,
+            "floor": 100,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-staff",
+            "owner": "org0",
+            "node": "n0",
+            "type": "staff",
+            "quantity": 6,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-sanitation",
+            "owner": "org0",
+            "node": "n0",
+            "type": "sanitation",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-energy",
+            "owner": "org0",
+            "node": "n0",
+            "type": "energy",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": {
+              "powerKw": 12,
+              "connector": "A"
+            },
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-blankets",
+            "owner": "org0",
+            "node": "n0",
+            "type": "blankets",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-fuel",
+            "owner": "org0",
+            "node": "n0",
+            "type": "fuel",
+            "quantity": 300,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-food",
+            "owner": "org0",
+            "node": "n0",
+            "type": "food",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org0-rescue",
+            "owner": "org0",
+            "node": "n0",
+            "type": "rescue",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-water",
+            "owner": "org1",
+            "node": "n2",
+            "type": "water",
+            "quantity": 600,
+            "reserved": 0,
+            "floor": 100,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-staff",
+            "owner": "org1",
+            "node": "n2",
+            "type": "staff",
+            "quantity": 6,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-sanitation",
+            "owner": "org1",
+            "node": "n2",
+            "type": "sanitation",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-energy",
+            "owner": "org1",
+            "node": "n2",
+            "type": "energy",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": {
+              "powerKw": 12,
+              "connector": "A"
+            },
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-blankets",
+            "owner": "org1",
+            "node": "n2",
+            "type": "blankets",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-fuel",
+            "owner": "org1",
+            "node": "n2",
+            "type": "fuel",
+            "quantity": 300,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-food",
+            "owner": "org1",
+            "node": "n2",
+            "type": "food",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org1-rescue",
+            "owner": "org1",
+            "node": "n2",
+            "type": "rescue",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-water",
+            "owner": "org2",
+            "node": "n6",
+            "type": "water",
+            "quantity": 600,
+            "reserved": 0,
+            "floor": 100,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-staff",
+            "owner": "org2",
+            "node": "n6",
+            "type": "staff",
+            "quantity": 6,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-sanitation",
+            "owner": "org2",
+            "node": "n6",
+            "type": "sanitation",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-energy",
+            "owner": "org2",
+            "node": "n6",
+            "type": "energy",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": {
+              "powerKw": 12,
+              "connector": "A"
+            },
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-blankets",
+            "owner": "org2",
+            "node": "n6",
+            "type": "blankets",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-fuel",
+            "owner": "org2",
+            "node": "n6",
+            "type": "fuel",
+            "quantity": 300,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-food",
+            "owner": "org2",
+            "node": "n6",
+            "type": "food",
+            "quantity": 200,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          },
+          {
+            "id": "r-org2-rescue",
+            "owner": "org2",
+            "node": "n6",
+            "type": "rescue",
+            "quantity": 2,
+            "reserved": 0,
+            "floor": 0,
+            "compatibility": null,
+            "version": 1,
+            "observedAt": 0
+          }
+        ],
+        "completedAt": 101
+      },
+      {
+        "id": "query-2",
+        "org": "org0",
+        "target": "vehicles",
+        "state": "ready",
+        "createdAt": 0,
+        "readyAt": 50,
+        "result": [
+          {
+            "id": "v-org0-0",
+            "owner": "org0",
+            "node": "n0",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          },
+          {
+            "id": "v-org0-1",
+            "owner": "org0",
+            "node": "n0",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          },
+          {
+            "id": "v-org1-0",
+            "owner": "org1",
+            "node": "n2",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          },
+          {
+            "id": "v-org1-1",
+            "owner": "org1",
+            "node": "n2",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          },
+          {
+            "id": "v-org2-0",
+            "owner": "org2",
+            "node": "n6",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          },
+          {
+            "id": "v-org2-1",
+            "owner": "org2",
+            "node": "n6",
+            "at": 0,
+            "capacity": 300,
+            "weightKg": 3500,
+            "speedMps": 12,
+            "maxWaterDepth": 0.3,
+            "maxCargoKg": 1000,
+            "volumeM3": 1,
+            "seats": 20,
+            "fuelMlPerKm": 180,
+            "fuel": 80000,
+            "shiftEnd": 600000,
+            "state": "idle",
+            "version": 1,
+            "operation": null,
+            "destination": null,
+            "receivedOrderVersion": 0,
+            "order": null
+          }
+        ],
+        "completedAt": 101
+      },
+      {
+        "id": "query-3",
+        "org": "org0",
+        "target": "map",
+        "state": "ready",
+        "createdAt": 93,
+        "readyAt": 143,
+        "result": {
+          "nodes": [
+            {
+              "id": "n0",
+              "x": 0,
+              "z": 0,
+              "bank": "west"
+            },
+            {
+              "id": "n1",
+              "x": 369,
+              "z": 0,
+              "bank": "west"
+            },
+            {
+              "id": "n2",
+              "x": 1000,
+              "z": 0,
+              "bank": "east"
+            },
+            {
+              "id": "n3",
+              "x": 0,
+              "z": 796,
+              "bank": "west"
+            },
+            {
+              "id": "n4",
+              "x": 608,
+              "z": 553,
+              "bank": "east"
+            },
+            {
+              "id": "n5",
+              "x": 1000,
+              "z": 784,
+              "bank": "east"
+            },
+            {
+              "id": "n6",
+              "x": 0,
+              "z": 1000,
+              "bank": "west"
+            },
+            {
+              "id": "n7",
+              "x": 699,
+              "z": 1000,
+              "bank": "east"
+            },
+            {
+              "id": "n8",
+              "x": 1000,
+              "z": 1000,
+              "bank": "east"
+            }
+          ],
+          "roads": [
+            {
+              "id": "n3:n6",
+              "from": "n3",
+              "to": "n6",
+              "lengthM": 232,
+              "speedMps": 8,
+              "maxWeight": 3700
+            },
+            {
+              "id": "n6:n3",
+              "from": "n6",
+              "to": "n3",
+              "lengthM": 232,
+              "speedMps": 8,
+              "maxWeight": 3700
+            },
+            {
+              "id": "n5:n8",
+              "from": "n5",
+              "to": "n8",
+              "lengthM": 246,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n8:n5",
+              "from": "n8",
+              "to": "n5",
+              "lengthM": 246,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n7:n8",
+              "from": "n7",
+              "to": "n8",
+              "lengthM": 338,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n8:n7",
+              "from": "n8",
+              "to": "n7",
+              "lengthM": 338,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n0:n1",
+              "from": "n0",
+              "to": "n1",
+              "lengthM": 418,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n1:n0",
+              "from": "n1",
+              "to": "n0",
+              "lengthM": 418,
+              "speedMps": 8,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n4:n5",
+              "from": "n4",
+              "to": "n5",
+              "lengthM": 510,
+              "speedMps": 14,
+              "maxWeight": 15000
+            },
+            {
+              "id": "n5:n4",
+              "from": "n5",
+              "to": "n4",
+              "lengthM": 510,
+              "speedMps": 14,
+              "maxWeight": 15000
+            },
+            {
+              "id": "n2:n4",
+              "from": "n2",
+              "to": "n4",
+              "lengthM": 1165,
+              "speedMps": 4.5,
+              "maxWeight": 5000
+            },
+            {
+              "id": "n4:n2",
+              "from": "n4",
+              "to": "n2",
+              "lengthM": 1165,
+              "speedMps": 4.5,
+              "maxWeight": 5000
+            },
+            {
+              "id": "n0:n3",
+              "from": "n0",
+              "to": "n3",
+              "lengthM": 898,
+              "speedMps": 14,
+              "maxWeight": 15000
+            },
+            {
+              "id": "n3:n0",
+              "from": "n3",
+              "to": "n0",
+              "lengthM": 898,
+              "speedMps": 14,
+              "maxWeight": 15000
+            },
+            {
+              "id": "n2:n7",
+              "from": "n2",
+              "to": "n7",
+              "lengthM": 1177,
+              "speedMps": 8,
+              "maxWeight": 3700
+            },
+            {
+              "id": "n7:n2",
+              "from": "n7",
+              "to": "n2",
+              "lengthM": 1177,
+              "speedMps": 8,
+              "maxWeight": 3700
+            },
+            {
+              "id": "n1:n4",
+              "from": "n1",
+              "to": "n4",
+              "lengthM": 682,
+              "speedMps": 10,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n4:n1",
+              "from": "n4",
+              "to": "n1",
+              "lengthM": 682,
+              "speedMps": 10,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n3:n7",
+              "from": "n3",
+              "to": "n7",
+              "lengthM": 819,
+              "speedMps": 10,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n7:n3",
+              "from": "n7",
+              "to": "n3",
+              "lengthM": 819,
+              "speedMps": 10,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n6:n8",
+              "from": "n6",
+              "to": "n8",
+              "lengthM": 1121,
+              "speedMps": 10,
+              "maxWeight": 12000
+            },
+            {
+              "id": "n8:n6",
+              "from": "n8",
+              "to": "n6",
+              "lengthM": 1121,
+              "speedMps": 10,
+              "maxWeight": 12000
+            }
+          ],
+          "places": [
+            {
+              "id": "b0",
+              "node": "n0",
+              "x": 75,
+              "z": 70,
+              "use": "residential"
+            },
+            {
+              "id": "b1",
+              "node": "n1",
+              "x": 444,
+              "z": 70,
+              "use": "plant"
+            },
+            {
+              "id": "b2",
+              "node": "n2",
+              "x": 1075,
+              "z": 70,
+              "use": "residential"
+            },
+            {
+              "id": "b3",
+              "node": "n3",
+              "x": 75,
+              "z": 866,
+              "use": "residential"
+            },
+            {
+              "id": "b4",
+              "node": "n4",
+              "x": 683,
+              "z": 623,
+              "use": "warehouse"
+            },
+            {
+              "id": "b5",
+              "node": "n5",
+              "x": 1075,
+              "z": 854,
+              "use": "shelter"
+            },
+            {
+              "id": "b6",
+              "node": "n6",
+              "x": 75,
+              "z": 1070,
+              "use": "school"
+            },
+            {
+              "id": "b7",
+              "node": "n7",
+              "x": 774,
+              "z": 1070,
+              "use": "residential"
+            },
+            {
+              "id": "b8",
+              "node": "n8",
+              "x": 1075,
+              "z": 1070,
+              "use": "school"
+            }
+          ]
+        },
+        "completedAt": 194
+      }
+    ],
+    "claims": [],
+    "patterns": [],
+    "modelRequests": [
+      {
+        "id": "model-request-1",
+        "org": "org0",
+        "actor": "external-org0",
+        "model": "google/gemma-4-31b-it",
+        "requestedAt": 1448,
+        "state": "available",
+        "policy": "wall",
+        "availableAt": 61038,
+        "wallMs": 59514.008700000006,
+        "promptTokens": 5501,
+        "outputTokens": 8192,
+        "providerCost": 0.00404694,
+        "providerRequestId": "gen-1791808721-IutYKmcxejPNnPc5M5xY",
+        "failed": false
+      },
+      {
+        "id": "model-request-2",
+        "org": "org0",
+        "actor": "external-org0",
+        "model": "google/gemma-4-31b-it",
+        "requestedAt": 61254,
+        "state": "failed",
+        "policy": "wall",
+        "availableAt": 80076,
+        "wallMs": 18812.609899999996,
+        "promptTokens": 0,
+        "outputTokens": 0,
+        "failed": true
+      },
+      {
+        "id": "model-request-3",
+        "org": "org0",
+        "actor": "external-org0",
+        "model": "google/gemma-4-31b-it",
+        "requestedAt": 80167,
+        "state": "failed",
+        "policy": "wall",
+        "availableAt": 98932,
+        "wallMs": 18730.559200000003,
+        "promptTokens": 0,
+        "outputTokens": 0,
+        "failed": true
+      }
+    ],
+    "publicUpdates": []
+  },
+  "wallMs": 102576.13119999999,
+  "usage": [
+    {
+      "episode": "live-response-1791808719503",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 59514.008700000006,
+      "input_tokens": 5501,
+      "output_tokens": 8192,
+      "cost_usd": 0.00404694,
+      "provider_id": "gen-1791808721-IutYKmcxejPNnPc5M5xY"
+    },
+    {
+      "episode": "live-response-1791808719503",
+      "model": "google/gemma-4-31b-it",
+      "state": "failed",
+      "wall_ms": 18718.299899999998,
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost_usd": null,
+      "provider_id": "gen-1791808800-bUZdThTh0Wfl6IA3SEfD"
+    },
+    {
+      "episode": "live-response-1791808719503",
+      "model": "google/gemma-4-31b-it",
+      "state": "failed",
+      "wall_ms": 18793.114100000006,
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost_usd": null,
+      "provider_id": "gen-1791808781-9dehuEFsvry18KZY0Ics"
+    }
+  ],
+  "costUsd": 0.00404694,
+  "metrics": {
+    "simulatedMs": 99016,
+    "services": {
+      "water": {
+        "unit": "L",
+        "demand": 600,
+        "served": 0,
+        "pending": 600,
+        "overprovided": 0,
+        "uncoveredUnitMs": 59409600,
+        "onTime": 0
+      }
+    },
+    "collective": {
+      "shelterPlaceHours": 0,
+      "operatingHours": 0,
+      "waterProduced": 0,
+      "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+    },
+    "population": {
+      "model": "experimental-v1",
+      "clinicallyValidated": false,
+      "alive": 540,
+      "deceased": 0,
+      "injured": 0,
+      "waterDeficitPersonHours": 0,
+      "foodDeficitPersonHours": 0,
+      "exposurePersonHours": 0,
+      "untreatedInjuryPersonHours": 0,
+      "communities": [
+        {
+          "id": "community-s0",
+          "sector": "s0",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s1",
+          "sector": "s1",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s2",
+          "sector": "s2",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s3",
+          "sector": "s3",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s4",
+          "sector": "s4",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s5",
+          "sector": "s5",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s6",
+          "sector": "s6",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s7",
+          "sector": "s7",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s8",
+          "sector": "s8",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        }
+      ]
+    },
+    "perCommunity": [
+      {
+        "id": "need-water-main",
+        "building": "b5",
+        "type": "water",
+        "quantity": 600,
+        "served": 0,
+        "completedAt": null,
+        "createdAt": 0,
+        "deadline": 10800000,
+        "silent": false,
+        "firstSignalAt": 31051,
+        "remote": false,
+        "knownBy": [
+          "org0",
+          "org1",
+          "org2",
+          "org3"
+        ]
+      }
+    ],
+    "latency": {},
+    "posts": 1,
+    "ingested": 0,
+    "operations": 0,
+    "operatorReviewMs": 0,
+    "conflicts": 0,
+    "failedTrips": 0,
+    "staleOrders": 0,
+    "queries": 3,
+    "cost": 3,
+    "events": 19,
+    "modelCalls": 3,
+    "modelWallMs": 97057.1778,
+    "modelUsage": {
+      "promptTokens": 5501,
+      "outputTokens": 8192,
+      "pending": 0,
+      "failed": 2,
+      "providerCost": 0.00404694
+    },
+    "platformTransport": {
+      "attempts": 0,
+      "disconnected": 0,
+      "bytes": 0,
+      "note": "Actual platform peer HTTP is charged by the laboratory transport adapter; this is distinct from source-system messages."
+    },
+    "invalidActions": 0,
+    "ledgerValid": true,
+    "source": {
+      "created": 1,
+      "published": 1,
+      "falseSignals": 0,
+      "deleted": 0,
+      "capped": false
+    },
+    "information": {
+      "downloaded": 0,
+      "accepted": 0,
+      "interpreted": 0,
+      "discarded": 0,
+      "downloadLatencyMs": {
+        "p50": null,
+        "p95": null
+      },
+      "confirmedFalse": 0,
+      "rejectedObservedTrue": 0,
+      "falseMerges": 0,
+      "unobservedNeeds": 0,
+      "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+    },
+    "coordination": {
+      "expired": 0,
+      "withdrawn": 0,
+      "orphanReservations": 0,
+      "clarifications": 0,
+      "reviewQueued": 0,
+      "loansOverdue": 0
+    },
+    "physical": {
+      "closedCrossings": 0,
+      "trafficQueue": 0,
+      "overprovidedByType": {
+        "water": {
+          "quantity": 0,
+          "unit": "L"
+        }
+      },
+      "distanceM": 0,
+      "fuelMl": 0,
+      "arrivedNotReceived": 0,
+      "facilitiesOperating": 0,
+      "blocked": 0
+    },
+    "finance": {
+      "sandbox": true,
+      "available": 20000,
+      "spent": 0,
+      "received": 0
+    },
+    "subgroups": {
+      "silent": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 1,
+            "rightCensored": 1
+          }
+        }
+      },
+      "remote": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 0,
+            "pendingBeforeDeadline": 1,
+            "rightCensored": 1
+          }
+        }
+      }
+    },
+    "response": {
+      "completed": 0,
+      "rightCensored": 1,
+      "needToServiceMs": {
+        "p50": null,
+        "p95": null,
+        "note": "Completed cases only; report right-censored cases alongside these percentiles."
+      }
+    },
+    "eventCounts": {
+      "need_created": 1,
+      "world_initialized": 1,
+      "action_accepted": 3,
+      "message_delivered": 5,
+      "query_completed": 3,
+      "model_requested": 3,
+      "signal_created": 1,
+      "post_published": 1,
+      "model_available": 3
+    }
+  },
+  "invariants": []
+}

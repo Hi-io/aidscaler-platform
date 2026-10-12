@@ -1,0 +1,68 @@
+{
+  "at": "2026-10-12T13:14:56.002Z",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "gitRevisions": {
+    "platform": "a99bf8f826b58373c32bacf5e232c0a095bc92f0",
+    "simulator": "6c75ae51e5592c64e3d74df2ab94a20f7fc6d9b2"
+  },
+  "node": "v24.19.0",
+  "platform": "win32",
+  "arch": "x64",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+    "logicalCpus": 12,
+    "memoryBytes": 68644159488
+  },
+  "cases": [
+    {
+      "name": "platform-syntax",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 9913.966699999999,
+      "summary": [
+        "Syntax verified: 138 JavaScript modules."
+      ]
+    },
+    {
+      "name": "platform-tests",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 197734.3162,
+      "tests": {
+        "tests": 116,
+        "pass": 116,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "simulator-syntax-contracts",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 4931.724800000025,
+      "summary": [
+        "67 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
+      ]
+    },
+    {
+      "name": "simulator-tests",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 7918.211500000005,
+      "tests": {
+        "tests": 120,
+        "pass": 120,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "scope": "Automated local mechanism verification, no paid model calls and no human or field validation.",
+  "candidateChanged": false,
+  "passed": true
+}
