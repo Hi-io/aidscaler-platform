@@ -13,7 +13,9 @@
     "demo": "node --env-file-if-exists=.env.local scripts/demo.mjs",
     "evaluate": "node --env-file-if-exists=.env.local scripts/evaluate.mjs",
     "test:live": "node --env-file-if-exists=.env.local scripts/live.mjs",
-    "test:ui": "node scripts/ui-test.mjs"
+    "test:ui": "node scripts/ui-test.mjs",
+    "setup:media": "node scripts/setup-media.mjs",
+    "test:media": "node --env-file-if-exists=.env.local scripts/media-smoke.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.14",

@@ -1,9 +1,86 @@
-import test from 'node:test';import assert from 'node:assert/strict';
-import {Store} from '../src/store.mjs';import {createPlatform} from '../server.mjs';
-test('API requires sessions, CSRF and roles; the public portal contains only approved projections',async t=>{const store=await Store.open();const app=await createPlatform({port:0,org:'org0',orgName:'Test Relief',store,autoIngest:false,startWorker:false,writeAccessFile:false,bootstrapPassword:'test-password-12345'});t.after(async()=>{await app.close();await store.close();});const base=app.url;
- assert.equal((await fetch(base+'/api/dashboard')).status,401);const login=await fetch(base+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'analyst@org0.nexo.local',password:'test-password-12345'})});assert.equal(login.status,200);const c=login.headers.get('set-cookie').split(';')[0],{csrf}=await login.json();
- assert.equal((await fetch(base+'/api/sync',{method:'POST',headers:{cookie:c,'Content-Type':'application/json'},body:'{}'})).status,403);
- assert.equal((await fetch(base+'/api/resource',{method:'POST',headers:{cookie:c,'X-CSRF-Token':csrf,'Content-Type':'application/json','Idempotency-Key':'resource'},body:JSON.stringify({type:'water',quantity:1})})).status,403);
- await store.put('org0','publication','draft',{title:'Private draft',text:'Sensitive note',state:'draft'},0);await store.put('org0','publication','live',{title:'Approved need',text:'Pooled assistance is needed',state:'published',status:'support_needed',area:'District',publishedAt:Date.now(),privateNotes:'secret'},0);
- const portal=await (await fetch(base+'/api/public')).json();assert.equal(portal.updates.length,1);assert.equal(portal.updates[0].privateNotes,undefined);assert.equal(JSON.stringify(portal).includes('Sensitive note'),false);assert.equal((await fetch(base+'/.env.local')).status,404);
+import test from "node:test";
+import assert from "node:assert/strict";
+import { Store } from "../src/store.mjs";
+import { createPlatform } from "../server.mjs";
+test("API requires sessions, CSRF and roles; the public portal contains only approved projections", async (t) => {
+  const store = await Store.open();
+  const app = await createPlatform({
+    port: 0,
+    org: "org0",
+    orgName: "Test Relief",
+    store,
+    autoIngest: false,
+    startWorker: false,
+    writeAccessFile: false,
+    bootstrapPassword: "test-password-12345",
+  });
+  t.after(async () => {
+    await app.close();
+    await store.close();
+  });
+  const base = app.url;
+  assert.equal((await fetch(base + "/api/dashboard")).status, 401);
+  const login = await fetch(base + "/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: "analyst@org0.nexo.local",
+      password: "test-password-12345",
+    }),
+  });
+  assert.equal(login.status, 200);
+  const c = login.headers.get("set-cookie").split(";")[0],
+    { csrf } = await login.json();
+  assert.equal(
+    (
+      await fetch(base + "/api/sync", {
+        method: "POST",
+        headers: { cookie: c, "Content-Type": "application/json" },
+        body: "{}",
+      })
+    ).status,
+    403,
+  );
+  assert.equal(
+    (
+      await fetch(base + "/api/resource", {
+        method: "POST",
+        headers: {
+          cookie: c,
+          "X-CSRF-Token": csrf,
+          "Content-Type": "application/json",
+          "Idempotency-Key": "resource",
+        },
+        body: JSON.stringify({ type: "water", quantity: 1 }),
+      })
+    ).status,
+    403,
+  );
+  await store.put(
+    "org0",
+    "publication",
+    "draft",
+    { title: "Private draft", text: "Sensitive note", state: "draft" },
+    0,
+  );
+  await store.put(
+    "org0",
+    "publication",
+    "live",
+    {
+      title: "Approved need",
+      text: "Pooled assistance is needed",
+      state: "published",
+      status: "support_needed",
+      area: "District",
+      publishedAt: Date.now(),
+      privateNotes: "secret",
+    },
+    0,
+  );
+  const portal = await (await fetch(base + "/api/public")).json();
+  assert.equal(portal.updates.length, 1);
+  assert.equal(portal.updates[0].privateNotes, undefined);
+  assert.equal(JSON.stringify(portal).includes("Sensitive note"), false);
+  assert.equal((await fetch(base + "/.env.local")).status, 404);
 });

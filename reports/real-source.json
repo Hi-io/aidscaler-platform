@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-11T23:53:33.416Z",
+  "source": "https://goadmin.ifrc.org/api/v2/event/?limit=2",
+  "documentation": "https://go-wiki.ifrc.org/en/go-api/api-overview",
+  "httpRead": true,
+  "records": 2,
+  "contentHash": "96bdda0f4ded1139bf2945ddc41cb4b9c32cdebbcd0b5d15a0a6c84acdb72a77",
+  "sourceTypes": [
+    "Population Movement",
+    "Earthquake"
+  ],
+  "notes": [
+    "Public read integration only. No institutional partnership, current stock access or field validation is implied.",
+    "Real source data is kept out of simulation KPI experiments."
+  ]
+}

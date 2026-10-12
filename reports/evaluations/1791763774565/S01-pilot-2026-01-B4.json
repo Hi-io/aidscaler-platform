@@ -1,0 +1,3670 @@
+{
+  "at": "2026-10-12T00:11:26.856Z",
+  "arm": "B4",
+  "scenario": "S01",
+  "seed": "pilot-2026-01",
+  "replicate": 0,
+  "status": "completed",
+  "errors": [],
+  "manifest": {
+    "schemaVersion": 1,
+    "engineVersion": "0.2.0",
+    "engineBuild": "76ef28cd2cc2ea5bea88c59c5b707d0c5b14baa6547207ecff11ac59a667c4ae",
+    "randomVersion": "fnv-avalanche-v1",
+    "runtimeMajor": 24,
+    "config": {
+      "seed": "pilot-2026-01",
+      "scenario": "S01",
+      "hazard": "none",
+      "variant": "standard",
+      "grid": 5,
+      "extentKm": 2,
+      "organizations": 4,
+      "durationMs": 14400000,
+      "populationPerSector": 60,
+      "backgroundTraffic": 0,
+      "postsPerHour": 0,
+      "falseRate": 0.12,
+      "observationRate": 0.8,
+      "operatorCount": 2,
+      "reviewMs": 30000,
+      "inspectionMs": 60000,
+      "loadMs": 60000,
+      "unloadMs": 60000,
+      "setupMs": 60000,
+      "networkLatencyMs": 1000,
+      "packetLoss": 0,
+      "networkCapacity": 30,
+      "sourceIndexMs": 10000,
+      "queryLatencyMs": 1000,
+      "bandwidthBytesPerSecond": 1000000,
+      "toolQuota": 60,
+      "funds": 5000,
+      "stockWater": 2400,
+      "reservedWater": 100,
+      "policy": "none",
+      "mode": "modeled",
+      "clockLatency": "modeled",
+      "split": "development",
+      "language": "mixed",
+      "logMode": "compact",
+      "maxEvents": 2000000,
+      "maxPosts": 1000000,
+      "topology": "grid",
+      "bridgeCount": 3,
+      "healthTickMs": 600000,
+      "waterMlPerPersonDay": 3000,
+      "foodKcalPerPersonDay": 2100,
+      "initialWaterHours": 6,
+      "initialFoodHours": 12,
+      "waterCriticalHours": 30,
+      "foodCriticalHours": 72,
+      "injuryCriticalHours": 2,
+      "exposureCriticalHours": 4,
+      "waterFatalityBpPerHour": 150,
+      "foodFatalityBpPerHour": 25,
+      "injuryFatalityBpPerHour": 1000,
+      "exposureFatalityBpPerHour": 600,
+      "injuryFractionBp": 1500,
+      "temperatureC": 24,
+      "healthReports": true,
+      "recurringNeeds": true,
+      "resupplyReviewHours": 6,
+      "resupplyHorizonHours": 24,
+      "authorshipMs": 1000,
+      "staffShiftMs": 28800000,
+      "staffRestMs": 3600000,
+      "vehicleFuelMl": 80000,
+      "fuelMlPerKm": 180,
+      "sourceRequestLimit": 100000,
+      "modelLatencyMs": 15000,
+      "modelCallLimit": 1000,
+      "subsystemSeeds": {}
+    },
+    "contentVersion": "presets-v1+social-v1"
+  },
+  "engineBuild": "76ef28cd2cc2ea5bea88c59c5b707d0c5b14baa6547207ecff11ac59a667c4ae",
+  "initialMapHash": "9df56b6debd5353e58036b792a4d70c19a17d38aab1f3fe68dde71023aeff788",
+  "candidateFingerprint": "4cd44f1866b9dc56ca02c15050c02d9027759f02b67ada1f0062bb9f5f20b23c",
+  "measurementMode": "modeled",
+  "clockPolicy": "declared delays; no accelerated wall-time charging",
+  "operator": "scripted; human comprehension not measured",
+  "wallMs": 37211.903900000005,
+  "activities": [
+    {
+      "org": "org0",
+      "state": "inconclusive",
+      "model": "google/gemma-4-31b-it",
+      "startedAt": 1791763851085,
+      "steps": [
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791763852502,
+          "state": "completed",
+          "label": "Checked map",
+          "params": {
+            "org": "org0",
+            "target": "map"
+          },
+          "result": {
+            "id": "query-1",
+            "org": "org0",
+            "target": "map",
+            "state": "ready",
+            "createdAt": 75000,
+            "readyAt": 76000,
+            "result": {
+              "nodes": [
+                {
+                  "id": "n0",
+                  "x": 0,
+                  "z": 0
+                },
+                {
+                  "id": "n1",
+                  "x": 500,
+                  "z": 0
+                },
+                {
+                  "id": "n2",
+                  "x": 1000,
+                  "z": 0
+                },
+                {
+                  "id": "n3",
+                  "x": 1500,
+                  "z": 0
+                },
+                {
+                  "id": "n4",
+                  "x": 2000,
+                  "z": 0
+                },
+                {
+                  "id": "n5",
+                  "x": 0,
+                  "z": 500
+                },
+                {
+                  "id": "n6",
+                  "x": 500,
+                  "z": 500
+                },
+                {
+                  "id": "n7",
+                  "x": 1000,
+                  "z": 500
+                },
+                {
+                  "id": "n8",
+                  "x": 1500,
+                  "z": 500
+                },
+                {
+                  "id": "n9",
+                  "x": 2000,
+                  "z": 500
+                },
+                {
+                  "id": "n10",
+                  "x": 0,
+                  "z": 1000
+                },
+                {
+                  "id": "n11",
+                  "x": 500,
+                  "z": 1000
+                },
+                {
+                  "id": "n12",
+                  "x": 1000,
+                  "z": 1000
+                },
+                {
+                  "id": "n13",
+                  "x": 1500,
+                  "z": 1000
+                },
+                {
+                  "id": "n14",
+                  "x": 2000,
+                  "z": 1000
+                },
+                {
+                  "id": "n15",
+                  "x": 0,
+                  "z": 1500
+                },
+                {
+                  "id": "n16",
+                  "x": 500,
+                  "z": 1500
+                },
+                {
+                  "id": "n17",
+                  "x": 1000,
+                  "z": 1500
+                },
+                {
+                  "id": "n18",
+                  "x": 1500,
+                  "z": 1500
+                },
+                {
+                  "id": "n19",
+                  "x": 2000,
+                  "z": 1500
+                },
+                {
+                  "id": "n20",
+                  "x": 0,
+                  "z": 2000
+                },
+                {
+                  "id": "n21",
+                  "x": 500,
+                  "z": 2000
+                },
+                {
+                  "id": "n22",
+                  "x": 1000,
+                  "z": 2000
+                },
+                {
+                  "id": "n23",
+                  "x": 1500,
+                  "z": 2000
+                },
+                {
+                  "id": "n24",
+                  "x": 2000,
+                  "z": 2000
+                }
+              ],
+              "roads": [
+                {
+                  "id": "n0:n1",
+                  "from": "n0",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n0",
+                  "from": "n1",
+                  "to": "n0",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n0:n5",
+                  "from": "n0",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n0",
+                  "from": "n5",
+                  "to": "n0",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n2",
+                  "from": "n1",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n2:n1",
+                  "from": "n2",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n6",
+                  "from": "n1",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n1",
+                  "from": "n6",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n2:n3",
+                  "from": "n2",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n3:n2",
+                  "from": "n3",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n2:n7",
+                  "from": "n2",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n7:n2",
+                  "from": "n7",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n3:n4",
+                  "from": "n3",
+                  "to": "n4",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n4:n3",
+                  "from": "n4",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n3:n8",
+                  "from": "n3",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n8:n3",
+                  "from": "n8",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n4:n9",
+                  "from": "n4",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n4",
+                  "from": "n9",
+                  "to": "n4",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n6",
+                  "from": "n5",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n5",
+                  "from": "n6",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n10",
+                  "from": "n5",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n10:n5",
+                  "from": "n10",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n7",
+                  "from": "n6",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n7:n6",
+                  "from": "n7",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n11",
+                  "from": "n6",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n11:n6",
+                  "from": "n11",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n7:n8",
+                  "from": "n7",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n8:n7",
+                  "from": "n8",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n7:n12",
+                  "from": "n7",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n7",
+                  "from": "n12",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n8:n9",
+                  "from": "n8",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n8",
+                  "from": "n9",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n8:n13",
+                  "from": "n8",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n13:n8",
+                  "from": "n13",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n14",
+                  "from": "n9",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n14:n9",
+                  "from": "n14",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n10:n11",
+                  "from": "n10",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n10",
+                  "from": "n11",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n10:n15",
+                  "from": "n10",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n15:n10",
+                  "from": "n15",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n12",
+                  "from": "n11",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n11",
+                  "from": "n12",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n16",
+                  "from": "n11",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n16:n11",
+                  "from": "n16",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n13",
+                  "from": "n12",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n12",
+                  "from": "n13",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n17",
+                  "from": "n12",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n17:n12",
+                  "from": "n17",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n14",
+                  "from": "n13",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n14:n13",
+                  "from": "n14",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n18",
+                  "from": "n13",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n13",
+                  "from": "n18",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n14:n19",
+                  "from": "n14",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n19:n14",
+                  "from": "n19",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n15:n16",
+                  "from": "n15",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n15",
+                  "from": "n16",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n15:n20",
+                  "from": "n15",
+                  "to": "n20",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n20:n15",
+                  "from": "n20",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n17",
+                  "from": "n16",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n17:n16",
+                  "from": "n17",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n21",
+                  "from": "n16",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n16",
+                  "from": "n21",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n17:n18",
+                  "from": "n17",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n17",
+                  "from": "n18",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n17:n22",
+                  "from": "n17",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n22:n17",
+                  "from": "n22",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n19",
+                  "from": "n18",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n19:n18",
+                  "from": "n19",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n18:n23",
+                  "from": "n18",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n23:n18",
+                  "from": "n23",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n19:n24",
+                  "from": "n19",
+                  "to": "n24",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n24:n19",
+                  "from": "n24",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n20:n21",
+                  "from": "n20",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n20",
+                  "from": "n21",
+                  "to": "n20",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n22",
+                  "from": "n21",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n22:n21",
+                  "from": "n22",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n22:n23",
+                  "from": "n22",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n23:n22",
+                  "from": "n23",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n23:n24",
+                  "from": "n23",
+                  "to": "n24",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n24:n23",
+                  "from": "n24",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                }
+              ],
+              "places": [
+                {
+                  "id": "b0",
+                  "node": "n0",
+                  "x": 75,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b1",
+                  "node": "n1",
+                  "x": 575,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b2",
+                  "node": "n2",
+                  "x": 1075,
+                  "z": 70,
+                  "use": "school"
+                },
+                {
+                  "id": "b3",
+                  "node": "n3",
+                  "x": 1575,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b4",
+                  "node": "n4",
+                  "x": 2075,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b5",
+                  "node": "n5",
+                  "x": 75,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b6",
+                  "node": "n6",
+                  "x": 575,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b7",
+                  "node": "n7",
+                  "x": 1075,
+                  "z": 570,
+                  "use": "plant"
+                },
+                {
+                  "id": "b8",
+                  "node": "n8",
+                  "x": 1575,
+                  "z": 570,
+                  "use": "school"
+                },
+                {
+                  "id": "b9",
+                  "node": "n9",
+                  "x": 2075,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b10",
+                  "node": "n10",
+                  "x": 75,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b11",
+                  "node": "n11",
+                  "x": 575,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b12",
+                  "node": "n12",
+                  "x": 1075,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b13",
+                  "node": "n13",
+                  "x": 1575,
+                  "z": 1070,
+                  "use": "shelter"
+                },
+                {
+                  "id": "b14",
+                  "node": "n14",
+                  "x": 2075,
+                  "z": 1070,
+                  "use": "warehouse"
+                },
+                {
+                  "id": "b15",
+                  "node": "n15",
+                  "x": 75,
+                  "z": 1570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b16",
+                  "node": "n16",
+                  "x": 575,
+                  "z": 1570,
+                  "use": "school"
+                },
+                {
+                  "id": "b17",
+                  "node": "n17",
+                  "x": 1075,
+                  "z": 1570,
+                  "use": "warehouse"
+                },
+                {
+                  "id": "b18",
+                  "node": "n18",
+                  "x": 1575,
+                  "z": 1570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b19",
+                  "node": "n19",
+                  "x": 2075,
+                  "z": 1570,
+                  "use": "school"
+                },
+                {
+                  "id": "b20",
+                  "node": "n20",
+                  "x": 75,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b21",
+                  "node": "n21",
+                  "x": 575,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b22",
+                  "node": "n22",
+                  "x": 1075,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b23",
+                  "node": "n23",
+                  "x": 1575,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b24",
+                  "node": "n24",
+                  "x": 2075,
+                  "z": 2070,
+                  "use": "school"
+                }
+              ]
+            },
+            "completedAt": 77001
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791763852781,
+          "state": "completed",
+          "label": "Checked roads",
+          "params": {
+            "org": "org0",
+            "target": "roads"
+          },
+          "result": {
+            "id": "query-2",
+            "org": "org0",
+            "target": "roads",
+            "state": "ready",
+            "createdAt": 77001,
+            "readyAt": 78001,
+            "result": {
+              "n0:n1": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n1:n0": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n0:n5": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n5:n0": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n1:n2": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n2:n1": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n1:n6": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n6:n1": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n2:n3": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n3:n2": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n2:n7": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n7:n2": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n3:n4": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n4:n3": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n3:n8": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n8:n3": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n4:n9": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n9:n4": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n5:n6": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n6:n5": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n5:n10": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n10:n5": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n6:n7": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n7:n6": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n6:n11": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n11:n6": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n7:n8": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n8:n7": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n7:n12": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n12:n7": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n8:n9": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n9:n8": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n8:n13": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n13:n8": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n9:n14": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n14:n9": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n10:n11": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n11:n10": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n10:n15": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n15:n10": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n11:n12": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n12:n11": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n11:n16": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n16:n11": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n12:n13": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n13:n12": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n12:n17": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n17:n12": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n13:n14": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n14:n13": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n13:n18": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n18:n13": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n14:n19": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n19:n14": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n15:n16": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n16:n15": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n15:n20": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n20:n15": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n16:n17": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n17:n16": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n16:n21": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n21:n16": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n17:n18": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n18:n17": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n17:n22": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n22:n17": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n18:n19": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n19:n18": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n18:n23": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n23:n18": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n19:n24": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n24:n19": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n20:n21": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n21:n20": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n21:n22": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n22:n21": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n22:n23": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n23:n22": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n23:n24": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              },
+              "n24:n23": {
+                "open": true,
+                "waterDepth": 0,
+                "version": 1,
+                "at": 0
+              }
+            },
+            "completedAt": 79002
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791763853045,
+          "state": "completed",
+          "label": "Checked facility",
+          "params": {
+            "org": "org0",
+            "target": "facility"
+          },
+          "result": {
+            "id": "query-3",
+            "org": "org0",
+            "target": "facility",
+            "state": "ready",
+            "createdAt": 79002,
+            "readyAt": 80002,
+            "result": null,
+            "completedAt": 81003
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_allocations",
+          "at": 1791763855276,
+          "state": "completed",
+          "label": "Checked allocations against scarce capacity",
+          "params": {},
+          "result": {
+            "allocations": [
+              {
+                "need": "need-water-main",
+                "resource": "r-org0-water",
+                "vehicle": "v-org0-1",
+                "quantity": 300,
+                "owner": "org0",
+                "needsRouteCheck": true
+              },
+              {
+                "need": "need-water-main",
+                "resource": "r-org0-water",
+                "vehicle": "v-org0-0",
+                "quantity": 200,
+                "owner": "org0",
+                "needsRouteCheck": true
+              }
+            ],
+            "unserved": [
+              {
+                "need": "need-water-main",
+                "remaining": 100,
+                "unit": "L",
+                "reason": "No uncommitted eligible capacity in this planning round"
+              }
+            ],
+            "algorithm": "deterministic constrained greedy reference",
+            "doesNotDispatch": true,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "vehicle": "v-org0-1",
+                  "resource": "r-org0-water",
+                  "need": "need-water-main",
+                  "quantity": 300
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "vehicle": "v-org0-0",
+                  "resource": "r-org0-water",
+                  "need": "need-water-main",
+                  "quantity": 200
+                },
+                "dependsOn": []
+              }
+            ],
+            "evidenceIds": [
+              "need-water-main",
+              "r-org0-water",
+              "v-org0-1",
+              "need-water-main",
+              "r-org0-water",
+              "v-org0-0"
+            ]
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "record_claim",
+          "at": 1791763858443,
+          "state": "completed",
+          "label": "Recorded sourced observed claim",
+          "params": {
+            "contradicts": [],
+            "location": "b13",
+            "references": [
+              "fffa93e20132db5ad372fa70",
+              "need-water-main"
+            ],
+            "sourceRelations": [
+              {
+                "id": "fffa93e20132db5ad372fa70",
+                "relation": "supports"
+              }
+            ],
+            "state": "observed",
+            "text": "60 people at b13 need 600 L of water."
+          },
+          "result": {
+            "text": "60 people at b13 need 600 L of water.",
+            "state": "observed",
+            "location": "b13",
+            "observedAt": 1791763858455,
+            "references": [
+              "fffa93e20132db5ad372fa70",
+              "need-water-main"
+            ],
+            "contradicts": [],
+            "originActor": "nexo-investigator",
+            "sourceRelations": [
+              {
+                "id": "fffa93e20132db5ad372fa70",
+                "relation": "supports"
+              }
+            ],
+            "id": "claim_08de796a-ba81-4551-876e-94ba278a179e",
+            "version": 1,
+            "createdAt": 1791763858455,
+            "updatedAt": 1791763858455
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "prepare_allocation",
+          "at": 1791763858462,
+          "state": "failed",
+          "params": {
+            "benefit": "Provides 500 L of the requested 600 L of water to 60 people at b13.",
+            "indices": [
+              0,
+              1
+            ],
+            "rationale": "The need is for 600 L of water at b13. Available water at n0 is 500 L (600 total - 100 floor). Two vehicles (v-org0-0 and v-org0-1) each have a capacity of 300 L. Together they can transport 500 L. Roads are open.",
+            "title": "Water Delivery to b13"
+          },
+          "result": {
+            "error": "NO_KNOWN_ROUTE",
+            "message": "No accessible known route can carry this vehicle to the destination."
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791763860410,
+          "state": "completed",
+          "label": "Checked map",
+          "params": {
+            "org": "org0",
+            "target": "map"
+          },
+          "result": {
+            "id": "query-4",
+            "org": "org0",
+            "target": "map",
+            "state": "ready",
+            "createdAt": 126003,
+            "readyAt": 127003,
+            "result": {
+              "nodes": [
+                {
+                  "id": "n0",
+                  "x": 0,
+                  "z": 0
+                },
+                {
+                  "id": "n1",
+                  "x": 500,
+                  "z": 0
+                },
+                {
+                  "id": "n2",
+                  "x": 1000,
+                  "z": 0
+                },
+                {
+                  "id": "n3",
+                  "x": 1500,
+                  "z": 0
+                },
+                {
+                  "id": "n4",
+                  "x": 2000,
+                  "z": 0
+                },
+                {
+                  "id": "n5",
+                  "x": 0,
+                  "z": 500
+                },
+                {
+                  "id": "n6",
+                  "x": 500,
+                  "z": 500
+                },
+                {
+                  "id": "n7",
+                  "x": 1000,
+                  "z": 500
+                },
+                {
+                  "id": "n8",
+                  "x": 1500,
+                  "z": 500
+                },
+                {
+                  "id": "n9",
+                  "x": 2000,
+                  "z": 500
+                },
+                {
+                  "id": "n10",
+                  "x": 0,
+                  "z": 1000
+                },
+                {
+                  "id": "n11",
+                  "x": 500,
+                  "z": 1000
+                },
+                {
+                  "id": "n12",
+                  "x": 1000,
+                  "z": 1000
+                },
+                {
+                  "id": "n13",
+                  "x": 1500,
+                  "z": 1000
+                },
+                {
+                  "id": "n14",
+                  "x": 2000,
+                  "z": 1000
+                },
+                {
+                  "id": "n15",
+                  "x": 0,
+                  "z": 1500
+                },
+                {
+                  "id": "n16",
+                  "x": 500,
+                  "z": 1500
+                },
+                {
+                  "id": "n17",
+                  "x": 1000,
+                  "z": 1500
+                },
+                {
+                  "id": "n18",
+                  "x": 1500,
+                  "z": 1500
+                },
+                {
+                  "id": "n19",
+                  "x": 2000,
+                  "z": 1500
+                },
+                {
+                  "id": "n20",
+                  "x": 0,
+                  "z": 2000
+                },
+                {
+                  "id": "n21",
+                  "x": 500,
+                  "z": 2000
+                },
+                {
+                  "id": "n22",
+                  "x": 1000,
+                  "z": 2000
+                },
+                {
+                  "id": "n23",
+                  "x": 1500,
+                  "z": 2000
+                },
+                {
+                  "id": "n24",
+                  "x": 2000,
+                  "z": 2000
+                }
+              ],
+              "roads": [
+                {
+                  "id": "n0:n1",
+                  "from": "n0",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n0",
+                  "from": "n1",
+                  "to": "n0",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n0:n5",
+                  "from": "n0",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n0",
+                  "from": "n5",
+                  "to": "n0",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n2",
+                  "from": "n1",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n2:n1",
+                  "from": "n2",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n1:n6",
+                  "from": "n1",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n1",
+                  "from": "n6",
+                  "to": "n1",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n2:n3",
+                  "from": "n2",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n3:n2",
+                  "from": "n3",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n2:n7",
+                  "from": "n2",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n7:n2",
+                  "from": "n7",
+                  "to": "n2",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n3:n4",
+                  "from": "n3",
+                  "to": "n4",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n4:n3",
+                  "from": "n4",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n3:n8",
+                  "from": "n3",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n8:n3",
+                  "from": "n8",
+                  "to": "n3",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n4:n9",
+                  "from": "n4",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n4",
+                  "from": "n9",
+                  "to": "n4",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n6",
+                  "from": "n5",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n5",
+                  "from": "n6",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n5:n10",
+                  "from": "n5",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n10:n5",
+                  "from": "n10",
+                  "to": "n5",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n7",
+                  "from": "n6",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n7:n6",
+                  "from": "n7",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n6:n11",
+                  "from": "n6",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n11:n6",
+                  "from": "n11",
+                  "to": "n6",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n7:n8",
+                  "from": "n7",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n8:n7",
+                  "from": "n8",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n7:n12",
+                  "from": "n7",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n7",
+                  "from": "n12",
+                  "to": "n7",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n8:n9",
+                  "from": "n8",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n8",
+                  "from": "n9",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n8:n13",
+                  "from": "n8",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n13:n8",
+                  "from": "n13",
+                  "to": "n8",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n9:n14",
+                  "from": "n9",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n14:n9",
+                  "from": "n14",
+                  "to": "n9",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n10:n11",
+                  "from": "n10",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n10",
+                  "from": "n11",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n10:n15",
+                  "from": "n10",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n15:n10",
+                  "from": "n15",
+                  "to": "n10",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n12",
+                  "from": "n11",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n11",
+                  "from": "n12",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n11:n16",
+                  "from": "n11",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n16:n11",
+                  "from": "n16",
+                  "to": "n11",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n13",
+                  "from": "n12",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n12",
+                  "from": "n13",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n12:n17",
+                  "from": "n12",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n17:n12",
+                  "from": "n17",
+                  "to": "n12",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n14",
+                  "from": "n13",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n14:n13",
+                  "from": "n14",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n13:n18",
+                  "from": "n13",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n13",
+                  "from": "n18",
+                  "to": "n13",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n14:n19",
+                  "from": "n14",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n19:n14",
+                  "from": "n19",
+                  "to": "n14",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n15:n16",
+                  "from": "n15",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n15",
+                  "from": "n16",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n15:n20",
+                  "from": "n15",
+                  "to": "n20",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n20:n15",
+                  "from": "n20",
+                  "to": "n15",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n17",
+                  "from": "n16",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n17:n16",
+                  "from": "n17",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n16:n21",
+                  "from": "n16",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n16",
+                  "from": "n21",
+                  "to": "n16",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n17:n18",
+                  "from": "n17",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n17",
+                  "from": "n18",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n17:n22",
+                  "from": "n17",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n22:n17",
+                  "from": "n22",
+                  "to": "n17",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n18:n19",
+                  "from": "n18",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n19:n18",
+                  "from": "n19",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n18:n23",
+                  "from": "n18",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n23:n18",
+                  "from": "n23",
+                  "to": "n18",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n19:n24",
+                  "from": "n19",
+                  "to": "n24",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n24:n19",
+                  "from": "n24",
+                  "to": "n19",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n20:n21",
+                  "from": "n20",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n20",
+                  "from": "n21",
+                  "to": "n20",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n21:n22",
+                  "from": "n21",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n22:n21",
+                  "from": "n22",
+                  "to": "n21",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n22:n23",
+                  "from": "n22",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n23:n22",
+                  "from": "n23",
+                  "to": "n22",
+                  "lengthM": 500,
+                  "speedMps": 16,
+                  "maxWeight": 20000
+                },
+                {
+                  "id": "n23:n24",
+                  "from": "n23",
+                  "to": "n24",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                },
+                {
+                  "id": "n24:n23",
+                  "from": "n24",
+                  "to": "n23",
+                  "lengthM": 500,
+                  "speedMps": 10,
+                  "maxWeight": 5000
+                }
+              ],
+              "places": [
+                {
+                  "id": "b0",
+                  "node": "n0",
+                  "x": 75,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b1",
+                  "node": "n1",
+                  "x": 575,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b2",
+                  "node": "n2",
+                  "x": 1075,
+                  "z": 70,
+                  "use": "school"
+                },
+                {
+                  "id": "b3",
+                  "node": "n3",
+                  "x": 1575,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b4",
+                  "node": "n4",
+                  "x": 2075,
+                  "z": 70,
+                  "use": "residential"
+                },
+                {
+                  "id": "b5",
+                  "node": "n5",
+                  "x": 75,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b6",
+                  "node": "n6",
+                  "x": 575,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b7",
+                  "node": "n7",
+                  "x": 1075,
+                  "z": 570,
+                  "use": "plant"
+                },
+                {
+                  "id": "b8",
+                  "node": "n8",
+                  "x": 1575,
+                  "z": 570,
+                  "use": "school"
+                },
+                {
+                  "id": "b9",
+                  "node": "n9",
+                  "x": 2075,
+                  "z": 570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b10",
+                  "node": "n10",
+                  "x": 75,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b11",
+                  "node": "n11",
+                  "x": 575,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b12",
+                  "node": "n12",
+                  "x": 1075,
+                  "z": 1070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b13",
+                  "node": "n13",
+                  "x": 1575,
+                  "z": 1070,
+                  "use": "shelter"
+                },
+                {
+                  "id": "b14",
+                  "node": "n14",
+                  "x": 2075,
+                  "z": 1070,
+                  "use": "warehouse"
+                },
+                {
+                  "id": "b15",
+                  "node": "n15",
+                  "x": 75,
+                  "z": 1570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b16",
+                  "node": "n16",
+                  "x": 575,
+                  "z": 1570,
+                  "use": "school"
+                },
+                {
+                  "id": "b17",
+                  "node": "n17",
+                  "x": 1075,
+                  "z": 1570,
+                  "use": "warehouse"
+                },
+                {
+                  "id": "b18",
+                  "node": "n18",
+                  "x": 1575,
+                  "z": 1570,
+                  "use": "residential"
+                },
+                {
+                  "id": "b19",
+                  "node": "n19",
+                  "x": 2075,
+                  "z": 1570,
+                  "use": "school"
+                },
+                {
+                  "id": "b20",
+                  "node": "n20",
+                  "x": 75,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b21",
+                  "node": "n21",
+                  "x": 575,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b22",
+                  "node": "n22",
+                  "x": 1075,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b23",
+                  "node": "n23",
+                  "x": 1575,
+                  "z": 2070,
+                  "use": "residential"
+                },
+                {
+                  "id": "b24",
+                  "node": "n24",
+                  "x": 2075,
+                  "z": 2070,
+                  "use": "school"
+                }
+              ]
+            },
+            "completedAt": 128004
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "draft_response",
+          "at": 1791763880363,
+          "state": "failed",
+          "params": {
+            "actions": [
+              {
+                "dependsOn": [],
+                "owner": "org0",
+                "params": {
+                  "need": "need-water-main",
+                  "quantity": 300,
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-1"
+                },
+                "type": "dispatch"
+              },
+              {
+                "dependsOn": [],
+                "owner": "org0",
+                "params": {
+                  "need": "need-water-main",
+                  "quantity": 200,
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-0"
+                },
+                "type": "dispatch"
+              }
+            ],
+            "alternatives": [],
+            "benefit": "Delivers 500 L of water to 60 people at b13, meeting most of the 600 L requirement.",
+            "conditions": [],
+            "priority": "high",
+            "rationale": "Need for 600 L of water at b13 (need-water-main). Available water at n0 is 500 L (600 total - 100 floor). Two vehicles (v-org0-0, v-org0-1) with 300 L capacity each are available at n0. Route from n0 to b13 (n13) is open.",
+            "references": [
+              "fffa93e20132db5ad372fa70",
+              "need-water-main",
+              "r-org0-water",
+              "v-org0-0",
+              "v-org0-1"
+            ],
+            "summary": "Deliver 500 L of water to b13 using two vehicles.",
+            "title": "Water Delivery to b13"
+          },
+          "result": {
+            "error": "NO_KNOWN_ROUTE",
+            "message": "No accessible known route can carry this vehicle to the destination."
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791763883223,
+          "state": "completed",
+          "label": "Checked vehicles",
+          "params": {
+            "org": "org0",
+            "target": "vehicles"
+          },
+          "result": {
+            "id": "query-5",
+            "org": "org0",
+            "target": "vehicles",
+            "state": "ready",
+            "createdAt": 158004,
+            "readyAt": 159004,
+            "result": [
+              {
+                "id": "v-org0-0",
+                "owner": "org0",
+                "node": "n0",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "idle",
+                "version": 1
+              },
+              {
+                "id": "v-org0-1",
+                "owner": "org0",
+                "node": "n0",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "idle",
+                "version": 1
+              },
+              {
+                "id": "v-org1-0",
+                "owner": "org1",
+                "node": "n13",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "working",
+                "version": 1
+              },
+              {
+                "id": "v-org1-1",
+                "owner": "org1",
+                "node": "n4",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "idle",
+                "version": 1
+              },
+              {
+                "id": "v-org2-0",
+                "owner": "org2",
+                "node": "n20",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "idle",
+                "version": 1
+              },
+              {
+                "id": "v-org2-1",
+                "owner": "org2",
+                "node": "n20",
+                "at": 0,
+                "capacity": 300,
+                "weightKg": 3500,
+                "speedMps": 12,
+                "maxWaterDepth": 0.3,
+                "fuel": 80000,
+                "shiftEnd": 14400000,
+                "state": "idle",
+                "version": 1
+              }
+            ],
+            "completedAt": 160005
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "finish_without_proposal",
+          "at": 1791763886558,
+          "state": "completed",
+          "label": "Preserved uncertainty",
+          "params": {
+            "reason": "The system repeatedly returns 'NO_KNOWN_ROUTE' when attempting to prepare or draft allocations for vehicles v-org0-0 and v-org0-1 from n0 to b13 (n13), despite the map and road data indicating that the roads are open and the vehicles' weight/water-depth constraints are not exceeded. Since I cannot establish a feasible route through the provided tools, I cannot propose a valid dispatch."
+          },
+          "result": {
+            "state": "insufficient_evidence",
+            "reason": "The system repeatedly returns 'NO_KNOWN_ROUTE' when attempting to prepare or draft allocations for vehicles v-org0-0 and v-org0-1 from n0 to b13 (n13), despite the map and road data indicating that the roads are open and the vehicles' weight/water-depth constraints are not exceeded. Since I cannot establish a feasible route through the provided tools, I cannot propose a valid dispatch."
+          }
+        }
+      ],
+      "proposalId": null,
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "reason": "The system repeatedly returns 'NO_KNOWN_ROUTE' when attempting to prepare or draft allocations for vehicles v-org0-0 and v-org0-1 from n0 to b13 (n13), despite the map and road data indicating that the roads are open and the vehicles' weight/water-depth constraints are not exceeded. Since I cannot establish a feasible route through the provided tools, I cannot propose a valid dispatch.",
+      "finishedAt": 1791763886571,
+      "calls": 7,
+      "wallMs": 35481.572199999995
+    }
+  ],
+  "usage": [
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 1345.2442999999912,
+      "input_tokens": 6112,
+      "output_tokens": 57,
+      "cost_usd": 0.00238811,
+      "provider_id": "gen-1791763851-3IoSITi5UMFPmG4plsba"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 1902.5844999999972,
+      "input_tokens": 12872,
+      "output_tokens": 13,
+      "cost_usd": 0.00490631,
+      "provider_id": "gen-1791763853-w7pNDcZNtaqKZ1FsY3kF"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3130.2225000000035,
+      "input_tokens": 13174,
+      "output_tokens": 260,
+      "cost_usd": 0.00530512,
+      "provider_id": "gen-1791763855-SYfHrNH6AIHQWvQSqFej"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 1894.0773000000045,
+      "input_tokens": 13673,
+      "output_tokens": 23,
+      "cost_usd": 0.00522219,
+      "provider_id": "gen-1791763858-SERP9hGPbfvYqvRGZua0"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 19658.984299999996,
+      "input_tokens": 18343,
+      "output_tokens": 364,
+      "cost_usd": 0.00738894,
+      "provider_id": "gen-1791763860-CnWIGvhWHvjHoJJDCiC1"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 2788.2966000000015,
+      "input_tokens": 18740,
+      "output_tokens": 23,
+      "cost_usd": 0.00714765,
+      "provider_id": "gen-1791763880-zbj74ODXUUDJD145rYL4"
+    },
+    {
+      "episode": "pilot-B4-S01-pilot-2026-01-0-org0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3040.8551000000007,
+      "input_tokens": 19305,
+      "output_tokens": 109,
+      "cost_usd": 0.00746125,
+      "provider_id": "gen-1791763883-zTbnuaRA85moqO5BMf4r"
+    }
+  ],
+  "costUsd": 0.039819570000000006,
+  "unknownCostCalls": 0,
+  "metrics": {
+    "simulatedMs": 14400000,
+    "services": {
+      "water": {
+        "unit": "L",
+        "demand": 600,
+        "served": 0,
+        "pending": 600,
+        "overprovided": 0,
+        "uncoveredUnitMs": 8640000000,
+        "onTime": 0
+      }
+    },
+    "population": {
+      "model": "experimental-v1",
+      "clinicallyValidated": false,
+      "alive": 1500,
+      "deceased": 0,
+      "injured": 0,
+      "waterDeficitPersonHours": 0,
+      "foodDeficitPersonHours": 0,
+      "exposurePersonHours": 0,
+      "untreatedInjuryPersonHours": 0,
+      "communities": [
+        {
+          "id": "community-s0",
+          "sector": "s0",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s1",
+          "sector": "s1",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s2",
+          "sector": "s2",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s3",
+          "sector": "s3",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s4",
+          "sector": "s4",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s5",
+          "sector": "s5",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s6",
+          "sector": "s6",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s7",
+          "sector": "s7",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s8",
+          "sector": "s8",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s9",
+          "sector": "s9",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s10",
+          "sector": "s10",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s11",
+          "sector": "s11",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s12",
+          "sector": "s12",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s13",
+          "sector": "s13",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s14",
+          "sector": "s14",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s15",
+          "sector": "s15",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s16",
+          "sector": "s16",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s17",
+          "sector": "s17",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s18",
+          "sector": "s18",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s19",
+          "sector": "s19",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s20",
+          "sector": "s20",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s21",
+          "sector": "s21",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s22",
+          "sector": "s22",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s23",
+          "sector": "s23",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s24",
+          "sector": "s24",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        }
+      ]
+    },
+    "perCommunity": [
+      {
+        "id": "need-water-main",
+        "building": "b13",
+        "type": "water",
+        "quantity": 600,
+        "served": 0,
+        "completedAt": null,
+        "createdAt": 0,
+        "deadline": 10800000,
+        "silent": false,
+        "firstSignalAt": 32600,
+        "remote": false,
+        "knownBy": [
+          "org0"
+        ]
+      }
+    ],
+    "latency": {},
+    "posts": 2,
+    "ingested": 3,
+    "operations": 0,
+    "operatorReviewMs": 0,
+    "conflicts": 0,
+    "failedTrips": 0,
+    "staleOrders": 0,
+    "queries": 5,
+    "cost": 5,
+    "events": 73,
+    "modelCalls": 7,
+    "modelWallMs": 33760.264599999995,
+    "modelUsage": {
+      "promptTokens": 102219,
+      "outputTokens": 849,
+      "pending": 0,
+      "failed": 0,
+      "providerCost": 0.039819570000000006
+    },
+    "invalidActions": 0,
+    "ledgerValid": true,
+    "source": {
+      "created": 2,
+      "published": 2,
+      "falseSignals": 0,
+      "deleted": 0,
+      "capped": false
+    },
+    "information": {
+      "downloaded": 1,
+      "accepted": 1,
+      "interpreted": 1,
+      "discarded": 0,
+      "downloadLatencyMs": {
+        "p50": 27400,
+        "p95": 27400
+      },
+      "confirmedFalse": 0,
+      "rejectedObservedTrue": 0,
+      "falseMerges": 0,
+      "unobservedNeeds": 0,
+      "note": "Error counts use private evaluator labels. Unverified content is not classified as true. No inferred accuracy score."
+    },
+    "coordination": {
+      "expired": 0,
+      "withdrawn": 0,
+      "orphanReservations": 0,
+      "clarifications": 0,
+      "reviewQueued": 0,
+      "loansOverdue": 0
+    },
+    "physical": {
+      "closedCrossings": 0,
+      "trafficQueue": 0,
+      "overprovidedByType": {
+        "water": {
+          "quantity": 0,
+          "unit": "L"
+        }
+      },
+      "distanceM": 1500,
+      "fuelMl": 270,
+      "arrivedNotReceived": 0,
+      "facilitiesOperating": 0,
+      "blocked": 0
+    },
+    "finance": {
+      "sandbox": true,
+      "available": 20000,
+      "spent": 0,
+      "received": 0
+    },
+    "subgroups": {
+      "silent": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          }
+        }
+      },
+      "remote": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          }
+        }
+      }
+    },
+    "response": {
+      "completed": 0,
+      "rightCensored": 1,
+      "needToServiceMs": {
+        "p50": null,
+        "p95": null,
+        "note": "Completed cases only; report right-censored cases alongside these percentiles."
+      }
+    },
+    "eventCounts": {
+      "need_created": 1,
+      "world_initialized": 1,
+      "signal_created": 2,
+      "message_delivered": 12,
+      "post_published": 2,
+      "ingestion_receipt": 3,
+      "model_requested": 7,
+      "model_available": 7,
+      "action_accepted": 5,
+      "query_completed": 5,
+      "community_health": 24,
+      "vehicle_dispatched": 1,
+      "vehicle_arrived": 1
+    }
+  },
+  "invariants": [],
+  "claimScope": "development pilot; not held-out, calibrated field or UX validation"
+}

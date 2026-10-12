@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-11T23:30:08.270Z",
+  "at": "2026-10-12T00:26:09.868Z",
   "browser": "Chromium",
   "checks": [
     {
@@ -75,6 +75,24 @@
       "horizontalOverflow": false
     },
     {
+      "page": "media",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "connections",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "moderation",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
       "page": "overview",
       "width": 390,
       "loaded": true,
@@ -142,6 +160,24 @@
     },
     {
       "page": "audit",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "media",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "connections",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "moderation",
       "width": 390,
       "loaded": true,
       "horizontalOverflow": false

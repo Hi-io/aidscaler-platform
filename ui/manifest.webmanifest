@@ -1,1 +1,16 @@
-{"name":"NEXO Response Workspace","short_name":"NEXO","start_url":"/","display":"standalone","background_color":"#f5f6fa","theme_color":"#131b31","icons":[{"src":"/mark.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+{
+  "name": "NEXO Response Workspace",
+  "short_name": "NEXO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f6fa",
+  "theme_color": "#131b31",
+  "icons": [
+    {
+      "src": "/mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
