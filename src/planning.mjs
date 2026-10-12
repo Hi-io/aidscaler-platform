@@ -57,9 +57,10 @@ export function allocationPlan({
   operations = [],
   now = 0,
 }) {
+  const ownedKey = (record) => JSON.stringify([record.owner, record.id]);
   const stock = new Map(
       resources.map((r) => [
-        r.id,
+        ownedKey(r),
         Math.max(0, r.quantity - (r.reserved ?? 0) - (r.floor ?? 0)),
       ]),
     ),
@@ -86,13 +87,13 @@ export function allocationPlan({
       for (const vehicle of vehicles.filter(
         (v) =>
           v.owner === resource.owner &&
-          !usedVehicles.has(v.id) &&
+          !usedVehicles.has(ownedKey(v)) &&
           ["idle", "arrived"].includes(v.state),
       )) {
         const quantity = Math.floor(
           Math.min(
             remaining,
-            stock.get(resource.id),
+            stock.get(ownedKey(resource)),
             vehicle.capacity ?? 0,
             (vehicle.maxCargoKg ?? Infinity) /
               (resource.type === "water"
@@ -111,8 +112,8 @@ export function allocationPlan({
           owner: resource.owner,
           needsRouteCheck: true,
         });
-        stock.set(resource.id, stock.get(resource.id) - quantity);
-        usedVehicles.add(vehicle.id);
+        stock.set(ownedKey(resource), stock.get(ownedKey(resource)) - quantity);
+        usedVehicles.add(ownedKey(vehicle));
         remaining -= quantity;
         if (!remaining) break;
       }
@@ -222,6 +223,11 @@ export async function validateConditions(store, org, conditions) {
       }
       if (c.type === "approval") {
         const p = await store.get(org, "proposal", c.id, false);
+        check(
+          p,
+          "APPROVAL_REFERENCE",
+          "An approval condition must reference an existing received proposal. Do not invent an owner approval ID: each action owner already reviews its part through the partner workflow.",
+        );
         satisfied = p?.state === "authorized" && !!p.authorization;
         evidenceId = p?.id;
       }

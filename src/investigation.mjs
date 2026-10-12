@@ -8,7 +8,11 @@ import {
 } from "./contracts.mjs";
 import { uid, hash } from "./store.mjs";
 import { check, AppError } from "./errors.mjs";
-import { allocationPlan, validatePlan } from "./planning.mjs";
+import { validatePlan } from "./planning.mjs";
+import {
+  receivedAllocationPlan,
+  validateAllocationOffers,
+} from "./received-allocation.mjs";
 import { composeService } from "./planning.mjs";
 import { servicePlan } from "./services.mjs";
 import { boundedContext } from "./model-context.mjs";
@@ -154,7 +158,7 @@ export const researchTools = [
   ),
   tool(
     "plan_allocations",
-    "Use a deterministic allocator to check stock, reserve floors, concurrent demand and vehicle capacity. These are draft allocations, not dispatches.",
+    "Compile owned stock and CURRENT CONSENTED partner stock/fleet against reserves, concurrent demand and vehicle capacity. Copies exact offer references; every action owner still reviews its part. No dispatch or approval is granted.",
     obj({}),
   ),
   tool(
@@ -196,7 +200,7 @@ Distinguish observed evidence, inferred possibilities, owner confirmation, autho
 Look for capabilities described for another purpose, conditional collaboration, empty return trips, safe alternatives and composition of water/energy/personnel/sanitation/transport/facilities where relevant. Never certify a damaged building safe without a completed inspection. Avoid duplicating help already committed or in transit. Review dependencies and preserve unaffected work when repairing.
 Dispatch parameter names are exactly vehicle, resource, quantity and need (or building/destination). Quantity is an integer in the resource's native unit. available = quantity - reserved - floor. Partial delivery is valid. Do not empty protected reserves to satisfy an entire need. A current authorized need observation can be the basis for a proportionate partial response; uncertainty must be recorded but do not invent unnecessary conditions. If verification is important, use verify and cite the returned inspection ID, not an invented evidence ID. Use a condition only if it truly prevents the planned action. Do not mark an unverified condition satisfied.
 Produce a draft_response with evidence IDs from the available inputs or recorded claims, clear pending conditions, responsible owners, alternatives and a SHORT decision rationale. Do not expose private chain-of-thought. Your rationale explains evidence, checked constraints and remaining uncertainty only. If tools cannot establish feasibility, finish_without_proposal rather than invent IDs. All actions are drafts, human authorization is required. Use native English.`;
-const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need; do not substitute an unrelated allocation as its solution. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
+const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. It includes consented current peer offers as well as owned capacity. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Do NOT add a made-up owner approval condition: the built-in independent owner workflow already enforces consent. An approval condition is only for a dependency on an EXISTING different proposal ID. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need; do not substitute an unrelated allocation as its solution. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
 export class Investigator {
   constructor({ store, domain, connector, provider, config }) {
     Object.assign(this, { store, domain, connector, provider, config });
@@ -668,34 +672,8 @@ export class Investigator {
                 });
               step.label = "Searched public reports";
             } else if (name === "plan_allocations") {
-              response = allocationPlan({
-                needs: await this.store.list(org, "need", 2000),
-                resources: (await this.store.list(org, "resource", 500)).filter(
-                  (r) => r.owner === org,
-                ),
-                vehicles: (await this.store.list(org, "vehicle", 500)).filter(
-                  (v) => v.owner === org,
-                ),
-                operations: await this.store.list(org, "operation", 2000),
-              });
-              response.actions = response.allocations.map((a) => ({
-                type: "dispatch",
-                owner: a.owner,
-                params: {
-                  vehicle: a.vehicle,
-                  resource: a.resource,
-                  need: a.need,
-                  quantity: a.quantity,
-                },
-                dependsOn: [],
-              }));
-              response.evidenceIds = response.allocations.flatMap((a) => [
-                a.need,
-                a.resource,
-                a.vehicle,
-              ]);
+              response = await receivedAllocationPlan(this.store, this.config);
               allocation = response;
-              response.nextTool = "prepare_allocation";
               step.label = "Checked allocations against scarce capacity";
             } else if (name === "prepare_allocation") {
               check(
@@ -713,15 +691,11 @@ export class Investigator {
                 "ALLOCATION",
                 "Choose valid allocation indices.",
               );
+              const selected = indices.map((i) => allocation.allocations[i]);
+              await validateAllocationOffers(this.store, this.config, selected);
               const actions = indices.map((i) => allocation.actions[i]),
                 references = [
-                  ...new Set(
-                    actions.flatMap((a) => [
-                      a.params.need,
-                      a.params.resource,
-                      a.params.vehicle,
-                    ]),
-                  ),
+                  ...new Set(selected.flatMap((a) => a.evidenceIds)),
                 ];
               const d = {
                 title: args.title,
