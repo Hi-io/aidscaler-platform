@@ -279,3 +279,18 @@ En suficiencia física con horizonte fijo, B6 tarda **34.540 min** frente a **32
 El corpus de información secundaria de 768 distractores sigue siendo una sensibilidad distinta, con otras semillas. Aunque permita un resultado favorable, no reemplaza estos nueve mundos ni acredita que aumentar ruido de 192 a 768 sea causalmente la única diferencia. Sus plantillas/lecturas humanas siguen siendo supuestos internos.
 
 Las correcciones aisladas posteriores crean otra versión: recibos de personas admitidas, holds de evaluación/flota, cualificación de personal, contexto de herramientas, oportunidades verificables, atención por fuente, lectura por lotes y revisión operacional concurrente. Hay que volver a pasar el gate conjunto y medir; **no se les asigna retrospectivamente el resultado anterior**.
+
+### 11.6 Controles originales cerrados: ninguna sensibilidad borra el negativo
+
+Los [doce mundos de sensibilidad](../reports/repaired-controls-closed.json) terminaron con 24/24 necesidades suficientes, cero errores/invariantes y huellas estables. Gemma hizo 45 llamadas en seis mundos pagados, coste conocido USD 0.0289114.
+
+| Control | B5, min | B6, min | Mejora de B6 en suficiencia física |
+|---|---:|---:|---:|
+| Un comprobador disponible | 31.355 | 39.631 | -26.39% |
+| Lectura humana gratuita | 35.592 | 32.958 | +7.40% |
+| Canal formal inmediato | 30.076 | 31.463 | -4.61% |
+| Silencio y pérdida, semilla 1 | 38.265 | 35.593 | +6.98% |
+| Silencio y pérdida, semilla 2 | 48.791 | 46.787 | +4.11% |
+| Canal formal a 30 min | 31.010 | 32.958 | -6.28% |
+
+El control de lectura gratuita puede mejorar por secuencia y asignación de flota; ese resultado **no se atribuye a leer más rápido que una persona**. Los beneficios pequeños en silencio/pérdida tampoco prueban ganancia general: conservar subgrupos, recursos nativos y todas las semillas. La versión posterior debe demostrar una mejora propia contra planificación convencional, con aprobaciones y verificaciones concurrentes iguales, en lugar de escoger el control favorable.

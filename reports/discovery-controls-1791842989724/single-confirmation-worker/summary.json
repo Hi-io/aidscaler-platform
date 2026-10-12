@@ -1,0 +1,142 @@
+{
+  "runs": 2,
+  "completedRuns": 2,
+  "failedRuns": 0,
+  "modelFailures": 0,
+  "invariantViolations": 0,
+  "costUsd": 0.005018400000000001,
+  "chargedBudgetUsd": 0.005018400000000001,
+  "comparisons": [
+    {
+      "baseline": "B5",
+      "candidate": "B6",
+      "independentWorlds": 1,
+      "restrictedMeanTimeReduction": -0.263931260667877,
+      "baselineMinutes": 31.355491666666666,
+      "candidateMinutes": 39.631186111111106,
+      "timeEffects": {
+        "sufficient": {
+          "pairs": 1,
+          "unit": "milliseconds until sufficient physical aid; right-censored at the fixed horizon",
+          "resource": "response_clock",
+          "field": "restrictedMeanMs",
+          "baselineMean": 1881329.5,
+          "candidateMean": 2377871.1666666665,
+          "delta": -496541.6666666665,
+          "improvement": -0.263931260667877,
+          "interval95": [
+            -496541.6666666665,
+            -496541.6666666665
+          ],
+          "relativeInterval95": [
+            -0.263931260667877,
+            -0.263931260667877
+          ],
+          "evidenceLevel": "exploratory_pilot",
+          "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+        },
+        "firstUseful": {
+          "pairs": 1,
+          "unit": "milliseconds until first useful physical aid; right-censored at the fixed horizon",
+          "resource": "response_clock",
+          "field": "restrictedMeanMs",
+          "baselineMean": 1881329.5,
+          "candidateMean": 2377871.1666666665,
+          "delta": -496541.6666666665,
+          "improvement": -0.263931260667877,
+          "interval95": [
+            -496541.6666666665,
+            -496541.6666666665
+          ],
+          "relativeInterval95": [
+            -0.263931260667877,
+            -0.263931260667877
+          ],
+          "evidenceLevel": "exploratory_pilot",
+          "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+        },
+        "note": "Resample independent seed worlds, not individual tweets or deliveries. Small internal pilots do not establish generalizability."
+      },
+      "nativeDeficitEffects": [
+        {
+          "pairs": 1,
+          "unit": "resource units × milliseconds",
+          "resource": "water",
+          "field": "uncoveredUnitMs",
+          "baselineMean": 1035497650,
+          "candidateMean": 1353612650,
+          "delta": -318115000,
+          "improvement": -0.30720977493285484,
+          "interval95": [
+            -318115000,
+            -318115000
+          ],
+          "relativeInterval95": [
+            -0.30720977493285484,
+            -0.30720977493285484
+          ],
+          "evidenceLevel": "exploratory_pilot",
+          "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+        },
+        {
+          "pairs": 1,
+          "unit": "resource units × milliseconds",
+          "resource": "food",
+          "field": "uncoveredUnitMs",
+          "baselineMean": 257074067,
+          "candidateMean": 278783067,
+          "delta": -21709000,
+          "improvement": -0.08444647977658515,
+          "interval95": [
+            -21709000,
+            -21709000
+          ],
+          "relativeInterval95": [
+            -0.08444647977658515,
+            -0.08444647977658515
+          ],
+          "evidenceLevel": "exploratory_pilot",
+          "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+        },
+        {
+          "pairs": 1,
+          "unit": "resource units × milliseconds",
+          "resource": "blankets",
+          "field": "uncoveredUnitMs",
+          "baselineMean": 283366050,
+          "candidateMean": 378601050,
+          "delta": -95235000,
+          "improvement": -0.336084721511275,
+          "interval95": [
+            -95235000,
+            -95235000
+          ],
+          "relativeInterval95": [
+            -0.336084721511275,
+            -0.336084721511275
+          ],
+          "evidenceLevel": "exploratory_pilot",
+          "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+        }
+      ],
+      "completed": {
+        "baseline": 24,
+        "candidate": 24,
+        "eligible": 24
+      },
+      "perWorld": [
+        {
+          "seed": "response-burst-2026-01",
+          "baselineMinutes": 31.355491666666666,
+          "candidateMinutes": 39.631186111111106,
+          "improvement": -0.263931260667877
+        }
+      ],
+      "statement": "Internal simulation under the declared source-review assumptions. Not field effectiveness, lives saved or Gemini performance."
+    }
+  ],
+  "folder": "reports/discovery-controls-1791842989724/single-confirmation-worker",
+  "declaredRuns": 2,
+  "missingRuns": 0,
+  "stoppedReason": null
+}
