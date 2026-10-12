@@ -1,0 +1,1132 @@
+{
+  "at": "2026-10-12T14:36:22.888Z",
+  "run": "lab-review-1791815587535",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "candidateChanged": false,
+  "actor": "Scripted synthetic commander accounts; no real operator study",
+  "world": "Existing local S19 laboratory; no observer truth is passed to NEXO",
+  "purpose": "Real evidence/tool activity and an independently reviewed pending decision visible in the operator workspace",
+  "shares": [
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-rescue",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-rescue",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-rescue",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-food",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-food",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-food",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-fuel",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-fuel",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-fuel",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-blankets",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-blankets",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-blankets",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-energy",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-energy",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-energy",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-staff",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-staff",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-staff",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "resource",
+      "id": "r-org0-water",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "resource",
+      "id": "r-org0-water",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "resource",
+      "id": "r-org0-water",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-21",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-21",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-21",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-20",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-20",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-20",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-14",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-14",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-14",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-11",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-11",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-11",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-9",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-9",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-9",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-23",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-23",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-23",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-6",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-6",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-6",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-22",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-22",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-22",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-19",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-19",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-19",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-17",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-17",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-17",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-28",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-28",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-28",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-27",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-27",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-27",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-25",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-25",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-25",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-3",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-3",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-3",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-2",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-2",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-2",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-18",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-18",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-18",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-16",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-16",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-16",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-12",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-12",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-12",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-10",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-10",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-10",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-8",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-8",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-8",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-4",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-4",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-4",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-0",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-0",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-0",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-15",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-15",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-15",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-26",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-26",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-26",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-29",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-29",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-29",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-7",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-7",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-7",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-5",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-5",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-5",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-24",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-24",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-24",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "traffic-13",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "traffic-13",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "traffic-13",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "v-org0-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "v-org0-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "v-org0-1",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org1",
+      "kind": "vehicle",
+      "id": "v-org0-0",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org2",
+      "kind": "vehicle",
+      "id": "v-org0-0",
+      "queued": true
+    },
+    {
+      "from": "org0",
+      "to": "org3",
+      "kind": "vehicle",
+      "id": "v-org0-0",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-rescue",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-food",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-fuel",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-blankets",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-energy",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-staff",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org1-water",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org1-1",
+      "queued": true
+    },
+    {
+      "from": "org1",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org1-0",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-rescue",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-food",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-fuel",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-blankets",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-energy",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-staff",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org2-water",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org2-1",
+      "queued": true
+    },
+    {
+      "from": "org2",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org2-0",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-rescue",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-food",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-fuel",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-blankets",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-energy",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-sanitation",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-staff",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "resource",
+      "id": "r-org3-water",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org3-1",
+      "queued": true
+    },
+    {
+      "from": "org3",
+      "to": "org0",
+      "kind": "vehicle",
+      "id": "v-org3-0",
+      "queued": true
+    }
+  ],
+  "failure": null,
+  "errors": [],
+  "activity": {
+    "id": "investigation_c77f609b-91bd-45f1-8282-534579ea52f2",
+    "state": "inconclusive",
+    "model": "google/gemma-4-31b-it",
+    "proposalId": null,
+    "steps": [
+      {
+        "tool": "find_facilities",
+        "state": "completed",
+        "at": 1791815601613
+      },
+      {
+        "tool": "lookup",
+        "state": "completed",
+        "at": 1791815608395
+      },
+      {
+        "tool": "lookup",
+        "state": "completed",
+        "at": 1791815629825
+      },
+      {
+        "tool": "read_context",
+        "state": "completed",
+        "at": 1791815651614
+      },
+      {
+        "tool": "search",
+        "state": "completed",
+        "at": 1791815665773
+      },
+      {
+        "tool": "lookup",
+        "state": "failed",
+        "at": 1791815695657
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815729434
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815736048
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815754983
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815761686
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815768652
+      },
+      {
+        "tool": "verify",
+        "state": "completed",
+        "at": 1791815775515
+      }
+    ]
+  },
+  "authorization": "Not granted by this script. Operators review the exact version."
+}

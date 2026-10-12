@@ -216,3 +216,115 @@ La campaña estructural inicial [protocol](../reports/evaluations/1791811091548/
 La referencia convencional de aquella variante abortó con FACILITY al no tener evaluación recibida del sitio; una referencia competente debe conservarlo pendiente y seguir preparando ayuda factible. La ablación de consulta [informe inicial](../reports/ablations/inquiry-1791811331183/summary.json) completó 12 outcomes, pero broad_refresh omitía el org requerido en la consulta capabilities y falló con NOT_FOUND. **Sus mejoras numéricas frente a ese error no prueban utilidad marginal de GenAI.** La corrección y repetición del evaluador se documentan separadamente cuando concluyan.
 
 Los contrastes finales tienen que conservar pérdidas, inconclusos, timeouts, coste desconocido y referencias con debilidades. La regla del producto es preparar ayuda verificable, no elegir un subconjunto de gráficos favorables. Los gates estadísticos, independientes y humanos permanecen separados de los mecanismos implementados.
+
+## 13. Resultados finales de la entrega local — 13 de octubre de 2026, Tokio
+
+Los timestamps originales están en UTC, por lo que estos reportes aparecen fechados el 12 de octubre. El candidato conserva la huella `27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f`. No se retocó el producto durante estas mediciones. Gemma 4 31B/OpenRouter es el proveedor real; Gemini y GCP no participaron.
+
+### 13.1 Verificación y versión del evaluador
+
+[La verificación final](../reports/verifications/1791818045802.json) pasó **120 pruebas de plataforma y 120 del simulador**, sin fallos, cancelaciones ni omisiones, y comprobó 144 módulos de plataforma, 67 del simulador, 26 contratos de entrada, 23 acciones y 360 presets. La huella final del evaluador es `5bd6c85e3f2d934a51a67a9913b1aac5b6e1c9eb28699b8bb911cf63147b1330`.
+
+No confundir las huellas del candidato y del evaluador:
+
+| Evaluador | Ejecuciones | Cambio y alcance |
+|---|---|---|
+| `0ad639ae…` | Campaña principal, continuación estructural, carga física, repair y ablación original de consulta | Versión congelada de esas ejecuciones. Se conservan resultados y errores. |
+| `bbc11ef5…` | Siete referencias convencionales corregidas, seis refrescos amplios corregidos, probe nominal de cuatro procesos y verificación 118+120 | Se añadió el dueño requerido a `capabilities`; la referencia conserva una instalación no evaluada como pendiente y continúa con ayuda factible. El candidato no cambió. |
+| `5bd6c85e…` | Verificación final 120+120 y análisis posterior | Corrige el conteo de mundos de variantes estructurales y rechaza pares no planificados. No modifica bootstrap, mundo, acciones, proveedor ni resultados originales. |
+
+Las regresiones de referencias ejercitan los servicios HTTP reales. Las de informes comprueban que una variante faltante sigue faltando, que los fallos se conservan y que añadir un mundo no planificado no crea una ventaja aparente. Un informe posterior tiene su propia huella y no reetiqueta los outcomes anteriores.
+
+Las 80 comprobaciones de navegador de §12 siguen correspondiendo al mismo candidato. No equivalen a un estudio con 80 personas.
+
+### 13.2 Campaña principal: resultado físico y atribución
+
+[Resumen](../reports/evaluations/1791810897832/summary.json), [contrastes completos](../reports/evaluations/1791810897832/contrasts.json): **36/36 outcomes conservados**, tres mundos por escenario S19/S01/S23, B4 aislado, B5 red convencional, B6 NEXO en red y B7 investigador general con el mismo modelo, herramientas y red. Hubo **32 ejecuciones completadas y cuatro fallidas**, estas últimas de B4 por timeout/schema del proveedor. Cero violaciones de invariantes. Coste conocido USD **0,480307**; presupuesto cargado USD **0,628756**, incluidas reservas de 18 llamadas de coste desconocido.
+
+El objetivo es disminuir la integral de necesidad no atendida; una integral mayor es peor. Los resultados se expresan por unidad nativa, sin mezclar litros y plazas:
+
+| Comparación de B6 | Escenario | Resultado del déficit integrado |
+|---|---|---|
+| Frente a B5 convencional | S19 | **2,30% mayor en agua y 1,52% mayor en refugio**. No se acreditó ventaja incremental de GenAI. |
+| Frente a B5 convencional | S01 y S23 | **7,47% mayor en agua** en ambos escenarios. |
+| Frente a B7, mismo modelo/red/herramientas | S19 | Reducciones exploratorias de 0,37% en agua y 1,76% en refugio; los intervalos incluyen ausencia de ventaja. |
+| Frente a B7 | S01 y S23 | Empate en agua. |
+| Frente a B4 aislado | S19/S01/S23 | Reducciones aproximadas de 77–81% en agua; 83,72% en refugio de S19. B5 también obtiene una mejora semejante o mejor. Los fallos de B4 permanecen en el denominador. |
+
+Son pilotos de tres mundos, no una campaña independiente confirmatoria. Los intervalos degenerados de escenarios con outcomes iguales no demuestran certeza de campo. Tampoco se convierte el contraste frente a B4 en «Gemma mejora 80%»: cambian la red y la planificación, y existen fallos del proveedor. La referencia convencional es un algoritmo finito dentro de sus contratos, no un equipo humanitario profesional.
+
+En la variante estándar S19 se alcanzaron 600 L y 50 plazas ocupadas mediante capacidades de propietarios distintos. Ese resultado prueba ejecución física dentro del catálogo; que una composición funcione no establece que el LLM sea necesario para toda composición.
+
+### 13.3 Composición y variantes negativas
+
+[Continuación estructural original](../reports/evaluations/structure-continuation-1791812722694/summary.json) conserva **21 outcomes: 19 completados y dos fallidos**, además del abort original sin outcome y su reserva de USD 0,15. Coste conocido USD **0,450753**; presupuesto cargado USD **0,650919**. Los fallos fueron B5 distribuido sin evaluación recibida y B7 incompatible por schema del proveedor. Cero violaciones.
+
+[El informe revisado](../reports/evaluations/structure-continuation-1791812722694/summary-reviewed.json) corrige exclusivamente el denominador: siete mundos estructurales, cero pares faltantes; el resumen antiguo mostraba `-6`. Hereda expresamente los cuatro outcomes originales y el abort, sin borrar la debilidad de aquella referencia.
+
+[La nueva referencia B5](../reports/evaluations/1791816799506/summary.json) terminó **7/7**, con cero llamadas al modelo, coste cero y cero violaciones. La variante distribuida ahora entrega 600 L en lugar de abortar:
+
+| Variante | B6 original | B5 corregido | Qué indica |
+|---|---|---|---|
+| Estándar | 600 L; 50 personas en refugio | 600 L; 50 personas en refugio | Composición y ocupación física funcionan; ambas estrategias pueden conseguirlas. |
+| Distribuida, incompatible, personal insuficiente, ocupada o tardía | 600 L; cero plazas ocupadas | 600 L; cero plazas ocupadas | No se fabrica el servicio faltante; tampoco se acreditó composición generalizada exitosa. |
+| Insegura | Cero L; cero plazas | Cero L; cero plazas | No hubo intervención física útil dentro de ese horizonte; el resultado negativo se conserva. |
+
+No se combina la referencia nueva con ejecuciones antiguas como una campaña congelada única. Las variantes fueron escritas internamente y no son un holdout externo secreto.
+
+### 13.4 Investigación activa: corrección sin volver a cobrar todo
+
+[Ablación corregida](../reports/ablations/inquiry-corrected-1791816795826/summary.json): seis refrescos amplios nuevos y **los seis outcomes activos originales íntegros**, incluidos los negativos. El candidato y el recorrido activo no cambiaron. Todos terminaron sin violaciones. Coste nuevo USD **0,052132**; coste de los 12 outcomes conservados USD **0,164524**.
+
+En S06/S11 los recorridos activos hicieron 12 consultas frente a 30 del refresco amplio. En S18 hicieron 63/56 frente a 31/136: no existe una reducción uniforme. El error NOT_FOUND de la referencia anterior sigue visible y sus porcentajes favorables se invalidan como evidencia de utilidad.
+
+La comparación **rechaza el bootstrap entre huellas distintas**. El resumen registra `not_comparable`, sin porcentaje de mejora ni intervalo. Esta corrección en dos etapas sirve para revisar el mecanismo y conservar gasto, no para proclamar utilidad marginal de las preguntas, menor latencia de inferencia ni K14/K15 cumplidos. Los reportes incluyen todos los outcomes, huellas y rutas heredadas.
+
+La ablación de reparación de §12 conserva la misma carga original en 4/4 ensayos. Su objetivo de mejora de tiempo K07 sigue sin cumplirse: corregir un informe de investigación no altera ese resultado.
+
+### 13.5 Carga física: 100 necesidades concurrentes
+
+[Carga física](../reports/physical-load/1791811244239/summary.json): 100 necesidades añadidas más la base, stock/flota/revisión finitos, dos semillas y B5/B6/B7. **6/6 completadas**, cero violaciones, USD **0,116748**. Necesidades pendientes y parciales conservadas:
+
+| Semilla | B5 convencional | B6 NEXO | B7 mismo modelo/red |
+|---|---|---|---|
+| 01 | 9 necesidades completamente servidas | 9 | 7 |
+| 02 | 9 | 4 | 9 |
+
+Como ejemplo, en semilla 02 B6 recibió 42/1.331 L, 44/709 porciones y 0/710 mantas dentro del horizonte. No son «100 soluciones por minuto». El resultado no acredita superioridad de asignación bajo esa carga. Las tres oportunidades de planificación y los recursos finitos son parte del protocolo, no una garantía de resolver cada entrada.
+
+La prueba semántica de §12 identifica 100 necesidades por cada una de cuatro organizaciones con precisión/recall 1,0 **en un corpus sintético interno**. Reconocimiento semántico, plan válido y servicio físico son niveles distintos.
+
+### 13.6 Transporte y UI: cobertura de publicaciones tardías
+
+[Probe final de cuatro procesos](../reports/flow/nominal-process-1791817861166.json): 1.000 publicaciones generadas, cuatro procesos/bases privadas, **4.000 pares publicación–organización esperados, 4.000 versiones durables, cero pérdidas y cero pares sin medir**. Incluye uploads disponibles más tarde mediante un drenaje final finito; los IDs esperados pertenecen al evaluador y no se envían a la ingesta del candidato.
+
+| Métrica real de pared | Resultado p95 | Objetivo local | Estado |
+|---|---|---|---|
+| Fuente disponible → persistencia durable | **3.330 ms** | <5.000 ms | Cumplido en esta topología/hardware |
+| Comando → escritura durable | **13,71 ms** | <2.000 ms | Cumplido |
+| Navegación → contenido visible | **117,74 ms** | <2.000 ms | Cumplido |
+| Filtro → dos frames | **32,70 ms** | <200 ms | Cumplido |
+
+Duración de pared 80,24 s; cero llamadas al modelo, errores JS o violaciones. Hardware: i5-10400, 12 CPUs lógicas, 64 GiB, Node 24.19. Las llegadas equivalen a 10.000 publicaciones/h en bursts; no es una prueba sostenida de varias horas.
+
+La latencia comienza cuando el post está disponible en la fuente. **Excluye el polling de 5 s**, el refresh de UI y el retraso anterior de subida; no es «del desastre a una decisión en 3,33 s». Tampoco acredita exactitud de video/audio: aquí son descriptores y la prueba de bytes reales es separada.
+
+[El probe preliminar de cuatro procesos](../reports/flow/nominal-process-1791816560782.json) midió p95 3.911 ms y 3.200 pares. Cubría posts visibles por lote sin agotar uploads tardíos; queda como preliminar, no como cobertura de 1.000×4. [La topología anterior en un proceso](../reports/flow/nominal-flow-1791810599616.json) conservó p95 7.877 ms, que **incumplió** el objetivo. Ambos resultados permanecen disponibles; el nuevo éxito no borra el fallo.
+
+### 13.7 Fuente real y laboratorio inspeccionable
+
+[Lectura IFRC GO repetida](../reports/sources/ifrc-go-1791815424508.json): dos registros HTTP reales y dos señales durables, candidato estable. Es lectura pública, no acuerdo institucional, inventario operativo ni ejercicio de terreno. Estos datos no entraron en los KPIs sintéticos.
+
+[Investigación del laboratorio](../reports/lab/lab-review-1791817028005.json) usó Gemma real y herramientas `find_facilities`, `plan_service` y `prepare_service`; dejó una propuesta para revisión. No aprobó, publicó ni despachó por cuenta del operador. El launcher precarga inventario, vehículos y mapa mediante consultas normales limitadas al actor, sin verdad del observador. Cada dueño consintió compartir sus propias proyecciones.
+
+Antes hubo **tres investigaciones inconclusas conservadas**, por comprobaciones pendientes o alternativa no factible, en `reports/lab/`. Un control previo del observador adelantó el reloj para inspeccionar una comprobación de campo y está identificado como control de demo. La propuesta posterior no prueba éxito al primer intento, latencia instantánea ni comprensión humana.
+
+El mundo de presentación se dejó en pausa, con recepción automática activa y nuevas investigaciones automáticas deshabilitadas para evitar gasto desatendido. Play en el observador continúa el mundo; una propuesta necesita refresco si cambian evidencias, versiones o permisos. Pausar una demo no modifica las campañas anteriores.
+
+### 13.8 Cierre de funciones y límite de los objetivos
+
+El recorrido local implementado comprende C1–C7 dentro del catálogo, entradas/salidas y pantallas por rol, proveedor real, red con autonomía por dueño, recepción física, reparación de la misma operación, política de atención, fuentes/medios, trazabilidad, persistencia, recuperación, retención y pagos sandbox. [CIERRE_LOCAL.md](CIERRE_LOCAL.md) y [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md) relacionan cada requisito con su prueba.
+
+**No se declara una mejora primaria significativa sobre B5/B7, K07 cumplido, validación humana, holdout independiente ni eficacia de campo.** El gate §38.2 permite un claim limitado cuando la meta no se cumple; se aplica ese límite, sin rebajar la meta. Las funciones locales están entregadas y los ensayos exigentes se ejecutaron; sus resultados pueden refutar la promesa inicial.
+
+Los objetivos restantes necesitan revisión/etiquetas y participantes independientes según [VALIDACION_EXTERNA.md](VALIDACION_EXTERNA.md), y otra versión del método que supere referencias competentes sin seleccionar resultados favorables. No se inventaron operadores reales, donantes, institucionalidad ni vidas salvadas. Gemini y GCP tienen su fase posterior propia.

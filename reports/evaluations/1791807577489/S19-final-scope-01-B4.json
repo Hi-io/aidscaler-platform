@@ -1,0 +1,4065 @@
+{
+  "at": "2026-10-12T12:22:28.372Z",
+  "arm": "B4",
+  "scenario": "S19",
+  "seed": "final-scope-01",
+  "replicate": 0,
+  "status": "completed",
+  "errors": [],
+  "manifest": {
+    "schemaVersion": 1,
+    "engineVersion": "0.2.0",
+    "engineBuild": "56f9a98912e85669b8695861e1afd7d2ff4ec37af5b80e2c5dbd707213bce757",
+    "randomVersion": "fnv-avalanche-v1",
+    "runtimeMajor": 24,
+    "config": {
+      "seed": "final-scope-01",
+      "scenario": "S19",
+      "hazard": "none",
+      "variant": "standard",
+      "compositionVariant": "standard",
+      "grid": 5,
+      "extentKm": 2,
+      "organizations": 4,
+      "durationMs": 14400000,
+      "populationPerSector": 60,
+      "backgroundTraffic": 0,
+      "postsPerHour": 0,
+      "falseRate": 0.12,
+      "observationRate": 0.8,
+      "operatorCount": 2,
+      "reviewMs": 30000,
+      "inspectionMs": 60000,
+      "loadMs": 60000,
+      "unloadMs": 60000,
+      "setupMs": 60000,
+      "networkLatencyMs": 1000,
+      "packetLoss": 0,
+      "networkCapacity": 30,
+      "sourceIndexMs": 10000,
+      "queryLatencyMs": 1000,
+      "bandwidthBytesPerSecond": 1000000,
+      "toolQuota": 60,
+      "funds": 5000,
+      "stockWater": 2400,
+      "reservedWater": 100,
+      "policy": "none",
+      "mode": "modeled",
+      "clockLatency": "modeled",
+      "split": "development",
+      "language": "mixed",
+      "logMode": "compact",
+      "maxEvents": 2000000,
+      "maxPosts": 1000000,
+      "topology": "grid",
+      "bridgeCount": 3,
+      "healthTickMs": 600000,
+      "waterMlPerPersonDay": 3000,
+      "foodKcalPerPersonDay": 2100,
+      "initialWaterHours": 6,
+      "initialFoodHours": 12,
+      "waterCriticalHours": 30,
+      "foodCriticalHours": 72,
+      "injuryCriticalHours": 2,
+      "exposureCriticalHours": 4,
+      "waterFatalityBpPerHour": 150,
+      "foodFatalityBpPerHour": 25,
+      "injuryFatalityBpPerHour": 1000,
+      "exposureFatalityBpPerHour": 600,
+      "injuryFractionBp": 1500,
+      "temperatureC": 24,
+      "healthReports": true,
+      "recurringNeeds": true,
+      "resupplyReviewHours": 6,
+      "resupplyHorizonHours": 24,
+      "authorshipMs": 1000,
+      "staffShiftMs": 28800000,
+      "staffRestMs": 3600000,
+      "vehicleFuelMl": 80000,
+      "fuelMlPerKm": 180,
+      "sourceRequestLimit": 100000,
+      "modelLatencyMs": 15000,
+      "modelCallLimit": 1000,
+      "subsystemSeeds": {}
+    },
+    "contentVersion": "presets-v1+social-v1"
+  },
+  "engineBuild": "56f9a98912e85669b8695861e1afd7d2ff4ec37af5b80e2c5dbd707213bce757",
+  "initialMapHash": "e03c91e725b8501277301563f4414110cb86afe7cdd6cb406a5083bc88fc3389",
+  "candidateFingerprint": "43b93addcff67cc094b1c6c78101428c7b6844ece673e06a3189a0626bf0c041",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "measurementMode": "modeled",
+  "clockPolicy": "declared delays; no accelerated wall-time charging",
+  "operator": "scripted; human comprehension not measured",
+  "planningRounds": 3,
+  "responseOrder": "deadline_then_priority",
+  "repairStrategy": "selective",
+  "inquiryStrategy": "active",
+  "roundsExecuted": 3,
+  "policyIntervalMs": 1200000,
+  "episodeBudgetUsd": 0.15,
+  "planningTopology": "one_isolated_instance",
+  "modelConfig": {
+    "modelId": "google/gemma-4-31b-it",
+    "maxOutputTokens": 8192,
+    "modelTimeoutMs": 120000,
+    "investigationTimeoutMs": 360000,
+    "reasoningEnabled": true,
+    "providerSort": "latency",
+    "priceMultiplier": 2,
+    "maxCallsPerRound": 8,
+    "totalEpisodeCalls": 24,
+    "budgetPolicy": "shared_episode_pool_same_total_cap_for_every_arm"
+  },
+  "wallMs": 170755.5475,
+  "activities": [
+    {
+      "org": "org0",
+      "round": 0,
+      "atSim": 760008,
+      "state": "inconclusive",
+      "model": "google/gemma-4-31b-it",
+      "startedAt": 1791807584892,
+      "steps": [
+        {
+          "type": "tool",
+          "tool": "find_facilities",
+          "at": 1791807587413,
+          "state": "completed",
+          "label": "Found candidate service sites in the received map",
+          "params": {
+            "use": "shelter"
+          },
+          "result": {
+            "source": "received_geography_directory",
+            "use": "shelter",
+            "totalAvailable": 1,
+            "nextOffset": null,
+            "candidates": [
+              {
+                "x": 1575,
+                "z": 1070,
+                "id": "b13",
+                "use": "shelter",
+                "node": "n13",
+                "receivedAssessment": null
+              }
+            ],
+            "note": "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "verify",
+          "at": 1791807589091,
+          "state": "completed",
+          "label": "Verification: building",
+          "params": {
+            "id": "b13",
+            "reason": "Checking if b13 can be used as a shelter for need-case-2.",
+            "target": "building"
+          },
+          "result": {
+            "id": "inspection-1",
+            "org": "org0",
+            "target": "building",
+            "entity": "b13",
+            "method": "field",
+            "state": "completed",
+            "createdAt": 96003,
+            "staff": "commitment-1",
+            "vehicle": "v-org0-0",
+            "startedAt": 96003,
+            "operation": "operation-1",
+            "arrivedAt": 321004,
+            "observedAt": 381004,
+            "result": {
+              "id": "b13",
+              "node": "n13",
+              "use": "shelter",
+              "safe": true,
+              "state": "candidate",
+              "damage": 0,
+              "capacity": 300,
+              "dependencies": {
+                "water": 60,
+                "sanitation": 1,
+                "staff": 2,
+                "energy": 1
+              },
+              "provisioned": {
+                "water": 0,
+                "sanitation": 0,
+                "staff": 0,
+                "energy": 0
+              },
+              "requiredPower": {
+                "powerKw": 10,
+                "connector": "A"
+              },
+              "requiredStaffSkills": [],
+              "version": 1
+            },
+            "completedAt": 382005
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807593440,
+          "state": "completed",
+          "label": "Checked a service across complementary owners",
+          "params": {
+            "building": "b13"
+          },
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": false,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-staff",
+                  "vehicle": "v-org0-1",
+                  "quantity": 1,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-1",
+                  "quantity": 60,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": [
+                  0
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "inspection-1",
+              "r-org0-staff",
+              "v-org0-1",
+              "r-org0-water"
+            ],
+            "missing": [
+              {
+                "type": "staff",
+                "quantity": 1
+              },
+              {
+                "type": "energy",
+                "quantity": 1
+              },
+              {
+                "type": "sanitation",
+                "quantity": 1
+              }
+            ],
+            "requirements": {
+              "staff": 2,
+              "water": 60,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [],
+            "ownerApprovals": [
+              "org0"
+            ],
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status.",
+            "nextTool": "verify_or_lookup_missing_dependencies"
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807596446,
+          "state": "completed",
+          "label": "Read focused received peer_offer records",
+          "params": {
+            "kind": "peer_offer"
+          },
+          "result": {
+            "kind": "peer_offer",
+            "records": [],
+            "totalAvailable": 0,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791807600350,
+          "state": "completed",
+          "label": "Checked personnel",
+          "params": {
+            "target": "personnel"
+          },
+          "result": {
+            "id": "query-4",
+            "org": "org0",
+            "target": "personnel",
+            "state": "ready",
+            "createdAt": 427005,
+            "readyAt": 428005,
+            "result": [
+              {
+                "id": "operator-org0-0",
+                "org": "org0",
+                "role": "operator",
+                "competence": [
+                  "review"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "operator-org0-1",
+                "org": "org0",
+                "role": "operator",
+                "competence": [
+                  "review"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "driver-org0-0",
+                "org": "org0",
+                "role": "driver",
+                "competence": [
+                  "transport"
+                ],
+                "node": "n0",
+                "shiftEnd": 14400000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "driver-org0-1",
+                "org": "org0",
+                "role": "driver",
+                "competence": [
+                  "transport"
+                ],
+                "node": "n0",
+                "shiftEnd": 14400000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "crew-org0",
+                "org": "org0",
+                "role": "crew",
+                "competence": [
+                  "inspection",
+                  "debris_clearance"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              }
+            ],
+            "completedAt": 429006
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "verify",
+          "at": 1791807607592,
+          "state": "completed",
+          "label": "Verification: building",
+          "params": {
+            "id": "b0",
+            "reason": "Checking if the school at b0 can be used as an alternative shelter for need-case-2.",
+            "target": "building"
+          },
+          "result": {
+            "id": "inspection-2",
+            "org": "org0",
+            "target": "building",
+            "entity": "b0",
+            "method": "field",
+            "state": "completed",
+            "createdAt": 444006,
+            "staff": "commitment-2",
+            "vehicle": "v-org0-0",
+            "startedAt": 444006,
+            "operation": "operation-2",
+            "arrivedAt": 669007,
+            "observedAt": 729007,
+            "result": {
+              "id": "b0",
+              "node": "n0",
+              "use": "school",
+              "safe": true,
+              "state": "intact",
+              "damage": 0,
+              "capacity": 120,
+              "dependencies": {
+                "water": 60,
+                "sanitation": 1,
+                "staff": 2,
+                "energy": 1
+              },
+              "provisioned": {
+                "water": 0,
+                "sanitation": 0,
+                "staff": 0,
+                "energy": 0
+              },
+              "requiredPower": {
+                "powerKw": 10,
+                "connector": "A"
+              },
+              "requiredStaffSkills": [],
+              "version": 1
+            },
+            "completedAt": 730008
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807608261,
+          "state": "failed",
+          "params": {
+            "building": "b0"
+          },
+          "result": {
+            "error": "FACILITY_PURPOSE",
+            "message": "This assessed location is not a usable service facility. A demand location is not automatically a shelter. Find an eligible candidate site in the actor-visible map and inspect it."
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807619159,
+          "state": "completed",
+          "label": "Read focused received resource records",
+          "params": {
+            "kind": "resource"
+          },
+          "result": {
+            "kind": "resource",
+            "records": [
+              {
+                "id": "r-org0-blankets",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584476,
+                "type": "blankets",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-energy",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584473,
+                "type": "energy",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": {
+                  "powerKw": 12,
+                  "connector": "A"
+                }
+              },
+              {
+                "id": "r-org0-food",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584483,
+                "type": "food",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-fuel",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584479,
+                "type": "fuel",
+                "quantity": 300,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-rescue",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584486,
+                "type": "rescue",
+                "quantity": 2,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-sanitation",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584469,
+                "type": "sanitation",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-staff",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584466,
+                "type": "staff",
+                "quantity": 1,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-water",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584461,
+                "type": "water",
+                "quantity": 600,
+                "reserved": 0,
+                "floor": 100,
+                "node": "n0",
+                "compatibility": null
+              }
+            ],
+            "totalAvailable": 8,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        }
+      ],
+      "proposalId": null,
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "inputSnapshot": {
+        "hash": "46339ac40bc3f1b2678e56456cdbc8305487e120efa0932538507e703c265015",
+        "context": {
+          "rawCharacters": 10704,
+          "presentedCharacters": 5158,
+          "coverage": {
+            "recordsInReceivedSnapshot": {
+              "need": 2,
+              "signal": 2,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 8,
+              "vehicle": 2,
+              "facility": 0,
+              "operation": 0,
+              "peer_offer": 0,
+              "location": 25
+            },
+            "omittedFromInitialPreview": {
+              "need": 0,
+              "signal": 0,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 0,
+              "vehicle": 0,
+              "facility": 0,
+              "operation": 0,
+              "peer_offer": 0,
+              "location": 13
+            },
+            "resourceTypesObserved": [
+              "food",
+              "fuel",
+              "staff",
+              "water",
+              "energy",
+              "rescue",
+              "blankets",
+              "sanitation"
+            ],
+            "note": "A preview is not exhaustive. Missing from this preview does NOT mean absent, false, zero demand or unavailable. Read omitted records with read_context; refresh external state with lookup/verify. No hidden world state is supplied."
+          }
+        },
+        "policy": "nexo",
+        "focusNeed": "need-case-2",
+        "focusFacility": null,
+        "sourceObservedAt": 66003,
+        "signals": [
+          {
+            "id": "02015707cf8074854572dac2",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583237
+          },
+          {
+            "id": "6c3a2bcecbdd7f6921972b48",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583217
+          }
+        ],
+        "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
+      },
+      "finishedAt": 1791807619187,
+      "calls": 8,
+      "wallMs": 34279.356700000004,
+      "researchAblation": {
+        "inquiryStrategy": "active",
+        "repairStrategy": "selective",
+        "repairOf": null,
+        "refreshTargets": [],
+        "refreshModelledMs": 0,
+        "refreshWallMs": 0.005600000000413274,
+        "modelledDraftMs": 694005,
+        "changedScope": [],
+        "preservedSteps": [],
+        "physicalHistoryPreserved": true
+      }
+    },
+    {
+      "org": "org0",
+      "round": 1,
+      "atSim": 1382001,
+      "state": "inconclusive",
+      "model": "google/gemma-4-31b-it",
+      "startedAt": 1791807620527,
+      "steps": [
+        {
+          "type": "tool",
+          "tool": "find_facilities",
+          "at": 1791807629259,
+          "state": "completed",
+          "label": "Found candidate service sites in the received map",
+          "params": {
+            "use": "shelter"
+          },
+          "result": {
+            "source": "received_geography_directory",
+            "use": "shelter",
+            "totalAvailable": 1,
+            "nextOffset": null,
+            "candidates": [
+              {
+                "x": 1575,
+                "z": 1070,
+                "id": "b13",
+                "use": "shelter",
+                "node": "n13",
+                "receivedAssessment": {
+                  "at": 381004,
+                  "use": "shelter",
+                  "node": "n13",
+                  "safe": true,
+                  "floor": 0,
+                  "owner": "org0",
+                  "state": "candidate",
+                  "damage": 0,
+                  "capacity": 300,
+                  "reserved": 0,
+                  "provisioned": {
+                    "staff": 0,
+                    "water": 0,
+                    "energy": 0,
+                    "sanitation": 0
+                  },
+                  "dependencies": {
+                    "staff": 2,
+                    "water": 60,
+                    "energy": 1,
+                    "sanitation": 1
+                  },
+                  "requiredPower": {
+                    "powerKw": 10,
+                    "connector": "A"
+                  },
+                  "sourceVersion": 1,
+                  "sourceSnapshot": {
+                    "at": 381004,
+                    "id": "b13",
+                    "use": "shelter",
+                    "node": "n13",
+                    "safe": true,
+                    "state": "candidate",
+                    "damage": 0,
+                    "version": 1,
+                    "capacity": 300,
+                    "provisioned": {
+                      "staff": 0,
+                      "water": 0,
+                      "energy": 0,
+                      "sanitation": 0
+                    },
+                    "dependencies": {
+                      "staff": 2,
+                      "water": 60,
+                      "energy": 1,
+                      "sanitation": 1
+                    },
+                    "requiredPower": {
+                      "powerKw": 10,
+                      "connector": "A"
+                    },
+                    "requiredStaffSkills": []
+                  },
+                  "requiredStaffSkills": [],
+                  "id": "b13",
+                  "version": 1,
+                  "createdAt": 1791807589159,
+                  "updatedAt": 1791807589159
+                }
+              }
+            ],
+            "note": "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807629274,
+          "state": "completed",
+          "label": "Read focused received operation records",
+          "params": {
+            "kind": "operation",
+            "ids": [
+              "operation-1"
+            ]
+          },
+          "result": {
+            "kind": "operation",
+            "records": [
+              {
+                "id": "operation-1",
+                "version": 15,
+                "state": "arrived",
+                "observedAt": 321004,
+                "updatedAt": 1791807620494,
+                "type": "inspection",
+                "vehicle": "v-org0-0",
+                "destination": "n13"
+              }
+            ],
+            "totalAvailable": 1,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807636621,
+          "state": "completed",
+          "label": "Checked a service across complementary owners",
+          "params": {
+            "building": "b13"
+          },
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": false,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-staff",
+                  "vehicle": "v-org0-1",
+                  "quantity": 1,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-1",
+                  "quantity": 60,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": [
+                  0
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "inspection-1",
+              "r-org0-staff",
+              "v-org0-1",
+              "r-org0-water"
+            ],
+            "missing": [
+              {
+                "type": "staff",
+                "quantity": 1
+              },
+              {
+                "type": "energy",
+                "quantity": 1
+              },
+              {
+                "type": "sanitation",
+                "quantity": 1
+              }
+            ],
+            "requirements": {
+              "staff": 2,
+              "water": 60,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [],
+            "ownerApprovals": [
+              "org0"
+            ],
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status.",
+            "nextTool": "verify_or_lookup_missing_dependencies"
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807640039,
+          "state": "completed",
+          "label": "Read focused received peer_offer records",
+          "params": {
+            "kind": "peer_offer"
+          },
+          "result": {
+            "kind": "peer_offer",
+            "records": [],
+            "totalAvailable": 0,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791807647100,
+          "state": "completed",
+          "label": "Checked personnel",
+          "params": {
+            "target": "personnel"
+          },
+          "result": {
+            "id": "query-5",
+            "org": "org0",
+            "target": "personnel",
+            "state": "ready",
+            "createdAt": 1320000,
+            "readyAt": 1321000,
+            "result": [
+              {
+                "id": "operator-org0-0",
+                "org": "org0",
+                "role": "operator",
+                "competence": [
+                  "review"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "operator-org0-1",
+                "org": "org0",
+                "role": "operator",
+                "competence": [
+                  "review"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "driver-org0-0",
+                "org": "org0",
+                "role": "driver",
+                "competence": [
+                  "transport"
+                ],
+                "node": "n0",
+                "shiftEnd": 14400000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "driver-org0-1",
+                "org": "org0",
+                "role": "driver",
+                "competence": [
+                  "transport"
+                ],
+                "node": "n0",
+                "shiftEnd": 14400000,
+                "restMs": 3600000,
+                "onShift": true
+              },
+              {
+                "id": "crew-org0",
+                "org": "org0",
+                "role": "crew",
+                "competence": [
+                  "inspection",
+                  "debris_clearance"
+                ],
+                "node": "n0",
+                "shiftEnd": 28800000,
+                "restMs": 3600000,
+                "onShift": true
+              }
+            ],
+            "completedAt": 1322001
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "lookup",
+          "at": 1791807647252,
+          "state": "failed",
+          "params": {
+            "target": "capabilities"
+          },
+          "result": {
+            "error": "NOT_FOUND",
+            "message": "Unknown partner"
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807647277,
+          "state": "failed",
+          "params": {
+            "building": "b0"
+          },
+          "result": {
+            "error": "FACILITY_PURPOSE",
+            "message": "This assessed location is not a usable service facility. A demand location is not automatically a shelter. Find an eligible candidate site in the actor-visible map and inspect it."
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807655224,
+          "state": "completed",
+          "label": "Read focused received resource records",
+          "params": {
+            "kind": "resource"
+          },
+          "result": {
+            "kind": "resource",
+            "records": [
+              {
+                "id": "r-org0-blankets",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584476,
+                "type": "blankets",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-energy",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584473,
+                "type": "energy",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": {
+                  "powerKw": 12,
+                  "connector": "A"
+                }
+              },
+              {
+                "id": "r-org0-food",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584483,
+                "type": "food",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-fuel",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584479,
+                "type": "fuel",
+                "quantity": 300,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-rescue",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584486,
+                "type": "rescue",
+                "quantity": 2,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-sanitation",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584469,
+                "type": "sanitation",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-staff",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584466,
+                "type": "staff",
+                "quantity": 1,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-water",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584461,
+                "type": "water",
+                "quantity": 600,
+                "reserved": 0,
+                "floor": 100,
+                "node": "n0",
+                "compatibility": null
+              }
+            ],
+            "totalAvailable": 8,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "search",
+          "at": 1791807665957,
+          "state": "completed",
+          "label": "Searched public reports",
+          "params": {
+            "query": "shelter facility b0 b1 b2 b10 b11 b12 b14 b15 b16 b17 b18"
+          },
+          "result": {
+            "posts": [],
+            "total": 0,
+            "nextCursor": null,
+            "now": 1352001
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "compose_service",
+          "at": 1791807677587,
+          "state": "completed",
+          "label": "Checked complementary service dependencies",
+          "params": {
+            "service": "shelter"
+          },
+          "result": {
+            "service": "shelter",
+            "requirements": [
+              {
+                "type": "safety_inspection",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "owner_permission",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "water",
+                "fulfilled": true,
+                "evidence": "r-org0-water",
+                "owner": "org0"
+              },
+              {
+                "type": "sanitation",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "staff",
+                "fulfilled": true,
+                "evidence": "r-org0-staff",
+                "owner": "org0"
+              },
+              {
+                "type": "energy",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "transport",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              }
+            ],
+            "ready": false,
+            "note": "A composed proposal is not a physical operating service."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "search",
+          "at": 1791807688707,
+          "state": "completed",
+          "label": "Searched public reports",
+          "params": {
+            "query": "East Valley shelter"
+          },
+          "result": {
+            "posts": [],
+            "total": 0,
+            "nextCursor": null,
+            "now": 1382001
+          }
+        }
+      ],
+      "proposalId": null,
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "inputSnapshot": {
+        "hash": "c50482e28c0bf00d8569d6e848058ff4f41ed1f44b77ee5989f861b395a432fb",
+        "context": {
+          "rawCharacters": 12926,
+          "presentedCharacters": 6002,
+          "coverage": {
+            "recordsInReceivedSnapshot": {
+              "need": 2,
+              "signal": 2,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 8,
+              "vehicle": 2,
+              "facility": 2,
+              "operation": 2,
+              "peer_offer": 0,
+              "location": 25
+            },
+            "omittedFromInitialPreview": {
+              "need": 0,
+              "signal": 0,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 0,
+              "vehicle": 0,
+              "facility": 0,
+              "operation": 0,
+              "peer_offer": 0,
+              "location": 13
+            },
+            "resourceTypesObserved": [
+              "food",
+              "fuel",
+              "staff",
+              "water",
+              "energy",
+              "rescue",
+              "blankets",
+              "sanitation"
+            ],
+            "note": "A preview is not exhaustive. Missing from this preview does NOT mean absent, false, zero demand or unavailable. Read omitted records with read_context; refresh external state with lookup/verify. No hidden world state is supplied."
+          }
+        },
+        "policy": "nexo",
+        "focusNeed": "need-case-2",
+        "focusFacility": null,
+        "sourceObservedAt": 1260000,
+        "signals": [
+          {
+            "id": "02015707cf8074854572dac2",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583237
+          },
+          {
+            "id": "6c3a2bcecbdd7f6921972b48",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583217
+          }
+        ],
+        "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
+      },
+      "finishedAt": 1791807688728,
+      "calls": 8,
+      "wallMs": 68188.5245,
+      "researchAblation": {
+        "inquiryStrategy": "active",
+        "repairStrategy": "selective",
+        "repairOf": null,
+        "refreshTargets": [],
+        "refreshModelledMs": 0,
+        "refreshWallMs": 0.0039000000033411197,
+        "modelledDraftMs": 122001,
+        "changedScope": [],
+        "preservedSteps": [],
+        "physicalHistoryPreserved": true
+      }
+    },
+    {
+      "org": "org0",
+      "round": 2,
+      "atSim": 2580000,
+      "state": "inconclusive",
+      "model": "google/gemma-4-31b-it",
+      "startedAt": 1791807690838,
+      "steps": [
+        {
+          "type": "tool",
+          "tool": "find_facilities",
+          "at": 1791807696750,
+          "state": "completed",
+          "label": "Found candidate service sites in the received map",
+          "params": {
+            "use": "shelter"
+          },
+          "result": {
+            "source": "received_geography_directory",
+            "use": "shelter",
+            "totalAvailable": 1,
+            "nextOffset": null,
+            "candidates": [
+              {
+                "x": 1575,
+                "z": 1070,
+                "id": "b13",
+                "use": "shelter",
+                "node": "n13",
+                "receivedAssessment": {
+                  "at": 381004,
+                  "use": "shelter",
+                  "node": "n13",
+                  "safe": true,
+                  "floor": 0,
+                  "owner": "org0",
+                  "state": "candidate",
+                  "damage": 0,
+                  "capacity": 300,
+                  "reserved": 0,
+                  "provisioned": {
+                    "staff": 0,
+                    "water": 0,
+                    "energy": 0,
+                    "sanitation": 0
+                  },
+                  "dependencies": {
+                    "staff": 2,
+                    "water": 60,
+                    "energy": 1,
+                    "sanitation": 1
+                  },
+                  "requiredPower": {
+                    "powerKw": 10,
+                    "connector": "A"
+                  },
+                  "sourceVersion": 1,
+                  "sourceSnapshot": {
+                    "at": 381004,
+                    "id": "b13",
+                    "use": "shelter",
+                    "node": "n13",
+                    "safe": true,
+                    "state": "candidate",
+                    "damage": 0,
+                    "version": 1,
+                    "capacity": 300,
+                    "provisioned": {
+                      "staff": 0,
+                      "water": 0,
+                      "energy": 0,
+                      "sanitation": 0
+                    },
+                    "dependencies": {
+                      "staff": 2,
+                      "water": 60,
+                      "energy": 1,
+                      "sanitation": 1
+                    },
+                    "requiredPower": {
+                      "powerKw": 10,
+                      "connector": "A"
+                    },
+                    "requiredStaffSkills": []
+                  },
+                  "requiredStaffSkills": [],
+                  "id": "b13",
+                  "version": 1,
+                  "createdAt": 1791807589159,
+                  "updatedAt": 1791807589159
+                }
+              }
+            ],
+            "note": "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807704681,
+          "state": "completed",
+          "label": "Read focused received facility records",
+          "params": {
+            "kind": "facility"
+          },
+          "result": {
+            "kind": "facility",
+            "records": [
+              {
+                "id": "b0",
+                "version": 1,
+                "sourceVersion": 1,
+                "state": "intact",
+                "owner": "org0",
+                "updatedAt": 1791807607653,
+                "dependencies": {
+                  "staff": 2,
+                  "water": 60,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "use": "school",
+                "node": "n0",
+                "safe": true,
+                "capacity": 120,
+                "provisioned": {
+                  "staff": 0,
+                  "water": 0,
+                  "energy": 0,
+                  "sanitation": 0
+                },
+                "requiredPower": {
+                  "powerKw": 10,
+                  "connector": "A"
+                },
+                "requiredStaffSkills": []
+              },
+              {
+                "id": "b13",
+                "version": 1,
+                "sourceVersion": 1,
+                "state": "candidate",
+                "owner": "org0",
+                "updatedAt": 1791807589159,
+                "dependencies": {
+                  "staff": 2,
+                  "water": 60,
+                  "energy": 1,
+                  "sanitation": 1
+                },
+                "use": "shelter",
+                "node": "n13",
+                "safe": true,
+                "capacity": 300,
+                "provisioned": {
+                  "staff": 0,
+                  "water": 0,
+                  "energy": 0,
+                  "sanitation": 0
+                },
+                "requiredPower": {
+                  "powerKw": 10,
+                  "connector": "A"
+                },
+                "requiredStaffSkills": []
+              }
+            ],
+            "totalAvailable": 2,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807707731,
+          "state": "completed",
+          "label": "Checked a service across complementary owners",
+          "params": {
+            "building": "b13"
+          },
+          "result": {
+            "building": "b13",
+            "service": "shelter",
+            "readyToDraft": false,
+            "actions": [
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-staff",
+                  "vehicle": "v-org0-1",
+                  "quantity": 1,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": []
+              },
+              {
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "resource": "r-org0-water",
+                  "vehicle": "v-org0-1",
+                  "quantity": 60,
+                  "building": "b13",
+                  "destination": "n13"
+                },
+                "dependsOn": [
+                  0
+                ]
+              }
+            ],
+            "references": [
+              "b13",
+              "inspection-1",
+              "r-org0-staff",
+              "v-org0-1",
+              "r-org0-water"
+            ],
+            "missing": [
+              {
+                "type": "staff",
+                "quantity": 1
+              },
+              {
+                "type": "energy",
+                "quantity": 1
+              },
+              {
+                "type": "sanitation",
+                "quantity": 1
+              }
+            ],
+            "requirements": {
+              "staff": 2,
+              "water": 60,
+              "energy": 1,
+              "sanitation": 1
+            },
+            "affectedNeeds": [],
+            "offerVersions": [],
+            "ownerApprovals": [
+              "org0"
+            ],
+            "note": "Quantities and compatible equipment are sourced. Routes and each owner authorization are checked before execution. Operating service requires physical delivery and a received facility status.",
+            "nextTool": "verify_or_lookup_missing_dependencies"
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807713351,
+          "state": "completed",
+          "label": "Read focused received peer_offer records",
+          "params": {
+            "kind": "peer_offer"
+          },
+          "result": {
+            "kind": "peer_offer",
+            "records": [],
+            "totalAvailable": 0,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "plan_service",
+          "at": 1791807715854,
+          "state": "failed",
+          "params": {
+            "building": "b0"
+          },
+          "result": {
+            "error": "FACILITY_PURPOSE",
+            "message": "This assessed location is not a usable service facility. A demand location is not automatically a shelter. Find an eligible candidate site in the actor-visible map and inspect it."
+          },
+          "label": "A check needs attention"
+        },
+        {
+          "type": "tool",
+          "tool": "compose_service",
+          "at": 1791807727905,
+          "state": "completed",
+          "label": "Checked complementary service dependencies",
+          "params": {
+            "service": "shelter"
+          },
+          "result": {
+            "service": "shelter",
+            "requirements": [
+              {
+                "type": "safety_inspection",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "owner_permission",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "water",
+                "fulfilled": true,
+                "evidence": "r-org0-water",
+                "owner": "org0"
+              },
+              {
+                "type": "sanitation",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "staff",
+                "fulfilled": true,
+                "evidence": "r-org0-staff",
+                "owner": "org0"
+              },
+              {
+                "type": "energy",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              },
+              {
+                "type": "transport",
+                "fulfilled": false,
+                "evidence": null,
+                "owner": null
+              }
+            ],
+            "ready": false,
+            "note": "A composed proposal is not a physical operating service."
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "search",
+          "at": 1791807736474,
+          "state": "completed",
+          "label": "Searched public reports",
+          "params": {
+            "query": "available staff energy sanitation shelter"
+          },
+          "result": {
+            "posts": [],
+            "total": 0,
+            "nextCursor": null,
+            "now": 2565000
+          }
+        },
+        {
+          "type": "tool",
+          "tool": "read_context",
+          "at": 1791807747523,
+          "state": "completed",
+          "label": "Read focused received resource records",
+          "params": {
+            "kind": "resource"
+          },
+          "result": {
+            "kind": "resource",
+            "records": [
+              {
+                "id": "r-org0-blankets",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584476,
+                "type": "blankets",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-energy",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584473,
+                "type": "energy",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": {
+                  "powerKw": 12,
+                  "connector": "A"
+                }
+              },
+              {
+                "id": "r-org0-food",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584483,
+                "type": "food",
+                "quantity": 200,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-fuel",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584479,
+                "type": "fuel",
+                "quantity": 300,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-rescue",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584486,
+                "type": "rescue",
+                "quantity": 2,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-sanitation",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584469,
+                "type": "sanitation",
+                "quantity": 0,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-staff",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584466,
+                "type": "staff",
+                "quantity": 1,
+                "reserved": 0,
+                "floor": 0,
+                "node": "n0",
+                "compatibility": null
+              },
+              {
+                "id": "r-org0-water",
+                "version": 1,
+                "sourceVersion": 1,
+                "owner": "org0",
+                "observedAt": 60000,
+                "updatedAt": 1791807584461,
+                "type": "water",
+                "quantity": 600,
+                "reserved": 0,
+                "floor": 100,
+                "node": "n0",
+                "compatibility": null
+              }
+            ],
+            "totalAvailable": 8,
+            "offset": 0,
+            "nextOffset": null,
+            "source": "organization_received_store",
+            "refresh": "Use lookup/verify for new source observations. This read does not independently verify or authorize anything."
+          }
+        }
+      ],
+      "proposalId": null,
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "inputSnapshot": {
+        "hash": "722482a886f8c24e46b2336ed635866f5d43462cb856b892b21bc2b1ddaa01a3",
+        "context": {
+          "rawCharacters": 12927,
+          "presentedCharacters": 6002,
+          "coverage": {
+            "recordsInReceivedSnapshot": {
+              "need": 2,
+              "signal": 2,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 8,
+              "vehicle": 2,
+              "facility": 2,
+              "operation": 2,
+              "peer_offer": 0,
+              "location": 25
+            },
+            "omittedFromInitialPreview": {
+              "need": 0,
+              "signal": 0,
+              "report": 0,
+              "claim": 0,
+              "evidence_group": 0,
+              "resource": 0,
+              "vehicle": 0,
+              "facility": 0,
+              "operation": 0,
+              "peer_offer": 0,
+              "location": 13
+            },
+            "resourceTypesObserved": [
+              "food",
+              "fuel",
+              "staff",
+              "water",
+              "energy",
+              "rescue",
+              "blankets",
+              "sanitation"
+            ],
+            "note": "A preview is not exhaustive. Missing from this preview does NOT mean absent, false, zero demand or unavailable. Read omitted records with read_context; refresh external state with lookup/verify. No hidden world state is supplied."
+          }
+        },
+        "policy": "nexo",
+        "focusNeed": "need-case-2",
+        "focusFacility": null,
+        "sourceObservedAt": 2460000,
+        "signals": [
+          {
+            "id": "02015707cf8074854572dac2",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583237
+          },
+          {
+            "id": "6c3a2bcecbdd7f6921972b48",
+            "sourceVersion": 1,
+            "receivedAt": 1791807583217
+          }
+        ],
+        "note": "These versions were presented to the model. This is not a claim of independently verified interpretation accuracy."
+      },
+      "finishedAt": 1791807747545,
+      "calls": 8,
+      "wallMs": 56699.1363,
+      "researchAblation": {
+        "inquiryStrategy": "active",
+        "repairStrategy": "selective",
+        "repairOf": null,
+        "refreshTargets": [],
+        "refreshModelledMs": 0,
+        "refreshWallMs": 0.003400000001420267,
+        "modelledDraftMs": 120000,
+        "changedScope": [],
+        "preservedSteps": [],
+        "physicalHistoryPreserved": true
+      }
+    }
+  ],
+  "platformEvidence": [
+    {
+      "org": "org0",
+      "counts": [
+        {
+          "kind": "activity",
+          "state": "inconclusive",
+          "n": 3
+        },
+        {
+          "kind": "context",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "facility",
+          "state": "candidate",
+          "n": 1
+        },
+        {
+          "kind": "facility",
+          "state": "intact",
+          "n": 1
+        },
+        {
+          "kind": "intake",
+          "state": "pending",
+          "n": 2
+        },
+        {
+          "kind": "investigation_checkpoint",
+          "state": "completed",
+          "n": 3
+        },
+        {
+          "kind": "need",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "operation",
+          "state": "arrived",
+          "n": 2
+        },
+        {
+          "kind": "query",
+          "state": "ready",
+          "n": 2
+        },
+        {
+          "kind": "resource",
+          "state": null,
+          "n": 8
+        },
+        {
+          "kind": "response_policy",
+          "state": null,
+          "n": 1
+        },
+        {
+          "kind": "road",
+          "state": null,
+          "n": 80
+        },
+        {
+          "kind": "signal",
+          "state": "unverified",
+          "n": 2
+        },
+        {
+          "kind": "source",
+          "state": "connected",
+          "n": 1
+        },
+        {
+          "kind": "source_version",
+          "state": null,
+          "n": 2
+        },
+        {
+          "kind": "vehicle",
+          "state": "en_route",
+          "n": 1
+        },
+        {
+          "kind": "vehicle",
+          "state": "idle",
+          "n": 1
+        },
+        {
+          "kind": "verification",
+          "state": "completed",
+          "n": 2
+        }
+      ],
+      "claimCount": 0,
+      "investigatorQueries": [
+        {
+          "tool": "verify",
+          "state": "completed",
+          "at": 1791807589091
+        },
+        {
+          "tool": "lookup",
+          "state": "completed",
+          "at": 1791807600350
+        },
+        {
+          "tool": "verify",
+          "state": "completed",
+          "at": 1791807607592
+        },
+        {
+          "tool": "lookup",
+          "state": "completed",
+          "at": 1791807647100
+        },
+        {
+          "tool": "lookup",
+          "state": "failed",
+          "at": 1791807647252
+        },
+        {
+          "tool": "search",
+          "state": "completed",
+          "at": 1791807665957
+        },
+        {
+          "tool": "search",
+          "state": "completed",
+          "at": 1791807688707
+        },
+        {
+          "tool": "search",
+          "state": "completed",
+          "at": 1791807736474
+        }
+      ],
+      "evidencePrecision": null,
+      "evidenceRecall": null,
+      "humanMinutes": null,
+      "note": "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied."
+    }
+  ],
+  "usage": [
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 2342.6215999999995,
+      "input_tokens": 4952,
+      "output_tokens": 197,
+      "cost_usd": 0.00077208,
+      "reserved_usd": 0.00749998,
+      "provider_id": "gen-1791807585-Z550Ayb0elsqrvx2sCiN",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 1589.3680999999997,
+      "input_tokens": 5075,
+      "output_tokens": 215,
+      "cost_usd": 0.0007965,
+      "reserved_usd": 0.00755974,
+      "provider_id": "gen-1791807587-z8vbK2decy2iATgEuR55",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 4136.5326000000005,
+      "input_tokens": 5328,
+      "output_tokens": 417,
+      "cost_usd": 0.00091272,
+      "reserved_usd": 0.0076551399999999995,
+      "provider_id": "gen-1791807589-IFxro4jmOZ4uUeh4FeUX",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 2657.9827000000005,
+      "input_tokens": 5620,
+      "output_tokens": 288,
+      "cost_usd": 0.000902,
+      "reserved_usd": 0.007777899999999999,
+      "provider_id": "gen-1791807594-4ssO0CAmxxr7F11cvzCE",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3841.842199999999,
+      "input_tokens": 5703,
+      "output_tokens": 334,
+      "cost_usd": 0.00093202,
+      "reserved_usd": 0.00782722,
+      "provider_id": "gen-1791807596-t2gGYhYqgn85nkF4QbA4",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7062.7549,
+      "input_tokens": 6063,
+      "output_tokens": 1210,
+      "cost_usd": 0.00133282,
+      "reserved_usd": 0.00794422,
+      "provider_id": "gen-1791807600-2b5qBdIlDfus5nHKCpJE",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 473.8195999999989,
+      "input_tokens": 6317,
+      "output_tokens": 17,
+      "cost_usd": 0.00089118,
+      "reserved_usd": 0.00804124,
+      "provider_id": "gen-1791807608-v7j2T6rxQi1rXHpxxvAy",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round0",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 10748.846099999999,
+      "input_tokens": 6391,
+      "output_tokens": 1194,
+      "cost_usd": 0.00137234,
+      "reserved_usd": 0.008086959999999999,
+      "provider_id": "gen-1791807608-rGAqMY7vodrlkXqCUrFS",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 8691.477100000004,
+      "input_tokens": 5225,
+      "output_tokens": 971,
+      "cost_usd": 0.0011199,
+      "reserved_usd": 0.00758962,
+      "provider_id": "gen-1791807620-2vvjzWySjjJqk1qNrNrQ",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7290.165799999995,
+      "input_tokens": 5764,
+      "output_tokens": 675,
+      "cost_usd": 0.00107696,
+      "reserved_usd": 0.00779176,
+      "provider_id": "gen-1791807629-bGfxLUakTpoHGHJM5pZU",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 3208.404999999999,
+      "input_tokens": 6056,
+      "output_tokens": 435,
+      "cost_usd": 0.00102184,
+      "reserved_usd": 0.00791452,
+      "provider_id": "gen-1791807637-jmIVefB1KEjCfVSQ3Tlo",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7005.819299999996,
+      "input_tokens": 6139,
+      "output_tokens": 745,
+      "cost_usd": 0.00115746,
+      "reserved_usd": 0.00796384,
+      "provider_id": "gen-1791807640-Lse3kVvbyW8onD7BPR83",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7789.868700000006,
+      "input_tokens": 6611,
+      "output_tokens": 1108,
+      "cost_usd": 0.00136874,
+      "reserved_usd": 0.00814546,
+      "provider_id": "gen-1791807647-7yQfCnMyskAekmDYHoe9",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 10646.800999999992,
+      "input_tokens": 7306,
+      "output_tokens": 1578,
+      "cost_usd": 0.00165404,
+      "reserved_usd": 0.008363619999999999,
+      "provider_id": "gen-1791807655-94N6i9NhhnqADR9xNQOW",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 11556.908500000005,
+      "input_tokens": 7384,
+      "output_tokens": 1226,
+      "cost_usd": 0.00152416,
+      "reserved_usd": 0.00839854,
+      "provider_id": "gen-1791807666-fJliwKnN7Pc5EPwDRIQv",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round1",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 11048.955199999997,
+      "input_tokens": 7567,
+      "output_tokens": 1742,
+      "cost_usd": 0.00175618,
+      "reserved_usd": 0.00848836,
+      "provider_id": "gen-1791807678-gBkw2vZp7DNN6c1iv8d0",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 5877.307399999991,
+      "input_tokens": 5225,
+      "output_tokens": 611,
+      "cost_usd": 0.0009759,
+      "reserved_usd": 0.00758962,
+      "provider_id": "gen-1791807691-bs8NfqRKbOKqT4YFUpXK",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 7884.7063999999955,
+      "input_tokens": 5615,
+      "output_tokens": 485,
+      "cost_usd": 0.0009801,
+      "reserved_usd": 0.007729659999999999,
+      "provider_id": "gen-1791807697-oAWGci5ZmJZTSacBQO9u",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 2982.3608999999997,
+      "input_tokens": 5935,
+      "output_tokens": 484,
+      "cost_usd": 0.0010245,
+      "reserved_usd": 0.00785314,
+      "provider_id": "gen-1791807705-L2AOY9z08A6hXMAruQjU",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 5416.887999999992,
+      "input_tokens": 6227,
+      "output_tokens": 568,
+      "cost_usd": 0.00109898,
+      "reserved_usd": 0.00797608,
+      "provider_id": "gen-1791807708-qMucfeZFhAReJoD4gBll",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 2413.0354000000225,
+      "input_tokens": 6310,
+      "output_tokens": 410,
+      "cost_usd": 0.0010474,
+      "reserved_usd": 0.00802522,
+      "provider_id": "gen-1791807713-eabQhMt6kQfiTZ2T5h64",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 11864.919000000024,
+      "input_tokens": 6384,
+      "output_tokens": 1603,
+      "cost_usd": 0.00153496,
+      "reserved_usd": 0.008070939999999999,
+      "provider_id": "gen-1791807716-qKYEEWTDNN5tRqT0kKKw",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 8506.598100000003,
+      "input_tokens": 6567,
+      "output_tokens": 1081,
+      "cost_usd": 0.00135178,
+      "reserved_usd": 0.00816076,
+      "provider_id": "gen-1791807728-xdvof3OnTc5W1ds6Rl9t",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    },
+    {
+      "episode": "pilot-B4-S19-final-scope-01-0-org0-round2",
+      "model": "google/gemma-4-31b-it",
+      "state": "completed",
+      "wall_ms": 10574.67359999998,
+      "input_tokens": 6617,
+      "output_tokens": 1586,
+      "cost_usd": 0.00156078,
+      "reserved_usd": 0.008194239999999998,
+      "provider_id": "gen-1791807736-7hNge3plqkN0e86DLTmy",
+      "pricing": {
+        "at": "2026-10-12T12:19:45.032Z",
+        "model": "google/gemma-4-31b-it",
+        "rates": {
+          "prompt": "0.00000009",
+          "completion": "0.00000034",
+          "input_cache_read": "0.00000005"
+        },
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": false
+        },
+        "modalities": [
+          "image",
+          "text",
+          "video"
+        ],
+        "parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "maxCompletionTokens": 16384
+      }
+    }
+  ],
+  "costUsd": 0.028165340000000004,
+  "chargedBudgetUsd": 0.028165340000000004,
+  "unknownCostCalls": 0,
+  "metrics": {
+    "simulatedMs": 14400000,
+    "services": {
+      "water": {
+        "unit": "L",
+        "demand": 600,
+        "served": 0,
+        "pending": 600,
+        "overprovided": 0,
+        "uncoveredUnitMs": 8640000000,
+        "onTime": 0
+      },
+      "shelter": {
+        "unit": "place",
+        "demand": 50,
+        "served": 0,
+        "pending": 50,
+        "overprovided": 0,
+        "uncoveredUnitMs": 720000000,
+        "onTime": 0
+      }
+    },
+    "collective": {
+      "shelterPlaceHours": 0,
+      "operatingHours": 0,
+      "waterProduced": 0,
+      "note": "Operating hours alone are not useful service. Occupied shelter place-hours and finite water production are measured separately."
+    },
+    "population": {
+      "model": "experimental-v1",
+      "clinicallyValidated": false,
+      "alive": 1500,
+      "deceased": 0,
+      "injured": 0,
+      "waterDeficitPersonHours": 0,
+      "foodDeficitPersonHours": 0,
+      "exposurePersonHours": 240,
+      "untreatedInjuryPersonHours": 0,
+      "communities": [
+        {
+          "id": "community-s0",
+          "sector": "s0",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s1",
+          "sector": "s1",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s2",
+          "sector": "s2",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 4,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 240,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s3",
+          "sector": "s3",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s4",
+          "sector": "s4",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s5",
+          "sector": "s5",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s6",
+          "sector": "s6",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s7",
+          "sector": "s7",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s8",
+          "sector": "s8",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s9",
+          "sector": "s9",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s10",
+          "sector": "s10",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s11",
+          "sector": "s11",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s12",
+          "sector": "s12",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s13",
+          "sector": "s13",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": true,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s14",
+          "sector": "s14",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s15",
+          "sector": "s15",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s16",
+          "sector": "s16",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s17",
+          "sector": "s17",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s18",
+          "sector": "s18",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s19",
+          "sector": "s19",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s20",
+          "sector": "s20",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s21",
+          "sector": "s21",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s22",
+          "sector": "s22",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s23",
+          "sector": "s23",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        },
+        {
+          "id": "community-s24",
+          "sector": "s24",
+          "population": 60,
+          "inTransit": 0,
+          "deceased": 0,
+          "affected": false,
+          "injured": 0,
+          "dehydrationHours": 0,
+          "hungerHours": 0,
+          "exposureHours": 0,
+          "waterDeficitPersonHours": 0,
+          "foodDeficitPersonHours": 0,
+          "exposurePersonHours": 0,
+          "untreatedInjuryPersonHours": 0,
+          "deathsByCause": {
+            "water": 0,
+            "food": 0,
+            "exposure": 0,
+            "injury": 0
+          }
+        }
+      ]
+    },
+    "perCommunity": [
+      {
+        "id": "need-water-main",
+        "building": "b13",
+        "type": "water",
+        "quantity": 600,
+        "served": 0,
+        "completedAt": null,
+        "createdAt": 0,
+        "deadline": 10800000,
+        "silent": false,
+        "firstSignalAt": 32001,
+        "remote": true,
+        "knownBy": [
+          "org0"
+        ]
+      },
+      {
+        "id": "need-case-2",
+        "building": "b2",
+        "type": "shelter",
+        "quantity": 50,
+        "served": 0,
+        "completedAt": null,
+        "createdAt": 0,
+        "deadline": 3600000,
+        "silent": false,
+        "firstSignalAt": 22001,
+        "remote": true,
+        "knownBy": [
+          "org0"
+        ]
+      }
+    ],
+    "latency": {
+      "authorized": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 2
+      },
+      "dispatched": {
+        "p50": 0,
+        "p95": 0,
+        "samples": 2
+      },
+      "arrived": {
+        "p50": 225001,
+        "p95": 225001,
+        "samples": 2
+      },
+      "service": {
+        "p50": 285001,
+        "p95": 285001,
+        "samples": 2
+      }
+    },
+    "posts": 2,
+    "ingested": 6,
+    "operations": 2,
+    "operatorReviewMs": 0,
+    "conflicts": 0,
+    "failedTrips": 0,
+    "staleOrders": 0,
+    "queries": 6,
+    "cost": 6,
+    "events": 142,
+    "modelCalls": 24,
+    "modelWallMs": 155612.65720000002,
+    "modelUsage": {
+      "promptTokens": 146381,
+      "outputTokens": 19180,
+      "pending": 0,
+      "failed": 0,
+      "providerCost": 0.028165340000000004
+    },
+    "platformTransport": {
+      "attempts": 0,
+      "disconnected": 0,
+      "bytes": 0,
+      "note": "Actual platform peer HTTP is charged by the laboratory transport adapter; this is distinct from source-system messages."
+    },
+    "invalidActions": 1,
+    "ledgerValid": true,
+    "source": {
+      "created": 2,
+      "published": 2,
+      "falseSignals": 0,
+      "deleted": 0,
+      "capped": false
+    },
+    "information": {
+      "downloaded": 2,
+      "accepted": 2,
+      "interpreted": 2,
+      "discarded": 0,
+      "downloadLatencyMs": {
+        "p50": 34002,
+        "p95": 44002
+      },
+      "confirmedFalse": 0,
+      "rejectedObservedTrue": 0,
+      "falseMerges": 0,
+      "unobservedNeeds": 0,
+      "note": "These counts cover source-world claims only, not claims in an external platform database. Workflow acknowledgments are not semantic accuracy. Platform precision/recall requires matched external claims and independent task annotations."
+    },
+    "coordination": {
+      "expired": 0,
+      "withdrawn": 0,
+      "orphanReservations": 0,
+      "clarifications": 0,
+      "reviewQueued": 0,
+      "loansOverdue": 0
+    },
+    "physical": {
+      "closedCrossings": 0,
+      "trafficQueue": 0,
+      "overprovidedByType": {
+        "water": {
+          "quantity": 0,
+          "unit": "L"
+        },
+        "shelter": {
+          "quantity": 0,
+          "unit": "place"
+        }
+      },
+      "distanceM": 5000,
+      "fuelMl": 900,
+      "arrivedNotReceived": 2,
+      "facilitiesOperating": 0,
+      "blocked": 0
+    },
+    "finance": {
+      "sandbox": true,
+      "available": 20000,
+      "spent": 0,
+      "received": 0
+    },
+    "subgroups": {
+      "silent": {
+        "true": {},
+        "false": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          },
+          "shelter": {
+            "needs": 1,
+            "demand": 50,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          }
+        }
+      },
+      "remote": {
+        "true": {
+          "water": {
+            "needs": 1,
+            "demand": 600,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          },
+          "shelter": {
+            "needs": 1,
+            "demand": 50,
+            "served": 0,
+            "missedDeadline": 1,
+            "pendingBeforeDeadline": 0,
+            "rightCensored": 1
+          }
+        },
+        "false": {}
+      }
+    },
+    "response": {
+      "completed": 0,
+      "rightCensored": 2,
+      "needToServiceMs": {
+        "p50": null,
+        "p95": null,
+        "note": "Completed cases only; report right-censored cases alongside these percentiles."
+      }
+    },
+    "eventCounts": {
+      "need_created": 2,
+      "world_initialized": 1,
+      "signal_created": 2,
+      "message_delivered": 28,
+      "post_published": 2,
+      "action_accepted": 7,
+      "query_completed": 5,
+      "ingestion_receipt": 6,
+      "model_requested": 24,
+      "model_available": 24,
+      "vehicle_dispatched": 2,
+      "vehicle_arrived": 2,
+      "verification_completed": 2,
+      "community_health": 48,
+      "action_rejected": 1
+    }
+  },
+  "invariants": [],
+  "claimScope": "development pilot; not held-out, calibrated field or UX validation"
+}

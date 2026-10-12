@@ -51,6 +51,26 @@ for (let i = 0; i < 5; i++) {
     agentKey = Object.entries(lab.actorKeys).find(
       ([, a]) => a.org === org && a.role === "agent",
     )?.[0];
+  // One-time source discovery for a fresh lab. These are ordinary scoped read
+  // actions, not observer facts. Replies arrive when the initial clock advances.
+  for (const target of ["inventory", "vehicles", "map"]) {
+    const discovery = await fetch(
+      `http://127.0.0.1:${lab.sourcePort}/api/actor/action`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${agentKey}`,
+        },
+        body: JSON.stringify({
+          type: "query",
+          params: { target },
+          idempotencyKey: `bootstrap-${sessionId}-${org}-${target}`,
+        }),
+      },
+    );
+    if (!discovery.ok) throw Error("Initial scoped source discovery failed.");
+  }
   const res = await fetch(
     `http://127.0.0.1:${lab.observerPort}/api/actors/provision`,
     {

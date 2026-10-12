@@ -1,6 +1,6 @@
 # NEXO — Estado de implementación y puertas de aceptación
 
-Actualizado el 12 de octubre de 2026. Complementa [la especificación](PLATAFORMA.md), [el laboratorio](SIMULADOR.md), [la operación local](LOCAL.md) y [la validación externa](VALIDACION_EXTERNA.md). Los objetivos de la especificación siguen vigentes: esta matriz no los rebaja para declarar terminado el proyecto.
+Actualizado el 13 de octubre de 2026 (Tokio). Complementa [la especificación](PLATAFORMA.md), [el laboratorio](SIMULADOR.md), [la operación local](LOCAL.md) y [la validación externa](VALIDACION_EXTERNA.md). Los objetivos de la especificación siguen vigentes: esta matriz no los rebaja para declarar terminado el proyecto.
 
 ## 1. Qué existe
 
@@ -178,7 +178,7 @@ La UI tiene jerarquía de resumen → acción → detalle, estados textuales, te
 | K24 | Modelo/consulta/revisión/orden/recibo por reloj declarado | Medido en episodios; live ×1 distinto de aceleración modelada. |
 | K25 | Tokens, coste recibido, coste desconocido reservado y fallos | Medido por episodio; tiempo humano e infraestructura total requieren estudio adicional. |
 | K26 | Integridad/reinicio/aislamiento/recovery | Suites positivas y backups probados; límites del fixture/hardware documentados. |
-| K27 | 1/4/12 organizaciones × 10/100/1000 necesidades | Nueve perfiles de ingesta completados. No hubo inferencia masiva: escala semántica con calidad pendiente. |
+| K27 | 1/4/12 organizaciones × 10/100/1000 necesidades | Nueve perfiles de ingesta; además 100 necesidades semánticas por cada una de cuatro organizaciones y seis ensayos físicos con 101 necesidades. No son 1.000 decisiones correctas ni calidad independiente de campo. Ver VALIDACION §13. |
 | K28 | 1440/1920/390, teclado, offline, conflictos, privacidad | Recorridos automáticos positivos; auditoría integral de accesibilidad y personas pendiente. |
 | K29 | Registro de conectores/licencia y IFRC GO | Acceso real de lectura probado; cooperación/adopción institucional pendiente. |
 | K30 | Precedente recuperable | Mejora/transferencia negativa no evaluadas; opcional. |
@@ -206,21 +206,21 @@ La [auditoría original](AUDITORIA_SIMULADOR.md) se conserva como registro fecha
 | A15 · Reportes / coste | Protocolo previo, dos huellas, coste/fallos/incompletos y paired bootstrap; pilotos pequeños no confirmatorios. |
 | A16 · Oráculos / escenarios | Suites de invariantes y escenarios adversos; universo de estrategias/desastres reales no certificado. |
 | A17 · Portal / pagos / adopción | Portal/fotos/moderación/sandbox y conector real funcionan; dinero real y adopción pendientes. |
-| A18 · Escala NEXO | Nueve perfiles plataforma+HTTP+DB; inferencia y calidad masivas aún no medidas. |
+| A18 · Escala NEXO | Nueve perfiles de transporte; 40 llamadas para 100 necesidades semánticas por cada una de cuatro organizaciones; carga física 101 necesidades y backlog medidos por separado. Corpus interno, sin ventaja física generalizada demostrada. |
 
 Prevalece el texto preciso de cada Axx en la auditoría original. Si cambia el motor, repetir las pruebas pertinentes y registrar su build.
 
 ## 9. Qué hace falta para declarar completada la especificación
 
-1. Generalizar C1/T13 sin indicar la solución: el ensayo dirigido positivo debe repetirse con opciones distractoras, imposibles y negativas en escenarios independientes.
+1. Generalizar C1/T13 fuera del catálogo y de las variantes internas: ya se ejecutaron necesidad sin ID/receta y siete variantes con distractores, incompatibilidad, personal, seguridad, ocupación y demora. Las variantes distribuidas no produjeron refugio ocupado; necesitan un método más fuerte y validación independiente, no renombrarlas como éxito.
 2. Conseguir ventaja atribuible a NEXO/GenAI frente a las mismas herramientas y red convencional. Si empata o pierde, mejorar el sistema y medir otra versión, conservando el ensayo anterior.
 3. Ejecutar evaluación sellada e independiente con tamaño decidido por potencia/variación, no por escoger las dos semillas favorables.
 4. Etiquetar externamente fuentes y medios reales permitidos; medir recall, precisión, fusiones graves, preguntas útiles y daños de falso descarte.
 5. Hacer ejercicios con operadores y público. Medir tareas/tiempo/errores, no preguntar solo si el producto gusta.
-6. Medir carga semántica creciente, coste, backlog y continuidad; no trasladar el resultado de almacenamiento a decisiones.
+6. Extender la carga semántica y física medidas a datos/condiciones independientes y más oportunidades de planificación. Ya se ejecutaron 100 necesidades semánticas por cuatro organizaciones, 101 necesidades físicas y 4.000 pares de transporte, con costes, pendientes y pérdidas; no trasladar almacenamiento a decisiones ni esconder la derrota de B6 en semilla física 02.
 7. Revisar parámetros, procedimientos, permisos de fuentes y adopción con organizaciones. No se han enviado contactos ni solicitudes a terceros.
 8. Repetir con Gemini cuando se habilite; este cambio no hereda automáticamente los resultados de Gemma.
-9. Extender y probar los límites funcionales que la matriz declara: composición fuera del catálogo finito actual, acreditación técnica/clínica específica, recorrido OCR de páginas pendientes, eliminación integral de datos si se exige, integración de pagos real y fuentes comerciales autorizadas. No etiquetar mecanismos acotados como cobertura universal.
+9. Extender únicamente los límites que estén dentro de un despliegue posterior acordado: composición fuera del catálogo, acreditación técnica/clínica, pagos reales y fuentes comerciales autorizadas. La continuación OCR de 23 páginas y retención/redacción local con tombstones ya están implementadas y probadas; borrar copias de proveedores/otras organizaciones exige su propio procedimiento. No etiquetar un mecanismo acotado como cobertura universal.
 10. Mejorar la selección recurrente entre necesidades competidoras antes de atribuir impacto a escala. La versión anterior podía completar agua en red o un refugio dirigido; aquel piloto sin foco no consiguió ambos. La planificación/política corregidas ya producen ambos en casos estándar de la campaña final, sin garantizar ventaja ante la referencia. Probar investigación, reservas de capacidad, prioridades del operador y reparación contra referencias igualmente recurrentes. No heredar un positivo de una huella anterior.
 
 GCP queda fuera de esta entrega. El resto de puertas abiertas se registra porque no sería honesto cerrar objetivos científicos o de personas solo por implementar una pantalla.
@@ -233,3 +233,11 @@ GCP queda fuera de esta entrega. El resto de puertas abiertas se registra porque
 Implementado después de aquella revisión: política aprobada y versionada de prioridades, planificación concurrente, aplazamiento de investigaciones automáticas sin evidencia nueva, ofertas limitadas a registros propios, repair sobre la operación original cargada, ingestión semántica por lotes, acuses durables recuperables, leases/checkpoints, continuación de PDF y retención/redacción local. Se mantiene el recorrido manual y una investigación dirigida puede reintentarse explícitamente.
 
 Los reportes finales separan cuatro niveles: funcionamiento, resultado físico interno, contraste causal interno y evidencia externa. Los targets de ventaja estadística, comprensión humana y calibración independiente no se declaran satisfechos por el número de tests. El alcance finito local no exige todos los países/conectores/profesiones (§37 de PLATAFORMA); ampliar a ellos necesita contratos y pruebas propios.
+
+## 11. Resultado del cierre — 13 de octubre de 2026, Tokio
+
+La verificación final pasa **120+120 pruebas** con candidato estable. El código local incluye los mecanismos y recorridos por rol descritos en [CIERRE_LOCAL.md](CIERRE_LOCAL.md); [VALIDACION §13](VALIDACION.md#13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio) conserva el resultado completo y sus huellas.
+
+Se ejecutaron 36 outcomes principales, 21 estructurales con el abort original conservado, siete referencias corregidas, seis ensayos físicos, ablaciones, bytes reales, semántica, UI y transporte. El transporte final alcanza 4.000/4.000 versiones durables y p95 3,33 s desde disponibilidad, sin inferir ni incluir polling. El refugio dirigido y la variante estándar consiguen ocupación física; la reparación conserva la misma carga.
+
+Las comparaciones no sostienen todavía ventaja primaria de B6 sobre B5/B7. K01/K03/K07/K15 no se marcan cumplidos por tener funciones. La investigación activa corregida mezcla huellas declaradas y rechaza inferir un intervalo entre ellas. Se aplica el claim limitado permitido por §38.2. Los estudios de personas, calibración/holdout independientes y Gemini/GCP permanecen separados; no se simularon como si hubieran ocurrido.

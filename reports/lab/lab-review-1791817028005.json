@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-12T14:57:52.840Z",
+  "run": "lab-review-1791817028005",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "candidateChanged": false,
+  "actor": "Scripted synthetic commander accounts; no real operator study",
+  "world": "Existing local S19 laboratory; no observer truth is passed to NEXO",
+  "purpose": "Real evidence/tool activity and an independently reviewed pending decision visible in the operator workspace",
+  "shares": [],
+  "existingOwnerConsentReused": true,
+  "failure": null,
+  "errors": [],
+  "activity": {
+    "id": "investigation_3591e0ae-b6f9-49cb-bf33-19b82f776760",
+    "state": "ready",
+    "model": "google/gemma-4-31b-it",
+    "proposalId": "proposal_d2044c85-0a4c-48dc-a9f6-64ca1e5028cf",
+    "steps": [
+      {
+        "tool": "find_facilities",
+        "state": "completed",
+        "at": 1791817037444
+      },
+      {
+        "tool": "plan_service",
+        "state": "completed",
+        "at": 1791817056577
+      },
+      {
+        "tool": "prepare_service",
+        "state": "completed",
+        "at": 1791817071758
+      }
+    ]
+  },
+  "authorization": "Not granted by this script. Operators review the exact version."
+}

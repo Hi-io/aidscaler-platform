@@ -1,10 +1,10 @@
 {
-  "at": "2026-10-12T13:14:56.002Z",
+  "at": "2026-10-12T15:14:05.806Z",
   "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
-  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "evaluatorFingerprint": "5bd6c85e3f2d934a51a67a9913b1aac5b6e1c9eb28699b8bb911cf63147b1330",
   "gitRevisions": {
-    "platform": "a99bf8f826b58373c32bacf5e232c0a095bc92f0",
-    "simulator": "6c75ae51e5592c64e3d74df2ab94a20f7fc6d9b2"
+    "platform": "0607528dee420e17522c940459ae65223359eb30",
+    "simulator": "240544fba9e7306ef1e7e2778ba52747ce7a0e49"
   },
   "node": "v24.19.0",
   "platform": "win32",
@@ -19,19 +19,19 @@
       "name": "platform-syntax",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 9913.966699999999,
+      "wallMs": 13446.7831,
       "summary": [
-        "Syntax verified: 138 JavaScript modules."
+        "Syntax verified: 144 JavaScript modules."
       ]
     },
     {
       "name": "platform-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 197734.3162,
+      "wallMs": 315881.81529999996,
       "tests": {
-        "tests": 116,
-        "pass": 116,
+        "tests": 120,
+        "pass": 120,
         "fail": 0,
         "cancelled": 0,
         "skipped": 0,
@@ -42,7 +42,7 @@
       "name": "simulator-syntax-contracts",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 4931.724800000025,
+      "wallMs": 6288.018299999996,
       "summary": [
         "67 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
       ]
@@ -51,7 +51,7 @@
       "name": "simulator-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 7918.211500000005,
+      "wallMs": 15363.757199999993,
       "tests": {
         "tests": 120,
         "pass": 120,

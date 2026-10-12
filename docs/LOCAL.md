@@ -42,7 +42,7 @@ Cada arranque crea `.local/labs/<sesión>/org*/pgdata`: un mundo nuevo no hereda
 
 ## Modelo, presupuesto y reloj
 
-`.env.example` enumera modelo, timeout, límite de llamadas y presupuesto por episodio. Cada organización tiene además una cuota por hora. La ingesta automática de investigaciones está pausada inicialmente; el operador la habilita desde Investigations. La recepción de publicaciones y sistemas sigue funcionando sin habilitar inferencia.
+`.env.example` enumera modelo, timeout, límite de llamadas y presupuesto por episodio. Cada organización tiene además una cuota por hora. Las investigaciones automáticas empiezan deshabilitadas; el operador puede habilitarlas desde Investigations. La recepción automática de publicaciones y sistemas sigue activa sin iniciar inferencia.
 
 Las investigaciones tienen hasta ocho llamadas por defecto, herramientas acotadas y posibilidad de parar. Un error con coste desconocido mantiene una reserva conservadora; no se convierte en coste cero. Las trazas muestran llamadas, resultados y razones breves, sin inventar pensamiento privado del modelo.
 
@@ -187,3 +187,31 @@ node scripts/response-journey.mjs
 ```
 
 Las campañas y ablaciones tienen presupuesto explícito y un protocolo previo. No ejecutar todas las campañas con proveedor por rutina: repetir cuando cambia el mecanismo, la versión o existe una incertidumbre concreta. Las ejecuciones pagadas del cierre ya se conservan en reports/. Ver [CIERRE_LOCAL.md](CIERRE_LOCAL.md).
+
+## Laboratorio de revisión del cierre
+
+El arranque obtiene inventario, vehículos y mapa mediante tres consultas HTTP normales por organización. Esa precarga usa únicamente permisos del actor, no el estado oculto del observador. Reduce una espera inicial innecesaria sin dar una solución al modelo.
+
+Para crear una nueva sesión del escenario de composición (primero detener con Ctrl+C el launcher de la sesión anterior):
+
+```powershell
+$env:NEXO_SCENARIO = 'S19'
+$env:NEXO_LAB_RATE = '10'
+pnpm lab
+```
+
+El cierre dejó el mundo de presentación en pausa; Play en el observador lo reanuda. Sus credenciales están en `.local/lab.json`, nunca dentro de NEXO ni en sus prompts. La ingesta sigue activa y las investigaciones automáticas permanecen deshabilitadas. Las proyecciones se comparten por sus propietarios desde Network; desplegar varias instancias no concede consentimiento automático.
+
+Desde Signals se puede seleccionar una necesidad/caso y solicitar investigación; el resultado queda en Investigations/Decisions con evidencia y condiciones. Una comprobación solicitada al campo puede seguir pendiente: continuar el mundo y sincronizar sus resultados antes de reintentar. No forzar una propuesta ni contar una comprobación solicitada como completada. Evidencia/versiones/TTL pueden volver obsoleta una propuesta; refrescar antes de autorizar.
+
+El helper de ensayo `scripts/prepare-lab-review.mjs` usa cuentas sintéticas de dueño, comparte sus proyecciones y solicita una investigación real; **consume saldo** y deja revisión/ejecución al operador. `--skip-share` reutiliza consentimientos existentes. Los intentos inconclusos se guardan junto al positivo; no usar el helper como una demo garantizada o prueba de UX humana.
+
+Verificación y análisis sin gasto de inferencia:
+
+```powershell
+node scripts/verify.mjs
+node scripts/nominal-process.mjs
+node scripts/summarize-campaign.mjs reports/evaluations/structure-continuation-1791812722694
+```
+
+El último comando escribe `summary-reviewed.json`, conserva el original, incorpora expresamente outcomes heredados y reservas desconocidas y no repite llamadas al modelo. El probe nominal incluye publicaciones tardías y separa disponibilidad, persistencia y UI; no mide toma de decisiones ni procesamiento multimodal.

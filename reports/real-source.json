@@ -1,10 +1,13 @@
 {
-  "at": "2026-10-11T23:53:33.416Z",
+  "at": "2026-10-12T14:30:24.479Z",
   "source": "https://goadmin.ifrc.org/api/v2/event/?limit=2",
   "documentation": "https://go-wiki.ifrc.org/en/go-api/api-overview",
   "httpRead": true,
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "candidateChanged": false,
   "records": 2,
-  "contentHash": "96bdda0f4ded1139bf2945ddc41cb4b9c32cdebbcd0b5d15a0a6c84acdb72a77",
+  "durableSignals": 2,
+  "contentHash": "c9b7868390153d65cd4a1102a641ba9e882df633c1928a1fc69fb8f448ce4fba",
   "sourceTypes": [
     "Population Movement",
     "Earthquake"

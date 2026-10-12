@@ -1,6 +1,8 @@
 import { Store } from "../src/store.mjs";
 import { Integrations } from "../src/integrations.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
+import { buildFingerprint } from "../evaluation/harness.mjs";
+const candidate = await buildFingerprint();
 const store = await Store.open();
 try {
   await store.organization("org0", "Integration verification");
@@ -27,7 +29,10 @@ try {
     source: url,
     documentation: "https://go-wiki.ifrc.org/en/go-api/api-overview",
     httpRead: true,
+    candidateFingerprint: candidate,
+    candidateChanged: candidate !== (await buildFingerprint()),
     records: result.data.results.length,
+    durableSignals: (await store.list("org0", "signal", 100)).length,
     contentHash: result.contentHash,
     sourceTypes: result.data.results.map((e) => e.dtype?.name),
     notes: [
@@ -36,6 +41,11 @@ try {
     ],
   };
   await mkdir("reports", { recursive: true });
+  await mkdir("reports/sources", { recursive: true });
+  await writeFile(
+    "reports/sources/ifrc-go-" + Date.now() + ".json",
+    JSON.stringify(report, null, 2),
+  );
   await writeFile("reports/real-source.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
 } finally {

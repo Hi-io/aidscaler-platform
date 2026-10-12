@@ -1,0 +1,744 @@
+{
+  "at": "2026-10-12T14:30:49.819Z",
+  "protocol": "reports/evaluations/1791810897832/protocol.json",
+  "complete": true,
+  "stoppedReason": null,
+  "runs": 36,
+  "plannedRuns": 36,
+  "missing": [],
+  "costUsd": 0.4803069100000001,
+  "chargedBudgetUsd": 0.62875633,
+  "unknownCostCalls": 18,
+  "comparisons": [
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 4825800600,
+      "candidateMean": 1043339000,
+      "delta": 3782461600,
+      "improvement": 0.7837998113722312,
+      "interval95": [
+        3776985600,
+        3788650200
+      ],
+      "relativeInterval95": [
+        0.7829084282185899,
+        0.7845944601647042
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B5",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 115483376.66666667,
+      "delta": 604516623.3333334,
+      "improvement": 0.8396064212962963,
+      "interval95": [
+        604225310,
+        604682290
+      ],
+      "relativeInterval95": [
+        0.8392018194444444,
+        0.8398365138888889
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 4825800600,
+      "candidateMean": 1067335400,
+      "delta": 3758465200,
+      "improvement": 0.778827289299935,
+      "interval95": [
+        3750585000,
+        3765255600
+      ],
+      "relativeInterval95": [
+        0.7774360080298479,
+        0.7797496546036712
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B6",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 117242926.66666667,
+      "delta": 602757073.3333334,
+      "improvement": 0.8371626018518519,
+      "interval95": [
+        602005250,
+        603142990
+      ],
+      "relativeInterval95": [
+        0.8361184027777777,
+        0.8376985972222222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B7",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 4825800600,
+      "candidateMean": 1071323800,
+      "delta": 3754476800,
+      "improvement": 0.7780008150357476,
+      "interval95": [
+        3749985600,
+        3759857400
+      ],
+      "relativeInterval95": [
+        0.7773117620406987,
+        0.7786317372475475
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B7",
+      "resource": "shelter",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 119348756.66666667,
+      "delta": 600651243.3333334,
+      "improvement": 0.8342378379629629,
+      "interval95": [
+        596494870,
+        603153340
+      ],
+      "relativeInterval95": [
+        0.8284650972222223,
+        0.8377129722222222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B4",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 2086402000,
+      "candidateMean": 361341700,
+      "delta": 1725060300,
+      "improvement": 0.8268110843452029,
+      "interval95": [
+        1323560800,
+        2520559300
+      ],
+      "relativeInterval95": [
+        0.7855414779193455,
+        0.8746168935018934
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B4",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 2086402000,
+      "candidateMean": 388341700,
+      "delta": 1698060300,
+      "improvement": 0.8138701458299983,
+      "interval95": [
+        1296560800,
+        2493559300
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.86524807757102
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B4",
+      "candidate": "B7",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 2086402000,
+      "candidateMean": 388341700,
+      "delta": 1698060300,
+      "improvement": 0.8138701458299983,
+      "interval95": [
+        1296560800,
+        2493559300
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.86524807757102
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B4",
+      "candidate": "B5",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1687402500,
+      "candidateMean": 361341700,
+      "delta": 1326060800,
+      "improvement": 0.7858592126063579,
+      "interval95": [
+        1323560800,
+        1331060800
+      ],
+      "relativeInterval95": [
+        0.7855414779193455,
+        0.7864918658534243
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B4",
+      "candidate": "B6",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1687402500,
+      "candidateMean": 388341700,
+      "delta": 1299060800,
+      "improvement": 0.7698582881084981,
+      "interval95": [
+        1296560800,
+        1304060800
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.7705382141659564
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B4",
+      "candidate": "B7",
+      "resource": "water",
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1687402500,
+      "candidateMean": 388341700,
+      "delta": 1299060800,
+      "improvement": 0.7698582881084981,
+      "interval95": [
+        1296560800,
+        1304060800
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.7705382141659564
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved."
+    }
+  ],
+  "gates": [
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 3,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B4",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 2,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B4",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 4,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B4",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 5,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-01",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S01",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B4",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 1,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B4",
+      "status": "failed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 3,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-02",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B6",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S23",
+      "seed": "final-lab-2026-10-12-03",
+      "arm": "B7",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 0,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    }
+  ],
+  "notAClaimOfSuperiority": true,
+  "remainingValidation": [
+    "Independent sealed structural holdout",
+    "Human operator and public comprehension trials",
+    "Institutional calibration and adoption",
+    "Gemini remeasurement after changing models",
+    "Recurrent policies across evolving emergencies"
+  ]
+}

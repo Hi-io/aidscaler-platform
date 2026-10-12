@@ -1,0 +1,446 @@
+{
+  "at": "2026-10-12T14:33:09.149Z",
+  "protocol": "reports/evaluations/1791810897832/protocol.json",
+  "candidateFingerprint": "27a5b6437385b528870809d8a3d080ca5a3e010fe60b7e69b48ea657ee10b94f",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "runs": 36,
+  "plannedRuns": 36,
+  "complete": true,
+  "stoppedReason": null,
+  "costUsd": 0.4803069100000001,
+  "chargedBudgetUsd": 0.62875633,
+  "missing": [],
+  "comparisons": [
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B6",
+      "question": "Network NEXO versus a single NEXO instance",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 4825800600,
+      "candidateMean": 1067335400,
+      "delta": 3758465200,
+      "improvement": 0.778827289299935,
+      "interval95": [
+        3750585000,
+        3765255600
+      ],
+      "relativeInterval95": [
+        0.7774360080298479,
+        0.7797496546036712
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 1340.5001666666667,
+        "candidate": 296.4820555555556,
+        "reduction": 1044.018111111111
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.08714823000000001,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B4",
+      "candidate": "B6",
+      "question": "Network NEXO versus a single NEXO instance",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "shelter",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 720000000,
+      "candidateMean": 117242926.66666667,
+      "delta": 602757073.3333334,
+      "improvement": 0.8371626018518519,
+      "interval95": [
+        602005250,
+        603142990
+      ],
+      "relativeInterval95": [
+        0.8361184027777777,
+        0.8376985972222222
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 200,
+        "candidate": 32.56747962962963,
+        "reduction": 167.43252037037038
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.08714823000000001,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B5",
+      "candidate": "B6",
+      "question": "GenAI contribution beyond conventional sharing",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1043339000,
+      "candidateMean": 1067335400,
+      "delta": -23996400,
+      "improvement": -0.022999619490884582,
+      "interval95": [
+        -26400600,
+        -22194000
+      ],
+      "relativeInterval95": [
+        -0.025207888744074092,
+        -0.021288154945999782
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 289.81638888888887,
+        "candidate": 296.4820555555556,
+        "reduction": -6.665666666666667
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B5",
+      "candidate": "B6",
+      "question": "GenAI contribution beyond conventional sharing",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "shelter",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 115483376.66666667,
+      "candidateMean": 117242926.66666667,
+      "delta": -1759550,
+      "improvement": -0.015236392031372503,
+      "interval95": [
+        -2220060,
+        -1499280
+      ],
+      "relativeInterval95": [
+        -0.01917569375482664,
+        -0.01299678833832818
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 32.07871574074074,
+        "candidate": 32.56747962962963,
+        "reduction": -0.4887638888888889
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B7",
+      "candidate": "B6",
+      "question": "NEXO versus same-model general investigator with the SAME shared owners and tools",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1071323800,
+      "candidateMean": 1067335400,
+      "delta": 3988400,
+      "improvement": 0.0037228707137841877,
+      "interval95": [
+        -3002400,
+        9569400
+      ],
+      "relativeInterval95": [
+        -0.0028041122496669235,
+        0.008907443347621502
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 297.5899444444444,
+        "candidate": 296.4820555555556,
+        "reduction": 1.107888888888889
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.07942584,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S19",
+      "baseline": "B7",
+      "candidate": "B6",
+      "question": "NEXO versus same-model general investigator with the SAME shared owners and tools",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "shelter",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 119348756.66666667,
+      "candidateMean": 117242926.66666667,
+      "delta": 2105830,
+      "improvement": 0.01764433965476031,
+      "interval95": [
+        -30360,
+        5510380
+      ],
+      "relativeInterval95": [
+        -0.00025982770923871357,
+        0.044616608233196464
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 33.15243240740741,
+        "candidate": 32.56747962962963,
+        "reduction": 0.5849527777777778
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.07942584,
+      "candidateProviderUsd": 0.07357032
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B4",
+      "candidate": "B6",
+      "question": "Network NEXO versus a single NEXO instance",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 2086402000,
+      "candidateMean": 388341700,
+      "delta": 1698060300,
+      "improvement": 0.8138701458299983,
+      "interval95": [
+        1296560800,
+        2493559300
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.86524807757102
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 579.5561111111111,
+        "candidate": 107.87269444444445,
+        "reduction": 471.6834166666667
+      },
+      "baselineFailures": 3,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.06817957999999999,
+      "candidateProviderUsd": 0.03441536
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B5",
+      "candidate": "B6",
+      "question": "GenAI contribution beyond conventional sharing",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 361341700,
+      "candidateMean": 388341700,
+      "delta": -27000000,
+      "improvement": -0.0747215170571236,
+      "interval95": [
+        -27000000,
+        -27000000
+      ],
+      "relativeInterval95": [
+        -0.0747215170571236,
+        -0.0747215170571236
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 100.37269444444445,
+        "candidate": 107.87269444444445,
+        "reduction": -7.5
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0,
+      "candidateProviderUsd": 0.03441536
+    },
+    {
+      "scenario": "S01",
+      "baseline": "B7",
+      "candidate": "B6",
+      "question": "NEXO versus same-model general investigator with the SAME shared owners and tools",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 388341700,
+      "candidateMean": 388341700,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 107.87269444444445,
+        "candidate": 107.87269444444445,
+        "reduction": 0
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.0307602,
+      "candidateProviderUsd": 0.03441536
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B4",
+      "candidate": "B6",
+      "question": "Network NEXO versus a single NEXO instance",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 1687402500,
+      "candidateMean": 388341700,
+      "delta": 1299060800,
+      "improvement": 0.7698582881084981,
+      "interval95": [
+        1296560800,
+        1304060800
+      ],
+      "relativeInterval95": [
+        0.7695168118036504,
+        0.7705382141659564
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 468.72291666666666,
+        "candidate": 107.87269444444445,
+        "reduction": 360.8502222222222
+      },
+      "baselineFailures": 1,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.0527111,
+      "candidateProviderUsd": 0.027586180000000002
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B5",
+      "candidate": "B6",
+      "question": "GenAI contribution beyond conventional sharing",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 361341700,
+      "candidateMean": 388341700,
+      "delta": -27000000,
+      "improvement": -0.0747215170571236,
+      "interval95": [
+        -27000000,
+        -27000000
+      ],
+      "relativeInterval95": [
+        -0.0747215170571236,
+        -0.0747215170571236
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 100.37269444444445,
+        "candidate": 107.87269444444445,
+        "reduction": -7.5
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0,
+      "candidateProviderUsd": 0.027586180000000002
+    },
+    {
+      "scenario": "S23",
+      "baseline": "B7",
+      "candidate": "B6",
+      "question": "NEXO versus same-model general investigator with the SAME shared owners and tools",
+      "expectedWorldPairs": 3,
+      "missingWorldPairs": 0,
+      "pairs": 3,
+      "unit": "resource units × milliseconds",
+      "resource": "water",
+      "field": "uncoveredUnitMs",
+      "baselineMean": 388341700,
+      "candidateMean": 388341700,
+      "delta": 0,
+      "improvement": 0,
+      "interval95": [
+        0,
+        0
+      ],
+      "relativeInterval95": [
+        0,
+        0
+      ],
+      "evidenceLevel": "exploratory_pilot",
+      "note": "Positive unmet-demand reduction favors the candidate. This does not establish human UX, field effectiveness or lives saved.",
+      "nativeUnitHours": {
+        "baseline": 107.87269444444445,
+        "candidate": 107.87269444444445,
+        "reduction": 0
+      },
+      "baselineFailures": 0,
+      "candidateFailures": 0,
+      "baselineProviderUsd": 0.0265101,
+      "candidateProviderUsd": 0.027586180000000002
+    }
+  ],
+  "failuresIncluded": true,
+  "clinicalOrHumanBenefitValidated": false,
+  "independentHoldout": false,
+  "limits": [
+    "Development pilot; two worlds do not support confirmatory inference.",
+    "A reduction can be negative; zero baseline means undefined relative improvement.",
+    "Different service units remain separate; no total score combines litres and places.",
+    "Rule-based reviewers and reference competence have not been calibrated with professionals.",
+    "Earlier pilots divided the network inference budget equally across owners. Later reports identify a shared total pool; do not combine outcomes from these different evaluators.",
+    "Gemma results do not establish Gemini performance, clinical lives saved, public trust or field effectiveness."
+  ]
+}

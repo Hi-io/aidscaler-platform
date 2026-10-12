@@ -1,6 +1,6 @@
 # NEXO — Cierre de implementación local y evidencia por requisito
 
-Actualizado el 12 de octubre de 2026. Este documento relaciona la [especificación de la plataforma](PLATAFORMA.md), el [simulador](SIMULADOR.md), el código ejecutable, las pruebas y lo que permiten afirmar los resultados. La matriz completa de entradas, salidas, pantallas y KPIs permanece en [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md). Los resultados numéricos finales se registran en [VALIDACION.md](VALIDACION.md) y en los reportes originales enlazados allí.
+Actualizado el 13 de octubre de 2026 (Tokio). Este documento relaciona la [especificación de la plataforma](PLATAFORMA.md), el [simulador](SIMULADOR.md), el código ejecutable, las pruebas y lo que permiten afirmar los resultados. La matriz completa de entradas, salidas, pantallas y KPIs permanece en [ESTADO_IMPLEMENTACION.md](ESTADO_IMPLEMENTACION.md). Los resultados numéricos finales se registran en [VALIDACION.md](VALIDACION.md) y en los reportes originales enlazados allí.
 
 ## 1. Alcance de esta entrega
 
@@ -94,7 +94,7 @@ Seeds, flujos aleatorios por subsistema, manifiesto, comandos, versiones y repla
 
 Las variantes de capacidad complementaria no añaden recursos solo para el brazo candidato. La misma semilla/variante, propietarios y recursos se aplican a las referencias. Las pruebas de reparación mantienen la misma carga original; una nueva entrega no se cuenta como reparación.
 
-## 8. Plan final de pruebas y cómo interpretar sus resultados
+## 8. Validación ejecutada y cómo interpretar sus resultados
 
 1. Sintaxis, contratos e invariantes de plataforma y simulador; huellas del candidato y evaluador iguales al inicio/final.
 2. Recorridos por rol, tres tamaños, teclado, reduced motion, shell/campo offline, conflictos, publicación, retención, política y actividad real.
@@ -121,3 +121,13 @@ Los ensayos internos pueden demostrar ayuda física en el laboratorio, correcci�
 Seguir [LOCAL.md](LOCAL.md) para arrancar las instancias y sus cuentas privadas. `node scripts/verify.mjs` guarda la verificación completa. Los scripts de investigación, semántica, reparación, flujo y campañas guardan sus reportes en `reports/` con presupuesto explícito. La configuración privada y claves no se suben a Git; `.gitignore` excluye también archivos propios de Codex.
 
 La especificación sigue definiendo los objetivos. Este documento informa implementación y evidencia sin reescribirlos retroactivamente para que cualquier resultado parezca suficiente.
+
+## 11. Estado final de la entrega local
+
+[Verificación final](../reports/verifications/1791818045802.json): **120 pruebas de plataforma y 120 del simulador aprobadas**, sin omitir fallos ni cambiar el candidato. [Resultados completos](VALIDACION.md#13-resultados-finales-de-la-entrega-local--13-de-octubre-de-2026-tokio) incluyen campaña principal de 36 outcomes, variación estructural, reparación física, carga concurrente/semántica, bytes, UI, fuente real y transporte.
+
+El transporte medido en la topología de cuatro procesos conserva las **4.000 versiones esperadas** y alcanza p95 **3,33 s** hasta persistencia. Es una prueba sin inferencia que excluye polling; el resultado anterior de 7,877 s permanece como incumplimiento de aquella topología.
+
+La campaña física confirma los mecanismos y también refuta parte de la ambición inicial: B6 no supera B5/B7 de manera robusta; la mejora K07 de reparación tampoco queda acreditada. Las variantes imposibles conservan su servicio faltante y la carga de 101 necesidades conserva backlog. Implementación cerrada del alcance finito local, objetivos científicos no aprobados automáticamente.
+
+El laboratorio está disponible en los puertos de [LOCAL.md](LOCAL.md), con mundo de presentación en pausa, ingesta activa y modelo sin gasto automático. Existe una propuesta de Gemma pendiente de revisión y trazas anteriores inconclusas. Los tres repositorios permanecen privados; las credenciales y artefactos de Codex quedan fuera de Git. La prueba con participantes/organizaciones y la posterior evaluación de Gemini/GCP no se inventan ni se presentan como terminadas.

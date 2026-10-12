@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-12T12:42:27.758Z",
+  "seeds": 2,
+  "count": 100,
+  "arms": [
+    "B5",
+    "B6",
+    "B7"
+  ],
+  "rounds": 3,
+  "budgetUsd": 0.9,
+  "episodeBudgetUsd": 0.15,
+  "candidateFingerprint": "444db2a12b555bfa3b99fc0b76e75ef66e9b5bfa84c67f4e68a5e650573aba96",
+  "evaluatorFingerprint": "0ad639ae5bf32d0e5dbc9c209425c77dc952d876de7b856299de913b95e5c717",
+  "scorerFingerprint": "1448110f6b8e6ea931d6b641c74cff154bc427aeb18cf01c6a7faa54812998bf",
+  "nativeTypes": [
+    "water",
+    "food",
+    "blankets"
+  ],
+  "organizations": 4,
+  "world": "Procedural 13 by 13 road nodes over 10 km; seeded deadlines/priorities, finite protected stock and fleets. Evaluator adds the same recorded demands/resources to every arm before initial HTTP observations.",
+  "operator": "Scripted finite owner review, not human UX",
+  "clock": "declared modeled tool/review/model/physical delays, not x1 inference latency",
+  "interpretation": "Hundred concurrent needs compete physically. The number of inputs is not the number served; backlog, pending stock, losses and failures remain visible. Semantic quality is evaluated separately.",
+  "sourceScope": "Received official observations plus 10 social-format publications per added need, with public repost lineage. No truth labels, future events or evaluator stock objects are sent to the candidate."
+}

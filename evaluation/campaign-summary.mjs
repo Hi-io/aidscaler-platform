@@ -9,14 +9,18 @@ export function summarizeCampaign({
   const planned = [];
   for (const scenario of protocol.scenarios)
     for (const variant of protocol.compositionVariants ?? ["standard"])
-    for (let i = 1; i <= protocol.seeds; i++)
-      for (const arm of protocol.arms)
-        planned.push({
-          scenario,
-          arm,
-          seed:
-            (protocol.seedPrefix ?? "pilot-2026-") + ((protocol.compositionVariants?.length ?? 1) > 1 ? variant + "-" : "") + String(i).padStart(2, "0"),
-        });
+      for (let i = 1; i <= protocol.seeds; i++)
+        for (const arm of protocol.arms)
+          planned.push({
+            scenario,
+            arm,
+            seed:
+              (protocol.seedPrefix ?? "pilot-2026-") +
+              ((protocol.compositionVariants?.length ?? 1) > 1
+                ? variant + "-"
+                : "") +
+              String(i).padStart(2, "0"),
+          });
   const missing = planned.filter(
     (p) =>
       !rows.some(
@@ -31,9 +35,18 @@ export function summarizeCampaign({
         (r) => r.scenario === scenario && r.arm === protocol.arms[0],
       );
       const bb = rows.filter((r) => r.scenario === scenario && r.arm === arm);
-      const seeds = aa
-        .filter((r) => bb.some((b) => b.seed === r.seed))
-        .map((r) => r.seed);
+      const expectedWorldSeeds = [
+        ...new Set(
+          planned.filter((p) => p.scenario === scenario).map((p) => p.seed),
+        ),
+      ];
+      const seeds = [
+        ...new Set(
+          aa
+            .filter((r) => bb.some((b) => b.seed === r.seed))
+            .map((r) => r.seed),
+        ),
+      ];
       const a = aa.filter((r) => seeds.includes(r.seed));
       const b = bb.filter((r) => seeds.includes(r.seed));
       for (const resource of new Set(
@@ -44,9 +57,19 @@ export function summarizeCampaign({
           baseline: protocol.arms[0],
           candidate: arm,
           resource,
-          missingWorldPairs: protocol.seeds - seeds.length,
+          expectedWorldPairs: expectedWorldSeeds.length,
+          missingWorldPairs: expectedWorldSeeds.filter(
+            (seed) => !seeds.includes(seed),
+          ).length,
+          unexpectedWorldPairs: seeds.filter(
+            (seed) => !expectedWorldSeeds.includes(seed),
+          ).length,
         };
         try {
+          if (row.unexpectedWorldPairs)
+            throw Object.assign(new Error("Unplanned world pair"), {
+              code: "EVALUATION_PLAN",
+            });
           Object.assign(row, pairedBootstrap(a, b, { resource }));
         } catch (e) {
           Object.assign(row, {

@@ -1,0 +1,185 @@
+{
+  "at": "2026-10-12T12:06:37.471Z",
+  "protocol": "reports/evaluations/1791804389075/protocol.json",
+  "complete": false,
+  "stoppedReason": "development_ui_and_blocked_operation_correction",
+  "runs": 3,
+  "plannedRuns": 27,
+  "missing": [
+    {
+      "scenario": "S19",
+      "arm": "B6",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B7",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B6",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B7",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B6",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S19",
+      "arm": "B7",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B7",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B7",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B5",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B6",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S01",
+      "arm": "B7",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B7",
+      "seed": "verified-recurrence-01"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B7",
+      "seed": "verified-recurrence-02"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B5",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B6",
+      "seed": "verified-recurrence-03"
+    },
+    {
+      "scenario": "S23",
+      "arm": "B7",
+      "seed": "verified-recurrence-03"
+    }
+  ],
+  "costUsd": 0,
+  "chargedBudgetUsd": 0,
+  "unknownCostCalls": 0,
+  "comparisons": [],
+  "gates": [
+    {
+      "scenario": "S19",
+      "seed": "verified-recurrence-01",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "verified-recurrence-02",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    },
+    {
+      "scenario": "S19",
+      "seed": "verified-recurrence-03",
+      "arm": "B5",
+      "status": "completed",
+      "integrity": true,
+      "noOrphanReservations": true,
+      "modelFailures": 0,
+      "pendingReceipts": 1,
+      "safetyNote": "An arrived vehicle without receipt is pending aid, not an integrity failure or a successful delivery.",
+      "invariantViolations": 0
+    }
+  ],
+  "notAClaimOfSuperiority": true,
+  "remainingValidation": [
+    "Independent sealed structural holdout",
+    "Human operator and public comprehension trials",
+    "Institutional calibration and adoption",
+    "Gemini remeasurement after changing models",
+    "Recurrent policies across evolving emergencies"
+  ],
+  "recovery": {
+    "at": "2026-10-12T12:06:37.472Z",
+    "rawOutcomesUnchanged": true,
+    "note": "The runner was interrupted for UI navigation/offline defects or retired for a blocked-operation recovery defect. Raw outcomes remain unchanged; unfinished episodes are missing, not imputed. Source changes during an active episode make that result incomparable. Unpersisted active episode charges are unavailable and must not be reported as zero spending."
+  }
+}
