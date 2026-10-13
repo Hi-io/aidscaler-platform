@@ -11,7 +11,7 @@ const lab = await createLabServers({
   persistCredentials: false,
   config: {
     scenario,
-    seed: process.env.DEMO_SEED ?? "nexo-live-demo-001",
+    seed: process.env.DEMO_SEED ?? "aidscaler-live-demo-001",
     policy: "none",
     mode: "modeled",
     grid: 5,

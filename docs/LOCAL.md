@@ -1,233 +1,101 @@
-# Operar NEXO en local
+# Run AidScaler locally
 
-## Requisitos y límites
+## Setup
 
-- Node.js 24+, pnpm 11 y los repositorios privados `nexo-platform` y `disaster-response-simulator` en carpetas hermanas.
-- La fase local utiliza Gemma 4 31B mediante OpenRouter desde el backend. Necesita internet para inferencia; la base de datos, la UI y el laboratorio son locales.
-- GCP no se despliega en esta fase. `ARQUITECTURA_GCP.md` describe una migración posterior, no servicios ya activos.
-- Las contraseñas, claves de origen/red y el API key se guardan únicamente en `.env.local` y `.local/`, ignorados por Git. AGENTS.md y artefactos de Codex también están ignorados.
-- El proveedor de pagos es un sandbox local. Ningún botón cobra dinero real.
+Use Node.js 24+, pnpm 11 and the sibling checkouts described in the [README](../README.md):
 
-## Inicio del laboratorio
+```text
+your-workspace/
+  aidscaler-platform/
+  disaster-response-simulator/
+```
 
-Instalar dependencias en ambos repositorios con `pnpm install --frozen-lockfile`. En la carpeta de la plataforma:
+Run `pnpm install --frozen-lockfile` in both repositories. In the platform directory, copy `.env.example` to `.env.local` only if you do not already have a local configuration. Set `OPENROUTER_API_KEY` there, then run:
 
-```powershell
-if (!(Test-Path -LiteralPath '.env.local')) {
-  Copy-Item -LiteralPath '.env.example' -Destination '.env.local'
-}
-# Configurar OPENROUTER_API_KEY en el archivo local, sin subirlo a Git.
+```sh
 pnpm lab
 ```
 
-El launcher levanta cinco procesos de organizaciones independientes: cuatro instancias NEXO y un contratista externo sin modelo ni workspace NEXO. Cada uno conserva su almacenamiento y autoridad.
+The current backend integration is **Gemma 4 31B through OpenRouter** (`MODEL_ID=google/gemma-4-31b-it`). Internet access is required for model inference; the workspace, databases and simulator run locally. Gemini and GCP are future integrations.
 
-| Superficie          | URL                               | Para quién                  |
-| ------------------- | --------------------------------- | --------------------------- |
-| Relief North        | `http://127.0.0.1:4400/`          | Operadores de org0          |
-| Community East      | `http://127.0.0.1:4401/`          | Operadores de org1          |
-| Rescue South        | `http://127.0.0.1:4402/`          | Operadores de org2          |
-| Medical West        | `http://127.0.0.1:4403/`          | Operadores de org3          |
-| Socio externo       | `http://127.0.0.1:4404/`          | Propietario del contratista |
-| Portal público      | `http://127.0.0.1:4400/public`    | Público/donantes de prueba  |
-| Reportar necesidad  | `http://127.0.0.1:4400/community` | Comunidad, sin cuenta       |
-| Observador 3D       | `http://127.0.0.1:4328/`          | Evaluador, nunca el modelo  |
-| Red social ficticia | `http://127.0.0.1:4329/feed`      | Fuente HTTP consultable     |
+The launcher resolves `../disaster-response-simulator`. Keep that sibling directory name even if you use another platform directory name.
 
-El laboratorio usa puertos diferentes del simulador independiente en 4318/4319. Los procesos se vinculan a loopback. Compartir esta URL requiere una solución de acceso posterior; esta instancia no es pública.
+## Open the workspace
 
-Las cuentas de prueba tienen direcciones como `commander@org0.nexo.local`, `analyst@org0.nexo.local`, `field@org0.nexo.local`, `publisher@org0.nexo.local`, `finance@org0.nexo.local`, `admin@org0.nexo.local` y `auditor@org0.nexo.local`. La contraseña generada está en `.local/access-org0.json` y sus equivalentes. La cuenta del socio externo se provisiona por separado. No imprimir estos archivos en reportes, commits, demos o capturas.
+| Surface | Address |
+|---|---|
+| First organization | [localhost:4400](http://127.0.0.1:4400/) |
+| Other organizations | Ports 4401–4403 |
+| Independent partner | [localhost:4404](http://127.0.0.1:4404/) |
+| Public updates | [localhost:4400/public](http://127.0.0.1:4400/public) |
+| Community reporting | [localhost:4400/community](http://127.0.0.1:4400/community) |
+| 3D laboratory | [localhost:4328](http://127.0.0.1:4328/) |
+| Fictional source feed | [localhost:4329/feed](http://127.0.0.1:4329/feed) |
 
-Cada arranque crea `.local/labs/<sesión>/org*/pgdata`: un mundo nuevo no hereda operaciones ni versiones antiguas. Las sesiones anteriores se conservan. `.local/lab.json` identifica la sesión y superficies actuales. Para retomar una base operativa sin reiniciar el mundo, usar `pnpm start` con su configuración; no borrar bases para ocultar resultados anteriores.
+Services bind to localhost. The standalone simulator's defaults are separate from the laboratory launcher ports above.
 
-## Modelo, presupuesto y reloj
+Find the generated account addresses, roles and password in `.local/access-org0.json`; organizations 1–3 have equivalent files. The independent partner uses `.local/access-partner-org4.json`. Use the listed address rather than constructing an account name. `.env.local`, `.local/`, session databases and credentials are local, Git-ignored data.
 
-`.env.example` enumera modelo, timeout, límite de llamadas y presupuesto por episodio. Cada organización tiene además una cuota por hora. Las investigaciones automáticas empiezan deshabilitadas; el operador puede habilitarlas desde Investigations. La recepción automática de publicaciones y sistemas sigue activa sin iniciar inferencia.
+Each launch creates a new session under `.local/labs/<session>/`, with separate databases and credentials per organization. Earlier sessions are retained. `.local/lab.json` identifies the current session and contains the observer access details. The observer controls and inspects the laboratory; it is not an information source for the model.
 
-Las investigaciones tienen hasta ocho llamadas por defecto, herramientas acotadas y posibilidad de parar. Un error con coste desconocido mantiene una reserva conservadora; no se convierte en coste cero. Las trazas muestran llamadas, resultados y razones breves, sin inventar pensamiento privado del modelo.
+## A short operator walkthrough
 
-En un incidente compartido, configurar una instancia coordinadora para la investigación y mantener la revisión/ejecución de aportes en cada propietario. Habilitar intake de ese mismo caso en todas las instancias puede duplicar consultas físicas y gastar cuotas. Cada instancia puede investigar sus casos locales; no existe todavía elección automática de líder o exclusión distribuida universal de casos. El evaluador posterior compara B5/B6 con la misma asignación de coordinación.
+1. **Overview:** see known needs, their sources, received help and active operations.
+2. **Signals:** inspect originals and revisions. Select sources to interpret or choose **Discover a response** to investigate a possible need.
+3. **Investigations:** follow actual model activity, tool results and pending checks. A request for clarification or assessment remains pending until its response arrives.
+4. **Decisions:** inspect quantities, evidence, conditions and owners. An authorized operator approves, edits or rejects the exact proposal version. Partners review their contributions independently.
+5. **Operations:** follow orders and trips through physical receipt and service. For a blocked operation, review a repair or recovery of the existing operation instead of silently duplicating it.
 
-Si OpenRouter responde HTTP 402, la instancia pausa nuevas llamadas y la campaña se detiene, conservando fallos y costes desconocidos. Restaurar el crédito de la **cuenta**, no solo aumentar el límite de la clave, y reiniciar el backend de la instancia con su mismo directorio/credenciales. No resetear un mundo operativo ni abrir una DB activa en otro proceso para conseguir ese reinicio. La UI y las acciones humanas no dependen de que vuelva la inferencia. Las pruebas unitarias/contratos no necesitan saldo.
+The model prepares options; it does not acquire an owner's authority. Acknowledgement, departure, arrival and sufficient receipt are separate states.
 
-La sesión interactiva arranca a ×10 para que el mundo no termine antes de abrir el workspace. Cambiar velocidad/pausa desde el observador o configurar `NEXO_LAB_RATE` entre un valor positivo y 1000. Esta velocidad de presentación no convierte el recorrido en medición live ×1 ni permite comparar inferencia acelerada con inferencia en tiempo real.
+| Role | Main workspace responsibility |
+|---|---|
+| Commander / dispatcher | Priorities, resources, proposal review and operational decisions |
+| Analyst | Sources, investigations, checks and draft proposals |
+| Field | Assigned tasks, reports and evidence; offline reports sync after reconnection |
+| Publisher | Review and approve public updates and media |
+| Finance | Sandbox funds, allocations and purchase reconciliation |
+| Admin / auditor | Accounts and connectors / read-only history and evidence |
 
-Tres modos de prueba son diferentes:
+The public portal shows approved aggregates. Community submissions enter moderation. A financial settlement does not establish a physical delivery, and the local payment sandbox does not move real money.
 
-- **Fixtures/replay:** no generan una nueva inferencia ni demuestran capacidad del modelo.
-- **Modelado:** el evaluador cobra demoras de consultas, comunicación, revisión y modelo en el reloj del mundo. Guarda por separado la latencia real del proveedor.
-- **Live ×1:** el mundo avanza por tiempo real, incluidas llamadas reales. No cobra la inferencia multiplicándola por una velocidad de simulación.
+## Model controls and simulation
 
-## Recorrido por rol
+Automatic source ingestion is enabled by the launcher; automatic investigations start disabled. Enable them in the organization settings only with the desired call and spending limits. `.env.example` documents provider, timeout and episode-budget settings. Investigations use bounded context and fetch further evidence through scoped tools.
 
-### Coordinación y despacho
+If provider credit is exhausted, new model work pauses while the workspace and human actions remain available. Restore the provider account's credit and restart the affected backend with its existing configuration; avoid replacing the operational database to recover model access.
 
-1. Abrir Overview: necesidad conocida, fuente de esa observación, ayuda recibida y operaciones pendientes.
-2. Abrir un caso o una publicación en Signals. Consultar originales, contradicciones y versiones antes de tomar una afirmación como hecho.
-3. Solicitar una investigación dirigida o habilitar intake automático con presupuesto. No hay un chatbot que necesite recibir una orden escrita por cada publicación.
-4. Revisar en Decisions las acciones y cantidades actuales, condiciones pendientes, evidencia, alternativa y propietario. Editar, aclarar, rechazar o autorizar esa versión concreta.
-5. Si interviene un socio, este revisa su contribución en su propia instancia. El coordinador no obtiene su autoridad.
-6. Seguir Operations. Autorizado, orden recibido, en tránsito, llegada, recepción y servicio son hitos distintos.
-7. Asignar una operación existente a un equipo de campo. Delegar una sola decisión a un analista con vigencia limitada, o transferir pendientes a otro responsable. Un relevo no transfiere automáticamente una aprobación.
-8. Si cambia una dependencia, revisar el cambio y preparar una reparación. Lo ejecutado queda en el historial y no se vuelve a despachar como parte de la reparación.
+The laboratory starts at ×10. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
 
-### Analista y verificación
-
-Revisar fuentes y medios reales, consultar conectores autorizados, pedir comprobaciones de campo, investigar opciones y preparar propuestas. Interpretación no es certificación de seguridad. La autoridad normal no incluye despachar; una delegación solo cubre la versión y alcance explícitos.
-
-### Campo
-
-La cuenta de campo accede a sus tareas asignadas, reportes y medios autorizados. Puede confirmar lectura, informar salida/llegada/problema y adjuntar evidencia. El estado de una tarea y un reporte de recepción no fabrican una recepción física en el simulador.
-
-Los updates se guardan en IndexedDB con identificador estable y dueño. El service worker conserva el shell para recargar offline; no conserva respuestas API privadas en la caché compartida. Al reconectar, el servidor debe acusar recepción antes de quitar un elemento de la cola. Si cambió la versión, resolver el conflicto de forma explícita; no sobrescribir una instrucción nueva.
-
-### Recursos e instalaciones
-
-Inventario, vehículos y evaluaciones conservan propietario y sistema de origen. Un dato del sistema externo no se edita como si fuera stock libre local. Reservas tienen mínimos retenidos, cantidad y TTL. Ofertas compartidas pueden retirarse; el estado de red no implica aceptación. Los servicios requieren equipos compatibles, acceso, evaluación y permiso actual.
-
-En esta fase recursos/instalaciones están bajo las cuentas operativas commander/dispatcher. No existe una certificación de todas las profesiones clínicas o técnicas por registrar un rol genérico.
-
-### Comunicación y finanzas
-
-Preparar una actualización pública agregada, revisar su estado y referencias y aprobarla. Una recepción pública requiere comprobante operativo confirmado. Las evidencias visuales requieren revisión humana de privacidad; no se exponen automáticamente todos los adjuntos.
-
-El responsable financiero concilia liquidaciones, asignaciones, liberaciones y reembolsos del sandbox. Promesa, checkout iniciado y fondos liquidados son distintos. El apoyo se agrupa para necesidades cambiantes; no promete entregar un artículo por aportación.
-
-### Público, comunidad y socio externo
-
-El público consulta únicamente actualizaciones aprobadas y finanzas agregadas. La comunidad puede enviar una descripción o un adjunto de foto/audio con lugar aproximado; ingresa a moderación, no directamente a la cola del modelo ni a una operación.
-
-El socio externo conserva un acceso y ledger separados: oferta limitada, solicitud, aceptación/rechazo por su dueño y confirmación de su operación. No necesita instalar NEXO ni usar su modelo. El gateway de esta fase cubre transporte; ampliar a otras contribuciones requiere ampliar y probar el contrato.
-
-### Administración y auditoría
-
-Administración crea/revoca cuentas y registra conectores. No obtiene autoridad operacional. Auditoría conserva actor, versión, evidencia y cambios; una corrección no borra la decisión anterior. Exportaciones y backups contienen datos privados y se mantienen fuera de Git.
-
-## Fuentes y medios
-
-El conector del simulador ingiere por HTTP la red social ficticia, revisiones y canales del equipo. Es separado de las consultas a inventario, flota, mapa y recibos. Solo usa una clave de organización; no puede consultar el observador omnisciente.
-
-Los conectores JSON y MCP se registran con origen permitido, licencia, frecuencia, esquema, herramienta y credenciales del backend de alcance mínimo. Una nueva fuente desconocida permanece sin habilitar. Las caídas y cuotas se muestran como fallos, no como inventario vacío.
-
-Para analizar bytes de audio, video y documentos:
+To select another scenario before launching, for example in PowerShell:
 
 ```powershell
-pnpm setup:media
+$env:AIDSCALER_SCENARIO = 'S19'
+$env:AIDSCALER_LAB_RATE = '10'
+pnpm lab
 ```
 
-La primera transcripción descarga pesos locales de ASR. Imágenes y fotogramas muestreados usan el modelo configurado. El primer análisis de PDF registra hasta 20 páginas y transcribe hasta cuatro escaneadas por lote. La UI permite continuar páginas pendientes, incluyendo las posteriores al primer tramo de 20; el modelo propone transcripciones con procedencia por página. Cada página distingue texto embebido de transcripción visual no verificada; las páginas restantes quedan pendientes. Registrar tipos no admitidos y partes no observadas. No llamar «percepción probada» a las descripciones sintéticas del laboratorio. Un medio sin archivo o con hash distinto no entra a inferencia ni publicación.
+Stop the launcher with **Ctrl+C** before starting a new session.
 
-## Ejecutar pruebas y recoger evidencia
+## Optional media and checks
 
-El contexto del modelo se centra en el caso; los historiales siguen disponibles mediante herramientas. `MODEL_MAX_OUTPUT_TOKENS=8192` y `MODEL_REASONING=true` permiten razonar sin un máximo pequeño. `MODEL_PROVIDER_SORT=latency` busca rapidez dentro del techo de tarifa de `MODEL_PRICE_MULTIPLIER=2`. Si un resultado queda cortado, no se ejecuta parcialmente. La espera por llamada es 120 s y la ventana de investigación 360 s; revisar también valores antiguos de `.env.local` que anulen los defaults nuevos. Detalles y límites en [CONTEXTO_MODELO.md](CONTEXTO_MODELO.md).
-
-```powershell
+```sh
+pnpm setup:media
 pnpm check
 pnpm test
-node scripts/verify.mjs # plataforma + simulador, huellas y reporte conjunto
-pnpm hygiene
-pnpm test:live       # smoke del proveedor, no entrega física
-pnpm demo            # composición y servicio con proveedor real, reloj modelado
-pnpm demo:live       # entrega física ×1; hasta diez minutos de observación
-pnpm test:journeys   # harness aislado de UI/offline/roles
-# Con pnpm lab activo:
-pnpm test:ui
-pnpm test:sources    # lectura real externa, no acuerdo institucional
-pnpm test:media      # bytes sintéticos autorizados, no corpus de campo
-pnpm test:load       # nueve perfiles; el mayor puede tardar unos trece minutos
 ```
 
-En el simulador ejecutar por separado `pnpm test` y `pnpm check`. Las pruebas automáticas no realizan llamadas pagadas salvo los comandos que indican proveedor/medios reales. `pnpm demo -- --autonomous` retira la selección de instalación del operador para un episodio exploratorio; no lo transforma en un holdout independiente. `node --env-file-if-exists=.env.local scripts/service-demo.mjs --from-need` selecciona solo una necesidad recibida, sin indicar instalación o solución.
+Media setup prepares local transcription and extraction dependencies; the first transcription may download model weights. Supported images and sampled video frames use the configured model. Unprocessed pages, frames or segments remain explicit rather than being presented as fully observed.
 
-Para el piloto comparativo:
+Ordinary checks and tests do not require a paid provider. Live-model demos and inference checks do: run them deliberately with a configured budget. Keep keys and generated access files out of screenshots, exports and Git.
 
-```powershell
-node --env-file-if-exists=.env.local scripts/campaign.mjs --scenarios=S23,S01,S09,S19 --arms=B1,B2,B3,B4,B5,B6 --seeds=1 --budget=1.5 --episode-budget=0.25 --rounds=1
+To test offline queue migration in a real browser, install the optional Chromium test binary and run:
+
+```sh
+pnpm exec playwright install chromium
+pnpm test:offline
 ```
 
-El protocolo se guarda antes de llamar al modelo. `--rounds` habilita hasta 24 oportunidades finitas con `--interval-ms`; el presupuesto es acumulativo. El candidato debe permanecer congelado durante la campaña. Los reportes guardan semillas, código, evaluador, configuración, fallos y costes. Un resultado con un mundo es piloto; pérdidas e incompletos se conservan. Leer `VALIDACION_EXTERNA.md` antes de acreditar mejoras confirmatorias.
+Existing offline reports retain their command IDs and organization ownership when migrated to AidScaler. Older local backup formats remain accepted after an integrity check; new backups use the AidScaler format.
 
-## Backup y recuperación local
-
-Detener los workers/servidor de la instancia antes de abrir su DB desde el comando de recuperación; esperar operaciones SQL confirmadas. El bundle contiene evidencia privada y hashes de contraseña, pero excluye sesiones, API key y claves de los servicios.
-
-```powershell
-$env:NEXO_LOCAL_DIR = '.local/org0'
-node scripts/backup.mjs export .local/backups/org0.json.gz
-node scripts/backup.mjs restore .local/backups/org0.json.gz .local/restored-org0
-```
-
-El backup no sobrescribe un archivo existente; restore exige una carpeta nueva. Conserva IDs de comandos, jobs pendientes, ledger y cadena de auditoría. Reconfigurar credenciales de origen/red en el backend de la instancia recuperada y autenticar de nuevo. No operar a la vez la copia recuperada y la original contra el mismo mundo físico: esa sería una recuperación equivocada, no una nueva organización.
-
-RPO local esperado: cero transacciones confirmadas desde la instantánea consistente; cambios posteriores necesitan otro backup. RTO inicial: cinco minutos en el hardware declarado, medido por el ensayo pequeño de recuperación. Ese resultado no garantiza el mismo tiempo para una base de datos o almacén de medios mucho mayor. La recuperación física después de una escritura incierta consulta la fuente con la misma clave antes de repetirla.
-
-## Cambiar de modelo o migrar
-
-Cambiar `MODEL_ID` configura otro modelo disponible; no garantiza el mismo soporte de herramientas, visión o precisión. Conservar y repetir tests de proveedor, multimodalidad, investigación y comparación. Gemini requiere su adaptador/configuración y una nueva campaña. La migración posterior a GCP debe repetir conformidad de DB, autenticación, cola, almacenamiento, contratos, despliegue y latencias; los servicios locales no heredan automáticamente las propiedades cloud.
-
-
-## Política, ingesta y recuperación del cierre local
-
-En Response, el coordinador aprueba una política versionada de prioridades, límites de revisión y tipos protegidos. La cola distingue necesidad pendiente, propuesta ya en revisión y caso inconcluso aplazado sin cambios; este último no desaparece. En Signals, la interpretación por lotes registra fuente/versiones, cobertura y rechazos. La fuente se sincroniza automáticamente; no se exige copiar manualmente tweets al workspace.
-
-La investigación automática usa el próximo caso elegible y permite asignar recursos entre necesidades concurrentes. Una investigación desde un caso/necesidad conserva su foco manual. Si no hay evidencia nueva tras una investigación inconclusa, la repetición automática se detiene para ahorrar coste; el dueño puede solicitar un nuevo intento. Un cambio material recibido reactiva la elegibilidad.
-
-En una operación bloqueada, Repair debe resolver o cancelar la operación original, con su cargo e historial. Un envío alternativo puede ser útil pero no resuelve por sí solo el bloqueo anterior. El estado reparado espera confirmación física del origen.
-
-En Organization, Retention muestra una vista previa del alcance y exige confirmación de dueño sobre esa versión. Ejecuta redacción/tombstones locales y bloquea resurrecciones de ingesta/inferencia en vuelo. No borra obligaciones físicas/decisorias, backups externos, proveedor ni copias de otra organización; revisar por separado esas retenciones. Una publicación pública derivada se retira cuando corresponda.
-
-Para pruebas reproducibles adicionales:
-
-```powershell
-node --env-file-if-exists=.env.local scripts/service-demo.mjs --from-need
-node --env-file-if-exists=.env.local scripts/blocked-repair.mjs --seed=blocked-transfer-01 --budget=.15
-node --env-file-if-exists=.env.local scripts/semantic-load.mjs --needs=100 --orgs=4 --copies=23 --budget=.3
-node scripts/nominal-flow.mjs
-node scripts/response-journey.mjs
-```
-
-Las campañas y ablaciones tienen presupuesto explícito y un protocolo previo. No ejecutar todas las campañas con proveedor por rutina: repetir cuando cambia el mecanismo, la versión o existe una incertidumbre concreta. Las ejecuciones pagadas del cierre ya se conservan en reports/. Ver [CIERRE_LOCAL.md](CIERRE_LOCAL.md).
-
-## Laboratorio de revisión del cierre
-
-El arranque obtiene inventario, vehículos y mapa mediante tres consultas HTTP normales por organización. Esa precarga usa únicamente permisos del actor, no el estado oculto del observador. Reduce una espera inicial innecesaria sin dar una solución al modelo.
-
-Para crear una nueva sesión del escenario de composición (primero detener con Ctrl+C el launcher de la sesión anterior):
-
-```powershell
-$env:NEXO_SCENARIO = 'S19'
-$env:NEXO_LAB_RATE = '10'
-pnpm lab
-```
-
-El cierre dejó el mundo de presentación en pausa; Play en el observador lo reanuda. Sus credenciales están en `.local/lab.json`, nunca dentro de NEXO ni en sus prompts. La ingesta sigue activa y las investigaciones automáticas permanecen deshabilitadas. Las proyecciones se comparten por sus propietarios desde Network; desplegar varias instancias no concede consentimiento automático.
-
-Desde Signals se puede seleccionar una necesidad/caso y solicitar investigación; el resultado queda en Investigations/Decisions con evidencia y condiciones. Una comprobación solicitada al campo puede seguir pendiente: continuar el mundo y sincronizar sus resultados antes de reintentar. No forzar una propuesta ni contar una comprobación solicitada como completada. Evidencia/versiones/TTL pueden volver obsoleta una propuesta; refrescar antes de autorizar.
-
-El helper de ensayo `scripts/prepare-lab-review.mjs` usa cuentas sintéticas de dueño, comparte sus proyecciones y solicita una investigación real; **consume saldo** y deja revisión/ejecución al operador. `--skip-share` reutiliza consentimientos existentes. Los intentos inconclusos se guardan junto al positivo; no usar el helper como una demo garantizada o prueba de UX humana.
-
-Verificación y análisis sin gasto de inferencia:
-
-```powershell
-node scripts/verify.mjs
-node scripts/nominal-process.mjs
-node scripts/summarize-campaign.mjs reports/evaluations/structure-continuation-1791812722694
-```
-
-El último comando escribe `summary-reviewed.json`, conserva el original, incorpora expresamente outcomes heredados y reservas desconocidas y no repite llamadas al modelo. El probe nominal incluye publicaciones tardías y separa disponibilidad, persistencia y UI; no mide toma de decisiones ni procesamiento multimodal.
-
-## Descubrir una respuesta desde publicaciones recibidas
-
-En Signals, seleccionar hasta 35 fuentes y usar **Discover a response**. El recorrido interpreta un lote acotado, conserva sus versiones y referencias, pide comprobaciones al canal de campo y prepara cantidades a partir de observaciones operativas recibidas. Una cantidad estimada por el modelo nunca autoriza ni sustituye una observación de demanda. **Interpret only** conserva el recorrido de extracción sin proponer una respuesta.
-
-El operador ve tres etapas: interpretación, comprobaciones y borrador revisable. Son acciones y resultados observables; no una transcripción del razonamiento privado del modelo. Los propietarios siguen autorizando los pasos físicos. Si falta una comprobación o capacidad, el caso conserva su estado pendiente y se reanuda ante información material nueva sin volver a pagar por interpretar las mismas fuentes.
-
-En Organization, el intake puede activar **discovery mode** bajo los límites de llamadas, presupuesto y revisiones configurados. Permanece desactivado por defecto. Las necesidades ya estructuradas pasan por el compilador determinista sin otra inferencia. Una investigación de composición o reparación sigue su recorrido de herramientas específico.
-
-La comparación reproducible de información pública y ayuda física usa:
-
-```powershell
-node --env-file-if-exists=.env.local scripts/discovery-benchmark.mjs --seeds=3 --arms=B5,B6,B8 --needs=12 --noise=48 --read-ms=60000 --workers=2 --budget=.5 --episode-budget=.12
-```
-
-Consume saldo solo en B6. El protocolo se guarda antes de las ejecuciones. B5 usa lectura convencional finita y extracción estructurada gratuita; B8 añade detección automática amplia por palabras y ubicación. Las demoras de atención humana son supuestos experimentales, no mediciones de profesionales. Consultar [diagnóstico y resultados](MEJORA_RESPUESTA.md) antes de interpretar la comparación.
+For a database backup, stop the affected instance first. `node scripts/backup.mjs export <new-backup-file>` saves a private bundle; `restore <backup-file> <new-directory>` requires a new destination. Set `AIDSCALER_LOCAL_DIR` to the intended instance's directory. Restore source/network credentials separately, and do not operate the recovered instance alongside the original against the same physical world.

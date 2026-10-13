@@ -5,7 +5,7 @@ import { createExternalGateway } from "../src/external-gateway.mjs";
 import { SimulatorConnector } from "../src/connector.mjs";
 import { Store } from "../src/store.mjs";
 import { sign } from "../src/network.mjs";
-test("a contractor without NEXO independently approves and physically completes its part over signed HTTP", async (t) => {
+test("a contractor without AidScaler independently approves and physically completes its part over signed HTTP", async (t) => {
   const h = await createHarness({
       scenario: "S01",
       seed: "external-partner-contract",
@@ -91,7 +91,7 @@ test("a contractor without NEXO independently approves and physically completes 
     {
       title: "Complement owned capacity with an external contractor",
       summary:
-        "Request five observed units from a partner that has no NEXO workspace.",
+        "Request five observed units from a partner that has no AidScaler workspace.",
       benefit: "Actual aid with separate owner authority",
       rationale:
         "Current capacity projection and observed demand; contractor decides.",
@@ -133,7 +133,7 @@ test("a contractor without NEXO independently approves and physically completes 
   assert.equal(
     gateway.investigator,
     undefined,
-    "No model or NEXO workspace is installed",
+    "No model or AidScaler workspace is installed",
   );
   const login = await fetch(gateway.url + "/api/login", {
     method: "POST",

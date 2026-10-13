@@ -8,10 +8,10 @@ const root = path.resolve(fileURLToPath(new URL("..", import.meta.url))),
 const { createLabServers } = await import(
   pathToFileURL(path.join(simRoot, "sources/server.mjs")).href
 );
-const scenario = process.env.NEXO_SCENARIO ?? "S01";
-const initialRate = Number(process.env.NEXO_LAB_RATE ?? 10);
+const scenario = process.env.AIDSCALER_SCENARIO ?? "S01";
+const initialRate = Number(process.env.AIDSCALER_LAB_RATE ?? 10);
 if (!Number.isFinite(initialRate) || initialRate <= 0 || initialRate > 1000)
-  throw Error("NEXO_LAB_RATE must be greater than zero and at most 1000.");
+  throw Error("AIDSCALER_LAB_RATE must be greater than zero and at most 1000.");
 // A reset world must not inherit stale physical operations/source versions from
 // an earlier run. Preserve each prior database under its own private session.
 const sessionId =
@@ -24,11 +24,11 @@ const lab = await createLabServers({
   config: {
     scenario,
     organizations: 5,
-    seed: process.env.NEXO_SEED ?? "nexo-development-001",
+    seed: process.env.AIDSCALER_SEED ?? "aidscaler-development-001",
     grid: 9,
     extentKm: 12,
     topology: "grid",
-    hazard: process.env.NEXO_HAZARD ?? "none",
+    hazard: process.env.AIDSCALER_HAZARD ?? "none",
     durationMs: 21600000,
     policy: "none",
     mode: "modeled",
@@ -82,7 +82,7 @@ for (let i = 0; i < 5; i++) {
       body: JSON.stringify({
         org,
         role: "commander",
-        id: `nexo-operator-${org}`,
+        id: `aidscaler-operator-${org}`,
         ttlMs: 604800000,
       }),
     },
@@ -131,8 +131,8 @@ for (let i = 0; i < 5; i++) {
       cwd: root,
       env: {
         ...process.env,
-        NEXO_LOCAL_DIR: instanceDir,
-        NEXO_ORG: org,
+        AIDSCALER_LOCAL_DIR: instanceDir,
+        AIDSCALER_ORG: org,
         PORT: String(4400 + i),
         DATA_DIR: path.join(instanceDir, "pgdata"),
         EVIDENCE_DIR: path.join(instanceDir, "evidence"),
@@ -173,7 +173,7 @@ await writeFile(
   { mode: 0o600 },
 );
 console.log(
-  `Laboratory observer: http://127.0.0.1:${lab.observerPort}\nFour isolated NEXO instances: http://127.0.0.1:4400–4403\nIndependent contractor bridge (no model): http://127.0.0.1:4404\nRole credentials are saved under ignored .local/access-org*.json; contractor in .local/access-partner-org4.json.\nUse the observer only for controlling and evaluating the world, never inside NEXO.`,
+  `Laboratory observer: http://127.0.0.1:${lab.observerPort}\nFour isolated AidScaler instances: http://127.0.0.1:4400–4403\nIndependent contractor bridge (no model): http://127.0.0.1:4404\nRole credentials are saved under ignored .local/access-org*.json; contractor in .local/access-partner-org4.json.\nUse the observer only for controlling and evaluating the world, never inside AidScaler.`,
 );
 for (const s of ["SIGINT", "SIGTERM"])
   process.on(s, async () => {

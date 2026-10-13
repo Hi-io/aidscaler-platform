@@ -156,7 +156,7 @@ try {
   await page.goto(app.url);
   await page
     .getByLabel("Email", { exact: true })
-    .fill("commander@org0.nexo.local");
+    .fill("commander@org0.aidscaler.local");
   await page
     .getByLabel("Password", { exact: true })
     .fill("evaluation-password");

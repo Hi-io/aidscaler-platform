@@ -22,7 +22,7 @@ async function launch(config, h, phase) {
       ...process.env,
       OPENROUTER_API_KEY: "",
       DATABASE_URL: "",
-      NEXO_LOCAL_DIR: config.localDir,
+      AIDSCALER_LOCAL_DIR: config.localDir,
     },
   });
   // Do not echo stdout/stderr: bootstrap/source credentials are private even in a failed fixture.

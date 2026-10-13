@@ -8,16 +8,20 @@ const args = Object.fromEntries(process.argv.slice(2).map(arg => {
   if (!arg.startsWith('--') || i < 0) throw Error('Use --input=path --output=folder');
   return [arg.slice(2, i), arg.slice(i + 1)];
 }));
-const input = resolve(args.input ?? 'reports/analysis/final-two-response-closed-20261013/readout.json');
+if (!args.input) {
+  console.log('Usage: node scripts/explain-response.mjs --input=path/to/closed-readout.json --output=path/to/new-report');
+  process.exit(0);
+}
+const input = resolve(args.input);
 const output = resolve(args.output ?? `reports/analysis/response-explained-${Date.now()}`);
 if (dirname(input) === output) throw Error('Keep the original evidence unchanged; use a new output folder.');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = await readFile(input), report = JSON.parse(bytes), inputSha256 = sha(bytes);
 if (report.schema !== 'closed-current-two-extremes-readout-v1') throw Error('Unsupported recorded readout schema.');
 const conventional = report.columns.find(c => c.arm === 'C_manual');
-const nexo = report.columns.find(c => c.arm === 'B6');
-if (!conventional || !nexo || report.columns.length !== 2) throw Error('Expected the two recorded methods.');
-const columns = [conventional, nexo];
+const aidscaler = report.columns.find(c => c.arm === 'B6');
+if (!conventional || !aidscaler || report.columns.length !== 2) throw Error('Expected the two recorded methods.');
+const columns = [conventional, aidscaler];
 if (!report.source.stable || columns.some(c => c.status !== 'completed' || !c.source.stable)) throw Error('Recorded comparison is not closed and source-stable.');
 const unit = { water: 'L', food: 'portions', blankets: 'unit' };
 for (const column of columns) {
@@ -38,8 +42,8 @@ const delta = (a, b) => a === b ? 'Igual' : a === 0 ? 'Aumenta desde 0'
   : `${number(Math.abs(b / a - 1) * 100, 2)}% ${b < a ? 'menos' : 'más'}`;
 const sourceLink = relative(output, input).replaceAll('\\', '/');
 const paired = (read, metric, meaning, display = number) => {
-  const a = read(conventional), b = read(nexo);
-  return { metric, conventional: a, nexo: b, displayConventional: display(a), displayNexo: display(b), change: delta(a, b), meaning };
+  const a = read(conventional), b = read(aidscaler);
+  return { metric, conventional: a, aidscaler: b, displayConventional: display(a), displayAidScaler: display(b), change: delta(a, b), meaning };
 };
 const travelBreakdown = columns.map(column => {
   const cases = column.physical.needs.map(need => {
@@ -76,8 +80,8 @@ const resourceRows = [];
 for (const type of ['water', 'food', 'blankets']) {
   const read = c => c.physical.byResource.find(r => r.type === type);
   const labelUnit = type === 'water' ? 'L' : type === 'food' ? 'porciones' : 'mantas';
-  const a = read(conventional), b = read(nexo);
-  resourceRows.push({ metric: `${names[type]}: cantidad recibida / requerida (${labelUnit})`, conventional: { received: a.usefulServed, demand: a.demand }, nexo: { received: b.usefulServed, demand: b.demand }, displayConventional: `${number(a.usefulServed, 0)} / ${number(a.demand, 0)}`, displayNexo: `${number(b.usefulServed, 0)} / ${number(b.demand, 0)}`, change: a.usefulServed === b.usefulServed && a.demand === b.demand ? 'Igual cobertura' : 'Ver cantidades', meaning: `Ideal: cubrir la demanda sin exceso. Cantidad útil recibida físicamente, no stock prometido. Una unidad representa ${type === 'water' ? 'un litro de agua' : type === 'food' ? 'una porción de comida' : 'una manta'}; no determina por sí sola cuántas personas o familias quedaron atendidas.` });
+  const a = read(conventional), b = read(aidscaler);
+  resourceRows.push({ metric: `${names[type]}: cantidad recibida / requerida (${labelUnit})`, conventional: { received: a.usefulServed, demand: a.demand }, aidscaler: { received: b.usefulServed, demand: b.demand }, displayConventional: `${number(a.usefulServed, 0)} / ${number(a.demand, 0)}`, displayAidScaler: `${number(b.usefulServed, 0)} / ${number(b.demand, 0)}`, change: a.usefulServed === b.usefulServed && a.demand === b.demand ? 'Igual cobertura' : 'Ver cantidades', meaning: `Ideal: cubrir la demanda sin exceso. Cantidad útil recibida físicamente, no stock prometido. Una unidad representa ${type === 'water' ? 'un litro de agua' : type === 'food' ? 'una porción de comida' : 'una manta'}; no determina por sí sola cuántas personas o familias quedaron atendidas.` });
   resourceRows.push(paired(c => read(c).sufficient.restrictedMeanMs, `${names[type]}: espera media hasta cantidad suficiente (min)`, `Menos es mejor. Espera promedio de los ${a.eligible} puntos con necesidad de ${names[type].toLowerCase()}, desde aparición hasta recibir toda la cantidad requerida. Cada necesidad pesa igual, aunque pida cantidades distintas.`, minutes));
   resourceRows.push(paired(c => read(c).uncoveredUnitMs / 60000, `${names[type]}: faltante acumulado (${labelUnit}·min)`, `Menos es mejor. Combina cuánto falta y durante cuánto tiempo: 10 ${labelUnit} faltantes durante 30 min = 300 ${labelUnit}·min. No mide personas, familias ni daños médicos.`));
 }
@@ -94,15 +98,15 @@ const totalRows = [
   paired(c => c.errors.length, 'Errores registrados en el ensayo', 'Ideal: 0. Fallos observados al ejecutar el flujo; ausencia de errores no demuestra seguridad universal.', value => number(value, 0)),
   paired(c => c.invariants.length, 'Reglas de integridad incumplidas', 'Ideal: 0. Reglas de conservación, permisos y estado que el motor detectó como rotas; no reemplaza evaluación en campo.', value => number(value, 0)),
 ];
-const table = rows => '| Métrica | Convencional | NEXO + Gemma 4 | Cambio | Qué representa para la respuesta y las personas que esperan |\n|---|---:|---:|---|---|\n' + rows.map(row => `| ${row.metric} | ${row.displayConventional} | ${row.displayNexo} | ${row.change} | ${row.meaning} |`).join('\n') + '\n';
+const table = rows => '| Métrica | Convencional | AidScaler + Gemma 4 | Cambio | Qué representa para la respuesta y las personas que esperan |\n|---|---:|---:|---|---|\n' + rows.map(row => `| ${row.metric} | ${row.displayConventional} | ${row.displayAidScaler} | ${row.change} | ${row.meaning} |`).join('\n') + '\n';
 const coordination = phaseRows[0], overall = phaseRows.at(-1);
-let md = `# NEXO: menos espera antes de activar la ayuda
+let md = `# AidScaler: menos espera antes de activar la ayuda
 
 Comparación registrada del 13 de octubre de 2026. Misma semilla, recursos y reglas físicas; 24 necesidades por método. Modelo realmente utilizado: **Gemma 4 31B**.
 
-**Preparar y autorizar la respuesta: ${number(coordination.conventional / 60000, 2)} → ${number(coordination.nexo / 60000, 2)} min, ${number((1 - coordination.nexo / coordination.conventional) * 100, 2)}% menos.** Son ${number((coordination.conventional - coordination.nexo) / 60000, 2)} minutos menos de espera antes de autorizar la ayuda, en promedio por necesidad.
+**Preparar y autorizar la respuesta: ${number(coordination.conventional / 60000, 2)} → ${number(coordination.aidscaler / 60000, 2)} min, ${number((1 - coordination.aidscaler / coordination.conventional) * 100, 2)}% menos.** Son ${number((coordination.conventional - coordination.aidscaler) / 60000, 2)} minutos menos de espera antes de autorizar la ayuda, en promedio por necesidad.
 
-**Ayuda suficiente recibida: ${number(overall.conventional / 60000, 2)} → ${number(overall.nexo / 60000, 2)} min, ${number((1 - overall.nexo / overall.conventional) * 100, 2)}% menos.** Este segundo indicador incluye el recorrido físico. Ambos cubrieron 24/24 necesidades.
+**Ayuda suficiente recibida: ${number(overall.conventional / 60000, 2)} → ${number(overall.aidscaler / 60000, 2)} min, ${number((1 - overall.aidscaler / overall.conventional) * 100, 2)}% menos.** Este segundo indicador incluye el recorrido físico. Ambos cubrieron 24/24 necesidades.
 
 ## Dos relojes que responden preguntas diferentes
 
@@ -119,12 +123,12 @@ La primera fase no mide únicamente cuánto piensa el modelo o cuánto tarda el 
 
 ## Qué significa “food mean sufficient, min”
 
-**“Tiempo medio hasta recibir toda la comida requerida, en minutos”. Menos es mejor.** En los ocho puntos con necesidad de comida, la espera pasó de **${number(conventional.physical.byResource.find(r => r.type === 'food').sufficient.restrictedMeanMs / 60000, 2)} a ${number(nexo.physical.byResource.find(r => r.type === 'food').sufficient.restrictedMeanMs / 60000, 2)} minutos**. Se cuenta desde que aparece la necesidad; no desde que sale el camión. Se recibió la misma cantidad útil en ambos: 164 porciones. Las solicitudes de comida quedaron cubiertas **33,58 minutos antes en promedio**.
+**“Tiempo medio hasta recibir toda la comida requerida, en minutos”. Menos es mejor.** En los ocho puntos con necesidad de comida, la espera pasó de **${number(conventional.physical.byResource.find(r => r.type === 'food').sufficient.restrictedMeanMs / 60000, 2)} a ${number(aidscaler.physical.byResource.find(r => r.type === 'food').sufficient.restrictedMeanMs / 60000, 2)} minutos**. Se cuenta desde que aparece la necesidad; no desde que sale el camión. Se recibió la misma cantidad útil en ambos: 164 porciones. Las solicitudes de comida quedaron cubiertas **33,58 minutos antes en promedio**.
 
 Si un punto pide 20 porciones y otro pide 40, cada punto tiene un tiempo de suficiencia. La media de tiempos pesa ambos puntos por igual. El faltante acumulado sí refleja tanto la cantidad que falta como su duración.
 
 ${table(resourceRows)}
-Las mantas tardaron más con NEXO; esa diferencia se conserva aunque agua, comida y el promedio total mejoraron.
+Las mantas tardaron más con AidScaler; esa diferencia se conserva aunque agua, comida y el promedio total mejoraron.
 
 ## Unidades que se pueden explicar sin inventar beneficiarios
 
@@ -151,11 +155,11 @@ Fuente: [lectura cerrada con trazas por necesidad](${sourceLink}), SHA256 \`${in
 Es una pareja de simulaciones con parámetros humanos declarados; no una medición de una ONG real. No establece cuántas vidas se salvaron. Gemini y el efecto en campo requieren sus propias mediciones. Los resultados históricos de otras versiones permanecen separados.
 `;
 const travelExcluded = travelExcludedRows[0];
-md = md.replace('## Desglose de tiempos registrados', `## Operaciones excluyendo ambos trayectos del envío\n\n**${number(travelExcluded.conventional / 60000, 2)} → ${number(travelExcluded.nexo / 60000, 2)} minutos: ${number((1 - travelExcluded.nexo / travelExcluded.conventional) * 100, 2)}% menos.** Esta lectura auxiliar usa los timestamps ya registrados de los 24 envíos por método.\n\n${table(travelExcludedRows)}\nSe descuenta el desplazamiento a recogida (pickupDispatched → pickupArrived, o 0 si el vehículo ya estaba allí) y el viaje con carga (dispatched → arrived). La transmisión, carga y descarga permanecen dentro, igual que cualquier espera previa por flota ocupada. No sustituye el KPI original de recepción ni mide exclusivamente trabajo intelectual.\n\n## Desglose de tiempos registrados`);
+md = md.replace('## Desglose de tiempos registrados', `## Operaciones excluyendo ambos trayectos del envío\n\n**${number(travelExcluded.conventional / 60000, 2)} → ${number(travelExcluded.aidscaler / 60000, 2)} minutos: ${number((1 - travelExcluded.aidscaler / travelExcluded.conventional) * 100, 2)}% menos.** Esta lectura auxiliar usa los timestamps ya registrados de los 24 envíos por método.\n\n${table(travelExcludedRows)}\nSe descuenta el desplazamiento a recogida (pickupDispatched → pickupArrived, o 0 si el vehículo ya estaba allí) y el viaje con carga (dispatched → arrived). La transmisión, carga y descarga permanecen dentro, igual que cualquier espera previa por flota ocupada. No sustituye el KPI original de recepción ni mide exclusivamente trabajo intelectual.\n\n## Desglose de tiempos registrados`);
 md = md.replace('Una porción requerida o recibida | Una familia alimentada, un día sin hambre o una persona nutrida sin definir tamaño, nutrición y consumo', 'Una porción requerida o recibida; el modelo poblacional supone 700 kcal por porción | Una familia alimentada o un día sin hambre: no hay seguimiento de consumo por persona ni composición familiar');
 const presentation = { schema: 'recorded-response-explained-v1', recordedDate: report.date, seed: report.seed, actualModel: report.model.actual, rendererSha256: sha(await readFile(new URL(import.meta.url))), input: { path: relative(process.cwd(), input).replaceAll('\\', '/'), sha256: inputSha256 }, source: report.source, definitions: report.definitions, scope: 'Offline presentation; original measurements and logic unchanged.', travelExcludedRows, travelBreakdown, phaseRows, resourceRows, totalRows };
 if (sha(await readFile(input)) !== inputSha256) throw Error('Source changed while rendering.');
 await mkdir(output, { recursive: false });
 await writeFile(resolve(output, 'readout.json'), JSON.stringify(presentation, null, 2) + '\n', { flag: 'wx' });
 await writeFile(resolve(output, 'readout.md'), md, { flag: 'wx' });
-console.log(JSON.stringify({ output, sourceSha256: inputSha256, metricsExplained: phaseRows.length + resourceRows.length + totalRows.length + travelExcludedRows.length, coordinationReductionPct: (1 - coordination.nexo / coordination.conventional) * 100, operationsExcludingShipmentTravelReductionPct: (1 - travelExcluded.nexo / travelExcluded.conventional) * 100, totalWaitReductionPct: (1 - overall.nexo / overall.conventional) * 100, providerCallsMade: 0, simulationsRun: 0 }));
+console.log(JSON.stringify({ output, sourceSha256: inputSha256, metricsExplained: phaseRows.length + resourceRows.length + totalRows.length + travelExcludedRows.length, coordinationReductionPct: (1 - coordination.aidscaler / coordination.conventional) * 100, operationsExcludingShipmentTravelReductionPct: (1 - travelExcluded.aidscaler / travelExcluded.conventional) * 100, totalWaitReductionPct: (1 - overall.aidscaler / overall.conventional) * 100, providerCallsMade: 0, simulationsRun: 0 }));

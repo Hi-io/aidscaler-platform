@@ -257,7 +257,7 @@ for (let index = 1; index <= seeds && !stoppedReason; index++)
           arm === "B5"
             ? await sharedRuleProposal(coordinator, id)
             : await coordinator.investigator.run(
-                { policy: arm === "B7" ? "general" : "nexo" },
+                { policy: arm === "B7" ? "general" : "aidscaler" },
                 id,
               );
         activities.push({ round, atSim: w.now, ...activity });

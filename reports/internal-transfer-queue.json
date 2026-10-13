@@ -1,7 +1,0 @@
-{
-  "phase": "cancelled_before_launch",
-  "plan": "reports/internal-transfer-plan.json",
-  "reason": "Duplicate proposal continuations and polling-only response receipts amplify peer sends and can make the virtual clock depend on CPU timing. Correct the shared product and repeat every affected arm with new fingerprints.",
-  "providerCalls": 0,
-  "comparisonInvalid": true
-}

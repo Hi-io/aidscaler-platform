@@ -6,7 +6,7 @@ import { servicePlan } from "../src/services.mjs";
 test("four scoped instances independently authorize complementary physical deliveries before opening a service", async (t) => {
   const h = await createHarness({
     scenario: "S19",
-    seed: "nexo-composition-functional",
+    seed: "aidscaler-composition-functional",
     organizations: 4,
   });
   t.after(() => h.close());

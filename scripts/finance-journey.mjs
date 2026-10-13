@@ -21,7 +21,7 @@ page.on("console", message => {
 });
 async function login(role, targetPage = page) {
   await targetPage.goto(app.url);
-  await targetPage.getByLabel("Email", { exact: true }).fill(`${role}@org0.nexo.local`);
+  await targetPage.getByLabel("Email", { exact: true }).fill(`${role}@org0.aidscaler.local`);
   await targetPage.getByLabel("Password", { exact: true }).fill("evaluation-password");
   await targetPage.getByRole("button", { name: "Enter workspace", exact: true }).click();
   await targetPage.locator(".workspace").waitFor();

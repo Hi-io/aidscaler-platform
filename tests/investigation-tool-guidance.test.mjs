@@ -59,7 +59,7 @@ async function fixture(t, messages, action) {
   };
 }
 
-for (const policy of ["nexo", "general"]) {
+for (const policy of ["aidscaler", "general"]) {
   test(`${policy} uses only scoped partner projection after foreign verification and ambiguous lookup are refused`, async (t) => {
     const f = await fixture(
       t,

@@ -9,7 +9,7 @@ const started = performance.now(),
   fingerprint = await buildFingerprint(),
   h = await createHarness({
     scenario: "S19",
-    seed: "nexo-composition-functional",
+    seed: "aidscaler-composition-functional",
     organizations: 4,
   });
 const episode = "service-live-" + Date.now();

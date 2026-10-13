@@ -193,7 +193,7 @@ export class OpenRouterProvider {
             Authorization: `Bearer ${this.config.apiKey}`,
             "Content-Type": "application/json",
             "HTTP-Referer": "http://localhost:4400",
-            "X-Title": "NEXO local disaster-response evaluation",
+            "X-Title": "AidScaler local disaster-response evaluation",
           },
           signal: signal
             ? AbortSignal.any([

@@ -1,72 +1,67 @@
-# NEXO · Disaster-response operations platform
+# AidScaler
 
-NEXO helps NGOs, emergency services and public response teams turn scattered reports into coordinated help. It combines public signals with each team's operational tools, investigates what needs checking and prepares feasible actions for human approval. Organizations can share capacity while retaining control of their resources and decisions.
+### Disaster-response operations, from scattered reports to coordinated action.
 
-The local platform uses **Gemma 4 31B through OpenRouter**. In the latest matched simulation, preparing and authorizing the response took **30.49% less time**. Sufficient physical aid arrived **20.59% sooner**:
+AidScaler is an operations platform for NGOs, emergency services and public response teams. It connects public reports with operational data, investigates what needs checking and prepares actions for human review. Multiple organizations can coordinate their capabilities while keeping control of their resources and decisions.
 
-| Recorded metric | Conventional | NEXO + Gemma 4 | What it means |
-|---|---:|---:|---|
-| Prepare and authorize the response | 28.278 min | 19.656 min | 8.622 fewer minutes waiting before help is authorized; excludes the shipment's pickup and loaded journeys. |
-| Operations excluding both shipment journeys | 30.295 min | 21.673 min | 28.46% less time; retains coordination, command transmission, loading and unloading. |
-| Wait for sufficient aid | 44.279 min | 35.162 min | 9.117 fewer minutes until the required quantity is physically received, including travel. |
-| Needs fully supplied | 24/24 | 24/24 | All requested quantities delivered; this counts needs, not individual people or lives saved. |
-| Fuel consumed | 38.880 L | 37.665 L | 3.125% less simulated vehicle fuel for the same coverage. |
+The platform runs locally with **Gemma 4 31B through OpenRouter**. Gemini and Google Cloud are planned next steps.
 
-Both methods had the same seed, resources, physical constraints and owner approvals. Six real model calls cost **USD 0.00613892**. Blankets took longer despite the improvement overall. [Current times, resource units and what every metric means](reports/analysis/final-two-response-explained-20261013/readout.md); [unchanged recorded evidence](reports/analysis/final-two-response-closed-20261013/readout.json); [earlier three-seed result and assumptions](docs/RESULTADOS_CAPACIDAD_HUMANA.md).
+## What the platform does
 
-Preparation and authorization includes access to information, reading, checks, coordination, review and fleet-availability waits; it is not the model's thinking time alone. Removing the shipment journeys retains those waits. Food is measured in portions, water in litres and blankets in individual items. Quantity × waiting time is reported separately for each resource, without assuming a number of people or families served.
+- **Bring information together.** Collect public signals, field reports and connected operational sources, preserving their origin and versions.
+- **Investigate with evidence.** Interpret text and supported media, cross-check claims and request clarification or competent field assessment.
+- **Prepare feasible responses.** Check stock, staff qualifications and shifts, vehicle capacity, routes, deadlines and protected reserves.
+- **Coordinate across organizations.** Exchange consented capabilities and proposals; each owner reviews its own contribution.
+- **Follow execution.** Distinguish approval, dispatch, travel, arrival, physical receipt and service. Revisit plans when their dependencies change.
+- **Keep the public informed.** Publish approved progress and aggregate sandbox funding information without exposing the operational workspace.
 
-Reading, decision and communication times are simulation assumptions. The current result is one paired seed; the earlier three-seed result of 18.02% remains separate. Gemini, emergency field operations and Google Cloud deployment require their own validation.
+Operators work through signals, investigations, decisions and operations. Field teams have assigned tasks and offline reporting; publishers, finance staff and administrators have separate permissions. Model activity shows real tool requests and returned evidence, with explanations that the operator can inspect.
 
 ## Run locally
 
-Requires Node.js 24+ and pnpm. Clone this private repository and the private disaster-response-simulator repository into sibling directories, then:
+Install **Node.js 24+**, **pnpm 11** and Git. Clone the platform and its simulation laboratory into sibling directories:
 
-~~~powershell
-pnpm install
-if (!(Test-Path -LiteralPath '.env.local')) {
-  Copy-Item -LiteralPath '.env.example' -Destination '.env.local'
-}
-# Set OPENROUTER_API_KEY in the ignored local file.
+```sh
+git clone --depth 1 https://github.com/Hi-io/aidscaler-platform.git
+git clone --depth 1 https://github.com/Hi-io/disaster-response-simulator.git
+
+cd disaster-response-simulator
+pnpm install --frozen-lockfile
+
+cd ../aidscaler-platform
+pnpm install --frozen-lockfile
+```
+
+On first setup, copy `.env.example` to `.env.local` and set `OPENROUTER_API_KEY` in that local file. Keep the configured model as `google/gemma-4-31b-it` to use the current integration. Then start the laboratory:
+
+```sh
 pnpm lab
-~~~
+```
 
-The first operational workspace is at [localhost:4400](http://127.0.0.1:4400); the other organizations use ports 4401–4403, each with its own persistent database. The independent contractor workspace is at port 4404; the 3D observer is at 4328 and its source gateway at 4329. Generated local passwords are saved in ignored .local/access-org*.json files. The platform binds to localhost, and credentials are excluded from Git.
+| Open | Purpose |
+|---|---|
+| [Workspace · localhost:4400](http://127.0.0.1:4400/) | First organization's operational workspace |
+| [3D laboratory · localhost:4328](http://127.0.0.1:4328/) | Inspect and control the simulated world |
+| [Source feed · localhost:4329/feed](http://127.0.0.1:4329/feed) | Fictional public reports consumed over HTTP |
+| [Public portal](http://127.0.0.1:4400/public) | Approved public updates |
 
-Each restart retains earlier session databases. A reset creates a fresh operational session instead of reusing stale commitments. [LOCAL.md](docs/LOCAL.md) explains accounts, budgets, field reports, publication and recovery.
+The launcher also starts three organization workspaces on ports 4401–4403 and an independent partner on 4404. Generated sign-in details are stored in ignored `.local/access-org*.json` files; use the exact account for the role you need. Stop the launcher with **Ctrl+C**.
 
-## What you can do
+Keep the simulator directory named `disaster-response-simulator`: the launcher and evaluation tools resolve it as a sibling. The platform directory can be named `aidscaler-platform`.
 
-- Collect public reports, inspect their sources and follow a sourced investigation.
-- Review proposed actions against available stock, qualified staff, vehicle capacity, routes, deadlines and protected reserves.
-- Coordinate independently approved contributions from partner organizations, with signed messages, reservations and delivery receipts.
-- Track physical delivery, facility readiness and evacuation separately from approval or dispatch.
-- Receive offline field reports and reviewed media, then publish approved progress through the public portal.
-- Manage pooled funds and local sandbox payments, with traceable allocations and purchase receipts.
+See [Local operation](docs/LOCAL.md) for accounts, model budgets, media setup and the operator workflow. The [simulation laboratory](https://github.com/Hi-io/disaster-response-simulator) provides the deterministic world, source gateway and optional 3D viewer; it is separate from the operational product.
 
-Model activity shows real tool requests, returned evidence and short explanations. It does not display fabricated private reasoning. Investigations receive focused context and retrieve further records through scoped tools. [CONTEXTO_MODELO.md](docs/CONTEXTO_MODELO.md) explains context and spending.
+For development, see the [architecture](docs/ARCHITECTURE.md) and [integration guide](docs/INTEGRATIONS.md).
 
-The simulator's **Human attention profile** selector exposes zero, moderate and burst presets; Advanced JSON controls timings and finite staff pools. Its scripted policy menu remains separate from a real manual controller or the Gemma integration. The measured manual workflow uses native read → decide → relay tasks and actual communication receipts, with finite owner reviews for both methods.
+## Development
 
-## Verification and evidence
-
-~~~powershell
+```sh
 pnpm check
 pnpm test
-node scripts/verify.mjs
-# Real provider and browser checks have separate receipts:
-pnpm test:live
-pnpm test:ui
-~~~
+```
 
-The unchanged platform candidate 9b4de8b… has a previously sealed [486-check core verification](reports/verifications/1791875155549.json). After the latest simulator and viewer updates, **249 simulator checks**, [31 affected integration checks](reports/verifications/affected-facility-integration-20261013.json) and [7 focused browser checks](reports/human-profile-ui/1791891190000/result.json) passed. The earlier [113 browser checks](reports/ui-verifications/1791876005595.json) remain evidence of their recorded version. These receipts verify behavior; performance comes from separate physical comparisons.
+The ordinary test suite uses local fixtures. Commands that explicitly invoke the live model or media inference require provider access and consume the configured budget.
 
-The full design is in [PLATAFORMA.md](docs/PLATAFORMA.md). [Implementation coverage](docs/ESTADO_IMPLEMENTACION.md), [measured results](docs/RESULTADOS_CAPACIDAD_HUMANA.md) and [external validation](docs/VALIDACION_EXTERNA.md) distinguish implemented mechanisms, measured simulation outcomes and evidence still needed in the field. Earlier receipts remain versioned in reports/ and Git history.
+## Project scope
 
-The [Google Cloud architecture](docs/ARQUITECTURA_GCP.md) is a migration plan. This phase runs locally and does not deploy cloud services.
-
-## Repeat the response comparison
-
-`node --env-file-if-exists=.env.local scripts/compare-response.mjs` displays the fixed protocol without making calls. Add `--run=ROOT_GO_FINAL_TWO_RESPONSE` to run the paired local experiment with the configured Gemma key. Results, physical receipts, failed cases and costs are saved under `reports/final-two-response/`; the maximum declared model exposure is USD 0.15.
-
-`node scripts/explain-response.mjs --output=reports/analysis/your-new-readout` renders the existing closed comparison with time breakdowns, travel-excluded operations and explanations for every displayed metric. This command only reads saved evidence and writes a new report; it makes no provider calls and runs no simulations.
+This is a working local prototype. The laboratory represents finite resources, human attention, communication delays and physical delivery; its outcomes are simulation evidence. Real emergency operations, institutional adoption, Gemini integration and cloud deployment need their own validation. Financial flows use a local sandbox and do not charge real money.

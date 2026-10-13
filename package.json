@@ -1,5 +1,5 @@
 {
-  "name": "nexo-platform",
+  "name": "aidscaler-platform",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -20,6 +20,7 @@
     "evaluate": "node --env-file-if-exists=.env.local scripts/evaluate.mjs",
     "test:live": "node --env-file-if-exists=.env.local scripts/live.mjs",
     "test:ui": "node scripts/ui-test.mjs",
+    "test:offline": "node --test tests/browser/offline-migration.test.mjs",
     "test:journeys": "node scripts/journey-test.mjs",
     "test:responses": "node scripts/response-journey.mjs",
     "test:review": "node scripts/review-journey.mjs",

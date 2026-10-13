@@ -28,7 +28,7 @@ try {
     await page.goto(base);
     await page
       .getByLabel("Email", { exact: true })
-      .fill("commander@org0.nexo.local");
+      .fill("commander@org0.aidscaler.local");
     await page.getByLabel("Password", { exact: true }).fill(access.password);
     await page.getByRole("button", { name: "Enter workspace" }).click();
     await page

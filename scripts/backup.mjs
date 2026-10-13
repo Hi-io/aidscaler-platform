@@ -36,7 +36,7 @@ export async function backupLocal(store, config) {
     for (const table of TABLES)
       tables[table] = (await tx.query(`SELECT * FROM ${table}`)).rows;
     return {
-      format: "nexo-local-backup-v1",
+      format: "aidscaler-local-backup-v1",
       createdAt: new Date().toISOString(),
       tables,
       files: [],
@@ -76,8 +76,11 @@ export async function backupLocal(store, config) {
 }
 export async function restoreLocal(bundle, target) {
   check(
-    bundle.payload?.format === "nexo-local-backup-v1" &&
-      bundle.integrity === hash(bundle.payload),
+    // Legacy bundles retain their exact payload and integrity: renaming a
+    // format before hashing would invalidate a genuine recovery snapshot.
+    ["aidscaler-local-backup-v1", "nexo-local-backup-v1"].includes(
+      bundle?.payload?.format,
+    ) && bundle.integrity === hash(bundle.payload),
     "BACKUP_INTEGRITY",
     "Recovery bundle integrity check failed.",
   );

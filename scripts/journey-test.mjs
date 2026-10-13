@@ -12,7 +12,7 @@ const login = async (page, role) => {
   await page.goto(base);
   await page
     .getByLabel("Email", { exact: true })
-    .fill(role + "@org0.nexo.local");
+    .fill(role + "@org0.aidscaler.local");
   await page
     .getByLabel("Password", { exact: true })
     .fill("evaluation-password");

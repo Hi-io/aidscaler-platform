@@ -57,7 +57,7 @@ async function startWorker(org) {
       stdio: ["ignore", "pipe", "pipe", "ipc"],
       env: {
         ...process.env,
-        NEXO_LOCAL_DIR: path.join(cwd, ".local"),
+        AIDSCALER_LOCAL_DIR: path.join(cwd, ".local"),
         DATA_DIR: path.join(cwd, "pgdata"),
         EVIDENCE_DIR: path.join(cwd, "evidence"),
       },
@@ -218,7 +218,7 @@ try {
   await page.goto(worker.url);
   await page
     .getByLabel("Email", { exact: true })
-    .fill("commander@org0.nexo.local");
+    .fill("commander@org0.aidscaler.local");
   await page
     .getByLabel("Password", { exact: true })
     .fill("evaluation-password");

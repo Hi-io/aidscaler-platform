@@ -33,7 +33,7 @@ for (const organizations of orgs)
         },
       });
     try {
-      // Exogenous benchmark construction belongs to the evaluator only. NEXO
+      // Exogenous benchmark construction belongs to the evaluator only. AidScaler
       // receives operational observations and actual HTTP publication pages.
       const buildings = h.lab.world.state.map.buildings.filter(
         (b) => b.use === "residential",

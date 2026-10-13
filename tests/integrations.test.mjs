@@ -102,18 +102,18 @@ test("a real MCP HTTP exchange reads only scoped records and exposes no authoriz
     url: app.url + "/mcp",
     allowedOrigin: app.url,
     token: app.config.mcpReadKey,
-    allowedTools: ["nexo_signals", "nexo_evidence"],
+    allowedTools: ["aidscaler_signals", "aidscaler_evidence"],
   });
   const listing = await client.connect();
   assert.equal(
     listing.tools.some((t) => /dispatch|authorize|approve/.test(t.name)),
     false,
   );
-  const data = await client.call("nexo_signals", { limit: 100 });
+  const data = await client.call("aidscaler_signals", { limit: 100 });
   assert.equal(JSON.parse(data.content[0].text).length, 1);
   assert.equal(JSON.stringify(data).includes("Private partner note"), false);
   await assert.rejects(() => client.call("dispatch", {}), /permitted/);
-  const absent = await client.call("nexo_evidence", { id: "private" });
+  const absent = await client.call("aidscaler_evidence", { id: "private" });
   assert.equal(JSON.parse(absent.content[0].text), null);
   await client.close();
 });

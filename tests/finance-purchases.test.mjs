@@ -192,7 +192,7 @@ test("real HTTP source order and partial receipts reconcile a settled local budg
   const app = h.apps[0], w = h.lab.world;
   w.advance(60000); await app.ingestion.sync({ sources: false });
   const login = await fetch(app.url + "/api/login", { method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: "finance@org0.nexo.local", password: "evaluation-password" }) });
+    body: JSON.stringify({ email: "finance@org0.aidscaler.local", password: "evaluation-password" }) });
   assert.equal(login.status, 200);
   const cookie = login.headers.get("set-cookie").split(";")[0], { csrf } = await login.json(),
     request = async (path, data, key) => {

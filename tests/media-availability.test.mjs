@@ -70,7 +70,7 @@ test("unavailable, descriptive and foreign media never create phantom uploads or
 
 test("changed media bytes fail integrity validation instead of becoming new model or public evidence", async (t) => {
   const directory = await mkdtemp(
-    path.join(os.tmpdir(), "nexo-evidence-test-"),
+    path.join(os.tmpdir(), "aidscaler-evidence-test-"),
   );
   const store = await Store.open();
   t.after(async () => {

@@ -1,4 +1,4 @@
-/** A contractor bridge, not a NEXO instance: no LLM, intake or shared workspace.
+/** A contractor bridge, not a AidScaler instance: no LLM, intake or shared workspace.
  * Its owner approves a typed request against its own scoped system of record.
  * Requests, decisions, retries and physical receipts survive process restart.
  */
@@ -454,8 +454,8 @@ export async function createExternalGateway({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-NEXO-From": org,
-          "X-NEXO-Signature": sign(peer.key, envelope),
+          "X-AIDSCALER-From": org,
+          "X-AIDSCALER-Signature": sign(peer.key, envelope),
         },
         body: JSON.stringify(envelope),
         redirect: "error",
@@ -638,8 +638,8 @@ export async function createExternalGateway({
           res,
           200,
           await receive(
-            req.headers["x-nexo-from"],
-            req.headers["x-nexo-signature"],
+            req.headers["x-aidscaler-from"],
+            req.headers["x-aidscaler-signature"],
             await input(req),
           ),
         );

@@ -24,11 +24,11 @@ const comparisons = [];
 const contrasts = [
   ["B1", "B2", "Extraction over deterministic allocation"],
   ["B2", "B4", "Investigation beyond extraction"],
-  ["B3", "B4", "NEXO versus same-model general investigator"],
+  ["B3", "B4", "AidScaler versus same-model general investigator"],
   ["B1", "B5", "Conventional sharing benefit; not a GenAI contribution"],
-  ["B4", "B6", "Network NEXO versus a single NEXO instance"],
+  ["B4", "B6", "Network AidScaler versus a single AidScaler instance"],
   ["B5", "B6", "GenAI contribution beyond conventional sharing"],
-  ["B7", "B6", "NEXO versus same-model general investigator with the SAME shared owners and tools"],
+  ["B7", "B6", "AidScaler versus same-model general investigator with the SAME shared owners and tools"],
 ];
 for (const scenario of protocol.scenarios)
   for (const [baseline, candidate, question] of contrasts) {

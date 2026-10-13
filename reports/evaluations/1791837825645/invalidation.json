@@ -1,6 +1,0 @@
-{
-  "at": "2026-10-12T21:15:51.940Z",
-  "validForComparativeClaims": false,
-  "reason": "Common reservation expiry, missing physical terminal telemetry, owned facility stock lookup and duplicated service planning invalidate comparative claims. Raw results, failures and usage are retained. Further simulator source changes at 2026-10-12T21:09:30.952Z invalidate still-running B7 fingerprints as well.",
-  "newFreezeRequired": true
-}

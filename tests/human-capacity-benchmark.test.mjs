@@ -160,7 +160,7 @@ const row=(arm,condition='moderate',mean=50)=>({arm,profile:'moderate',condition
   timeToSufficientService:{restrictedMeanMs:mean},timeToFirstUsefulService:{restrictedMeanMs:10},
   costUsd:0,knownCostUsd:0,chargedBudgetUsd:0,unknownCostRows:0});
 
-test('summary preserves NEXO loss and recovered errors, rejects altered/unfinished pairs and separates error controls',()=>{
+test('summary preserves AidScaler loss and recovered errors, rejects altered/unfinished pairs and separates error controls',()=>{
   const rows=[row('B5','moderate',40),row('B6','moderate',60),row('B5','moderate_error_1pct',100),row('B6','moderate_error_1pct',80)];
   const report=summarizeHumanCapacity(rows,[{arm:'B8',condition:'moderate',seed:'fixed-seed'}]);
   const loss=report.comparisons.find(r=>r.reference==='B5'&&r.condition==='moderate');

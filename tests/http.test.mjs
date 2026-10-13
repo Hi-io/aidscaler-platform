@@ -24,7 +24,7 @@ test("API requires sessions, CSRF and roles; the public portal contains only app
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: "analyst@org0.nexo.local",
+      email: "analyst@org0.aidscaler.local",
       password: "test-password-12345",
     }),
   });

@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 // The public rendition is decoded with the actual local Pillow runtime. Fail
 // before launching a world/browser when this required dependency is missing.
 const mediaPython =
-  process.env.NEXO_MEDIA_PYTHON ??
+  process.env.AIDSCALER_MEDIA_PYTHON ??
   fileURLToPath(
     new URL(
       process.platform === "win32"
@@ -19,7 +19,7 @@ const mediaPython =
   );
 await access(mediaPython).catch(() => {
   throw new Error(
-    "Review journey requires the real local image runtime. Run npm run setup:media or set NEXO_MEDIA_PYTHON to an installed runtime.",
+    "Review journey requires the real local image runtime. Run npm run setup:media or set AIDSCALER_MEDIA_PYTHON to an installed runtime.",
   );
 });
 await promisify(execFile)(
@@ -55,7 +55,7 @@ const login = async (role) => {
   await page.goto(base);
   await page
     .getByLabel("Email", { exact: true })
-    .fill(role + "@org0.nexo.local");
+    .fill(role + "@org0.aidscaler.local");
   await page
     .getByLabel("Password", { exact: true })
     .fill("evaluation-password");

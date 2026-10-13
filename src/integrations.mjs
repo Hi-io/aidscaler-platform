@@ -140,7 +140,7 @@ const schema = z
     allowedOrigin: z.url(),
     credentialsEnv: z
       .string()
-      .regex(/^NEXO_CONNECTOR_[A-Z0-9_]{1,80}$/)
+      .regex(/^AIDSCALER_CONNECTOR_[A-Z0-9_]{1,80}$/)
       .optional(),
     allowedTools: z.array(z.string().max(150)).max(30).default([]),
     purpose: z.string().min(5).max(1000),

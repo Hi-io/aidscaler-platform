@@ -17,7 +17,7 @@ test("public receipt photos stay private until publication, only derived bytes a
   t.after(() => store.close());
   await store.organization("org0");
   const evidenceDir = await mkdtemp(
-    path.join(os.tmpdir(), "nexo-public-proof-"),
+    path.join(os.tmpdir(), "aidscaler-public-proof-"),
   );
   const config = { evidenceDir, org: "org0" },
     domain = new Domain(store, config),
@@ -199,7 +199,7 @@ test("publication gates reject premature progress, foreign evidence and restrict
 });
 test("HTTP anonymous photo upload is idempotent, private and blocked from inference until moderation", async (t) => {
   const s = await Store.open(),
-    evidenceDir = await mkdtemp(path.join(os.tmpdir(), "nexo-community-"));
+    evidenceDir = await mkdtemp(path.join(os.tmpdir(), "aidscaler-community-"));
   const app = await createPlatform({
     port: 0,
     org: "org0",
@@ -246,7 +246,7 @@ test("HTTP anonymous photo upload is idempotent, private and blocked from infere
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: "analyst@org0.nexo.local",
+      email: "analyst@org0.aidscaler.local",
       password: "local-test-12345678",
     }),
   });

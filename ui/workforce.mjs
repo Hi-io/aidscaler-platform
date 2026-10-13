@@ -20,7 +20,7 @@ export function createWorkforceControls(h) {
     rows
       .map((r) => `<option value="${e(r.id)}">${e(label(r))}</option>`)
       .join("");
-  const taskCache = () => `nexo-tasks:${state.user.org}:${state.user.id}`;
+  const taskCache = () => `aidscaler-tasks:${state.user.org}:${state.user.id}`;
   async function field() {
     try {
       taskRows = await api("/api/tasks");

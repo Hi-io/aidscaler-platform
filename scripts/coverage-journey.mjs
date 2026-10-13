@@ -16,7 +16,7 @@ try {
   for (const viewport of [{ width: 1920, height: 1080 }, { width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport, reducedMotion: "reduce" }), page = await context.newPage(); currentPage = page;
     page.on("pageerror", e => errors.push(e.message));
-    await page.goto(app.url); await page.getByLabel("Email", { exact: true }).fill("commander@org0.nexo.local");
+    await page.goto(app.url); await page.getByLabel("Email", { exact: true }).fill("commander@org0.aidscaler.local");
     await page.getByLabel("Password", { exact: true }).fill("evaluation-password");
     await page.getByRole("button", { name: "Enter workspace", exact: true }).click();
     const review = page.getByRole("button", { name: "Review coverage", exact: true });

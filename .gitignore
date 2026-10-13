@@ -42,3 +42,15 @@ Thumbs.db
 
 .codex*
 **/.codex*
+
+# Local research notes and generated experiment artifacts.
+/reports/
+/docs/**
+!/docs/LOCAL.md
+!/docs/INTEGRATIONS.md
+!/docs/ARCHITECTURE.md
+*.md
+!README.md
+!/docs/LOCAL.md
+!/docs/INTEGRATIONS.md
+!/docs/ARCHITECTURE.md

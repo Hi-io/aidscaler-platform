@@ -2,7 +2,7 @@ import path from "node:path";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { randomBytes, createHash } from "node:crypto";
 export async function configuration(overrides = {}) {
-  const dir = path.resolve(process.env.NEXO_LOCAL_DIR ?? ".local");
+  const dir = path.resolve(process.env.AIDSCALER_LOCAL_DIR ?? ".local");
   await mkdir(dir, { recursive: true });
   let local = {};
   try {
@@ -23,14 +23,14 @@ export async function configuration(overrides = {}) {
   return {
     port: Number(process.env.PORT ?? 4400),
     host: "127.0.0.1",
-    org: process.env.NEXO_ORG ?? "org0",
+    org: process.env.AIDSCALER_ORG ?? "org0",
     orgName: "Relief North",
     dataDir: process.env.DATA_DIR ?? path.join(dir, "pgdata"),
     databaseUrl: process.env.DATABASE_URL,
     evidenceDir: process.env.EVIDENCE_DIR ?? path.join(dir, "evidence"),
     secret,
     mcpReadKey:
-      process.env.NEXO_MCP_KEY ??
+      process.env.AIDSCALER_MCP_KEY ??
       createHash("sha256")
         .update(secret + ":read-only-mcp")
         .digest("hex"),
@@ -47,7 +47,7 @@ export async function configuration(overrides = {}) {
     sourceUrl: process.env.SOURCE_URL ?? "http://127.0.0.1:4319",
     sourceAgentKey: process.env.SOURCE_AGENT_KEY,
     sourceHumanKey: process.env.SOURCE_HUMAN_KEY,
-    bootstrapPassword: process.env.NEXO_BOOTSTRAP_PASSWORD,
+    bootstrapPassword: process.env.AIDSCALER_BOOTSTRAP_PASSWORD,
     peers: [],
     pollMs: 5000,
     autoIngest: true,

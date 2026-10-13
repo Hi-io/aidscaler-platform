@@ -12,7 +12,7 @@ page.on("pageerror", e => errors.push(e.message));
 const close = () => page.getByRole("button", { name: "Close dialog", exact: true }).click();
 try {
  h.lab.world.advance(60000); for (const target of ["inventory", "vehicles", "map"]) await app.connector.action("query", { target }, "response-ui-" + target); await app.ingestion.sync();
- await page.goto(app.url); await page.getByLabel("Email", { exact: true }).fill("commander@org0.nexo.local"); await page.getByLabel("Password", { exact: true }).fill("evaluation-password"); await page.getByRole("button", { name: "Enter workspace", exact: true }).click(); await page.locator(".workspace").waitFor();
+ await page.goto(app.url); await page.getByLabel("Email", { exact: true }).fill("commander@org0.aidscaler.local"); await page.getByLabel("Password", { exact: true }).fill("evaluation-password"); await page.getByRole("button", { name: "Enter workspace", exact: true }).click(); await page.locator(".workspace").waitFor();
  await page.goto(app.url + "/#settings"); await page.getByText("Responsibilities, coverage & processing policy", { exact: true }).click(); await page.getByRole("button", { name: "Set response priorities", exact: true }).click();
  await page.locator("#response-policy [name=order]").selectOption("deadline_then_priority"); await page.getByText("Protected need types", { exact: true }).click(); await page.getByLabel("water", { exact: true }).check();
  await page.locator("#response-policy [name=reason]").fill("Explicit coordinator policy for this synthetic UI exercise"); await page.getByRole("button", { name: "Approve this policy version", exact: true }).click(); await page.locator("dialog").waitFor({ state: "detached" });
@@ -56,7 +56,7 @@ try {
  await page.getByText(remainingSources + " collected signals", { exact: true }).waitFor();
  assert.equal(errors.length, 0); await context.close();
  const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" }), m = await mobile.newPage();
- await m.goto(app.url); await m.getByLabel("Email", { exact: true }).fill("commander@org0.nexo.local"); await m.getByLabel("Password", { exact: true }).fill("evaluation-password"); await m.getByRole("button", { name: "Enter workspace", exact: true }).click(); await m.locator(".workspace").waitFor();
+ await m.goto(app.url); await m.getByLabel("Email", { exact: true }).fill("commander@org0.aidscaler.local"); await m.getByLabel("Password", { exact: true }).fill("evaluation-password"); await m.getByRole("button", { name: "Enter workspace", exact: true }).click(); await m.locator(".workspace").waitFor();
  await m.goto(app.url + "/#settings"); await m.getByText("Responsibilities, coverage & processing policy", { exact: true }).click(); await m.getByRole("button", { name: "Set response priorities", exact: true }).click();
  await m.locator("dialog").waitFor({ state: "visible" });
  const sizes = await m.evaluate(() => ({ body: document.documentElement.scrollWidth, width: innerWidth, dialog: document.querySelector("dialog").getBoundingClientRect().width })); assert.ok(sizes.body <= sizes.width + 1); assert.ok(sizes.dialog <= sizes.width); checks.push("Response-policy dialog remains usable at 390px with reduced motion and without page overflow");

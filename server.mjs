@@ -59,7 +59,7 @@ async function body(req, limit = 1_000_000) {
     throw new AppError("JSON", "Invalid JSON.");
   }
 }
-const cookie = (req) => req.headers.cookie?.match(/(?:^|; )nexo=([^;]+)/)?.[1];
+const cookie = (req) => req.headers.cookie?.match(/(?:^|; )aidscaler=([^;]+)/)?.[1];
 const KINDS = [
   "signal",
   "claim",
@@ -148,7 +148,7 @@ export async function createPlatform(overrides = {}) {
       users.push(
         await auth.create(null, {
           org: config.org,
-          email: `${r}@${config.org}.nexo.local`,
+          email: `${r}@${config.org}.aidscaler.local`,
           name:
             {
               commander: "Alex Morgan",
@@ -256,8 +256,8 @@ export async function createPlatform(overrides = {}) {
           res,
           200,
           await network.receive(
-            req.headers["x-nexo-from"],
-            req.headers["x-nexo-signature"],
+            req.headers["x-aidscaler-from"],
+            req.headers["x-aidscaler-signature"],
             await body(req),
           ),
         );
@@ -445,7 +445,7 @@ export async function createPlatform(overrides = {}) {
         );
         res.setHeader(
           "Set-Cookie",
-          `nexo=${session.token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800`,
+          `aidscaler=${session.token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800`,
         );
         return json(res, 200, { user: session.user, csrf: session.csrf });
       }
@@ -484,7 +484,7 @@ export async function createPlatform(overrides = {}) {
           await auth.logout(cookie(req));
           res.setHeader(
             "Set-Cookie",
-            "nexo=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0",
+            "aidscaler=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0",
           );
           return json(res, 200, { signedOut: true });
         }
@@ -1208,7 +1208,7 @@ if (
 ) {
   const app = await createPlatform();
   console.log(
-    `NEXO: ${app.url}\nPublic portal: ${app.url}/public\nRole credentials: ignored .local/access-${app.config.org}.json\nModel: ${app.config.modelId} (${app.config.provider})`,
+    `AidScaler: ${app.url}\nPublic portal: ${app.url}/public\nRole credentials: ignored .local/access-${app.config.org}.json\nModel: ${app.config.modelId} (${app.config.provider})`,
   );
   for (const s of ["SIGINT", "SIGTERM"])
     process.on(s, async () => {

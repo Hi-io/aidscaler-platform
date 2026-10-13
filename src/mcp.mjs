@@ -64,7 +64,7 @@ export class McpConnector {
     const r = await this.request("initialize", {
       protocolVersion: this.version,
       capabilities: {},
-      clientInfo: { name: "nexo-scoped-client", version: "0.1.0" },
+      clientInfo: { name: "aidscaler-scoped-client", version: "0.1.0" },
     });
     this.version = r.protocolVersion;
     await this.request("notifications/initialized", {}, true);

@@ -103,7 +103,7 @@ export async function runHumanCapacityCampaign(options={}) {
     evaluator:await humanCapacityEvaluatorFingerprint(),simulator:await requireLoadedSimulatorBuild()};
   validateHumanCampaignGate(JSON.parse(await readFile(resolve(options.freeze),'utf8')),current);
   const nonce=randomUUID();
-  const lockPath=resolve(options.lock??'../../.candidate-development/nexo-platform/.local/PAID_RESEARCH_STUDY.lock');
+  const lockPath=resolve(options.lock??'.local/PAID_RESEARCH_STUDY.lock');
   return withHumanResearchLock(lockPath,{study:'native-human-capacity',nonce,pid:process.pid,source:current},async()=>{
   const folder=resolve(options.folder??`reports/human-capacity/${Date.now()}`);
   await mkdir(folder,{recursive:true});

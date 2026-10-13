@@ -1,8 +1,0 @@
-{
-  "status": "interrupted_before_completion",
-  "session": 85516,
-  "verificationProcess": 18860,
-  "reason": "Independent code review identified a concurrent authorization-cancellation and operational-plan-modification edge in the newly implemented nonblocking source review. Stop only the free verification process tree, repair the implementation, then rerun the complete gate on stable bytes.",
-  "completedGate": false,
-  "scope": "No paid campaign was terminated or altered. No uncompleted test or verification result is credited as passing. Logs remain in ignored .local/verification for diagnosis."
-}

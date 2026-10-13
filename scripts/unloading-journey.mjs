@@ -23,7 +23,7 @@ function watch(target) {
 }
 watch(page);
 async function login(target, role) {
-  await target.goto(app.url); await target.getByLabel("Email", { exact: true }).fill(`${role}@org0.nexo.local`);
+  await target.goto(app.url); await target.getByLabel("Email", { exact: true }).fill(`${role}@org0.aidscaler.local`);
   await target.getByLabel("Password", { exact: true }).fill("evaluation-password");
   await target.getByRole("button", { name: "Enter workspace", exact: true }).click(); await target.locator(".workspace").waitFor();
 }

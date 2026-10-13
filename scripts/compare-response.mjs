@@ -3,7 +3,7 @@ import {createHash,randomUUID} from 'node:crypto';
 import {resolve} from 'node:path';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).map(a=>{const i=a.indexOf('=');return[a.slice(2,i<0?undefined:i),i<0?true:a.slice(i+1)];}));
-const pins={candidate:'9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3',baseEvaluator:'d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090',evaluator:'75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e'};
+const pins={"candidate":"2a9c64640f12fb0b6eee1f5d5215161cb7f9f096fa77b81e44e949039b2f6040","baseEvaluator":"19e0a3b9f67a7906d1717b83ca648a28a97ccf57e474982c35f59ab068cf3aba","evaluator":"228caacb6500adb6e46db7235bba13cf8eb53ae291d7b8bab8dfdc197122ea46"};
 const seed='native-human-capacity-primary-01',worlds=['C_manual','B6'].map(arm=>({arm,profile:'moderate',condition:'moderate',seed}));
 const common={count:24,noise:192,reposts:2,formalDelayMs:1800000,horizonMs:10800000,grid:9,extentKm:6,pumpMs:60000,clarificationWorkers:2,maxModelCalls:16,budgetUsd:.15,wallLimitMs:900000,humanCapacityOverrides:{readers:2,deciders:2,relayers:1,readErrorBp:0,decisionErrorBp:0,relayErrorBp:0}};
 if(options.run!=='ROOT_GO_FINAL_TWO_RESPONSE'){console.log(JSON.stringify({state:'PREPARED_NOT_LAUNCHED',worlds,common}));process.exit(0);}
@@ -13,7 +13,7 @@ const [{buildFingerprint,evaluatorFingerprint},{requireLoadedSimulatorBuild},{ru
  import('../evaluation/harness.mjs'),import('../evaluation/simulator-build.mjs'),import('../evaluation/human-capacity-benchmark.mjs'),import('../scripts/human-capacity-campaign.mjs')]);
 const current=async()=>({candidate:await buildFingerprint(),baseEvaluator:await evaluatorFingerprint(),evaluator:await humanCapacityEvaluatorFingerprint(),simulator:await requireLoadedSimulatorBuild()});
 const initial=await current();
-if(Object.entries(pins).some(([k,v])=>initial[k]!==v)||initial.simulator!=='4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa')throw Error('Expected current frozen candidate/evaluators and current simulator4ea1.');
+if(Object.entries(pins).some(([k,v])=>initial[k]!==v)||initial.simulator!=='4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa')throw Error('The declared AidScaler candidate, evaluators or simulator changed before the comparison.');
 const same=s=>Object.keys(initial).every(k=>s[k]===initial[k]);
 const folder=resolve(options.folder??'reports/final-two-response/'+Date.now()),lock=resolve('.local/PAID_RESEARCH_STUDY.lock');
 let interrupted=false;const signal=()=>{interrupted=true;};process.on('SIGINT',signal);process.on('SIGTERM',signal);
@@ -44,7 +44,7 @@ try{await withHumanResearchLock(lock,{study:'final-two-response',nonce:randomUUI
  }
  const summary=summarizeHumanCapacity(rows,worlds);summary.comparisons=summary.comparisons.filter(p=>p.reference==='C_manual');
  const finalSource=await current(),stable=same(finalSource),pair=summary.comparisons[0]??null;
- const presentation=rows.map(r=>({arm:r.arm,label:r.arm==='C_manual'?'Conventional':'NEXO + Gemma 4',status:r.status,
+ const presentation=rows.map(r=>({arm:r.arm,label:r.arm==='C_manual'?'Conventional':'AidScaler + Gemma 4',status:r.status,
   sufficient:r.timeToSufficientService,firstUseful:r.timeToFirstUsefulService,cases:r.outcomes?.length??0,covered:r.outcomes?.filter(x=>!x.censored).length??0,
   censored:r.outcomes?.filter(x=>x.censored).length??null,resources:['water','food','blankets'].map(type=>{const a=(r.outcomes??[]).filter(x=>x.type===type);return{type,unit:a[0]?.unit??null,demand:a.reduce((n,x)=>n+x.quantity,0),received:a.reduce((n,x)=>n+x.served,0),excess:a.reduce((n,x)=>n+x.overprovided,0)};}),
   distanceM:r.metrics?.physical?.distanceM??null,fuelMl:r.metrics?.physical?.fuelMl??null,providerCalls:r.modelCalls,knownCostUsd:r.knownCostUsd,totalCostUsd:r.usageMissing?null:r.costUsd,
@@ -54,7 +54,7 @@ try{await withHumanResearchLock(lock,{study:'final-two-response',nonce:randomUUI
   notes:['Simulation with hypothetical moderate human-capacity parameters; one paired seed, not independent field validation.','All24 cases, censored failures and unknown bills retained. Positive physical service is not independent semantic precision.']};
  await writeFile(resolve(folder,'summary.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});
  const minute=n=>typeof n==='number'?(n/60000).toFixed(3):'unknown',usd=n=>typeof n==='number'?n.toFixed(8):'unknown';
- let md='# Conventional / NEXO + Gemma 4\n\nBoth methods receive the same seeded scenario, resources, permissions and physical rules. NEXO uses Gemma 4 through OpenRouter. These are simulated response outcomes; minutes saved do not establish lives saved.\n\n| Metric | Conventional | NEXO + Gemma 4 | Meaning for the response / beneficiaries |\n|---|---:|---:|---|\n';
+ let md='# Conventional / AidScaler + Gemma 4\n\nBoth methods receive the same seeded scenario, resources, permissions and physical rules. AidScaler uses Gemma 4 through OpenRouter. These are simulated response outcomes; minutes saved do not establish lives saved.\n\n| Metric | Conventional | AidScaler + Gemma 4 | Meaning for the response / beneficiaries |\n|---|---:|---:|---|\n';
  const left=presentation.find(r=>r.arm==='C_manual'),right=presentation.find(r=>r.arm==='B6'),cell=(r,f)=>r?f(r):'not run';
  const metrics=[
   ['Run status',r=>r.status,'Whether the declared simulation finished. A completed run still needs valid source integrity and physical evidence before comparison.'],
@@ -80,7 +80,7 @@ try{await withHumanResearchLock(lock,{study:'final-two-response',nonce:randomUUI
    ['excess','received beyond demand','Recorded overprovision is retained as a resource tradeoff and does not count as additional need coverage.']
   ])md+='| '+label+' — '+description+' | '+cell(left,r=>resourceValue(r,type,field))+' | '+cell(right,r=>resourceValue(r,type,field))+' | '+meaning+' '+unitMeaning+' |\n';
  }
- md+='\nThis is one paired seed under declared, hypothetical human-capacity settings. '+(result.comparativeClaimEligible?'The matched pair is eligible for comparison; eligibility does not imply a win.':'No comparative win is claimed: inspect run status, source integrity and missing or censored evidence.')+'\n\n[Protocol](protocol.json), [complete summary](summary.json), [Conventional outcomes](C_manual.json) and [NEXO + Gemma 4 outcomes](B6.json) retain quantities, failures, recovered errors, invariants and known or unknown usage. First partial help and sufficient help remain distinct endpoints in those records.\n';
+ md+='\nThis is one paired seed under declared, hypothetical human-capacity settings. '+(result.comparativeClaimEligible?'The matched pair is eligible for comparison; eligibility does not imply a win.':'No comparative win is claimed: inspect run status, source integrity and missing or censored evidence.')+'\n\n[Protocol](protocol.json), [complete summary](summary.json), [Conventional outcomes](C_manual.json) and [AidScaler + Gemma 4 outcomes](B6.json) retain quantities, failures, recovered errors, invariants and known or unknown usage. First partial help and sufficient help remain distinct endpoints in those records.\n';
  await writeFile(resolve(folder,'readout.md'),md,{flag:'wx'});await checkpoint();console.log(JSON.stringify({folder,sourceStable:stable,eligible:result.comparativeClaimEligible,presentation}));
  if(!result.comparativeClaimEligible)process.exitCode=1;
 });}finally{process.off('SIGINT',signal);process.off('SIGTERM',signal);}

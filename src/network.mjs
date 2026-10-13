@@ -174,8 +174,8 @@ export class Network {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-NEXO-From": this.config.org,
-        "X-NEXO-Signature": sign(peer.key, envelope),
+        "X-AIDSCALER-From": this.config.org,
+        "X-AIDSCALER-Signature": sign(peer.key, envelope),
       },
       body: JSON.stringify(envelope),
       signal: AbortSignal.timeout(10000),

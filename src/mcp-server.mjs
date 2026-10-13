@@ -2,7 +2,7 @@ import { check } from "./errors.mjs";
 import { resolveEvidence } from "./citations.mjs";
 export const mcpTools = [
   {
-    name: "nexo_context",
+    name: "aidscaler_context",
     description:
       "Read this organization’s received operational snapshot. No observer truth or credentials.",
     inputSchema: {
@@ -12,7 +12,7 @@ export const mcpTools = [
     },
   },
   {
-    name: "nexo_signals",
+    name: "aidscaler_signals",
     description: "Read up to 100 received source records.",
     inputSchema: {
       type: "object",
@@ -21,7 +21,7 @@ export const mcpTools = [
     },
   },
   {
-    name: "nexo_evidence",
+    name: "aidscaler_evidence",
     description: "Read one accessible evidence record.",
     inputSchema: {
       type: "object",
@@ -31,7 +31,7 @@ export const mcpTools = [
     },
   },
   {
-    name: "nexo_responses",
+    name: "aidscaler_responses",
     description:
       "Read the status of human-owned response proposals. Cannot authorize.",
     inputSchema: {
@@ -50,7 +50,7 @@ export async function handleMcp(store, org, request) {
     result = {
       protocolVersion: "2025-06-18",
       capabilities: { tools: { listChanged: false } },
-      serverInfo: { name: "nexo-read-only", version: "0.1.0" },
+      serverInfo: { name: "aidscaler-read-only", version: "0.1.0" },
     };
   else if (method === "tools/list") result = { tools: mcpTools };
   else if (method === "tools/call") {
@@ -62,19 +62,19 @@ export async function handleMcp(store, org, request) {
     );
     let data;
     const args = params.arguments ?? {};
-    if (params.name === "nexo_context")
+    if (params.name === "aidscaler_context")
       data =
         (await store.get(org, "context", "operational", false))?.snapshot ??
         null;
-    if (params.name === "nexo_signals")
+    if (params.name === "aidscaler_signals")
       data = await store.list(
         org,
         "signal",
         Math.max(1, Math.min(100, Number(args.limit ?? 30))),
       );
-    if (params.name === "nexo_evidence")
+    if (params.name === "aidscaler_evidence")
       data = await resolveEvidence(store, org, args.id);
-    if (params.name === "nexo_responses")
+    if (params.name === "aidscaler_responses")
       data = await store.list(org, "proposal", 100);
     result = {
       content: [{ type: "text", text: JSON.stringify(data) }],

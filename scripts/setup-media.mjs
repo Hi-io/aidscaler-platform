@@ -15,7 +15,7 @@ try {
   await access(python);
 } catch {
   run(
-    process.env.NEXO_PYTHON ??
+    process.env.AIDSCALER_PYTHON ??
       (process.platform === "win32" ? "python" : "python3"),
     ["-m", "venv", directory],
   );

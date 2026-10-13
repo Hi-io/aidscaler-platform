@@ -13,11 +13,12 @@ async function laboratory(t, organizations = 1) {
     persistCredentials: false,
     config: {
       scenario: "S23",
-      seed: "nexo-live-demo-001",
+      seed: "aidscaler-live-demo-001",
       policy: "none",
       mode: "modeled",
       grid: 5,
       extentKm: 2,
+      topology: "grid",
       hazard: "none",
       backgroundTraffic: 0,
       postsPerHour: 0,

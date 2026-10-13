@@ -47,7 +47,7 @@ export const HUMAN_CAPACITY_PROTOCOL = {
   failurePolicy: 'At most two attempts per inconclusive manual stage, with all receipts and errors retained. Missing relay, rejected work, unserved demand, unknown fees and provider failures are never counted as completed service.',
   clocks: 'Publication, HTTP receipt, native human work, model availability, inquiry and physical receipt are separate source clocks. Provider measured wall time is charged at max(native model latency, measured provider duration). Host SQL/UI wall time is separately reported.',
   coalescing: 'All arms recompile only after the received response material signature or eligible integrated need IDs change. Receipt ingestion, owner review, physical execution and unknown human/inquiry queues continue at each common60s pump or earlier received native readyAt; no private completion or skipped horizon. Public feed downloads occur only in the coordinator store actually consumed by this controller; distributed reading still obtains its own native authenticated source snapshot.',
-  controls: 'Keep zero profile, moderate, burst, B5/B8 upper bounds, failed and censored worlds. Human errors are source-seeded and apply to the same owner review mechanism for NEXO; no arm-specific random error or forced duplicate score.',
+  controls: 'Keep zero profile, moderate, burst, B5/B8 upper bounds, failed and censored worlds. Human errors are source-seeded and apply to the same owner review mechanism for AidScaler; no arm-specific random error or forced duplicate score.',
   endpoint: 'First useful and sufficient physical service RMST at the fixed horizon, by native demand and resource units; background task completion or proposal approval is not aid.',
 };
 

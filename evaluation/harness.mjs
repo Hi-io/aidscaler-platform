@@ -187,7 +187,7 @@ export async function createHarness({
   const networkFetcher = async (url, options) => {
     // Transport is part of the laboratory, outside the candidate. It may see
     // physical connectivity to delay/fail a delivery, never to reveal a plan.
-    const from = options.headers["X-NEXO-From"],
+    const from = options.headers["X-AIDSCALER-From"],
       to =
         apps.find((a) => url.startsWith(a.url + "/"))?.config.org ??
         apps
@@ -882,7 +882,7 @@ export async function runEpisode({
               refreshWallMs = performance.now() - refreshWall;
             activity = await app.investigator.run(
               {
-                policy: ["B3", "B7"].includes(arm) ? "general" : "nexo",
+                policy: ["B3", "B7"].includes(arm) ? "general" : "aidscaler",
                 ...(repair ? { repairOf: repair.id } : {}),
               },
               episode,

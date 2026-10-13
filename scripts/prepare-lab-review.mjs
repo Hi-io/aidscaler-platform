@@ -138,7 +138,7 @@ const report = {
   candidateFingerprint: candidate,
   candidateChanged: candidate !== (await buildFingerprint()),
   actor: "Scripted synthetic commander accounts; no real operator study",
-  world: "Existing local S19 laboratory; no observer truth is passed to NEXO",
+  world: "Existing local S19 laboratory; no observer truth is passed to AidScaler",
   purpose:
     "Real evidence/tool activity and an independently reviewed pending decision visible in the operator workspace",
   shares,

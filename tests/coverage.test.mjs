@@ -152,7 +152,7 @@ test("contact retries are bounded by received clock, survive poll storms and sto
 });
 
 test("durable restart reuses an ambiguously issued source inquiry and later receives only its exact original contact", async t => {
-  const dir = await mkdtemp(join(tmpdir(), "nexo-coverage-")); let currentStore;
+  const dir = await mkdtemp(join(tmpdir(), "aidscaler-coverage-")); let currentStore;
   t.after(async () => { if (currentStore && !currentStore.db.closed) await currentStore.close(); await rm(dir, { recursive: true, force: true }); });
   const f = await fixture(t, { dataDir: dir }), row = await f.request(["a"]), original = f.connector.action;
   currentStore = f.store;

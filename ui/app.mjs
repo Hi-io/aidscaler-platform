@@ -132,7 +132,7 @@ const visibleNav = () =>
   );
 function cacheSession() {
   sessionStorage.setItem(
-    "nexo-workspace",
+    "aidscaler-workspace",
     JSON.stringify({
       user: state.user,
       model: state.model,
@@ -1027,7 +1027,7 @@ async function runAction(name, id) {
   }
   if (name === "logout") {
     await api("/api/logout", {});
-    sessionStorage.removeItem("nexo-workspace");
+    sessionStorage.removeItem("aidscaler-workspace");
     state.user = null;
     login();
     return;
@@ -1481,7 +1481,7 @@ else
   } catch {
     let cached;
     try {
-      cached = JSON.parse(sessionStorage.getItem("nexo-workspace"));
+      cached = JSON.parse(sessionStorage.getItem("aidscaler-workspace"));
     } catch {}
     if (!navigator.onLine && cached?.expiresAt > Date.now()) {
       state.user = cached.user;

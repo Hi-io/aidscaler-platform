@@ -13,7 +13,7 @@ import {
 } from "../evaluation/simulator-build.mjs";
 
 async function fixture(t) {
-  const dir = await mkdtemp(path.join(tmpdir(), "nexo-build-integrity-"));
+  const dir = await mkdtemp(path.join(tmpdir(), "aidscaler-build-integrity-"));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const root = pathToFileURL(dir + path.sep);
   for (const name of [
