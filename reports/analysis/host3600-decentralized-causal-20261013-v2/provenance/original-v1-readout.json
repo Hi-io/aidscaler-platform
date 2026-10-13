@@ -1,0 +1,1166 @@
+{
+  "input": {
+    "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-decentralized-closed-20261013.json",
+    "sha256": "af08bd089fb67a7cb272c533b0ccaeb375415e0e89d0e266e7d3f7d5de380045"
+  },
+  "source": {
+    "initial": {
+      "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+      "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+      "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+    },
+    "final": {
+      "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+      "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+      "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+    },
+    "stable": true,
+    "reasons": []
+  },
+  "comparisons": [
+    {
+      "seed": "native-human-capacity-control-decentralized-01",
+      "condition": "moderate",
+      "profile": "moderate",
+      "reference": "C_manual",
+      "candidate": "B6",
+      "comparable": true,
+      "reasons": [],
+      "firstUseful": {
+        "referenceRmstMs": 2634412.8333333335,
+        "candidateRmstMs": 1921329.5,
+        "reductionFraction": 0.27068017749938844,
+        "referenceCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 2634412.8333333335,
+          "restrictedMedianMs": 2563017,
+          "restrictedP95Ms": 4359017,
+          "reachedOnlyP95Ms": 4359017,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 1921329.5,
+          "restrictedMedianMs": 1989517,
+          "restrictedP95Ms": 3693517,
+          "reachedOnlyP95Ms": 3693517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "sufficient": {
+        "referenceRmstMs": 2634412.8333333335,
+        "candidateRmstMs": 1921329.5,
+        "reductionFraction": 0.27068017749938844,
+        "referenceCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 2634412.8333333335,
+          "restrictedMedianMs": 2563017,
+          "restrictedP95Ms": 4359017,
+          "reachedOnlyP95Ms": 4359017,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 1921329.5,
+          "restrictedMedianMs": 1989517,
+          "restrictedP95Ms": 3693517,
+          "reachedOnlyP95Ms": 3693517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "stages": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -743291.6666666666,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 26562.5,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 3645.8333333333335,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -713083.3333333334,
+            "pairedObserved": 24,
+            "eligible": 24
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -743291.6666666666,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 26562.5,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 3645.8333333333335,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -713083.3333333334,
+            "pairedObserved": 24,
+            "eligible": 24
+          }
+        }
+      }
+    },
+    {
+      "seed": "native-human-capacity-control-decentralized-01",
+      "condition": "moderate",
+      "profile": "moderate",
+      "reference": "C_decentralized",
+      "candidate": "B6",
+      "comparable": true,
+      "reasons": [],
+      "firstUseful": {
+        "referenceRmstMs": 4364121.166666667,
+        "candidateRmstMs": 1921329.5,
+        "reductionFraction": 0.5597442356378205,
+        "referenceCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 4364121.166666667,
+          "restrictedMedianMs": 3310017,
+          "restrictedP95Ms": 9373517,
+          "reachedOnlyP95Ms": 9373517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 1921329.5,
+          "restrictedMedianMs": 1989517,
+          "restrictedP95Ms": 3693517,
+          "reachedOnlyP95Ms": 3693517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "sufficient": {
+        "referenceRmstMs": 4364121.166666667,
+        "candidateRmstMs": 1921329.5,
+        "reductionFraction": 0.5597442356378205,
+        "referenceCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 4364121.166666667,
+          "restrictedMedianMs": 3310017,
+          "restrictedP95Ms": 9373517,
+          "reachedOnlyP95Ms": 9373517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 24,
+          "reached": 24,
+          "rightCensored": 0,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 1921329.5,
+          "restrictedMedianMs": 1989517,
+          "restrictedP95Ms": 3693517,
+          "reachedOnlyP95Ms": 3693517,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "stages": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -2357375,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": -20312.5,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": -65104.166666666664,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -2442791.6666666665,
+            "pairedObserved": 24,
+            "eligible": 24
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -2357375,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": -20312.5,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": -65104.166666666664,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -2442791.6666666665,
+            "pairedObserved": 24,
+            "eligible": 24
+          }
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "arm": "C_manual",
+      "status": "completed",
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+      "sha256": "84db12966499a1a2ae56350fc8f98c57716bf03dd1691063539a05fb81080860",
+      "firstRmstMs": 2634412.8333333335,
+      "sufficientRmstMs": 2634412.8333333335,
+      "byResource": [
+        {
+          "type": "water",
+          "unit": "L",
+          "demand": 340,
+          "served": 340,
+          "excess": 0,
+          "deficitUnitMs": 1060550780,
+          "rmstMs": 2902704.5,
+          "censored": 0
+        },
+        {
+          "type": "food",
+          "unit": "portions",
+          "demand": 159,
+          "served": 159,
+          "excess": 0,
+          "deficitUnitMs": 398700203,
+          "rmstMs": 2672642,
+          "censored": 0
+        },
+        {
+          "type": "blankets",
+          "unit": "unit",
+          "demand": 168,
+          "served": 168,
+          "excess": 0,
+          "deficitUnitMs": 414665356,
+          "rmstMs": 2327892,
+          "censored": 0
+        }
+      ],
+      "quantity": {
+        "water": {
+          "unit": "L",
+          "demand": 340,
+          "usefulServed": 340,
+          "excess": 0,
+          "censored": 0
+        },
+        "food": {
+          "unit": "portions",
+          "demand": 159,
+          "usefulServed": 159,
+          "excess": 0,
+          "censored": 0
+        },
+        "blankets": {
+          "unit": "unit",
+          "demand": 168,
+          "usefulServed": 168,
+          "excess": 0,
+          "censored": 0
+        }
+      },
+      "operationCount": 24,
+      "stageMeans": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 1823307.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 303188.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 447916.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 2634412.8333333335,
+            "observed": 24,
+            "eligible": 24
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 1823307.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 303188.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 447916.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 2634412.8333333335,
+            "observed": 24,
+            "eligible": 24
+          }
+        }
+      },
+      "actualNativeStages": {
+        "read": {
+          "received": 217,
+          "completed": 217,
+          "pending": 0,
+          "workPersonMs": 6510000,
+          "waitingPersonMs": 72090000,
+          "completedQueueP95Ms": 750000,
+          "finishedP95Ms": 780000
+        },
+        "decide": {
+          "received": 125,
+          "completed": 125,
+          "pending": 0,
+          "workPersonMs": 6240000,
+          "waitingPersonMs": 13987000,
+          "completedQueueP95Ms": 450000,
+          "finishedP95Ms": 480000
+        },
+        "relay": {
+          "received": 64,
+          "completed": 64,
+          "pending": 0,
+          "workPersonMs": 5760000,
+          "waitingPersonMs": 13915000,
+          "completedQueueP95Ms": 780000,
+          "finishedP95Ms": 871001
+        }
+      },
+      "workPersonMs": 18510000,
+      "maxOrgBacklog": 53,
+      "cutoffMs": 10800000,
+      "K20": {
+        "elapsedAttentionWorkPersonMs": 18510000,
+        "elapsedAttentionWorkPersonMinutes": 308.5,
+        "source": "Sum of native stage elapsedWorkPersonMs",
+        "independentlyRecomputedWorkPersonMs": 18510000,
+        "workReconciliationMatches": true,
+        "operatorReviewMsExcludedFromAdditionalSum": true,
+        "operatorReviewMsReported": 1260000,
+        "sufficientPositiveCohortCases": 24,
+        "positiveCohortCases": 24,
+        "attentionMinutesPerPhysicallySufficientCohortCase": 12.854166666666666,
+        "minutesPerIndependentlyCorrectResolution": null,
+        "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 177750,
+          "fuelMl": 31995,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 5.407367777777778,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "modelUsage": {
+        "usageRecords": 0,
+        "providerCalls": 0,
+        "reportedProviderCalls": 0,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 0,
+        "providerWallTotalMs": 0,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "firstInquiryProvenanceAllLocations": {
+        "native-manual-read-decide-local": 5,
+        "native-manual-read-decide-delivered-relay": 19
+      },
+      "firstInquiryProvenanceCohortLocations": {
+        "native-manual-read-decide-local": 5,
+        "native-manual-read-decide-delivered-relay": 19
+      },
+      "inquiryAttributionScope": "Provenance associates a model/free/manual output with a request. It does not show that the model was necessary, that an exact claim was true, or replace an ablation.",
+      "host": {
+        "wallMs": 460516.32180000003,
+        "HTTPcalls": 10785,
+        "SQLcalls": 85553,
+        "summedHTTPms": 245008.80409999823,
+        "summedSQLms": 116477.4292999999,
+        "phases": {
+          "source-poll": {
+            "calls": 169,
+            "totalMs": 44751.703699999765,
+            "maxMs": 3190.875
+          },
+          "owner-receipts-review-execution": {
+            "calls": 232,
+            "totalMs": 338477.1823999997,
+            "maxMs": 3570.0398999999743
+          },
+          "scoped-actor-snapshots": {
+            "calls": 232,
+            "totalMs": 10899.531800000103,
+            "maxMs": 122.22060000000056
+          },
+          "consume-native-manual": {
+            "calls": 232,
+            "totalMs": 1661.4445999999025,
+            "maxMs": 96.840200000006
+          },
+          "received-source-inquiry": {
+            "calls": 232,
+            "totalMs": 1965.2040999999663,
+            "maxMs": 96.90970000000016
+          },
+          "coordinator-receipt-refresh": {
+            "calls": 232,
+            "totalMs": 32387.50970000027,
+            "maxMs": 223.2382000000216
+          },
+          "native-demand-integration": {
+            "calls": 232,
+            "totalMs": 8619.429399999712,
+            "maxMs": 96.31349999999657
+          },
+          "received-response-compile": {
+            "calls": 88,
+            "totalMs": 5414.054399999848,
+            "maxMs": 148.60519999999087
+          }
+        },
+        "scope": "Nested/concurrent timings are not additive exclusive CPU nor physical time"
+      },
+      "oldComparison": {
+        "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+        "sha256": "516bad70f34650d96dd394414f28f2cc51e546f70835c970513ff9dade3e070d",
+        "status": "completed",
+        "wallLimitMs": 900000,
+        "oldRmstMs": 2634412.8333333335,
+        "currentMinusOldRmstMs": 0,
+        "samePhysicalOutcomeVector": true,
+        "noStatisticalPooling": true,
+        "scope": "Diagnostic predecessor comparison, not additional independent worlds or a causal estimate of host allowance"
+      }
+    },
+    {
+      "arm": "C_decentralized",
+      "status": "completed",
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+      "sha256": "a7f2f7ad678c1fd14a1f7b83edeaec07f0658b69a742a0df80db12ed068f08d9",
+      "firstRmstMs": 4364121.166666667,
+      "sufficientRmstMs": 4364121.166666667,
+      "byResource": [
+        {
+          "type": "water",
+          "unit": "L",
+          "demand": 340,
+          "served": 340,
+          "excess": 530,
+          "deficitUnitMs": 2002605780,
+          "rmstMs": 5203892,
+          "censored": 0
+        },
+        {
+          "type": "food",
+          "unit": "portions",
+          "demand": 159,
+          "served": 159,
+          "excess": 224,
+          "deficitUnitMs": 583458203,
+          "rmstMs": 3835204.5,
+          "censored": 0
+        },
+        {
+          "type": "blankets",
+          "unit": "unit",
+          "demand": 168,
+          "served": 168,
+          "excess": 296,
+          "deficitUnitMs": 732375356,
+          "rmstMs": 4053267,
+          "censored": 0
+        }
+      ],
+      "quantity": {
+        "water": {
+          "unit": "L",
+          "demand": 340,
+          "usefulServed": 340,
+          "excess": 530,
+          "censored": 0
+        },
+        "food": {
+          "unit": "portions",
+          "demand": 159,
+          "usefulServed": 159,
+          "excess": 224,
+          "censored": 0
+        },
+        "blankets": {
+          "unit": "unit",
+          "demand": 168,
+          "usefulServed": 168,
+          "excess": 296,
+          "censored": 0
+        }
+      },
+      "operationCount": 64,
+      "stageMeans": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 3437391,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 350063.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 516666.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 4364121.166666667,
+            "observed": 24,
+            "eligible": 24
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 3437391,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 350063.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 516666.6666666667,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 4364121.166666667,
+            "observed": 24,
+            "eligible": 24
+          }
+        }
+      },
+      "actualNativeStages": {
+        "read": {
+          "received": 245,
+          "completed": 245,
+          "pending": 0,
+          "workPersonMs": 7350000,
+          "waitingPersonMs": 72090000,
+          "completedQueueP95Ms": 720000,
+          "finishedP95Ms": 750000
+        },
+        "decide": {
+          "received": 218,
+          "completed": 218,
+          "pending": 0,
+          "workPersonMs": 11160000,
+          "waitingPersonMs": 13755000,
+          "completedQueueP95Ms": 236000,
+          "finishedP95Ms": 296000
+        },
+        "relay": {
+          "received": 1506,
+          "completed": 460,
+          "pending": 1046,
+          "workPersonMs": 41571936,
+          "waitingPersonMs": 7175300328,
+          "completedQueueP95Ms": 8392000,
+          "finishedP95Ms": 8424001
+        }
+      },
+      "workPersonMs": 60081936,
+      "maxOrgBacklog": 319,
+      "cutoffMs": 10800000,
+      "K20": {
+        "elapsedAttentionWorkPersonMs": 60081936,
+        "elapsedAttentionWorkPersonMinutes": 1001.3656,
+        "source": "Sum of native stage elapsedWorkPersonMs",
+        "independentlyRecomputedWorkPersonMs": 60081936,
+        "workReconciliationMatches": true,
+        "operatorReviewMsExcludedFromAdditionalSum": true,
+        "operatorReviewMsReported": 1920000,
+        "sufficientPositiveCohortCases": 24,
+        "positiveCohortCases": 24,
+        "attentionMinutesPerPhysicallySufficientCohortCase": 41.72356666666666,
+        "minutesPerIndependentlyCorrectResolution": null,
+        "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 712500,
+          "fuelMl": 128250,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 20.425008333333334,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "modelUsage": {
+        "usageRecords": 0,
+        "providerCalls": 0,
+        "reportedProviderCalls": 0,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 0,
+        "providerWallTotalMs": 0,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "firstInquiryProvenanceAllLocations": {
+        "native-local-read-decide": 24
+      },
+      "firstInquiryProvenanceCohortLocations": {
+        "native-local-read-decide": 24
+      },
+      "inquiryAttributionScope": "Provenance associates a model/free/manual output with a request. It does not show that the model was necessary, that an exact claim was true, or replace an ablation.",
+      "host": {
+        "wallMs": 1042036.7505999999,
+        "HTTPcalls": 19716,
+        "SQLcalls": 180965,
+        "summedHTTPms": 642642.624899986,
+        "summedSQLms": 256973.7026000407,
+        "phases": {
+          "source-poll": {
+            "calls": 130,
+            "totalMs": 38085.819899999944,
+            "maxMs": 3057.637400000007
+          },
+          "owner-receipts-review-execution": {
+            "calls": 310,
+            "totalMs": 781050.7453000008,
+            "maxMs": 3610.2383000000846
+          },
+          "scoped-actor-snapshots": {
+            "calls": 310,
+            "totalMs": 27765.69709999935,
+            "maxMs": 190.75529999984428
+          },
+          "consume-native-manual": {
+            "calls": 310,
+            "totalMs": 1193.1094999997877,
+            "maxMs": 76.29060000000754
+          },
+          "decentralized-real-coordination": {
+            "calls": 310,
+            "totalMs": 28719.47749999707,
+            "maxMs": 386.94940000004135
+          },
+          "received-source-inquiry": {
+            "calls": 310,
+            "totalMs": 2240.4061000007787,
+            "maxMs": 235.13120000006165
+          },
+          "coordinator-receipt-refresh": {
+            "calls": 310,
+            "totalMs": 56061.32929999917,
+            "maxMs": 277.9310000000987
+          },
+          "native-demand-integration": {
+            "calls": 1240,
+            "totalMs": 25460.132900001598,
+            "maxMs": 122.16610000003129
+          },
+          "received-response-compile": {
+            "calls": 900,
+            "totalMs": 40671.670300000056,
+            "maxMs": 182.45029999990948
+          }
+        },
+        "scope": "Nested/concurrent timings are not additive exclusive CPU nor physical time"
+      },
+      "oldComparison": {
+        "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+        "sha256": "60ee5697b69e94e3ce7fd5fcdd56f9a9762122916563d81044ce0b75730be4f0",
+        "status": "wall_limit",
+        "wallLimitMs": 900000,
+        "oldRmstMs": 4364121.166666667,
+        "currentMinusOldRmstMs": 0,
+        "samePhysicalOutcomeVector": false,
+        "noStatisticalPooling": true,
+        "scope": "Diagnostic predecessor comparison, not additional independent worlds or a causal estimate of host allowance"
+      }
+    },
+    {
+      "arm": "B6",
+      "status": "completed",
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json",
+      "sha256": "7d9b859f3b42eb88374b8bd0d9028c5bf0a74a1a7d7315d4355c351fb785bf79",
+      "firstRmstMs": 1921329.5,
+      "sufficientRmstMs": 1921329.5,
+      "byResource": [
+        {
+          "type": "water",
+          "unit": "L",
+          "demand": 340,
+          "served": 340,
+          "excess": 0,
+          "deficitUnitMs": 811715780,
+          "rmstMs": 2174829.5,
+          "censored": 0
+        },
+        {
+          "type": "food",
+          "unit": "portions",
+          "demand": 159,
+          "served": 159,
+          "excess": 0,
+          "deficitUnitMs": 193233703,
+          "rmstMs": 1327392,
+          "censored": 0
+        },
+        {
+          "type": "blankets",
+          "unit": "unit",
+          "demand": 168,
+          "served": 168,
+          "excess": 0,
+          "deficitUnitMs": 370634356,
+          "rmstMs": 2261767,
+          "censored": 0
+        }
+      ],
+      "quantity": {
+        "water": {
+          "unit": "L",
+          "demand": 340,
+          "usefulServed": 340,
+          "excess": 0,
+          "censored": 0
+        },
+        "food": {
+          "unit": "portions",
+          "demand": 159,
+          "usefulServed": 159,
+          "excess": 0,
+          "censored": 0
+        },
+        "blankets": {
+          "unit": "unit",
+          "demand": 168,
+          "usefulServed": 168,
+          "excess": 0,
+          "censored": 0
+        }
+      },
+      "operationCount": 24,
+      "stageMeans": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 1080016,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 329751,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 451562.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 1921329.5,
+            "observed": 24,
+            "eligible": 24
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "meanMs": 1080016,
+            "observed": 24,
+            "eligible": 24
+          },
+          "pickupAndPreparationMs": {
+            "meanMs": 329751,
+            "observed": 24,
+            "eligible": 24
+          },
+          "loadedTravelMs": {
+            "meanMs": 451562.5,
+            "observed": 24,
+            "eligible": 24
+          },
+          "arrivalToServiceMs": {
+            "meanMs": 60000,
+            "observed": 24,
+            "eligible": 24
+          },
+          "totalMs": {
+            "meanMs": 1921329.5,
+            "observed": 24,
+            "eligible": 24
+          }
+        }
+      },
+      "actualNativeStages": {
+        "read": {
+          "received": 0,
+          "completed": 0,
+          "pending": 0,
+          "workPersonMs": 0,
+          "waitingPersonMs": 0,
+          "completedQueueP95Ms": null,
+          "finishedP95Ms": null
+        },
+        "decide": {
+          "received": 37,
+          "completed": 37,
+          "pending": 0,
+          "workPersonMs": 1110000,
+          "waitingPersonMs": 0,
+          "completedQueueP95Ms": 0,
+          "finishedP95Ms": 30000
+        },
+        "relay": {
+          "received": 0,
+          "completed": 0,
+          "pending": 0,
+          "workPersonMs": 0,
+          "waitingPersonMs": 0,
+          "completedQueueP95Ms": null,
+          "finishedP95Ms": null
+        }
+      },
+      "workPersonMs": 1110000,
+      "maxOrgBacklog": 1,
+      "cutoffMs": 10800000,
+      "K20": {
+        "elapsedAttentionWorkPersonMs": 1110000,
+        "elapsedAttentionWorkPersonMinutes": 18.5,
+        "source": "Sum of native stage elapsedWorkPersonMs",
+        "independentlyRecomputedWorkPersonMs": 1110000,
+        "workReconciliationMatches": true,
+        "operatorReviewMsExcludedFromAdditionalSum": true,
+        "operatorReviewMsReported": 1110000,
+        "sufficientPositiveCohortCases": 24,
+        "positiveCohortCases": 24,
+        "attentionMinutesPerPhysicallySufficientCohortCase": 0.7708333333333334,
+        "minutesPerIndependentlyCorrectResolution": null,
+        "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 185250,
+          "fuelMl": 33345,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 5.608756666666666,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "modelUsage": {
+        "usageRecords": 7,
+        "providerCalls": 7,
+        "reportedProviderCalls": 7,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0.00803654,
+        "totalProviderCostUsd": 0.00803654,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0.00803654,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 55018.0318,
+        "providerWallTotalMs": 55018.0318,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0010776,
+            "reservedUsd": 0.0068869,
+            "wallMs": 13724.853400000138,
+            "inputTokens": 3780,
+            "outputTokens": 1371,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00180288,
+            "reservedUsd": 0.00762634,
+            "wallMs": 11704.341999999946,
+            "inputTokens": 5412,
+            "outputTokens": 2613,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00088042,
+            "reservedUsd": 0.00683794,
+            "wallMs": 4314.589099999983,
+            "inputTokens": 3623,
+            "outputTokens": 933,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00117756,
+            "reservedUsd": 0.006877899999999999,
+            "wallMs": 7058.308699999936,
+            "inputTokens": 3734,
+            "outputTokens": 1637,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00126382,
+            "reservedUsd": 0.00688384,
+            "wallMs": 7542.851199999917,
+            "inputTokens": 3833,
+            "outputTokens": 1818,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00113696,
+            "reservedUsd": 0.006976179999999999,
+            "wallMs": 8287.063599999994,
+            "inputTokens": 4484,
+            "outputTokens": 1273,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0006973,
+            "reservedUsd": 0.0066392199999999995,
+            "wallMs": 2386.0238000000827,
+            "inputTokens": 3215,
+            "outputTokens": 618,
+            "error": null
+          }
+        ],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "firstInquiryProvenanceAllLocations": {
+        "common-free-explicit-parser": 12,
+        "actual-model-perception-receipt": 12
+      },
+      "firstInquiryProvenanceCohortLocations": {
+        "common-free-explicit-parser": 12,
+        "actual-model-perception-receipt": 12
+      },
+      "inquiryAttributionScope": "Provenance associates a model/free/manual output with a request. It does not show that the model was necessary, that an exact claim was true, or replace an ablation.",
+      "host": {
+        "wallMs": 296775.2091000001,
+        "HTTPcalls": 6860,
+        "SQLcalls": 65302,
+        "summedHTTPms": 91335.8319000036,
+        "summedSQLms": 85863.02360000275,
+        "phases": {
+          "source-poll": {
+            "calls": 168,
+            "totalMs": 31708.36889999942,
+            "maxMs": 742.372699999949
+          },
+          "owner-receipts-review-execution": {
+            "calls": 184,
+            "totalMs": 164066.64789999975,
+            "maxMs": 2485.750600000145
+          },
+          "scoped-actor-snapshots": {
+            "calls": 184,
+            "totalMs": 4030.36409999663,
+            "maxMs": 59.501200000057
+          },
+          "actual-model-perception": {
+            "calls": 23,
+            "totalMs": 56619.72680000006,
+            "maxMs": 25899.27780000004
+          },
+          "received-source-inquiry": {
+            "calls": 184,
+            "totalMs": 1186.517500000773,
+            "maxMs": 653.9830999998376
+          },
+          "coordinator-receipt-refresh": {
+            "calls": 184,
+            "totalMs": 18740.876800000202,
+            "maxMs": 185.5812000001315
+          },
+          "received-response-compile": {
+            "calls": 70,
+            "totalMs": 4108.793000000063,
+            "maxMs": 137.9794000000693
+          }
+        },
+        "scope": "Nested/concurrent timings are not additive exclusive CPU nor physical time"
+      },
+      "oldComparison": {
+        "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json",
+        "sha256": "e2dec91dc29e14571aeb92becbba68e7f11638021e3e678000b2ac3e9447b5ea",
+        "status": "completed",
+        "wallLimitMs": 900000,
+        "oldRmstMs": 1906329.5,
+        "currentMinusOldRmstMs": 15000,
+        "samePhysicalOutcomeVector": false,
+        "noStatisticalPooling": true,
+        "scope": "Diagnostic predecessor comparison, not additional independent worlds or a causal estimate of host allowance"
+      }
+    }
+  ],
+  "scope": "One CLOSED same-seed group, native assumed workflow. Not new annotations, model-only attribution, best NGO comparison or primary replacement.",
+  "companion": {
+    "path": ".local/human-kpi-companion.mjs",
+    "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b"
+  },
+  "sourceTruthPrecision": null,
+  "modelNecessityFraction": null,
+  "statisticalPoolingWithHost900": false
+}

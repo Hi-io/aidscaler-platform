@@ -1,0 +1,109 @@
+{
+  "schema": "append-only-closed-three-world-publication-files-v2",
+  "sourcePins": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "originalClosedReader": {
+    "path": "reports/analysis/host3600-decentralized-closed-20261013.json",
+    "sha256": "af08bd089fb67a7cb272c533b0ccaeb375415e0e89d0e266e7d3f7d5de380045"
+  },
+  "rawInputs": [
+    {
+      "arm": "C_manual",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+      "sha256": "84db12966499a1a2ae56350fc8f98c57716bf03dd1691063539a05fb81080860",
+      "status": "completed"
+    },
+    {
+      "arm": "C_decentralized",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+      "sha256": "a7f2f7ad678c1fd14a1f7b83edeaec07f0658b69a742a0df80db12ed068f08d9",
+      "status": "completed"
+    },
+    {
+      "arm": "B6",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-B6.json",
+      "sha256": "7d9b859f3b42eb88374b8bd0d9028c5bf0a74a1a7d7315d4355c351fb785bf79",
+      "status": "completed"
+    }
+  ],
+  "antecedents": [
+    {
+      "path": ".local/reports/host3600-decentralized-causal-20261013-v1/readout.json",
+      "sha256": "104563ad4fea5f0bb5f3d02859a1c8e2558c2afd0ddb18280ec8f01f914a4c91"
+    },
+    {
+      "path": ".local/reports/host3600-decentralized-causal-20261013-v1/source-definitions-clarification.json",
+      "sha256": "bb2aee2b698d08ab798497845d3db5d3393644ac77a5abdbb4e3141625d8074f"
+    },
+    {
+      "path": ".local/analyze-host3600-decentralized-closed.mjs",
+      "sha256": "9569db5b56dcd03f4dc24ffdceeeb53bc72a1ad3ebdb9b9d426a9de4249cbcad"
+    }
+  ],
+  "sealedCompanion": {
+    "path": ".local/human-kpi-companion.mjs",
+    "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b"
+  },
+  "publisher": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\publish-host3600-decentralized-causal-v2.mjs",
+    "sha256": "8a5d3b6ba6ff6f5bc6f25b7436cac2799c07fbbc1fafae4b0d946d0c70c1a3be"
+  },
+  "files": [
+    {
+      "path": "readout.json",
+      "sha256": "04bb334323a96a760a08411be4ccf780cd41680a767d55539ef5c885d382b650",
+      "bytes": 52069,
+      "role": "Corrected publication; original effects copied unchanged"
+    },
+    {
+      "path": "readout.md",
+      "sha256": "1982eb4af5b15ead39d7d486d871494af4d793af65e1a6f6b181fd2aa66bcf08",
+      "bytes": 7863,
+      "role": "Public causal discussion and limitations"
+    },
+    {
+      "path": "source-definitions-clarification.json",
+      "sha256": "bb2aee2b698d08ab798497845d3db5d3393644ac77a5abdbb4e3141625d8074f",
+      "bytes": 5298,
+      "role": "Exact native pending/start/finish samples and completed receipt counts; supplement preserved"
+    },
+    {
+      "path": "publisher-helper.mjs.txt",
+      "sha256": "8a5d3b6ba6ff6f5bc6f25b7436cac2799c07fbbc1fafae4b0d946d0c70c1a3be",
+      "bytes": 8852,
+      "role": "Exact publisher bytes; copies effects and corrects labels without source imports"
+    },
+    {
+      "path": "provenance/original-v1-helper.mjs.txt",
+      "sha256": "9569db5b56dcd03f4dc24ffdceeeb53bc72a1ad3ebdb9b9d426a9de4249cbcad",
+      "bytes": 6163,
+      "role": "Historical helper only; deprecated name explicitly superseded, not current definition"
+    },
+    {
+      "path": "provenance/original-v1-readout.json",
+      "sha256": "104563ad4fea5f0bb5f3d02859a1c8e2558c2afd0ddb18280ec8f01f914a4c91",
+      "bytes": 42099,
+      "role": "Unmodified predecessor, not current metric naming"
+    },
+    {
+      "path": "provenance/original-v1-readout.md",
+      "sha256": "34a02dec8469d2290c7683471041734067e8a815f0d851e1c7e9aecb69facc50",
+      "bytes": 7848,
+      "role": "Unmodified preceding explanation"
+    }
+  ],
+  "verification": {
+    "originalEffectsCopiedExactly": true,
+    "measurementsReestimated": false,
+    "estimatorsChanged": false,
+    "resultsFiltered": false,
+    "rawsRehashed": true,
+    "newCoreWrites": 0,
+    "newWorlds": 0,
+    "newProviderCalls": 0,
+    "stressOutcomesRead": false
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "schema": "authorized-closed-three-worlds-source-definition-clarification",
+  "rows": [
+    {
+      "arm": "C_manual",
+      "rawSha256": "84db12966499a1a2ae56350fc8f98c57716bf03dd1691063539a05fb81080860",
+      "operationStates": {
+        "completed": 24
+      },
+      "positivePhysicalReceipts": 24,
+      "completedServiceTimestampCount": 24,
+      "nativeStages": {
+        "read": {
+          "received": 217,
+          "completed": 217,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 330000,
+            "p95": 750000,
+            "samples": 217
+          },
+          "completedTurnaroundMs": {
+            "p50": 360000,
+            "p95": 780000,
+            "samples": 217
+          }
+        },
+        "decide": {
+          "received": 125,
+          "completed": 125,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 30000,
+            "p95": 450000,
+            "samples": 125
+          },
+          "completedTurnaroundMs": {
+            "p50": 90000,
+            "p95": 480000,
+            "samples": 125
+          }
+        },
+        "relay": {
+          "received": 64,
+          "completed": 64,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 120000,
+            "p95": 780000,
+            "samples": 64
+          },
+          "completedTurnaroundMs": {
+            "p50": 211001,
+            "p95": 871001,
+            "samples": 64
+          }
+        }
+      }
+    },
+    {
+      "arm": "C_decentralized",
+      "rawSha256": "a7f2f7ad678c1fd14a1f7b83edeaec07f0658b69a742a0df80db12ed068f08d9",
+      "operationStates": {
+        "completed": 62,
+        "dispatched": 2
+      },
+      "positivePhysicalReceipts": 62,
+      "completedServiceTimestampCount": 62,
+      "nativeStages": {
+        "read": {
+          "received": 245,
+          "completed": 245,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 270000,
+            "p95": 720000,
+            "samples": 245
+          },
+          "completedTurnaroundMs": {
+            "p50": 300000,
+            "p95": 750000,
+            "samples": 245
+          }
+        },
+        "decide": {
+          "received": 218,
+          "completed": 218,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 30000,
+            "p95": 236000,
+            "samples": 218
+          },
+          "completedTurnaroundMs": {
+            "p50": 90000,
+            "p95": 296000,
+            "samples": 218
+          }
+        },
+        "relay": {
+          "received": 1506,
+          "completed": 460,
+          "queued": 1042,
+          "working": 4,
+          "pendingCensored": 1046,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 4466000,
+            "p95": 8392000,
+            "samples": 464
+          },
+          "completedTurnaroundMs": {
+            "p50": 4501001,
+            "p95": 8424001,
+            "samples": 460
+          }
+        }
+      }
+    },
+    {
+      "arm": "B6",
+      "rawSha256": "7d9b859f3b42eb88374b8bd0d9028c5bf0a74a1a7d7315d4355c351fb785bf79",
+      "operationStates": {
+        "completed": 24
+      },
+      "positivePhysicalReceipts": 24,
+      "completedServiceTimestampCount": 24,
+      "nativeStages": {
+        "read": {
+          "received": 0,
+          "completed": 0,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": null,
+            "p95": null,
+            "samples": 0
+          },
+          "completedTurnaroundMs": {
+            "p50": null,
+            "p95": null,
+            "samples": 0
+          }
+        },
+        "decide": {
+          "received": 37,
+          "completed": 37,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": 0,
+            "p95": 0,
+            "samples": 37
+          },
+          "completedTurnaroundMs": {
+            "p50": 30000,
+            "p95": 30000,
+            "samples": 37
+          }
+        },
+        "relay": {
+          "received": 0,
+          "completed": 0,
+          "queued": 0,
+          "working": 0,
+          "pendingCensored": 0,
+          "cutoffMs": 10800000,
+          "startedQueueMs": {
+            "p50": null,
+            "p95": null,
+            "samples": 0
+          },
+          "completedTurnaroundMs": {
+            "p50": null,
+            "p95": null,
+            "samples": 0
+          }
+        }
+      }
+    }
+  ],
+  "warning": "readout.json completedQueueP95Ms is a misnamed alias of native startedQueueMs.p95, which includes active started tasks. Use explicitly labeled started/finished metrics here. operationCount is issued operations, not receipt count. Sealed readers are unchanged."
+}

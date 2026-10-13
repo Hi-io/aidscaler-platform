@@ -1,0 +1,47 @@
+// Read only root-authorized three CLOSED decentralized worlds, never stress partials.
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {summarizeEpisode} from './human-kpi-companion.mjs';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const input='reports/analysis/host3600-decentralized-closed-20261013.json',bytes=await readFile(input),report=JSON.parse(bytes.toString('utf8'));
+if(report.rows?.length!==3||report.validRuns!==3||report.completedRuns!==3||report.rows.map(r=>r.arm).join(',')!=='C_manual,C_decentralized,B6')throw Error('Exact three valid CLOSED rows required');
+const sum=obj=>Object.values(obj??{}).reduce((n,r)=>n+(r.totalMs??0),0);
+const rows=[];
+for(const row of report.rows){
+ if(!row.file.replaceAll('\\','/').includes('/native-bridge-host3600-v2-20261013/decentralized/'))throw Error('Closed group scope violation');
+ const rawBytes=await readFile(row.file);if(sha(rawBytes)!==row.sha256)throw Error('Sealed raw changed');const raw=JSON.parse(rawBytes.toString('utf8'));
+ if(raw.status!=='completed'||raw.protocol?.wallLimitMs!==3600000)throw Error('Not CLOSED HOST3600');
+ const c=summarizeEpisode(raw),firstQueries=new Map();for(const activity of raw.activities??[])if(activity.stage==='source-directed-confirmation'&&!firstQueries.has(activity.location))firstQueries.set(activity.location,activity.provenance);
+ const provenance={};for(const value of firstQueries.values())provenance[value]=(provenance[value]??0)+1;
+ const cohortBuildings=new Set(raw.outcomes.map(o=>o.building)),cohortFirst={};for(const [building,value]of firstQueries)if(cohortBuildings.has(building))cohortFirst[value]=(cohortFirst[value]??0)+1;
+ const native=raw.metrics.humanCapacity,stageViews=Object.fromEntries(Object.entries(native.stages).map(([stage,s])=>[stage,{received:s.received,completed:s.completed,pending:s.pendingCensored,
+  workPersonMs:s.elapsedWorkPersonMs,waitingPersonMs:s.elapsedQueuePersonMs,completedQueueP95Ms:s.startedQueueMs.p95,finishedP95Ms:s.finishedTurnaroundMs.p95}]));
+ const fieldQuantity=raw.outcomes.reduce((a,o)=>{const x=a[o.type]??={unit:o.unit,demand:0,usefulServed:0,excess:0,censored:0};x.demand+=o.quantity;x.usefulServed+=o.served;x.excess+=o.overprovided;x.censored+=Number(o.censored);return a;},{});
+ const canonicalPhysical=raw.outcomes.map(o=>({id:o.id,type:o.type,unit:o.unit,quantity:o.quantity,served:o.served,excess:o.overprovided,first:o.firstServiceAt,sufficient:o.completedAt}));
+ let oldComparison=null;const oldFile=row.file.replace('native-bridge-host3600-v2-20261013','native-bridge-v2-20261013');
+ const oldBytes=await readFile(oldFile),old=JSON.parse(oldBytes.toString('utf8'));
+ const oldPhysical=old.outcomes.map(o=>({id:o.id,type:o.type,unit:o.unit,quantity:o.quantity,served:o.served,excess:o.overprovided,first:o.firstServiceAt,sufficient:o.completedAt}));
+ oldComparison={file:oldFile,sha256:sha(oldBytes),status:old.status,wallLimitMs:old.protocol.wallLimitMs,oldRmstMs:old.timeToSufficientService.restrictedMeanMs,
+  currentMinusOldRmstMs:raw.timeToSufficientService.restrictedMeanMs-old.timeToSufficientService.restrictedMeanMs,
+  samePhysicalOutcomeVector:sha(JSON.stringify(oldPhysical))===sha(JSON.stringify(canonicalPhysical)),
+  noStatisticalPooling:true,scope:'Diagnostic predecessor comparison, not additional independent worlds or a causal estimate of host allowance'};
+ rows.push({arm:row.arm,status:raw.status,file:row.file,sha256:row.sha256,firstRmstMs:row.physical.firstUseful.restrictedMeanMs,sufficientRmstMs:row.physical.sufficient.restrictedMeanMs,
+  byResource:row.physical.byResource.map(x=>({type:x.type,unit:x.unit,demand:x.demand,served:x.usefulServed,excess:x.excessReceived,deficitUnitMs:x.uncoveredUnitMs,rmstMs:x.sufficient.restrictedMeanMs,censored:x.sufficient.rightCensored})),
+  quantity:fieldQuantity,operationCount:raw.observerOnly.operations.length,stageMeans:row.physical.stages,actualNativeStages:stageViews,
+  workPersonMs:Object.values(native.stages).reduce((n,s)=>n+s.elapsedWorkPersonMs,0),maxOrgBacklog:native.maximumBacklog,cutoffMs:raw.metrics.simulatedMs,
+  K20:c.K20,K09:c.K09,modelUsage:row.cost,firstInquiryProvenanceAllLocations:provenance,firstInquiryProvenanceCohortLocations:cohortFirst,
+  inquiryAttributionScope:'Provenance associates a model/free/manual output with a request. It does not show that the model was necessary, that an exact claim was true, or replace an ablation.',
+  host:{wallMs:raw.wallMs,HTTPcalls:Object.values(raw.profiler.http).reduce((n,x)=>n+x.calls,0),SQLcalls:Object.values(raw.profiler.sql).reduce((n,x)=>n+x.calls,0),
+    summedHTTPms:sum(raw.profiler.http),summedSQLms:sum(raw.profiler.sql),phases:raw.profiler.phases,scope:'Nested/concurrent timings are not additive exclusive CPU nor physical time'},oldComparison});
+}
+const output={input:{file:resolve(input),sha256:sha(bytes)},source:report.rows[0].source,comparisons:report.comparisons,rows,
+  scope:'One CLOSED same-seed group, native assumed workflow. Not new annotations, model-only attribution, best NGO comparison or primary replacement.',
+  companion:{path:'.local/human-kpi-companion.mjs',sha256:sha(await readFile('.local/human-kpi-companion.mjs'))},
+  sourceTruthPrecision:null,modelNecessityFraction:null,statisticalPoolingWithHost900:false};
+const dir='.local/reports/host3600-decentralized-causal-20261013-v1';await mkdir(dir,{recursive:true});
+await writeFile(resolve(dir,'readout.json'),JSON.stringify(output,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({output:resolve(dir,'readout.json'),rows:rows.map(r=>({arm:r.arm,rmstMinutes:r.sufficientRmstMs/60000,quantities:r.quantity,
+ workMinutes:r.workPersonMs/60000,pendingRelays:r.actualNativeStages.relay.pending,maxOrgBacklog:r.maxOrgBacklog,operationCount:r.operationCount,
+ sourceInquiryProvenance:r.firstInquiryProvenanceCohortLocations,fees:r.modelUsage.totalProviderCostUsd,calls:r.modelUsage.providerCalls,old:r.oldComparison})),
+ comparisons:report.comparisons.map(p=>({reference:p.reference,gain:p.sufficient.reductionFraction,stage:p.stages.thresholdContribution}))}));

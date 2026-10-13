@@ -1,0 +1,46 @@
+{
+  "sourcePins": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "originalClosedReadout": {
+    "path": "reports/analysis/host3600-stress48-closed-20261013.json",
+    "sha256": "96e8b42e52875129309afcaaa0c23fb7039318ccfbdcf0b595887fff92be1177"
+  },
+  "rawInputs": [
+    {
+      "arm": "C_manual",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-C_manual.json",
+      "sha256": "ddd926b4a02e20368c139ec06776fb9a87aa032d86fc1da0741daf417d70eec8"
+    },
+    {
+      "arm": "B8",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-B8.json",
+      "sha256": "59d1f1ebc539f3bad51cbac18a3b1595f18e37f83086a38528fec5cd163724d8"
+    },
+    {
+      "arm": "B6",
+      "path": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-B6.json",
+      "sha256": "8ba5bb367f825d42ff68aa83f6858bfe5d9656facb0d60787fe895e4e35392fe"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "readout.json",
+      "sha256": "7008ef5a4e7194a699654dda66921ccfde8ac122dbe8dc8035281bd464dc3cbb"
+    },
+    {
+      "path": "helper.mjs.txt",
+      "sha256": "834e6421f6b73742beba365bf1c6bc306847fac328e9c07bc20b9e2627ea88e5"
+    }
+  ],
+  "companion": {
+    "path": ".local/human-kpi-companion.mjs",
+    "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b"
+  },
+  "newWorlds": 0,
+  "newProviderCalls": 0,
+  "stress96OutcomesRead": false
+}
