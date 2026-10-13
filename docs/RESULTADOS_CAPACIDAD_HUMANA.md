@@ -2,9 +2,28 @@
 
 ## Comparación actual
 
-La comprobación más reciente, con el simulador actualizado y una pareja de la misma semilla, redujo el tiempo medio hasta ayuda suficiente **20,59%: 44,279 → 35,162 minutos**. Ambos métodos atendieron **24/24** necesidades, sin casos censurados, exceso, errores ni invariantes rotos. NEXO recorrió 209,25 km frente a 216 km y consumió 37,665 L frente a 38,880 L: **3,125% menos**. Seis llamadas reales a Gemma 4 costaron **USD 0,00613892**.
+La comprobación más reciente, con el simulador actualizado y una pareja de la misma semilla, redujo **30,49% la preparación y autorización de la respuesta** y **20,59% el tiempo total hasta ayuda suficiente**. Son indicadores diferentes: el primero hace visible la espera operativa previa al envío; el segundo incluye el viaje físico hasta recibir la cantidad requerida.
 
-Agua y comida llegaron antes en promedio; las mantas tardaron más. [Tabla de los dos métodos, todos los recursos, trazas y límites](../reports/analysis/final-two-response-closed-20261013/readout.md). Es una pareja simulada, no evidencia de campo. Su motor es `4ea1bf88…`; la primaria de tres semillas que sigue conserva su versión original y se presenta por separado.
+| Métrica registrada | Convencional | NEXO + Gemma 4 | Qué representa |
+|---|---:|---:|---|
+| Preparar y autorizar la ayuda | 28,278 min | 19,656 min | 30,49% menos: 8,622 min de espera evitada antes de autorizar el envío. Incluye información disponible, comprobaciones, coordinación, revisión y espera de flota. |
+| Operaciones sin trayectos del envío | 30,295 min | 21,673 min | 28,46% menos. Excluye desplazamiento a recogida y viaje cargado; conserva coordinación, transmisión, carga y descarga. |
+| Espera total hasta ayuda suficiente | 44,279 min | 35,162 min | 20,59% menos: 9,117 min antes de recibir físicamente toda la cantidad requerida. Incluye los trayectos. |
+| Necesidades cubiertas | 24/24 | 24/24 | Todas las cantidades requeridas llegaron. Una necesidad puede agrupar varias personas; no cuenta vidas salvadas. |
+
+La lectura sin trayectos es una descomposición descriptiva de timestamps existentes, no un nuevo ensayo ni un cambio al KPI. Se conservaron los 24 casos por método y sus reglas físicas. La recogida incluye desplazamiento; restar únicamente el viaje cargado del total no habría eliminado todos los trayectos. La espera previa por vehículos ocupados sigue incluida en la fase operativa.
+
+Ambos métodos cerraron sin casos censurados, exceso, errores ni invariantes rotos. NEXO recorrió 209,25 km frente a 216 km y consumió 37,665 L frente a 38,880 L: **3,125% menos**. Seis llamadas reales a Gemma 4 costaron **USD 0,00613892**. Agua y comida llegaron antes en promedio; las mantas tardaron más.
+
+[Informe explicado: cada métrica, unidades, sentido de mejora y perspectiva de quienes esperan ayuda](../reports/analysis/final-two-response-explained-20261013/readout.md). La [evidencia cerrada original](../reports/analysis/final-two-response-closed-20261013/readout.json) conserva sus bytes y cálculos. Es una pareja simulada, no evidencia de campo. Su motor es `4ea1bf88…`; la primaria de tres semillas que sigue conserva su versión original y se presenta por separado.
+
+### Comida, mantas y cantidades pendientes
+
+**Food mean sufficient, min** significa **tiempo medio hasta recibir toda la comida requerida, en minutos; menos es mejor**. Se promedian ocho necesidades de comida, cada una con igual peso, desde su aparición hasta la recepción física suficiente. En esta pareja: **51,165 → 17,586 min**, con las mismas **164 porciones** recibidas. No representa minutos por persona ni tiempo de viaje solamente.
+
+Una unidad de comida es una porción (el modelo poblacional supone 700 kcal); una unidad de mantas es una manta; el agua se registra en litros. No hay seguimiento individual que permita convertir esos artículos en familias alimentadas o personas sin frío.
+
+El déficit acumulado combina **cantidad todavía faltante × tiempo**: 10 porciones faltantes durante 30 min equivalen a 300 porciones·min. Menos es mejor; una entrega parcial reduce el déficit aunque no complete toda la solicitud. No equivale a 300 minutos de hambre de personas identificadas, y no se suman litros·min, porciones·min y mantas·min. El informe explicado añade esa interpretación al lado de cada valor.
 
 ## Primaria anterior: tres semillas
 

@@ -54,10 +54,33 @@ try{await withHumanResearchLock(lock,{study:'final-two-response',nonce:randomUUI
   notes:['Simulation with hypothetical moderate human-capacity parameters; one paired seed, not independent field validation.','All24 cases, censored failures and unknown bills retained. Positive physical service is not independent semantic precision.']};
  await writeFile(resolve(folder,'summary.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});
  const minute=n=>typeof n==='number'?(n/60000).toFixed(3):'unknown',usd=n=>typeof n==='number'?n.toFixed(8):'unknown';
- let md='# Conventional / NEXO + Gemma 4\n\nSame seed, resources and physical rules. Actual model: Gemma 4; Gemini remains a future substitution.\n\n| Metric | Conventional | NEXO + Gemma 4 |\n|---|---:|---:|\n';
+ let md='# Conventional / NEXO + Gemma 4\n\nBoth methods receive the same seeded scenario, resources, permissions and physical rules. NEXO uses Gemma 4 through OpenRouter. These are simulated response outcomes; minutes saved do not establish lives saved.\n\n| Metric | Conventional | NEXO + Gemma 4 | Meaning for the response / beneficiaries |\n|---|---:|---:|---|\n';
  const left=presentation.find(r=>r.arm==='C_manual'),right=presentation.find(r=>r.arm==='B6'),cell=(r,f)=>r?f(r):'not run';
- for(const [label,f]of [['Status',r=>r.status],['Sufficient physical service',r=>r.covered+'/'+r.cases],['Censored',r=>r.censored],['Restricted mean, min',r=>minute(r.sufficient?.restrictedMeanMs)],['Distance, km',r=>r.distanceM==null?'unknown':(r.distanceM/1000).toFixed(3)],['Fuel, L',r=>r.fuelMl==null?'unknown':(r.fuelMl/1000).toFixed(3)],['Known provider cost, USD',r=>usd(r.knownCostUsd)],['Total provider cost, USD',r=>usd(r.totalCostUsd)],['Provider calls',r=>r.providerCalls??'unknown']])md+='| '+label+' | '+cell(left,f)+' | '+cell(right,f)+' |\n';
- md+='\nThe complete raw outcomes, per-resource quantities, errors, invariants, usage and protocol are retained alongside this readout. '+(result.comparativeClaimEligible?'The matched pair is eligible for comparison.':'No comparative win is claimed: see status, source integrity and missing/censored evidence.')+'\n';
+ const metrics=[
+  ['Run status',r=>r.status,'Whether the declared simulation finished. A completed run still needs valid source integrity and physical evidence before comparison.'],
+  ['Needs receiving sufficient help',r=>r.covered+'/'+r.cases,'Needs whose physical receipts covered their required quantity. This counts needs, not people or families.'],
+  ['Needs still unresolved at the horizon',r=>r.censored??'unknown','These cases remain in the result rather than disappearing from the average. Censoring means sufficient help was not observed within the declared time window.'],
+  ['Mean time to sufficient help, min (horizon-limited)',r=>minute(r.sufficient?.restrictedMeanMs),'Lower means required help arrived sooner on average. Unresolved cases remain limited by the same horizon; this is not an average of successful cases only.'],
+  ['Vehicle travel, km',r=>r.distanceM==null?'unknown':(r.distanceM/1000).toFixed(3),'Distance travelled by the finite fleet. More travel uses transport capacity and can be a tradeoff even when help arrives sooner.'],
+  ['Fuel consumed, L',r=>r.fuelMl==null?'unknown':(r.fuelMl/1000).toFixed(3),'Physical fuel used by the response. Less fuel conserves an operational resource; it does not by itself prove more people were helped.'],
+  ['Known model-provider cost, USD',r=>usd(r.knownCostUsd),'Recorded inference charges only. This subtotal is not a complete bill when some usage is unknown.'],
+  ['Total model-provider cost, USD',r=>usd(r.totalCostUsd),'The full recorded inference bill when available. Unknown is kept explicit and never presented as zero; deployment, salaries and supplies are outside this figure.'],
+  ['Model-provider calls',r=>r.providerCalls??'unknown','Actual model requests made during the run. Calls are computational work, not deliveries or beneficiaries.']
+ ];
+ for(const [label,f,meaning]of metrics)md+='| '+label+' | '+cell(left,f)+' | '+cell(right,f)+' | '+meaning+' |\n';
+ const resourceValue=(r,type,field)=>{const resource=r.resources.find(x=>x.type===type);return resource?.unit==null?'unknown':resource[field]+' '+resource.unit;};
+ for(const [type,label,unitMeaning]of [
+  ['water','Water','Water is reported in its native volume unit.'],
+  ['food','Food','Food quantities represent portions; no equivalence to people or families is assumed.'],
+  ['blankets','Blankets','Each blanket unit represents one blanket; no equivalence to people or families is assumed.']
+ ]){
+  for(const [field,description,meaning]of [
+   ['demand','required','Required quantity for the declared needs.'],
+   ['received','physically received','Quantity credited by the recorded physical receipts; compare it with demand rather than treating dispatch as arrival.'],
+   ['excess','received beyond demand','Recorded overprovision is retained as a resource tradeoff and does not count as additional need coverage.']
+  ])md+='| '+label+' — '+description+' | '+cell(left,r=>resourceValue(r,type,field))+' | '+cell(right,r=>resourceValue(r,type,field))+' | '+meaning+' '+unitMeaning+' |\n';
+ }
+ md+='\nThis is one paired seed under declared, hypothetical human-capacity settings. '+(result.comparativeClaimEligible?'The matched pair is eligible for comparison; eligibility does not imply a win.':'No comparative win is claimed: inspect run status, source integrity and missing or censored evidence.')+'\n\n[Protocol](protocol.json), [complete summary](summary.json), [Conventional outcomes](C_manual.json) and [NEXO + Gemma 4 outcomes](B6.json) retain quantities, failures, recovered errors, invariants and known or unknown usage. First partial help and sufficient help remain distinct endpoints in those records.\n';
  await writeFile(resolve(folder,'readout.md'),md,{flag:'wx'});await checkpoint();console.log(JSON.stringify({folder,sourceStable:stable,eligible:result.comparativeClaimEligible,presentation}));
  if(!result.comparativeClaimEligible)process.exitCode=1;
 });}finally{process.off('SIGINT',signal);process.off('SIGTERM',signal);}

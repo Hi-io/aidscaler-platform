@@ -2,15 +2,19 @@
 
 NEXO helps NGOs, emergency services and public response teams turn scattered reports into coordinated help. It combines public signals with each team's operational tools, investigates what needs checking and prepares feasible actions for human approval. Organizations can share capacity while retaining control of their resources and decisions.
 
-The local platform uses **Gemma 4 31B through OpenRouter**. The latest matched simulation brought sufficient physical aid **20.59% sooner**:
+The local platform uses **Gemma 4 31B through OpenRouter**. In the latest matched simulation, preparing and authorizing the response took **30.49% less time**. Sufficient physical aid arrived **20.59% sooner**:
 
-| Conventional coordination | NEXO + Gemma 4 |
-|---:|---:|
-| 44.279 minutes to sufficient aid | 35.162 minutes to sufficient aid |
-| 24/24 needs served | 24/24 needs served |
-| 38.880 L of fuel | 37.665 L of fuel |
+| Recorded metric | Conventional | NEXO + Gemma 4 | What it means |
+|---|---:|---:|---|
+| Prepare and authorize the response | 28.278 min | 19.656 min | 8.622 fewer minutes waiting before help is authorized; excludes the shipment's pickup and loaded journeys. |
+| Operations excluding both shipment journeys | 30.295 min | 21.673 min | 28.46% less time; retains coordination, command transmission, loading and unloading. |
+| Wait for sufficient aid | 44.279 min | 35.162 min | 9.117 fewer minutes until the required quantity is physically received, including travel. |
+| Needs fully supplied | 24/24 | 24/24 | All requested quantities delivered; this counts needs, not individual people or lives saved. |
+| Fuel consumed | 38.880 L | 37.665 L | 3.125% less simulated vehicle fuel for the same coverage. |
 
-Both methods had the same seed, resources, physical constraints and owner approvals. Six real model calls cost **USD 0.00613892**. Blankets took longer despite the improvement overall. [Current comparison and every resource](reports/analysis/final-two-response-closed-20261013/readout.md); [earlier three-seed result and assumptions](docs/RESULTADOS_CAPACIDAD_HUMANA.md).
+Both methods had the same seed, resources, physical constraints and owner approvals. Six real model calls cost **USD 0.00613892**. Blankets took longer despite the improvement overall. [Current times, resource units and what every metric means](reports/analysis/final-two-response-explained-20261013/readout.md); [unchanged recorded evidence](reports/analysis/final-two-response-closed-20261013/readout.json); [earlier three-seed result and assumptions](docs/RESULTADOS_CAPACIDAD_HUMANA.md).
+
+Preparation and authorization includes access to information, reading, checks, coordination, review and fleet-availability waits; it is not the model's thinking time alone. Removing the shipment journeys retains those waits. Food is measured in portions, water in litres and blankets in individual items. Quantity × waiting time is reported separately for each resource, without assuming a number of people or families served.
 
 Reading, decision and communication times are simulation assumptions. The current result is one paired seed; the earlier three-seed result of 18.02% remains separate. Gemini, emergency field operations and Google Cloud deployment require their own validation.
 
@@ -64,3 +68,5 @@ The [Google Cloud architecture](docs/ARQUITECTURA_GCP.md) is a migration plan. T
 ## Repeat the response comparison
 
 `node --env-file-if-exists=.env.local scripts/compare-response.mjs` displays the fixed protocol without making calls. Add `--run=ROOT_GO_FINAL_TWO_RESPONSE` to run the paired local experiment with the configured Gemma key. Results, physical receipts, failed cases and costs are saved under `reports/final-two-response/`; the maximum declared model exposure is USD 0.15.
+
+`node scripts/explain-response.mjs --output=reports/analysis/your-new-readout` renders the existing closed comparison with time breakdowns, travel-excluded operations and explanations for every displayed metric. This command only reads saved evidence and writes a new report; it makes no provider calls and runs no simulations.

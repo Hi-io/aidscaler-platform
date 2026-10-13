@@ -1,0 +1,650 @@
+{
+  "schema": "recorded-response-explained-v1",
+  "recordedDate": "2026-10-13",
+  "seed": "native-human-capacity-primary-01",
+  "actualModel": "Gemma 4 via OpenRouter",
+  "rendererSha256": "55efd7fdb936e6b25b407870f73ab70c3dafbd732b46b6b6509d8516a6458baa",
+  "input": {
+    "path": "reports/analysis/final-two-response-closed-20261013/readout.json",
+    "sha256": "6233dca81e0dac987f1eb12b8d01d0eb0119dd8a5d624173753cca0c546ba2bf"
+  },
+  "source": {
+    "initial": {
+      "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+      "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+      "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+      "simulator": "4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa"
+    },
+    "final": {
+      "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+      "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+      "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+      "simulator": "4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa"
+    },
+    "stable": true
+  },
+  "definitions": {
+    "metricReaderSha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+    "companionSha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b",
+    "all24CasesRetained": true,
+    "noCompletedOnlyMean": true,
+    "quantityUnitsNeverPooled": true
+  },
+  "scope": "Offline presentation; original measurements and logic unchanged.",
+  "travelExcludedRows": [
+    {
+      "metric": "Tiempo operativo sin trayectos del envío (min)",
+      "conventional": 1817683.6666666667,
+      "nexo": 1300350.3333333333,
+      "displayConventional": "30,295",
+      "displayNexo": "21,673",
+      "change": "28,46% menos",
+      "meaning": "Menos es mejor. Conserva preparación/autorización, transmisión, carga y descarga; excluye desplazamiento a recogida y viaje cargado. La espera previa por flota ocupada sigue dentro: no es sólo tiempo de pensar."
+    }
+  ],
+  "travelBreakdown": [
+    {
+      "arm": "C_manual",
+      "observed": 24,
+      "pickupTravelMeanMs": 339062.5,
+      "loadedTravelMeanMs": 500000,
+      "withoutShipmentTravelMeanMs": 1817683.6666666667,
+      "cases": [
+        {
+          "need": "c34853da508c27ea78b2e08e",
+          "pickupTravelMs": 675000,
+          "loadedTravelMs": 775000,
+          "withoutShipmentTravelMs": 2878017,
+          "totalMs": 4328017
+        },
+        {
+          "need": "f5370fc8687c82c27e3242eb",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 350000,
+          "withoutShipmentTravelMs": 1056017,
+          "totalMs": 1406017
+        },
+        {
+          "need": "2bddb3a93488a9de8fb95bc0",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 437500,
+          "withoutShipmentTravelMs": 874017,
+          "totalMs": 1311517
+        },
+        {
+          "need": "9eb33ba28957c9d6d733b7f8",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 1012500,
+          "withoutShipmentTravelMs": 1083017,
+          "totalMs": 2095517
+        },
+        {
+          "need": "63e4a001340897b94ee76724",
+          "pickupTravelMs": 425000,
+          "loadedTravelMs": 350000,
+          "withoutShipmentTravelMs": 3527017,
+          "totalMs": 4302017
+        },
+        {
+          "need": "9daac3f662d9faca016f2c5e",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 873017,
+          "totalMs": 1173017
+        },
+        {
+          "need": "14a4707f7af776e9fecc015b",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 425000,
+          "withoutShipmentTravelMs": 1055017,
+          "totalMs": 1480017
+        },
+        {
+          "need": "bb844558177edd4156af34cb",
+          "pickupTravelMs": 662500,
+          "loadedTravelMs": 412500,
+          "withoutShipmentTravelMs": 3007017,
+          "totalMs": 4082017
+        },
+        {
+          "need": "d27ebb23ce6188d1481de14b",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 993017,
+          "totalMs": 1293017
+        },
+        {
+          "need": "daf43cfeb1d251788356d24b",
+          "pickupTravelMs": 350000,
+          "loadedTravelMs": 675000,
+          "withoutShipmentTravelMs": 1603017,
+          "totalMs": 2628017
+        },
+        {
+          "need": "cb59ddcb0b92d138b1c28628",
+          "pickupTravelMs": 425000,
+          "loadedTravelMs": 662500,
+          "withoutShipmentTravelMs": 1688017,
+          "totalMs": 2775517
+        },
+        {
+          "need": "8292a849c19088f0f5a78475",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 287500,
+          "withoutShipmentTravelMs": 903017,
+          "totalMs": 1190517
+        },
+        {
+          "need": "d29055e49f8c874c8b7c1eb4",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 562500,
+          "withoutShipmentTravelMs": 933017,
+          "totalMs": 1495517
+        },
+        {
+          "need": "671cedcdc79c57e0e8d78007",
+          "pickupTravelMs": 300000,
+          "loadedTravelMs": 512500,
+          "withoutShipmentTravelMs": 1513017,
+          "totalMs": 2325517
+        },
+        {
+          "need": "d5e4f19bf8cc5c2c54a8384d",
+          "pickupTravelMs": 562500,
+          "loadedTravelMs": 487500,
+          "withoutShipmentTravelMs": 1657017,
+          "totalMs": 2707017
+        },
+        {
+          "need": "a873cd8f7ff52c383d96d515",
+          "pickupTravelMs": 437500,
+          "loadedTravelMs": 550000,
+          "withoutShipmentTravelMs": 1515017,
+          "totalMs": 2502517
+        },
+        {
+          "need": "41ed251a4b6895a3ac866b3b",
+          "pickupTravelMs": 300000,
+          "loadedTravelMs": 787500,
+          "withoutShipmentTravelMs": 1446017,
+          "totalMs": 2533517
+        },
+        {
+          "need": "13fe8ea8bb69583693d2a2e8",
+          "pickupTravelMs": 487500,
+          "loadedTravelMs": 587500,
+          "withoutShipmentTravelMs": 2866017,
+          "totalMs": 3941017
+        },
+        {
+          "need": "67d09735efe213c47042dcfb",
+          "pickupTravelMs": 512500,
+          "loadedTravelMs": 225000,
+          "withoutShipmentTravelMs": 2581017,
+          "totalMs": 3318517
+        },
+        {
+          "need": "bc3be118fbd0416428255ec1",
+          "pickupTravelMs": 550000,
+          "loadedTravelMs": 700000,
+          "withoutShipmentTravelMs": 2716017,
+          "totalMs": 3966017
+        },
+        {
+          "need": "d362c790d9ef79f998571ac5",
+          "pickupTravelMs": 1012500,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 2287017,
+          "totalMs": 3599517
+        },
+        {
+          "need": "c4a45785931971aa666fd0a9",
+          "pickupTravelMs": 787500,
+          "loadedTravelMs": 512500,
+          "withoutShipmentTravelMs": 2743017,
+          "totalMs": 4043017
+        },
+        {
+          "need": "20ba0afe409baa90add07e38",
+          "pickupTravelMs": 362500,
+          "loadedTravelMs": 425000,
+          "withoutShipmentTravelMs": 2381017,
+          "totalMs": 3168517
+        },
+        {
+          "need": "c590088a72d28cf6f89c0c1f",
+          "pickupTravelMs": 287500,
+          "loadedTravelMs": 362500,
+          "withoutShipmentTravelMs": 1446017,
+          "totalMs": 2096017
+        }
+      ]
+    },
+    {
+      "arm": "B6",
+      "observed": 24,
+      "pickupTravelMeanMs": 314062.5,
+      "loadedTravelMeanMs": 495291.6666666667,
+      "withoutShipmentTravelMeanMs": 1300350.3333333333,
+      "cases": [
+        {
+          "need": "c34853da508c27ea78b2e08e",
+          "pickupTravelMs": 450000,
+          "loadedTravelMs": 850000,
+          "withoutShipmentTravelMs": 2245017,
+          "totalMs": 3545017
+        },
+        {
+          "need": "f5370fc8687c82c27e3242eb",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 350000,
+          "withoutShipmentTravelMs": 426017,
+          "totalMs": 776017
+        },
+        {
+          "need": "2bddb3a93488a9de8fb95bc0",
+          "pickupTravelMs": 675000,
+          "loadedTravelMs": 437500,
+          "withoutShipmentTravelMs": 2289017,
+          "totalMs": 3401517
+        },
+        {
+          "need": "9eb33ba28957c9d6d733b7f8",
+          "pickupTravelMs": 700000,
+          "loadedTravelMs": 512500,
+          "withoutShipmentTravelMs": 2545017,
+          "totalMs": 3757517
+        },
+        {
+          "need": "63e4a001340897b94ee76724",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 357000,
+          "withoutShipmentTravelMs": 536017,
+          "totalMs": 893017
+        },
+        {
+          "need": "9daac3f662d9faca016f2c5e",
+          "pickupTravelMs": 700000,
+          "loadedTravelMs": 425000,
+          "withoutShipmentTravelMs": 2714017,
+          "totalMs": 3839017
+        },
+        {
+          "need": "14a4707f7af776e9fecc015b",
+          "pickupTravelMs": 300000,
+          "loadedTravelMs": 662500,
+          "withoutShipmentTravelMs": 2017017,
+          "totalMs": 2979517
+        },
+        {
+          "need": "bb844558177edd4156af34cb",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 412500,
+          "withoutShipmentTravelMs": 425017,
+          "totalMs": 837517
+        },
+        {
+          "need": "d27ebb23ce6188d1481de14b",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 535017,
+          "totalMs": 835017
+        },
+        {
+          "need": "daf43cfeb1d251788356d24b",
+          "pickupTravelMs": 350000,
+          "loadedTravelMs": 680000,
+          "withoutShipmentTravelMs": 1023017,
+          "totalMs": 2053017
+        },
+        {
+          "need": "cb59ddcb0b92d138b1c28628",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 412500,
+          "withoutShipmentTravelMs": 536017,
+          "totalMs": 948517
+        },
+        {
+          "need": "8292a849c19088f0f5a78475",
+          "pickupTravelMs": 725000,
+          "loadedTravelMs": 787500,
+          "withoutShipmentTravelMs": 2382017,
+          "totalMs": 3894517
+        },
+        {
+          "need": "d29055e49f8c874c8b7c1eb4",
+          "pickupTravelMs": 350000,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 1120017,
+          "totalMs": 1770017
+        },
+        {
+          "need": "671cedcdc79c57e0e8d78007",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 75000,
+          "withoutShipmentTravelMs": 502017,
+          "totalMs": 577017
+        },
+        {
+          "need": "d5e4f19bf8cc5c2c54a8384d",
+          "pickupTravelMs": 300000,
+          "loadedTravelMs": 725000,
+          "withoutShipmentTravelMs": 1118017,
+          "totalMs": 2143017
+        },
+        {
+          "need": "a873cd8f7ff52c383d96d515",
+          "pickupTravelMs": 412500,
+          "loadedTravelMs": 450000,
+          "withoutShipmentTravelMs": 1118017,
+          "totalMs": 1980517
+        },
+        {
+          "need": "41ed251a4b6895a3ac866b3b",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 300000,
+          "withoutShipmentTravelMs": 613017,
+          "totalMs": 913017
+        },
+        {
+          "need": "13fe8ea8bb69583693d2a2e8",
+          "pickupTravelMs": 637500,
+          "loadedTravelMs": 587500,
+          "withoutShipmentTravelMs": 2253017,
+          "totalMs": 3478017
+        },
+        {
+          "need": "67d09735efe213c47042dcfb",
+          "pickupTravelMs": 300000,
+          "loadedTravelMs": 637500,
+          "withoutShipmentTravelMs": 1124017,
+          "totalMs": 2061517
+        },
+        {
+          "need": "bc3be118fbd0416428255ec1",
+          "pickupTravelMs": 412500,
+          "loadedTravelMs": 700000,
+          "withoutShipmentTravelMs": 1322017,
+          "totalMs": 2434517
+        },
+        {
+          "need": "d362c790d9ef79f998571ac5",
+          "pickupTravelMs": 412500,
+          "loadedTravelMs": 700000,
+          "withoutShipmentTravelMs": 1157017,
+          "totalMs": 2269517
+        },
+        {
+          "need": "c4a45785931971aa666fd0a9",
+          "pickupTravelMs": 737500,
+          "loadedTravelMs": 75000,
+          "withoutShipmentTravelMs": 1783017,
+          "totalMs": 2595517
+        },
+        {
+          "need": "20ba0afe409baa90add07e38",
+          "pickupTravelMs": 0,
+          "loadedTravelMs": 412500,
+          "withoutShipmentTravelMs": 649017,
+          "totalMs": 1061517
+        },
+        {
+          "need": "c590088a72d28cf6f89c0c1f",
+          "pickupTravelMs": 75000,
+          "loadedTravelMs": 737500,
+          "withoutShipmentTravelMs": 776017,
+          "totalMs": 1588517
+        }
+      ]
+    }
+  ],
+  "phaseRows": [
+    {
+      "metric": "Preparar y autorizar la respuesta",
+      "conventional": 1696682.6666666667,
+      "nexo": 1179349.3333333333,
+      "displayConventional": "28,278",
+      "displayNexo": "19,656",
+      "change": "30,49% menos",
+      "meaning": "Menos es mejor. Desde que aparece la necesidad hasta autorizar la ayuda: menos espera antes de activar el envío. Incluye disponibilidad de información, lectura, comprobación, coordinación, revisión y espera de flota; termina antes de recogida y viaje del envío."
+    },
+    {
+      "metric": "Recogida y preparación",
+      "conventional": 400063.5,
+      "nexo": 375063.5,
+      "displayConventional": "6,668",
+      "displayNexo": "6,251",
+      "change": "6,25% menos",
+      "meaning": "Menos es mejor si conserva las comprobaciones. Autorización → salida con carga; incluye comunicación de la orden, desplazamiento para recoger y carga. No es una fase exclusivamente administrativa."
+    },
+    {
+      "metric": "Viaje con la ayuda",
+      "conventional": 500000,
+      "nexo": 495291.6666666667,
+      "displayConventional": "8,333",
+      "displayNexo": "8,255",
+      "change": "0,94% menos",
+      "meaning": "Menos significa que la carga llega antes. Salida con carga → llegada al destino; este trayecto se presenta por separado de la coordinación."
+    },
+    {
+      "metric": "Llegada → recepción útil",
+      "conventional": 60000,
+      "nexo": 60000,
+      "displayConventional": "1,000",
+      "displayNexo": "1,000",
+      "change": "Igual",
+      "meaning": "Menos es mejor. Tiempo para descargar y registrar la recepción física; un camión que llega todavía no cuenta como ayuda recibida."
+    },
+    {
+      "metric": "Espera total hasta recibir ayuda suficiente",
+      "conventional": 2656746.1666666665,
+      "nexo": 2109704.5,
+      "displayConventional": "44,279",
+      "displayNexo": "35,162",
+      "change": "20,59% menos",
+      "meaning": "Menos es mejor. Aparición de la necesidad → recepción de la cantidad requerida. Incluye coordinación, recogida, viaje y descarga."
+    }
+  ],
+  "resourceRows": [
+    {
+      "metric": "Agua: cantidad recibida / requerida (L)",
+      "conventional": {
+        "received": 440,
+        "demand": 440
+      },
+      "nexo": {
+        "received": 440,
+        "demand": 440
+      },
+      "displayConventional": "440 / 440",
+      "displayNexo": "440 / 440",
+      "change": "Igual cobertura",
+      "meaning": "Ideal: cubrir la demanda sin exceso. Cantidad útil recibida físicamente, no stock prometido. Una unidad representa un litro de agua; no determina por sí sola cuántas personas o familias quedaron atendidas."
+    },
+    {
+      "metric": "Agua: espera media hasta cantidad suficiente (min)",
+      "conventional": 2736392,
+      "nexo": 2592829.5,
+      "displayConventional": "45,607",
+      "displayNexo": "43,214",
+      "change": "5,25% menos",
+      "meaning": "Menos es mejor. Espera promedio de los 8 puntos con necesidad de agua, desde aparición hasta recibir toda la cantidad requerida. Cada necesidad pesa igual, aunque pida cantidades distintas."
+    },
+    {
+      "metric": "Agua: faltante acumulado (L·min)",
+      "conventional": 21918.958,
+      "nexo": 20432.874666666667,
+      "displayConventional": "21.918,958",
+      "displayNexo": "20.432,875",
+      "change": "6,78% menos",
+      "meaning": "Menos es mejor. Combina cuánto falta y durante cuánto tiempo: 10 L faltantes durante 30 min = 300 L·min. No mide personas, familias ni daños médicos."
+    },
+    {
+      "metric": "Comida: cantidad recibida / requerida (porciones)",
+      "conventional": {
+        "received": 164,
+        "demand": 164
+      },
+      "nexo": {
+        "received": 164,
+        "demand": 164
+      },
+      "displayConventional": "164 / 164",
+      "displayNexo": "164 / 164",
+      "change": "Igual cobertura",
+      "meaning": "Ideal: cubrir la demanda sin exceso. Cantidad útil recibida físicamente, no stock prometido. Una unidad representa una porción de comida; no determina por sí sola cuántas personas o familias quedaron atendidas."
+    },
+    {
+      "metric": "Comida: espera media hasta cantidad suficiente (min)",
+      "conventional": 3069892,
+      "nexo": 1055142,
+      "displayConventional": "51,165",
+      "displayNexo": "17,586",
+      "change": "65,63% menos",
+      "meaning": "Menos es mejor. Espera promedio de los 8 puntos con necesidad de comida, desde aparición hasta recibir toda la cantidad requerida. Cada necesidad pesa igual, aunque pida cantidades distintas."
+    },
+    {
+      "metric": "Comida: faltante acumulado (porciones·min)",
+      "conventional": 8555.9048,
+      "nexo": 2852.9131333333335,
+      "displayConventional": "8555,905",
+      "displayNexo": "2852,913",
+      "change": "66,66% menos",
+      "meaning": "Menos es mejor. Combina cuánto falta y durante cuánto tiempo: 10 porciones faltantes durante 30 min = 300 porciones·min. No mide personas, familias ni daños médicos."
+    },
+    {
+      "metric": "Mantas: cantidad recibida / requerida (mantas)",
+      "conventional": {
+        "received": 130,
+        "demand": 130
+      },
+      "nexo": {
+        "received": 130,
+        "demand": 130
+      },
+      "displayConventional": "130 / 130",
+      "displayNexo": "130 / 130",
+      "change": "Igual cobertura",
+      "meaning": "Ideal: cubrir la demanda sin exceso. Cantidad útil recibida físicamente, no stock prometido. Una unidad representa una manta; no determina por sí sola cuántas personas o familias quedaron atendidas."
+    },
+    {
+      "metric": "Mantas: espera media hasta cantidad suficiente (min)",
+      "conventional": 2163954.5,
+      "nexo": 2681142,
+      "displayConventional": "36,066",
+      "displayNexo": "44,686",
+      "change": "23,90% más",
+      "meaning": "Menos es mejor. Espera promedio de los 8 puntos con necesidad de mantas, desde aparición hasta recibir toda la cantidad requerida. Cada necesidad pesa igual, aunque pida cantidades distintas."
+    },
+    {
+      "metric": "Mantas: faltante acumulado (mantas·min)",
+      "conventional": 4822.811833333333,
+      "nexo": 5768.636833333333,
+      "displayConventional": "4822,812",
+      "displayNexo": "5768,637",
+      "change": "19,61% más",
+      "meaning": "Menos es mejor. Combina cuánto falta y durante cuánto tiempo: 10 mantas faltantes durante 30 min = 300 mantas·min. No mide personas, familias ni daños médicos."
+    }
+  ],
+  "totalRows": [
+    {
+      "metric": "Necesidades cubiertas suficientemente",
+      "conventional": 24,
+      "nexo": 24,
+      "displayConventional": "24/24",
+      "displayNexo": "24/24",
+      "change": "Igual",
+      "meaning": "Más, hasta cubrir todas, es mejor. Se completó la entrega física requerida en ese punto; una necesidad puede reunir a varias personas. Nunca equivale automáticamente a una vida salvada."
+    },
+    {
+      "metric": "Necesidades sin suficiencia al cerrar la observación",
+      "conventional": 0,
+      "nexo": 0,
+      "displayConventional": "0",
+      "displayNexo": "0",
+      "change": "Igual",
+      "meaning": "Menos es mejor. Todavía no se había registrado ayuda suficiente al horizonte. Permanecen en el cálculo del tiempo hasta su límite de observación."
+    },
+    {
+      "metric": "Distancia recorrida (km)",
+      "conventional": 216,
+      "nexo": 209.25,
+      "displayConventional": "216,000",
+      "displayNexo": "209,250",
+      "change": "3,13% menos",
+      "meaning": "Menos, con igual cobertura, significa menos recorrido físico para prestar ayuda. Cuenta los desplazamientos de los vehículos, no distancia a pie de beneficiarios."
+    },
+    {
+      "metric": "Combustible consumido (L)",
+      "conventional": 38.88,
+      "nexo": 37.665,
+      "displayConventional": "38,880",
+      "displayNexo": "37,665",
+      "change": "3,13% menos",
+      "meaning": "Menos, con igual cobertura, significa menos combustible utilizado por los vehículos. Es consumo del modelo físico, no ahorro monetario medido."
+    },
+    {
+      "metric": "Trabajo humano registrado (persona·min)",
+      "conventional": 268.5,
+      "nexo": 17.5,
+      "displayConventional": "268,500",
+      "displayNexo": "17,500",
+      "change": "93,48% menos",
+      "meaning": "Menos, con igual cobertura, implica menos ocupación de los puestos de atención simulados. Suma duraciones de trabajo registrado; dos personas trabajando 5 min = 10 persona·min. No es tiempo de reloj ni todas las horas laborales de una ONG."
+    },
+    {
+      "metric": "Llamadas reales al modelo",
+      "conventional": 0,
+      "nexo": 6,
+      "displayConventional": "0",
+      "displayNexo": "6",
+      "change": "Aumenta desde 0",
+      "meaning": "Número de solicitudes al proveedor. No es un resultado humanitario; se interpreta junto con cobertura, calidad y costo, no como “menos siempre es mejor”."
+    },
+    {
+      "metric": "Costo conocido del modelo (USD)",
+      "conventional": 0,
+      "nexo": 0.006138920000000001,
+      "displayConventional": "0,00000000",
+      "displayNexo": "0,00613892",
+      "change": "Aumenta desde 0",
+      "meaning": "Gasto registrado únicamente por inferencia. No incluye combustible, salarios, infraestructura ni costo por vida salvada."
+    },
+    {
+      "metric": "Costo total del modelo (USD)",
+      "conventional": 0,
+      "nexo": 0.006138920000000001,
+      "displayConventional": "0,00000000",
+      "displayNexo": "0,00613892",
+      "change": "Aumenta desde 0",
+      "meaning": "Coincide con el conocido porque no hay facturación desconocida en esta pareja. Menos es conveniente sólo conservando calidad y atención."
+    },
+    {
+      "metric": "Llamadas con facturación desconocida",
+      "conventional": 0,
+      "nexo": 0,
+      "displayConventional": "0",
+      "displayNexo": "0",
+      "change": "Igual",
+      "meaning": "Ideal: 0. Indica si el costo total puede afirmarse; no es una medida de ayuda recibida."
+    },
+    {
+      "metric": "Errores registrados en el ensayo",
+      "conventional": 0,
+      "nexo": 0,
+      "displayConventional": "0",
+      "displayNexo": "0",
+      "change": "Igual",
+      "meaning": "Ideal: 0. Fallos observados al ejecutar el flujo; ausencia de errores no demuestra seguridad universal."
+    },
+    {
+      "metric": "Reglas de integridad incumplidas",
+      "conventional": 0,
+      "nexo": 0,
+      "displayConventional": "0",
+      "displayNexo": "0",
+      "change": "Igual",
+      "meaning": "Ideal: 0. Reglas de conservación, permisos y estado que el motor detectó como rotas; no reemplaza evaluación en campo."
+    }
+  ]
+}
