@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-13T00:34:11.073Z",
+  "version": "b8907cd5dd243a68258ef0d961c35d4b9d275f0ce8a90653b5d70b168ecccbcb",
+  "files": [
+    {
+      "file": "full-gates.mjs",
+      "sha256": "a1628c3e55912166ef0abaf80342e09fa32ead77e3415e6cd5030f8e5aa895d2"
+    },
+    {
+      "file": "run-ui-verification.mjs",
+      "sha256": "34b6bbbc14871581bfac80fe98411bfb9e97766452758ff389e72fffeb0b3fb9"
+    },
+    {
+      "file": "refresh-measurement-plans.mjs",
+      "sha256": "f8272a7f2bcdb43432c9da1b9b4bc74a92f0598463bf08d5c44ff503d23efb7e"
+    },
+    {
+      "file": "stream-plan.mjs",
+      "sha256": "4530f497171a325aac4d3b7a1730e1722fedacd5078250186d554f2ac90ccc31"
+    },
+    {
+      "file": "run-information-preflight.mjs",
+      "sha256": "94630f2a0209ee2ae416f576281b1188bc23704616fa171e8a933af54ac05983"
+    },
+    {
+      "file": "general-agent-reuse.mjs",
+      "sha256": "437440440d2b5b31b6e3320a51e5a6eef6fa67c51973ca4e6f28bfb1a8ebc2b5"
+    },
+    {
+      "file": "recovery-series.mjs",
+      "sha256": "f12b246a7401c812df6a45fd3ae38558036344455a366a1c64facac4ff819cba"
+    },
+    {
+      "file": "research-studies-controlled.mjs",
+      "sha256": "28503679e875e5bd236b446b2d21df6902a7a038a641075f075a66bbdf4a78fd"
+    },
+    {
+      "file": "geometry-transfer-controlled.mjs",
+      "sha256": "7ecf7af45f7e6153d75e9b9c55f3d96aef8290c075edca3cdaea9b5cf29b25c7"
+    },
+    {
+      "file": "geometry-transfer-plan.json",
+      "sha256": "b6be78b594b86054263f340be4c719418ddc95f77a68f9ab8839cd0ab62cf97a"
+    },
+    {
+      "file": "delegated-studies-plan.json",
+      "sha256": "eee2408dd290e377ed7c3f67a379beb0fe5984941fc5388d63643281d244a072"
+    }
+  ],
+  "scope": "Exact reproducible orchestration bytes, archived before this version is measured. No credential, database or paid outcome included."
+}

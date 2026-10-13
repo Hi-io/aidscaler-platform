@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-13T05:05:13.771Z",
+  "source": "isolated tested candidate",
+  "preservedHistoricalOutcomes": true,
+  "entries": [
+    {
+      "repo": "nexo-platform",
+      "file": "reports/measurement-freezes/1791865903608.json",
+      "sha256": "17321dfaf498a5ef4cc7a996516d3d19576d3f1cf60fcb61eb7810b0be6e2949",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/ui-verifications/1791865813182.json",
+      "sha256": "43a5cd77ce490cac92069c28d54ddd837b015dabce995f80e25d45e2a3b22a01",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/verifications/1791865074195.json",
+      "sha256": "56aacea12cbe720381474e76c52d97c8634d62b70c3873cee5efbff02393457f",
+      "previousSha256": null,
+      "backup": null
+    }
+  ]
+}

@@ -1386,3 +1386,45 @@ Una campaña de tiempo de respuesta puede detener su controlador al terminar la 
 Conservar cada versión original, sus revisiones y el motivo de su estado: lectura válida no verificada, petición explícita, comentario retenido, progreso correlacionado con un recibo independiente, rechazo, truncación o atención pendiente. Avanzar un offset de lote no significa que sus fuentes se procesaron. Un recibo semántico válido demuestra lectura/procedencia conforme al contrato, no precisión independiente ni autenticidad de una publicación. Registros posteriores quedan fuera del denominador sellado y se informan por separado.
 
 La recuperación mide backlog máximo, tiempo hasta cierre/censura, fuentes y versiones durables en cada organización, trabajos/consultas/propuestas pendientes, revisiones finitas, errores, inferencia/coste y consecuencias físicas. Una cola de revisiones cero en un runner que las solicita secuencialmente no demuestra capacidad humana concurrente. Probar primero el mecanismo con un proveedor público sustituido y HTTP externo bloqueado; después el modelo real en el mismo perfil, conservando ambos resultados y sus límites.
+
+## 45. Capacidad humana causal y atribución de la mejora
+
+### 45.1 Requisito adicional del autor
+
+El simulador debe representar lo que impide a una organización convencional ser instantáneamente eficiente: recibir muchas fuentes, leerlas, integrar información pertinente, decidir y transmitirla a otro dueño con capacidad finita. La demora no se añade al KPI después del ensayo. El origen crea trabajos reales, los encola, ocupa puestos y entrega el resultado únicamente al terminar. Una publicación leída no autoriza una misión; la revisión del responsable sigue siendo obligatoria en todos los brazos.
+
+Las mismas fuentes, versiones, recursos, ubicaciones, canales, reglas físicas y permisos se utilizan en las comparaciones. Los mensajes entregados tarde conservan su observación original; el receptor no obtiene automáticamente el estado actual de todo el mundo. Error humano se modela como trabajo inconcluso y reintento limitado con coste, no como certeza falsa ni un multiplicador aplicado sólo al convencional. El mismo mecanismo de revisión con errores se aplica a NEXO.
+
+### 45.2 Referencias que deben conservarse
+
+| Referencia | Flujo que se compara | Interpretación del contraste |
+|---|---|---|
+| C_manual | Lectores distribuidos, triaje competente después de leer, integración, transmisión al coordinador y coordinación sólo con dueños de capacidad pertinente; asignador común competente. | Mejora frente a un flujo manual específico con sus tiempos y puestos declarados. |
+| C_decentralized | Equipos independientes con recursos propios y comunicación real de necesidades, intenciones y operaciones; no inventar duplicados. | Sensibilidad a comunicación atrasada y coordinación distribuida, no práctica universal de las ONG. |
+| B5 | Parser explícito gratuito y planificación compartida competente; lectura humana finita sólo para otras fuentes. | Incremento frente a automatización convencional disponible. |
+| B8 | Detector amplio gratuito de pistas/lugares y consultas automáticas; sin penalización artificial de lectura. | Control automatizado fuerte. Un empate o derrota debe publicarse. |
+| B6 | Percepción real por modelo, investigación acotada y asignador común; misma revisión humana del dueño. | Plataforma híbrida. Ganar contra C_manual no prueba que toda la ganancia proceda del modelo. |
+
+La familia literal actual contiene IDs públicos y puede ser resuelta por B8 sin aritmética semántica. Mantenerla como control negativo. Interpretación contextual y percepción de bytes se prueban separadamente; no describir un contraste de colas como una capacidad exclusiva de GenAI. La descomposición del beneficio debe separar automatización, investigación, coordinación y modelo.
+
+### 45.3 Variables y condiciones antes del resultado
+
+Declarar lectores, decisores y transmisores por dueño, duración por etapa, carga externa, conexión, pérdida y demora de canal, revisión de dueño, límite de consultas, reporte formal, cobertura de fuentes, cantidad simultánea de necesidades y horizonte. Los valores iniciales son supuestos del laboratorio, no cifras empíricas de productividad humana.
+
+Conservar demora cero, lectura rápida, más lectores, error cero y una sensibilidad de error pequeña aplicada simétricamente. Conservar cargas moderada y saturada, 24/48/96 necesidades, y el resultado cuando la referencia automatizada gana. Una condición puede representar un desastre plausible sin estar calibrada para un país concreto. No ajustar semillas, flota, fuentes o reglas después de observar qué brazo gana.
+
+### 45.4 Evidencia mínima de cierre
+
+Demostrar una mejora sustancial en primera ayuda útil y ayuda suficiente, con medios restringidos que incluyen necesidades no atendidas al horizonte. Añadir déficit por unidad, deadlines, exceso físico, duplicados físicos, utilización, combustible, stock, filas pendientes y todos los errores/costes. Registrar espera, trabajo y transmisión por separado, además del tiempo HTTP/modelo y del tiempo de ejecución del laboratorio.
+
+La autoridad, conservación de stock/carga y reproducción por seed/checkpoint no pueden degradarse para ganar velocidad. El controlador sólo usa información recibida. El scorer privado puntúa después y no elige acciones. Un ACK, una hipótesis o una propuesta no cuentan como ayuda. No calcular vidas salvadas a partir de minutos ahorrados sin un modelo clínico y evidencia independiente.
+
+### 45.5 Producto y experiencia
+
+El operador ve primero necesidad, estado, próximo paso y responsable. El detalle muestra fuente y versión, qué comprobación está pendiente, antigüedad y explicación breve de la recomendación. Actividad del modelo significa estados y herramientas reales; no se fabrica ni expone razonamiento privado. Una hipótesis sin contexto se conserva como `waiting_context`, no se oculta como resuelta; una consulta equivalente pendiente se reutiliza sin perder fuentes contradictorias.
+
+El visor del laboratorio debe mostrar colas nativas de lectura/decisión/transmisión filtradas por organización; la verdad privada pertenece sólo a la perspectiva de observador. Las columnas verdad, publicado y consumido son diagnósticas, nunca un atajo para el controlador. El exceso sólo aparece cuando hubo entregas reales. Gate funcional, comparación física y validación con personas son tres requisitos distintos.
+
+### 45.6 Registro del cierre primario actual
+
+La primaria de doce mundos cerró en la versión indicada en [RESULTADOS_CAPACIDAD_HUMANA.md](RESULTADOS_CAPACIDAD_HUMANA.md). Todos los casos y contrastes se conservan: NEXO mejoró un 18,02% el tiempo hasta recibir ayuda suficiente frente al flujo manual declarado; B5 fue más rápido y el contraste con B8 fue mixto. Mantas y combustible empeoraron frente al manual. El resultado cumple una mejora aproximada bajo esos supuestos; no acredita una ventaja exclusiva del LLM ni una superioridad universal. Los controles de capacidad/carga y demás gates físicos tienen evidencia separada y se incorporarán al cerrar, sin modificar los requisitos o desechar negativos.

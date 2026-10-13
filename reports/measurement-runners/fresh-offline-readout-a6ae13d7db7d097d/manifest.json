@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-13T01:41:07.502Z",
+  "artifact": "offline evidence reader; independent finite source creation guard",
+  "previousArchive": "reports/measurement-runners/fresh-offline-readout-48b2da19e817f19c",
+  "modelCalls": 0,
+  "sourceTreesMutated": false,
+  "tests": {
+    "command": "node --test .local/read-fresh-evidence.test.mjs",
+    "passed": 18,
+    "failed": 0
+  },
+  "resultsScope": "Reader-only fixture validation. No campaign outcomes or performance claims are overwritten.",
+  "files": [
+    {
+      "name": "read-fresh-evidence.mjs",
+      "sha256": "a6ae13d7db7d097de6032d9c24451f94c70622be0cea361795f48d3a20f55bac",
+      "bytes": 49034
+    },
+    {
+      "name": "read-fresh-evidence.test.mjs",
+      "sha256": "d660f106299913f36b85d194e084a3cffba032c6d5220271bf56c3d006d95435",
+      "bytes": 26061
+    },
+    {
+      "name": "fresh-evidence-readout-guide.md",
+      "sha256": "e564dbd1ab22cb0729566f2ae57b868c748fb8075267bbcfe5ce7e041e97e611",
+      "bytes": 7419
+    },
+    {
+      "name": "final-evidence-document-template.md",
+      "sha256": "5d1ded1b7430d7270df78b35c52a21b83715ca15fb740a8f466c5e37fe9c079d",
+      "bytes": 6442
+    }
+  ]
+}

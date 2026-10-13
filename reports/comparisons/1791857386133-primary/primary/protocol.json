@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-13T02:09:46.134Z",
+  "version": "public-discovery-physical-response-v2",
+  "hypothesis": "Earlier interpretation of public information can reduce time until useful physical aid, compared with competent finite conventional review.",
+  "fairness": "Same raw public bytes, metadata, directory, formal-report delay, consented stock, fleet, field checks, dispatch reviews and physical world. Neither controller receives evaluator gold. Explicit structured requests and repost grouping are free in all arms.",
+  "references": {
+    "B5": "Conventional shared planner with free structured parsing plus finite human source review",
+    "B6": "Real configured model perception, targeted confirmations and deterministic batching",
+    "B8": "Stronger free broad keyword/location discovery, then the same targeted confirmations and batching",
+    "B9": "Same configured model as a general tool-using disaster-response investigator: raw source batches, no specialized semantic preprocessor, same operational tools and reviewed physical response",
+    "B0": "Extraction disconnected: formal observations only, same competent allocator"
+  },
+  "clocks": "World travel/communication/review delays are modeled. Model availability is charged at max(declared latency, actual measured provider time). Human attention duration/workers are sensitivity parameters, not measured field productivity. SQL/HTTP wall overhead is separately reported, not sped up with the simulation clock.",
+  "negatives": "Zero human-reading delay, immediate formal reports, failures, unserved needs and no advantage against a stronger keyword baseline must remain visible.",
+  "verification": "Requests and operational owner reviews return pending receipts. The same finite field and owner queues progress while trucks move; submitting a review never advances the whole world synchronously to its approval. No controller must wait for all inquiries before acting on an already received need.",
+  "generalAgentScope": "B9 is this explicit finite general-agent reference implementation, not all possible agents. It receives the same public sources, free structured parsing, approved policy, deterministic planner, owners, model configuration and total call/cost cap. The general agent chooses its own queries and drafts; no observer facts or specialized perception receipt are supplied.",
+  "planFile": "reports/discovery-followup-plan.json",
+  "section": "primary",
+  "name": "primary",
+  "seeds": 3,
+  "seedPrefix": "response-burst-2026",
+  "arms": [
+    "B5",
+    "B6",
+    "B8"
+  ],
+  "config": {
+    "count": 24,
+    "noise": 192,
+    "reposts": 2,
+    "humanReadMs": 30000,
+    "humanWorkers": 2,
+    "clarificationWorkers": 2,
+    "formalDelayMs": 3600000,
+    "horizonMs": 10800000,
+    "maxModelCalls": 32,
+    "budgetUsd": 0.15,
+    "silentFraction": 0,
+    "packetLoss": 0,
+    "traffic": 0,
+    "extentKm": 6,
+    "grid": 9,
+    "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+    "evaluatorBuild": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab"
+  },
+  "simulatorBuild": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+  "totalBudgetUsd": 0.6,
+  "orchestration": "Two zero-inference worlds in parallel, then one paid world at a time. Same physical resources, modeled delays, seeds and scoped authority in every arm. Every declared outcome including failures retained.",
+  "stop": "All declared worlds retained. Existing physical-cohort completion is distinct from K22 source-recovery."
+}

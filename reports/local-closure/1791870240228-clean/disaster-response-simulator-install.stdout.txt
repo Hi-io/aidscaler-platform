@@ -1,0 +1,23 @@
+✓ Lockfile passes supply-chain policies (verified 1d ago)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +3
++++
+Packages are hard linked from the content-addressable store to the virtual store.
+  Content-addressable store is at: C:\Users\Hiros\OneDrive\Documentos\AI Builder Cup\.human-capacity-development\nexo-platform\.local\T27-private-builds-v2\1791870240228-clean\fresh-pnpm-store\v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 3, reused 1, downloaded 0, added 1
+Progress: resolved 3, reused 1, downloaded 1, added 1
+Progress: resolved 3, reused 1, downloaded 1, added 2
+Progress: resolved 3, reused 1, downloaded 2, added 2
+Progress: resolved 3, reused 1, downloaded 2, added 3
+Progress: resolved 3, reused 1, downloaded 2, added 3, done
+
+dependencies:
++ lucide-static 1.55.0
++ three 0.186.1
+
+devDependencies:
++ prettier 3.9.10
+
+Done in 13s using pnpm v11.25.0

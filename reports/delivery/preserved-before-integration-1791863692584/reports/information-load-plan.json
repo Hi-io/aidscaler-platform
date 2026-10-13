@@ -1,0 +1,106 @@
+{
+  "declaredAt": "2026-10-13",
+  "purpose": "Secondary predeclared information-load sensitivity after correcting pickup TTL, failed-operation telemetry, stock ownership and duplicated service plans. It cannot replace or conceal the original 24-needs/192-noise experiment.",
+  "primary": {
+    "seedPrefix": "information-load-2026",
+    "seeds": 3,
+    "arms": [
+      "B5",
+      "B6",
+      "B8"
+    ],
+    "needs": 24,
+    "noise": 768,
+    "reposts": 2,
+    "humanReadMs": 30000,
+    "humanWorkers": 2,
+    "clarificationWorkers": 2,
+    "formalDelayMs": 3600000,
+    "horizonMs": 10800000,
+    "maxModelCalls": 80,
+    "episodeBudgetUsd": 0.2,
+    "campaignBudgetUsd": 0.8
+  },
+  "controls": [
+    {
+      "name": "zero-reading-time",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6",
+        "B8"
+      ],
+      "humanReadMs": 0
+    },
+    {
+      "name": "five-second-reading",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "humanReadMs": 5000
+    },
+    {
+      "name": "fifteen-second-reading",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "humanReadMs": 15000
+    },
+    {
+      "name": "immediate-formal",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "formalDelayMs": 0
+    },
+    {
+      "name": "silent-and-loss",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6",
+        "B8"
+      ],
+      "silentFraction": 0.25,
+      "packetLoss": 0.05
+    }
+  ],
+  "stages": [
+    "Freeze fresh exact source bytes and complete mechanism verification before paid comparisons.",
+    "Run the corrected original profile on its original first seed. Retain the entire physical funnel and negative result, if any.",
+    "Run free B5 and B8 on information-load-2026-01 before buying semantic interpretation. Inspect whether physical capacity, confirmation workers or communication dominate the result.",
+    "Only proceed with paid perception if the free funnel leaves a causally plausible information-processing bottleneck. Record the decision before running B6.",
+    "Run every declared primary seed and sensitivity once the profile is admitted. Preserve failures, unknown provider costs, censoring and source invalidation. No favorable model retry selection."
+  ],
+  "guardrails": [
+    "All arms receive identical public bytes and formal observations; all use the same stock, map, vehicle assignment, explicit pickup TTL, field verification and owner review.",
+    "Explicit requests, lineage deduplication, strict routine commentary and received progress reconciliation are free for all references. No baseline is forced to reread obvious structured information.",
+    "Each controller is isolated from evaluator truth, gold labels, future events and undelivered messages.",
+    "Primary endpoint: restricted mean time until sufficient physical service at the fixed 3h horizon, including unserved needs. First useful service and matched served-only times are secondary, not replacements.",
+    "Check native deficits, delivered quantity, all-need coverage, overprovisioning, distance, fuel, duplicate execution, ledger invariants, model failures and charged costs.",
+    "Finite human reading parameters and template proportions are uncalibrated modeling assumptions. Faster interpretation in this family does not establish real-world lives saved or superiority over every inexpensive automatic filter.",
+    "No claim of 100 concurrent physical problems per minute or guaranteed x1000 complete model pipeline; engine, UI, provider and physical service are distinct measurements.",
+    "Gemma is the measured model. Gemini, GCP deployment, human comprehension and independent disaster validation remain separate future gates."
+  ],
+  "amendments": [
+    {
+      "at": "2026-10-12T21:59:55.399Z",
+      "reason": "Fresh version after explicit pickup TTL, material terminal receipts, owned-stock/physical staff qualification conservation, service holds/facility refresh, strict progress/commentary reconciliation, shared fleet pair exchange, sourced alternative checkpoints and all-three fresh integrity gates. All earlier invalidated outcomes and costs remain retained; no outcomes imputed.",
+      "previousFingerprints": {
+        "candidateFingerprint": null,
+        "evaluatorFingerprint": null,
+        "simulatorFingerprint": null
+      },
+      "verification": "reports/verification-latest.json"
+    }
+  ],
+  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+  "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+  "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+}

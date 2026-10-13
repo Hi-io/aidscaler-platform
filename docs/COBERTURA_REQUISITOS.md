@@ -10,9 +10,11 @@ Fecha de revisión: 13 de octubre de 2026, Tokio. Esta matriz complementa [PLATA
 - **Externo:** requiere participantes, procedimientos de una institución, datos anotados independientemente, permisos adicionales o infraestructura excluida de esta fase.
 - **Opcional:** H1/memoria no bloquea el cierre del núcleo C1–C7.
 
-**Estado actual: nuevo snapshot local verificado y congelado; ventajas comparativas pendientes.** La [verificación 1791841893496](../reports/verifications/1791841893496.json) pasó **274/274 pruebas de plataforma, 173/173 del simulador**, 197/79 módulos JS, contratos/higiene, cero skipped/cancelled y tres huellas iniciales/finales iguales. UI pasó 57+12+6+9 comprobaciones con cero errores. Los commits privados actuales son plataforma `f37d1325c7be639cbbe85d1d6231c3bb63133471` y simulador `237ac30dd1fb7277b2d847d898632c38dff83ed1`; los SHA anteriores registrados dentro del gate corresponden al HEAD antes de empaquetar las fuentes. Estas pruebas no acreditan todavía una mejora comparativa ni estudios con personas.
+**Estado vigente:** capacidad humana nativa implementada; [483 pruebas de plataforma y 247 del motor](../reports/verifications/1791865074195.json), [113 checks UI](../reports/ui-verifications/1791865813182.json), [instalación limpia con entrega física](../reports/local-closure/1791870240228-clean/result.json) y [primaria íntegra de doce mundos](RESULTADOS_CAPACIDAD_HUMANA.md). NEXO mejora un 18,02% frente al flujo manual declarado; pierde frente a B5 y obtiene resultados mixtos frente a B8. Controles secundarios y estudios de claims amplios siguen abiertos. Las huellas vigentes y todos los límites están en el readout actual; los snapshots siguientes permanecen como historia de la evidencia.
 
-Huellas del snapshot actual verificado:
+**Estado del snapshot anterior, histórico:** la [verificación 1791841893496](../reports/verifications/1791841893496.json) pasó **274/274 pruebas de plataforma, 173/173 del simulador**, 197/79 módulos JS, contratos/higiene, cero skipped/cancelled y tres huellas iniciales/finales iguales. UI pasó 57+12+6+9 comprobaciones con cero errores. Los commits de esa entrega eran plataforma `f37d1325c7be639cbbe85d1d6231c3bb63133471` y simulador `237ac30dd1fb7277b2d847d898632c38dff83ed1`; los SHA anteriores registrados dentro del gate corresponden al HEAD antes de empaquetar las fuentes. Esas pruebas no acreditaban todavía una mejora comparativa ni estudios con personas.
+
+Huellas de ese snapshot anterior verificado:
 
 ```text
 candidato:  86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc
@@ -430,3 +432,13 @@ K22 tiene así evidencia nominal de **combinación de mecanismos y cierre local*
 - Efectividad de campo, causalidad sobre rescates/mortalidad y cifras de vidas salvadas: no derivables del laboratorio. El propósito humanitario se comunica como objetivo, no resultado medido.
 
 La definición de terminado distingue producto local, evidencia comparativa y validación externa. Esta distinción permite avanzar sin ocultar pendientes y sin exigir al simulador que certifique aquello que sólo puede comprobar una intervención real.
+## Anexo: capacidad humana dentro del mundo, no como penalización del evaluador
+
+La versión nueva implementa `human_work` en el motor para lectura, integración/decisión y comunicación. Las solicitudes compiten por pools finitos, conservan su referencia y versión, entregan un snapshot al terminar y pueden esperar, fallar o quedar inconclusas. Un relay requiere además entrega efectiva por el canal nativo; completar el trabajo de comunicación no equivale a recibir la información. La revisión humana de una acción física sigue siendo independiente y comparte el pool de decisión en todos los brazos.
+
+El [protocolo de capacidad humana](EVALUACION_CAPACIDAD_HUMANA.md) declara `C_manual`, `C_decentralized`, `B5`, `B8` y `B6`. El flujo manual central conserva triage competente y el mismo compilador operativo después de recibir la información. Los controles automáticos fuertes conservan sus capacidades anteriores. No se inyecta un porcentaje de duplicados ni se añade un retraso fijo a una puntuación: el exceso debe provenir de órdenes, stock, carga y recibos realmente ejecutados. Las tasas humanas son hipótesis de laboratorio, con controles de lectura rápida, más lectores y cero demora adicional; no representan calibración con profesionales.
+
+La campaña principal pendiente de esta versión comprende tres semillas nuevas y cuatro brazos, doce mundos. Debe registrar primer servicio útil, suficiencia al horizonte, censura, déficit por unidad, exceso, cola por etapa, trabajo y relays, todos los errores recuperados y costes conocidos/desconocidos. Un resultado favorable frente a `C_manual` demuestra el efecto del flujo automatizado bajo esos supuestos. El incremento atribuible al modelo necesita el contraste separado con `B5/B8`, que también pueden ganar. Los resultados negativos previos permanecen válidos para sus propias huellas.
+
+Los gates mecánicos de colas, visor, recuperación y recibos no sustituyen la campaña física comparativa ni los requisitos externos de comprensión humana, corpus independiente, Gemini o campo. Al cerrar las campañas se añadirá el readout íntegro, sin borrar fallos, limitar el denominador a los éxitos o convertir litros/minutos en vidas salvadas.
+

@@ -1,0 +1,34 @@
+{
+  "state": "prepared_not_launched",
+  "runnerSha256": "09de31da061fa49f8136795d440e832cd7c88e5f3a587164ab4660558a8fc9e3",
+  "planSha256": "5b9058238b2f9d2a235d6d6a00dea6fcac28c062c60a8bff606c1ab30c69f641",
+  "providerCallsMadeDuringPreparation": 0,
+  "files": [
+    {
+      "name": "local-latency-evidence.mjs",
+      "sha256": "09de31da061fa49f8136795d440e832cd7c88e5f3a587164ab4660558a8fc9e3",
+      "bytes": 20419
+    },
+    {
+      "name": "evidence-probe-guards.mjs",
+      "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96",
+      "bytes": 4518
+    },
+    {
+      "name": "local-latency-evidence.test.mjs",
+      "sha256": "9414a510b3b33510e84bba65219596a1848ac62d614d267409b5a56aa2492104",
+      "bytes": 2558
+    },
+    {
+      "name": "evidence-probe-guards.test.mjs",
+      "sha256": "dfbeac47aa173a8c49e9a66a3b10c865fa3b8e94e68961e8418f1db984765299",
+      "bytes": 2316
+    },
+    {
+      "name": "local-load-evidence-guide.md",
+      "sha256": "c9a41b852ab2bd00adead921cb43cd9237622fd336aad90220ff90ab5a1c51f5",
+      "bytes": 8502
+    }
+  ],
+  "note": "Archive records prepared code and declared protocol only. No scenario, throughput, accuracy or latency result is implied."
+}

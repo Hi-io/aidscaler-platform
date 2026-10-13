@@ -1,0 +1,72 @@
+{
+  "at": "2026-10-13T02:21:06.2826092Z",
+  "scope": "Read-only audit of command-dependent random draws and paired exogenous inputs. No worlds, models or provider calls were executed; no source files were edited.",
+  "fingerprints": {
+    "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+    "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+    "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e"
+  },
+  "currentPrimaryProtocol": {
+    "path": "reports/comparisons/1791857386133-primary/index.json",
+    "packetLoss": 0,
+    "backgroundTraffic": 0,
+    "silentFraction": 0,
+    "observationRate": 1,
+    "inProgress": true,
+    "noOutcomeClaim": true
+  },
+  "findings": [
+    {
+      "id": "episode-label",
+      "status": "No direct source RNG contamination found",
+      "evidence": ["evaluation/discovery-benchmark.mjs:88", "evaluation/discovery-benchmark.mjs:90", "evaluation/discovery-benchmark.mjs:113", "disaster-response-simulator/engine/world.mjs:261", "disaster-response-simulator/engine/determinism.mjs:16"],
+      "detail": "The episode string includes arm, seed and Date.now(), and is used for model scope, idempotency/request keys and run labels. It is not passed as the simulator seed or subsystem seed. Source draws use the configured seed plus subsystem/entity/event/index; there is no shared mutable PRNG or Math.random() in the physical engine/generators/contracts. Wall time is used by evaluation workers for deadlines, not by physical random draws.",
+      "limit": "This does not make different model runs deterministic. Different chosen commands or scheduling can change endogenous source IDs and source-clock timing. Provider wall time is an intended measured contributor to model latency."
+    },
+    {
+      "id": "command-packet-loss",
+      "status": "Seed pairing does not imply matched operation-level packet shocks",
+      "evidence": ["disaster-response-simulator/engine/communications.mjs:14", "disaster-response-simulator/engine/communications.mjs:18", "disaster-response-simulator/engine/communications.mjs:79", "disaster-response-simulator/engine/world.mjs:256"],
+      "detail": "Source messages are assigned the endogenous counter message-N. Packet loss uses (seed, communications, message-N, loss, attempt). Extra or differently ordered queries/orders/telemetry change which physical command receives a given random draw. This is policy-dependent workload, not a direct arm-name draw. The primary packetLoss=0 comparison is unaffected by this draw coupling.",
+      "recommendedClaim": "Seed-paired exogenous worlds with policy-dependent command-delivery draws; command-level random shocks are not individually matched.",
+      "recommendedControl": "Preserve the packetLoss=0 contrast. Treat packetLoss=0.05 as a multi-seed robustness analysis, retain all runs and do not attribute a single paired difference entirely to semantic intelligence. If a future study requires matched packet shocks for corresponding commands, preregister an independent exogenous network fault schedule or semantic message identity before measuring; do not retrofit shocks after outcomes."
+    },
+    {
+      "id": "clarification-reply",
+      "status": "Inspection identity has the same coupling limitation when observationRate is below one",
+      "evidence": ["disaster-response-simulator/engine/tasks.mjs:230", "disaster-response-simulator/engine/tasks.mjs:233"],
+      "detail": "A clarification reply uses (seed, verification, inspection ID, reply). Inspection numbering and command order may differ across policies. Current discovery explicitly sets observationRate=1, so random reply refusal does not distinguish current primary arms. Cohort silentFraction is separate and drawn from stable building IDs, not from inspection counters."
+    },
+    {
+      "id": "stable-cohort-and-publication",
+      "status": "Predeclared physical need and authored corpus draws are stable across paired policies",
+      "evidence": ["disaster-response-simulator/generators/response-benchmark.mjs:164", "disaster-response-simulator/generators/response-benchmark.mjs:177", "disaster-response-simulator/generators/response-benchmark.mjs:184", "disaster-response-simulator/generators/response-benchmark.mjs:247", "disaster-response-simulator/generators/response-benchmark.mjs:258", "disaster-response-simulator/generators/response-benchmark.mjs:262", "disaster-response-simulator/generators/information.mjs:64", "disaster-response-simulator/generators/information.mjs:67", "disaster-response-simulator/engine/world.mjs:270"],
+      "detail": "Benchmark place selection, quantity, explicit/contextual style, silence, deadlines, priorities and noise locations/times use stable building or noise-index keys. Authored public signal IDs derive from the stable causeEvent plus family via opaqueId(seed, kind, key), rather than a mutable post counter. Repost and engagement draws for these posts therefore remain keyed to the same public source ID. Controllers may cause additional endogenous reports; the evolving corpus need not remain byte-identical after policy actions."
+    },
+    {
+      "id": "background-traffic",
+      "status": "Traffic parameter is a count; congestion and subsequent routing are causally endogenous",
+      "evidence": ["evaluation/discovery-benchmark.mjs:104", "disaster-response-simulator/contracts/config.mjs:138", "disaster-response-simulator/engine/world.mjs:241", "disaster-response-simulator/engine/traffic.mjs:221", "disaster-response-simulator/engine/traffic.mjs:229", "disaster-response-simulator/engine/traffic.mjs:248"],
+      "detail": "traffic=15 means fifteen background vehicles, not fifteen percent. Stable traffic-i IDs and the initial origin draw are matched by seed. Destination draws are keyed to vehicle identity and source-clock time; new targets occur on the same periodic schedule only when that vehicle is idle/arrived. Policy vehicles alter occupancy, waiting and whether a background vehicle is available for its next scheduled trip. Those resulting differences are physical consequences of the policy, not independent exogenous nuisance held constant at each command.",
+      "recommendedClaim": "Report exact background vehicle count and map extent/fleet, rather than an unsupported traffic percentage. Separate the zero-background control from multi-seed congestion robustness."
+    },
+    {
+      "id": "peer-http-transport",
+      "status": "Narrower network fault model than ordinary source messages",
+      "evidence": ["evaluation/harness.mjs:184", "evaluation/harness.mjs:195", "evaluation/harness.mjs:200", "evaluation/harness.mjs:215"],
+      "detail": "Cross-platform HTTP transport checks actual source connectivity for both organizations and advances the common source clock by networkLatencyMs, capped at the declared horizon. It records each transport delivery/failure. This adapter does not draw source packetLoss and does not model source message bandwidth/congestion for HTTP peer bodies. Ordinary source commands/observations still go through finite source communications and packet-loss logic. Equal use of the adapter in compared linked arms is fair within the implemented model, but does not establish full packet-loss fidelity for federation traffic.",
+      "recommendedClaim": "Peer transport evidence covers connectivity, nominal latency and recorded HTTP delivery; avoid claiming realistic packet-loss/bandwidth saturation for federation unless a future predeclared model adds those effects."
+    }
+  ],
+  "rawSourceSha256": {
+    "evaluation/discovery-benchmark.mjs": "f235917f4e38444ebce5b4bdced470e5ae2aa8b714ccd28aea18ee769829d2a0",
+    "evaluation/harness.mjs": "fade73bbcad57fa957c9d8c82cacd40dda04cfc1f760cf7cddaa06c35651344a",
+    "disaster-response-simulator/engine/communications.mjs": "d543191fe6dd34de0f2dd60049f475b2ae775f0e94f0c5de261f2a71ba96c1df",
+    "disaster-response-simulator/engine/traffic.mjs": "ddd4673dc79a762cba12118e983fcebb47ce1095b9f0ad3bde0de3896ec75a07",
+    "disaster-response-simulator/engine/world.mjs": "1b4de48909fba350660262702c82de3305adf3304b55e8f3371cf1ca9b9295d1",
+    "disaster-response-simulator/engine/tasks.mjs": "7a3370b5d68a4b450e757b41653bad6bb51021dba6e297763bba04590dfc4471",
+    "disaster-response-simulator/generators/response-benchmark.mjs": "8d96f2f4a39663929e580e96f106e8a493b596674e95cea60e5f4688611e3967",
+    "disaster-response-simulator/generators/information.mjs": "c8297b745d3f32d9a88284817dda42d0a15b668106002ffcf9779cad2247e10f"
+  },
+  "conclusion": "No direct arm/Date.now contamination of physical random seeds was found. The primary zero-loss/zero-background comparison avoids the main command-randomness limitation. Paired seeds match authored exogenous worlds and corpus, not all policy-dependent command shocks or evolving congestion. This audit is source reasoning, not new execution evidence, and makes no benefit, mortality, Gemini or human-performance claim."
+}

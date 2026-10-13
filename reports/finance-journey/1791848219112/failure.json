@@ -1,0 +1,22 @@
+{
+  "candidate": "d5e02ff3ea53b97e487affde8fdbed4299b8941a3b47f66aa9921629a5fa6f88",
+  "evaluator": "bf3d048588e3a386e534b308b4e87778b19ee0c3791d1f83325d965ee4d4a1d5",
+  "checks": [
+    "Browser contribution remains pending until an authenticated local sandbox provider settles it",
+    "Financial reviewer records a real settled USD sandbox budget through the browser",
+    "Explicit browser approval links a source expense to an unspent budget exactly once; paying does not publish a receipt",
+    "Approved partial public aggregate at 1920px has no horizontal overflow",
+    "Financial reviewer at 1920px has no horizontal overflow",
+    "Approved partial public aggregate at 390px has no horizontal overflow",
+    "Financial reviewer at 390px has no horizontal overflow",
+    "Public browser shows only the deliberately reviewed partial six-of-ten aggregate without source purchase IDs",
+    "Actual complete supplier receipt updates private evidence while the public aggregate remains at the earlier human review",
+    "A new financial review publishes the later native quantity without another financial charge or any model call",
+    "auditor has no financial reconciliation, allocation or publication form",
+    "analyst has no financial reconciliation, allocation or publication form"
+  ],
+  "errors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Failed to load resource: the server responded with a status of 401 (Unauthorized)'\n+ ]\n- []\n"
+}

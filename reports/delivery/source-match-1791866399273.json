@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-13T04:39:59.272Z",
+  "passed": true,
+  "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+  "evaluatorFingerprint": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+  "simulatorFingerprint": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+  "gatePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\verification-latest.json",
+  "uiPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\ui-verification-snapshot.json",
+  "gatePassed": true,
+  "uiPassed": true,
+  "byteComparedFiles": 429,
+  "mismatches": [],
+  "scope": "Published checkout matches the complete tested candidate; no re-execution of paid worlds, no conversion of simulation results into field outcomes."
+}

@@ -1,0 +1,25 @@
+{
+  "candidate": "9b18d02daf6eae5562dcc54be11cbba1debd5ac336a70af068d16ca92cd83021",
+  "evaluator": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulator": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+  "folder": "reports/unloading-journey/1791855077127",
+  "checks": [
+    "Arrived cargo shows zero received before crew approval and finite work",
+    "arrived at 1920px has no horizontal overflow",
+    "arrived at 390px has no horizontal overflow",
+    "Auditor can inspect pending native quantities but has no crew preparation or authorization controls"
+  ],
+  "errors": [],
+  "expectedAnonymousSessionProbes": [
+    {
+      "path": "/api/me",
+      "status": 401
+    },
+    {
+      "path": "/api/me",
+      "status": 401
+    }
+  ],
+  "status": "failed",
+  "error": "{\"operation\":\"operation-1\",\"readyToDraft\":false,\"actions\":[],\"references\":[\"unloading-1\"],\"pending\":[],\"missing\":[{\"type\":\"current_receiver_site\",\"building\":\"b13\"}],\"sourceNow\":299009,\"versions\":{\"request\":\"unloading-1\",\"sourceRunId\":\"5d8bfd5cb32a13459a33\",\"requestVersion\":1,\"operationVersion\":4,\"targetVersion\":2,\"deliveryQuantity\":300},\"note\":\"Receive this receiver's current site/version before assigning a crew.\",\"checkpoint\":\"f8b86b74fd5cea67a92870576642168323f5f919f7c0f905e213a09c4e93e68a\"}\n\nfalse !== true\n"
+}

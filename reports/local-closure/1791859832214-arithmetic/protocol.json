@@ -1,0 +1,89 @@
+{
+  "schema": "four-needs-two-vehicles-two-owners-control-v1",
+  "wallLimitMs": 180000,
+  "source": {
+    "scenario": "S23",
+    "seed": "hand-sheet-2026-01",
+    "organizations": 2,
+    "grid": 5,
+    "extentKm": 1,
+    "durationMs": 1200000,
+    "policy": "none",
+    "hazard": "none",
+    "topology": "grid",
+    "postsPerHour": 0,
+    "backgroundTraffic": 0,
+    "packetLoss": 0,
+    "healthReports": false,
+    "recurringNeeds": false,
+    "reviewMs": 1000,
+    "networkLatencyMs": 1000,
+    "queryLatencyMs": 1000,
+    "loadMs": 1000,
+    "unloadMs": 1000
+  },
+  "needs": [
+    {
+      "id": "hand-a",
+      "owner": "org0",
+      "quantity": 50,
+      "sendQuantity": 50,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-b",
+      "owner": "org0",
+      "quantity": 90,
+      "sendQuantity": 30,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-c",
+      "owner": "org1",
+      "quantity": 40,
+      "sendQuantity": 40,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-d",
+      "owner": "org1",
+      "quantity": 25,
+      "sendQuantity": 0,
+      "deadline": 1800000
+    }
+  ],
+  "initialAuthoring": "Withdraw the default main need, add four water needs at four existing residential buildings and retain one original native vehicle per owner before the first external input. No stock is added. Archive the complete authored initial checkpoint. This is checkpoint-replay evidence, not seed-only reproduction of an unmodified S23.",
+  "controller": "Fixed scripted owner plan from ordinary received need/stock/vehicle/map/policy rows. org0 supplies A then deliberately partial B with the same finite vehicle; org1 supplies C; D is the declared unserved/future-deadline negative. Every exact command requires ordinary owner reviews.",
+  "expected": "Independent piecewise demand-minus-actual-service integral from service_delivered events, first-positive and sufficient timestamps, right censoring, deadline-aware denominators, source stock/reserved/cargo conservation, received-vs-approved distinction, resource occupancy hours and complete checkpoint/input replay.",
+  "limits": [
+    "One arithmetic/safety fixture, not a comparative benefit or semantic throughput study.",
+    "Source reviewer and staff resource hours are distinct; no measured human reading/decision time is asserted. Future deadline is not counted as an already missed deadline."
+  ],
+  "preparedAt": "2026-10-13T02:50:32.216Z",
+  "kind": "arithmetic",
+  "authorizationRequired": "ROOT_GO_NUMERIC_RECEIPTS",
+  "scriptSha256": "39740c1efb73604d4a7b19c425953444816a99dce9af70f38fd77931cab2aec0",
+  "executed": false,
+  "hardware": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.19.0",
+    "cpus": [
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz"
+    ],
+    "totalMemoryBytes": 68644159488
+  },
+  "root": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.candidate-development\\nexo-platform",
+  "note": "No world starts during preparation. All failures retained and never counted as complete."
+}

@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-13T01:35:50.428Z",
+  "candidate": "df9c7de60e75a1637b090cafdbcf7b054cd0d0492c7fc2ab81d39dbc31711bd5",
+  "evaluator": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulator": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+  "folder": "reports/unloading-journey/1791855337282",
+  "checks": [
+    "Arrived cargo shows zero received before crew approval and finite work",
+    "arrived at 1920px has no horizontal overflow",
+    "arrived at 390px has no horizontal overflow",
+    "Auditor can inspect pending native quantities but has no crew preparation or authorization controls",
+    "Checked crew plan and expanded request survive a periodic received-state refresh",
+    "Keyboard prepares crew trip without owner authority or physical receipt",
+    "Reviewer opens the authentic original request and sees zero physical receipt",
+    "Keyboard receiver review records an exact authorization before source execution",
+    "Actual crew transport finishes while the original aid still has zero useful receipt",
+    "Checked crew plan and expanded request survive a periodic received-state refresh",
+    "Keyboard prepares unloading work without owner authority or physical receipt",
+    "Keyboard receiver review records an exact authorization before source execution",
+    "Browser receipt shows the original 300 units only after real source work, with no duplicate aid dispatch",
+    "received at 1920px has no horizontal overflow",
+    "received at 390px has no horizontal overflow"
+  ],
+  "errors": [],
+  "expectedAnonymousSessionProbes": [
+    {
+      "path": "/api/me",
+      "status": 401
+    },
+    {
+      "path": "/api/me",
+      "status": 401
+    }
+  ],
+  "usageCalls": 0,
+  "nativeReceived": 300,
+  "status": "passed",
+  "note": "Actual Chromium keyboard/desktop/mobile and local HTTP source. Scripted laboratory source owners; not human comprehension, model reasoning or comparative time gain."
+}

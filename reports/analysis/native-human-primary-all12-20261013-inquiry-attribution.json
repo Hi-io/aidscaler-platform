@@ -1,0 +1,3251 @@
+{
+  "schema": "post-outcome-request-provenance-v1",
+  "allDeclaredWorlds": 12,
+  "rows": [
+    {
+      "arm": "C_manual",
+      "seed": "native-human-capacity-primary-01",
+      "rawSha256": "e4d0ae5c425b94629057cc1c91f864e400ccd640204901505c44c95a94880736",
+      "perNeed": [
+        {
+          "id": "c34853da508c27ea78b2e08e",
+          "building": "b45",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "f5370fc8687c82c27e3242eb",
+          "building": "b43",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "2bddb3a93488a9de8fb95bc0",
+          "building": "b74",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "9eb33ba28957c9d6d733b7f8",
+          "building": "b79",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "63e4a001340897b94ee76724",
+          "building": "b37",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "9daac3f662d9faca016f2c5e",
+          "building": "b66",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "14a4707f7af776e9fecc015b",
+          "building": "b42",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "bb844558177edd4156af34cb",
+          "building": "b22",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "d27ebb23ce6188d1481de14b",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "daf43cfeb1d251788356d24b",
+          "building": "b30",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "cb59ddcb0b92d138b1c28628",
+          "building": "b38",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "8292a849c19088f0f5a78475",
+          "building": "b36",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "d29055e49f8c874c8b7c1eb4",
+          "building": "b56",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "671cedcdc79c57e0e8d78007",
+          "building": "b1",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "d5e4f19bf8cc5c2c54a8384d",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 7,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "a873cd8f7ff52c383d96d515",
+          "building": "b32",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "41ed251a4b6895a3ac866b3b",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "13fe8ea8bb69583693d2a2e8",
+          "building": "b8",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "67d09735efe213c47042dcfb",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "bc3be118fbd0416428255ec1",
+          "building": "b46",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "d362c790d9ef79f998571ac5",
+          "building": "b12",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "c4a45785931971aa666fd0a9",
+          "building": "b9",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "20ba0afe409baa90add07e38",
+          "building": "b58",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "c590088a72d28cf6f89c0c1f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "native-manual-read-decide-delivered-relay": 18,
+        "native-manual-read-decide-local": 6
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B5",
+      "seed": "native-human-capacity-primary-01",
+      "rawSha256": "db60125cd024973c7b64d59480b4050e2ccebb63653c6f1024098f773347170b",
+      "perNeed": [
+        {
+          "id": "c34853da508c27ea78b2e08e",
+          "building": "b45",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "f5370fc8687c82c27e3242eb",
+          "building": "b43",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "2bddb3a93488a9de8fb95bc0",
+          "building": "b74",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "9eb33ba28957c9d6d733b7f8",
+          "building": "b79",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "63e4a001340897b94ee76724",
+          "building": "b37",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "9daac3f662d9faca016f2c5e",
+          "building": "b66",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "14a4707f7af776e9fecc015b",
+          "building": "b42",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "bb844558177edd4156af34cb",
+          "building": "b22",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d27ebb23ce6188d1481de14b",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "daf43cfeb1d251788356d24b",
+          "building": "b30",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "cb59ddcb0b92d138b1c28628",
+          "building": "b38",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "8292a849c19088f0f5a78475",
+          "building": "b36",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "d29055e49f8c874c8b7c1eb4",
+          "building": "b56",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "671cedcdc79c57e0e8d78007",
+          "building": "b1",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d5e4f19bf8cc5c2c54a8384d",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 7,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "a873cd8f7ff52c383d96d515",
+          "building": "b32",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "41ed251a4b6895a3ac866b3b",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "13fe8ea8bb69583693d2a2e8",
+          "building": "b8",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "67d09735efe213c47042dcfb",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "bc3be118fbd0416428255ec1",
+          "building": "b46",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d362c790d9ef79f998571ac5",
+          "building": "b12",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "c4a45785931971aa666fd0a9",
+          "building": "b9",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "20ba0afe409baa90add07e38",
+          "building": "b58",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c590088a72d28cf6f89c0c1f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "native-human-read-receipt": 14,
+        "common-free-explicit-parser": 10
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B8",
+      "seed": "native-human-capacity-primary-01",
+      "rawSha256": "395a717b98260f905092b5b01e8ae2d25a84174a905ce791b7548a9f48f7b77d",
+      "perNeed": [
+        {
+          "id": "c34853da508c27ea78b2e08e",
+          "building": "b45",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "f5370fc8687c82c27e3242eb",
+          "building": "b43",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "2bddb3a93488a9de8fb95bc0",
+          "building": "b74",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 6,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "9eb33ba28957c9d6d733b7f8",
+          "building": "b79",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "63e4a001340897b94ee76724",
+          "building": "b37",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "9daac3f662d9faca016f2c5e",
+          "building": "b66",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "14a4707f7af776e9fecc015b",
+          "building": "b42",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "bb844558177edd4156af34cb",
+          "building": "b22",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d27ebb23ce6188d1481de14b",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "daf43cfeb1d251788356d24b",
+          "building": "b30",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "cb59ddcb0b92d138b1c28628",
+          "building": "b38",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "8292a849c19088f0f5a78475",
+          "building": "b36",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "d29055e49f8c874c8b7c1eb4",
+          "building": "b56",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "671cedcdc79c57e0e8d78007",
+          "building": "b1",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d5e4f19bf8cc5c2c54a8384d",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 10,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "a873cd8f7ff52c383d96d515",
+          "building": "b32",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "41ed251a4b6895a3ac866b3b",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "13fe8ea8bb69583693d2a2e8",
+          "building": "b8",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "67d09735efe213c47042dcfb",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "bc3be118fbd0416428255ec1",
+          "building": "b46",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "d362c790d9ef79f998571ac5",
+          "building": "b12",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "c4a45785931971aa666fd0a9",
+          "building": "b9",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "20ba0afe409baa90add07e38",
+          "building": "b58",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "c590088a72d28cf6f89c0c1f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "common-free-broad-keyword": 18,
+        "common-free-explicit-parser": 6
+      },
+      "requestsOutsidePhysicalCohort": 38,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B6",
+      "seed": "native-human-capacity-primary-01",
+      "rawSha256": "29462aee28fef682e46ebedbfe2cd339aea4b58be56defd49f4f15dde1da1c7c",
+      "perNeed": [
+        {
+          "id": "c34853da508c27ea78b2e08e",
+          "building": "b45",
+          "type": "water",
+          "firstRequestProvenance": null,
+          "requestActivities": 0,
+          "provenances": []
+        },
+        {
+          "id": "f5370fc8687c82c27e3242eb",
+          "building": "b43",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "2bddb3a93488a9de8fb95bc0",
+          "building": "b74",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "9eb33ba28957c9d6d733b7f8",
+          "building": "b79",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "63e4a001340897b94ee76724",
+          "building": "b37",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "9daac3f662d9faca016f2c5e",
+          "building": "b66",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "14a4707f7af776e9fecc015b",
+          "building": "b42",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "bb844558177edd4156af34cb",
+          "building": "b22",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d27ebb23ce6188d1481de14b",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "daf43cfeb1d251788356d24b",
+          "building": "b30",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "cb59ddcb0b92d138b1c28628",
+          "building": "b38",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "8292a849c19088f0f5a78475",
+          "building": "b36",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "d29055e49f8c874c8b7c1eb4",
+          "building": "b56",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "671cedcdc79c57e0e8d78007",
+          "building": "b1",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d5e4f19bf8cc5c2c54a8384d",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "a873cd8f7ff52c383d96d515",
+          "building": "b32",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "41ed251a4b6895a3ac866b3b",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "13fe8ea8bb69583693d2a2e8",
+          "building": "b8",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "67d09735efe213c47042dcfb",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "bc3be118fbd0416428255ec1",
+          "building": "b46",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d362c790d9ef79f998571ac5",
+          "building": "b12",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "c4a45785931971aa666fd0a9",
+          "building": "b9",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "20ba0afe409baa90add07e38",
+          "building": "b58",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c590088a72d28cf6f89c0c1f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "unknown": 1,
+        "common-free-explicit-parser": 10,
+        "actual-model-perception-receipt": 13
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [
+        {
+          "request": "model-request-1",
+          "nativeDeclaredAvailableAt": 137016,
+          "controllerObservedAt": 137016,
+          "measuredProviderWallMs": 4643.303599999985
+        },
+        {
+          "request": "model-request-2",
+          "nativeDeclaredAvailableAt": 212016,
+          "controllerObservedAt": 212016,
+          "measuredProviderWallMs": 3277.9462999999523
+        },
+        {
+          "request": "model-request-3",
+          "nativeDeclaredAvailableAt": 289016,
+          "controllerObservedAt": 289016,
+          "measuredProviderWallMs": 6198.1384999998845
+        },
+        {
+          "request": "model-request-4",
+          "nativeDeclaredAvailableAt": 321016,
+          "controllerObservedAt": 321016,
+          "measuredProviderWallMs": 10689.34850000008
+        },
+        {
+          "request": "model-request-5",
+          "nativeDeclaredAvailableAt": 401016,
+          "controllerObservedAt": 401016,
+          "measuredProviderWallMs": 12735.543999999994
+        },
+        {
+          "request": "model-request-6",
+          "nativeDeclaredAvailableAt": 416016,
+          "controllerObservedAt": 416016,
+          "measuredProviderWallMs": 10549.335399999982
+        },
+        {
+          "request": "model-request-7",
+          "nativeDeclaredAvailableAt": 497016,
+          "controllerObservedAt": 497016,
+          "measuredProviderWallMs": 4677.102100000018
+        }
+      ],
+      "maximumModelProviderWallMs": 12735.543999999994,
+      "lastModelControllerObservedAt": 497016,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "C_manual",
+      "seed": "native-human-capacity-primary-02",
+      "rawSha256": "41c3e2f67c2afe4a319271a9f930d736d652741c1f5a7317315f458967e06b0c",
+      "perNeed": [
+        {
+          "id": "a89632e31fd580e49ba6f5dd",
+          "building": "b24",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "51873efac18810c96c76bae2",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "c140ae1d626d11265f3bb889",
+          "building": "b14",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "cf4a4b16184947bee7807b0b",
+          "building": "b64",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "100e5e168490450a530fd946",
+          "building": "b9",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "db54006700b1d46e099152a5",
+          "building": "b19",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "20d5277ea9b01971810e4ef3",
+          "building": "b11",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "e74a999cd96f4dd70fe4ddde",
+          "building": "b23",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "ab9db401e4988c157ff02748",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "40a9e282a354ed29757d5719",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "4313ef84e8ffe023755da052",
+          "building": "b45",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "c61335946b01d11a3ac21fcb",
+          "building": "b46",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "f460a6b88e151e29cb6e2cd8",
+          "building": "b3",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "be1054e286ecc05ff6ab6757",
+          "building": "b16",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "eac1cb12c0df1c2a3823f1c2",
+          "building": "b18",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 4,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "b9733f844bf9d4f4b0829d42",
+          "building": "b78",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 5,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "30ca34fe3a20598ae7583e9b",
+          "building": "b8",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "9eb6534c518fb974dc24a219",
+          "building": "b48",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "a1edfb7dcc83f73a8a22dd52",
+          "building": "b72",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "3edb237df559895b1ab4eefa",
+          "building": "b15",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "bfc9eeebab64adf5f4341f98",
+          "building": "b30",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "8b94d916d8f0569012b6393e",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "c37be2c402fdf0c59bc5f987",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "1983d79014ada6656095014e",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "native-manual-read-decide-delivered-relay": 19,
+        "native-manual-read-decide-local": 5
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B5",
+      "seed": "native-human-capacity-primary-02",
+      "rawSha256": "9771b5bff605d633643f91bd591a4c88c93d8d8cbd7930b8c493c138a8a33700",
+      "perNeed": [
+        {
+          "id": "a89632e31fd580e49ba6f5dd",
+          "building": "b24",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "51873efac18810c96c76bae2",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c140ae1d626d11265f3bb889",
+          "building": "b14",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "cf4a4b16184947bee7807b0b",
+          "building": "b64",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "100e5e168490450a530fd946",
+          "building": "b9",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "db54006700b1d46e099152a5",
+          "building": "b19",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "20d5277ea9b01971810e4ef3",
+          "building": "b11",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "e74a999cd96f4dd70fe4ddde",
+          "building": "b23",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "ab9db401e4988c157ff02748",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "40a9e282a354ed29757d5719",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "4313ef84e8ffe023755da052",
+          "building": "b45",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c61335946b01d11a3ac21fcb",
+          "building": "b46",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "f460a6b88e151e29cb6e2cd8",
+          "building": "b3",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "be1054e286ecc05ff6ab6757",
+          "building": "b16",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "eac1cb12c0df1c2a3823f1c2",
+          "building": "b18",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b9733f844bf9d4f4b0829d42",
+          "building": "b78",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 5,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "30ca34fe3a20598ae7583e9b",
+          "building": "b8",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "9eb6534c518fb974dc24a219",
+          "building": "b48",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "a1edfb7dcc83f73a8a22dd52",
+          "building": "b72",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "3edb237df559895b1ab4eefa",
+          "building": "b15",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "bfc9eeebab64adf5f4341f98",
+          "building": "b30",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "8b94d916d8f0569012b6393e",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "c37be2c402fdf0c59bc5f987",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "1983d79014ada6656095014e",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "common-free-explicit-parser": 14,
+        "native-human-read-receipt": 10
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B8",
+      "seed": "native-human-capacity-primary-02",
+      "rawSha256": "688626aef52967bac31aeb2f707e799c75988159ce7601b6370df8a074e634c9",
+      "perNeed": [
+        {
+          "id": "a89632e31fd580e49ba6f5dd",
+          "building": "b24",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "51873efac18810c96c76bae2",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c140ae1d626d11265f3bb889",
+          "building": "b14",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "cf4a4b16184947bee7807b0b",
+          "building": "b64",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "100e5e168490450a530fd946",
+          "building": "b9",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "db54006700b1d46e099152a5",
+          "building": "b19",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "20d5277ea9b01971810e4ef3",
+          "building": "b11",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "e74a999cd96f4dd70fe4ddde",
+          "building": "b23",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "ab9db401e4988c157ff02748",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "40a9e282a354ed29757d5719",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "4313ef84e8ffe023755da052",
+          "building": "b45",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "c61335946b01d11a3ac21fcb",
+          "building": "b46",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "f460a6b88e151e29cb6e2cd8",
+          "building": "b3",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "be1054e286ecc05ff6ab6757",
+          "building": "b16",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "eac1cb12c0df1c2a3823f1c2",
+          "building": "b18",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b9733f844bf9d4f4b0829d42",
+          "building": "b78",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 7,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "30ca34fe3a20598ae7583e9b",
+          "building": "b8",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 6,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "9eb6534c518fb974dc24a219",
+          "building": "b48",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "a1edfb7dcc83f73a8a22dd52",
+          "building": "b72",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "3edb237df559895b1ab4eefa",
+          "building": "b15",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 6,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "bfc9eeebab64adf5f4341f98",
+          "building": "b30",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "8b94d916d8f0569012b6393e",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "c37be2c402fdf0c59bc5f987",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "1983d79014ada6656095014e",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 6,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "common-free-broad-keyword": 14,
+        "common-free-explicit-parser": 10
+      },
+      "requestsOutsidePhysicalCohort": 53,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B6",
+      "seed": "native-human-capacity-primary-02",
+      "rawSha256": "0c39c05271550b110390465bce2818ef76ee99c72c7ed94ec9926d3c805b2ada",
+      "perNeed": [
+        {
+          "id": "a89632e31fd580e49ba6f5dd",
+          "building": "b24",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "51873efac18810c96c76bae2",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c140ae1d626d11265f3bb889",
+          "building": "b14",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "cf4a4b16184947bee7807b0b",
+          "building": "b64",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "100e5e168490450a530fd946",
+          "building": "b9",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "db54006700b1d46e099152a5",
+          "building": "b19",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "20d5277ea9b01971810e4ef3",
+          "building": "b11",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "e74a999cd96f4dd70fe4ddde",
+          "building": "b23",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "ab9db401e4988c157ff02748",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "40a9e282a354ed29757d5719",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "4313ef84e8ffe023755da052",
+          "building": "b45",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "c61335946b01d11a3ac21fcb",
+          "building": "b46",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "f460a6b88e151e29cb6e2cd8",
+          "building": "b3",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "be1054e286ecc05ff6ab6757",
+          "building": "b16",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "eac1cb12c0df1c2a3823f1c2",
+          "building": "b18",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b9733f844bf9d4f4b0829d42",
+          "building": "b78",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "30ca34fe3a20598ae7583e9b",
+          "building": "b8",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "9eb6534c518fb974dc24a219",
+          "building": "b48",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "a1edfb7dcc83f73a8a22dd52",
+          "building": "b72",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "3edb237df559895b1ab4eefa",
+          "building": "b15",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "bfc9eeebab64adf5f4341f98",
+          "building": "b30",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "8b94d916d8f0569012b6393e",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "c37be2c402fdf0c59bc5f987",
+          "building": "b4",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "1983d79014ada6656095014e",
+          "building": "b34",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "common-free-explicit-parser": 14,
+        "actual-model-perception-receipt": 10
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [
+        {
+          "request": "model-request-1",
+          "nativeDeclaredAvailableAt": 137016,
+          "controllerObservedAt": 137016,
+          "measuredProviderWallMs": 7057.798700000159
+        },
+        {
+          "request": "model-request-2",
+          "nativeDeclaredAvailableAt": 212016,
+          "controllerObservedAt": 212016,
+          "measuredProviderWallMs": 8062.576900000218
+        },
+        {
+          "request": "model-request-3",
+          "nativeDeclaredAvailableAt": 288016,
+          "controllerObservedAt": 288016,
+          "measuredProviderWallMs": 6878.135699999984
+        },
+        {
+          "request": "model-request-4",
+          "nativeDeclaredAvailableAt": 319016,
+          "controllerObservedAt": 319016,
+          "measuredProviderWallMs": 7783.677099999972
+        },
+        {
+          "request": "model-request-5",
+          "nativeDeclaredAvailableAt": 398016,
+          "controllerObservedAt": 398016,
+          "measuredProviderWallMs": 6260.265999999829
+        },
+        {
+          "request": "model-request-6",
+          "nativeDeclaredAvailableAt": 430016,
+          "controllerObservedAt": 430016,
+          "measuredProviderWallMs": 5730.832500000019
+        },
+        {
+          "request": "model-request-7",
+          "nativeDeclaredAvailableAt": 511016,
+          "controllerObservedAt": 511016,
+          "measuredProviderWallMs": 3049.74450000003
+        }
+      ],
+      "maximumModelProviderWallMs": 8062.576900000218,
+      "lastModelControllerObservedAt": 511016,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "C_manual",
+      "seed": "native-human-capacity-primary-03",
+      "rawSha256": "80f5162c9eca89aa94e8ae456c30bc2111d9116bb5460624755980278ab3d2ce",
+      "perNeed": [
+        {
+          "id": "e9c5ef38a729e4065e88bd5a",
+          "building": "b20",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "08cc4b051c67716e1f9ac659",
+          "building": "b50",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "b321a5bb353793e50bd6286b",
+          "building": "b58",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "50f62873919a5543a0b4774c",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 4,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "608b7dcec7ef871450942044",
+          "building": "b51",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 4,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "d6c84f5619548c283bf7bb2c",
+          "building": "b71",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "b2b1a8c5390fb9e37f8f2540",
+          "building": "b23",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "4ae938720cf135ebcdfc7c24",
+          "building": "b55",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "422da3a9e3a5dd24edaefd0f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "bfcd10d861dd9469c4a00443",
+          "building": "b15",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "42c32c2d979e59f58ffb38ff",
+          "building": "b64",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "4602aa2110a362c8f2718eee",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "8b6b9a6bac5322c5c87eb622",
+          "building": "b19",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "e0f140e2729b1c67950eadfa",
+          "building": "b28",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "afcf6a6770652a7c9e6b4494",
+          "building": "b54",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-local",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-local",
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "781f1ba62fb45baa1a61c19a",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "4424a189e0e4310c6886aece",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "fd96892dcf2dbc72ff80e782",
+          "building": "b72",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 4,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "a5413317f130314845c2b1a8",
+          "building": "b49",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "f8077bd7fe10349a2103f522",
+          "building": "b10",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 2,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay",
+            "native-manual-read-decide-local"
+          ]
+        },
+        {
+          "id": "86fed06ff60da964a3d03eb2",
+          "building": "b79",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "84e5ddec4e25bbe6ba7e687b",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 3,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "0724819cd63b4c4886dccc7f",
+          "building": "b27",
+          "type": "food",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        },
+        {
+          "id": "0fc7949a54cb081d7060c4d6",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "native-manual-read-decide-delivered-relay",
+          "requestActivities": 1,
+          "provenances": [
+            "native-manual-read-decide-delivered-relay"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "native-manual-read-decide-delivered-relay": 20,
+        "native-manual-read-decide-local": 4
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B5",
+      "seed": "native-human-capacity-primary-03",
+      "rawSha256": "f34b92d0a169782ba926aa37da12d180ff3e6e18a8c1d93832c87680173adfd4",
+      "perNeed": [
+        {
+          "id": "e9c5ef38a729e4065e88bd5a",
+          "building": "b20",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "08cc4b051c67716e1f9ac659",
+          "building": "b50",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b321a5bb353793e50bd6286b",
+          "building": "b58",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "50f62873919a5543a0b4774c",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 4,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "608b7dcec7ef871450942044",
+          "building": "b51",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d6c84f5619548c283bf7bb2c",
+          "building": "b71",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "b2b1a8c5390fb9e37f8f2540",
+          "building": "b23",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "4ae938720cf135ebcdfc7c24",
+          "building": "b55",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "422da3a9e3a5dd24edaefd0f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "bfcd10d861dd9469c4a00443",
+          "building": "b15",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "42c32c2d979e59f58ffb38ff",
+          "building": "b64",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "4602aa2110a362c8f2718eee",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "8b6b9a6bac5322c5c87eb622",
+          "building": "b19",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "e0f140e2729b1c67950eadfa",
+          "building": "b28",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "afcf6a6770652a7c9e6b4494",
+          "building": "b54",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "781f1ba62fb45baa1a61c19a",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "4424a189e0e4310c6886aece",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "fd96892dcf2dbc72ff80e782",
+          "building": "b72",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "a5413317f130314845c2b1a8",
+          "building": "b49",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "f8077bd7fe10349a2103f522",
+          "building": "b10",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "86fed06ff60da964a3d03eb2",
+          "building": "b79",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "84e5ddec4e25bbe6ba7e687b",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        },
+        {
+          "id": "0724819cd63b4c4886dccc7f",
+          "building": "b27",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "0fc7949a54cb081d7060c4d6",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "native-human-read-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "native-human-read-receipt"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "native-human-read-receipt": 12,
+        "common-free-explicit-parser": 12
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B8",
+      "seed": "native-human-capacity-primary-03",
+      "rawSha256": "304e68a90151a1032606d03b76bb75cda070c2fdd0044e33442d662940d3c58a",
+      "perNeed": [
+        {
+          "id": "e9c5ef38a729e4065e88bd5a",
+          "building": "b20",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "08cc4b051c67716e1f9ac659",
+          "building": "b50",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b321a5bb353793e50bd6286b",
+          "building": "b58",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "50f62873919a5543a0b4774c",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 9,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "608b7dcec7ef871450942044",
+          "building": "b51",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "d6c84f5619548c283bf7bb2c",
+          "building": "b71",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "b2b1a8c5390fb9e37f8f2540",
+          "building": "b23",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "4ae938720cf135ebcdfc7c24",
+          "building": "b55",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "422da3a9e3a5dd24edaefd0f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "bfcd10d861dd9469c4a00443",
+          "building": "b15",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "42c32c2d979e59f58ffb38ff",
+          "building": "b64",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "4602aa2110a362c8f2718eee",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "8b6b9a6bac5322c5c87eb622",
+          "building": "b19",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "e0f140e2729b1c67950eadfa",
+          "building": "b28",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "afcf6a6770652a7c9e6b4494",
+          "building": "b54",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "781f1ba62fb45baa1a61c19a",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 8,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "4424a189e0e4310c6886aece",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser",
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "fd96892dcf2dbc72ff80e782",
+          "building": "b72",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 6,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "a5413317f130314845c2b1a8",
+          "building": "b49",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "f8077bd7fe10349a2103f522",
+          "building": "b10",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "86fed06ff60da964a3d03eb2",
+          "building": "b79",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 5,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "84e5ddec4e25bbe6ba7e687b",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        },
+        {
+          "id": "0724819cd63b4c4886dccc7f",
+          "building": "b27",
+          "type": "food",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-broad-keyword",
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "0fc7949a54cb081d7060c4d6",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-broad-keyword",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-broad-keyword"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "common-free-broad-keyword": 18,
+        "common-free-explicit-parser": 6
+      },
+      "requestsOutsidePhysicalCohort": 46,
+      "modelClockRecords": [],
+      "maximumModelProviderWallMs": null,
+      "lastModelControllerObservedAt": null,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    },
+    {
+      "arm": "B6",
+      "seed": "native-human-capacity-primary-03",
+      "rawSha256": "8f32fe9916bf41323105e4992c72f1722b714d4e7b651f2208c8bbca5a9110b5",
+      "perNeed": [
+        {
+          "id": "e9c5ef38a729e4065e88bd5a",
+          "building": "b20",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "08cc4b051c67716e1f9ac659",
+          "building": "b50",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "b321a5bb353793e50bd6286b",
+          "building": "b58",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "50f62873919a5543a0b4774c",
+          "building": "b80",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "608b7dcec7ef871450942044",
+          "building": "b51",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "d6c84f5619548c283bf7bb2c",
+          "building": "b71",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "b2b1a8c5390fb9e37f8f2540",
+          "building": "b23",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "4ae938720cf135ebcdfc7c24",
+          "building": "b55",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 3,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "422da3a9e3a5dd24edaefd0f",
+          "building": "b67",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "bfcd10d861dd9469c4a00443",
+          "building": "b15",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "42c32c2d979e59f58ffb38ff",
+          "building": "b64",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "4602aa2110a362c8f2718eee",
+          "building": "b47",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "8b6b9a6bac5322c5c87eb622",
+          "building": "b19",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "e0f140e2729b1c67950eadfa",
+          "building": "b28",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "afcf6a6770652a7c9e6b4494",
+          "building": "b54",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "781f1ba62fb45baa1a61c19a",
+          "building": "b75",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 2,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "4424a189e0e4310c6886aece",
+          "building": "b21",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "fd96892dcf2dbc72ff80e782",
+          "building": "b72",
+          "type": "blankets",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 4,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "a5413317f130314845c2b1a8",
+          "building": "b49",
+          "type": "water",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "f8077bd7fe10349a2103f522",
+          "building": "b10",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 2,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "86fed06ff60da964a3d03eb2",
+          "building": "b79",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "84e5ddec4e25bbe6ba7e687b",
+          "building": "b25",
+          "type": "water",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 3,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        },
+        {
+          "id": "0724819cd63b4c4886dccc7f",
+          "building": "b27",
+          "type": "food",
+          "firstRequestProvenance": "common-free-explicit-parser",
+          "requestActivities": 1,
+          "provenances": [
+            "common-free-explicit-parser"
+          ]
+        },
+        {
+          "id": "0fc7949a54cb081d7060c4d6",
+          "building": "b38",
+          "type": "blankets",
+          "firstRequestProvenance": "actual-model-perception-receipt",
+          "requestActivities": 1,
+          "provenances": [
+            "actual-model-perception-receipt"
+          ]
+        }
+      ],
+      "firstRequestCounts": {
+        "actual-model-perception-receipt": 12,
+        "common-free-explicit-parser": 12
+      },
+      "requestsOutsidePhysicalCohort": 0,
+      "modelClockRecords": [
+        {
+          "request": "model-request-1",
+          "nativeDeclaredAvailableAt": 137016,
+          "controllerObservedAt": 137016,
+          "measuredProviderWallMs": 5930.373599999584
+        },
+        {
+          "request": "model-request-2",
+          "nativeDeclaredAvailableAt": 212016,
+          "controllerObservedAt": 212016,
+          "measuredProviderWallMs": 3568.278699999675
+        },
+        {
+          "request": "model-request-3",
+          "nativeDeclaredAvailableAt": 289016,
+          "controllerObservedAt": 289016,
+          "measuredProviderWallMs": 3410.88570000045
+        },
+        {
+          "request": "model-request-4",
+          "nativeDeclaredAvailableAt": 321016,
+          "controllerObservedAt": 321016,
+          "measuredProviderWallMs": 7057.016900000162
+        },
+        {
+          "request": "model-request-5",
+          "nativeDeclaredAvailableAt": 400016,
+          "controllerObservedAt": 400016,
+          "measuredProviderWallMs": 3125.7442000000738
+        },
+        {
+          "request": "model-request-6",
+          "nativeDeclaredAvailableAt": 430016,
+          "controllerObservedAt": 430016,
+          "measuredProviderWallMs": 3897.520699999761
+        },
+        {
+          "request": "model-request-7",
+          "nativeDeclaredAvailableAt": 447017,
+          "controllerObservedAt": 447017,
+          "measuredProviderWallMs": 1022.777999999933
+        }
+      ],
+      "maximumModelProviderWallMs": 7057.016900000162,
+      "lastModelControllerObservedAt": 447017,
+      "note": "Request activity order/provenance is not proof that a delivered verification originated exclusively in this lane. Shared pending reuse may combine lanes."
+    }
+  ],
+  "limits": "Received request activity only; no actual confirmation time inferred from ACK, no model necessity or semantic accuracy inferred."
+}

@@ -4,6 +4,8 @@ Local operations software for NGOs, emergency teams and public response organiza
 
 The current model adapter uses **Gemma 4 31B through OpenRouter**, not Gemini. A model's performance is not transferable by assumption. Google Cloud deployment is deliberately excluded from this implementation phase.
 
+The current twelve-world finite-human comparison measured **18.02% faster sufficient physical aid than its declared manual workflow** (41.85 → 34.31 minutes). Strong deterministic B5 was faster than NEXO; B8 results were mixed, and blankets/fuel regressed. These are synthetic, assumption-bound results. See [all outcomes, attribution and limitations](docs/RESULTADOS_CAPACIDAD_HUMANA.md); capacity and burst controls remain in progress.
+
 ## Run locally
 
 Requires Node.js 24+ and pnpm. Clone this private repository and the private `disaster-response-simulator` repository into sibling directories, then:
@@ -55,6 +57,10 @@ pnpm test:ui
 ```
 
 Tests exercise authorization, CSRF, ownership, version conflicts, idempotency, reserve floors, concurrent allocations, dependency invalidation, restart recovery, signed network messages, payment webhooks and desktop/mobile navigation. Real provider smoke tests and investigation episodes write receipts to `reports/`. Failed or inconclusive investigations do not count as delivered aid.
+
+The native human-capacity laboratory adds finite reading, decision and communication pools inside the physical simulator. Information is usable only after its actor's work and actual channel delivery; reviews remain finite for every arm. `C_manual` is a competent manual coordination workflow, while `B5` and `B8` retain useful deterministic automation. The observer's older `conventional` automatic policy is an algorithmic reference, not a measurement of this manual workflow. See [the human-capacity protocol](docs/EVALUACION_CAPACIDAD_HUMANA.md) for rates, paired scenarios, strong controls and what simulated effort can establish.
+
+This source version has [483 platform and 247 simulator checks](reports/verifications/1791865074195.json) and [113 browser checks](reports/ui-verifications/1791865813182.json). Performance comparisons have separate source-bound reports; passing these checks does not establish that the model is faster than the strongest reference.
 
 `pnpm demo` uses the real provider and the actor-visible HTTP gateway. A scripted evaluation operator models approval; this is not a human comprehension trial. Its accelerated modeled clock and actual provider wall latency are reported separately. Production observations, clinical calibration, organizational adoption and statistically supported performance improvements remain separate evidence requirements.
 

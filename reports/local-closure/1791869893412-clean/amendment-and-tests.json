@@ -1,0 +1,20 @@
+{
+  "schema": "t27-profile-preserving-v2-amendment",
+  "prepared": true,
+  "executed": false,
+  "worldsStarted": 0,
+  "modelCalls": 0,
+  "installsPerformed": 0,
+  "pureTests": 6,
+  "pureTestsPassed": 6,
+  "oldHelperSha256": "b388d5e30be5efbe920fe4ae2ebfe334879c41faebd5f2b80d74ee944da9ca19",
+  "oldArchivedHelperSha256": "b388d5e30be5efbe920fe4ae2ebfe334879c41faebd5f2b80d74ee944da9ca19",
+  "originalHelperStillMatchesArchive": true,
+  "helperSha256": "27adcdf38ffa226f8266403f3dce0c3ea5c655456e8475f583da458b63bf9333",
+  "testSha256": "40594b005b95e52f5e82e22c857deed207aa1fe348424815e36a9a6c07644eb8",
+  "guideSha256": "fe9fba19a77e20930432c774e1e98f5f4bed3eb063501a896715af37ff3778d1",
+  "sourceFilesModified": 0,
+  "homeReassigned": false,
+  "codexHomeReassigned": false,
+  "freshUserProfileClaim": false
+}

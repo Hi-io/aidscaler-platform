@@ -1,0 +1,39 @@
+✓ Lockfile passes supply-chain policies (verified 1d ago)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +21
++++++++++++++++++++++
+
+   ╭────────────────────────────────────────────────────────────────────────╮
+   │                                                                        │
+   │                  Update available! 11.25.0 → 12.11.2.                  │
+   │                  Changelog: https://pnpm.io/v/12.11.2                  │
+   │   To update, run: Invoke-WebRequest https://get.pnpm.io/install.ps1    │
+   │                 -UseBasicParsing | Invoke-Expression                   │
+   │                                                                        │
+   ╰────────────────────────────────────────────────────────────────────────╯
+
+Packages are hard linked from the content-addressable store to the virtual store.
+  Content-addressable store is at: C:\Users\Hiros\OneDrive\Documentos\AI Builder Cup\.human-capacity-development\nexo-platform\.local\T27-private-builds-v2\1791870240228-clean\fresh-pnpm-store\v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 21, reused 0, downloaded 15, added 14
+Progress: resolved 21, reused 0, downloaded 17, added 16
+Progress: resolved 21, reused 0, downloaded 17, added 17
+Progress: resolved 21, reused 0, downloaded 19, added 18
+Progress: resolved 21, reused 0, downloaded 20, added 19
+Progress: resolved 21, reused 0, downloaded 20, added 20
+Progress: resolved 21, reused 0, downloaded 21, added 20
+Progress: resolved 21, reused 0, downloaded 21, added 21
+Progress: resolved 21, reused 0, downloaded 21, added 21, done
+
+dependencies:
++ @electric-sql/pglite 0.3.16
++ lucide-static 0.574.0
++ pg 8.23.1
++ zod 4.6.5
+
+devDependencies:
++ @playwright/test 1.64.0
++ prettier 3.9.10
+
+Done in 14s using pnpm v11.25.0

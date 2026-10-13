@@ -1,0 +1,104 @@
+{
+  "schema": "source-s03-s05-physical-chain-v1",
+  "state": "prepared_not_launched",
+  "seed": "local-native-physical-chain-2026-01",
+  "scenarios": [
+    "S03",
+    "S05"
+  ],
+  "variants": [
+    "standard",
+    "adverse",
+    "infeasible"
+  ],
+  "worlds": [
+    {
+      "scenario": "S03",
+      "variant": "standard",
+      "compositionVariant": "standard",
+      "declaredLabel": "nominal_attempt_not_presumed_favorable"
+    },
+    {
+      "scenario": "S03",
+      "variant": "adverse",
+      "compositionVariant": "standard",
+      "declaredLabel": "adverse_attempt"
+    },
+    {
+      "scenario": "S03",
+      "variant": "infeasible",
+      "compositionVariant": "insufficient_staff",
+      "declaredLabel": "infeasible_attempt"
+    },
+    {
+      "scenario": "S05",
+      "variant": "standard",
+      "compositionVariant": "standard",
+      "declaredLabel": "nominal_attempt_not_presumed_favorable"
+    },
+    {
+      "scenario": "S05",
+      "variant": "adverse",
+      "compositionVariant": "standard",
+      "declaredLabel": "adverse_attempt"
+    },
+    {
+      "scenario": "S05",
+      "variant": "infeasible",
+      "compositionVariant": "insufficient_staff",
+      "declaredLabel": "infeasible_attempt"
+    }
+  ],
+  "common": {
+    "organizations": 1,
+    "nativeOrganizations": 4,
+    "grid": 9,
+    "extentKm": 2,
+    "topology": "grid",
+    "horizonMs": 10800000,
+    "cadenceMs": 60000,
+    "wallLimitMs": 900000,
+    "packetLoss": 0,
+    "observationRate": 1,
+    "networkLatencyMs": 1000,
+    "queryLatencyMs": 1000,
+    "reviewMs": 30000,
+    "inspectionMs": 60000,
+    "loadMs": 60000,
+    "unloadMs": 60000,
+    "setupMs": 60000,
+    "clarificationWorkers": 2,
+    "maxDraftsPerWorld": 40,
+    "maxHazardInquiryLocations": 20,
+    "producedWaterBatchMinL": 100
+  },
+  "providerPaidCapUsd": 0,
+  "modelCallsAllowed": 0,
+  "stopFile": ".local/STOP_PHYSICAL_CHAIN_CURRENT",
+  "lockFile": ".local/PAID_RESEARCH_STUDY.lock",
+  "gate": "ROOT_GO_PHYSICAL_CHAIN + unchanged three hashes/full-suite/UI seal; root schedules after current primary.",
+  "controller": "Competent received-data compiled planner; exact independent owner review, physical assessment/provisioning/travel/work, regular source queries. No observer object enters controller.",
+  "S03": "Select the plant from received public directory; clarification is not safety; field assessment and separate owner-approved provisioning/activation; select only received usable water stock at the plant node for distribution. Score production-resource receipts only after final source audit.",
+  "S05": "Native fire begins at minute5 and evolves without controller knowledge. Received damage/access text is a lead, not verified evacuation demand. Finite human-approved clarification/radio inquiries; servicePlan and checkedRepairPlan act only on received current needs, safety and roads. No fabricated displaced cohort or substitute shelter.",
+  "stopping": "No gold served/occupancy stopping. Fixed source horizon, operator stop or wall allowance. All planned/missing outcomes retained; no model or extra resource gift.",
+  "outcomes": [
+    "plant opened",
+    "actual raw stock consumed and water produced",
+    "produced water physically used against outstanding native water demand",
+    "hazard lead source ID/version/received clock",
+    "shelter need received via completed source inquiry",
+    "owner review + actual evacuation admission",
+    "all rejected/inconclusive/pending plans",
+    "source invariants",
+    "all owner proposals/reviews/K16",
+    "three hashes and zero provider usage"
+  ],
+  "limitations": [
+    "Not an advantage comparison, a Gemini demonstration or lives saved.",
+    "Native fire can cut Internet30min, isolate pickup nodes and damage the only shelter. Nominal is not labeled successful in advance.",
+    "Infeasible removes water stock/deadline via existing native variant plus water_operations/shelter_support qualifications via existing compositionVariant before observations.",
+    "The no-model controller uses ordinary public text keywords for a bounded verification lead, not semantic certification.",
+    "Capacity1000L/hour, finite raw10000 and generator runtime120min do not imply unlimited production.",
+    "One owner platform with four native organizations does not prove federation gains or same-dotation single/network effects."
+  ]
+}

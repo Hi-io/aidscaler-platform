@@ -1,0 +1,18 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { buildFingerprint, evaluatorFingerprint } from '../evaluation/harness.mjs';
+import { requireLoadedSimulatorBuild } from '../evaluation/simulator-build.mjs';
+import { verificationPassed } from '../scripts/verification-gates.mjs';
+const fp={candidateFingerprint:await buildFingerprint(),evaluatorFingerprint:await evaluatorFingerprint(),simulatorFingerprint:await requireLoadedSimulatorBuild()};
+const v=JSON.parse(await readFile('reports/verification-latest.json','utf8'));
+if(!verificationPassed(v)||Object.entries(fp).some(([k,x])=>v[k]!==x))throw Error('Stable complete gate required before declaring fresh comparisons');
+const ui=JSON.parse(await readFile('reports/ui-verification-snapshot.json','utf8'));
+if(!ui.passed||!ui.unchanged||Object.entries(fp).some(([k,x])=>ui[k]!==x))throw Error('Complete stable UI/financial journeys required before measurements');
+for(const file of ['discovery-followup-plan.json','information-load-plan.json','general-agent-plan.json']){
+ const p=JSON.parse(await readFile('reports/'+file,'utf8'));
+ const previousFingerprints=Object.fromEntries(Object.keys(fp).map(k=>[k,p[k]??null]));
+ p.amendments??=[];p.amendments.push({at:new Date().toISOString(),reason:'Fresh common candidate after exact physical evacuation receipts, globally protected assessment resources, qualified mixed staff, grounded received opportunities, source-specific partial attention/bounded recovery, finite operational review queue with authorization fencing, batched polling, homogeneous lot expiry/provenance guards, bounded durable external-connector continuation, fair contextual route receipt lifecycle, real process-crash/storage-full recovery tests, scoped sandbox spending/partial supplier receipts with human financial/public reconciliation, explicit connector registry evidence, loaded-vehicle route checks, owner-declared vehicle calendars/next commitments, received driver availability, source-declared qualified-staff shift/rest calendars, received congestion estimates, pickup colocation, material availability wake-up signatures, awaited asynchronous stop policies, replay-consistent piecewise vehicle/staff capacity-hour instrumentation, source-enforced payload mass/volume/passenger-seat limits, full historical review-to-physical-service evidence and concurrent finite source-owner review in every comparative arm, received-directory-only owner-approved coverage checks for unknown/stale communities, versioned receiver-authorized unloading with real onsite qualified crew and preserved original cargo, conservative finite proposal-to-service creation timestamps, three-way bounded common fleet assignment that escapes a verified pair-swap local minimum, and service-worker JS included in the candidate byte fingerprint. All previous outcomes, failures and costs remain preserved. No result has been observed from this version when the amended plan is declared.',previousFingerprints,verification:'reports/verification-latest.json'});
+ Object.assign(p,fp); await writeFile('reports/'+file,JSON.stringify(p,null,2)+'\n');
+}
+await writeFile('reports/measurement-freeze-current.json',JSON.stringify({at:new Date().toISOString(),...fp,verification:'reports/verification-latest.json',scope:'Prerecorded fresh stable version before paid outcomes; prior negative evidence retained, every declared world/seed/control required.'},null,2)+'\n');
+console.log(JSON.stringify({declared:fp,verification:'PASS',paidCalls:0}));
+

@@ -1,0 +1,52 @@
+{
+  "schema": "simulator-real-webgl-control-v1",
+  "wallLimitMs": 180000,
+  "fixture": {
+    "scenario": "S23",
+    "seed": "viewer-literal-2026-01",
+    "organizations": 1,
+    "grid": 5,
+    "extentKm": 2,
+    "horizonMs": 1800000
+  },
+  "checks": [
+    "Real Chromium WebGL canvas renders with no application error.",
+    "Orthographic camera pan/zoom and zoom-out building LOD toggle.",
+    "Entity search, follow and stop tracking.",
+    "Truth lane hidden in actor perspective; only actual connector intake receipts shown.",
+    "Camera-only operations while paused preserve the complete physical state hash.",
+    "A/B canvases initialize and report synchronized source clocks with the same initial physical map."
+  ],
+  "instrumentation": "Browser route injects an observation-only JSON readout immediately before the existing renderer.render; it copies camera, LOD flags, draw-call count. The injected source and original source SHA are retained. No camera, state, physics or policy mutation by instrumentation.",
+  "limits": [
+    "Behavioral smoke on declared hardware/browser, not independent human comprehension or accessibility certification.",
+    "Frame counter is descriptive, not a calibrated 30–60 FPS certification. A/B policy comparison is not scored for advantage."
+  ],
+  "preparedAt": "2026-10-13T02:50:30.687Z",
+  "kind": "viewer",
+  "authorizationRequired": "ROOT_GO_SIMULATOR_VIEWER",
+  "scriptSha256": "39740c1efb73604d4a7b19c425953444816a99dce9af70f38fd77931cab2aec0",
+  "executed": false,
+  "hardware": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.19.0",
+    "cpus": [
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz"
+    ],
+    "totalMemoryBytes": 68644159488
+  },
+  "root": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.candidate-development\\nexo-platform",
+  "note": "No world starts during preparation. All failures retained and never counted as complete."
+}

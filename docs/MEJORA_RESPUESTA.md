@@ -2,6 +2,8 @@
 
 Este documento separa fallos del producto, límites del experimento y cuestiones todavía no demostradas. El objetivo de desarrollo autorizado es demostrar una mejora sustancial del tiempo hasta servicio útil en una comparación justa. Los porcentajes iniciales de [PLATAFORMA.md](PLATAFORMA.md) siguen como aspiraciones de diseño, no como resultados ya alcanzados. La simulación no acredita impacto de campo ni garantiza una posición en la competición.
 
+Resultado nuevo, separado de las campañas históricas siguientes: [la primaria de capacidad humana cerró doce mundos](RESULTADOS_CAPACIDAD_HUMANA.md). NEXO mejora un 18,02% frente al flujo manual declarado; B5 sigue ganando y B8 tiene resultados mixtos. Se conservan las regresiones por recurso y combustible. Los controles de tasas/carga siguen en ejecución; no sustituyen ni borran los negativos anteriores.
+
 ## 1. Qué falló en la comparación anterior
 
 Las ejecuciones anteriores se conservan. No se reemplazan sus números con resultados de otra versión.

@@ -1,11 +1,11 @@
 {
-  "at": "2026-10-12T21:51:33.499Z",
-  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
-  "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
-  "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+  "at": "2026-10-13T01:42:17.148Z",
+  "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+  "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
   "gitRevisions": {
-    "platform": "7cc8fd1b3a52d9e00d9be4485875e912e192e478",
-    "simulator": "237ac30dd1fb7277b2d847d898632c38dff83ed1"
+    "platform": "09d03b4b2c77298d76a20149882ab88bf14330f8",
+    "simulator": "83323884fd39fa4128ecb23c9727bf9046c0aca8"
   },
   "node": "v24.19.0",
   "platform": "win32",
@@ -20,19 +20,19 @@
       "name": "platform-syntax",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 10832.6025,
+      "wallMs": 18793.137499999997,
       "summary": [
-        "Syntax verified: 197 JavaScript modules."
+        "Syntax verified: 337 JavaScript modules."
       ]
     },
     {
       "name": "platform-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 415980.50330000004,
+      "wallMs": 706022.1837,
       "tests": {
-        "tests": 274,
-        "pass": 274,
+        "tests": 448,
+        "pass": 448,
         "fail": 0,
         "cancelled": 0,
         "skipped": 0,
@@ -43,19 +43,19 @@
       "name": "simulator-syntax-contracts",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 4393.89499999996,
+      "wallMs": 5554.404399999999,
       "summary": [
-        "79 JavaScript modules checked; 26 inputs, 23 actions, 360 presets; repository hygiene passed."
+        "101 JavaScript modules checked; 26 inputs, 24 actions, 360 presets; repository hygiene passed."
       ]
     },
     {
       "name": "simulator-tests",
       "exitCode": 0,
       "signal": null,
-      "wallMs": 7359.244499999972,
+      "wallMs": 14118.962300000014,
       "tests": {
-        "tests": 173,
-        "pass": 173,
+        "tests": 228,
+        "pass": 228,
         "fail": 0,
         "cancelled": 0,
         "skipped": 0,
@@ -64,9 +64,9 @@
     }
   ],
   "scope": "Automated local mechanism verification, no paid model calls and no human or field validation.",
-  "candidateFinalFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
-  "evaluatorFinalFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
-  "simulatorFinalFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c",
+  "candidateFinalFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+  "evaluatorFinalFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulatorFinalFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
   "candidateChanged": false,
   "evaluatorChanged": false,
   "simulatorChanged": false,

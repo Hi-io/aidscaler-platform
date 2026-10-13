@@ -1,0 +1,46 @@
+Skip to workspace
+Local workspace connected
+Public portal 
+A
+Response overview
+Operational map
+Signals & evidence
+Source media
+Community reports
+Investigations
+Decision queue
+Operations
+Resources & facilities
+Partner network
+Public updates
+Pooled funds
+Field workspace
+People & handovers
+Sources & access
+External connections
+Decision history
+From an order to useful help.
+
+Follow acknowledgements, travel and receipt. Arrival is not the same as service.
+
+Prepare an operational action
+ARRIVED · NOT YET RECEIVED
+Finish the delivery
+
+The receiving team must supply a qualified crew. Arrival is not a receipt.
+
+b13 · 0 / 300 received · waiting for crew
+
+1 qualified crew · shelter_support · 1 minutes of work. The original cargo stays with delivery operation-1.
+
+Check receiver crew
+
+Receive this receiver's current site/version before assigning a crew.
+
+current receiver site
+
+OPERATION	STATE	AUTHORIZED BY	LATEST CONFIRMATION	
+delivery · ration-1
+300 units · need need-water-main
+	waiting to unload	Source authority	Operational source confirmed	Follow
+NEXO local prototype · google/gemma-4-31b-it · Sources and simulation results remain distinct from real-world outcomes.

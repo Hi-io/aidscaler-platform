@@ -1,0 +1,124 @@
+{
+  "checks": [
+    {
+      "repository": "nexo-platform",
+      "commit": "0c4bd08aea5fb429ba9b3c55b44e3611617cc8d1",
+      "trackedFiles": 1114,
+      "archiveSha256": "349162972a17b87fb7f45547826ddedaee07a718211d23075c7a3d35375ec50a",
+      "lockHash": "b1dc0fde142d88cf4c762417fbe1f5693717e33955c7142bfe92ea6b21a27bc5",
+      "installWallMs": 14262.9319,
+      "installExit": 0,
+      "topLevelModulesRealDirectory": true
+    },
+    {
+      "repository": "disaster-response-simulator",
+      "commit": "17bd7a446a1e7cd81fee2d9a14104753e3f90226",
+      "trackedFiles": 177,
+      "archiveSha256": "393095518773fb21831690e6b8a8c9bfea85476f6858042be0ee4bb9e9de5f1a",
+      "lockHash": "ee8d03eb0f8752b183919fe523801ae71d506c940d3e49fc40b07d91ed882d5f",
+      "installWallMs": 13119.8517,
+      "installExit": 0,
+      "topLevelModulesRealDirectory": true
+    }
+  ],
+  "startup": {
+    "passed": true,
+    "fingerprints": {
+      "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+      "evaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+      "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+    },
+    "atSourceClock": 189004,
+    "readyQueries": [
+      {
+        "target": "map",
+        "state": "ready"
+      },
+      {
+        "target": "policy",
+        "state": "ready"
+      },
+      {
+        "target": "inventory",
+        "state": "ready"
+      },
+      {
+        "target": "vehicles",
+        "state": "ready"
+      }
+    ],
+    "receipts": [
+      {
+        "id": "operation-1",
+        "org": "org0",
+        "type": "delivery",
+        "received": 300,
+        "times": {
+          "authorized": 69004,
+          "reserved": 69004,
+          "orderReceived": 70005,
+          "accepted": 70005,
+          "prepared": 71005,
+          "dispatched": 71005,
+          "arrived": 183507,
+          "unloadingStarted": 183507,
+          "received": 184507,
+          "service": 184507
+        }
+      }
+    ],
+    "invariants": [],
+    "modelCalls": 0,
+    "sourceStore": "new in-memory PGlite; no copied DB or bootstrap credentials"
+  },
+  "runtime": {
+    "node": "v24.19.0",
+    "pnpm": "11.25.0",
+    "platform": "win32",
+    "credentialEnvironmentInherited": false,
+    "homeReassigned": false,
+    "codexHomeReassigned": false,
+    "originalProfilePathsPreserved": true,
+    "freshUserProfile": false,
+    "packageIsolation": "Fresh explicit pnpm store and npm cache; task-specific empty user/global npmrc; no copied node_modules or dependency junction.",
+    "optionalPythonMediaInstalled": false,
+    "optionalChromiumInstalled": false
+  },
+  "passed": true,
+  "kind": "clean",
+  "wallMs": 36543.5213,
+  "sourceUnchanged": true,
+  "initialFingerprints": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "finalFingerprints": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "hardware": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.19.0",
+    "cpus": [
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz"
+    ],
+    "totalMemoryBytes": 68644159488
+  },
+  "protocolSha256": "44c9499d0c87a3f8d037fe1923937d6c85a9853bac859156b35f5d46c01fc45a",
+  "valid": true,
+  "modelSpendUsd": 0
+}

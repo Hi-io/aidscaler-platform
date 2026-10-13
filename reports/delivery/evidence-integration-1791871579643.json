@@ -1,0 +1,455 @@
+{
+  "at": "2026-10-13T06:06:20.172Z",
+  "source": "isolated tested candidate",
+  "preservedHistoricalOutcomes": true,
+  "entries": [
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-closed.json",
+      "sha256": "70202eaf2a7faec9e49ede0e3f6d3d16ded9af2d85254a9d39c78fd18289a5b2",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-closed.md",
+      "sha256": "9693d7c17e94a6fa38a317a8ba838323a8df6606156790a7264495b683f98fa4",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-diagnosis.json",
+      "sha256": "b2f31d009d48d30e64da11e9269ac6e11fe2098c33acb9fc10a05ef9bb916fc2",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-diagnosis.md",
+      "sha256": "e4f5a86ca170e0ff9c1367a734daaa782a3323c25735bb56769e19a1fdeeffcd",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-inquiry-attribution.json",
+      "sha256": "1e7aa5060a26b4079ab87ab425b792b721c0d833f213788bea38c024d6872c67",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-support/analyze-native-human-primary-final.mjs",
+      "sha256": "2a51faa3a2fdc9095935249b66e2b48e9167d4a97336f0f1da837309058188f1",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-support/archive-native-human-primary-final.mjs",
+      "sha256": "b88d044100ed6813bf442dad0f8d0cf97522a1241a3b1e055f0793a913df7e37",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-support/audit-primary-inquiry-attribution.mjs",
+      "sha256": "8c388fa2d69f4b382639ae99014b19b459755b2ed28a5e5589d6b2427a0fd4e9",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/analysis/native-human-primary-all12-20261013-support/manifest.json",
+      "sha256": "934faa803714d1cd3cd68107e765375ba32b29b63a148b19391f9bcf861e6150",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/human-capacity-benchmark.mjs",
+      "sha256": "0a84a8bdad4246d2d01861f06b270241cc409b022311bcb9d4c55e2433b866eb",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-01-B5.json",
+      "sha256": "db60125cd024973c7b64d59480b4050e2ccebb63653c6f1024098f773347170b",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-01-B6.json",
+      "sha256": "29462aee28fef682e46ebedbfe2cd339aea4b58be56defd49f4f15dde1da1c7c",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-01-B8.json",
+      "sha256": "395a717b98260f905092b5b01e8ae2d25a84174a905ce791b7548a9f48f7b77d",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-01-C_manual.json",
+      "sha256": "e4d0ae5c425b94629057cc1c91f864e400ccd640204901505c44c95a94880736",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-02-B5.json",
+      "sha256": "9771b5bff605d633643f91bd591a4c88c93d8d8cbd7930b8c493c138a8a33700",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-02-B6.json",
+      "sha256": "0c39c05271550b110390465bce2818ef76ee99c72c7ed94ec9926d3c805b2ada",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-02-B8.json",
+      "sha256": "688626aef52967bac31aeb2f707e799c75988159ce7601b6370df8a074e634c9",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-02-C_manual.json",
+      "sha256": "41c3e2f67c2afe4a319271a9f930d736d652741c1f5a7317315f458967e06b0c",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-03-B5.json",
+      "sha256": "f34b92d0a169782ba926aa37da12d180ff3e6e18a8c1d93832c87680173adfd4",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-03-B6.json",
+      "sha256": "8f32fe9916bf41323105e4992c72f1722b714d4e7b651f2208c8bbca5a9110b5",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-03-B8.json",
+      "sha256": "304e68a90151a1032606d03b76bb75cda070c2fdd0044e33442d662940d3c58a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/moderate-native-human-capacity-primary-03-C_manual.json",
+      "sha256": "80f5162c9eca89aa94e8ae456c30bc2111d9116bb5460624755980278ab3d2ce",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/protocol.json",
+      "sha256": "1adfebb17828bf6ad7d754b37093d0467661806dbd6a530ada3ac549f5afc8a0",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/human-capacity/native-primary-20261013/summary.json",
+      "sha256": "446f67939e807e1337a118df63b7604c771abcf8dcc6dbb475c62d311c21f9f0",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/definitions-v1/guide.md",
+      "sha256": "5eff3d7ae380478633e7289e3dffe81ab41ae5faa461cb8bd9dea921ab0c28a9",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/definitions-v1/human-kpi-companion.mjs",
+      "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/definitions-v1/human-kpi-companion.test.mjs",
+      "sha256": "559e2d00a4e3569855abd619308ef2c8dbdc5fec144f177b45aec6d83cace3d4",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/definitions-v1/pure-tests.json",
+      "sha256": "be73e646b26d5c9d7b4ac5092921220c670289388abefd3af6678f8fb30e872a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/definitions-v1/seal.json",
+      "sha256": "f60671a636be6c1b722b353f62530dfd87b006a42cf918c7fd616d3c09d3fe1d",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-01.json",
+      "sha256": "4db5ee1c789fdaa0c02e587cc651e9facfefdea82bd6f5f729da938b392f4928",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-02.json",
+      "sha256": "2caa3c538a284f461b6388179462ebea7c76ed839d6ff9a75475a65ffff76ac8",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-03.json",
+      "sha256": "0fb1061eaae7d19b5ee18a0969a1e06408a548731c44413ba07774b518b0bbb3",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-04.json",
+      "sha256": "70fdf64a64e7adac9fb845f2c96d3860a894751a6b12009cac3f5445054eaa09",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-05.json",
+      "sha256": "6459f9f6c3b2a78bb3b72fb00a8cf88299bdc91835b8e0b25b5617d1560e5547",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-06.json",
+      "sha256": "e1b6e3790f0ebd4bd374d4819ed27b16ded10122c656a993551fa1ab6e8349d1",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-07.json",
+      "sha256": "978d69e842e923344bccd20bc63d5ebe4b6d7dc2306e70322808771c0d149227",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-08.json",
+      "sha256": "74da699d57ddd41f90eb5433573452a25132adedf5b6273bd20674a8b152c6b0",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-09.json",
+      "sha256": "25df652f529738e5f5eca328fd6edf0769a668c9cc66ed084d351f73e22da0a6",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-10.json",
+      "sha256": "9a85992abad37067f967bbaa70f73b6826325534a58b03a2f4724305793f7fef",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-11.json",
+      "sha256": "93e55b510c947b9cde0dc2a7a439f26e9638f7d0e5307b3fd428c00f5db4e8d3",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-20261013-closed/world-12.json",
+      "sha256": "9792f2b72a42396586259dedb4b3e0e3c31085e013680b69cf82110a3a2c7660",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-summary-1791870506706/readout.md",
+      "sha256": "a7a7e1e68fdf6f2b2c9df08c69131b8ee1dae3691dab5704b9d63a06ace70c16",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-summary-1791870506706/summarizer.mjs",
+      "sha256": "e2ab73eadc9616f14b252271177c6e08e3e67ebed58f10a79299cc7154849fd7",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/kpi-companion/native-primary-all12-summary-1791870506706/summary.json",
+      "sha256": "e724ae2e1267c05c0e00576c914fc8769e6141b25187d596a1ddfb401fcf343f",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/amendment-and-tests.json",
+      "sha256": "47cf243b6bc765300b2500d727fd1cc17bf75ddbd6334875c34ff0a909b6f2f5",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/federation-structural-control.mjs",
+      "sha256": "951ce94e4dd3643052d25614bf7e46e187f6f7cbc498895786ae3262230625f6",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/local-clean-checkout-profile-v2.mjs",
+      "sha256": "27adcdf38ffa226f8266403f3dce0c3ea5c655456e8475f583da458b63bf9333",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/local-clean-checkout-profile-v2.test.mjs",
+      "sha256": "40594b005b95e52f5e82e22c857deed207aa1fe348424815e36a9a6c07644eb8",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/plan.md",
+      "sha256": "fe9fba19a77e20930432c774e1e98f5f4bed3eb063501a896715af37ff3778d1",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791869893412-clean/protocol.json",
+      "sha256": "ffef8bdab89fe5d7926296f6b3aeac391ce72967bf40608d1b4224ae667fe55c",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/clean-startup-smoke.json",
+      "sha256": "415d719740631233f98ce43fa944336695f961ec5fcdb1edd1e868d18a5799b4",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/disaster-response-simulator-install.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/disaster-response-simulator-install.stdout.txt",
+      "sha256": "fd3364da47a20702d027a3ae0e71e8da699780a03a413710e95edca0bb2603db",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/disaster-response-simulator.tar",
+      "sha256": "393095518773fb21831690e6b8a8c9bfea85476f6858042be0ee4bb9e9de5f1a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/execution-gate.json",
+      "sha256": "dab6c228458cab184185acb10f4b2c424ecb18e86f3ca1be77f552c7998cd25f",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/federation-structural-control.mjs",
+      "sha256": "951ce94e4dd3643052d25614bf7e46e187f6f7cbc498895786ae3262230625f6",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/generated-build-layout.json",
+      "sha256": "3c707ba7e64aba97cfd8c4d0455c25ea905c1787260562219635c77da862d9be",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/local-clean-checkout-profile-v2.mjs",
+      "sha256": "27adcdf38ffa226f8266403f3dce0c3ea5c655456e8475f583da458b63bf9333",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/nexo-platform-install.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/nexo-platform-install.stdout.txt",
+      "sha256": "f51fea7572515a6f97398da4e5e40023022ade0136555c4390ca05f1fc43808a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/nexo-platform.tar",
+      "sha256": "349162972a17b87fb7f45547826ddedaee07a718211d23075c7a3d35375ec50a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/protocol.json",
+      "sha256": "44c9499d0c87a3f8d037fe1923937d6c85a9853bac859156b35f5d46c01fc45a",
+      "previousSha256": null,
+      "backup": null
+    },
+    {
+      "repo": "nexo-platform",
+      "file": "reports/local-closure/1791870240228-clean/result.json",
+      "sha256": "bd2c8601ca57b8e6dc39ead9e1558ace2994a42fd7f52c54947d6a4baaa8779b",
+      "previousSha256": null,
+      "backup": null
+    }
+  ]
+}

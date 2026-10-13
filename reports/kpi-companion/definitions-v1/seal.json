@@ -1,0 +1,20 @@
+{
+  "version": "native-human-kpi-companion-v1",
+  "createdAt": "2026-10-13T05:06:53.463Z",
+  "provenance": {
+    "blindness": "Post-baseline companion: author previously read C_manual/B5 seed01 summaries during an authorized denominator audit; no B6 or further primary outcomes were read to define this companion.",
+    "definitions": "Fixed from documented KPI semantics and source implementation; no outcome-fitted threshold, selected seed, controller change or new success criterion.",
+    "scope": "Offline descriptive companion only. It does not replace the sealed primary reader or certify semantic correctness, real human performance, or comparative benefit."
+  },
+  "helper": {
+    "file": "human-kpi-companion.mjs",
+    "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b"
+  },
+  "test": {
+    "file": "human-kpi-companion.test.mjs",
+    "sha256": "559e2d00a4e3569855abd619308ef2c8dbdc5fec144f177b45aec6d83cace3d4"
+  },
+  "noRawPrimaryInputsLoaded": true,
+  "noNewWorlds": true,
+  "noPaidCalls": true
+}

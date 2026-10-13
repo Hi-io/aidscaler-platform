@@ -1,0 +1,411 @@
+{
+  "at": "2026-10-13T01:55:37.126Z",
+  "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+  "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+  "finalFingerprints": {
+    "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+    "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+    "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e"
+  },
+  "unchanged": true,
+  "passed": false,
+  "cases": [
+    {
+      "script": "ui-test.mjs",
+      "at": "2026-10-13T01:54:42.668Z",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 8814.4732,
+      "reportPath": "reports/ui-verification.json",
+      "report": {
+        "at": "2026-10-13T01:54:51.344Z",
+        "browser": "Chromium",
+        "checks": [
+          {
+            "page": "overview",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "map",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "signals",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "investigations",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "review",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "operations",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "resources",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "network",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "publications",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "finance",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "field",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "coordination",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "settings",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "audit",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "media",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "connections",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "moderation",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "public",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "community",
+            "width": 1440,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "overview",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "map",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "signals",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "investigations",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "review",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "operations",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "resources",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "network",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "publications",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "finance",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "field",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "coordination",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "settings",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "audit",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "media",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "connections",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "moderation",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "public",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "community",
+            "width": 1920,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "overview",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "map",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "signals",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "investigations",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "review",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "operations",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "resources",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "network",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "publications",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "finance",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "field",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "coordination",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "settings",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "audit",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "media",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "connections",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "moderation",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "public",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          },
+          {
+            "page": "community",
+            "width": 390,
+            "loaded": true,
+            "horizontalOverflow": false
+          }
+        ],
+        "errors": [],
+        "note": "Automated rendering/navigation at 1440, 1920 and 390 px with reduced motion. Not human comprehension evidence or a full accessibility certification."
+      }
+    },
+    {
+      "script": "journey-test.mjs",
+      "at": "2026-10-13T01:54:51.483Z",
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 9858.081100000001,
+      "reportPath": "reports/ui-journeys.json",
+      "report": {
+        "at": "2026-10-13T01:55:01.253Z",
+        "browser": "Chromium",
+        "checks": [
+          "Case → manual draft → versioned revision; no dispatch",
+          "Received operational map and keyboard fallback render",
+          "Actual source file upload → processing → unverified interpretation",
+          "Field offline write → reload → reconnect → one durable acknowledged report",
+          "Dispatcher assignment → field acknowledgement → offline departure → restart/reconnect; no invented physical receipt",
+          "Scoped delegation exposes one analyst approval and revocation removes it without changing the user's role",
+          "Role workspace: admin",
+          "Role workspace: analyst",
+          "Role workspace: dispatcher",
+          "Role workspace: publisher",
+          "Role workspace: finance",
+          "Role workspace: auditor"
+        ],
+        "errors": [],
+        "scope": "Automated workflows and keyboard/mobile/offline checks; not a human comprehension or accessibility certification"
+      }
+    },
+    {
+      "script": "review-journey.mjs",
+      "at": "2026-10-13T01:55:01.341Z",
+      "exitCode": 1,
+      "signal": null,
+      "wallMs": 35760.4984,
+      "reportPath": "reports/ui-review-journeys.json",
+      "report": null
+    }
+  ],
+  "scope": "Automated local browser journeys, including source purchase/partial receipt/financial/public review, received-directory contact checks, and original-cargo receiver unloading at desktop/mobile keyboard viewports; no paid model and no human comprehension validation."
+}

@@ -1,0 +1,107 @@
+{
+  "declaredAt": "2026-10-13",
+  "purpose": "Predeclare follow-up profiles before observing their outcomes; substantial reduction in physical response time, with competent references and quality guardrails.",
+  "primary": {
+    "seedPrefix": "response-burst-2026",
+    "seeds": 3,
+    "arms": [
+      "B5",
+      "B6",
+      "B8"
+    ],
+    "needs": 24,
+    "noise": 192,
+    "reposts": 2,
+    "humanReadMs": 30000,
+    "humanWorkers": 2,
+    "clarificationWorkers": 2,
+    "formalDelayMs": 3600000,
+    "horizonMs": 10800000,
+    "maxModelCalls": 32,
+    "episodeBudgetUsd": 0.15,
+    "campaignBudgetUsd": 0.6
+  },
+  "controls": [
+    {
+      "name": "single-confirmation-worker",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "clarificationWorkers": 1
+    },
+    {
+      "name": "zero-reading-time",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "humanReadMs": 0
+    },
+    {
+      "name": "immediate-formal-reports",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "formalDelayMs": 0
+    },
+    {
+      "name": "silent-and-loss",
+      "seeds": 2,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "silentFraction": 0.25,
+      "packetLoss": 0.05
+    },
+    {
+      "name": "thirty-minute-formal-reports",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "formalDelayMs": 1800000,
+      "launch": "Included as fifth profile of the fresh sequential controls runner; not a separate duplicate."
+    }
+  ],
+  "rules": [
+    "Each campaign writes its own final protocol and source hashes before any arm runs. Controls inherit primary values except the explicit variable changes.",
+    "Finish the source qualification and failed-provider clock corrections before final campaigns. Preserve the earlier small pilot as diagnostic, not final-candidate evidence.",
+    "Do not edit candidate, engine or evaluator during a comparison. Any required correction creates a new version and retains old results.",
+    "Include failures, costs, right-censored outcomes and every declared seed. No selection by favorable model answer or delivery.",
+    "Compare physical service, native deficits, sufficient and first-useful response times, coverage, overprovisioning, distance and fuel.",
+    "Human reading capacity and formal delay are modeled assumptions; sensitivity profiles and B8 can refute or limit the claim. Do not equate laboratory minutes with real lives saved.",
+    "This is an internally authored synthetic workload, not independent disaster calibration or a secret holdout. Gemini and GCP remain later phases."
+  ],
+  "amendments": [
+    {
+      "at": "2026-10-12T20:42:23.596Z",
+      "reason": "Repeat all previously declared profiles and seeds after durable continuation/material receipt fixes and authority-race regression. Prior interrupted comparisons remain invalidated with cost reserves; no outcomes imputed.",
+      "previousFingerprints": {
+        "candidateFingerprint": null,
+        "evaluatorFingerprint": null,
+        "simulatorFingerprint": null
+      },
+      "verification": "reports/verification-latest.json"
+    },
+    {
+      "at": "2026-10-12T21:59:55.399Z",
+      "reason": "Fresh version after explicit pickup TTL, material terminal receipts, owned-stock/physical staff qualification conservation, service holds/facility refresh, strict progress/commentary reconciliation, shared fleet pair exchange, sourced alternative checkpoints and all-three fresh integrity gates. All earlier invalidated outcomes and costs remain retained; no outcomes imputed.",
+      "previousFingerprints": {
+        "candidateFingerprint": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+        "evaluatorFingerprint": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584",
+        "simulatorFingerprint": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee"
+      },
+      "verification": "reports/verification-latest.json"
+    }
+  ],
+  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+  "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+  "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+}

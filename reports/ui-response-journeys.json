@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-12T21:52:32.013Z",
-  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+  "at": "2026-10-13T02:04:14.221Z",
+  "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
   "candidateChanged": false,
   "checks": [
     "Coordinator approves priorities and protected types through the UI; native units and delivery authority remain separate",

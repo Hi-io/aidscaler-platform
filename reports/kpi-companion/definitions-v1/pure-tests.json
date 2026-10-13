@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "tests": 8,
+  "failed": 0,
+  "kind": "builtin-only pure fixtures",
+  "primaryInputsLoadedForCompanion": 0,
+  "priorExposure": "C_manual/B5 seed01 summaries during previous authorized denominator audit",
+  "guideSha256": "5eff3d7ae380478633e7289e3dffe81ab41ae5faa461cb8bd9dea921ab0c28a9",
+  "command": "node --test .local/human-kpi-companion.test.mjs"
+}

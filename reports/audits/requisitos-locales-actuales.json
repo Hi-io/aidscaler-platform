@@ -1,0 +1,2939 @@
+{
+  "recordedAt": "2026-10-13T00:51:09.719Z",
+  "scope": "Only isolated candidate worktrees; main campaigns unmodified",
+  "paidCalls": 0,
+  "sourceEditedByThisAudit": false,
+  "documentHashes": {
+    "PLATAFORMA.md": "eb4aedc1e01d37faf7231b21704b653b1e185c186a4a90fc2e9eb054ef8f0614",
+    "SIMULADOR.md": "00c5815d92cc1a9f9512bc7d15b69859b6458706cef56a68204a72fa6838cd5d",
+    "COBERTURA_REQUISITOS.md": "5d6a9f995c05b8418501b2e3bfe6bc33dae0bcd435176008adef59324386635a",
+    "ESTADO_IMPLEMENTACION.md": "712338c96ef5133bc1bdcad3e2e2ca7c65068cbbe4789dd1fc774a7aceef0ee4",
+    "CIERRE_LOCAL.md": "1508dfd6531b96d460e471f33e262647df0c982a19f50bcf53d4d859f02f58e8",
+    "LOCAL.md": "4f39117bbc138b1691053c519d79c50ed1e9b502f1ec2523373ea9837686d035",
+    "VALIDACION.md": "6e2a098280119157ff6e085cf751d1e12c063f6d6a07735de3b3a295b818bddd",
+    "VALIDACION_EXTERNA.md": "5197124832369e7422e6c24fee7fb7193bbaa0b533a1e11c422a1ef855b2b8a4",
+    "CONTEXTO_MODELO.md": "4da10fd22d935aaa479acb93e50dd1b92be8d37ddad0caa667f3bba9a0eff9de",
+    "ARQUITECTURA_GCP.md": "ee1db365335f8ca756f2f9f9057a08410da45701f409a134df02410d235d4d7e"
+  },
+  "buildSnapshot": {
+    "candidate": "131d4caa780be999e510fc571d81542d74e8d0405939a7826254b9fa53b71332",
+    "evaluator": "f588759b181abac8bb307a5eb8d5600e43f26513b31e126fef98c6c2d7dd88ad",
+    "simulator": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+    "sealedFullCandidate": false,
+    "candidateEvaluatorScope": "Prior snapshot only; new parent exact platform/evaluator gate remains pending."
+  },
+  "interpretation": [
+    "Latest user accepts substantial time improvement; original numerical KPI targets remain goals, not a new fixed mandatory threshold.",
+    "A mechanism/test source reference is not a claim that its current full suite, efficacy, semantic quality or human usability passed.",
+    "Inputs use canonical PLATAFORMA IDs; historical ESTADO table uses an earlier grouping, so its captions must not silently redefine I02/I03/I07.",
+    "Finite shelter/water-plant contracts are implemented; arbitrary new industries, cold chains, professions and universal composition are not claimed.",
+    "Private observer truth is allowed only for scoring, never source selection, stopping of source recovery or controller planning.",
+    "No absolute top-1, 100/100, saved-lives, Gemini or real humanitarian efficacy claim follows from local completion."
+  ],
+  "completedScopedRepairs": [
+    {
+      "ids": [
+        "S07",
+        "S14",
+        "O21",
+        "I15",
+        "K08",
+        "K26"
+      ],
+      "repair": "Typed static directory + exact delivered observation coverage, and optional non-staff unloading dependency. Receiver independently reviews exact owned qualified onsite crew; command, bays, work, shifts and same original cargo are real. Damaged/expired/quarantined crew rejection is atomic. Ordinary conventional reference has the same requirement and action, including one authorized spare cargo recovery to free crew transport.",
+      "tests": [
+        "../disaster-response-simulator/tests/coverage-received.test.mjs",
+        "../disaster-response-simulator/tests/unloading-crew.test.mjs",
+        "tests/coverage.test.mjs",
+        "tests/coverage-physical.test.mjs",
+        "tests/unloading.test.mjs"
+      ],
+      "physicalNewTests": 10,
+      "simulatorSuite": {
+        "pass": 228,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "checkModules": 101,
+        "inputs": 26,
+        "actions": 24,
+        "presets": 360,
+        "engineBuild": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+        "log": "../disaster-response-simulator/.local/s07-s14-atomicity-full.log",
+        "scope": "isolated source full suite only",
+        "platformCandidateGate": "pending_parent_current_full_gate",
+        "headlessBenchmark": "pending_parent_GO_after_current_full_gate_UI"
+      },
+      "scope": "Source S07 bounded directory sweep and real field report/replay; S14 native crew physical delivery, owner review, same aid operation, revocation/shift/outage/privacy/replay and conventional600L completion. Static condition/contact corrections labelled components.",
+      "remaining": "Exact current platform source receipt/UI gate, benchmark, fair comparative outcomes and professional calibration remain separate."
+    },
+    {
+      "ids": [
+        "I11",
+        "I15",
+        "K09",
+        "K26"
+      ],
+      "repair": "Mass/volume dispatch guards already existed. Corrected staff unit profile75kg/.075m3/1seat, before-reserve loaded route, loading/late-order physical recheck, and received anonymous crew release. Cabin passengers/crew remain seat-only cabin limits plus75kg road gross, distinct from staff freight cargo. Every controller has the same source contract.",
+      "tests": [
+        "../disaster-response-simulator/tests/cargo-capacity.test.mjs",
+        "../disaster-response-simulator/tests/evacuation-service-receipt.test.mjs",
+        "tests/received-cargo.test.mjs",
+        "tests/reroute-mass.test.mjs"
+      ],
+      "physicalNewTests": 7,
+      "simulatorSuite": {
+        "pass": 218,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "checkModules": 97,
+        "inputs": 26,
+        "actions": 23,
+        "presets": 360,
+        "engineBuild": "f14cccffdc4c852eb554aabd7954be75e675e6b0881796471160511d0bf0b791",
+        "log": "../disaster-response-simulator/.local/cargo-final-full.log",
+        "scope": "simulator isolated full suite only",
+        "platformCandidateGate": "pending_parent_full_gate",
+        "headlessBenchmark": "pending_parent_GO_after_full_gate_UI"
+      },
+      "scope": "Real stock relocation/three bilateral transfers/receipt/replay; corrected static vehicle/road limits explicitly labelled component fixtures without exogenous replay claims.",
+      "remaining": "Fresh exact platform/UI gate, current headless benchmark, fair comparable service outcomes and operational calibration."
+    },
+    {
+      "ids": [
+        "I11",
+        "I15",
+        "K09",
+        "K26"
+      ],
+      "repair": "Mass/volume dispatch guards already existed. Corrected staff unit profile75kg/.075m3/1seat, before-reserve loaded route, loading/late-order physical recheck, and received anonymous crew release. Cabin passengers/crew remain seat-only cabin limits plus75kg road gross, distinct from staff freight cargo. Every controller has the same source contract.",
+      "tests": [
+        "../disaster-response-simulator/tests/cargo-capacity.test.mjs",
+        "../disaster-response-simulator/tests/evacuation-service-receipt.test.mjs",
+        "tests/received-cargo.test.mjs",
+        "tests/reroute-mass.test.mjs"
+      ],
+      "physicalNewTests": 7,
+      "simulatorSuite": {
+        "pass": 218,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "checkModules": 97,
+        "inputs": 26,
+        "actions": 23,
+        "presets": 360,
+        "engineBuild": "f14cccffdc4c852eb554aabd7954be75e675e6b0881796471160511d0bf0b791",
+        "log": "../disaster-response-simulator/.local/cargo-final-full.log",
+        "scope": "simulator isolated full suite only",
+        "platformCandidateGate": "pending_parent_full_gate",
+        "headlessBenchmark": "pending_parent_GO_after_full_gate_UI"
+      },
+      "scope": "Real stock relocation/three bilateral transfers/receipt/replay; corrected static vehicle/road limits explicitly labelled component fixtures without exogenous replay claims.",
+      "remaining": "Fresh exact platform/UI gate, current headless benchmark, fair comparable service outcomes and operational calibration."
+    },
+    {
+      "ids": [
+        "I11",
+        "I15",
+        "UX07",
+        "K09",
+        "K10",
+        "K26"
+      ],
+      "repair": "Typed own/consented vehicle calendars, exact empty return, no remote cargo pickup, anonymous driver availability and actual crew work/rest windows; owner recheck/reject/recovery preserves sunk costs and prior physical help. Physical staff schedules remain separate across transfers and return exactly after cancellation. Source-clock capacity-hour integrals include event-free intervals and checkpoint/input replay.",
+      "tests": [
+        "../disaster-response-simulator/tests/vehicle-calendar.test.mjs",
+        "../disaster-response-simulator/tests/vehicle-driver.test.mjs",
+        "../disaster-response-simulator/tests/staff-calendar.test.mjs",
+        "../disaster-response-simulator/tests/utilization.test.mjs",
+        "tests/empty-return-window.test.mjs",
+        "tests/driver-availability.test.mjs",
+        "tests/staff-planning-calendar.test.mjs"
+      ],
+      "simulatorSuite": {
+        "pass": 211,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "engineBuild": "908b54e956c8d002dd44591a6d3fecd8997bc135bf02d0a599b24e00271d5ff2",
+        "checkModules": 94,
+        "inputs": 26,
+        "actions": 23,
+        "presets": 360
+      },
+      "remaining": "Full exact candidate/UI gate and a current five-profile headless benchmark pending. No empirical crew productivity, real driver identity, operational calibration or incremental model benefit follows from these guards."
+    },
+    {
+      "ids": [
+        "I22",
+        "O16",
+        "S20"
+      ],
+      "repair": "Source receipt quantities bridge to local donor/allocation/spent/reconciliation ledger only through an explicit human-approved sandbox_credit/USD-cent mapping. Order acknowledgement never implies goods or closure; backorder and partial delivery stay pending. Approved public aggregates do not reveal unapproved private receipt changes.",
+      "tests": [
+        "tests/finance-purchases.test.mjs",
+        "tests/purchase-receipts.test.mjs"
+      ],
+      "platformFinanceSubset": {
+        "pass": 9,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "platformCombinedPurchaseSubset": {
+        "pass": 12,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "browserArtifact": "reports/finance-journey/1791848259532/result.json",
+      "browserChecks": {
+        "pass": 12,
+        "fail": 0
+      },
+      "remaining": "Current full candidate gate and external production bank/payment settlement; local sandbox bridge does not establish banking, donation impact or semantic throughput."
+    },
+    {
+      "ids": [
+        "I22",
+        "O16",
+        "S20"
+      ],
+      "repair": "Source-owned finite supplier tranches; own delayed finance query and material versions; physical received deltas, backorder/failure, separate sandbox_credit currency, no actor-declared receipts.",
+      "tests": [
+        "../disaster-response-simulator/tests/purchase-partial.test.mjs",
+        "tests/purchase-receipts.test.mjs"
+      ],
+      "simulatorSuite": {
+        "pass": 190,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "engineBuild": "6a7bda485c1d1f986a2924f9771af434cb0c23ccd1f03326c95ad41645f39a1e"
+      },
+      "platformPurchaseWorkerSubset": {
+        "pass": 2,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "remaining": "Historical source-only result; subsequent explicit Finance/Worker/browser bridge evidence is recorded separately above."
+    },
+    {
+      "ids": [
+        "I09",
+        "I17",
+        "O09",
+        "O11"
+      ],
+      "repair": "Homogeneous optional lot dates/origin; physical expiry releases stock holds and prevents useful credit for expired cargo; source inventory preserves metadata; owner and common planner validate received current and nominal-use time.",
+      "tests": [
+        "../disaster-response-simulator/tests/supply-expiry.test.mjs",
+        "tests/lot-capacity.test.mjs",
+        "tests/lot-capacity-physical.test.mjs",
+        "tests/fleet-assignment.test.mjs"
+      ],
+      "simulatorSuite": {
+        "pass": 183,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "engineBuild": "c50f2cdf2c336591b8dee49db2ff154d88e67d5e877ebfb6425dd95e9df162af"
+      },
+      "platformRelatedSubset": {
+        "pass": 25,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      }
+    },
+    {
+      "ids": [
+        "I10",
+        "I15",
+        "I21",
+        "O13",
+        "O14",
+        "O15"
+      ],
+      "repair": "Qualified physical staff selection/holds/consented profile bounds and actual evacuation.received; waits correlated to the exact destination, not an unrelated shelter trip."
+    }
+  ],
+  "localMechanismMissing": [
+    {
+      "id": "coverage_gap_field_observation",
+      "ids": [
+        "S07",
+        "O21",
+        "T23",
+        "K08"
+      ],
+      "status": "implemented_source_and_focused_platform_physical_UI_verified_current_full_gate_pending",
+      "scope": "Literal scenario-to-feature traceability; parent must resolve or explicitly narrow claim before treating it as closed.",
+      "sourceBuild": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+      "currentEvidence": "Simulator coverage3 tests within228fullPASS. Parent agent confirms fresh source2825 physical1PASS plus1920/390UI2PASS. Current full platform/evaluator gate remains pending.",
+      "historicalFinding": "Existing coverage counters describe omitted context or last contact, not an actor-visible geographical gap policy leading to a bounded independently approved field observation of a residential community without any initial signal.",
+      "currentMechanism": "Received static directory, exact per-building contacts from delivered observations only, bounded owner-reviewed finite field inquiry, and ordinary received need progression. Source mechanism and platform physical/UI fixtures now passed against2825 source."
+    },
+    {
+      "id": "declared_unloading_crew_dependency",
+      "ids": [
+        "S14",
+        "I15",
+        "O13"
+      ],
+      "status": "source_implemented_platform_physical_gate_pending",
+      "scope": "Literal scenario-to-feature traceability; parent must resolve or explicitly narrow claim before treating it as closed.",
+      "sourceBuild": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+      "currentEvidence": "Seven source unload tests PASS, including full competent conventional600L/replay; new platform helper and tests present, final platform physical result must be reported by owner before closure.",
+      "historicalFinding": "Unload currently blocks damage>=3. S14 substitutes damaged access for the literal missing unloading team. Facility activation/setup has staff dependencies but ordinary physical unloading does not.",
+      "currentMechanism": "Optional declared local crew requirement; original cargo waits withreceived0, exact receiver-approved owned qualified onsite staff reserved, real command/bays/work/turns and same aid operation receipt. Competent conventional recovery rule uses one independently reviewed additional own shipment and actual return, without stock or transport reset."
+    }
+  ],
+  "localAutomaticEvidenceRemaining": [
+    {
+      "id": "G01",
+      "ids": [
+        "K26",
+        "K28",
+        "T01",
+        "T10",
+        "T27"
+      ],
+      "action": "Full platform+engine check/tests, crash/ENOSPC/backup recovery, and current browser journeys with all three fresh initial/final fingerprints.",
+      "acceptance": "Zero fail/skip/cancel, source-unchanged; old full273/274 or historical84UI results do not transfer to this candidate."
+    },
+    {
+      "id": "G02",
+      "ids": [
+        "K01",
+        "K02",
+        "K03",
+        "K04",
+        "K15",
+        "T19",
+        "T22"
+      ],
+      "action": "Predeclared same-world finite-resource paired B5/B6/B8/B7 plus single-vs-network; retain original negatives, secondary seeds and reader-speed/formal/silent-source sensitivities.",
+      "acceptance": "Substantial useful-service improvement in declared family, no stock/authority/coverage harm; report censoring, cohorts, intervals and all failures, not only medians among served."
+    },
+    {
+      "id": "G03",
+      "ids": [
+        "K07",
+        "K14",
+        "T15",
+        "T17"
+      ],
+      "action": "Fresh route/restriction/correction and active-query causal controls using unchanged physical cargo; compare repaired service with broad replan/query references.",
+      "acceptance": "Mechanism fixture PASS is necessary but not incremental LLM advantage or statistical repair improvement."
+    },
+    {
+      "id": "G04",
+      "ids": [
+        "K11",
+        "K13",
+        "K16",
+        "K17",
+        "K22",
+        "T16",
+        "T24"
+      ],
+      "action": "Fixed received source-ID+version cohort at declared intake cutoff; real/recorded parser modes separated; finite independent reviews; pending/rejected/inconclusive sources retained and revision-aware closure.",
+      "acceptance": "Do not stop when private physical gold demand is served; semantic receipt/count is not independent understanding, and pending is not read."
+    },
+    {
+      "id": "G05",
+      "ids": [
+        "K22",
+        "K24",
+        "K27",
+        "T16",
+        "T24"
+      ],
+      "action": "Fresh nominal and burst coupled runs reporting pipeline latency percentiles, real backlog recovery, finite reviews and physical outcomes for heterogeneous needs. Extend 1/4/12 org ×10/100/1000 only when this machine permits, preserving bounds.",
+      "acceptance": "Current local function/UI p95 and ack/state/ingest budgets require declared workload and clocks; 10k generated posts or row storage are not 1000 correct decisions; throughput saturation/incomplete wall-limited runs remain visible."
+    },
+    {
+      "id": "G06",
+      "ids": [
+        "K05",
+        "K06",
+        "K08",
+        "K09",
+        "K10",
+        "K25"
+      ],
+      "action": "Read current comparator reports for native-unit deficit/waste/coverage groups/km/fuel/crew time/continuity and real paid-cost ledger; document negative/ambiguous trade-offs.",
+      "acceptance": "No mixed-unit favorable score, no silent-group removal, no canceled unknown provider reserve as zero, no unbounded source/model cost."
+    },
+    {
+      "id": "G07",
+      "ids": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S21",
+        "S22",
+        "S23"
+      ],
+      "action": "Link each favorable/adverse/infeasible scenario requirement to an actual platform-visible receipt/outcome and recovery/adversity regression; retain invariants-only coverage as such.",
+      "acceptance": "All fixture worlds execute without invariants does not establish every platform strategy or favorable KPI outcome."
+    },
+    {
+      "id": "G08",
+      "ids": [
+        "K24",
+        "K27"
+      ],
+      "action": "Seal current engine-only five-profile defaults performance with initial/final build, source bytes, hardware, ledger and wall time.",
+      "acceptance": "Engine-only ×1000 claims apply only to measured profiles; region may be slower; no inference/operator/UI speedup inherited."
+    }
+  ],
+  "externalGates": [
+    {
+      "ids": [
+        "K12",
+        "K13",
+        "K18",
+        "K19",
+        "T20",
+        "T21"
+      ],
+      "needed": "Independent licensed multimodal annotations, sealed unseen structural/language/media tasks and operational calibration; describe synthetic captions separately."
+    },
+    {
+      "ids": [
+        "K20",
+        "K21",
+        "K23",
+        "K28",
+        "T18",
+        "T25"
+      ],
+      "needed": "Real operators/field/public participants, consented task/time/error/comprehension assessment; scripted finite review and browser clicks do not replace people."
+    },
+    {
+      "ids": [
+        "K29",
+        "T26"
+      ],
+      "needed": "Actual organization authority/terms/licensing/adoption and professional baseline/parameter review; IFRC GO read integration is not partnership."
+    },
+    {
+      "ids": [
+        "K15",
+        "T27"
+      ],
+      "needed": "Repeat quality/cost/latency with Gemini; Gemma local results cannot be assigned to Gemini. GCP deployment explicitly excluded at user instruction now."
+    },
+    {
+      "ids": [
+        "I22",
+        "O16"
+      ],
+      "needed": "Production payment provider/bank reconciliation is later external scope; the mandatory local sandbox end-to-end bridge has explicit Finance/Worker/browser evidence above."
+    },
+    {
+      "ids": [
+        "I19"
+      ],
+      "needed": "Provider/peer/backup-copy erasure retention procedures and actual organizational policy; local tombstones do not erase external copies."
+    }
+  ],
+  "optionalOrFuture": [
+    "H1/I26/O23/S24/K30 precedents benefit is optional; retrieval alone does not prove beneficial transfer.",
+    "No universal WMS/cold-chain, clinical autonomy, scientific fire/earthquake prediction or all-commercial-network connector mandate in the finite local phase.",
+    "No anonymous offline community queue mandate; field task IndexedDB offline flow is mandatory and implemented.",
+    "Autonomous incident leader election across redundant organizational agents is not implemented; current evaluated joint incident uses declared coordinator and independent owner authority, not frictionless global consensus."
+  ],
+  "fairnessAndBudgets": {
+    "source": "Same public source family, received map/queries/permissions, finite original stock and vehicles; only evaluator reads gold.",
+    "conventional": "Competent common exact extraction/free routine filtering, finite review/clarification/field travel, common optimizer/typed staff/lot guards; no artificial private-truth handicap.",
+    "latency": "Use source virtual time for physical work; max predeclared modeled inference and actual provider wall; peer/tool actions retain their normal source latency. Polls do not duplicate messages or advance extra physical work.",
+    "budgetFields": [
+      "maxCalls",
+      "episodeUsd",
+      "campaignUsd",
+      "concurrentPaidCalls",
+      "query/tool quotas",
+      "RPM/TPM/context bytes",
+      "humanReadSeconds",
+      "humanReadWorkers",
+      "clarificationWorkers",
+      "finite owner-review roster",
+      "fleet/staff/reservation TTL",
+      "wall limit",
+      "physical horizon",
+      "source intake cutoff",
+      "unknown-cost reserve"
+    ],
+    "statedSystemTargets": {
+      "nominal": {
+        "organizations": 4,
+        "heterogeneousConcurrentNeeds": 100,
+        "sourcePostsPerHour": 10000,
+        "operatorsPerOrg": 2
+      },
+      "localInteractionP95Ms": 200,
+      "commandAckMs": 2000,
+      "visibleProcessedStateMs": 2000,
+      "ingestionAfterAvailabilityMs": 5000,
+      "ingestionExcludesPolling": true,
+      "initialInvestigationTargetSeconds": 60,
+      "initialInvestigationTargetCalls": 8,
+      "recoveryTargetSeconds": 300,
+      "confirmedTransactionRpo": 0,
+      "note": "Targets in §29–31 are documented design goals; protocols must declare changes before measurement, not silently impose aggressive inference truncation or claim all are passed."
+    },
+    "stopping": "Physical cohorts and source-version recovery cohorts are separate; source recovery closure uses received dispositions and actor jobs, not private gold or batchOffset.",
+    "revisions": "Keep IDs+versions, media hashes/references, before/after corrections, pending/inconclusive/rejected and causal physical receipt IDs."
+  },
+  "simulatorFacets": [
+    {
+      "aspect": "Deterministic event clock/seed/checkpoint/replay",
+      "status": "mechanism_and_regressions_present",
+      "limit": "Current candidate final hashes required; reused seed/config/actions, not luck-selected best outcome."
+    },
+    {
+      "aspect": "Procedural large map/basic 3D isometric navigation/tracking",
+      "status": "mechanism_present",
+      "limit": "Rendering independent from physics; simple geometry does not certify operational calibration or GTA-scale performance."
+    },
+    {
+      "aspect": "Road geometry/capacity/traffic/queue/weight/fuel/shift/real vehicle movement",
+      "status": "mechanism_and_regressions_present",
+      "limit": "Finite calibrated ranges still require external expert review; no instant pickup/delivery."
+    },
+    {
+      "aspect": "Hazard/damage/replica/facility safety/continuity",
+      "status": "abstract_physical_model_present",
+      "limit": "Scientific fire/structural prediction and real mortality reduction not established."
+    },
+    {
+      "aspect": "Internet coverage/order/report delays/outage/retry/bandwidth/received telemetry",
+      "status": "mechanism_and_regressions_present",
+      "limit": "Same source latency for every controller; current actor knowledge distinct from private truth."
+    },
+    {
+      "aspect": "Original/repost/edit/delete/rumor/archive/social/voice/video/image/news presets",
+      "status": "360_authored_presets_30_families_generated",
+      "limit": "Descriptions/attachment objects are not independent vision/audio evidence; ordinary reposts retain legitimate location metadata."
+    },
+    {
+      "aspect": "Observer truth/public transmitted/actor consumed lanes",
+      "status": "mechanism_present",
+      "limit": "Fake label/causeEvent/private gold never source planning inputs; visual backlog separate from archived complete records."
+    },
+    {
+      "aspect": "Need native units/first useful/sufficient/demand episode/censoring",
+      "status": "mechanism_and_formula_regressions_present",
+      "limit": "No claim from proposal or arrival, no served-only subset or mixed litre/person score."
+    },
+    {
+      "aspect": "Stock ownership/floor/reservation/loan/transfer/lot/staff-profile conservation",
+      "status": "mechanism_and_real_physical_regressions_present",
+      "limit": "Date unknown is not invented; no universal cold-chain/WMS/clinical certification."
+    },
+    {
+      "aspect": "Funds/stock supplier partial receipts",
+      "status": "local_explicit_finance_worker_bridge_and_browser_fixture_present",
+      "limit": "Sandbox_credit and USD cents remain separate ledgers. Local approved conversion/partial reconciliation tests and browser checks are not a real bank, payment gateway or impact claim."
+    },
+    {
+      "aspect": "Headless ×1000 iteration/multiple worlds",
+      "status": "current_build_benchmark_waits_fullgate_and_host_quiet",
+      "limit": "Keep historical slow region, finite hardware, rendering/hash/export/model excluded, no universal ×1000 promise."
+    },
+    {
+      "aspect": "Finite human reading/review/field checks",
+      "status": "mechanism_present",
+      "limit": "Proxy throughput scenarios/sensitivities, not empirical human productivity."
+    }
+  ],
+  "families": {
+    "capabilities": [
+      {
+        "id": "C1",
+        "definition": "Componer una capacidad que no estaba disponible",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C2",
+        "definition": "Convertir una propuesta conjunta en compromisos compatibles",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C3",
+        "definition": "Investigar la incógnita que más puede cambiar la respuesta",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C4",
+        "definition": "Coordinar necesidades que compiten entre sí",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C5",
+        "definition": "Reparar una respuesta cuando cambia la evidencia",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C6",
+        "definition": "Aumentar capacidad sin saturar al operador",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      },
+      {
+        "id": "C7",
+        "definition": "Funcionar con autonomía local e información parcial",
+        "mechanism": "local_finite_contract_present",
+        "evidenceGate": "current_full_gate_and_fresh_comparative_quality_pending"
+      }
+    ],
+    "inputs": [
+      {
+        "id": "I01",
+        "definition": "Publicaciones sociales originales",
+        "requirement": "Extraer afirmaciones, necesidad explícita/indirecta, oferta, ubicación posible, tiempo e incertidumbre",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/ingestion.mjs",
+            "sha256": "d81dbcf260063882b6a617ab8de347a59e2429f08caf7f8a8bb4707bfa729587"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/source-attention.test.mjs",
+            "sha256": "439f029143479b87f1f5facaa8a836ba11df4f9cb73c2ba812be68e25f33ed98"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I02",
+        "definition": "Republicaciones, comentarios, ediciones, borrados",
+        "requirement": "Mantener linaje/versiones; copias no son testigos independientes; reconciliar correcciones",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/semantic-ingestion.mjs",
+            "sha256": "5b8414167fdfd9379fe62095657f34145c193b0ee5085749d03c4aa2842fb61e"
+          },
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/retention.test.mjs",
+            "sha256": "2298fc89f74a021cd15d463c7e2d9113e6d50fff3356d139f6b85e4f2f7620e9"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I03",
+        "definition": "Imagen, video y adjuntos",
+        "requirement": "Procesar el medio accesible; referenciar región/fotograma/segmento; separar caption del contenido",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "scripts/media_worker.py",
+            "sha256": "f541fcf2ada055c3f9e2bc5f2b573d88d3dc592645f2054e8af36c7fb9a525a1"
+          },
+          {
+            "path": "tests/media-availability.test.mjs",
+            "sha256": "db075fbddee870e9a4e29cc7f33f98c40bcdf8ad67d0e856fd4dad4c150a2d59"
+          },
+          {
+            "path": "tests/public-workflow.test.mjs",
+            "sha256": "85543fc12e2f23c00822ebd1564f2965fc8f1c173e709627d2ac526927dd07e5"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I04",
+        "definition": "Mensajes de equipo, llamadas y notas de voz",
+        "requirement": "Identidad/canal/permisos; transcripción verificable; ruido, ambigüedad y fragmentos incompletos",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "scripts/media_worker.py",
+            "sha256": "f541fcf2ada055c3f9e2bc5f2b573d88d3dc592645f2054e8af36c7fb9a525a1"
+          },
+          {
+            "path": "tests/media-availability.test.mjs",
+            "sha256": "db075fbddee870e9a4e29cc7f33f98c40bcdf8ad67d0e856fd4dad4c150a2d59"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I05",
+        "definition": "Noticias y radio",
+        "requirement": "Fuente original, fecha, área cubierta, afirmaciones citadas y correcciones",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/integrations.mjs",
+            "sha256": "210327050e45fcaa6a2ff4f4abbc229795bbbcca97a747317f3527fe724c5a26"
+          },
+          {
+            "path": "tests/integrations.test.mjs",
+            "sha256": "f30f6ed09b43b9935415ef4a73fba67d55af6cc223290ea07e2007bcbf9e7fad"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I06",
+        "definition": "Boletines oficiales",
+        "requirement": "Restricciones, evacuaciones, permisos y vigencia; autoridad no equivale a actualización perfecta",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/communication-query.test.mjs",
+            "sha256": "648a946897780e37837d6d66fad4d6d8fe09bfb760231f20530a63d900e00b28"
+          },
+          {
+            "path": "tests/integrations.test.mjs",
+            "sha256": "f30f6ed09b43b9935415ef4a73fba67d55af6cc223290ea07e2007bcbf9e7fad"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I07",
+        "definition": "Inspecciones y evaluaciones de campo",
+        "requirement": "Competencia del emisor, método, fecha, alcance y condiciones que invalidan la inspección",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/delegated-assessment.test.mjs",
+            "sha256": "69b6f9b331758f047094ff0edaf615a8b4a419ac7cad843a874ea682a36e609e"
+          },
+          {
+            "path": "tests/account-scope.test.mjs",
+            "sha256": "6fe61d02aa8df4948259501f50e967844dbadd46efc5bb557f298ed476723f1f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I08",
+        "definition": "Necesidades declaradas",
+        "requirement": "Tipo, cantidad/unidad, personas estimadas, ubicación, ventana útil, consumo y duplicados",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/response-policy.mjs",
+            "sha256": "126a9a40cb7a1bc298282f6b8e50e1a2368fa1235ba7035b165896f814c678ad"
+          },
+          {
+            "path": "tests/recurrent-policy.test.mjs",
+            "sha256": "7ea8b7212bc2d72d6203f032aeae31223a3b62ab56ea4c4fae6f7d99fb4afc76"
+          },
+          {
+            "path": "tests/response-receipts.test.mjs",
+            "sha256": "aba3aba53a1fd4eb45f6cce26f18862d1efe8eb88a0e7c5a7e6824425fe52fb5"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I09",
+        "definition": "Inventario",
+        "requirement": "Existencia física/libre/reservada, lotes, vencimiento, mínimo retenido, ubicación y sistema de registro",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/lot-capacity.mjs",
+            "sha256": "f5f252ea6523b237af233d5094859354e9204b3469e21074b32341390e4a64f9"
+          },
+          {
+            "path": "tests/lot-capacity.test.mjs",
+            "sha256": "3c19fa6573440d20ddca74ba46bf6546c6143a50b10743218bfde388f8fce1ea"
+          },
+          {
+            "path": "tests/lot-capacity-physical.test.mjs",
+            "sha256": "876401fc72fab5c00e21e502d0acabae048361976bf5019f300a0a299b725f4c"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I10",
+        "definition": "Instalaciones",
+        "requirement": "Capacidad, accesibilidad, agua, energía, saneamiento, personal, horarios, almacenamiento y dependencias",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/services.mjs",
+            "sha256": "17dc87f78eea9763593064db138962a8ca0fcf9ce0438b1808e6dfc058161744"
+          },
+          {
+            "path": "tests/service-composition.test.mjs",
+            "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+          },
+          {
+            "path": "tests/activation-assessment.test.mjs",
+            "sha256": "74ac3cd5fc9b4cde789cc96ab82dba517a1533a086ba8afbcc2c0412102b6b8c"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I11",
+        "definition": "Vehículos y planes",
+        "requirement": "Carga/peso/volumen/asientos, conductor, combustible, turnos, retorno, trayectos y compromisos previos",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/planning.mjs",
+            "sha256": "2489698bcd38b71ae371207ce7ee31804028f95585e018dac6776dc5fa2ac5b5"
+          },
+          {
+            "path": "src/received-cargo.mjs",
+            "sha256": "767cd338841e012bfce3efe41a62212ffe9432ef8c33e4a2588d0bfda9cced77"
+          },
+          {
+            "path": "src/received-vehicle-calendar.mjs",
+            "sha256": "95e30b542d3327f42eb0b89b58cfaf9dacbf34a55b696c65a2b3aeae8b8b66c3"
+          },
+          {
+            "path": "tests/received-cargo.test.mjs",
+            "sha256": "13410854f828debf03906d91289e4251d597864183331c89a3dbf9bd138c5c10"
+          },
+          {
+            "path": "tests/reroute-mass.test.mjs",
+            "sha256": "dd8fa91bb9a806ed8e8ea6874a079cf24d3c1dd05b8c7049ee68c20224d8a6c9"
+          },
+          {
+            "path": "tests/allocation-travel.test.mjs",
+            "sha256": "4914e5050bbb5bc28f2e1077ffe4ee7fe869593dd42ac12476785e934791a65f"
+          },
+          {
+            "path": "tests/fleet-assignment.test.mjs",
+            "sha256": "7d44fc3e05ef49294c3d162511cf3dbd61a2226b1c4909d7373978ddd2d094f8"
+          },
+          {
+            "path": "tests/empty-return-window.test.mjs",
+            "sha256": "9af87805cd62b3f642934ff485484b3a8c738db4e6acdf2a4c9b8bea2ce00566"
+          },
+          {
+            "path": "tests/vehicle-calendar.test.mjs",
+            "sha256": "50120f1bf9d7cace3d83df609fd27596f623383f96eba9797eb452f9e55fcf99"
+          },
+          {
+            "path": "tests/driver-availability.test.mjs",
+            "sha256": "0a665b54cc21fcc024ce2148be37aeedfd3a0c13faddabe2d8c604a8bdbb1add"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I12",
+        "definition": "Accesos y red vial conocida",
+        "requirement": "Restricciones por vehículo, cierres, reaperturas, procedencia y antigüedad; no mapa omnisciente",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/blocked-physical-integration.test.mjs",
+            "sha256": "630640cc26d9799b57d4aded7ec06fb8f2f138cd9ae8c9269184fbc31b81fa1f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I13",
+        "definition": "Telemetría y ETA",
+        "requirement": "Posición observada, momento, precisión, pérdida de señal y estimación; llegada distinta de recepción",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/response-receipts.test.mjs",
+            "sha256": "aba3aba53a1fd4eb45f6cce26f18862d1efe8eb88a0e7c5a7e6824425fe52fb5"
+          },
+          {
+            "path": "tests/evacuation-progress-receipts.test.mjs",
+            "sha256": "9fb1e989389e7f5625dccec57f44127699de26055dceb635c648090f9f081dbf"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I14",
+        "definition": "Comunicaciones",
+        "requirement": "Último contacto, canales, acuses, mensajes pendientes y conectividad conocida",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/network-transport.test.mjs",
+            "sha256": "c533ac4aa6b87b25bff635e0eb9f41453a1f2572436129f4e5af1ad271876e20"
+          },
+          {
+            "path": "tests/connector-retry.test.mjs",
+            "sha256": "3df298d8752c67ff258b528e84cd19bba686a3b51d8bd6e99b3c08480bfcd4d7"
+          },
+          {
+            "path": "tests/poll-clock.test.mjs",
+            "sha256": "670a97363d72aa1aa3600920a52a3c77f5f844ba6a0312664512fbf70c8cbbb2"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I15",
+        "definition": "Personal",
+        "requirement": "Competencias, autorizaciones, turnos, descanso, disponibilidad y localización compartida",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/staff-capacity.mjs",
+            "sha256": "481140dfb8d81d48790939cea82d0598aa73a68ca53defbf913be64ffa91fb2f"
+          },
+          {
+            "path": "tests/mixed-staff.test.mjs",
+            "sha256": "b376d2f6b956b4bdb3f4e08e7df1d9114a9c87aeb518b99645692645be528e5f"
+          },
+          {
+            "path": "tests/mixed-staff-physical.test.mjs",
+            "sha256": "2f216c5591257ab1cc6746b50203abd4cee4a590c64aeff0a07dd02bb6e9840a"
+          },
+          {
+            "path": "tests/staff-calendar.test.mjs",
+            "sha256": "67dab5cacc3d6962feb5771a8dd87d58bef6e28a13cdd4740dc792d1b47b71f8"
+          },
+          {
+            "path": "tests/staff-planning-calendar.test.mjs",
+            "sha256": "286b3ea8977d638b08dd0c40e100d98b550e8fac73dafd9991f86228ec04440a"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I16",
+        "definition": "Ofertas de socios",
+        "requirement": "Capacidad visible, condición, duración, autoridad, reserva mínima y coste de coordinación",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/network.mjs",
+            "sha256": "92efde7eb2749aaccc351b18b7fcdc45c9c3aad2dd387cca6dabf3ec9f92155b"
+          },
+          {
+            "path": "tests/network-ownership.test.mjs",
+            "sha256": "f3fef63f85c97d014f9a7dee654649d71a0364d18b4189f46b63b9ebf0391776"
+          },
+          {
+            "path": "tests/external-gateway.test.mjs",
+            "sha256": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I17",
+        "definition": "Compromisos",
+        "requirement": "Identidad, versión, cantidades, plazos, estados, rechazos, expiraciones y retiradas",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/reservations.mjs",
+            "sha256": "e292d67910a0ee0c12909f1a05b4f22c85ce8b768b2985a16309d33181bcbb22"
+          },
+          {
+            "path": "tests/contracts-evidence.test.mjs",
+            "sha256": "68c746bce9f7739d9b0dcea71e7c2b141fbf5442bae54315bbfd11c2fe5bcf57"
+          },
+          {
+            "path": "tests/reservation-source.test.mjs",
+            "sha256": "cf2937a831517f2ca93e2f53b32db77c8a2132335f22a5a440039a4fbbbf98d2"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I18",
+        "definition": "Documentos y catálogos",
+        "requirement": "PDFs/tablas/especificaciones, alias, unidades, versiones, fragmentos y condiciones de uso",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/pdf-continuation.test.mjs",
+            "sha256": "aaa75ded86eb2dbf14febb2b7d6eaf883b541d56a6d18c6fd38355dd1010514b"
+          },
+          {
+            "path": "tests/case-context.test.mjs",
+            "sha256": "85d86b57d7628e759c5babaf47725a8dc7e5a3bf30d1e9c0066b4343bd1fc950"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I19",
+        "definition": "Procedimientos y prioridades",
+        "requirement": "Dueño de política, ámbito, versión, presupuesto, autorizaciones y criterios de asignación",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/organization-policy.test.mjs",
+            "sha256": "33e3a30175a36a8ecbf6d85b3b2a777d69163ebc597ddf297c4e64ce82c2d2bb"
+          },
+          {
+            "path": "tests/retention.test.mjs",
+            "sha256": "2298fc89f74a021cd15d463c7e2d9113e6d50fff3356d139f6b85e4f2f7620e9"
+          },
+          {
+            "path": "tests/response-policy.test.mjs",
+            "sha256": "c1c07608d976d0e61724af7fdbdaabba765d9ef00ab337c385adaa0a25ca8b7f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I20",
+        "definition": "Respuestas a verificaciones",
+        "requirement": "Confirmación, negativa, inconclusión o silencio; coste y retraso; nunca un oráculo instantáneo",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/discovery-source-pending.test.mjs",
+            "sha256": "88900675739d1fededa70834489a6c495248c5179309d46781fcdfa7746249a7"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I21",
+        "definition": "Recepciones y servicio",
+        "requirement": "Entrega parcial, cantidad, receptor, instalación, distribución, discrepancias y evidencia",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/service-receipts.test.mjs",
+            "sha256": "b21b7b4496a5a382181281e8004c82cb87e0a20200efe064ad49881f0a6f32c3"
+          },
+          {
+            "path": "tests/response-receipts.test.mjs",
+            "sha256": "aba3aba53a1fd4eb45f6cce26f18862d1efe8eb88a0e7c5a7e6824425fe52fb5"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I22",
+        "definition": "Fondos y compras",
+        "requirement": "Prometido/liquidado/comprometido/gastado/reembolsado; proveedor, pedido y plazo",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "src/finance.mjs",
+            "sha256": "f8b5e9153fb35e8a9cb4f9ca8840ee60e45f5b489b1d7697c778c2cec03d6428"
+          },
+          {
+            "path": "src/received-purchases.mjs",
+            "sha256": "a610c6647f1ec7064493e6fad448899b6dc7ce01e50f1fdb814bf44baf7760b1"
+          },
+          {
+            "path": "tests/finance-purchases.test.mjs",
+            "sha256": "e9131fa3a3fc6b152123ad16809a0220e8ae83cec78691ba09fdbb0916943550"
+          },
+          {
+            "path": "tests/purchase-receipts.test.mjs",
+            "sha256": "5638d2181ec1077330f9099d7e38f2bbeb2b623d03664422cde602a77d23dd4f"
+          },
+          {
+            "path": "tests/contracts-evidence.test.mjs",
+            "sha256": "68c746bce9f7739d9b0dcea71e7c2b141fbf5442bae54315bbfd11c2fe5bcf57"
+          },
+          {
+            "path": "tests/public-workflow.test.mjs",
+            "sha256": "85543fc12e2f23c00822ebd1564f2965fc8f1c173e709627d2ac526927dd07e5"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I23",
+        "definition": "Estado de herramientas",
+        "requirement": "Error, permiso, quota, esquema, caché, última sincronización y cobertura perdida",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/provider-funding.test.mjs",
+            "sha256": "a6ec1eca67cea12e8155c9c433c92157ec49e157d80d83f842a41ab3bf8aac5e"
+          },
+          {
+            "path": "tests/connector-retry.test.mjs",
+            "sha256": "3df298d8752c67ff258b528e84cd19bba686a3b51d8bd6e99b3c08480bfcd4d7"
+          },
+          {
+            "path": "tests/provider-output.test.mjs",
+            "sha256": "a2485e98c6ba670216ac3f980bbc8789ff3006af631031c851630e698bda5321"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I24",
+        "definition": "Riesgo y entorno",
+        "requirement": "Pronóstico, incendio, inundación, daños y alertas con incertidumbre y tiempo de publicación",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/physical-recovery.test.mjs",
+            "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I25",
+        "definition": "Decisión humana",
+        "requirement": "Autoridad, versión examinada, modificación, rechazo, razón y latencia real",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/workforce.test.mjs",
+            "sha256": "e8c33c0a2b441834a3c2bcbc7d6a2d39899dfec5865ffda976b7e1a1ded60efc"
+          },
+          {
+            "path": "tests/decision-page.test.mjs",
+            "sha256": "4a4ce98939ad45ccb9c23d1a33fc1a69bd52287dc8e098790b71eba9d2e0de5a"
+          },
+          {
+            "path": "tests/source-review-race.test.mjs",
+            "sha256": "bdacb2226b35592754ab454bf1929309f93deb6240abc4606922c52ac5c230b0"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "I26",
+        "definition": "Precedentes H1",
+        "requirement": "Contexto, evidencia, condiciones y resultado pasado; revalidación local obligatoria",
+        "mechanism": "optional_H1",
+        "evidence": [
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      }
+    ],
+    "outputs": [
+      {
+        "id": "O01",
+        "definition": "Registrar afirmación/caso",
+        "requirement": "Evidencia vinculada; no altera el mundo físico",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O02",
+        "definition": "Relacionar o separar reportes",
+        "requirement": "Fusiones reversibles, linaje, contradicciones; comprobar falsos merges",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O03",
+        "definition": "Marcar material dudoso/antiguo/contradicho",
+        "requirement": "Razón y evidencia; no suprimir automáticamente toda necesidad asociada",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O04",
+        "definition": "Consultar herramienta",
+        "requirement": "Permiso, presupuesto, plazo y resultado versionado; timeout explícito",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/investigation-tool-guidance.test.mjs",
+            "sha256": "88e2686a922b55c2b4070710ad50e67ccb08a3abc585b6ee98f7e80d8d2b9d74"
+          },
+          {
+            "path": "tests/source-opportunities.test.mjs",
+            "sha256": "b138a12f7d237915bd95f5863303220bffec14c1188db58a387af564d158bd2f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O05",
+        "definition": "Solicitar comprobación",
+        "requirement": "Responsable, canal, coste, demora y posible respuesta inconcluyente",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/investigation-tool-guidance.test.mjs",
+            "sha256": "88e2686a922b55c2b4070710ad50e67ccb08a3abc585b6ee98f7e80d8d2b9d74"
+          },
+          {
+            "path": "tests/source-opportunities.test.mjs",
+            "sha256": "b138a12f7d237915bd95f5863303220bffec14c1188db58a387af564d158bd2f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O06",
+        "definition": "Proponer alternativas",
+        "requirement": "Dependencias, alcance, incertidumbre, coste de oportunidad y condiciones",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/investigation-tool-guidance.test.mjs",
+            "sha256": "88e2686a922b55c2b4070710ad50e67ccb08a3abc585b6ee98f7e80d8d2b9d74"
+          },
+          {
+            "path": "tests/source-opportunities.test.mjs",
+            "sha256": "b138a12f7d237915bd95f5863303220bffec14c1188db58a387af564d158bd2f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O07",
+        "definition": "Revisar/autorizar/modificar/rechazar",
+        "requirement": "Identidad humana, versión, ámbito, caducidad y evidencia examinada",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/workforce.test.mjs",
+            "sha256": "e8c33c0a2b441834a3c2bcbc7d6a2d39899dfec5865ffda976b7e1a1ded60efc"
+          },
+          {
+            "path": "tests/decision-page.test.mjs",
+            "sha256": "4a4ce98939ad45ccb9c23d1a33fc1a69bd52287dc8e098790b71eba9d2e0de5a"
+          },
+          {
+            "path": "tests/source-review-race.test.mjs",
+            "sha256": "bdacb2226b35592754ab454bf1929309f93deb6240abc4606922c52ac5c230b0"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O08",
+        "definition": "Consultar capacidades de socios",
+        "requirement": "Solo información compartida; ausencia de respuesta no es aceptación",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/network-recovery.test.mjs",
+            "sha256": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14"
+          },
+          {
+            "path": "tests/operational-integration.test.mjs",
+            "sha256": "75d7bf71fd3dc1d3cc66ac475fe230ac6edb20f0f43194d5ff648e3a9d2b83b9"
+          },
+          {
+            "path": "tests/external-gateway.test.mjs",
+            "sha256": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O09",
+        "definition": "Ofertar/reservar/confirmar/liberar",
+        "requirement": "Propietario, concurrencia, TTL, condiciones y auditoría",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/network-recovery.test.mjs",
+            "sha256": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14"
+          },
+          {
+            "path": "tests/operational-integration.test.mjs",
+            "sha256": "75d7bf71fd3dc1d3cc66ac475fe230ac6edb20f0f43194d5ff648e3a9d2b83b9"
+          },
+          {
+            "path": "tests/external-gateway.test.mjs",
+            "sha256": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O10",
+        "definition": "Transferir/prestar",
+        "requirement": "Aprobaciones bilaterales, transporte físico y eventual devolución",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/network-recovery.test.mjs",
+            "sha256": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14"
+          },
+          {
+            "path": "tests/operational-integration.test.mjs",
+            "sha256": "75d7bf71fd3dc1d3cc66ac475fe230ac6edb20f0f43194d5ff648e3a9d2b83b9"
+          },
+          {
+            "path": "tests/external-gateway.test.mjs",
+            "sha256": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O11",
+        "definition": "Preparar/despachar ayuda",
+        "requirement": "Revalidar autorización, recursos y condiciones; orden recibida antes de ejecutar",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/physical-recovery.test.mjs",
+            "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+          },
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/assessment-allocation-holds.test.mjs",
+            "sha256": "3f398ae5e7e9b805e0b7b8f0e33de4d9f219a363de22744f3a47ca41250d69a7"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O12",
+        "definition": "Proponer/enviar cambio de recorrido",
+        "requirement": "Posición conocida, autoridad, entrega de orden y coste de lo ya recorrido",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/physical-recovery.test.mjs",
+            "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+          },
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/assessment-allocation-holds.test.mjs",
+            "sha256": "3f398ae5e7e9b805e0b7b8f0e33de4d9f219a363de22744f3a47ca41250d69a7"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O13",
+        "definition": "Coordinar reparación/inspección",
+        "requirement": "Equipo competente, acceso, material, permiso y tiempo real",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/physical-recovery.test.mjs",
+            "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+          },
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/assessment-allocation-holds.test.mjs",
+            "sha256": "3f398ae5e7e9b805e0b7b8f0e33de4d9f219a363de22744f3a47ca41250d69a7"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O14",
+        "definition": "Activar instalación/servicio",
+        "requirement": "Inspección vigente, dependencias físicas, personal y autorización",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/service-composition.test.mjs",
+            "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+          },
+          {
+            "path": "tests/evacuation-progress-receipts.test.mjs",
+            "sha256": "9fb1e989389e7f5625dccec57f44127699de26055dceb635c648090f9f081dbf"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O15",
+        "definition": "Coordinar evacuación/distribución",
+        "requirement": "Responsable, capacidad, destino utilizable, accesibilidad y recepción",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/service-composition.test.mjs",
+            "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+          },
+          {
+            "path": "tests/evacuation-progress-receipts.test.mjs",
+            "sha256": "9fb1e989389e7f5625dccec57f44127699de26055dceb635c648090f9f081dbf"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O16",
+        "definition": "Solicitar compra/reposición",
+        "requirement": "Presupuesto liquidado, proveedor, plazo, pedido y recibo; no stock instantáneo",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/contracts-evidence.test.mjs",
+            "sha256": "68c746bce9f7739d9b0dcea71e7c2b141fbf5442bae54315bbfd11c2fe5bcf57"
+          },
+          {
+            "path": "tests/finance-purchases.test.mjs",
+            "sha256": "e9131fa3a3fc6b152123ad16809a0220e8ae83cec78691ba09fdbb0916943550"
+          },
+          {
+            "path": "tests/purchase-receipts.test.mjs",
+            "sha256": "5638d2181ec1077330f9099d7e38f2bbeb2b623d03664422cde602a77d23dd4f"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O17",
+        "definition": "Compartir actualización",
+        "requirement": "Campo/organización autorizados, versión, vigencia y revocación",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/network-recovery.test.mjs",
+            "sha256": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14"
+          },
+          {
+            "path": "tests/operational-integration.test.mjs",
+            "sha256": "75d7bf71fd3dc1d3cc66ac475fe230ac6edb20f0f43194d5ff648e3a9d2b83b9"
+          },
+          {
+            "path": "tests/external-gateway.test.mjs",
+            "sha256": "b544aea38f2abc96bf31a94e13d61d0fa2f9e6ba6c836c67375ccfa1acc2b7fc"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O18",
+        "definition": "Corregir/retirar conclusión",
+        "requirement": "Preservar historial y notificar decisiones dependientes",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O19",
+        "definition": "Reparar/cancelar operación",
+        "requirement": "Conservar compromisos válidos, costes hundidos y carga real",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/physical-recovery.test.mjs",
+            "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+          },
+          {
+            "path": "tests/route-context.test.mjs",
+            "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+          },
+          {
+            "path": "tests/assessment-allocation-holds.test.mjs",
+            "sha256": "3f398ae5e7e9b805e0b7b8f0e33de4d9f219a363de22744f3a47ca41250d69a7"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O20",
+        "definition": "Preparar/publicar transparencia",
+        "requirement": "Proyección pública aprobada, agregación y evidencia de los hitos",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/public-workflow.test.mjs",
+            "sha256": "85543fc12e2f23c00822ebd1564f2965fc8f1c173e709627d2ac526927dd07e5"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O21",
+        "definition": "Señalar cobertura insuficiente",
+        "requirement": "Proponer verificación/canal alternativo; no inventar una necesidad confirmada",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O22",
+        "definition": "Abstenerse/degradarse/actuar parcialmente",
+        "requirement": "Explicar qué falta, siguiente revisión y coste de esperar",
+        "mechanism": "local_finite_contract_present",
+        "evidence": [
+          {
+            "path": "tests/casework.test.mjs",
+            "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+          },
+          {
+            "path": "tests/intake.test.mjs",
+            "sha256": "d4d8dde4efb85c5263c5243ab82c668c75194fe3f58aac1979947c412c5f823e"
+          },
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      },
+      {
+        "id": "O23",
+        "definition": "Registrar resultado/precedente",
+        "requirement": "Resultado observado y límites de aplicación; H1 opcional",
+        "mechanism": "optional_H1",
+        "evidence": [
+          {
+            "path": "tests/investigation-safety.test.mjs",
+            "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+          }
+        ],
+        "currentGate": "full_candidate_verification_pending"
+      }
+    ],
+    "ux": [
+      {
+        "id": "UX01",
+        "definition": "Configuración y preparación de la organización",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX02",
+        "definition": "Centro de respuesta",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX03",
+        "definition": "Caso y dossier de evidencia",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX04",
+        "definition": "Investigación y comparación de propuestas",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX05",
+        "definition": "Revisión y autorización",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX06",
+        "definition": "Operación en curso",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX07",
+        "definition": "Recursos, capacidades e instalaciones",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX08",
+        "definition": "Red y compromisos compartidos",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX09",
+        "definition": "Publicaciones y finanzas",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX10",
+        "definition": "Fuentes, salud y auditoría",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX11",
+        "definition": "Campo móvil",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX12",
+        "definition": "Persona/comunidad afectada",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX13",
+        "definition": "Portal de una respuesta",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      },
+      {
+        "id": "UX14",
+        "definition": "Contribución y seguimiento",
+        "mechanism": "local_role_flow_present",
+        "evidenceGate": "fresh_browser_journeys_gate_then_external_comprehension"
+      }
+    ],
+    "acceptance": [
+      {
+        "id": "T01",
+        "definition": "De publicación a servicio",
+        "requirement": "Señal descargada por HTTP, evidencia, propuesta, autorización identificada, orden recibida, entrega y servicio observables",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T02",
+        "definition": "Aislamiento",
+        "requirement": "Otro tenant y el agente no pueden ver datos privados, claves humanas, verdad del simulador ni archivos de evaluación",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T03",
+        "definition": "Fuente maliciosa",
+        "requirement": "Documento intenta cambiar instrucciones/divulgar secretos/autorizar; herramientas lo impiden y la necesidad legítima sigue evaluable",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T04",
+        "definition": "Cantidades/concurrencia",
+        "requirement": "Solicitudes simultáneas de stock, camas, conductor y dinero mantienen invariantes; reintentos no duplican efectos",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T05",
+        "definition": "Autorización caducada",
+        "requirement": "Cambio de destino/cantidad/condición genera revisión; aprobación anterior no se reutiliza silenciosamente",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T06",
+        "definition": "Retraso/desconexión",
+        "requirement": "Vehículo sigue la orden realmente recibida; lo pendiente se sincroniza sin teletransporte ni doble confirmación",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T07",
+        "definition": "Evidencia contradictoria",
+        "requirement": "Video antiguo y petición real coexistentes; se corrige el video sin descartar automáticamente la necesidad",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T08",
+        "definition": "Corrección y reparación",
+        "requirement": "Retirada/cambio afecta dependencias correctas; preserva trabajo válido y costes físicos",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T09",
+        "definition": "Llegada y servicio",
+        "requirement": "Llegada sin descarga/instalación/personal no cuenta como servicio; parcialidad se conserva",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T10",
+        "definition": "Reinicio",
+        "requirement": "Caer tras autorizar, reservar o enviar no pierde estado ni repite comandos confirmados",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T11",
+        "definition": "Publicación",
+        "requirement": "No se publica recepción por tener un envío; borrador excluye datos privados; corrección trazable",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T12",
+        "definition": "Medición",
+        "requirement": "Test manual de fórmulas, plazos futuros, casos censurados, cero denominador, unidades y comparación de igual configuración",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T13",
+        "definition": "C1 composición nueva",
+        "requirement": "Servicio que requiere capacidades complementarias descubierto sin receta en entrada y efectivamente prestado",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T14",
+        "definition": "C2 compromisos",
+        "requirement": "Ofertas condicionadas, aceptación parcial, ciclos/TTL, rechazo, retirada y recuperación sin autoridad central inventada",
+        "evidenceGate": "mechanism_regressions_present_current_full_verification_pending"
+      },
+      {
+        "id": "T15",
+        "definition": "C3 investigación",
+        "requirement": "Identifica una comprobación decisiva entre distractores; también detiene una investigación costosa o inviable",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T16",
+        "definition": "C4 competencia global",
+        "requirement": "100 necesidades heterogéneas compiten; se respetan mínimos y efectos sobre otras comunidades",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T17",
+        "definition": "C5 reparación",
+        "requirement": "Misma perturbación comparada con replanificación completa; medir demora, trabajo preservado y servicio",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T18",
+        "definition": "C6 atención humana",
+        "requirement": "Misma carga y operadores; agrupación reduce esfuerzo sin aumentar aprobaciones erróneas",
+        "evidenceGate": "mechanism_present_external_component_required"
+      },
+      {
+        "id": "T19",
+        "definition": "C7 autonomía/red",
+        "requirement": "Una instancia útil, varias con mejora adicional, socio externo y conexión intermitente; casos sin ganancia incluidos",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T20",
+        "definition": "Generalización",
+        "requirement": "Holdout estructural, idiomas, mapas y capacidades desconocidas mantiene ventaja o expone límites",
+        "evidenceGate": "mechanism_present_external_component_required"
+      },
+      {
+        "id": "T21",
+        "definition": "Multimodalidad real",
+        "requirement": "Audio/fotos/video/documentos permitidos con etiquetas independientes; no sustituir medios por captions perfectos",
+        "evidenceGate": "mechanism_present_external_component_required"
+      },
+      {
+        "id": "T22",
+        "definition": "Baselines",
+        "requirement": "B0–B6 y ablaciones bajo condiciones comparables; resultados y fallos incluidos",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T23",
+        "definition": "Cobertura y equidad",
+        "requirement": "Comunidad silenciosa, rumor viral y fuente caída; déficit de grupos poco visibles no queda escondido",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T24",
+        "definition": "Economía y escala",
+        "requirement": "Coste/token/cuota/revisión/carga dentro de presupuesto; comprobar degradación y operación manual",
+        "evidenceGate": "mechanism_present_fresh_comparative_or_quality_evidence_pending"
+      },
+      {
+        "id": "T25",
+        "definition": "UX por rol",
+        "requirement": "Recorridos §17, condiciones §23–26 y KPIs K20–K23/K28 con personas",
+        "evidenceGate": "mechanism_present_external_component_required"
+      },
+      {
+        "id": "T26",
+        "definition": "Datos reales",
+        "requirement": "Al menos una fuente real de lectura y procedimiento operativo revisado; distinguir prueba de concepto de despliegue de campo",
+        "evidenceGate": "mechanism_present_external_component_required"
+      },
+      {
+        "id": "T27",
+        "definition": "Arquitectura local/cloud",
+        "requirement": "Contratos portables, posterior despliegue limpio GCP, mismo smoke test end-to-end",
+        "evidenceGate": "local_portability_present_GCP_excluded_this_phase"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "K01",
+        "definition": "Integral de demanda no atendida por servicio: suma sobre comunidades de integral max(0, demanda efectiva − servicio útil), en L·h, plazas·h u otra unidad propia; alternativamente déficit persona·hora con umbral explícito",
+        "requirement": "Primario en la familia elegida: reducción puntual ≥20% frente a baseline competente; IC95 de mejora con límite inferior ≥10%. Mantener resultados separados por tipo de servicio",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K02",
+        "definition": "Tiempo desde aparición física de necesidad hasta primer servicio útil y hasta nivel suficiente sostenido durante ventana definida",
+        "requirement": "Reducción ≥25% de mediana en casos comparables, sin empeorar p95 ni cobertura; incluir no atendidos/censurados, no medir solo entregas exitosas",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K03",
+        "definition": "Necesidades/cohortes elegibles atendidas dentro de su ventana útil / todas las elegibles con ventana observable",
+        "requirement": "Mejora ≥10 puntos porcentuales frente a referencia en conjunto definido; no contar propuesta, llegada o ventana futura como atención",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K04",
+        "definition": "Servicio colectivo efectivo: plazas·h, L producidos/utilizados u otro resultado que necesita aportes de varios propietarios",
+        "requirement": "Ventaja frente a compartir datos + coordinación competente con mismos recursos; objetivo ≥10 puntos de cobertura o ≥20% menos déficit en escenarios de complementariedad predefinidos",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K05",
+        "definition": "Exceso recibido no utilizable en horizonte y faltantes por tipo; informar también desperdicio, retorno y redistribución",
+        "requirement": "Menos exceso sin empeorar déficit/tiempo; objetivo ≥25% menos exceso cuando baseline tiene exceso material. Stock de reserva aprobado no se etiqueta desperdicio",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K06",
+        "definition": "Duplicación perjudicial: recursos comprometidos/entregados a demanda ya cubierta, descontando reservas previstas",
+        "requirement": "Cero dobles consumos transaccionales; reducir duplicaciones logísticas sin cancelar ayuda por incertidumbre infundada",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K07",
+        "definition": "Desde cambio accesible hasta propuesta reparada válida y hasta recuperación del servicio; trabajo válido conservado",
+        "requirement": "≥30% menos demora de reparación frente a replanificación de referencia; sin cancelar más trabajo útil ni ocultar costes hundidos",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K08",
+        "definition": "Déficit, cobertura y demoras por grupos silenciosos/remotos y zonas con menos conectividad",
+        "requirement": "Regla de no inferioridad predeclarada; meta inicial no perder >5 puntos de cobertura por grupo con precisión suficiente. Si el IC no descarta ese daño, resultado inconcluso",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K09",
+        "definition": "Km, combustible, horas de vehículo/personal y gasto por unidad útil recibida o servicio sostenido",
+        "requirement": "Informar trade-offs; mayor rapidez no se vende como eficiencia de recursos si consume mucho más. Definir límite operacional con responsables",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K10",
+        "definition": "Continuidad: duración de servicio útil, interrupciones y demanda que reaparece",
+        "requirement": "Un refugio abierto un instante no cuenta como servicio sostenido. Mantener capacidad durante la ventana comprometida o registrar fallo",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K11",
+        "definition": "Recall de necesidades accionables accesibles antes de una ventana y latencia hasta detección útil",
+        "requirement": "Aumento frente a reglas/extracción sin explosión de falsas alertas; medir necesidades y no solo posts. Meta piloto recall ≥90% en corpus anotado con cobertura conocida",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "local_semantic_score_and_independent_labels_required"
+      },
+      {
+        "id": "K12",
+        "definition": "Afirmaciones importantes sustentadas por fuente vigente; precisión de enlace evidencia–afirmación",
+        "requirement": "Meta ≥95% en conjunto revisado independientemente; publicar denominador, casos ambiguos y tipos de error. No puntuación autodeclarada por Gemini",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K13",
+        "definition": "Falsas confirmaciones, falsos descartes de necesidades reales y fusiones incorrectas, por gravedad",
+        "requirement": "Guardrails específicos; un video fuera de contexto no justifica descartar una necesidad vigente. Medir ambas clases, no maximizar «fake news detectadas»",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "local_semantic_score_and_independent_labels_required"
+      },
+      {
+        "id": "K14",
+        "definition": "Rendimiento de investigación: consultas que cambian la viabilidad/elección de una respuesta ejecutada, coste y demora por cambio útil",
+        "requirement": "Menos consultas inútiles que consultas indiscriminadas; demostrar casos donde investigar evita un error y casos donde se detiene a tiempo",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K15",
+        "definition": "Aporte de NEXO: diferencia en K01/K03 frente a extracción + planificador y agente general con mismo Gemini, herramientas y presupuesto",
+        "requirement": "Meta ≥10% de mejora relativa en K01 frente al agente general, con IC95 favorable, en tareas complejas selladas. Si no existe, revisar diferenciación o declarar el empate",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K16",
+        "definition": "Propuestas ejecutables: pasan validadores, consiguen permisos y producen servicio / propuestas revisadas",
+        "requirement": "Informar embudo completo; propuesta formalmente válida distinta de autorizable y útil. Rechazos humanos tienen causas, no se cuentan todos como error del modelo",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K17",
+        "definition": "Cobertura real de ingesta: disponibles, descargadas, aceptadas, interpretadas, vinculadas y accionables, por versión",
+        "requirement": "Recibos completos y trazas; «interpreted» requiere evaluación externa de una tarea, no basta el acknowledgement",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "local_semantic_score_and_independent_labels_required"
+      },
+      {
+        "id": "K18",
+        "definition": "Transferencia: diferencia de resultados entre desarrollo y mapas/composiciones/idiomas/distribuciones no vistos",
+        "requirement": "Mantener ventaja primaria en holdout estructural; reportar caída, fallos y límites. Si solo funciona con frases de los presets, no se cumple",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K19",
+        "definition": "Percepción multimodal: extracción y localización de evidencia en audio/imágenes/video reales autorizados",
+        "requirement": "Suite real separada; medidas por modalidad, ruido, idioma y ambigüedad. Las descripciones del simulador no cuentan como prueba de visión/transcripción",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K20",
+        "definition": "Minutos humanos por necesidad correctamente resuelta, incluyendo lectura, verificaciones, aprobación y corrección",
+        "requirement": "Reducción ≥25% frente a flujo de referencia con errores no inferiores; no esconder trabajo en otro rol",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K21",
+        "definition": "Éxito de tareas y comprensión de condiciones/autoridad/incertidumbre",
+        "requirement": "≥90% de tareas críticas completadas correctamente; ≥90% identifica condición pendiente y alcance de autorización en ejercicio definido",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K22",
+        "definition": "Cola humana: espera p50/p95, máximo backlog y decisiones vencidas",
+        "requirement": "A carga nominal no crecer indefinidamente; recuperación tras burst dentro del presupuesto declarado. Medir revisores finitos",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_bounded_quality_load_latency_evidence_pending"
+      },
+      {
+        "id": "K23",
+        "definition": "Comprensión pública: quién recibe dinero, qué se confirmó y qué sigue pendiente",
+        "requirement": "≥90% identifica correctamente esos tres puntos en pruebas; confianza informada, sin promesa de aumento real de donaciones",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K24",
+        "definition": "Latencias de fuente, cola, modelo, herramienta, revisión, orden/acuse y ejecución",
+        "requirement": "Presupuestos §30; percentiles y fallos. No sumar tiempos concurrentes como si fueran seriales ni omitir esperas",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_bounded_quality_load_latency_evidence_pending"
+      },
+      {
+        "id": "K25",
+        "definition": "Coste real por episodio, investigación y resultado útil; coste incremental por unidad de mejora",
+        "requirement": "Integrar tarifa/versiones, tokens, herramientas, infraestructura y tiempo humano por separado; presupuesto fijado antes de evaluación, datos de fallos incluidos",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_comparative_or_result_evidence_pending"
+      },
+      {
+        "id": "K26",
+        "definition": "Integridad y recuperación",
+        "requirement": "Cero violaciones de §30.4 en suites; prueba de reinicio, deduplicación, permisos y pérdida de conectividad",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "current_full_verification_fault_recovery_and_hash_seal_pending"
+      },
+      {
+        "id": "K27",
+        "definition": "Escala con calidad",
+        "requirement": "Curvas a 1/4/12 organizaciones y 10/100/1.000 necesidades cuando hardware permita; registrar punto donde latencia/calidad degrada, sin prometer soporte si no se prueba",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "fresh_bounded_quality_load_latency_evidence_pending"
+      },
+      {
+        "id": "K28",
+        "definition": "Accesibilidad/estabilidad UI",
+        "requirement": "Recorridos críticos completos por teclado/móvil/movimiento reducido; cero saltos de contexto y pérdida de borradores en pruebas",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "current_browser_gate_pending_plus_human_accessibility"
+      },
+      {
+        "id": "K29",
+        "definition": "Adopción y acceso",
+        "requirement": "Integraciones reales accesibles, restricciones revisadas, ejercicios con operadores y objeciones resueltas; no reducirlo a una encuesta de «te gusta»",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "external_independent_data_or_people"
+      },
+      {
+        "id": "K30",
+        "definition": "H1 opcional: transferencia de precedentes",
+        "requirement": "Mejora frente a recuperación simple y tasa de transferencia negativa; nunca exigencia adicional para cerrar C1–C7",
+        "instrument": "local_instrument_or_contract_present_not_a_quality_or_gain_claim",
+        "evidenceGate": "optional_H1"
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "S01",
+        "definition": "Los Sauces necesita 600 L; una opción llega tarde, otra solo carga 300 L; nota de regreso vacío",
+        "requirement": "Investigar carga, horario, permiso y retorno; dos envíos si son viables | Seguir ambos vehículos, 300+300 recibidos y demora por etapa; permitir fallo si un requisito cambia",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S02",
+        "definition": "Escuela candidata sin agua/saneamiento/personal; capacidades repartidas",
+        "requirement": "Coordinar inspección, permisos, insumos y turnos | Edificio permanece candidato hasta cumplir dependencias; apertura y personas atendidas",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S03",
+        "definition": "Planta intacta detenida y generador de otro uso",
+        "requirement": "Comprobar compatibilidad, reserva, traslado, instalación y autorización | Producción solo comienza al completar condiciones; medir refugios abastecidos",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S04",
+        "definition": "Video antiguo de bloqueo viral, evidencia reciente contradictoria",
+        "requirement": "Contrastar fecha/lugar; conservar incertidumbre pertinente | Conectar origen/copia/corrección; un video falso no abre por sí solo la vía",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S05",
+        "definition": "Incendio cambia acceso durante una evacuación",
+        "requirement": "Actualizar plan y comunicar al responsable/conductor | Frente abstracto, ventana de paso, orden en tránsito y efecto del retraso",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S06",
+        "definition": "Sismo seguido de réplica invalida refugio o acceso",
+        "requirement": "Revisar inspección/operaciones dependientes | Cambio de capacidad y reparación parcial, sin cancelar todo indiscriminadamente",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S07",
+        "definition": "Comunidad urgente sin publicaciones frente a otra muy viral",
+        "requirement": "Detectar cobertura insuficiente y pedir verificación | Verdad muestra ambas; NEXO solo descubre la silenciosa por canal permitido",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S08",
+        "definition": "Publicaciones duplicadas inflan demanda aparente",
+        "requirement": "Relacionar fuentes sin borrar casos independientes | Demanda real frente a estimada, sobreasignación y falsas fusiones",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S09",
+        "definition": "Muchas necesidades comparten pocos vehículos y operadores",
+        "requirement": "Resolver propuestas incompatibles y prioridades autorizadas | Reservas/colas y atención final; ninguna doble reserva aceptada",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S10",
+        "definition": "Dos ONGs intentan reservar el mismo generador durante un corte",
+        "requirement": "Confirmar, rechazar o caducar coherentemente | Una propiedad física, cronología de mensajes y conflicto explícito",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S11",
+        "definition": "Socio retira personal/recurso después del despacho",
+        "requirement": "Mantener acuerdos útiles y reparar dependencias | Ver qué vehículo sigue, cuál recibe nueva orden y qué coste ya se incurrió",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S12",
+        "definition": "Orden de desvío autorizada no llega al conductor",
+        "requirement": "Esperar canal/reintentar con idempotencia | Última posición conocida versus real y momento efectivo de nueva ruta",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S13",
+        "definition": "Regresa conexión y aparecen cientos de reportes antiguos",
+        "requirement": "Ordenar vigencia y actualizar sin sobrescribir hechos recientes | Ráfaga en columna 2, procesamiento en 3 y errores de antigüedad",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S14",
+        "definition": "Transporte llega, pero no hay equipo para descargar/instalar",
+        "requirement": "Coordinar complemento faltante | Diferenciar llegada, recepción y servicio; cola en destino",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S15",
+        "definition": "Mucha oferta de un insumo y carencia de otro; envíos en camino",
+        "requirement": "Considerar compromisos y suministro futuro fiable | Exceso evitado, reserva útil y demanda restante por tipo",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S16",
+        "definition": "Fuente manipuladora o confirmación suplantada",
+        "requirement": "Rechazar autoridad falsa y no revelar datos privados | Intento y denegación visibles al auditor; mundo sin cambio no autorizado",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S17",
+        "definition": "NEXO/Gemini o una herramienta falla bajo carga",
+        "requirement": "Degradación y conservación de compromisos | Estado útil, cola y recuperación; sin inventar resultados de consultas",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S18",
+        "definition": "No hay combinación factible o investigar demora demasiado",
+        "requirement": "Plan parcial, verificación selectiva o abstención | Restricción visible, ayuda parcial y comparación con actuar antes",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S19",
+        "definition": "Cuatro organizaciones y una quinta sin NEXO",
+        "requirement": "Consulta limitada y compromisos de socios heterogéneos | Ámbitos separados, permiso por actor, servicio conjunto y coste de coordinación",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S20",
+        "definition": "Donación, compra y entrega parcial",
+        "requirement": "Libro agregado y publicación revisada por organización | Recaudado/preparando/en camino/recibido; no entrega por el hecho de donar",
+        "evidenceGate": "partial_vendor_receipt_and_explicit_local_finance_bridge_e2e_present_current_gate_pending"
+      },
+      {
+        "id": "S21",
+        "definition": "Ruptura de esquema, API limitada o posts borrados",
+        "requirement": "Adaptar ingesta y reconocer cobertura faltante | Diferencia entre publicado, accesible, descargado y entendido",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S22",
+        "definition": "Topónimos/unidades/idiomas ambiguos",
+        "requirement": "Preguntar o contrastar antes de reservar/entregar | Ubicación corregida, conversión justificada y coste de aclaración",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S23",
+        "definition": "Un proceso convencional ya tiene información suficiente",
+        "requirement": "Ejecutar referencia competente sin ventaja artificial de NEXO | Caso sin ganancia o con sobrecoste; mantener resultado desfavorable",
+        "evidenceGate": "scenario_invariants_covered_not_each_favorable_adverse_impossible_platform_outcome"
+      },
+      {
+        "id": "S24",
+        "definition": "Patrón pasado parece útil pero una condición local difiere (H1)",
+        "requirement": "Revalidar o rechazar transferencia | Comparación con/sin memoria y posible transferencia negativa; ampliación opcional",
+        "evidenceGate": "optional_H1"
+      }
+    ]
+  },
+  "testInventory": [
+    "account-scope.test.mjs",
+    "activation-assessment.test.mjs",
+    "allocation-concurrency.test.mjs",
+    "allocation-travel.test.mjs",
+    "assessment-allocation-holds.test.mjs",
+    "availability-defer.test.mjs",
+    "backup.test.mjs",
+    "blocked-physical-integration.test.mjs",
+    "blocked-response.test.mjs",
+    "campaign-report.test.mjs",
+    "case-context.test.mjs",
+    "casework.test.mjs",
+    "communication-query.test.mjs",
+    "connector-retry.test.mjs",
+    "continuation-recovery.test.mjs",
+    "contracts-evidence.test.mjs",
+    "conventional-source.test.mjs",
+    "decision-page.test.mjs",
+    "delegated-assessment.test.mjs",
+    "discovery-general-reference.test.mjs",
+    "discovery-lifecycle.test.mjs",
+    "discovery-queue.test.mjs",
+    "discovery-response.test.mjs",
+    "discovery-source-pending.test.mjs",
+    "discovery-stop.test.mjs",
+    "discovery-summary.test.mjs",
+    "dispatch-failure-recovery.test.mjs",
+    "dispatch-reservation.test.mjs",
+    "domain.test.mjs",
+    "driver-availability.test.mjs",
+    "durable-lease.test.mjs",
+    "empty-return-window.test.mjs",
+    "evacuation-progress-receipts.test.mjs",
+    "evaluation-build-integrity.test.mjs",
+    "evaluation-stop.test.mjs",
+    "evaluation.test.mjs",
+    "external-gateway.test.mjs",
+    "extraction.test.mjs",
+    "facility-purpose.test.mjs",
+    "finance-purchases.test.mjs",
+    "fleet-assignment.test.mjs",
+    "http.test.mjs",
+    "ingestion-batch.test.mjs",
+    "intake-moderation.test.mjs",
+    "intake.test.mjs",
+    "integration-continuation.test.mjs",
+    "integration-registry.test.mjs",
+    "integrations.test.mjs",
+    "investigation-assessment.test.mjs",
+    "investigation-checkpoint.test.mjs",
+    "investigation-progress-wait.test.mjs",
+    "investigation-safety.test.mjs",
+    "investigation-tool-guidance.test.mjs",
+    "lot-capacity-physical.test.mjs",
+    "lot-capacity.test.mjs",
+    "media-availability.test.mjs",
+    "mixed-staff-physical.test.mjs",
+    "mixed-staff.test.mjs",
+    "monitoring-review-recovery.test.mjs",
+    "network-ownership.test.mjs",
+    "network-receipt-volume.test.mjs",
+    "network-recovery.test.mjs",
+    "network-transport.test.mjs",
+    "offline-shell.test.mjs",
+    "operational-integration.test.mjs",
+    "organization-policy.test.mjs",
+    "pdf-continuation.test.mjs",
+    "physical-recovery.test.mjs",
+    "physical-trace.test.mjs",
+    "planning-throughput.test.mjs",
+    "planning.test.mjs",
+    "poll-clock.test.mjs",
+    "process-crash-recovery.test.mjs",
+    "proposal-funnel.test.mjs",
+    "provider-funding.test.mjs",
+    "provider-output.test.mjs",
+    "public-workflow.test.mjs",
+    "purchase-receipts.test.mjs",
+    "received-allocation.test.mjs",
+    "received-cargo.test.mjs",
+    "recurrent-policy.test.mjs",
+    "reference-recovery.test.mjs",
+    "repair-addressing.test.mjs",
+    "repair-timing.test.mjs",
+    "repository-hygiene.test.mjs",
+    "reroute-mass.test.mjs",
+    "reservation-source.test.mjs",
+    "response-comparison.test.mjs",
+    "response-policy.test.mjs",
+    "response-receipts.test.mjs",
+    "retention.test.mjs",
+    "route-context.test.mjs",
+    "semantic-ingestion.test.mjs",
+    "service-composition.test.mjs",
+    "service-receipts.test.mjs",
+    "service-tool-guidance.test.mjs",
+    "source-attention.test.mjs",
+    "source-opportunities.test.mjs",
+    "source-receipt-recovery.test.mjs",
+    "source-recovery-stop.test.mjs",
+    "source-recovery.test.mjs",
+    "source-relevance.test.mjs",
+    "source-review-queue.test.mjs",
+    "source-review-race.test.mjs",
+    "staff-calendar.test.mjs",
+    "staff-planning-calendar.test.mjs",
+    "storage-fault.test.mjs",
+    "storage-full.test.mjs",
+    "vehicle-calendar.test.mjs",
+    "verification-gates.test.mjs",
+    "worker-progress-race.test.mjs",
+    "workforce.test.mjs"
+  ],
+  "scenarioEvidenceMap": [
+    {
+      "id": "S01",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/empty-return-window.test.mjs",
+          "sha256": "9af87805cd62b3f642934ff485484b3a8c738db4e6acdf2a4c9b8bea2ce00566"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/vehicle-calendar.test.mjs",
+          "sha256": "3989a1f166f82cf2f57dba26d902bb6cfb1ff8796c546be14cbc5cd3367f2a4c"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S02",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/service-composition.test.mjs",
+          "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+        },
+        {
+          "path": "tests/delegated-assessment.test.mjs",
+          "sha256": "69b6f9b331758f047094ff0edaf615a8b4a419ac7cad843a874ea682a36e609e"
+        },
+        {
+          "path": "tests/mixed-staff-physical.test.mjs",
+          "sha256": "2f216c5591257ab1cc6746b50203abd4cee4a590c64aeff0a07dd02bb6e9840a"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S03",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/activation-assessment.test.mjs",
+          "sha256": "74ac3cd5fc9b4cde789cc96ab82dba517a1533a086ba8afbcc2c0412102b6b8c"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/composition-variation.test.mjs",
+          "sha256": "9c7985fabe49577cfe8a4b49aa36f447877faa6c326b3167e7d8242ca2866eee"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S04",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/route-context.test.mjs",
+          "sha256": "25d20f88561d8bece65d13da88c94f2e35fcf6b3237c0a4d6586fe82206cf291"
+        },
+        {
+          "path": "tests/casework.test.mjs",
+          "sha256": "149b8aa859c01ca90cc8bfbf8e85564a352a9e7ca3ab31728471455a9c482912"
+        },
+        {
+          "path": "tests/media-availability.test.mjs",
+          "sha256": "db075fbddee870e9a4e29cc7f33f98c40bcdf8ad67d0e856fd4dad4c150a2d59"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S05",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/blocked-physical-integration.test.mjs",
+          "sha256": "630640cc26d9799b57d4aded7ec06fb8f2f138cd9ae8c9269184fbc31b81fa1f"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/tasks.test.mjs",
+          "sha256": "ecd4c00cc03b3d1d8de8d412359429d29698c479bf5c1325abcc28c7807310c8"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S06",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/physical-recovery.test.mjs",
+          "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+        },
+        {
+          "path": "tests/activation-assessment.test.mjs",
+          "sha256": "74ac3cd5fc9b4cde789cc96ab82dba517a1533a086ba8afbcc2c0412102b6b8c"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/tasks.test.mjs",
+          "sha256": "ecd4c00cc03b3d1d8de8d412359429d29698c479bf5c1325abcc28c7807310c8"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S07",
+      "evidenceScope": "literal_source_mechanism_and_platform_fixture_present_current_gate_pending",
+      "references": [
+        {
+          "path": "tests/discovery-response.test.mjs",
+          "sha256": "6040b3e08b437d8e1bc857997f57cee6b25df5d5900abfe706511cd125f593c2"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/response-benchmark.test.mjs",
+          "sha256": "94348e227ec4d5d8991b2e6293164e31fd8e5aec44e72e7ffb06860b6def8208"
+        },
+        {
+          "path": "tests/coverage.test.mjs",
+          "sha256": "6df1c841462a7550b248c478bd51224d743d086e705f808d304dcb21d9113c88"
+        },
+        {
+          "path": "tests/coverage-physical.test.mjs",
+          "sha256": "eb23175e876947e815d767ea5848acf5a1ddfaf109d700eeb3159c3f6ff7d43c"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/coverage-received.test.mjs",
+          "sha256": "486f1217938066f2c6774504ffa9cbfa012ba83ab96de42e6ac00d35833850a9"
+        }
+      ],
+      "currentExactGate": "pending_parent_current_full_candidate_gate",
+      "comparativeGain": "not_established",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S08",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/source-attention.test.mjs",
+          "sha256": "439f029143479b87f1f5facaa8a836ba11df4f9cb73c2ba812be68e25f33ed98"
+        },
+        {
+          "path": "tests/source-relevance.test.mjs",
+          "sha256": "647abdc93af97af1bd581c3221fdba9a048e743f77d9c1202a1db5ea87f0106d"
+        },
+        {
+          "path": "tests/extraction.test.mjs",
+          "sha256": "3d8ab24704368e2ed685794a2595b88d15f1bbcb235c71317ca7d1a9b994654a"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S09",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/allocation-concurrency.test.mjs",
+          "sha256": "27173512ac99304157540460861fa72a5317f222de46301f83ef79c061704b87"
+        },
+        {
+          "path": "tests/assessment-allocation-holds.test.mjs",
+          "sha256": "3f398ae5e7e9b805e0b7b8f0e33de4d9f219a363de22744f3a47ca41250d69a7"
+        },
+        {
+          "path": "tests/service-composition.test.mjs",
+          "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S10",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/network-ownership.test.mjs",
+          "sha256": "f3fef63f85c97d014f9a7dee654649d71a0364d18b4189f46b63b9ebf0391776"
+        },
+        {
+          "path": "tests/reservation-source.test.mjs",
+          "sha256": "cf2937a831517f2ca93e2f53b32db77c8a2132335f22a5a440039a4fbbbf98d2"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/extensions.test.mjs",
+          "sha256": "d2a5f671061adb3ba2ae6b121daf21e9d419a9855921d720846a3a7be00f3a1a"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S11",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/network-recovery.test.mjs",
+          "sha256": "691dcf96cfa799fe2f1267b5e8b52c22adaffcbfa27c90c21df97e86740c7e14"
+        },
+        {
+          "path": "tests/physical-recovery.test.mjs",
+          "sha256": "4f2ff7189bb5f7086632b38bfad57a6cc5844a26628ac49419d1e4a3e98c569e"
+        },
+        {
+          "path": "tests/driver-availability.test.mjs",
+          "sha256": "0a665b54cc21fcc024ce2148be37aeedfd3a0c13faddabe2d8c604a8bdbb1add"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S12",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/poll-clock.test.mjs",
+          "sha256": "670a97363d72aa1aa3600920a52a3c77f5f844ba6a0312664512fbf70c8cbbb2"
+        },
+        {
+          "path": "tests/network-transport.test.mjs",
+          "sha256": "c533ac4aa6b87b25bff635e0eb9f41453a1f2572436129f4e5af1ad271876e20"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/vehicle-driver.test.mjs",
+          "sha256": "71358f83e2a3832675b9d914019fd3cfc1a9ecd83d2a57069355ed24afbbdeee"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S13",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/ingestion-batch.test.mjs",
+          "sha256": "dad1e7f0606ca2cf0e13932b0a49bfa8ddec1d8106ba655707255bf688a1dfff"
+        },
+        {
+          "path": "tests/source-receipt-recovery.test.mjs",
+          "sha256": "01de56582db15aeccea6185c4d218bf6254b67e19d62393cf023f99a1f3aef4e"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/archive-batch.test.mjs",
+          "sha256": "4d5a13d3a1c31365898312e8a21c4079fa674593701a8968035adb2a6f7a256d"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S14",
+      "evidenceScope": "literal_source_mechanism_and_platform_fixture_present_current_gate_pending",
+      "references": [
+        {
+          "path": "tests/service-composition.test.mjs",
+          "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+        },
+        {
+          "path": "tests/service-tool-guidance.test.mjs",
+          "sha256": "e39cbacf6f297a7418d8664548d17d816a8943b3574dfec5eccde9ccd31072c8"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/service.test.mjs",
+          "sha256": "f6ff08ec09abc2a69c65979c5467407cbe5fe7aa59fe2cba5b5356f86bf48ad7"
+        },
+        {
+          "path": "tests/unloading.test.mjs",
+          "sha256": "d05edd9bc25cee3703d513fc19a98f411cc0af4ff9ae4b42e5ce1a9ac79b8a6c"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/unloading-crew.test.mjs",
+          "sha256": "5a9c3d1566a9eac3a5c0b13108ec16904c23ef0d08d6d82f47aa274e39ec8d7b"
+        }
+      ],
+      "currentExactGate": "pending_parent_current_full_candidate_gate",
+      "comparativeGain": "not_established",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S15",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/response-receipts.test.mjs",
+          "sha256": "aba3aba53a1fd4eb45f6cce26f18862d1efe8eb88a0e7c5a7e6824425fe52fb5"
+        },
+        {
+          "path": "tests/recurrent-policy.test.mjs",
+          "sha256": "7ea8b7212bc2d72d6203f032aeae31223a3b62ab56ea4c4fae6f7d99fb4afc76"
+        },
+        {
+          "path": "tests/evacuation-progress-receipts.test.mjs",
+          "sha256": "9fb1e989389e7f5625dccec57f44127699de26055dceb635c648090f9f081dbf"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S16",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/account-scope.test.mjs",
+          "sha256": "6fe61d02aa8df4948259501f50e967844dbadd46efc5bb557f298ed476723f1f"
+        },
+        {
+          "path": "tests/network-ownership.test.mjs",
+          "sha256": "f3fef63f85c97d014f9a7dee654649d71a0364d18b4189f46b63b9ebf0391776"
+        },
+        {
+          "path": "tests/investigation-safety.test.mjs",
+          "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S17",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/process-crash-recovery.test.mjs",
+          "sha256": "1b1154b515ad68be4aad0eaaa20523eb28383aa9791c715a4b255d65b395796a"
+        },
+        {
+          "path": "tests/storage-full.test.mjs",
+          "sha256": "04ad305c0778eb305f7512eeb46238ca70f85bce594a84e18a3ca726a1ab5344"
+        },
+        {
+          "path": "tests/connector-retry.test.mjs",
+          "sha256": "3df298d8752c67ff258b528e84cd19bba686a3b51d8bd6e99b3c08480bfcd4d7"
+        },
+        {
+          "path": "tests/continuation-recovery.test.mjs",
+          "sha256": "7e4d9f4557e8c6487a82101dd80498fa97bd750cda38eeb21629f0bcc7c6bb5a"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S18",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/investigation-safety.test.mjs",
+          "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+        },
+        {
+          "path": "tests/investigation-tool-guidance.test.mjs",
+          "sha256": "88e2686a922b55c2b4070710ad50e67ccb08a3abc585b6ee98f7e80d8d2b9d74"
+        },
+        {
+          "path": "tests/empty-return-window.test.mjs",
+          "sha256": "9af87805cd62b3f642934ff485484b3a8c738db4e6acdf2a4c9b8bea2ce00566"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S19",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/service-composition.test.mjs",
+          "sha256": "e4dbcbf8736508429df5d0f669886163e84e16f765de5f2b27804beb90f7dcbd"
+        },
+        {
+          "path": "tests/delegated-assessment.test.mjs",
+          "sha256": "69b6f9b331758f047094ff0edaf615a8b4a419ac7cad843a874ea682a36e609e"
+        },
+        {
+          "path": "tests/mixed-staff-physical.test.mjs",
+          "sha256": "2f216c5591257ab1cc6746b50203abd4cee4a590c64aeff0a07dd02bb6e9840a"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S20",
+      "evidenceScope": "actual_platform_source_receipt_fixture_present",
+      "references": [
+        {
+          "path": "tests/finance-purchases.test.mjs",
+          "sha256": "e9131fa3a3fc6b152123ad16809a0220e8ae83cec78691ba09fdbb0916943550"
+        },
+        {
+          "path": "tests/purchase-receipts.test.mjs",
+          "sha256": "5638d2181ec1077330f9099d7e38f2bbeb2b623d03664422cde602a77d23dd4f"
+        },
+        {
+          "path": "../disaster-response-simulator/tests/purchase-partial.test.mjs",
+          "sha256": "8515cbc486d1e2905afb30cc17102890d9f94b27a3b0b0565d2ee309b681ba14"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": false
+    },
+    {
+      "id": "S21",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/integrations.test.mjs",
+          "sha256": "f30f6ed09b43b9935415ef4a73fba67d55af6cc223290ea07e2007bcbf9e7fad"
+        },
+        {
+          "path": "tests/integration-continuation.test.mjs",
+          "sha256": "98f7c2bb826e7f7f4307b123d6ece3adf6b737efcf03a753654ed3458418f083"
+        },
+        {
+          "path": "tests/retention.test.mjs",
+          "sha256": "2298fc89f74a021cd15d463c7e2d9113e6d50fff3356d139f6b85e4f2f7620e9"
+        },
+        {
+          "path": "tests/media-availability.test.mjs",
+          "sha256": "db075fbddee870e9a4e29cc7f33f98c40bcdf8ad67d0e856fd4dad4c150a2d59"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S22",
+      "evidenceScope": "received_contract_safety_or_information_lifecycle_regressions_present",
+      "references": [
+        {
+          "path": "tests/extraction.test.mjs",
+          "sha256": "3d8ab24704368e2ed685794a2595b88d15f1bbcb235c71317ca7d1a9b994654a"
+        },
+        {
+          "path": "tests/intake-moderation.test.mjs",
+          "sha256": "d9e590a43e9678f27ba3b4ef956447c2f67f8efd8898926b0c54880c1e7e3492"
+        },
+        {
+          "path": "tests/investigation-safety.test.mjs",
+          "sha256": "2fbd7789f64711c16c490e66f859e03ae2f2c50cf1d3364aa00ad040b0327188"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    },
+    {
+      "id": "S23",
+      "evidenceScope": "related_component_or_partial_physical_regression_not_full_scenario_outcome",
+      "references": [
+        {
+          "path": "tests/received-allocation.test.mjs",
+          "sha256": "71f94da357a3553ef3c0f54ce4ca4a943e0492a8dc4d9d355bca174014ecd7ba"
+        },
+        {
+          "path": "tests/discovery-general-reference.test.mjs",
+          "sha256": "29dc6b1ef4b932d1b73874c789af8b3e5ebb2c29953fe5415f5e67ad0d595e75"
+        },
+        {
+          "path": "tests/response-comparison.test.mjs",
+          "sha256": "2ca46fc89c27682b1f47d1fb444f12c1b134fb31c907191b4e686c21f4da96a7"
+        }
+      ],
+      "currentExactGate": "pending_parent_full_candidate_gate",
+      "comparativeGain": "not_established_by_reference_existence",
+      "requiresFreshScenarioOutcome": true
+    }
+  ],
+  "currentSimulatorSourceGate": {
+    "pass": 228,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "checkModules": 101,
+    "inputs": 26,
+    "actions": 24,
+    "presets": 360,
+    "engineBuild": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
+    "log": "../disaster-response-simulator/.local/s07-s14-atomicity-full.log",
+    "scope": "isolated source full suite only",
+    "platformCandidateGate": "pending_parent_current_full_gate",
+    "headlessBenchmark": "pending_parent_GO_after_current_full_gate_UI"
+  },
+  "historicalInvalidGates": [
+    {
+      "id": "1791850761716",
+      "simulator": {
+        "pass": 204,
+        "total": 211
+      },
+      "reason": "source_changed_during_run",
+      "validComparison": false,
+      "note": "Preserved; not amended to borrow passing counts from the later source."
+    },
+    {
+      "id": "73343",
+      "simulator": {
+        "pass": 218,
+        "total": 218
+      },
+      "platform": {
+        "pass": 410,
+        "total": 418
+      },
+      "reason": "platform_failures_before_S07_S14_iteration",
+      "validComparison": false,
+      "note": "Retained as failed old candidate gate. New passing simulator tests cannot amend or seal that old platform gate."
+    }
+  ],
+  "sourceClosureLimits": [
+    "No code/engine/evaluator/tests changed by this report helper.",
+    "All scenario worlds executing without invariants is not a platform strategy passing every favorable/adverse/infeasible outcome.",
+    "S01/S02/S09/S12/S19/S20 have bounded actual source receipt fixtures; other related references may be partial/component/contract safety tests. Fullgate must validate those tests on current bytes.",
+    "G07 remains open for outcome-to-requirement traceability outside these bounded fixtures, and does not become a new mechanism defect merely because a test uses a different scenario label.",
+    "No saved lives, real mortality, empirical humans, Gemini, GCP, top-1 guarantee or incremental model benefit inferred.",
+    "Source-only S07/S14 implementation no longer lacks a physical mechanism. Its final228 gate does not establish current platform/UI completion or temporal/model advantage. Initial S07 contact components and crew condition edits are explicit fixtures, not empirical disaster calibration."
+  ],
+  "readonlyPotentialMechanismGaps": [
+    {
+      "ids": [
+        "S07",
+        "O21",
+        "T23",
+        "K08"
+      ],
+      "state": "parent_review_required_scope_literal_gap",
+      "references": [
+        "src/case-context.mjs:340",
+        "src/services.mjs assessmentPlan",
+        "src/contracts.mjs verify",
+        "../disaster-response-simulator/engine/operations.mjs coverage"
+      ],
+      "minimalFlow": "Received directory and timestamped contact/observation history -> unverified coverage gap -> bounded owner-approved field observation with finite staff/vehicle/permission -> authentic received inspection reveals or rules out a need -> ordinary allocation/receipt.",
+      "assertions": [
+        "No hidden need IDs or private silent labels choose targets.",
+        "No gap alone confirms a need.",
+        "Crew travels, waits for source connectivity and cannot be simultaneously allocated to cargo.",
+        "Positive silent community, negative no-need target, and blocked/inaccessible target remain distinguishable."
+      ],
+      "sourceEditsMade": true,
+      "historicalFinding": "Existing coverage counters describe omitted context or last contact, not an actor-visible geographical gap policy leading to a bounded independently approved field observation of a residential community without any initial signal.",
+      "currentStatus": "source_mechanism_implemented_exact_contact_scope",
+      "parentCurrentFullGate": "pending",
+      "currentMechanism": "Received static directory, exact per-building contacts from delivered observations only, bounded owner-reviewed finite field inquiry, and ordinary received need progression. Source mechanism and platform physical/UI fixtures now passed against2825 source."
+    },
+    {
+      "ids": [
+        "S14",
+        "I15",
+        "O13"
+      ],
+      "state": "parent_review_required_scope_literal_gap",
+      "references": [
+        "../disaster-response-simulator/engine/operations.mjs unload",
+        "../disaster-response-simulator/scenarios/catalog.mjs S14",
+        "src/services.mjs servicePlan"
+      ],
+      "minimalFlow": "Optional owner-received unloading crew requirement defaults0 -> loaded truck arrives but received0 when local crew absent -> independently approved real staff transport -> finite work/shift -> same cargo received exactly once and useful service.",
+      "assertions": [
+        "Arrival ACK never equals goods received.",
+        "No second water dispatch to complete the old cargo.",
+        "Foreign or unqualified/offshift staff does not satisfy declared requirement.",
+        "Receipt under outage and crew removed during work preserve pending cargo and sunk costs."
+      ],
+      "sourceEditsMade": true,
+      "historicalFinding": "Unload currently blocks damage>=3. S14 substitutes damaged access for the literal missing unloading team. Facility activation/setup has staff dependencies but ordinary physical unloading does not.",
+      "currentStatus": "source_mechanism_implemented_same_original_cargo_owner_review",
+      "parentCurrentFullGate": "pending",
+      "currentMechanism": "Optional declared local crew requirement; original cargo waits withreceived0, exact receiver-approved owned qualified onsite staff reserved, real command/bays/work/turns and same aid operation receipt. Competent conventional recovery rule uses one independently reviewed additional own shipment and actual return, without stock or transport reset."
+    }
+  ],
+  "auditRefreshedAt": "2026-10-13T01:26:24.227Z"
+}

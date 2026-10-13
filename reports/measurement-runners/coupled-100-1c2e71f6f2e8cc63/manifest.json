@@ -1,0 +1,27 @@
+{
+  "artifact": "Prepared coupled100 runner; no results and no provider calls",
+  "state": "prepared_not_launched",
+  "modelCalls": 0,
+  "runnerSha256": "1c2e71f6f2e8cc631a3cc7eb2f68a837f9f8bb3c2390b8e748022c61499f1af7",
+  "planSha256": "4c28b49e662536e95413df421c6eebc1fc25cf87faa464c9b447c60fdccdbb53",
+  "files": [
+    {
+      "name": "combined-100-controlled.mjs",
+      "sha256": "1c2e71f6f2e8cc631a3cc7eb2f68a837f9f8bb3c2390b8e748022c61499f1af7",
+      "bytes": 17262
+    },
+    {
+      "name": "combined-100-controlled.test.mjs",
+      "sha256": "22a6307212ef9f70e759a8e4c36680ca8d4a825cf9d768b699224495d004bcb6",
+      "bytes": 6342
+    },
+    {
+      "name": "combined-100-guide.md",
+      "sha256": "75d9314d118f3845f2e467188e05dd2fb902566a892184700fcbdc1ad274f5dd",
+      "bytes": 3938
+    }
+  ],
+  "command": "node --test .local/combined-100-controlled.test.mjs",
+  "verifiedTests": 6,
+  "scope": "Pure gate, cost/unknown and native-outcome tests only. No campaign quality or performance measured."
+}

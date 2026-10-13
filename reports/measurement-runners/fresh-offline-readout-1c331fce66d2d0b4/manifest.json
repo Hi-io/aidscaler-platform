@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-13T03:03:57.198Z",
+  "artifact": "offline evidence reader; no model or evaluator/controller import",
+  "modelCalls": 0,
+  "sourceTreesMutated": false,
+  "tests": {
+    "command": "node --test .local/read-fresh-evidence.test.mjs",
+    "passed": 19,
+    "failed": 0
+  },
+  "amendment": "Closed physical fallback outcomes retain operational errors in paired comparisons. Missing outcomes, changed builds and broken invariants remain blocked. No favorable selection of successful model worlds.",
+  "resultsScope": "Reader tests only. Previously generated analyses and raw campaigns remain preserved; no candidate campaign performance is claimed by this archive.",
+  "files": [
+    {
+      "name": "read-fresh-evidence.mjs",
+      "sha256": "1c331fce66d2d0b42206c757b496c5fa4cd6c2b6596aec83fe5b5789bc1a3c44",
+      "bytes": 49511
+    },
+    {
+      "name": "read-fresh-evidence.test.mjs",
+      "sha256": "3992c4ee862651f861f18ca280f5a8c3696b9fa1809603e437c5b775547e267f",
+      "bytes": 27287
+    },
+    {
+      "name": "fresh-evidence-readout-guide.md",
+      "sha256": "e564dbd1ab22cb0729566f2ae57b868c748fb8075267bbcfe5ce7e041e97e611",
+      "bytes": 7419
+    },
+    {
+      "name": "final-evidence-document-template.md",
+      "sha256": "5d1ded1b7430d7270df78b35c52a21b83715ca15fb740a8f466c5e37fe9c079d",
+      "bytes": 6442
+    }
+  ]
+}
