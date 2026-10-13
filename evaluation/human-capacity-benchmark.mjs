@@ -16,7 +16,8 @@ import { collectProposalServiceFunnel } from './proposal-funnel.mjs';
 import { capturePhysicalDepartures, operationTrace } from './physical-trace.mjs';
 
 export const HUMAN_CAPACITY_PROTOCOL = {
-  version: 'native-human-capacity-physical-response-v3',
+  version: 'native-human-capacity-physical-response-v4',
+  identityAmendment: 'Opaque bounded internal episode IDs hash full arm/profile/condition/seed/run nonce; full readable identity remains in results. This only fixes derived command-key overflow. Command/model-scope references change, so traces are not asserted bit-identical; source seed, exogenous corpus, parameters, permissions, physics, prompts and budgets are unchanged.',
   hypothesis: 'Automation may reduce source-reading and manual coordination backlog and hence physical service time; strong automated conventional references may tie or win.',
   scope: 'Separate internal scenario family with explicit hypothetical human-capacity parameters. It does not replace prior B5/B8 comparisons or claim empirically calibrated human productivity/errors.',
   arms: {
@@ -51,6 +52,11 @@ export const HUMAN_CAPACITY_PROTOCOL = {
 };
 
 const finite = x => typeof x === 'number' && Number.isFinite(x);
+export function nativeHumanEpisodeIdentity({ arm, profile, condition = profile, seed }, nonce) {
+  const fields = { arm, profile, condition, seed, nonce };
+  return { ...fields, id: 'human-capacity-' + hash(fields),
+    readableLabel: `human-capacity-${condition}-${arm}-${seed}-${nonce}` };
+}
 const sealedHash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 export const sourceVersionKey = s => `${s.id}:${s.sourceVersion ?? s.version ?? 1}`;
 
@@ -179,7 +185,8 @@ export async function runHumanCapacityEpisode({
   candidateFingerprint ??= await buildFingerprint();
   evaluatorBuild ??= await humanCapacityEvaluatorFingerprint();
   await requireLoadedSimulatorBuild();
-  const episode = `human-capacity-${condition}-${arm}-${seed}-${Date.now()}`;
+  const episodeIdentity = nativeHumanEpisodeIdentity({ arm, profile, condition, seed }, Date.now());
+  const episode = episodeIdentity.id;
   const started = performance.now();
   const h = await createHarness({ scenario: 'S23', seed, organizations: 4,
     config: { grid, extentKm, durationMs: horizonMs, healthReports: false, recurringNeeds: false,
@@ -530,7 +537,7 @@ export async function runHumanCapacityEpisode({
   const final = await checkFinalBuilds({ candidate: candidateFingerprint, evaluator: evaluatorBuild, simulator: w.manifest.engineBuild },
     { candidate: buildFingerprint, evaluator: humanCapacityEvaluatorFingerprint });
   if (final.invalidStatus) status = final.invalidStatus;
-  const result = finalizedResult = { arm, profile, condition, seed, candidateFingerprint, evaluatorFingerprint: evaluatorBuild,
+  const result = finalizedResult = { arm, profile, condition, seed, episodeIdentity, candidateFingerprint, evaluatorFingerprint: evaluatorBuild,
     baseEvaluatorFingerprint: await evaluatorFingerprint(), ...finalizeEpisodeIntegrity({status,errors},final),
     protocol: { ...HUMAN_CAPACITY_PROTOCOL, count, noise, reposts, formalDelayMs, horizonMs, grid, extentKm,
       pumpMs, clarificationWorkers, humanCapacityOverrides, condition, budgetUsd, maxModelCalls, wallLimitMs },

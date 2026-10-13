@@ -1,13 +1,62 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { completedHumanReceipt, sourceFromHumanResult, manualSourceOwner, materialDemandKey, planningMaterialSignature, receivedHumanWakeAt, receivedManualPeerOperation, nativeHumanWorkParams, actionableManualLead, relevantManualHandoffs, finalizeEpisodeIntegrity,
-  reconcileUsage, nativeServiceSummary, summarizeHumanCapacity } from '../evaluation/human-capacity-benchmark.mjs';
+  reconcileUsage, nativeServiceSummary, summarizeHumanCapacity, nativeHumanEpisodeIdentity, runHumanCapacityEpisode, HUMAN_CAPACITY_PROTOCOL } from '../evaluation/human-capacity-benchmark.mjs';
 import { campaignPlan, validateHumanCampaignGate } from '../scripts/human-capacity-campaign.mjs';
 import { validateParameters } from '../../disaster-response-simulator/contracts/parameters.mjs';
+import { Store } from '../src/store.mjs';
+import { Domain } from '../src/domain.mjs';
+import { draftReceivedResponse } from '../src/discovery-response.mjs';
 
 const ref={kind:'post',id:'public-current',version:2};
 const receipt={id:'human-read-1',org:'org1',stage:'read',state:'completed',createdAt:1000,startedAt:2000,completedAt:32000,
   result:{source:ref,snapshot:{id:'public-current',version:2,text:'We still need drinking water at public-building.'},sourceObservedAt:0}};
+
+test('v4 opaque episode IDs preserve full identity and separate parent/seed/nonce in every arm',()=>{
+  assert.equal(HUMAN_CAPACITY_PROTOCOL.version,'native-human-capacity-physical-response-v4');
+  const fields={arm:'C_decentralized',profile:'moderate',condition:'moderate_error_1pct',seed:'full-seed-'.repeat(20).slice(0,128)};
+  const a=nativeHumanEpisodeIdentity(fields,1791873350000);
+  assert.equal(a.id.length,79);assert(a.readableLabel.length>180);assert.equal(a.seed,fields.seed);
+  assert.equal(a.arm,fields.arm);assert.equal(a.profile,fields.profile);assert.equal(a.condition,fields.condition);
+  assert.equal(nativeHumanEpisodeIdentity(fields,1791873350000).id,a.id);
+  assert.notEqual(nativeHumanEpisodeIdentity({...fields,seed:fields.seed.slice(0,-1)+'y'},1791873350000).id,a.id);
+  assert.notEqual(nativeHumanEpisodeIdentity(fields,1791873350001).id,a.id);
+  const ids=Object.keys(HUMAN_CAPACITY_PROTOCOL.arms).map(arm=>nativeHumanEpisodeIdentity({...fields,arm},1791873350000).id);
+  assert.equal(new Set(ids).size,ids.length);assert(ids.every(id=>id.length===79));
+});
+
+test('long decentralized identity compiles through real Store and repeats without duplicate draft or authority',async(t)=>{
+  const store=await Store.open();t.after(()=>store.close());await store.organization('org0');
+  await store.put('org0','need','need-water',{type:'water',unit:'L',quantity:40,served:0,deadline:3600000},0);
+  await store.put('org0','resource','water',{owner:'org0',type:'water',unit:'L',quantity:80,reserved:0,floor:20},0);
+  await store.put('org0','vehicle','truck',{owner:'org0',state:'idle',capacity:100,driverAvailable:true},0);
+  const config={org:'org0',peers:[]},app={store,config,domain:new Domain(store,config)};
+  const identity=nativeHumanEpisodeIdentity({arm:'C_decentralized',profile:'moderate',condition:'moderate_error_1pct',seed:'long-full-seed-'.repeat(20).slice(0,128)},1791873350000);
+  const parent=identity.id+'-org0-turn-1000000',captured=[],command=store.command.bind(store);
+  store.command=(org,key,payload,fn)=>{captured.push({org,key,payload});return command(org,key,payload,fn);};
+  const first=await draftReceivedResponse(app,parent);assert.equal(first.state,'ready');
+  const proposal=await store.get('org0','proposal',first.proposalId);
+  assert.equal(proposal.state,'awaiting_review');assert.equal(proposal.actions[0].params.quantity,40);
+  assert(captured[0].key.length<=180);assert.equal((await store.list('org0','operation')).length,0);
+  const again=await draftReceivedResponse(app,parent);assert.equal(again.allocations,0);
+  assert.equal((await store.list('org0','proposal')).length,1);
+  const {org,key,payload}=captured[0];
+  const replay=await command(org,key,payload,()=>{throw Error('REPLAY_MUST_NOT_MUTATE');});assert.equal(replay.id,first.proposalId);
+  assert.equal((await store.list('org0','proposal')).length,1);
+  await command('org0','x'.repeat(180),{boundary:true},async()=>({accepted:true}));
+  await assert.rejects(()=>command('org0','x'.repeat(181),{boundary:true},async()=>({accepted:true})),e=>e.code==='IDEMPOTENCY');
+});
+
+test('free bounded episode result retains actual full seed/readable label and common physical parameters',async()=>{
+  const seed='native-metadata-full-seed-'.repeat(6).slice(0,128);
+  const r=await runHumanCapacityEpisode({arm:'B5',profile:'moderate',condition:'moderate',seed,count:1,noise:0,reposts:0,
+    formalDelayMs:0,horizonMs:180000,grid:5,pumpMs:15000,maxModelCalls:1,wallLimitMs:120000});
+  assert.equal(r.status,'completed');assert.equal(r.seed,seed);assert.equal(r.episodeIdentity.seed,seed);
+  assert.equal(r.episodeIdentity.id.length,79);assert(r.episodeIdentity.readableLabel.includes(seed));
+  assert.equal(r.protocol.version,'native-human-capacity-physical-response-v4');
+  assert.equal(r.protocol.count,1);assert.equal(r.protocol.noise,0);assert.equal(r.protocol.horizonMs,180000);
+  assert.equal(r.modelCalls,0);assert.equal(r.costUsd,0);assert.deepEqual(r.errors,[]);assert.deepEqual(r.invariants,[]);
+});
 
 test('native read and decide omit transport-only fields while relay retains real network parameters',()=>{
   for(const stage of ['read','decide']){
