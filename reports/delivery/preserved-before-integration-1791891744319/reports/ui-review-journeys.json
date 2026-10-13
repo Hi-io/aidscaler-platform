@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-13T02:04:02.500Z",
+  "checks": [
+    "Anonymous image submission without written narrative stays private and creates no model work",
+    "Human moderation with exact version stages source evidence without confirming physical demand",
+    "Source dossier → corrected interpretation → reversible evidence grouping with retained history",
+    "Private photo → reviewed actual PNG rendition → approved public receipt update; only derived image URL",
+    "Corrected public update atomically replaces previous version; withdrawal retains notice and hides photo",
+    "Versioned organization setup resumes after reload; finite model limits persist and remain inside server maxima"
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "mediaRuntime": {
+    "python": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.candidate-development\\nexo-platform\\.local\\asr-venv\\Scripts\\python.exe",
+    "decoder": "actual local Pillow; no decoder stub"
+  },
+  "scope": "Automated UI workflows; publication receipt explicitly injected as a synthetic UI fixture, not physical-delivery evidence; no human comprehension study"
+}

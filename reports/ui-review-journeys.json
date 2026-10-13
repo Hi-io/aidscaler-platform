@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-13T02:04:02.500Z",
+  "at": "2026-10-13T07:20:32.121Z",
   "checks": [
     "Anonymous image submission without written narrative stays private and creates no model work",
     "Human moderation with exact version stages source evidence without confirming physical demand",
@@ -11,7 +11,7 @@
   "errors": [],
   "failedRequests": [],
   "mediaRuntime": {
-    "python": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.candidate-development\\nexo-platform\\.local\\asr-venv\\Scripts\\python.exe",
+    "python": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\asr-venv\\Scripts\\python.exe",
     "decoder": "actual local Pillow; no decoder stub"
   },
   "scope": "Automated UI workflows; publication receipt explicitly injected as a synthetic UI fixture, not physical-delivery evidence; no human comprehension study"

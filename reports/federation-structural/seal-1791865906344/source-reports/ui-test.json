@@ -1,0 +1,350 @@
+{
+  "at": "2026-10-13T04:30:20.949Z",
+  "browser": "Chromium",
+  "checks": [
+    {
+      "page": "overview",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "map",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "signals",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "investigations",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "review",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "operations",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "resources",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "network",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "publications",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "finance",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "field",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "coordination",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "settings",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "audit",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "media",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "connections",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "moderation",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "public",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "community",
+      "width": 1440,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "overview",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "map",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "signals",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "investigations",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "review",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "operations",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "resources",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "network",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "publications",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "finance",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "field",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "coordination",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "settings",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "audit",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "media",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "connections",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "moderation",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "public",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "community",
+      "width": 1920,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "overview",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "map",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "signals",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "investigations",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "review",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "operations",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "resources",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "network",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "publications",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "finance",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "field",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "coordination",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "settings",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "audit",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "media",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "connections",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "moderation",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "public",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    },
+    {
+      "page": "community",
+      "width": 390,
+      "loaded": true,
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "note": "Automated rendering/navigation at 1440, 1920 and 390 px with reduced motion. Not human comprehension evidence or a full accessibility certification."
+}

@@ -1,85 +1,66 @@
 # NEXO · Disaster-response operations platform
 
-Local operations software for NGOs, emergency teams and public response organizations. Public signals and scoped operational systems feed a model-assisted investigation. Humans authorize consequential actions; transactional and physical validators remain outside the model.
+NEXO helps NGOs, emergency services and public response teams turn scattered reports into coordinated help. It combines public signals with each team's operational tools, investigates what needs checking and prepares feasible actions for human approval. Organizations can share capacity while retaining control of their resources and decisions.
 
-The current model adapter uses **Gemma 4 31B through OpenRouter**, not Gemini. A model's performance is not transferable by assumption. Google Cloud deployment is deliberately excluded from this implementation phase.
+The local platform uses **Gemma 4 31B through OpenRouter**. The latest matched simulation brought sufficient physical aid **20.59% sooner**:
 
-The current twelve-world finite-human comparison measured **18.02% faster sufficient physical aid than its declared manual workflow** (41.85 → 34.31 minutes). Strong deterministic B5 was faster than NEXO; B8 results were mixed, and blankets/fuel regressed. These are synthetic, assumption-bound results. See [all outcomes, attribution and limitations](docs/RESULTADOS_CAPACIDAD_HUMANA.md); capacity and burst controls remain in progress.
+| Conventional coordination | NEXO + Gemma 4 |
+|---:|---:|
+| 44.279 minutes to sufficient aid | 35.162 minutes to sufficient aid |
+| 24/24 needs served | 24/24 needs served |
+| 38.880 L of fuel | 37.665 L of fuel |
+
+Both methods had the same seed, resources, physical constraints and owner approvals. Six real model calls cost **USD 0.00613892**. Blankets took longer despite the improvement overall. [Current comparison and every resource](reports/analysis/final-two-response-closed-20261013/readout.md); [earlier three-seed result and assumptions](docs/RESULTADOS_CAPACIDAD_HUMANA.md).
+
+Reading, decision and communication times are simulation assumptions. The current result is one paired seed; the earlier three-seed result of 18.02% remains separate. Gemini, emergency field operations and Google Cloud deployment require their own validation.
 
 ## Run locally
 
-Requires Node.js 24+ and pnpm. Clone this private repository and the private `disaster-response-simulator` repository into sibling directories, then:
+Requires Node.js 24+ and pnpm. Clone this private repository and the private disaster-response-simulator repository into sibling directories, then:
 
-```powershell
+~~~powershell
 pnpm install
 if (!(Test-Path -LiteralPath '.env.local')) {
   Copy-Item -LiteralPath '.env.example' -Destination '.env.local'
 }
 # Set OPENROUTER_API_KEY in the ignored local file.
 pnpm lab
-```
+~~~
 
-Four NEXO processes, each with its own persistent embedded PostgreSQL database, run at `http://127.0.0.1:4400`–`4403`. A fifth independent contractor at `4404` has its own database and authority, without a NEXO model. The 3D laboratory observer runs at `http://127.0.0.1:4328`; its source gateway runs at `4329`. Existing simulator ports `4318`/`4319` are left alone.
+The first operational workspace is at [localhost:4400](http://127.0.0.1:4400); the other organizations use ports 4401–4403, each with its own persistent database. The independent contractor workspace is at port 4404; the 3D observer is at 4328 and its source gateway at 4329. Generated local passwords are saved in ignored .local/access-org*.json files. The platform binds to localhost, and credentials are excluded from Git.
 
-Role accounts and generated local passwords are saved in ignored `.local/access-org*.json`. No account, model key, simulator key or observer credential is committed. The platform is bound to localhost.
+Each restart retains earlier session databases. A reset creates a fresh operational session instead of reusing stale commitments. [LOCAL.md](docs/LOCAL.md) explains accounts, budgets, field reports, publication and recovery.
 
-Each laboratory restart creates a new private session directory, retaining earlier databases. Resetting the physical world never silently reuses stale operations from an old run. See [LOCAL.md](docs/LOCAL.md) for roles, budgets, offline operation, moderation, publication and backup/restore.
+## What you can do
 
-Investigations receive a focused, sourced preview and can retrieve omitted records with scoped tools. Custom action contracts load only when needed. Reasoning is enabled for supported models with an initial 8,192-token output allowance; private reasoning is never displayed or stored. Provider routing seeks low latency under an explicit tariff ceiling. See [model context and spending](docs/CONTEXTO_MODELO.md).
+- Collect public reports, inspect their sources and follow a sourced investigation.
+- Review proposed actions against available stock, qualified staff, vehicle capacity, routes, deadlines and protected reserves.
+- Coordinate independently approved contributions from partner organizations, with signed messages, reservations and delivery receipts.
+- Track physical delivery, facility readiness and evacuation separately from approval or dispatch.
+- Receive offline field reports and reviewed media, then publish approved progress through the public portal.
+- Manage pooled funds and local sandbox payments, with traceable allocations and purchase receipts.
 
-For one standalone instance, provision its scoped source configuration in `.local/bootstrap.json`, then run `pnpm start`. Use `DATABASE_URL` for a server PostgreSQL database. Without it, the local prototype uses filesystem-persistent embedded PostgreSQL (PGlite); its exclusive connection is not evidence of multi-host database throughput.
+Model activity shows real tool requests, returned evidence and short explanations. It does not display fabricated private reasoning. Investigations receive focused context and retrieve further records through scoped tools. [CONTEXTO_MODELO.md](docs/CONTEXTO_MODELO.md) explains context and spending.
 
-## Workspaces
+The simulator's **Human attention profile** selector exposes zero, moderate and burst presets; Advanced JSON controls timings and finite staff pools. Its scripted policy menu remains separate from a real manual controller or the Gemma integration. The measured manual workflow uses native read → decide → relay tasks and actual communication receipts, with finite owner reviews for both methods.
 
-The public-source response pipeline interprets bounded received batches, requests field confirmations and compiles checked quantities for independent owner review. Structured demand uses the same deterministic allocator without an unnecessary model call. See [response diagnosis and measured comparisons](docs/MEJORA_RESPUESTA.md) and [local operation](docs/LOCAL.md#descubrir-una-respuesta-desde-publicaciones-recibidas).
+## Verification and evidence
 
-- Response overview, collected signals, sourced investigations and a human decision queue.
-- Operational stages, inventory, vehicles, assessed facilities, reservations, deadlines and protected reserves.
-- Signed partner messages, explicit sharing, version handling, revocation and independent owner decisions.
-- Compiled allocations from owned and current consented partner capacities, with exact offer references, revalidation and independent owner review.
-- Approved public response updates, pooled-fund accounting and a local payment-provider sandbox.
-- Field reporting with a durable device queue, community intake, scoped accounts and decision history.
-- Reviewed photo/audio uploads, reversible evidence groups, sourced human corrections, public photo derivation and traceable publication corrections/retractions.
-- Original-byte integrity checks, sampled video frames, local speech transcription and bounded scanned-PDF visual transcription with page provenance and unresolved-page markers.
-- Resumable organization setup, persistent processing limits, scoped account revocation, private exports and consistent local recovery bundles.
-- Model activity displays real tool requests, returned results and short rationales. It does not display fabricated private chain-of-thought.
-
-## Verification
-
-```powershell
+~~~powershell
 pnpm check
 pnpm test
 node scripts/verify.mjs
+# Real provider and browser checks have separate receipts:
 pnpm test:live
-pnpm demo
-# With pnpm lab running:
 pnpm test:ui
-```
+~~~
 
-Tests exercise authorization, CSRF, ownership, version conflicts, idempotency, reserve floors, concurrent allocations, dependency invalidation, restart recovery, signed network messages, payment webhooks and desktop/mobile navigation. Real provider smoke tests and investigation episodes write receipts to `reports/`. Failed or inconclusive investigations do not count as delivered aid.
+The unchanged platform candidate 9b4de8b… has a previously sealed [486-check core verification](reports/verifications/1791875155549.json). After the latest simulator and viewer updates, **249 simulator checks**, [31 affected integration checks](reports/verifications/affected-facility-integration-20261013.json) and [7 focused browser checks](reports/human-profile-ui/1791891190000/result.json) passed. The earlier [113 browser checks](reports/ui-verifications/1791876005595.json) remain evidence of their recorded version. These receipts verify behavior; performance comes from separate physical comparisons.
 
-The native human-capacity laboratory adds finite reading, decision and communication pools inside the physical simulator. Information is usable only after its actor's work and actual channel delivery; reviews remain finite for every arm. `C_manual` is a competent manual coordination workflow, while `B5` and `B8` retain useful deterministic automation. The observer's older `conventional` automatic policy is an algorithmic reference, not a measurement of this manual workflow. See [the human-capacity protocol](docs/EVALUACION_CAPACIDAD_HUMANA.md) for rates, paired scenarios, strong controls and what simulated effort can establish.
+The full design is in [PLATAFORMA.md](docs/PLATAFORMA.md). [Implementation coverage](docs/ESTADO_IMPLEMENTACION.md), [measured results](docs/RESULTADOS_CAPACIDAD_HUMANA.md) and [external validation](docs/VALIDACION_EXTERNA.md) distinguish implemented mechanisms, measured simulation outcomes and evidence still needed in the field. Earlier receipts remain versioned in reports/ and Git history.
 
-This source version has [483 platform and 247 simulator checks](reports/verifications/1791865074195.json) and [113 browser checks](reports/ui-verifications/1791865813182.json). Performance comparisons have separate source-bound reports; passing these checks does not establish that the model is faster than the strongest reference.
+The [Google Cloud architecture](docs/ARQUITECTURA_GCP.md) is a migration plan. This phase runs locally and does not deploy cloud services.
 
-`pnpm demo` uses the real provider and the actor-visible HTTP gateway. A scripted evaluation operator models approval; this is not a human comprehension trial. Its accelerated modeled clock and actual provider wall latency are reported separately. Production observations, clinical calibration, organizational adoption and statistically supported performance improvements remain separate evidence requirements.
+## Repeat the response comparison
 
-To investigate a received shelter need without supplying the facility or solution:
-
-```powershell
-node --env-file-if-exists=.env.local scripts/service-demo.mjs --from-need
-```
-
-Comparative pilots save a protocol before execution and retain failed/incomplete outcomes. All arms keep the same per-episode cap; later evaluations use a shared inference pool across owners rather than starving a coordinator with fixed quarters. Both shared arms assign one research coordinator to their shared incident while partners independently authorize and execute their contributions. This is an explicit deployment policy, not distributed leader election. A network benefit is not automatically a GenAI benefit. Summaries distinguish NEXO versus the same-model general investigator and network NEXO versus conventional shared planning.
-
-## Specification and delivery evidence
-
-The full product contract is [PLATAFORMA.md](docs/PLATAFORMA.md). [Implementation coverage](docs/ESTADO_IMPLEMENTACION.md), [measured results](docs/VALIDACION.md), [local operation](docs/LOCAL.md) and [external validation](docs/VALIDACION_EXTERNA.md) distinguish working mechanisms from unproven hypotheses. Simulator requirements and the dated original audit remain in `docs/`. A passing test does not imply the full specification has been demonstrated.
-
-Google Cloud architecture is retained in [ARQUITECTURA_GCP.md](docs/ARQUITECTURA_GCP.md) for a later migration. No cloud service is deployed by this repository at this stage.
-
-The current frozen-source verification passes **215 platform tests and 154 simulator tests**, with unchanged candidate, evaluator and simulator fingerprints. **84 browser checks** cover desktop/mobile navigation, operator journeys, independent reviews and the public-response pipeline. See [complete requirement coverage](docs/COBERTURA_REQUISITOS.md), [the verification receipt](reports/verifications/1791837370142.json) and [the committed-source seal](reports/frozen-candidate-final.json).
-
-The earlier four-process transport probe persisted all **4,000 expected publication/organization versions**, including late uploads, at **3.33 seconds p95 from source availability**; polling and model inference are excluded. That historical transport measurement is not a physical-response or model-throughput result for the new candidate. Physical service, original-cargo repair, semantic interpretation and role-based UI have separate evidence.
-
-The earlier 36-outcome comparative pilot **does not establish a robust advantage over conventional shared planning or the same-model general investigator**. Negative results, provider failures, backlogs, historical builds and evaluator corrections are retained. The new received-source and delegated-assessment comparisons have their own predeclared protocol and source fingerprints; current results are tracked in [response improvement](docs/MEJORA_RESPUESTA.md). Independent calibration, human trials and Gemini remeasurement remain separate requirements.
+`node --env-file-if-exists=.env.local scripts/compare-response.mjs` displays the fixed protocol without making calls. Add `--run=ROOT_GO_FINAL_TWO_RESPONSE` to run the paired local experiment with the configured Gemma key. Results, physical receipts, failed cases and costs are saved under `reports/final-two-response/`; the maximum declared model exposure is USD 0.15.

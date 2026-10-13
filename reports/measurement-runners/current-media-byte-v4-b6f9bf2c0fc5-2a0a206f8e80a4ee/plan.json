@@ -1,0 +1,52 @@
+{
+  "version": "current-media-byte-controlled-v4-evaluator-rebind",
+  "authorization": "ROOT_GO_MEDIA_BYTES",
+  "source": {
+    "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluatorFingerprint": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "simulatorBuild": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "amendment": "Evaluator-only v4 rebind. Prior prepared v1 archive retained; identical original source script, four byte hashes, model/call/cost caps and stop semantics. No fixture or outcome selection.",
+  "childScript": "scripts/media-smoke.mjs",
+  "fixtures": [
+    {
+      "filename": "return-note.wav",
+      "sha256": "dec1ae591024ceb86a788912cc84f4759f6c6a3a2d856eff5d3e564c51c161cf",
+      "bytes": 433890
+    },
+    {
+      "filename": "water-storage.png",
+      "sha256": "8d7ee271de1752a535e7ddba2dd37f2c1ff9c3c602d4a1947832e8449f52fb78",
+      "bytes": 6311
+    },
+    {
+      "filename": "access.mp4",
+      "sha256": "6844ea3490d3e16c7c728c614f898f43b6a3f7752ff2fb932295de3dda4b47da",
+      "bytes": 28079
+    },
+    {
+      "filename": "field-note.pdf",
+      "sha256": "7c35f1dd57e85c4243bb1c35f7c023f67e699f5509fdd47c5e3bbc9589fe8a14",
+      "bytes": 12063
+    }
+  ],
+  "predeclaredFixtureSha256": {
+    "return-note.wav": "dec1ae591024ceb86a788912cc84f4759f6c6a3a2d856eff5d3e564c51c161cf",
+    "water-storage.png": "8d7ee271de1752a535e7ddba2dd37f2c1ff9c3c602d4a1947832e8449f52fb78",
+    "access.mp4": "6844ea3490d3e16c7c728c614f898f43b6a3f7752ff2fb932295de3dda4b47da",
+    "field-note.pdf": "7c35f1dd57e85c4243bb1c35f7c023f67e699f5509fdd47c5e3bbc9589fe8a14"
+  },
+  "maxCalls": 6,
+  "budgetUsd": 0.25,
+  "expectedModel": "google/gemma-4-31b-it",
+  "sharedLock": ".local/PAID_RESEARCH_STUDY.lock",
+  "softStopAfterMs": 900000,
+  "scope": "Actual synthetic WAV/PNG/MP4/PDF bytes + private-by-default metadata-free public rendition fixture. Byte/decode/model-contract integration, not semantic accuracy, actual aid, public publishing or field effectiveness.",
+  "stopping": "The intact four-fixture child is one settled boundary. Stop/signal/soft deadline is recorded but never kills the child or a provider; native decoder/provider/call/budget bounds remain unchanged. A requested stop may still permit remaining bounded fixture calls before child settlement.",
+  "isolation": "Run the intact source script by absolute path from a new ignored task CWD with byte-identical fixture copies. Relative evidence/latest reports go there; no legacy result is overwritten. HOME/CODEX_HOME are not reassigned.",
+  "syntheticReceipt": "The child authors byte-smoke-receipt only for image transformation/publication guards. It is explicitly syntheticFixture and must never count as physical aid.",
+  "cost": "Full ledger retained. Null/missing/failed billing is unknown; full .25 cap exposure retained without counting known subtotal twice. Legacy totals kept separately, never null-to-zero.",
+  "gate": "Named ROOT_GO + fresh v4 unchanged three-hash/full-suite/seven-journey UI proof archived before spawn; actual test/check counts retained in raw freeze. Post-child source/fixture/script hashes checked.",
+  "childScriptSha256": "c649ee9fc58fff5940d37a89cc6b1950564adb1f9a01cfe4facdfd8862c2694e",
+  "freezeSha256": "4c94d17e373f60b16926b7d5be5c566bf22b448efb63129034b5ead10ebdc44b"
+}

@@ -1,9 +1,9 @@
 {
-  "at": "2026-10-13T02:04:44.588Z",
-  "candidate": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
-  "evaluator": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
-  "simulator": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e",
-  "folder": "reports/unloading-journey/1791857071446",
+  "at": "2026-10-13T07:21:13.449Z",
+  "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+  "evaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+  "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+  "folder": "reports/unloading-journey/1791876060256",
   "checks": [
     "Arrived cargo shows zero received before crew approval and finite work",
     "arrived at 1920px has no horizontal overflow",

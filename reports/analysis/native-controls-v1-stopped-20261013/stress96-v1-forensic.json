@@ -1,0 +1,247 @@
+{
+  "schema": "offline-native-human-capacity-evidence-v1",
+  "declaredRuns": 3,
+  "observedRawRuns": 0,
+  "completedRuns": 0,
+  "validRuns": 0,
+  "missingRuns": [
+    {
+      "arm": "C_manual",
+      "profile": "moderate",
+      "condition": "moderate_96",
+      "seed": "native-human-capacity-control-stress96-01",
+      "count": 96,
+      "noise": 768,
+      "maxModelCalls": 32,
+      "grid": 13,
+      "humanCapacityOverrides": {
+        "readers": 2,
+        "deciders": 2,
+        "relayers": 1,
+        "readErrorBp": 0,
+        "decisionErrorBp": 0,
+        "relayErrorBp": 0
+      },
+      "reason": "missing_closed_raw",
+      "reportedSummary": {},
+      "cost": {
+        "usageRecords": null,
+        "providerCalls": null,
+        "reportedProviderCalls": null,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": null,
+        "totalProviderCostUsd": null,
+        "totalCostKnown": false,
+        "unknownCostCalls": null,
+        "unknownCostReserveUsd": null,
+        "chargedBudgetUsd": null,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": null,
+        "providerWallTotalMs": null,
+        "providerWallMissingCalls": null,
+        "failedCalls": null,
+        "attempts": null,
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      }
+    },
+    {
+      "arm": "B8",
+      "profile": "moderate",
+      "condition": "moderate_96",
+      "seed": "native-human-capacity-control-stress96-01",
+      "count": 96,
+      "noise": 768,
+      "maxModelCalls": 32,
+      "grid": 13,
+      "humanCapacityOverrides": {
+        "readers": 2,
+        "deciders": 2,
+        "relayers": 1,
+        "readErrorBp": 0,
+        "decisionErrorBp": 0,
+        "relayErrorBp": 0
+      },
+      "reason": "missing_closed_raw",
+      "reportedSummary": {},
+      "cost": {
+        "usageRecords": null,
+        "providerCalls": null,
+        "reportedProviderCalls": null,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": null,
+        "totalProviderCostUsd": null,
+        "totalCostKnown": false,
+        "unknownCostCalls": null,
+        "unknownCostReserveUsd": null,
+        "chargedBudgetUsd": null,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": null,
+        "providerWallTotalMs": null,
+        "providerWallMissingCalls": null,
+        "failedCalls": null,
+        "attempts": null,
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      }
+    },
+    {
+      "arm": "B6",
+      "profile": "moderate",
+      "condition": "moderate_96",
+      "seed": "native-human-capacity-control-stress96-01",
+      "count": 96,
+      "noise": 768,
+      "maxModelCalls": 32,
+      "grid": 13,
+      "humanCapacityOverrides": {
+        "readers": 2,
+        "deciders": 2,
+        "relayers": 1,
+        "readErrorBp": 0,
+        "decisionErrorBp": 0,
+        "relayErrorBp": 0
+      },
+      "reason": "missing_closed_raw",
+      "reportedSummary": {},
+      "cost": {
+        "usageRecords": null,
+        "providerCalls": null,
+        "reportedProviderCalls": null,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": null,
+        "totalProviderCostUsd": null,
+        "totalCostKnown": false,
+        "unknownCostCalls": null,
+        "unknownCostReserveUsd": null,
+        "chargedBudgetUsd": 0.15,
+        "fullEpisodeCapExposureWhenMissingUsd": 0.15,
+        "providerWallKnownSubtotalMs": null,
+        "providerWallTotalMs": null,
+        "providerWallMissingCalls": null,
+        "failedCalls": null,
+        "attempts": null,
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      }
+    }
+  ],
+  "duplicateDeclarations": [],
+  "duplicateAttempts": [],
+  "unplannedRuns": [],
+  "rows": [],
+  "comparisons": [
+    {
+      "seed": "native-human-capacity-control-stress96-01",
+      "condition": "moderate_96",
+      "profile": "moderate",
+      "reference": "C_manual",
+      "candidate": "B6",
+      "comparable": false,
+      "reasons": [
+        "missing_pair"
+      ],
+      "firstUseful": {
+        "referenceRmstMs": null,
+        "candidateRmstMs": null,
+        "reductionFraction": null,
+        "referenceCoverage": null,
+        "candidateCoverage": null
+      },
+      "sufficient": {
+        "referenceRmstMs": null,
+        "candidateRmstMs": null,
+        "reductionFraction": null,
+        "referenceCoverage": null,
+        "candidateCoverage": null
+      },
+      "stages": null
+    },
+    {
+      "seed": "native-human-capacity-control-stress96-01",
+      "condition": "moderate_96",
+      "profile": "moderate",
+      "reference": "B8",
+      "candidate": "B6",
+      "comparable": false,
+      "reasons": [
+        "missing_pair"
+      ],
+      "firstUseful": {
+        "referenceRmstMs": null,
+        "candidateRmstMs": null,
+        "reductionFraction": null,
+        "referenceCoverage": null,
+        "candidateCoverage": null
+      },
+      "sufficient": {
+        "referenceRmstMs": null,
+        "candidateRmstMs": null,
+        "reductionFraction": null,
+        "referenceCoverage": null,
+        "candidateCoverage": null
+      },
+      "stages": null
+    }
+  ],
+  "aggregates": [
+    {
+      "condition": "moderate_96",
+      "reference": "C_manual",
+      "candidate": "B6",
+      "declaredPairs": 1,
+      "validPairs": 0,
+      "allDeclaredPairsComparable": false,
+      "estimand": "ratio_of_mean_paired_restricted_means; all declared seeds required",
+      "firstUseful": {
+        "referenceMeanRmstMs": null,
+        "candidateMeanRmstMs": null,
+        "reductionFraction": null,
+        "meanPairedReductionFraction": null,
+        "perSeedRange": null
+      },
+      "sufficient": {
+        "referenceMeanRmstMs": null,
+        "candidateMeanRmstMs": null,
+        "reductionFraction": null,
+        "meanPairedReductionFraction": null,
+        "perSeedRange": null
+      },
+      "note": "Descriptive small-seed result, not a confidence interval, significance claim or external human calibration. No aggregation over a favorable subset of incomplete pairs."
+    },
+    {
+      "condition": "moderate_96",
+      "reference": "B8",
+      "candidate": "B6",
+      "declaredPairs": 1,
+      "validPairs": 0,
+      "allDeclaredPairsComparable": false,
+      "estimand": "ratio_of_mean_paired_restricted_means; all declared seeds required",
+      "firstUseful": {
+        "referenceMeanRmstMs": null,
+        "candidateMeanRmstMs": null,
+        "reductionFraction": null,
+        "meanPairedReductionFraction": null,
+        "perSeedRange": null
+      },
+      "sufficient": {
+        "referenceMeanRmstMs": null,
+        "candidateMeanRmstMs": null,
+        "reductionFraction": null,
+        "meanPairedReductionFraction": null,
+        "perSeedRange": null
+      },
+      "note": "Descriptive small-seed result, not a confidence interval, significance claim or external human calibration. No aggregation over a favorable subset of incomplete pairs."
+    }
+  ],
+  "costSummary": {
+    "knownSubtotalUsd": 0,
+    "allAttemptCostsKnown": false,
+    "totalProviderCostUsd": null,
+    "chargedBudgetUsd": null,
+    "rowsWithUnknownCost": 3,
+    "missingPaidCapExposureUsd": 0.15,
+    "possibleRepeatedLedgerArtifacts": 0,
+    "note": "Includes invalid, duplicate and unplanned artifacts; charges are not discarded with ineligible comparisons. Duplicate world files may repeat a ledger, so subtotals remain artifact-scoped and no confirmed total bill is asserted until reconciled."
+  },
+  "reportedSummary": null,
+  "reportedSummaryScope": "Preserved as reported; independently recomputed physical denominators and matching gates above are authoritative for this readout.",
+  "note": "Every planned/missing/failed/censored/recovered-error world is retained. Manual gains do not imply GenAI beats B5/B8. Secondary decentralized conditions are not pooled with the primary moderate family."
+}

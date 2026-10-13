@@ -1,0 +1,34 @@
+{
+  "state": "prepared_not_launched",
+  "runnerSha256": "1234ad393f13bd6a063ccc486d320ec3dea6732a7c7a9946b5cce419ca611094",
+  "planSha256": "744ada8d2d791c7a926697bfc6e4f0b5bd247d4b2fa975f75a09c06e3e99e315",
+  "providerCallsMadeDuringPreparation": 0,
+  "files": [
+    {
+      "name": "current-service-recovery.mjs",
+      "sha256": "1234ad393f13bd6a063ccc486d320ec3dea6732a7c7a9946b5cce419ca611094",
+      "bytes": 16117
+    },
+    {
+      "name": "current-service-recovery.test.mjs",
+      "sha256": "7b92d3e943beba90232b21d516bfbf54c33bba741bb089fbfd540d73f64fcd0e",
+      "bytes": 6283
+    },
+    {
+      "name": "current-service-recovery-guide.md",
+      "sha256": "56a79c136d10d4418505499da705c87a9b2efad7359ab5ad68c6f7e1d59ec956",
+      "bytes": 4527
+    },
+    {
+      "name": "evidence-probe-guards.mjs",
+      "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96",
+      "bytes": 4518
+    },
+    {
+      "name": "read-human-capacity-evidence.mjs",
+      "sha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+      "bytes": 32419
+    }
+  ],
+  "note": "Archive records prepared code and declared protocol only. No scenario, throughput, accuracy or latency result is implied."
+}

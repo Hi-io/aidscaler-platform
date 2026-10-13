@@ -1,0 +1,39 @@
+/** New v2 stop namespace; legacy federation owns no research lock. */
+import {readFile,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {randomUUID,createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
+import {withHumanResearchLock} from '../scripts/human-capacity-campaign.mjs';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+export function validateLockedChild(invocation){
+  if(resolve(invocation.entry)!==resolve('.local/federation-structural-control.mjs')||
+    !Array.isArray(invocation.args)||!invocation.args.includes('--execute')||
+    !invocation.args.includes('--authorization=ROOT_GO_FEDERATION')||
+    !invocation.args.some(x=>x.startsWith('--seal='))||invocation.args.some(x=>x.startsWith('--episode')))
+    throw Error('Only the authorized whole federation campaign can use the v2 thin lock child');
+  return true;
+}
+export async function runLockedChild(options={}){
+  if(options.run!=='ROOT_GO_FINISH_LOCAL_LOCK_CHILD')return {state:'PREPARED_NOT_LAUNCHED',worldsStarted:0,modelCalls:0};
+  if(!options.invocation)throw Error('Exact archived invocation required');
+  const invocation=JSON.parse(await readFile(resolve(options.invocation),'utf8'));validateLockedChild(invocation);
+  if(sha(await readFile(resolve(invocation.entry)))!==invocation.entrySha256)throw Error('Federation bytes changed');
+  const lock=resolve('.local/PAID_RESEARCH_STUDY.lock'),signal=()=>{
+    writeFile(resolve('.local/STOP_FINISH_LOCAL_STUDIES_V2'),JSON.stringify({at:new Date().toISOString(),scope:'finish-local-lock-child-v2'}),{flag:'a'}).catch(()=>{});
+    // The child is never signalled or killed. Wait for settled free execution.
+  };
+  process.on('SIGINT',signal);process.on('SIGTERM',signal);
+  try{return await withHumanResearchLock(lock,{study:'finish-local-federation-v2',nonce:randomUUID(),pid:process.pid},async()=>{
+    const child=spawn(process.execPath,[invocation.entry,...invocation.args],{cwd:process.cwd(),windowsHide:true,stdio:['ignore','pipe','pipe']});
+    child.stdout.pipe(process.stdout);child.stderr.pipe(process.stderr);
+    console.log(JSON.stringify({phase:'locked_child_started',pid:child.pid,study:'federation12'}));
+    return await new Promise(done=>{child.once('error',e=>done({exitCode:null,signal:null,error:{code:e.code??e.name}}));
+      child.once('close',(exitCode,signal)=>done({exitCode,signal}));});
+  });}finally{process.off('SIGINT',signal);process.off('SIGTERM',signal);}
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+  const o=Object.fromEntries(process.argv.slice(2).map(a=>{const i=a.indexOf('=');return i<0?[a.replace(/^--/,''),true]:[a.slice(2,i),a.slice(i+1)];}));
+  const r=await runLockedChild(o);console.log(JSON.stringify({phase:'locked_child_closed',...r}));
+  if(r.exitCode!=null)process.exitCode=r.exitCode;else if(r.error)process.exitCode=1;
+}

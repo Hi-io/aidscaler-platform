@@ -1,0 +1,77 @@
+{
+  "schema": "native-hand-arithmetic-v2",
+  "recordedAt": "2026-10-13T03:53:31.947Z",
+  "config": {
+    "scenario": "S23",
+    "seed": "hand-sheet-native-human-2026-01",
+    "organizations": 2,
+    "grid": 5,
+    "extentKm": 1,
+    "durationMs": 1200000,
+    "policy": "none",
+    "hazard": "none",
+    "topology": "grid",
+    "postsPerHour": 0,
+    "backgroundTraffic": 0,
+    "packetLoss": 0,
+    "healthReports": false,
+    "recurringNeeds": false,
+    "reviewMs": 1000,
+    "networkLatencyMs": 1000,
+    "queryLatencyMs": 1000,
+    "loadMs": 1000,
+    "unloadMs": 1000,
+    "humanCapacity": {
+      "profile": "moderate",
+      "readers": 1,
+      "deciders": 1,
+      "relayers": 1,
+      "readMs": 1000,
+      "decisionMs": 1000,
+      "relayMs": 1000
+    }
+  },
+  "design": [
+    {
+      "id": "hand-a",
+      "owner": "org0",
+      "quantity": 50,
+      "send": 50,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-b",
+      "owner": "org0",
+      "quantity": 90,
+      "send": 30,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-c",
+      "owner": "org1",
+      "quantity": 40,
+      "send": 40,
+      "deadline": 600000
+    },
+    {
+      "id": "hand-d",
+      "owner": "org1",
+      "quantity": 25,
+      "send": 0,
+      "deadline": 1800000
+    }
+  ],
+  "engineBuild": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+  "helperSha256": "e7e71debf637552efa239086878b8b115eb7ff20f981f5abcf1b012ef9b07184",
+  "modelCalls": 0,
+  "controller": "Only ordinary HTTP received own need/resource/vehicle/proposal rows; fixed authored quantities; three exact owner reviews.",
+  "authoring": "Four authored needs and two original vehicles, no stock added. Initial checkpoint retained; reproduction is from this checkpoint, not an untouched seed-only S23.",
+  "limits": [
+    "Arithmetic and physical/authority evidence only; not comparative improvement, model quality or human empirical calibration."
+  ],
+  "machine": {
+    "node": "v24.19.0",
+    "platform": "win32",
+    "cpu": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz"
+  }
+}

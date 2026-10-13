@@ -1,0 +1,67 @@
+{
+  "K15": {
+    "version": "minimal-same-family-general-agent-v1",
+    "authorization": "ROOT_GO_K15_CURRENT",
+    "seed": "k15-current-discovery-2026-01",
+    "worlds": [
+      "B6",
+      "B9"
+    ],
+    "episodeBudgetUsd": 0.15,
+    "totalBudgetUsd": 0.4,
+    "maxModelCalls": 32,
+    "config": {
+      "count": 24,
+      "noise": 192,
+      "reposts": 2,
+      "humanReadMs": 30000,
+      "humanWorkers": 2,
+      "clarificationWorkers": 2,
+      "formalDelayMs": 1800000,
+      "silentFraction": 0,
+      "extentKm": 6,
+      "grid": 9,
+      "horizonMs": 10800000,
+      "traffic": 0,
+      "packetLoss": 0,
+      "budgetUsd": 0.15,
+      "maxModelCalls": 32
+    },
+    "scope": "Fresh runDiscoveryEpisode B6 and B9 only, same exogenous received public corpus, native source profile, model/tools/permissions/stock/fleet/reviews/common compiler and budget. Not a reuse of human-capacity moderate, not all possible agents, not an independently sealed semantic family.",
+    "retained": "Every declared failure, recovered schema error, censor, source change, missing usage and cap exposure is retained. One seed is descriptive; no bootstrap confidence claim. No retry to select a favorable response.",
+    "stopping": "Current discovery service-cohort stopping is preserved as K02 scope; not source-recovery K22. Endogenous receipts/communication may differ by policy."
+  },
+  "K11_K13": {
+    "version": "compact-real-semantic-scoring-wrapper-v1",
+    "authorization": "ROOT_GO_SEMANTIC_PILOT",
+    "seed": "k11-semantic-current-2026-01",
+    "needs": 8,
+    "organizations": 1,
+    "copies": 2,
+    "episodeBudgetUsd": 0.12,
+    "totalBudgetUsd": 0.12,
+    "maximumProviderAttemptsByCurrentLoop": 2,
+    "wallLimitMs": 300000,
+    "sourceScript": "scripts/semantic-load.mjs",
+    "languages": [
+      "en",
+      "es",
+      "fr",
+      "ja"
+    ],
+    "resourceTypes": [
+      "water",
+      "food",
+      "medicine",
+      "shelter",
+      "blankets"
+    ],
+    "entities": "Existing received public building IDs bN, supplied by ordinary scoped query(map); no hidden aliases or observer IDs inserted in model context.",
+    "corpus": "Current script cycles language and native resource/unit over8 explicit current requests; each also contains an old-video correction. Two public-lineage copies plus one labelled historic clip and one injection post per request. Semantic tuples are scored only by the observer after extraction.",
+    "scope": "Small internally authored exact-tuple K11/K13 pilot, not clinical/public-source accuracy, calibrated professional performance, K12 independent attribution, or physical response speed.",
+    "bound": "One organization and24 evaluated originals fit one batch30. Current SemanticIngestion permits at most one schema repair, hence at most2 provider attempts; a runtime increase is a violated predeclared bound, not an extra successful trial.",
+    "retained": "Full raw failed batches/rejected observations/omissions and known/unknown usage preserved. Archive child source bytes and three initial/final build hashes; never trust legacy costUsd null-to-zero or candidate-only final gate."
+  },
+  "sharedLock": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+  "childScriptSha256": "f175452661657c2082ada9cf15f7cfece06f0ad096ecc0edee3254da331c140f"
+}

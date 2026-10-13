@@ -1,0 +1,134 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {spawnSync} from 'node:child_process';
+import {OLD_SOURCE,NEW_SOURCE,V4_GATE_COUNTS,OLD_PATHS,validateNewSource,validateV4Gate,readHistoricalPrimary,readHistoricalControls,bridgeGroups,
+  validateVersionedCoverage,rebindPlan,validateReboundPlan,sha,verifyCurrentHumanRaws} from './version-bridge-v2.mjs';
+import {coordinateBridgeControls} from './compact-human-controls-bridge-v2.mjs';
+import {definitions,runFinishStudies} from './finish-local-studies-v2.mjs';
+import {validateAdditionalPlan,selectAdditionalGroups} from './run-additional-human-controls-v2.mjs';
+import {validateReadRelayPlan} from './run-read-relay-error-amendment-v2.mjs';
+import {forensicCounts,readStoppedControls} from './read-stopped-controls-v1-forensic.mjs';
+
+const newer={...NEW_SOURCE};
+const oldJson=async p=>{const bytes=await readFile(p);return {data:JSON.parse(bytes.toString('utf8')),sha256:sha(bytes)};};
+const rebound=(old,path,oldSha)=>rebindPlan(old,{source:newer,oldPath:path,oldSha,freezePath:'.local/future-test-freeze.json',
+  freezeSha:'c'.repeat(64),declaredAt:'PRE_OUTCOME_PURE_FIXTURE'});
+
+test('new evaluator hashes are required; runtime/source changes invalidate this bridge',()=>{
+  assert.equal(validateNewSource(newer),true);
+  assert.throws(()=>validateNewSource(OLD_SOURCE));
+  assert.throws(()=>validateNewSource({...newer,candidate:'d'.repeat(64)}));
+  assert.throws(()=>validateNewSource({...newer,simulator:'d'.repeat(64)}));
+  assert.throws(()=>validateNewSource({...newer,humanEvaluator:'a'.repeat(64)}));
+});
+test('v4 gate amendment requires486 exactly and does not repurpose an old483/full proof',async()=>{
+  assert.deepEqual(V4_GATE_COUNTS,{platform:486,simulator:247,ui:113});
+  const old=await oldJson('reports/measurement-freezes/1791865903608.json');assert.throws(()=>validateV4Gate(old.data,NEW_SOURCE));
+});
+test('all12 predecessor primary bytes remain historical v1, never current reference',async()=>{
+  const p=await readHistoricalPrimary();assert.equal(p.declaredRuns,12);assert.equal(p.raw.length,12);
+  assert.equal(p.version,'v1');assert.deepEqual(p.source,OLD_SOURCE);
+  await assert.rejects(()=>readHistoricalPrimary('.local/another-primary'));
+});
+test('17/11/8 and failed decentralized raw remain visible, not relabeled17closed',async()=>{
+  const old=await readHistoricalControls();assert.equal(old.declaredRuns,17);assert.equal(old.observedRuns,11);
+  assert.equal(old.validClosedGroupRuns,8);assert.equal(old.failedRuns,1);assert.equal(old.unlaunchedRuns,6);
+  assert.equal(old.raw.filter(r=>r.status==='failed').length,1);assert.equal(old.all17Closed,false);
+  assert.equal(old.accounting.countedExactlyOnce,true);assert.equal(old.accounting.includesFailedGroup,true);
+});
+test('bridge repeats all3 affected and preserves6 unlaunched native parameter sets',async()=>{
+  const groups=await bridgeGroups(),old=await oldJson(OLD_PATHS.compactPlan);
+  assert.deepEqual(groups.map(g=>g.id),['decentralized','stress48','stress96']);
+  assert.equal(groups.reduce((n,g)=>n+g.plan.worlds.length,0),9);
+  for(const g of groups){const before=old.data.groups.find(x=>x.id===g.id);
+    assert.deepEqual(g.plan.worlds,before.plan.worlds);assert.deepEqual(g.plan.config,before.plan.config);
+    assert.deepEqual(g.options,before.options);assert.equal(g.paidEpisodes,1);assert.equal(g.maxReservedPaidUsd,.15);}
+});
+function currentIndex(){return {source:newer,stoppedReason:null,records:['decentralized','stress48','stress96'].map(id=>({
+  id,closure:{permitsNext:true},worlds:Array.from({length:3},()=>({status:'completed'}))}))};}
+test('coverage permits requirement inventory but explicitly forbids mixed-version statistics',async()=>{
+  const old=await readHistoricalControls(),c=validateVersionedCoverage(old,currentIndex(),newer);
+  assert.equal(c.type,'EXPLICIT_VERSIONED_COVERAGE');assert.equal(c.statisticalPoolingAllowed,false);
+  assert.equal(c.all17SingleVersionClosed,false);assert.equal(c.v1.observedRuns,11);assert.equal(c.v2.observedRuns,9);
+  assert.throws(()=>validateVersionedCoverage({...old,all17Closed:true},currentIndex(),newer));
+  assert.throws(()=>validateVersionedCoverage(old,{...currentIndex(),source:OLD_SOURCE},newer));
+  const bad=currentIndex();bad.records[0].closure.permitsNext=false;assert.throws(()=>validateVersionedCoverage(old,bad,newer));
+});
+test('formal/burst plan rebind preserves silent/loss blocked and every API input parameter',async()=>{
+  const old=await oldJson(OLD_PATHS.additional),plan=rebound(old.data,OLD_PATHS.additional,old.sha256);
+  assert.equal(validateReboundPlan(plan,old.data,{source:newer,oldPath:OLD_PATHS.additional,oldSha:old.sha256}),true);
+  assert.deepEqual(plan.worlds,old.data.worlds);assert.equal(plan.groups[1].state,'BLOCKED_API_UNSUPPORTED');
+  assert.throws(()=>selectAdditionalGroups(plan));assert.deepEqual(selectAdditionalGroups(plan,'formal_immediate,burst').map(g=>g.id),['formal_immediate','burst']);
+  assert.equal(await validateAdditionalPlan(plan,{current:newer,sha256:sha(JSON.stringify(plan)),expectedSha:sha(JSON.stringify(plan))}),true);
+  const bad=structuredClone(plan);bad.groups[0].execution.episodeInputs[0].formalDelayMs=1;
+  await assert.rejects(()=>validateAdditionalPlan(bad,{current:newer,sha256:sha(JSON.stringify(bad)),expectedSha:sha(JSON.stringify(bad))}));
+});
+test('read/relay rebind cannot enable decision/review1pct, change seed or reduce ceiling',async()=>{
+  const old=await oldJson(OLD_PATHS.readRelay),plan=rebound(old.data,OLD_PATHS.readRelay,old.sha256);
+  assert.equal(await validateReadRelayPlan(plan,{current:newer,sha256:sha(JSON.stringify(plan)),expectedSha:sha(JSON.stringify(plan))}),true);
+  assert.equal(plan.nativeConfigurationPerOwner.decisionErrorBp,0);assert.equal(plan.historicalControl.state,'BLOCKED_NOT_LAUNCHED');
+  for(const mutate of [p=>p.worlds[0].humanCapacityOverrides.decisionErrorBp=100,p=>p.worlds[0].seed+='winner',p=>p.config.maxModelCalls=8]){
+    const bad=structuredClone(plan);mutate(bad);
+    await assert.rejects(()=>validateReadRelayPlan(bad,{current:newer,sha256:sha(JSON.stringify(bad)),expectedSha:sha(JSON.stringify(bad))}));
+  }
+});
+test('amendment metadata does not allow substituting another original plan or overriding SHA',async()=>{
+  const old=await oldJson(OLD_PATHS.additional),plan=rebound(old.data,OLD_PATHS.additional,old.sha256);
+  await assert.rejects(()=>validateAdditionalPlan(plan,{current:newer,sha256:sha(JSON.stringify(plan)),expectedSha:'d'.repeat(64)}));
+  const bad=structuredClone(plan);bad.versionAmendment.original.path=OLD_PATHS.readRelay;
+  await assert.rejects(()=>validateAdditionalPlan(bad,{current:newer,sha256:sha(JSON.stringify(bad)),expectedSha:sha(JSON.stringify(bad))}));
+});
+function currentRaw(){return {status:'completed',candidateFingerprint:newer.candidate,baseEvaluatorFingerprint:newer.baseEvaluator,
+  evaluatorFingerprint:newer.humanEvaluator,manifest:{engineBuild:newer.simulator},finalCandidateFingerprint:newer.candidate,
+  finalEvaluatorFingerprint:newer.humanEvaluator,finalEngineBuild:newer.simulator,candidateChanged:false,evaluatorChanged:false,
+  simulatorChanged:false,invariants:[],usage:[],errors:[{code:'RECOVERED'}]};}
+test('completed negative/recovered current raws accepted; oldhuman/currentbase mixing rejected',()=>{
+  assert.equal(verifyCurrentHumanRaws([currentRaw()],newer),true);
+  assert.throws(()=>verifyCurrentHumanRaws([{...currentRaw(),evaluatorFingerprint:OLD_SOURCE.humanEvaluator}],newer));
+  assert.throws(()=>verifyCurrentHumanRaws([{...currentRaw(),baseEvaluatorFingerprint:OLD_SOURCE.baseEvaluator}],newer));
+  assert.throws(()=>verifyCurrentHumanRaws([{...currentRaw(),usage:undefined}],newer));
+  assert.equal(verifyCurrentHumanRaws([{...currentRaw(),usage:undefined,usageMissing:true}],newer),true);
+});
+test('finish retains13studies and external versioned coverage; no replay of old compact',()=>{
+  const d=definitions({additional:{path:'newA',sha256:'A'},readRelay:{path:'newR',sha256:'R'}});
+  assert.equal(d.length,13);assert.equal(d[0].id,'versioned_controls');assert.equal(d[0].externalPrelude,true);
+  assert.equal(d.some(s=>s.id==='compact17'),false);assert.equal(d[1].fixed.includes('--plan=newA'),true);
+  assert.equal(d[2].fixed.includes('--plan-sha=R'),true);
+});
+test('v2 evidence entries cannot alter budgets/physics arguments or schedule unarchived paths',()=>{
+  const allowed=['K11_K13','K07','K14','coupled100','physical_chain','S19','K15','K22'],base=definitions(),
+    evidence={source:NEW_SOURCE,entries:Object.fromEntries(base.filter(s=>allowed.includes(s.id)).map(s=>[s.id,{
+      entry:s.entry.replace(/\.mjs$/,'-v2.mjs'),entrySha256:'a'.repeat(64),fixedArgs:s.fixed}]))};
+  const wired=definitions(undefined,evidence);assert.equal(wired.length,13);
+  assert.equal(wired.find(s=>s.id==='S19').maxReserveUsd,.60);
+  const wrong=structuredClone(evidence);wrong.entries.S19.fixedArgs.push('--budget=50');assert.throws(()=>definitions(undefined,wrong));
+  const path=structuredClone(evidence);path.entries.S19.entry='.local/another-helper.mjs';assert.throws(()=>definitions(undefined,path));
+  const source=structuredClone(evidence);source.source.humanEvaluator=OLD_SOURCE.humanEvaluator;assert.throws(()=>definitions(undefined,source));
+});
+test('actual prepared eight-entry evidence manifest keeps exact v4 source and declared scheduling',async()=>{
+  const manifest=await oldJson('.local/evidence-runners-v2/manifest.json'),d=definitions(undefined,manifest.data);
+  assert.equal(d.length,13);for(const e of manifest.data.entries){const s=d.find(s=>s.id===e.id);
+    assert.equal(s.entry,e.entry);assert.equal(s.maxReserveUsd,e.maxReserveUsd);
+    assert.equal(sha(await readFile(e.entry)),e.entrySha256);}
+});
+test('defaults in both new orchestrators cannot launch any world/provider',async()=>{
+  for(const run of [coordinateBridgeControls,runFinishStudies]){
+    const r=await run({});assert.equal(r.worldsStarted,0);assert.equal(r.modelCalls,0);assert.equal(r.state,'PREPARED_NOT_LAUNCHED');}
+});
+test('stopped forensic reader preserves failed group and missing6 without lowering old gates',async()=>{
+  const parent=await oldJson(OLD_PATHS.compact+'/protocol.json'),index=await oldJson(OLD_PATHS.compact+'/index.json');
+  const c=forensicCounts(parent.data,index.data);assert.equal(c.declared,17);assert.equal(c.observed,11);
+  assert.equal(c.closedValidGroupWorlds,8);assert.equal(c.failedWorlds,1);assert.equal(c.all17Closed,false);
+  const bad=structuredClone(index.data);bad.records[3].worlds=bad.records[3].worlds.filter(w=>w.status!=='failed');
+  assert.throws(()=>forensicCounts(parent.data,bad));
+  const active=structuredClone(index.data);active.unsettledReservedUsd=.15;assert.throws(()=>forensicCounts(parent.data,active));
+  assert.equal((await readStoppedControls()).worldsLoaded,0);
+});
+test('new CLI entry points default to zero-execution and resolve their own export names',()=>{
+  for(const file of ['compact-human-controls-bridge-v2','finish-local-studies-v2','read-stopped-controls-v1-forensic']){
+    const result=spawnSync(process.execPath,['.local/'+file+'.mjs'],{encoding:'utf8',windowsHide:true});
+    assert.equal(result.status,0,result.stderr);const body=JSON.parse(result.stdout);
+    assert.equal(body.modelCalls,0);assert.equal(body.worldsStarted??body.worldsLoaded,0);
+  }
+});

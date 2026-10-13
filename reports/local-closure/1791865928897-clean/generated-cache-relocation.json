@@ -1,0 +1,33 @@
+{
+  "schema": "t27-generated-cache-relocation-v1",
+  "atUtc": "2026-10-13T04:35:43.3071982Z",
+  "sourcesUnmodified": true,
+  "immutableEvidencePreserved": [
+    "protocol.json",
+    "result.json",
+    "byte-audit.json",
+    "clean-startup-smoke.json",
+    "nexo-platform.tar",
+    "disaster-response-simulator.tar",
+    "*-install.stdout.txt",
+    "*-install.stderr.txt"
+  ],
+  "reason": "Keep installed dependencies and package-manager caches in ignored .local rather than report archives",
+  "moves": [
+    {
+      "from": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\local-closure\\1791865928897-clean\\clean-checkouts",
+      "to": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\T27-private-builds\\1791865928897-clean\\clean-checkouts",
+      "purpose": "Stopped generated checkout/dependency/cache directory; not source evidence"
+    },
+    {
+      "from": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\local-closure\\1791865928897-clean\\fresh-pnpm-store",
+      "to": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\T27-private-builds\\1791865928897-clean\\fresh-pnpm-store",
+      "purpose": "Stopped generated checkout/dependency/cache directory; not source evidence"
+    },
+    {
+      "from": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\local-closure\\1791865928897-clean\\fresh-runtime-home",
+      "to": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\T27-private-builds\\1791865928897-clean\\fresh-runtime-home",
+      "purpose": "Stopped generated checkout/dependency/cache directory; not source evidence"
+    }
+  ]
+}

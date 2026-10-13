@@ -1,0 +1,57 @@
+{
+  "schema": "real-viewer-smoke-v1",
+  "recordedAt": "2026-10-13T03:35:16.194Z",
+  "initialBuild": "6cbd0507d66e9ecb0e0f71944ce366dbc9f0cc310a98d9dec8b013eddb0909ae",
+  "helperSha256": "110c04456de7746c8a8c3ac662c660a1198a5b6e9fac87585d58ad0954993e2e",
+  "config": {
+    "scenario": "S23",
+    "seed": "real-viewer-native-human-2026-01",
+    "organizations": 2,
+    "grid": 5,
+    "extentKm": 2,
+    "hazard": "none",
+    "policy": "none",
+    "backgroundTraffic": 0,
+    "postsPerHour": 0,
+    "healthReports": false,
+    "recurringNeeds": false,
+    "packetLoss": 0,
+    "networkLatencyMs": 1000,
+    "queryLatencyMs": 1000,
+    "reviewMs": 1000,
+    "loadMs": 1000,
+    "unloadMs": 1000,
+    "durationMs": 1800000,
+    "humanCapacity": {
+      "profile": "moderate",
+      "readers": 1,
+      "deciders": 1,
+      "relayers": 1,
+      "readMs": 120000
+    }
+  },
+  "viewports": [
+    {
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "observerScope": "Authenticated private observer with organization display filters; this browser remains observer-capable and is not an autonomous actor gateway.",
+  "actorScope": "Ordinary authenticated HTTP feed ingestion, human_work, owner propose/review and dispatch; no hidden data used to compile the fixed shipment.",
+  "instrumentation": "Only copies native camera, LOD, WebGL renderer statistics and A/B camera positions into a readout. Original/instrumented bytes archived, no source mutation.",
+  "limits": [
+    "Behavioral/overflow screenshot smoke; not user research, semantic accuracy, FPS certification or throughput comparison.",
+    "Playwright/Chromium supplied by the sibling platform host dev dependencies; not a cold browser installation.",
+    "A/B uses identical rules policies to test clock/camera synchronization, not policy benefit."
+  ],
+  "machine": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "cpu": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+    "node": "v24.19.0"
+  }
+}

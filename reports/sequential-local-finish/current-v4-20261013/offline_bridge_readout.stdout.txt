@@ -1,0 +1,3133 @@
+{
+  "output": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json",
+  "declared": 9,
+  "observed": 9,
+  "allDeclaredCurrentRetained": true,
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "terminal": {
+    "settled": true,
+    "reasons": [],
+    "absent": [],
+    "terminalIncomplete": false,
+    "note": "Terminal failure can be inventoried with all declared missing worlds; active or inflight results cannot be loaded."
+  },
+  "comparisons": [
+    {
+      "group": "decentralized",
+      "comparisons": [
+        {
+          "seed": "native-human-capacity-control-decentralized-01",
+          "condition": "moderate",
+          "profile": "moderate",
+          "reference": "C_manual",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 2634412.8333333335,
+            "candidateRmstMs": 1921329.5,
+            "reductionFraction": 0.27068017749938844,
+            "referenceCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 2634412.8333333335,
+              "restrictedMedianMs": 2563017,
+              "restrictedP95Ms": 4359017,
+              "reachedOnlyP95Ms": 4359017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 1921329.5,
+              "restrictedMedianMs": 1989517,
+              "restrictedP95Ms": 3693517,
+              "reachedOnlyP95Ms": 3693517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 2634412.8333333335,
+            "candidateRmstMs": 1921329.5,
+            "reductionFraction": 0.27068017749938844,
+            "referenceCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 2634412.8333333335,
+              "restrictedMedianMs": 2563017,
+              "restrictedP95Ms": 4359017,
+              "reachedOnlyP95Ms": 4359017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 1921329.5,
+              "restrictedMedianMs": 1989517,
+              "restrictedP95Ms": 3693517,
+              "reachedOnlyP95Ms": 3693517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -743291.6666666666,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 26562.5,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 3645.8333333333335,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -713083.3333333334,
+                "pairedObserved": 24,
+                "eligible": 24
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -743291.6666666666,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 26562.5,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 3645.8333333333335,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -713083.3333333334,
+                "pairedObserved": 24,
+                "eligible": 24
+              }
+            }
+          }
+        },
+        {
+          "seed": "native-human-capacity-control-decentralized-01",
+          "condition": "moderate",
+          "profile": "moderate",
+          "reference": "C_decentralized",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 4364121.166666667,
+            "candidateRmstMs": 1921329.5,
+            "reductionFraction": 0.5597442356378205,
+            "referenceCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 4364121.166666667,
+              "restrictedMedianMs": 3310017,
+              "restrictedP95Ms": 9373517,
+              "reachedOnlyP95Ms": 9373517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 1921329.5,
+              "restrictedMedianMs": 1989517,
+              "restrictedP95Ms": 3693517,
+              "reachedOnlyP95Ms": 3693517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 4364121.166666667,
+            "candidateRmstMs": 1921329.5,
+            "reductionFraction": 0.5597442356378205,
+            "referenceCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 4364121.166666667,
+              "restrictedMedianMs": 3310017,
+              "restrictedP95Ms": 9373517,
+              "reachedOnlyP95Ms": 9373517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 24,
+              "reached": 24,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 1921329.5,
+              "restrictedMedianMs": 1989517,
+              "restrictedP95Ms": 3693517,
+              "reachedOnlyP95Ms": 3693517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -2357375,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -20312.5,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -65104.166666666664,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -2442791.6666666665,
+                "pairedObserved": 24,
+                "eligible": 24
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -2357375,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -20312.5,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -65104.166666666664,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 24,
+                "eligible": 24
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -2442791.6666666665,
+                "pairedObserved": 24,
+                "eligible": 24
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "stress48",
+      "comparisons": [
+        {
+          "seed": "native-human-capacity-control-stress48-01",
+          "condition": "moderate_48",
+          "profile": "moderate",
+          "reference": "C_manual",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 5095808.666666667,
+            "candidateRmstMs": 3996767,
+            "reductionFraction": 0.21567561471761176,
+            "referenceCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 5095808.666666667,
+              "restrictedMedianMs": 5212517,
+              "restrictedP95Ms": 9030517,
+              "reachedOnlyP95Ms": 9030517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3996767,
+              "restrictedMedianMs": 3972017,
+              "restrictedP95Ms": 7384017,
+              "reachedOnlyP95Ms": 7384017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 5095808.666666667,
+            "candidateRmstMs": 3996767,
+            "reductionFraction": 0.21567561471761176,
+            "referenceCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 5095808.666666667,
+              "restrictedMedianMs": 5212517,
+              "restrictedP95Ms": 9030517,
+              "reachedOnlyP95Ms": 9030517,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3996767,
+              "restrictedMedianMs": 3972017,
+              "restrictedP95Ms": 7384017,
+              "reachedOnlyP95Ms": 7384017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -1053208.3333333333,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -23177.083333333332,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -22656.25,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -1099041.6666666667,
+                "pairedObserved": 48,
+                "eligible": 48
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -1053208.3333333333,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -23177.083333333332,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -22656.25,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -1099041.6666666667,
+                "pairedObserved": 48,
+                "eligible": 48
+              }
+            }
+          }
+        },
+        {
+          "seed": "native-human-capacity-control-stress48-01",
+          "condition": "moderate_48",
+          "profile": "moderate",
+          "reference": "B8",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 3985662.8333333335,
+            "candidateRmstMs": 3996767,
+            "reductionFraction": -0.00278602760218424,
+            "referenceCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3985662.8333333335,
+              "restrictedMedianMs": 3894017,
+              "restrictedP95Ms": 7342017,
+              "reachedOnlyP95Ms": 7342017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3996767,
+              "restrictedMedianMs": 3972017,
+              "restrictedP95Ms": 7384017,
+              "reachedOnlyP95Ms": 7384017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 3985662.8333333335,
+            "candidateRmstMs": 3996767,
+            "reductionFraction": -0.00278602760218424,
+            "referenceCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3985662.8333333335,
+              "restrictedMedianMs": 3894017,
+              "restrictedP95Ms": 7342017,
+              "reachedOnlyP95Ms": 7342017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 48,
+              "reached": 48,
+              "rightCensored": 0,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 3996767,
+              "restrictedMedianMs": 3972017,
+              "restrictedP95Ms": 7384017,
+              "reachedOnlyP95Ms": 7384017,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": 30375,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -7552.083333333333,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -11718.75,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": 11104.166666666666,
+                "pairedObserved": 48,
+                "eligible": 48
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": 30375,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": -7552.083333333333,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": -11718.75,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 48,
+                "eligible": 48
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": 11104.166666666666,
+                "pairedObserved": 48,
+                "eligible": 48
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "stress96",
+      "comparisons": [
+        {
+          "seed": "native-human-capacity-control-stress96-01",
+          "condition": "moderate_96",
+          "profile": "moderate",
+          "reference": "C_manual",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 8446243.270833334,
+            "candidateRmstMs": 7076370.020833333,
+            "reductionFraction": 0.16218728327781692,
+            "referenceCoverage": {
+              "eligible": 96,
+              "reached": 53,
+              "rightCensored": 43,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 8446243.270833334,
+              "restrictedMedianMs": 10346351,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10740019,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7076370.020833333,
+              "restrictedMedianMs": 7829161,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10414827,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 8446243.270833334,
+            "candidateRmstMs": 7076370.020833333,
+            "reductionFraction": 0.16218728327781692,
+            "referenceCoverage": {
+              "eligible": 96,
+              "reached": 53,
+              "rightCensored": 43,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 8446243.270833334,
+              "restrictedMedianMs": 10346351,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10740019,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7076370.020833333,
+              "restrictedMedianMs": 7829161,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10414827,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -2118224.3725490198,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 20097.941176470587,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 16503.235294117647,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -2081623.1960784313,
+                "pairedObserved": 51,
+                "eligible": 96
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -2118224.3725490198,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 20097.941176470587,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 16503.235294117647,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 51,
+                "eligible": 96
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -2081623.1960784313,
+                "pairedObserved": 51,
+                "eligible": 96
+              }
+            }
+          }
+        },
+        {
+          "seed": "native-human-capacity-control-stress96-01",
+          "condition": "moderate_96",
+          "profile": "moderate",
+          "reference": "B8",
+          "candidate": "B6",
+          "comparable": true,
+          "reasons": [],
+          "firstUseful": {
+            "referenceRmstMs": 7154937.052083333,
+            "candidateRmstMs": 7076370.020833333,
+            "reductionFraction": 0.010980813762313019,
+            "referenceCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7154937.052083333,
+              "restrictedMedianMs": 7955019,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10032685,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7076370.020833333,
+              "restrictedMedianMs": 7829161,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10414827,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "sufficient": {
+            "referenceRmstMs": 7154937.052083333,
+            "candidateRmstMs": 7076370.020833333,
+            "reductionFraction": 0.010980813762313019,
+            "referenceCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7154937.052083333,
+              "restrictedMedianMs": 7955019,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10032685,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "candidateCoverage": {
+              "eligible": 96,
+              "reached": 66,
+              "rightCensored": 30,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7076370.020833333,
+              "restrictedMedianMs": 7829161,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10414827,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            }
+          },
+          "stages": {
+            "firstContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -278659.1935483871,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 591.2741935483871,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 2822.4032258064517,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -275245.51612903224,
+                "pairedObserved": 62,
+                "eligible": 96
+              }
+            },
+            "thresholdContribution": {
+              "preAuthorizationMs": {
+                "candidateMinusReferenceMeanMs": -278659.1935483871,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "pickupAndPreparationMs": {
+                "candidateMinusReferenceMeanMs": 591.2741935483871,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "loadedTravelMs": {
+                "candidateMinusReferenceMeanMs": 2822.4032258064517,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "arrivalToServiceMs": {
+                "candidateMinusReferenceMeanMs": 0,
+                "pairedObserved": 62,
+                "eligible": 96
+              },
+              "totalMs": {
+                "candidateMinusReferenceMeanMs": -275245.51612903224,
+                "pairedObserved": 62,
+                "eligible": 96
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "costOnly": {
+    "ledgers": [
+      {
+        "identity": "09493754cb50d7344ba088cb1ec6ffed35421fb670cc8606782e2eed9e6336d8",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json"
+        ],
+        "rawSha256s": [
+          "7d9b859f3b42eb88374b8bd0d9028c5bf0a74a1a7d7315d4355c351fb785bf79"
+        ],
+        "scopes": [
+          "current-host3600:decentralized"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": "human-capacity-b07107a62b6a44c162c8fb3bbd0db6c81a379c1694698954c160198d689a216b",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.00803654,
+          "totalProviderCostUsd": 0.00803654,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.00803654,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 55018.0318,
+          "providerWallTotalMs": 55018.0318,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0010776,
+              "reservedUsd": 0.0068869,
+              "wallMs": 13724.853400000138,
+              "inputTokens": 3780,
+              "outputTokens": 1371,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00180288,
+              "reservedUsd": 0.00762634,
+              "wallMs": 11704.341999999946,
+              "inputTokens": 5412,
+              "outputTokens": 2613,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00088042,
+              "reservedUsd": 0.00683794,
+              "wallMs": 4314.589099999983,
+              "inputTokens": 3623,
+              "outputTokens": 933,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00117756,
+              "reservedUsd": 0.006877899999999999,
+              "wallMs": 7058.308699999936,
+              "inputTokens": 3734,
+              "outputTokens": 1637,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00126382,
+              "reservedUsd": 0.00688384,
+              "wallMs": 7542.851199999917,
+              "inputTokens": 3833,
+              "outputTokens": 1818,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00113696,
+              "reservedUsd": 0.006976179999999999,
+              "wallMs": 8287.063599999994,
+              "inputTokens": 4484,
+              "outputTokens": 1273,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0006973,
+              "reservedUsd": 0.0066392199999999995,
+              "wallMs": 2386.0238000000827,
+              "inputTokens": 3215,
+              "outputTokens": 618,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.00803654,
+        "totalProviderCostUsd": 0.00803654,
+        "chargedBudgetUsd": 0.00803654,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "6c58cd2aaad271fcc86b5c5215fbd6d08eabd5a5258cbf8a5cee4d9297bf7762",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json"
+        ],
+        "rawSha256s": [
+          "a7f2f7ad678c1fd14a1f7b83edeaec07f0658b69a742a0df80db12ed068f08d9"
+        ],
+        "scopes": [
+          "current-host3600:decentralized"
+        ],
+        "arm": "C_decentralized",
+        "nativeEpisodeIdentity": "human-capacity-76ef3fa8aa0e8f8fb45fb781a2e20050c74724768b83d08bfbd3b16f80099eab",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "f9d684c7a00068ad512e6fa8e2c6b3a5e70c478d4086780f8fb03bfcb0c20eff",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "84db12966499a1a2ae56350fc8f98c57716bf03dd1691063539a05fb81080860"
+        ],
+        "scopes": [
+          "current-host3600:decentralized"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": "human-capacity-baf10543e8763db454c4d04142e9eb60be9a20bbe098f168d51ac16642ec8afe",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "13f08ecf3d6e1400e9c90d2b94e5d9260c9b2eb96717b51e688002c9fbf4d6f6",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B6.json"
+        ],
+        "rawSha256s": [
+          "8ba5bb367f825d42ff68aa83f6858bfe5d9656facb0d60787fe895e4e35392fe"
+        ],
+        "scopes": [
+          "current-host3600:stress48"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": "human-capacity-37ea82a92f364ba0d618b5ded8fb7bf4e1ecd1de622050ddb880bf3bf3a38d77",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 13,
+          "providerCalls": 13,
+          "reportedProviderCalls": 13,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.01193348,
+          "totalProviderCostUsd": 0.01193348,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.01193348,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 76102.00599999982,
+          "providerWallTotalMs": 76102.00599999982,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00080364,
+              "reservedUsd": 0.00683326,
+              "wallMs": 7554.422599999933,
+              "inputTokens": 3606,
+              "outputTokens": 747,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00090696,
+              "reservedUsd": 0.00683866,
+              "wallMs": 6562.7316999998875,
+              "inputTokens": 3644,
+              "outputTokens": 992,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00090592,
+              "reservedUsd": 0.006870879999999999,
+              "wallMs": 4038.2646000001114,
+              "inputTokens": 3708,
+              "outputTokens": 967,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00093082,
+              "reservedUsd": 0.00686818,
+              "wallMs": 7129.788399999961,
+              "inputTokens": 3703,
+              "outputTokens": 1031,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00143664,
+              "reservedUsd": 0.0074421999999999995,
+              "wallMs": 10977.845500000054,
+              "inputTokens": 4956,
+              "outputTokens": 1857,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0010037,
+              "reservedUsd": 0.00692236,
+              "wallMs": 8564.68619999988,
+              "inputTokens": 4015,
+              "outputTokens": 1104,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00089584,
+              "reservedUsd": 0.0069218199999999995,
+              "wallMs": 4130.154300000053,
+              "inputTokens": 4036,
+              "outputTokens": 827,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00108646,
+              "reservedUsd": 0.0069752799999999995,
+              "wallMs": 8489.577899999917,
+              "inputTokens": 4489,
+              "outputTokens": 1145,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00121016,
+              "reservedUsd": 0.006963039999999999,
+              "wallMs": 7752.129900000058,
+              "inputTokens": 4384,
+              "outputTokens": 1491,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00087218,
+              "reservedUsd": 0.006852519999999999,
+              "wallMs": 3551.5801999999676,
+              "inputTokens": 3647,
+              "outputTokens": 904,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00081654,
+              "reservedUsd": 0.00681292,
+              "wallMs": 2792.786700000055,
+              "inputTokens": 3621,
+              "outputTokens": 774,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00091944,
+              "reservedUsd": 0.006894099999999999,
+              "wallMs": 3664.908799999859,
+              "inputTokens": 3856,
+              "outputTokens": 949,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00014518,
+              "reservedUsd": 0.00578854,
+              "wallMs": 893.1292000000831,
+              "inputTokens": 517,
+              "outputTokens": 182,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.01193348,
+        "totalProviderCostUsd": 0.01193348,
+        "chargedBudgetUsd": 0.01193348,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "afd8ba679ae7e32dda9a81dcf60b033a96fec4d72a3ac140ebf96793d7a4aa49",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B8.json"
+        ],
+        "rawSha256s": [
+          "59d1f1ebc539f3bad51cbac18a3b1595f18e37f83086a38528fec5cd163724d8"
+        ],
+        "scopes": [
+          "current-host3600:stress48"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": "human-capacity-eb44430c515f1bbe04d4e9b9a7b4357f440e2af9e78282e4d757d30e3f0c1eb2",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "685661bee1260c3cade0eabfdef98a4e14164e8d5eea17052a898c3eef011309",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "ddd926b4a02e20368c139ec06776fb9a87aa032d86fc1da0741daf417d70eec8"
+        ],
+        "scopes": [
+          "current-host3600:stress48"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": "human-capacity-e9c3a34b61e9bf7b3527cadc8b23b02ec9c677bacae0ba54ce955e5c2984557c",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "fe33a3c1090a89b9761f162afe8396543f114f3d22297356fe4afccaba87b496",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B6.json"
+        ],
+        "rawSha256s": [
+          "2554939425ee19589d2ca3066c1e14d0aecb3e4ca667ace015ed908f8e910c01"
+        ],
+        "scopes": [
+          "current-host3600:stress96"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": "human-capacity-49625e1e1ac85c886f4ec1e4640aa474243fe891234d0355dc5ee713f6f58933",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 25,
+          "providerCalls": 25,
+          "reportedProviderCalls": 25,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.021807220000000002,
+          "totalProviderCostUsd": 0.021807220000000002,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.021807220000000002,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 211040.7296000002,
+          "providerWallTotalMs": 211040.7296000002,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00068548,
+              "reservedUsd": 0.00691534,
+              "wallMs": 7340.729700000025,
+              "inputTokens": 3873,
+              "outputTokens": 877,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00077372,
+              "reservedUsd": 0.00688978,
+              "wallMs": 8534.4114000001,
+              "inputTokens": 3817,
+              "outputTokens": 1153,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00101666,
+              "reservedUsd": 0.00690436,
+              "wallMs": 13128.04469999997,
+              "inputTokens": 3846,
+              "outputTokens": 1859,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00079704,
+              "reservedUsd": 0.006910299999999999,
+              "wallMs": 8925.376900000032,
+              "inputTokens": 3921,
+              "outputTokens": 1191,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00078252,
+              "reservedUsd": 0.00689752,
+              "wallMs": 9557.478999999817,
+              "inputTokens": 3956,
+              "outputTokens": 1138,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00112282,
+              "reservedUsd": 0.0069526,
+              "wallMs": 18978.70479999995,
+              "inputTokens": 4146,
+              "outputTokens": 2083,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00094864,
+              "reservedUsd": 0.006934419999999999,
+              "wallMs": 12139.467799999751,
+              "inputTokens": 4043,
+              "outputTokens": 1601,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0011593,
+              "reservedUsd": 0.00770302,
+              "wallMs": 13013.193899999838,
+              "inputTokens": 5847,
+              "outputTokens": 1690,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0009814,
+              "reservedUsd": 0.00693172,
+              "wallMs": 15163.577000000048,
+              "inputTokens": 4068,
+              "outputTokens": 1690,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00082814,
+              "reservedUsd": 0.006939279999999999,
+              "wallMs": 9167.036700000055,
+              "inputTokens": 4011,
+              "outputTokens": 1256,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00091432,
+              "reservedUsd": 0.006922899999999999,
+              "wallMs": 11006.972099999897,
+              "inputTokens": 4050,
+              "outputTokens": 1498,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00101924,
+              "reservedUsd": 0.006886,
+              "wallMs": 13036.881300000008,
+              "inputTokens": 3967,
+              "outputTokens": 1831,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00099552,
+              "reservedUsd": 0.0069722199999999995,
+              "wallMs": 11856.763300000224,
+              "inputTokens": 4556,
+              "outputTokens": 1588,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0012239,
+              "reservedUsd": 0.00699202,
+              "wallMs": 16743.44439999992,
+              "inputTokens": 4555,
+              "outputTokens": 2260,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00103308,
+              "reservedUsd": 0.00690544,
+              "wallMs": 6212.857199999969,
+              "inputTokens": 4082,
+              "outputTokens": 1154,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008916,
+              "reservedUsd": 0.006903459999999999,
+              "wallMs": 4144.843899999745,
+              "inputTokens": 4000,
+              "outputTokens": 829,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00081504,
+              "reservedUsd": 0.006921279999999999,
+              "wallMs": 2452.57470000023,
+              "inputTokens": 4036,
+              "outputTokens": 625,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00078484,
+              "reservedUsd": 0.00692704,
+              "wallMs": 4379.164400000125,
+              "inputTokens": 4026,
+              "outputTokens": 553,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008454,
+              "reservedUsd": 0.00678376,
+              "wallMs": 3260.5145000000484,
+              "inputTokens": 3530,
+              "outputTokens": 878,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00067958,
+              "reservedUsd": 0.006613299999999999,
+              "wallMs": 3813.7754000001587,
+              "inputTokens": 2997,
+              "outputTokens": 650,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008515,
+              "reservedUsd": 0.006607539999999999,
+              "wallMs": 4835.535399999935,
+              "inputTokens": 3125,
+              "outputTokens": 1035,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00080436,
+              "reservedUsd": 0.0066771999999999995,
+              "wallMs": 3679.0518000000156,
+              "inputTokens": 3294,
+              "outputTokens": 858,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008335,
+              "reservedUsd": 0.00665758,
+              "wallMs": 3907.8055000002496,
+              "inputTokens": 3185,
+              "outputTokens": 969,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008772,
+              "reservedUsd": 0.00690526,
+              "wallMs": 4642.913300000131,
+              "inputTokens": 3940,
+              "outputTokens": 814,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00014242,
+              "reservedUsd": 0.00578404,
+              "wallMs": 1119.6104999999516,
+              "inputTokens": 503,
+              "outputTokens": 180,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.021807220000000002,
+        "totalProviderCostUsd": 0.021807220000000002,
+        "chargedBudgetUsd": 0.021807220000000002,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "c3339bd550ed59254f1c59676f4a21fdbf9455706e660edb1266829d612ce082",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B8.json"
+        ],
+        "rawSha256s": [
+          "d1f193f26e6e5c1bcc3dd527dc0ad7c3714e17755e40eed14a6f5efea1f64ab0"
+        ],
+        "scopes": [
+          "current-host3600:stress96"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": "human-capacity-ecfdf9bb5d0f4ea3765cdfd61ee2a9f2dcce00c71312b57dcbc883932b248ef3",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "efbfc77f08cfc457448bfc52367a97c1636c7af3524d1458b5e37ca68e0b463b",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "e4b9fa63a9c3f054cb2bc3fab28b7af66982695109ecf5f31bec03c4625c7399"
+        ],
+        "scopes": [
+          "current-host3600:stress96"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": "human-capacity-a9ed8d06e83f73fdca82b1b40b989ffc3e21df264aa314bc1103d8017e10c34f",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "f2d9c5c614376f09af14ac6cb252c48784cc0f7cb92f976c2d5662827ee7ce1b",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "e4d0ae5c425b94629057cc1c91f864e400ccd640204901505c44c95a94880736"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "33ae444c02487bb48163859a478e47e0fc5c06ef210c5a9f2285d8dcf8f14019",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-01-B5.json"
+        ],
+        "rawSha256s": [
+          "db60125cd024973c7b64d59480b4050e2ccebb63653c6f1024098f773347170b"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B5",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "ec4b6f8e945e5447c958bb0398f206dea83cebc489c55e731bfdca337d730cac",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-01-B8.json"
+        ],
+        "rawSha256s": [
+          "395a717b98260f905092b5b01e8ae2d25a84174a905ce791b7548a9f48f7b77d"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "ea61844f365ede89bb2b8ce1104df3949ef7b990383ed93ebe0e59b09684b6ae",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-01-B6.json"
+        ],
+        "rawSha256s": [
+          "29462aee28fef682e46ebedbfe2cd339aea4b58be56defd49f4f15dde1da1c7c"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.007544540000000001,
+          "totalProviderCostUsd": 0.007544540000000001,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.007544540000000001,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 52770.718399999896,
+          "providerWallTotalMs": 52770.718399999896,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00096866,
+              "reservedUsd": 0.006878619999999999,
+              "wallMs": 4643.303599999985,
+              "inputTokens": 3759,
+              "outputTokens": 1106,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00083852,
+              "reservedUsd": 0.006869439999999999,
+              "wallMs": 3277.9462999999523,
+              "inputTokens": 3718,
+              "outputTokens": 795,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00085222,
+              "reservedUsd": 0.006897159999999999,
+              "wallMs": 6198.1384999998845,
+              "inputTokens": 3793,
+              "outputTokens": 803,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00098844,
+              "reservedUsd": 0.006887079999999999,
+              "wallMs": 10689.34850000008,
+              "inputTokens": 3806,
+              "outputTokens": 1139,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00139362,
+              "reservedUsd": 0.0069543999999999995,
+              "wallMs": 12735.543999999994,
+              "inputTokens": 4363,
+              "outputTokens": 1957,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00170482,
+              "reservedUsd": 0.00790948,
+              "wallMs": 10549.335399999982,
+              "inputTokens": 6603,
+              "outputTokens": 1951,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00079826,
+              "reservedUsd": 0.006566859999999999,
+              "wallMs": 4677.102100000018,
+              "inputTokens": 3039,
+              "outputTokens": 932,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.007544540000000001,
+        "totalProviderCostUsd": 0.007544540000000001,
+        "chargedBudgetUsd": 0.007544540000000001,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "d8ec5ba5e96f29b6cf1e6c17a637e7cce315465f7c4dbdc0f9ef43c00d243536",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-02-C_manual.json"
+        ],
+        "rawSha256s": [
+          "41c3e2f67c2afe4a319271a9f930d736d652741c1f5a7317315f458967e06b0c"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "cf7e084f7707a689fd7eee30da12a251a220d2ae44684ff7ce3833db37f840a7",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-02-B5.json"
+        ],
+        "rawSha256s": [
+          "9771b5bff605d633643f91bd591a4c88c93d8d8cbd7930b8c493c138a8a33700"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B5",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "4a69e00ab68a404d38199045a003874cec6950f2ae504673931cc7c025d6a39b",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-02-B8.json"
+        ],
+        "rawSha256s": [
+          "688626aef52967bac31aeb2f707e799c75988159ce7601b6370df8a074e634c9"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "76339cc3eda44c5ad4262c609acf5bf5b07296dc4aed3dc8eab6fd46a858056f",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-02-B6.json"
+        ],
+        "rawSha256s": [
+          "0c39c05271550b110390465bce2818ef76ee99c72c7ed94ec9926d3c805b2ada"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.0062962999999999995,
+          "totalProviderCostUsd": 0.0062962999999999995,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.0062962999999999995,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 44823.03140000021,
+          "providerWallTotalMs": 44823.03140000021,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00080328,
+              "reservedUsd": 0.00683722,
+              "wallMs": 7057.798700000159,
+              "inputTokens": 3612,
+              "outputTokens": 744,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00117442,
+              "reservedUsd": 0.0068924799999999994,
+              "wallMs": 8062.576900000218,
+              "inputTokens": 3803,
+              "outputTokens": 1605,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00092324,
+              "reservedUsd": 0.00690148,
+              "wallMs": 6878.135699999984,
+              "inputTokens": 3786,
+              "outputTokens": 983,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00122134,
+              "reservedUsd": 0.00691246,
+              "wallMs": 7783.677099999972,
+              "inputTokens": 4141,
+              "outputTokens": 1604,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00099508,
+              "reservedUsd": 0.006938199999999999,
+              "wallMs": 6260.265999999829,
+              "inputTokens": 4242,
+              "outputTokens": 1003,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00094186,
+              "reservedUsd": 0.00691282,
+              "wallMs": 5730.832500000019,
+              "inputTokens": 4119,
+              "outputTokens": 913,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00023708,
+              "reservedUsd": 0.00594532,
+              "wallMs": 3049.74450000003,
+              "inputTokens": 1042,
+              "outputTokens": 228,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.0062962999999999995,
+        "totalProviderCostUsd": 0.0062962999999999995,
+        "chargedBudgetUsd": 0.0062962999999999995,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "9c604eef189b7fbba8cef448ec3f2b50d9b7c1fcc271d98b3ff1af34394e40f2",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-03-C_manual.json"
+        ],
+        "rawSha256s": [
+          "80f5162c9eca89aa94e8ae456c30bc2111d9116bb5460624755980278ab3d2ce"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "ed205a046e4673d3c53c77ab6de0c1ec1ce7635664eb871319685986e0855b8b",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-03-B5.json"
+        ],
+        "rawSha256s": [
+          "f34b92d0a169782ba926aa37da12d180ff3e6e18a8c1d93832c87680173adfd4"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B5",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "0a4e39dad14a7b5aaad8fdd71040c000217a2c8ce19d91b504175de6c985bf37",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-03-B8.json"
+        ],
+        "rawSha256s": [
+          "304e68a90151a1032606d03b76bb75cda070c2fdd0044e33442d662940d3c58a"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "a3c174a349e05c30ddc118406324be336c7d8de8a9d18a5fac0fe32789ef4083",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity\\native-primary-20261013\\moderate-native-human-capacity-primary-03-B6.json"
+        ],
+        "rawSha256s": [
+          "8f32fe9916bf41323105e4992c72f1722b714d4e7b651f2208c8bbca5a9110b5"
+        ],
+        "scopes": [
+          "v1-primary"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.00608458,
+          "totalProviderCostUsd": 0.00608458,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.00608458,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 28012.59779999964,
+          "providerWallTotalMs": 28012.59779999964,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00097418,
+              "reservedUsd": 0.00689302,
+              "wallMs": 5930.373599999584,
+              "inputTokens": 3787,
+              "outputTokens": 1110,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00090792,
+              "reservedUsd": 0.00685126,
+              "wallMs": 3568.278699999675,
+              "inputTokens": 3668,
+              "outputTokens": 986,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00084344,
+              "reservedUsd": 0.006867819999999999,
+              "wallMs": 3410.88570000045,
+              "inputTokens": 3716,
+              "outputTokens": 808,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00114078,
+              "reservedUsd": 0.0069202,
+              "wallMs": 7057.016900000162,
+              "inputTokens": 3997,
+              "outputTokens": 1453,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00095876,
+              "reservedUsd": 0.0069922,
+              "wallMs": 3125.7442000000738,
+              "inputTokens": 4494,
+              "outputTokens": 824,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00096554,
+              "reservedUsd": 0.006927579999999999,
+              "wallMs": 3897.520699999761,
+              "inputTokens": 4191,
+              "outputTokens": 947,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00029396,
+              "reservedUsd": 0.0060515199999999995,
+              "wallMs": 1022.777999999933,
+              "inputTokens": 1434,
+              "outputTokens": 233,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.00608458,
+        "totalProviderCostUsd": 0.00608458,
+        "chargedBudgetUsd": 0.00608458,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "4dfbd2934673a34954c580aaab2b7f4e127d7e8d6ace3925cbc710b8a1f35619",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "5a5e63e5cd3dec56daee6434799dedbbf796abfa4263a1d3e56780fb8d58b545"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "354d2de4d6265ef94195e63b172395440dbf3eed1f126ad226b79ad34a12db71",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B5.json"
+        ],
+        "rawSha256s": [
+          "0bb3cd7381fc51e2c70df69ca39bab08fd3248c81b62564502eb945fa6218c34"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B5",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "82ac3b60ed6446e358911d7343202338f657d07e647a7f3dbc542e6ad71a6ab3",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B8.json"
+        ],
+        "rawSha256s": [
+          "7ef5fff95a2ed42775a96f8fb013c0dcb19081a3bdd0a8348b166f1ca6b71626"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B8",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "49ab9478fbae82706285eb5e5d533b7fe23db8da94eb2366c0462a55d86ddd31",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B6.json"
+        ],
+        "rawSha256s": [
+          "5d1b49d9b3e0d9e37bf9a3cc40c126840e6a640a6938fde1d9a86f6441301ec7"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.0075974599999999995,
+          "totalProviderCostUsd": 0.0075974599999999995,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.0075974599999999995,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 44061.57499999984,
+          "providerWallTotalMs": 44061.57499999984,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00091484,
+              "reservedUsd": 0.006886359999999999,
+              "wallMs": 3778.293799999985,
+              "inputTokens": 3746,
+              "outputTokens": 976,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00088398,
+              "reservedUsd": 0.00686044,
+              "wallMs": 3449.1771999999182,
+              "inputTokens": 3717,
+              "outputTokens": 909,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00088818,
+              "reservedUsd": 0.006887979999999999,
+              "wallMs": 7353.538300000015,
+              "inputTokens": 3747,
+              "outputTokens": 909,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00113996,
+              "reservedUsd": 0.0069022,
+              "wallMs": 5481.152899999986,
+              "inputTokens": 3914,
+              "outputTokens": 1480,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00115138,
+              "reservedUsd": 0.006972579999999999,
+              "wallMs": 7816.245200000005,
+              "inputTokens": 4467,
+              "outputTokens": 1315,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00185464,
+              "reservedUsd": 0.00767872,
+              "wallMs": 10924.622399999993,
+              "inputTokens": 6036,
+              "outputTokens": 2524,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00076448,
+              "reservedUsd": 0.006527799999999999,
+              "wallMs": 5258.545199999935,
+              "inputTokens": 2912,
+              "outputTokens": 892,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.0075974599999999995,
+        "totalProviderCostUsd": 0.0075974599999999995,
+        "chargedBudgetUsd": 0.0075974599999999995,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "25ceda9d60c008e8a99154d2bfacb5a69eadb5037f6c6f0dd5bf303a335e8d3f",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read\\fast_read_5s-native-human-capacity-control-fast-read-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "5c8c7e41a6f5b98c0b5faf7eeef8c2b2e8ef295b0441315e338017eeeb77cefe"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "51eca2049430384bc3b839ed80de09a7590d20fe8ccb2ac111e38413e2bc05db",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read\\fast_read_5s-native-human-capacity-control-fast-read-01-B6.json"
+        ],
+        "rawSha256s": [
+          "80a814b09c4230c34490ca1d4ce2fba15c88b2b5e2e94cba3ce422224f1c3b5d"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 5,
+          "providerCalls": 5,
+          "reportedProviderCalls": 5,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.0044840999999999995,
+          "totalProviderCostUsd": 0.0044840999999999995,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.0044840999999999995,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 24216.719199999934,
+          "providerWallTotalMs": 24216.719199999934,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00090742,
+              "reservedUsd": 0.00684244,
+              "wallMs": 5543.964500000002,
+              "inputTokens": 3653,
+              "outputTokens": 990,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00074074,
+              "reservedUsd": 0.00686728,
+              "wallMs": 2406.0831999999937,
+              "inputTokens": 3691,
+              "outputTokens": 560,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0008623,
+              "reservedUsd": 0.00687808,
+              "wallMs": 4188.557199999981,
+              "inputTokens": 3745,
+              "outputTokens": 845,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00113558,
+              "reservedUsd": 0.00687682,
+              "wallMs": 7431.972599999979,
+              "inputTokens": 3797,
+              "outputTokens": 1510,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00083806,
+              "reservedUsd": 0.00673642,
+              "wallMs": 4646.141699999978,
+              "inputTokens": 3669,
+              "outputTokens": 811,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.0044840999999999995,
+        "totalProviderCostUsd": 0.0044840999999999995,
+        "chargedBudgetUsd": 0.0044840999999999995,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "426b5eed7730104ecccb2f8c7886c0fe834a168f6b899e353d32b63374d583e6",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8\\readers8-native-human-capacity-control-readers8-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "11604c0974c289679622138ed43b67183a8115417523544ca278ef3621250d02"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "42af51570c007d5097cf9036a71a61dce96b7c80974ec7b86a7ce9d15825c961",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8\\readers8-native-human-capacity-control-readers8-01-B6.json"
+        ],
+        "rawSha256s": [
+          "69f093ca35a36a93d2cdec24f8a89833226be6f53d62ddbdb5146d14e39179c3"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 6,
+          "providerCalls": 6,
+          "reportedProviderCalls": 6,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.00570586,
+          "totalProviderCostUsd": 0.00570586,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.00570586,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 26286.954099999974,
+          "providerWallTotalMs": 26286.954099999974,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00084072,
+              "reservedUsd": 0.006844059999999999,
+              "wallMs": 3879.4630999999936,
+              "inputTokens": 3648,
+              "outputTokens": 825,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00093832,
+              "reservedUsd": 0.00686728,
+              "wallMs": 5124.837100000004,
+              "inputTokens": 3708,
+              "outputTokens": 1048,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00097342,
+              "reservedUsd": 0.0068629599999999995,
+              "wallMs": 4344.768300000054,
+              "inputTokens": 3693,
+              "outputTokens": 1141,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0010752,
+              "reservedUsd": 0.006927399999999999,
+              "wallMs": 5028.13069999998,
+              "inputTokens": 4040,
+              "outputTokens": 1274,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00100834,
+              "reservedUsd": 0.00697816,
+              "wallMs": 3609.160899999959,
+              "inputTokens": 4391,
+              "outputTokens": 984,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00086986,
+              "reservedUsd": 0.0068498199999999995,
+              "wallMs": 4300.593999999983,
+              "inputTokens": 3919,
+              "outputTokens": 803,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.00570586,
+        "totalProviderCostUsd": 0.00570586,
+        "chargedBudgetUsd": 0.00570586,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "60a76dc86faa92e62abc71efbe2101a3b3ce63730dcd2c2e47d6fd65ad948558",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "6ffd2fbbef87aa73ebc0914aa5f0980161a5b18cfbb75996f343f608ad0a42ea"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "9b38b430d67b36aa36e6bc5a58911bab204f46b5cab757f1bc8dd032e9a8f571",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json"
+        ],
+        "rawSha256s": [
+          "7272023e0ac72966a5fad8f21299a8ffa82a1e3c63a2f9060bd7f3a38c30ebb9"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "C_decentralized",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "924ea3258568573109dee762b020510c3978693e98e1b655488058dd077967ca",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json"
+        ],
+        "rawSha256s": [
+          "da8780eebf4cac983f54b0b63312cb35d50e640c489a5f41b8bedc5555286871"
+        ],
+        "scopes": [
+          "v1-controls"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": null,
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 7,
+          "providerCalls": 7,
+          "reportedProviderCalls": 7,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.0077663,
+          "totalProviderCostUsd": 0.0077663,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.0077663,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 44677.516,
+          "providerWallTotalMs": 44677.516,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0010292,
+              "reservedUsd": 0.0068869,
+              "wallMs": 4841.441699999967,
+              "inputTokens": 3780,
+              "outputTokens": 1250,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00166464,
+              "reservedUsd": 0.0075619,
+              "wallMs": 10495.569499999983,
+              "inputTokens": 5276,
+              "outputTokens": 2315,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00083282,
+              "reservedUsd": 0.00683794,
+              "wallMs": 3988.526600000041,
+              "inputTokens": 3623,
+              "outputTokens": 814,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00111356,
+              "reservedUsd": 0.006877899999999999,
+              "wallMs": 6033.139200000034,
+              "inputTokens": 3734,
+              "outputTokens": 1477,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00125862,
+              "reservedUsd": 0.00688384,
+              "wallMs": 5816.607699999993,
+              "inputTokens": 3833,
+              "outputTokens": 1805,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00122856,
+              "reservedUsd": 0.006976179999999999,
+              "wallMs": 10589.399600000004,
+              "inputTokens": 4484,
+              "outputTokens": 1502,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0006389,
+              "reservedUsd": 0.0066392199999999995,
+              "wallMs": 2912.8316999999806,
+              "inputTokens": 3215,
+              "outputTokens": 472,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.0077663,
+        "totalProviderCostUsd": 0.0077663,
+        "chargedBudgetUsd": 0.0077663,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "9b8f33892dcc9204cc727d64a3ebdb49edb2902ff7f39a3fa05a4a952676530c",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json"
+        ],
+        "rawSha256s": [
+          "516bad70f34650d96dd394414f28f2cc51e546f70835c970513ff9dade3e070d"
+        ],
+        "scopes": [
+          "stopped-v4-host900"
+        ],
+        "arm": "C_manual",
+        "nativeEpisodeIdentity": "human-capacity-fab85bd57ffd168979394e61ee65a2e8569eec8be32298510608a967ba9bc3a8",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "5aebf998cb2d9860ea37fd400a85957c3a4403ed815fc6736d7e652ca87970e3",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json"
+        ],
+        "rawSha256s": [
+          "60ee5697b69e94e3ce7fd5fcdd56f9a9762122916563d81044ce0b75730be4f0"
+        ],
+        "scopes": [
+          "stopped-v4-host900"
+        ],
+        "arm": "C_decentralized",
+        "nativeEpisodeIdentity": "human-capacity-65f99629e2dfd234dd1f2a889943c3a3c7c2597bd0ea0c028c7426538f2e656e",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 0,
+          "providerCalls": 0,
+          "reportedProviderCalls": 0,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0,
+          "totalProviderCostUsd": 0,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 0,
+          "providerWallTotalMs": 0,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "chargedBudgetUsd": 0,
+        "forbiddenReferenceInference": false
+      },
+      {
+        "identity": "d7b4186b09b356bdf91eef4cabc94a9a6e367ac35d389080039290eaac85b96a",
+        "paths": [
+          "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json"
+        ],
+        "rawSha256s": [
+          "e2dec91dc29e14571aeb92becbba68e7f11638021e3e678000b2ac3e9447b5ea"
+        ],
+        "scopes": [
+          "stopped-v4-host900"
+        ],
+        "arm": "B6",
+        "nativeEpisodeIdentity": "human-capacity-e3f2cc2010a38d84b1a2bd0d32a551c815112f0afc35157dd07d2c58971da008",
+        "artifactCopies": 1,
+        "ledgerConflict": false,
+        "fee": {
+          "usageRecords": 6,
+          "providerCalls": 6,
+          "reportedProviderCalls": 6,
+          "usageCountMismatch": false,
+          "knownCostSubtotalUsd": 0.00622966,
+          "totalProviderCostUsd": 0.00622966,
+          "totalCostKnown": true,
+          "unknownCostCalls": 0,
+          "unknownCostReserveUsd": 0,
+          "chargedBudgetUsd": 0.00622966,
+          "fullEpisodeCapExposureWhenMissingUsd": null,
+          "providerWallKnownSubtotalMs": 37878.2509000001,
+          "providerWallTotalMs": 37878.2509000001,
+          "providerWallMissingCalls": 0,
+          "failedCalls": 0,
+          "attempts": [
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0010768,
+              "reservedUsd": 0.0068869,
+              "wallMs": 9058.190600000089,
+              "inputTokens": 3780,
+              "outputTokens": 1369,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00088042,
+              "reservedUsd": 0.00683794,
+              "wallMs": 6612.793800000101,
+              "inputTokens": 3623,
+              "outputTokens": 933,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00110796,
+              "reservedUsd": 0.006877899999999999,
+              "wallMs": 5723.322200000053,
+              "inputTokens": 3734,
+              "outputTokens": 1463,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00106062,
+              "reservedUsd": 0.00688384,
+              "wallMs": 5032.444200000027,
+              "inputTokens": 3833,
+              "outputTokens": 1310,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.00141376,
+              "reservedUsd": 0.006976179999999999,
+              "wallMs": 6931.584299999988,
+              "inputTokens": 4484,
+              "outputTokens": 1965,
+              "error": null
+            },
+            {
+              "state": "completed",
+              "model": "google/gemma-4-31b-it",
+              "costUsd": 0.0006901,
+              "reservedUsd": 0.0066392199999999995,
+              "wallMs": 4519.915799999842,
+              "inputTokens": 3215,
+              "outputTokens": 600,
+              "error": null
+            }
+          ],
+          "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+        },
+        "knownSubtotalUsd": 0.00622966,
+        "totalProviderCostUsd": 0.00622966,
+        "chargedBudgetUsd": 0.00622966,
+        "forbiddenReferenceInference": false
+      }
+    ],
+    "artifactCopies": 35,
+    "uniqueRetainedLedgerArtifacts": 35,
+    "knownSubtotalUsd": 0.09348603999999999,
+    "totalProviderCostUsd": 0.09348603999999999,
+    "chargedBudgetUsd": 0.09348603999999999,
+    "conflictingNativeLedgerIdentities": 0,
+    "note": "Copies of one native episode ledger are counted once. Pre-opaque histories deduplicate identical parsed artifacts; no provider request IDs exist in these exports, so this is retained-execution accounting, not a bank invoice or account-wide deduplication guarantee. Unknown fees remain null; real fees are never capped downward. Physical results are never pooled with histories.",
+    "missingCurrentPaidCapExposureUsd": 0,
+    "chargedIncludingMissingCurrentPaidSlotsUsd": 0.09348603999999999
+  }
+}

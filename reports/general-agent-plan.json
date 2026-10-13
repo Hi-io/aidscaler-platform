@@ -45,19 +45,9 @@
         "simulatorFingerprint": null
       },
       "verification": "reports/verification-latest.json"
-    },
-    {
-      "at": "2026-10-13T02:05:03.517Z",
-      "reason": "Fresh common candidate after exact physical evacuation receipts, globally protected assessment resources, qualified mixed staff, grounded received opportunities, source-specific partial attention/bounded recovery, finite operational review queue with authorization fencing, batched polling, homogeneous lot expiry/provenance guards, bounded durable external-connector continuation, fair contextual route receipt lifecycle, real process-crash/storage-full recovery tests, scoped sandbox spending/partial supplier receipts with human financial/public reconciliation, explicit connector registry evidence, loaded-vehicle route checks, owner-declared vehicle calendars/next commitments, received driver availability, source-declared qualified-staff shift/rest calendars, received congestion estimates, pickup colocation, material availability wake-up signatures, awaited asynchronous stop policies, replay-consistent piecewise vehicle/staff capacity-hour instrumentation, source-enforced payload mass/volume/passenger-seat limits, full historical review-to-physical-service evidence and concurrent finite source-owner review in every comparative arm, received-directory-only owner-approved coverage checks for unknown/stale communities, run-bound versioned receiver-authorized unloading with real onsite qualified crew and preserved original cargo including reviewed physical recovery of one additional own delivery under fleet backpressure, persistent pending-first unloading review UI, conservative finite proposal-to-service creation timestamps, three-way bounded common fleet assignment that escapes a verified pair-swap local minimum, service-worker JS included in the candidate byte fingerprint, and consistent successful B6/B9 provider HTTP duration separated from SQL bookkeeping with explicit elapsed fallback when the provider does not return a valid duration. All previous outcomes, failures and costs remain preserved. No result has been observed from this version when the amended plan is declared.",
-      "previousFingerprints": {
-        "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
-        "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
-        "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
-      },
-      "verification": "reports/verification-latest.json"
     }
   ],
-  "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
-  "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
-  "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e"
+  "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+  "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+  "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
 }

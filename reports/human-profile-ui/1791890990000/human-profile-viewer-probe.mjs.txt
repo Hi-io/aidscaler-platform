@@ -1,0 +1,180 @@
+// PROPOSED ONLY. Copy to simulator/.local/human-profile-viewer-probe.mjs
+// after source release and the UI patch. Nothing is executed by preparation.
+import assert from 'node:assert/strict';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import net from 'node:net';
+import { createLabServers } from '../sources/server.mjs';
+import { ENGINE_BUILD } from '../contracts/config.mjs';
+import { simulatorFingerprint } from '../../nexo-platform/evaluation/simulator-build.mjs';
+
+const options = Object.fromEntries(process.argv.slice(2).map(s => {
+  const i=s.indexOf('='); return [s.slice(2,i<0?undefined:i),i<0?true:s.slice(i+1)];
+}));
+if (options.run !== 'ROOT_GO_HUMAN_PROFILE_UI_PROBE') {
+  console.log(JSON.stringify({state:'PREPARED_NOT_LAUNCHED',worldsStarted:0,browserRuns:0,modelCalls:0}));
+} else {
+  if (!/^[a-f0-9]{64}$/.test(options['expected-build']??'') || !options.out) throw Error('EXPLICIT_NEW_BUILD_AND_REPORT_REQUIRED');
+  await run();
+}
+
+async function run() {
+  const sha=b=>createHash('sha256').update(b).digest('hex'),folder=resolve(options.out);
+  const checks=[],errors=[],expectedRejections=[],externalRequests=[];
+  const check=(name,data={})=>checks.push({name,passed:true,...data});
+  const originalFetch=globalThis.fetch;
+  let lab,browser,authenticated=false,expectConfigRejection=false,closing=false;
+  const redact=s=>[lab?.observerKey,...Object.keys(lab?.actorKeys??{})].filter(Boolean)
+    .reduce((text,key)=>text.replaceAll(key,'[redacted]'),String(s));
+  const save=(name,value)=>writeFile(resolve(folder,name),JSON.stringify(value,null,2)+'\n');
+  const request=async(base,path,{key,body}={})=>{
+    const response=await fetch(base+path,{headers:{...(key?{Authorization:'Bearer '+key}:{}),
+      ...(body?{'Content-Type':'application/json'}:{})},...(body?{method:'POST',body:JSON.stringify(body)}:{})});
+    assert.equal(response.ok,true,'HTTP '+path+' '+response.status);return response.json();
+  };
+  const config={scenario:'S23',seed:'human-profile-viewer-probe-v5-01',organizations:2,grid:3,extentKm:2,
+    hazard:'none',policy:'none',backgroundTraffic:0,postsPerHour:0,healthReports:false,recurringNeeds:false,
+    packetLoss:0,networkLatencyMs:0,queryLatencyMs:0,sourceIndexMs:0,durationMs:600000,
+    humanCapacity:{profile:'zero'}};
+  const initial=await simulatorFingerprint();assert.equal(initial,ENGINE_BUILD);assert.equal(initial,options['expected-build']);
+  await mkdir(folder,{recursive:false});
+  await writeFile(resolve(folder,'human-profile-viewer-probe.mjs.txt'),await readFile(fileURLToPath(import.meta.url)),{flag:'wx'});
+  await save('protocol.json',{schema:'real-human-profile-viewer-probe-v5',initialBuild:initial,
+    helperSha256:sha(await readFile(fileURLToPath(import.meta.url))),config,recordedAt:new Date().toISOString(),
+    viewports:['desktop1920x1080','brief-mobile390x844-selector'],
+    scope:'Configuration, typed console action and finite human queues only. Existing separate 15-check viewer proof covers pan/zoom/LOD/follow/A-B. No provider, no benefit or human calibration claim.',
+    injection:'One ordinary exogenous scenario_signal creates a public post; controller selections use its received feed ID/version. No private truth chooses a response.',
+    authority:'The console uses authenticated observer-authorized org0 commander action. The second read uses the ordinary authenticated org0 actor endpoint; owner1 privacy uses its own actor.',
+    invalidInput:'Adversarial DOM option tests native rejection of an invalid submitted profile. The unchanged observer config endpoint currently reports validation Error as HTTP500 with a generic message; retain that exact rejection, do not reclassify it as an unrelated runtime error or invent HTTP400. It does not alter engine code or manufacture queues.'});
+  try {
+    globalThis.fetch=(input,args)=>{
+      const url=new URL(typeof input==='string'?input:input.url??String(input));
+      assert.ok(['127.0.0.1','localhost','::1'].includes(url.hostname),'External fetch forbidden');return originalFetch(input,args);
+    };
+    const probe=net.createServer();await new Promise((done,reject)=>{probe.once('error',reject);probe.listen(0,'127.0.0.1',done);});
+    const port=probe.address().port;await new Promise((done,reject)=>probe.close(e=>e?reject(e):done()));
+    lab=await createLabServers({observerPort:port,sourcePort:0,persistCredentials:false,config});
+    const observer='http://127.0.0.1:'+lab.observerPort,source='http://127.0.0.1:'+lab.sourcePort;
+    const actor0=Object.entries(lab.actorKeys).find(([,a])=>a.org==='org0')[0],actor1=Object.entries(lab.actorKeys).find(([,a])=>a.org==='org1')[0];
+    const require=createRequire(new URL('../../nexo-platform/package.json',import.meta.url));
+    const {chromium}=require('@playwright/test');
+    browser=await chromium.launch({headless:true,args:['--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-gpu-sandbox']});
+    const context=await browser.newContext({viewport:{width:1920,height:1080}});
+    await context.route('**/*',route=>{
+      const url=new URL(route.request().url());
+      if(!['127.0.0.1','localhost','::1'].includes(url.hostname)){externalRequests.push(url.origin+url.pathname);return route.abort();}
+      if(url.pathname==='/favicon.ico')return route.fulfill({status:204,body:''});return route.continue();
+    });
+    const page=await context.newPage();page.setDefaultTimeout(15000);
+    page.on('pageerror',e=>{if(!closing)errors.push({type:'pageerror',message:redact(e.message)});});
+    page.on('console',m=>{
+      if(closing)return;
+      if(m.type()==='error'){
+        if(!authenticated&&/401/.test(m.text())||expectConfigRejection&&/500/.test(m.text()))expectedRejections.push({type:'console',message:redact(m.text())});
+        else errors.push({type:'console',message:redact(m.text())});
+      }else if(m.type()==='warning'&&/WebGL.*(?:error|context lost)|GL_(?:INVALID|OUT_OF_MEMORY)|shader.*error/i.test(m.text()))errors.push({type:'WebGL',message:redact(m.text())});
+    });
+    page.on('response',response=>{
+      if(closing||response.status()<400)return;
+      const path=new URL(response.url()).pathname,row={type:'HTTP',path,status:response.status()};
+      if(!authenticated&&response.status()===401&&['/api/catalog','/api/state'].includes(path)||expectConfigRejection&&path==='/api/config'&&response.status()===500)expectedRejections.push(row);
+      else errors.push(row);
+    });
+    await page.goto(observer);await page.locator('#key').fill(lab.observerKey);await page.locator('#loginForm button').click();
+    await page.locator('#app').waitFor({state:'visible'});authenticated=true;
+    await page.locator('#toggleConfig').click();assert.equal(await page.locator('#humanProfile').inputValue(),'zero');
+    await page.locator('#humanProfile').selectOption('moderate');
+    await page.locator('#configForm details summary').click();
+    // Intentionally conflicting advanced profile: the visible field must win,
+    // while its other native parameters survive the merge.
+    await page.locator('#advancedConfig').fill(JSON.stringify({humanCapacity:{profile:'burst',readers:1,deciders:1,relayers:1,readMs:30000,
+      readErrorBp:0,decisionErrorBp:0,relayErrorBp:0,backgroundReadPerHour:0,backgroundDecisionPerHour:0,backgroundRelayPerHour:0}}));
+    const configured=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/config'&&r.request().method()==='POST');
+    await page.locator('#configForm button[type="submit"]').click();assert.equal((await configured).status(),200);
+    await page.locator('#configDrawer').waitFor({state:'hidden'});
+    const selected=await request(observer,'/api/state',{key:lab.observerKey});
+    assert.equal(selected.manifest.config.humanCapacity.profile,'moderate');assert.equal(selected.manifest.config.humanCapacity.readers,1);
+    assert.equal(selected.manifest.config.humanCapacity.readMs,30000);assert.equal(selected.manifest.config.policy,'none');assert.equal(selected.playing,false);
+    await page.locator('#toggleConfig').click();assert.equal(await page.locator('#humanProfile').inputValue(),'moderate');
+    check('Visible profile wins advanced profile; native manifest preserves finite reader and duration',{profile:'moderate',readers:1,readMs:30000,policy:'none'});
+    // Use an actual clock change before reset, not a possibly identical run ID.
+    await request(observer,'/api/control',{key:lab.observerKey,body:{advanceTo:1000}});
+    const resetResponse=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/config'&&r.request().method()==='POST');
+    await page.locator('#reset').click();assert.equal((await resetResponse).status(),200);
+    const reset=await request(observer,'/api/state',{key:lab.observerKey});
+    assert.equal(reset.now,0);assert.equal(reset.playing,false);assert.deepEqual(reset.manifest.config,selected.manifest.config);
+    // A fresh document starts at its zero option. Its actual received config
+    // must restore moderate; merely inspecting our earlier selection is weak.
+    await page.reload();await page.locator('#app').waitFor({state:'visible'});await page.locator('#toggleConfig').click();
+    assert.equal(await page.locator('#humanProfile').inputValue(),'moderate');check('Reset keeps actual selected native manifest and returns source clock to zero');
+    // The fixed select cannot ordinarily choose an invalid option. Exercise the
+    // real server guard with an adversarial UI field, retaining its rejection.
+    const beforeInvalid=lab.world.stateHash();expectConfigRejection=true;
+    await page.evaluate(()=>document.getElementById('humanProfile').add(new Option('Invalid test','invalid-probe',true,true)));
+    const invalidResponse=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/config'&&r.request().method()==='POST');
+    await page.locator('#configForm button[type="submit"]').click();const invalid=await invalidResponse;
+    assert.equal(invalid.status(),500);const rejection=await invalid.json();
+    assert.equal(rejection.message,'Observer request failed');
+    await page.waitForFunction(()=>document.getElementById('toast').textContent==='Observer request failed');
+    assert.equal(lab.world.stateHash(),beforeInvalid);assert.equal((await request(observer,'/api/state',{key:lab.observerKey})).manifest.config.humanCapacity.profile,'moderate');
+    check('Invalid submitted profile rejected without resetting source or fabricating work',{status:500,error:rejection.error??null});
+    await page.locator('#humanProfile').selectOption('moderate');await page.evaluate(()=>document.querySelector('#humanProfile option[value="invalid-probe"]').remove());
+    expectConfigRejection=false;await page.locator('#closeConfig').click();
+
+    const building=reset.state.map.shelterId;
+    await request(observer,'/api/inject',{key:lab.observerKey,body:{type:'scenario_signal',data:{family:'P01',type:'text',text:'Public fixture report: families are waiting at the shelter.',
+      building,compositionMs:0,causeEvent:'human-profile-ui-probe'}}});
+    await request(observer,'/api/control',{key:lab.observerKey,body:{advanceTo:1000}});
+    const feed=await request(source,'/api/feed');assert.ok(feed.posts.length>0);const post=feed.posts[0];
+    await request(source,'/api/actor/ingestion',{key:actor0,body:{id:post.id,version:post.version,stage:'downloaded'}});
+    const before=await request(source,'/api/actor/state',{key:actor0}),aidBefore=await request(observer,'/api/metrics',{key:lab.observerKey});
+    await page.locator('#toggleConfig').click();await page.locator('#toggleCommand').click();
+    await page.locator('#actionOrg').selectOption('org0');await page.locator('#actionType').selectOption('human_work');
+    const example=JSON.parse(await page.locator('#actionParams').inputValue());assert.equal(example.stage,'read');assert.equal(example.reference.kind,'post');
+    const params={stage:'read',reference:{kind:'post',id:post.id,version:post.version}};
+    await page.locator('#actionParams').fill(JSON.stringify(params));
+    const consoleResponse=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/action'&&r.request().method()==='POST');
+    await page.locator('#actionForm button').click();assert.equal((await consoleResponse).status(),200);await page.locator('#closeCommand').click();
+    await request(source,'/api/actor/action',{key:actor0,body:{type:'human_work',params,idempotencyKey:'profile-probe-second-ordinary-read'}});
+    const own=await request(source,'/api/actor/state',{key:actor0}),read=own.humanWork.filter(t=>t.stage==='read');
+    assert.equal(read.length,2);assert.equal(read.filter(t=>t.state==='working').length,1);assert.equal(read.filter(t=>t.state==='queued').length,1);
+    assert.ok(read.every(t=>t.org==='org0'&&!Object.hasOwn(t,'privatePayload')&&!Object.hasOwn(t,'result')));
+    assert.deepEqual(own.operations,before.operations);assert.deepEqual(own.known.resources,before.known.resources);
+    assert.deepEqual((await request(observer,'/api/metrics',{key:lab.observerKey})).services,aidBefore.services);
+    check('UI console and authenticated actor submit real competing reads; one working, one queued, no aid or cargo mutation',{postId:post.id,version:post.version});
+    await request(source,'/api/actor/action',{key:actor1,body:{type:'human_work',params,idempotencyKey:'profile-probe-private-owner1'}});
+    const scoped=await request(source,'/api/actor/state',{key:actor0});assert.equal(scoped.humanWork.length,2);assert.ok(scoped.humanWork.every(t=>t.org==='org0'));
+    assert.equal(scoped.state,undefined);assert.ok(!JSON.stringify(scoped.humanWork).includes('privatePayload'));
+    await page.locator('#closeConfig').click();await page.locator('#perspective').selectOption('org0');
+    await page.locator('#openMeasurements').click();await page.locator('#measurementsDrawer details summary').click();
+    const row=page.locator('#informationStats table').last().locator('tbody tr').first();
+    await page.waitForFunction(()=>/^Read\s+1\s+1\s+0$/.test(document.querySelector('#informationStats table:last-of-type tbody tr')?.innerText??''));
+    assert.match(await row.innerText(),/^Read\s+1\s+1\s+0$/);await row.scrollIntoViewIfNeeded();
+    await page.screenshot({animations:'disabled',path:resolve(folder,'desktop-native-reader-queue.png')});
+    check('Native actor panel shows exact own queue; owner1 task remains private');
+    await page.locator('#closeMeasurements').click();
+    await request(observer,'/api/control',{key:lab.observerKey,body:{advanceTo:31000}});
+    const after=await request(source,'/api/actor/state',{key:actor0}),finished=after.humanWork.filter(t=>t.stage==='read');
+    assert.equal(finished.filter(t=>t.state==='completed').length,1);assert.equal(finished.filter(t=>t.state==='working').length,1);
+    const receipt=finished.find(t=>t.state==='completed');assert.equal(receipt.result.source.id,post.id);assert.equal(receipt.result.source.version,post.version);
+    assert.equal(receipt.result.snapshot.text,post.text);assert.deepEqual(after.operations,before.operations);
+    assert.deepEqual((await request(observer,'/api/metrics',{key:lab.observerKey})).services,aidBefore.services);
+    check('Source-clock advancement completes first received read and starts second; still no physical aid');
+    await page.setViewportSize({width:390,height:844});await page.locator('#toggleConfig').click();
+    await page.locator('#humanProfile').scrollIntoViewIfNeeded();assert.equal(await page.locator('#humanProfile').inputValue(),'moderate');
+    const bounds=await page.locator('#humanProfile').boundingBox();assert.ok(bounds.x>=-1&&bounds.x+bounds.width<=391);
+    await page.screenshot({animations:'disabled',path:resolve(folder,'mobile-profile-control.png')});check('Brief mobile profile control remains within drawer viewport',{bounds});
+    const final=await simulatorFingerprint();assert.equal(final,initial);assert.equal(lab.world.state.modelCalls,0);assert.deepEqual(lab.world.invariants(),[]);
+    assert.deepEqual(externalRequests,[]);assert.deepEqual(errors,[]);
+    await save('result.json',{passed:true,checks,errors,expectedRejections,externalRequests,initialBuild:initial,finalBuild:final,
+      helperSha256:sha(await readFile(fileURLToPath(import.meta.url))),browser:browser.version(),modelCalls:0,sourceIntegrity:lab.world.invariants(),recordedAt:new Date().toISOString()});
+    console.log(JSON.stringify({passed:true,checks:checks.length,report:resolve(folder,'result.json'),modelCalls:0}));
+  } catch (error) {
+    await save('result.json',{passed:false,checks,errors,expectedRejections,externalRequests,initialBuild:initial,finalBuild:await simulatorFingerprint(),
+      error:{name:error.name,message:redact(error.message)},recordedAt:new Date().toISOString()});
+    console.error(JSON.stringify({passed:false,message:redact(error.message),report:resolve(folder,'result.json')}));process.exitCode=1;
+  } finally {closing=true;await browser?.close();await lab?.close();globalThis.fetch=originalFetch;}
+}

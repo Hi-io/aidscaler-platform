@@ -1,0 +1,117 @@
+{
+  "declaredAt": "2026-10-13",
+  "purpose": "Predeclare follow-up profiles before observing their outcomes; substantial reduction in physical response time, with competent references and quality guardrails.",
+  "primary": {
+    "seedPrefix": "response-burst-2026",
+    "seeds": 3,
+    "arms": [
+      "B5",
+      "B6",
+      "B8"
+    ],
+    "needs": 24,
+    "noise": 192,
+    "reposts": 2,
+    "humanReadMs": 30000,
+    "humanWorkers": 2,
+    "clarificationWorkers": 2,
+    "formalDelayMs": 3600000,
+    "horizonMs": 10800000,
+    "maxModelCalls": 32,
+    "episodeBudgetUsd": 0.15,
+    "campaignBudgetUsd": 0.6
+  },
+  "controls": [
+    {
+      "name": "single-confirmation-worker",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "clarificationWorkers": 1
+    },
+    {
+      "name": "zero-reading-time",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "humanReadMs": 0
+    },
+    {
+      "name": "immediate-formal-reports",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "formalDelayMs": 0
+    },
+    {
+      "name": "silent-and-loss",
+      "seeds": 2,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "silentFraction": 0.25,
+      "packetLoss": 0.05
+    },
+    {
+      "name": "thirty-minute-formal-reports",
+      "seeds": 1,
+      "arms": [
+        "B5",
+        "B6"
+      ],
+      "formalDelayMs": 1800000,
+      "launch": "Included as fifth profile of the fresh sequential controls runner; not a separate duplicate."
+    }
+  ],
+  "rules": [
+    "Each campaign writes its own final protocol and source hashes before any arm runs. Controls inherit primary values except the explicit variable changes.",
+    "Finish the source qualification and failed-provider clock corrections before final campaigns. Preserve the earlier small pilot as diagnostic, not final-candidate evidence.",
+    "Do not edit candidate, engine or evaluator during a comparison. Any required correction creates a new version and retains old results.",
+    "Include failures, costs, right-censored outcomes and every declared seed. No selection by favorable model answer or delivery.",
+    "Compare physical service, native deficits, sufficient and first-useful response times, coverage, overprovisioning, distance and fuel.",
+    "Human reading capacity and formal delay are modeled assumptions; sensitivity profiles and B8 can refute or limit the claim. Do not equate laboratory minutes with real lives saved.",
+    "This is an internally authored synthetic workload, not independent disaster calibration or a secret holdout. Gemini and GCP remain later phases."
+  ],
+  "amendments": [
+    {
+      "at": "2026-10-12T20:42:23.596Z",
+      "reason": "Repeat all previously declared profiles and seeds after durable continuation/material receipt fixes and authority-race regression. Prior interrupted comparisons remain invalidated with cost reserves; no outcomes imputed.",
+      "previousFingerprints": {
+        "candidateFingerprint": null,
+        "evaluatorFingerprint": null,
+        "simulatorFingerprint": null
+      },
+      "verification": "reports/verification-latest.json"
+    },
+    {
+      "at": "2026-10-12T21:59:55.399Z",
+      "reason": "Fresh version after explicit pickup TTL, material terminal receipts, owned-stock/physical staff qualification conservation, service holds/facility refresh, strict progress/commentary reconciliation, shared fleet pair exchange, sourced alternative checkpoints and all-three fresh integrity gates. All earlier invalidated outcomes and costs remain retained; no outcomes imputed.",
+      "previousFingerprints": {
+        "candidateFingerprint": "d2a9932b684a1490907746f91bf6bcfd5a7b4de800179d0a56acbadce69ff800",
+        "evaluatorFingerprint": "0d201ba4a91efce0c31feb8748bdd6f4fcf501e54e26d77e7d0355bd23a43584",
+        "simulatorFingerprint": "aaec663a4bc2f51065ab021159dac481cb174b079b724bc89ed270cc66fd2cee"
+      },
+      "verification": "reports/verification-latest.json"
+    },
+    {
+      "at": "2026-10-13T02:05:03.515Z",
+      "reason": "Fresh common candidate after exact physical evacuation receipts, globally protected assessment resources, qualified mixed staff, grounded received opportunities, source-specific partial attention/bounded recovery, finite operational review queue with authorization fencing, batched polling, homogeneous lot expiry/provenance guards, bounded durable external-connector continuation, fair contextual route receipt lifecycle, real process-crash/storage-full recovery tests, scoped sandbox spending/partial supplier receipts with human financial/public reconciliation, explicit connector registry evidence, loaded-vehicle route checks, owner-declared vehicle calendars/next commitments, received driver availability, source-declared qualified-staff shift/rest calendars, received congestion estimates, pickup colocation, material availability wake-up signatures, awaited asynchronous stop policies, replay-consistent piecewise vehicle/staff capacity-hour instrumentation, source-enforced payload mass/volume/passenger-seat limits, full historical review-to-physical-service evidence and concurrent finite source-owner review in every comparative arm, received-directory-only owner-approved coverage checks for unknown/stale communities, run-bound versioned receiver-authorized unloading with real onsite qualified crew and preserved original cargo including reviewed physical recovery of one additional own delivery under fleet backpressure, persistent pending-first unloading review UI, conservative finite proposal-to-service creation timestamps, three-way bounded common fleet assignment that escapes a verified pair-swap local minimum, service-worker JS included in the candidate byte fingerprint, and consistent successful B6/B9 provider HTTP duration separated from SQL bookkeeping with explicit elapsed fallback when the provider does not return a valid duration. All previous outcomes, failures and costs remain preserved. No result has been observed from this version when the amended plan is declared.",
+      "previousFingerprints": {
+        "candidateFingerprint": "86481d81552e9ab052217dd6715f06ffbc2e8a1bc32e9412e8a7ef3e8ad4debc",
+        "evaluatorFingerprint": "9848357c9d8d756651b5463cda643ee828a4ca2aa739465bdf5163bad2c8341d",
+        "simulatorFingerprint": "bb307da98907240bf04aa7a9bcf6675efd74a7dac6b216cddc346b964b14680c"
+      },
+      "verification": "reports/verification-latest.json"
+    }
+  ],
+  "candidateFingerprint": "704c8ac21aba087f8732c5d9d6a413c50284c5caa5f573e24a2cc891d9450c1e",
+  "evaluatorFingerprint": "5e6a11ecae88648e491fe680fd7ae7407d00e12622b244c021dd5d9e661bbeab",
+  "simulatorFingerprint": "2825f94dffbf6db2835c05170ea00d9225863e4955682debd6236c4c71454b4e"
+}

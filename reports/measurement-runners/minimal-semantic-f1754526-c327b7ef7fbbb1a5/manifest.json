@@ -1,0 +1,34 @@
+{
+  "state": "prepared_not_launched",
+  "runnerSha256": "c327b7ef7fbbb1a569602263251716a8fff975ce5fa58c667bd5e5fa0e767145",
+  "planSha256": "e9b6b3a32d34ca077c9b01f5e6aebfed19dd1c4001769698c307ff3a5e7404e8",
+  "providerCallsMadeDuringPreparation": 0,
+  "files": [
+    {
+      "name": "minimal-semantic-studies.mjs",
+      "sha256": "c327b7ef7fbbb1a569602263251716a8fff975ce5fa58c667bd5e5fa0e767145",
+      "bytes": 16422
+    },
+    {
+      "name": "minimal-semantic-studies.test.mjs",
+      "sha256": "f4b0d9ce493b82e29612963f8163ad4c0089ca7b408caeaa9c713a479454a4a6",
+      "bytes": 8047
+    },
+    {
+      "name": "minimal-semantic-studies-guide.md",
+      "sha256": "86df933d98f384f672c90bcd749206500863e38e77ed03fe018ff51d258f43ff",
+      "bytes": 4032
+    },
+    {
+      "name": "evidence-probe-guards.mjs",
+      "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96",
+      "bytes": 4518
+    },
+    {
+      "name": "read-human-capacity-evidence.mjs",
+      "sha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+      "bytes": 32419
+    }
+  ],
+  "note": "Archive records prepared code and declared protocol only. No scenario, throughput, accuracy or latency result is implied."
+}

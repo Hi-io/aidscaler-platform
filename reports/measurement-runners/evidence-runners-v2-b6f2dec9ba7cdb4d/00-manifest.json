@@ -1,0 +1,290 @@
+{
+  "schema": "current-evidence-runners-identity-v4-rebind-v2",
+  "state": "prepared_not_launched_gate_pending",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "worldsStarted": 0,
+  "modelCalls": 0,
+  "lock": ".local/PAID_RESEARCH_STUDY.lock",
+  "entries": [
+    {
+      "id": "K11_K13",
+      "maxReserveUsd": 0.12,
+      "folder": true,
+      "fixedArgs": [
+        "--kind=K11_K13",
+        "--run=ROOT_GO_SEMANTIC_PILOT"
+      ],
+      "stopFile": ".local/STOP_MINIMAL_SEMANTIC_STUDIES",
+      "entry": ".local/minimal-semantic-studies-v2.mjs",
+      "entrySha256": "038bdc276a538453000f9d7aecd8d33b406d2212d70f289b1c787a10690d7546"
+    },
+    {
+      "id": "K15",
+      "maxReserveUsd": 0.3,
+      "folder": true,
+      "fixedArgs": [
+        "--kind=K15",
+        "--run=ROOT_GO_K15_CURRENT"
+      ],
+      "stopFile": ".local/STOP_MINIMAL_SEMANTIC_STUDIES",
+      "entry": ".local/minimal-semantic-studies-v2.mjs",
+      "entrySha256": "038bdc276a538453000f9d7aecd8d33b406d2212d70f289b1c787a10690d7546"
+    },
+    {
+      "id": "K07",
+      "maxReserveUsd": 0.4,
+      "fixedArgs": [
+        "--study=K07",
+        "--run=ROOT_GO_K07"
+      ],
+      "stopFile": ".local/STOP_RESEARCH_K07_CANDIDATE",
+      "discovery": {
+        "root": "reports/ablations",
+        "prefix": "repair-gated-"
+      },
+      "entry": ".local/research-studies-controlled-v2.mjs",
+      "entrySha256": "6bdbb30b6a5c5bcd9648002209573996e037e3763aed8fda4e190ae92882237a"
+    },
+    {
+      "id": "K14",
+      "maxReserveUsd": 0.6,
+      "fixedArgs": [
+        "--study=K14",
+        "--run=ROOT_GO_K14"
+      ],
+      "stopFile": ".local/STOP_RESEARCH_K14_CANDIDATE",
+      "discovery": {
+        "root": "reports/ablations",
+        "prefix": "inquiry-gated-"
+      },
+      "entry": ".local/research-studies-controlled-v2.mjs",
+      "entrySha256": "6bdbb30b6a5c5bcd9648002209573996e037e3763aed8fda4e190ae92882237a"
+    },
+    {
+      "id": "coupled100",
+      "maxReserveUsd": 0.3,
+      "fixedArgs": [
+        "--run=ROOT_GO_100"
+      ],
+      "stopFile": ".local/STOP_COUPLED_100_CURRENT",
+      "discovery": {
+        "root": "reports/combined",
+        "prefix": "coupled-100-current-"
+      },
+      "entry": ".local/combined-100-controlled-v2.mjs",
+      "entrySha256": "c59cd4559280a6b79aecf86bcfcb7902301fe0a8c9950013e4a4f00c27df5ada"
+    },
+    {
+      "id": "physical_chain",
+      "maxReserveUsd": 0,
+      "fixedArgs": [
+        "--run=ROOT_GO_PHYSICAL_CHAIN"
+      ],
+      "stopFile": ".local/STOP_PHYSICAL_CHAIN_CURRENT",
+      "discovery": {
+        "root": "reports/physical-chain",
+        "prefix": "native-current-"
+      },
+      "entry": ".local/physical-scenario-evidence-v2.mjs",
+      "entrySha256": "b1635ff805bbfba478384025befbcdf58cdd861d1af75370b0be2f6496df4c7a"
+    },
+    {
+      "id": "S19",
+      "maxReserveUsd": 0.6,
+      "folder": true,
+      "fixedArgs": [
+        "--study=S19",
+        "--run=ROOT_GO_S19_CURRENT"
+      ],
+      "stopFile": ".local/STOP_CURRENT_SERVICE_RECOVERY",
+      "entry": ".local/current-service-recovery-v2.mjs",
+      "entrySha256": "aa2f2d2d63d45c1879bdb374e808791720b386981d3707c2460567f0573923c2"
+    },
+    {
+      "id": "K22",
+      "maxReserveUsd": 0.35,
+      "folder": true,
+      "fixedArgs": [
+        "--study=K22",
+        "--run=ROOT_GO_K22_CURRENT"
+      ],
+      "stopFile": ".local/STOP_CURRENT_SERVICE_RECOVERY",
+      "entry": ".local/current-service-recovery-v2.mjs",
+      "entrySha256": "aa2f2d2d63d45c1879bdb374e808791720b386981d3707c2460567f0573923c2"
+    }
+  ],
+  "files": [
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards-v2.mjs",
+      "sha256": "87379b5239e3189c1ada8d60af61b0abaa94b29ff0b11a2e9d967fb2dc5c5219",
+      "bytes": 5302,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards.mjs",
+        "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies-v2.mjs",
+      "sha256": "038bdc276a538453000f9d7aecd8d33b406d2212d70f289b1c787a10690d7546",
+      "bytes": 16394,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies.mjs",
+        "sha256": "f3cd23719d1fec6a2dc81f84ee633c1c1fe3da730e3c46ee7c55cdd01b912868"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery-v2.mjs",
+      "sha256": "aa2f2d2d63d45c1879bdb374e808791720b386981d3707c2460567f0573923c2",
+      "bytes": 16191,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery.mjs",
+        "sha256": "1234ad393f13bd6a063ccc486d320ec3dea6732a7c7a9946b5cce419ca611094"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\research-studies-controlled-v2.mjs",
+      "sha256": "6bdbb30b6a5c5bcd9648002209573996e037e3763aed8fda4e190ae92882237a",
+      "bytes": 15162,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\research-studies-controlled.mjs",
+        "sha256": "28503679e875e5bd236b446b2d21df6902a7a038a641075f075a66bbdf4a78fd"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-controlled-v2.mjs",
+      "sha256": "c59cd4559280a6b79aecf86bcfcb7902301fe0a8c9950013e4a4f00c27df5ada",
+      "bytes": 17408,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-controlled.mjs",
+        "sha256": "1c2e71f6f2e8cc631a3cc7eb2f68a837f9f8bb3c2390b8e748022c61499f1af7"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence-v2.mjs",
+      "sha256": "b1635ff805bbfba478384025befbcdf58cdd861d1af75370b0be2f6496df4c7a",
+      "bytes": 25274,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence.mjs",
+        "sha256": "55faf0de1870af513bab6486db7a96b3a448d26a5dd32431e12c6299405ff524"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards-v2.test.mjs",
+      "sha256": "4f8e07bf33108c35b38734939415582bb0ab0f009c965b0cb712414864e0d0ef",
+      "bytes": 2475,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards.test.mjs",
+        "sha256": "dfbeac47aa173a8c49e9a66a3b10c865fa3b8e94e68961e8418f1db984765299"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies-v2.test.mjs",
+      "sha256": "9e406156f5111c2551063130288b9a0b812cba6560f8a02b39f5a3b1aab19e05",
+      "bytes": 8276,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies.test.mjs",
+        "sha256": "1d43bce07f4e31f42f5bc9076b95e6d9a15fcddb51cc4fbfd9cf09df5e5d8996"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies-guide-v2.md",
+      "sha256": "c7d2068ffa2f6a67a4c27996f80b680518bd866c91700ecc040067ebeb7785ff",
+      "bytes": 4294,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies-guide.md",
+        "sha256": "a3409ad48c0ec778bb198b27517719e0669993ff9c3ecdd769925f8ba63a787b"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery-v2.test.mjs",
+      "sha256": "1cd2d5e943a8e4df1888d9b2e86555a7ee94d4f545a197c29156ad360911adc8",
+      "bytes": 6286,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery.test.mjs",
+        "sha256": "7b92d3e943beba90232b21d516bfbf54c33bba741bb089fbfd540d73f64fcd0e"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery-guide-v2.md",
+      "sha256": "0e89d0dc5dd8abfb7f2a18900b6dc30e8c93b257f4f577aeb4fe6503d0dc6462",
+      "bytes": 4539,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery-guide.md",
+        "sha256": "56a79c136d10d4418505499da705c87a9b2efad7359ab5ad68c6f7e1d59ec956"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-controlled-v2.test.mjs",
+      "sha256": "28873553e4aaa02d3bcd39913d36fc643dd0e42decd3f0fe4ee6f56cb46184fc",
+      "bytes": 6501,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-controlled.test.mjs",
+        "sha256": "22a6307212ef9f70e759a8e4c36680ca8d4a825cf9d768b699224495d004bcb6"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-guide-v2.md",
+      "sha256": "03e6ba90e6d034e5088d236e27b524ab30f4ebd6f97db3d4c611cc25c0b146ee",
+      "bytes": 3950,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-guide.md",
+        "sha256": "75d9314d118f3845f2e467188e05dd2fb902566a892184700fcbdc1ad274f5dd"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence-v2.test.mjs",
+      "sha256": "3e5275e3816733c41d0385230fdade2a001f963e5b1ad0b51efeb50720ed9382",
+      "bytes": 6749,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence.test.mjs",
+        "sha256": "71c64496cb7283a767dcfeb4df86da12a5f70c2b089fee084f6d3fc686988291"
+      }
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence-guide-v2.md",
+      "sha256": "e3fbcd9c56fc6023fc1072fd7963065b4a88a0eb90ace24fa5064c78e678ca2d",
+      "bytes": 4927,
+      "original": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence-guide.md",
+        "sha256": "bd15629cb95631b7cedc9aa5638e9dd5099d3ca3fcf8ecfbb4a085ced0cc6705"
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\read-human-capacity-evidence.mjs",
+      "sha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+      "bytes": 32419
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\scripts\\semantic-load.mjs",
+      "sha256": "f175452661657c2082ada9cf15f7cfece06f0ad096ecc0edee3254da331c140f",
+      "bytes": 10718
+    }
+  ],
+  "freeze": {
+    "path": null,
+    "sha256": null,
+    "counts": null,
+    "status": "pending_new_successful_full_UI"
+  },
+  "amendment": [
+    "Ignored runner paths and their archives only",
+    "Authorized v4 base evaluator and unchanged candidate/source",
+    "S19/K22 archivist uses explicitly supplied freeze path",
+    "All children require successful unchanged source-bound full/UI; coordinator binds exact fresh full counts and human evaluator"
+  ],
+  "unchanged": [
+    "all seeds/scenarios/configuration/physics/permissions/staffing",
+    "provider caps and reservation exposure",
+    "GO tokens and stopping markers",
+    "native units/censoring/unknown fees/failure retention",
+    "no re-use or statistical pooling of predecessor outcomes"
+  ],
+  "launch": "Only root-controlled finish-v2 with exact source4hash, fresh full/UI/T27 proofs and named study GO. Add --freeze=<archived approved proof>. Manifest preparation is not launch authorization."
+}

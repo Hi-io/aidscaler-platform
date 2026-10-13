@@ -1,0 +1,319 @@
+{
+  "schema": "sequential-local-finish-after-closed-bridge-prepared",
+  "declaredAt": "2026-10-13T09:01:55.400Z",
+  "state": "PREPARED_NOT_LAUNCHED",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "destination": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013",
+  "bridgeFolder": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013",
+  "finishPlan": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-studies-v2-exposure-prepared-1791880490676\\plan.json",
+    "sha256": "03866e9516adb3e1d7e234711f749aba0b18bd53ad76fde2ceb8352d2b838af0"
+  },
+  "offlineReadoutSeal": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\host3600-readout-archive\\ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c\\seal.json",
+    "sha256": "41eb7f628d93a8cb3ac3aab1f8003868f3dc3cfc44cb028fee8482b91499653a"
+  },
+  "freeze": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freezes\\1791876112534-v4.json",
+    "sha256": "4c94d17e373f60b16926b7d5be5c566bf22b448efb63129034b5ead10ebdc44b"
+  },
+  "t27": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\local-closure\\1791876153508-clean\\result.json",
+    "sha256": "f8a6b9c41173489b8197492e196c5b9b6caa76fa218c1c370e05e88edcb363ea"
+  },
+  "files": [
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-studies-v2-exposure-prepared-1791880490676\\plan.json",
+      "sha256": "03866e9516adb3e1d7e234711f749aba0b18bd53ad76fde2ceb8352d2b838af0",
+      "bytes": 56655
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\read-host3600-bridge.mjs",
+      "sha256": "ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c",
+      "bytes": 16394
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\host3600-readout-archive\\ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c\\seal.json",
+      "sha256": "41eb7f628d93a8cb3ac3aab1f8003868f3dc3cfc44cb028fee8482b91499653a",
+      "bytes": 1693
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-media-byte-v4.mjs",
+      "sha256": "2a0a206f8e80a4ee33a2d9ba49aa047a02d337e56397517e3a0b43beb18881c2",
+      "bytes": 15654
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\sequential-local-finish.mjs",
+      "sha256": "90f611b375fd0fb896430a7bc76182c0608d1ec0cdc0bc607c658bbd36af5e48",
+      "bytes": 21029
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\sequential-local-finish.test.mjs",
+      "sha256": "755c5e089cd5f290d5fe26d07a7af96f88697e03154022f0cfe31748fbd29b6a",
+      "bytes": 7276
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-studies-v2-exposure.mjs",
+      "sha256": "1b33f29c900508f133abba01d4c1945746d36efec4a0655c43609ffc5db10b1c",
+      "bytes": 27482
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-study-guards.mjs",
+      "sha256": "6389796ec0ad7c6505ccc22d73eb7ac0fa6862998c56e406191d926326ffa00d",
+      "bytes": 6740
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-lock-child-v2.mjs",
+      "sha256": "47c4fea398933ff7403e3729dde8486e98906a46429f69fc69a0e6790b2235c6",
+      "bytes": 2939
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\version-bridge-v2.test.mjs",
+      "sha256": "0eb6d3769934d73de3be5b9966919e5d947b6a71ba152daedd27e69a85575de1",
+      "bytes": 11410
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-exposure-v2-guards.mjs",
+      "sha256": "a1d960e30d3b7f5e2f31ca12ef53ba3a986e46a89b3be9c1ff642e0fbbd58d17",
+      "bytes": 8164
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-exposure-v2.test.mjs",
+      "sha256": "7a793d6ae0e93affd08f3ad7b5f0e72de44566259ee356171033f91432e3ad82",
+      "bytes": 9583
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\additional-native0-v2-guards.mjs",
+      "sha256": "2f106a8b9babe6072f5a588f67e50c6985bc937bfb5b6df44eb28968f4a34b56",
+      "bytes": 3089
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\run-read-relay-error-amendment-v2.mjs",
+      "sha256": "7ce170951799758f9cb6330b3638407c9e1eae531ae8f9a95932965c440b383a",
+      "bytes": 13760
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards.mjs",
+      "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96",
+      "bytes": 4518
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-probe-guards-v2.mjs",
+      "sha256": "87379b5239e3189c1ada8d60af61b0abaa94b29ff0b11a2e9d967fb2dc5c5219",
+      "bytes": 5302
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\read-human-capacity-evidence.mjs",
+      "sha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+      "bytes": 32419
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\version-bridge-v2.mjs",
+      "sha256": "414fa9e856843a1d797090ba8bb62ec96009ebd16be7141af27a581e1e424825",
+      "bytes": 21106
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\compact-human-controls-bridge-v2.mjs",
+      "sha256": "4b34c66fc0ca7d2898a83b53b547e929f145e0550f67a49c7ea13c77c041f868",
+      "bytes": 16367
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\version-bridge-host3600-v2.mjs",
+      "sha256": "da1a656e708d418e12680a1900c0550816d8c5569374f6d578bd1e5f5d47e555",
+      "bytes": 9801
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\compact-human-controls-bridge-host3600-v2.mjs",
+      "sha256": "f04f3c3e542c044e8c765b5f449f47b73443150858a2e7e1a6d90aef1e4d3f36",
+      "bytes": 16568
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\bridge-host3600-v2.test.mjs",
+      "sha256": "a3294b90592e4ae2dd858a14a5894ba932c465d13437f86120bec369635c3fef",
+      "bytes": 3308
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\additional-human-controls-prepared-1791868369772\\plan.json",
+      "sha256": "a4435d5c32a27058f8cdad57ca1cd162786bfd59bc69858b0e9af655221af2d4",
+      "bytes": 27983
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\read-relay-error-amendment-1791867513712\\plan.json",
+      "sha256": "bb542915bb5cdf280a8b5bed5e43568016ecc45f41cbeaddae0272673aee6058",
+      "bytes": 15951
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\scripts\\human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "bytes": 12980
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\evaluation\\human-capacity-benchmark.mjs",
+      "sha256": "08fdcd43be56937c20e16db4fc72fc230d858f5d0dc192db68ee3719e1fc6889",
+      "bytes": 45453
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\scripts\\semantic-load.mjs",
+      "sha256": "f175452661657c2082ada9cf15f7cfece06f0ad096ecc0edee3254da331c140f",
+      "bytes": 10718
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\run-additional-human-controls-v2-native0.mjs",
+      "sha256": "e536511624ad8b7aa2429096019a18b94f732199ea03b99f2ee0552d0b66b797",
+      "bytes": 12662
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\minimal-semantic-studies-v2.mjs",
+      "sha256": "038bdc276a538453000f9d7aecd8d33b406d2212d70f289b1c787a10690d7546",
+      "bytes": 16394
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\research-studies-controlled-v2.mjs",
+      "sha256": "6bdbb30b6a5c5bcd9648002209573996e037e3763aed8fda4e190ae92882237a",
+      "bytes": 15162
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\combined-100-controlled-v2.mjs",
+      "sha256": "c59cd4559280a6b79aecf86bcfcb7902301fe0a8c9950013e4a4f00c27df5ada",
+      "bytes": 17408
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\physical-scenario-evidence-v2.mjs",
+      "sha256": "b1635ff805bbfba478384025befbcdf58cdd861d1af75370b0be2f6496df4c7a",
+      "bytes": 25274
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\current-service-recovery-v2.mjs",
+      "sha256": "aa2f2d2d63d45c1879bdb374e808791720b386981d3707c2460567f0573923c2",
+      "bytes": 16191
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\geometry-transfer-controlled-v2.mjs",
+      "sha256": "94721f4f36e3e1dd9529f7e81b1c2537b87172e6f0ea8da09ec854251e6dae2d",
+      "bytes": 9786
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\federation-structural-control.mjs",
+      "sha256": "951ce94e4dd3643052d25614bf7e46e187f6f7cbc498895786ae3262230625f6",
+      "bytes": 28376
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\local-latency-evidence.mjs",
+      "sha256": "09de31da061fa49f8136795d440e832cd7c88e5f3a587164ab4660558a8fc9e3",
+      "bytes": 20419
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\additional-native0-v2-prepared-1791878371781\\plan.json",
+      "sha256": "5d69d0e5614b8662f4ea9c007ab13703a090648ca47fd7998cfba2658f4358e9",
+      "bytes": 30287
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\version-bridge-v2-prepared-1791876267417\\readRelay-plan.json",
+      "sha256": "7cf970d15fdae411765282a32a6ae5ba28f5593602bda97916fa10dbab6a60b1",
+      "bytes": 17466
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\version-bridge-host3600-v2-prepared-1791879051048\\plan.json",
+      "sha256": "abb8e33896598c7f6808236cc1811f4c7ba702d77aa606e30192afdbeec663dd",
+      "bytes": 50534
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\evidence-runners-v2\\manifest-exposure-v2.json",
+      "sha256": "cc3c1f7a576192c253eb72b08077abfb5a76e4ac7a0228e3e8a30f103a6480f5",
+      "bytes": 15202
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freezes\\1791876112534-v4.json",
+      "sha256": "4c94d17e373f60b16926b7d5be5c566bf22b448efb63129034b5ead10ebdc44b",
+      "bytes": 25377
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\local-closure\\1791876153508-clean\\result.json",
+      "sha256": "f8a6b9c41173489b8197492e196c5b9b6caa76fa218c1c370e05e88edcb363ea",
+      "bytes": 4190
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\human-capacity-reader-archive\\f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9\\read-human-capacity-evidence.mjs",
+      "sha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+      "bytes": 32419
+    },
+    {
+      "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\human-kpi-companion.mjs",
+      "sha256": "5f4c5e07ce21d52b2acaca0065f252409c43db80a317cffacecb7b41e85a5e2b",
+      "bytes": 15755
+    }
+  ],
+  "commands": [
+    {
+      "id": "offline_bridge_readout",
+      "paidCapUsd": 0,
+      "entry": ".local/read-host3600-bridge.mjs",
+      "args": [
+        "--run=ROOT_GO_READ_HOST3600_BRIDGE",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013",
+        "--seal=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\host3600-readout-archive\\ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c\\seal.json",
+        "--output=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json"
+      ]
+    },
+    {
+      "id": "finish_human",
+      "paidCapUsd": 0.6,
+      "entry": ".local/finish-local-studies-v2-exposure.mjs",
+      "args": [
+        "--run=ROOT_GO_FINISH_LOCAL_STUDIES_V2",
+        "--plan=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-studies-v2-exposure-prepared-1791880490676\\plan.json",
+        "--plan-sha=03866e9516adb3e1d7e234711f749aba0b18bd53ad76fde2ceb8352d2b838af0",
+        "--completed-bridge=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013",
+        "--stage=human",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\human"
+      ]
+    },
+    {
+      "id": "finish_evidence",
+      "paidCapUsd": 3.62,
+      "entry": ".local/finish-local-studies-v2-exposure.mjs",
+      "args": [
+        "--run=ROOT_GO_FINISH_LOCAL_STUDIES_V2",
+        "--plan=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\finish-local-studies-v2-exposure-prepared-1791880490676\\plan.json",
+        "--plan-sha=03866e9516adb3e1d7e234711f749aba0b18bd53ad76fde2ceb8352d2b838af0",
+        "--completed-bridge=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013",
+        "--stage=evidence",
+        "--completed-human=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\human",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\evidence"
+      ]
+    },
+    {
+      "id": "media",
+      "paidCapUsd": 0.25,
+      "entry": ".local/current-media-byte-v4.mjs",
+      "args": [
+        "--run=ROOT_GO_MEDIA_BYTES",
+        "--freeze=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freezes\\1791876112534-v4.json"
+      ]
+    }
+  ],
+  "pollMs": 5000,
+  "universalResearchLock": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+  "coordinatorLock": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\SEQUENTIAL_LOCAL_FINISH_COORDINATOR.lock",
+  "v5Automatic": false,
+  "admissionExposureUsd": 4.47,
+  "includesActiveBridgeExposure": false,
+  "rootAuthorization": "ROOT_GO_SEQUENTIAL_LOCAL_FINISH",
+  "policies": [
+    "Only index/lock metadata while waiting",
+    "Never select by numerical gain",
+    "No retries or changed parameters",
+    "No signals/kills/STOP writes to children",
+    "Separate coordinator lock avoids duplicate wrappers; it is not the research lock and never grants action authority",
+    "Wait for each child to settle, validate its artifacts, then launch at most one next child",
+    "Never overwrite prior outcomes"
+  ],
+  "worldsStarted": 0,
+  "modelCalls": 0,
+  "newOutcomesRead": 0
+}

@@ -1,0 +1,108 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {ADMISSION_CAPS,SELECTED_NOMINAL_CAPS,conservativeStudyAccounting as account,validateExposureClosure} from './finish-local-exposure-v2-guards.mjs';
+import {definitions,runFinishStudies} from './finish-local-studies-v2-exposure.mjs';
+import {PILOT_CONFIG} from '../evaluation/harness.mjs';
+import {originalAdditionalPlan,amendNativeExpectation,validateAdditionalNative0File} from './additional-native0-v2-guards.mjs';
+import {validateAdditionalPlan,selectAdditionalGroups} from './run-additional-human-controls-v2-native0.mjs';
+const sha=x=>createHash('sha256').update(x).digest('hex');
+const study=id=>({id,maxReserveUsd:ADMISSION_CAPS[id]});
+const done={permitsNext:true},failed={permitsNext:false};
+test('fourteen studies preserve child budgets while ceiling differs from nominal slots',()=>{
+  const d=definitions();assert.equal(d.length,14);assert.equal(d.find(s=>s.id==='K18').maxReserveUsd,.40);
+  for(const [id,cap]of Object.entries(ADMISSION_CAPS))assert.equal(d.find(s=>s.id===id).maxReserveUsd,cap);
+  assert.equal(d.find(s=>s.id==='S19').selectedNominalPaidCapsUsd,.60);assert.equal(d.find(s=>s.id==='S19').maxReserveUsd,.75);
+  assert.equal(d.find(s=>s.id==='additional').maxReserveUsd,.45);assert.equal(SELECTED_NOMINAL_CAPS.additional,.30);
+});
+test('missing artifact/ledger reserves full child admission, never reduced nominal amount',()=>{
+  for(const id of ['additional','K07','K14','S19','K15','K22','K18']){
+    const a=account({},study(id),failed);assert.equal(a.chargedBudgetUsd,ADMISSION_CAPS[id]);assert.equal(a.totalProviderCostUsd,null);
+    assert.equal(a.knownCostSubtotalUsd,null);assert.equal(a.budgetFallbackToDeclaredCeiling,true);}
+});
+test('partial charged0 summary cannot hide later B6 inflight index',()=>{
+  const a=account({summary:{chargedBudgetUsd:0,knownCostSubtotalUsd:0,totalProviderCostUsd:0},
+    index:{chargedBudgetUsd:0,unsettledReservedUsd:.15,activeEpisode:{reservedUsd:.15}}},study('additional'),failed);
+  assert.equal(a.chargedBudgetUsd,.45);assert.equal(a.observedInflightReserveUsd,.15);assert.equal(a.knownCostSubtotalUsd,0);
+  assert.equal(a.totalProviderCostUsd,null);assert.equal(a.closureComplete,false);
+});
+test('old summary cannot shadow newer progress or an inflight attempt file',()=>{
+  const a=account({summary:{chargedBudgetUsd:.02},progress:{chargedBudgetUsd:.03,activeEpisode:{reservedUsd:.15}},
+    attempts:[{state:'started',reservedUsd:.15}]},study('S19'),failed);
+  assert.equal(a.observedCheckpointChargeUsd,.03);assert.equal(a.settledPlusInflightUsd,.18);assert.equal(a.chargedBudgetUsd,.75);
+});
+test('known subtotal is not total invoice, and recovered completed errors do not inflate known bill',()=>{
+  const unknown=account({summary:{chargedBudgetUsd:.02,knownCostUsd:.02}},study('K07'),done);
+  assert.equal(unknown.knownCostSubtotalUsd,.02);assert.equal(unknown.totalProviderCostUsd,null);assert.equal(unknown.chargedBudgetUsd,.50);
+  const known=account({summary:{chargedBudgetUsd:.02,totalProviderCostUsd:.02,totalCostKnown:true,knownCostSubtotalUsd:.02,errors:[{code:'RECOVERED'}]}},study('K07'),done);
+  assert.equal(known.totalProviderCostUsd,.02);assert.equal(known.chargedBudgetUsd,.02);
+});
+test('explicit completed zero invoice accepted; unknown zero checkpoint keeps ceiling',()=>{
+  assert.equal(account({summary:{chargedBudgetUsd:0,totalProviderCostUsd:0,totalCostKnown:true}},study('K15'),done).totalProviderCostUsd,0);
+  const unknown=account({summary:{chargedBudgetUsd:0,totalProviderCostUsd:0,totalCostKnown:true,unknownCostRows:1}},study('K15'),done);
+  assert.equal(unknown.totalProviderCostUsd,null);assert.equal(unknown.chargedBudgetUsd,.40);
+});
+test('a stale zero invoice cannot mask a later positive cumulative invoice',()=>{
+  const a=account({summary:{chargedBudgetUsd:0,totalProviderCostUsd:0,knownCostSubtotalUsd:0},
+    index:{chargedBudgetUsd:.023,totalProviderCostUsd:.023,totalCostKnown:true,knownCostUsd:.023}},study('K15'),done);
+  assert.equal(a.totalProviderCostUsd,.023);assert.equal(a.chargedBudgetUsd,.023);assert.equal(a.knownCostSubtotalUsd,.023);
+  const pending=account({summary:{chargedBudgetUsd:0,totalProviderCostUsd:0},
+    index:{chargedBudgetUsd:.023,totalProviderCostUsd:.023,unsettledReservedUsd:.15}},study('K15'),failed);
+  assert.equal(pending.totalProviderCostUsd,null);assert.equal(pending.chargedBudgetUsd,.40);
+});
+test('explicit terminal unknown total cannot be replaced by an old index zero or legacy costUsd',()=>{
+  const a=account({summary:{chargedBudgetUsd:.08,totalProviderCostUsd:null,knownCostSubtotalUsd:.08},
+    index:{chargedBudgetUsd:0,costUsd:0,totalProviderCostUsd:0,totalCostKnown:true}},study('S19'),done);
+  assert.equal(a.totalProviderCostUsd,null);assert.equal(a.knownCostSubtotalUsd,.08);assert.equal(a.chargedBudgetUsd,.75);
+  assert.equal(a.invoiceEvidence.explicitTerminalUnknown,true);
+  assert.equal(account({summary:{chargedBudgetUsd:0,costUsd:0}},study('K22'),done).totalProviderCostUsd,null);
+});
+test('nested world uncertainty and totals below known subtotal cannot certify a false invoice',()=>{
+  const a=account({summary:{chargedBudgetUsd:.08,totalProviderCostUsd:0,totalCostKnown:true,
+    worlds:[{fee:{knownCostSubtotalUsd:.08,totalCostKnown:false,totalProviderCostUsd:null}}]}},study('S19'),done);
+  assert.equal(a.totalProviderCostUsd,null);assert.equal(a.knownCostSubtotalUsd,.08);assert.equal(a.invoiceEvidence.unknownNested,true);
+  const b=account({summary:{chargedBudgetUsd:.08,totalProviderCostUsd:0,totalCostKnown:true,knownCostSubtotalUsd:.08}},study('K22'),done);
+  assert.equal(b.totalProviderCostUsd,null);assert.equal(b.invoiceEvidence.belowKnownSubtotal,true);
+});
+test('complete nested per-world fee proof certifies its aggregate and retains recovered errors',()=>{
+  const a=account({summary:{chargedBudgetUsd:.03,totalProviderCostUsd:.03,
+    worlds:[{fee:{totalProviderCostUsd:.01,totalCostKnown:true,knownCostSubtotalUsd:.01},errors:[{code:'RECOVERED'}]},
+      {fee:{totalProviderCostUsd:.02,totalCostKnown:true,knownCostSubtotalUsd:.02}}]}},study('S19'),done);
+  assert.equal(a.totalProviderCostUsd,.03);assert.equal(a.knownCostSubtotalUsd,.03);assert.equal(a.chargedBudgetUsd,.03);
+});
+test('real spending above declared cap is retained and never capped downward',()=>{
+  const a=account({index:{chargedBudgetUsd:1.2,unsettledReservedUsd:.15}},study('K14'),failed);
+  assert.ok(Math.abs(a.chargedBudgetUsd-1.35)<1e-12);assert.ok(a.chargedBudgetUsd>1.2);
+  assert.equal(a.maximumDeclaredExposureUsd,.70);assert.equal(a.totalProviderCostUsd,null);
+});
+test('native packetLoss0 expectation follows the actual harness and twelve real prior worlds, not a stub',async()=>{
+  assert.equal(PILOT_CONFIG.packetLoss,0);
+  const base='reports/human-capacity/native-primary-20261013',protocol=JSON.parse(await readFile(base+'/protocol.json','utf8'));
+  assert.equal(protocol.worlds.length,12);
+  for(const w of protocol.worlds){const raw=JSON.parse(await readFile(`${base}/${w.condition}-${w.seed}-${w.arm}.json`,'utf8'));
+    assert.equal(raw.status,'completed');assert.equal(raw.manifest.config.packetLoss,0);assert.equal(raw.corpus.config.silentFraction,0);}
+});
+test('new expectation amendment preserves all API inputs and records old.02 without changing physics',async()=>{
+  const old=await originalAdditionalPlan(),plan=amendNativeExpectation(old,{declaredAt:'PURE_TEST'}),current=old.sourceAtDeclaration;
+  assert.deepEqual(plan.groups.map(g=>g.execution.episodeInputs),old.groups.map(g=>g.execution.episodeInputs));
+  for(const g of selectAdditionalGroups(plan,'formal_immediate,burst'))assert.equal(g.desiredNativeScenario.packetLoss,0);
+  assert.equal(plan.nativeObservationAmendment.previousExpectedPacketLoss,.02);assert.throws(()=>selectAdditionalGroups(plan));
+  assert.equal(await validateAdditionalPlan(plan,{current,sha256:sha(JSON.stringify(plan)),expectedSha:sha(JSON.stringify(plan))}),true);
+  const bad=structuredClone(plan);bad.groups[0].execution.episodeInputs[0].budgetUsd=.50;
+  await assert.rejects(()=>validateAdditionalNative0File(bad,{current,sha256:sha(JSON.stringify(bad)),expectedSha:sha(JSON.stringify(bad))}));
+});
+function geometry(){return {summary:{plannedEpisodes:6,closedEpisodes:6,missingOutcomes:[],notAttempted:[],stoppedReason:null,
+  finalBuilds:{candidateChanged:false,evaluatorChanged:false,simulatorChanged:false},humanEvaluatorChanged:false,
+  humanEvaluatorFinalFingerprint:'75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e',
+  cases:Array.from({length:6},()=>({status:'completed',invariants:[],geometryProfileAudit:{matches:true},errors:[{code:'RECOVERED'}]})),
+  comparisons:['B5','B8'].map(baseline=>({baseline,independentWorlds:2,restrictedMeanTimeReduction:-.2}))}};}
+test('K18 requires all six native profiles/versions, preserves negative recovered outcomes',()=>{
+  const a=geometry();assert.equal(validateExposureClosure('K18',a,{exitCode:0}).permitsNext,true);
+  a.summary.cases[0].geometryProfileAudit.matches=false;assert.equal(validateExposureClosure('K18',a,{exitCode:0}).permitsNext,false);
+  const b=geometry();b.summary.cases.pop();assert.equal(validateExposureClosure('K18',b,{exitCode:0}).permitsNext,false);
+});
+test('new exposure default runs zero studies and cannot lower reserve through a descriptor',async()=>{
+  assert.equal((await runFinishStudies()).worldsStarted,0);
+  assert.throws(()=>account({}, {id:'S19',maxReserveUsd:.60},failed));
+});

@@ -1,0 +1,3745 @@
+{
+  "label": "Structural smoke only; no estimated GenAI or time advantage",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "b050d21e12c85d0ac386e2f3530fef0c1503c635220c37ee13e7f87332f6fe4f",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "args": {
+    "profile": "zero",
+    "condition": "zero-smoke",
+    "seed": "native-human-capacity-smoke-01",
+    "count": 4,
+    "noise": 8,
+    "reposts": 2,
+    "formalDelayMs": 300000,
+    "horizonMs": 1800000,
+    "pumpMs": 60000,
+    "clarificationWorkers": 2,
+    "budgetUsd": 0.15,
+    "maxModelCalls": 1,
+    "wallLimitMs": 180000
+  },
+  "all": [
+    {
+      "arm": "C_manual",
+      "status": "completed",
+      "errors": [],
+      "invariants": [],
+      "costUsd": 0,
+      "calls": 0,
+      "sufficient": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 845777.5
+      },
+      "first": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 845777.5
+      },
+      "coverage": {
+        "receivedOriginals": 27,
+        "progressSources": 2,
+        "routineSources": 2,
+        "modelBatches": 0,
+        "manualSources": 19,
+        "manualProcessed": 19,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 9,
+        "deferredInquiries": 0,
+        "compilations": 6,
+        "unchangedCompilationSkips": 2
+      },
+      "human": {
+        "profile": {
+          "profile": "zero",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 0,
+          "decisionMs": 0,
+          "relayMs": 0,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "stages": {
+          "read": {
+            "received": 19,
+            "completed": 19,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 19
+            },
+            "finishedTurnaroundMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 19
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "decide": {
+            "received": 13,
+            "completed": 13,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 13
+            },
+            "finishedTurnaroundMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 13
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "relay": {
+            "received": 8,
+            "completed": 8,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 8
+            },
+            "finishedTurnaroundMs": {
+              "p50": 1001,
+              "p95": 1001,
+              "samples": 8
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          }
+        },
+        "perOrg": {
+          "org3": {
+            "stages": {
+              "read": {
+                "received": 6,
+                "completed": 6,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 1001,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 1,
+            "observedAt": 864027,
+            "version": 33
+          },
+          "org0": {
+            "stages": {
+              "read": {
+                "received": 7,
+                "completed": 7,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 7
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 7
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 8,
+                "completed": 8,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 8
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 8
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 3,
+                "completed": 3,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 3
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 1001,
+                  "samples": 3
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 4,
+            "observedAt": 1173027,
+            "version": 58
+          },
+          "org1": {
+            "stages": {
+              "read": {
+                "received": 4,
+                "completed": 4,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 4
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 4
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 1001,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 1,
+            "observedAt": 183022,
+            "version": 27
+          },
+          "org2": {
+            "stages": {
+              "read": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 1,
+                "completed": 1,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 1
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 1
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 1,
+                "completed": 1,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 1
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 1001,
+                  "samples": 1
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 1,
+            "observedAt": 243025,
+            "version": 14
+          }
+        },
+        "maximumBacklog": 4,
+        "backgroundDropped": 0,
+        "note": "Declared experimental staffing and work durations, not empirical human performance. Person-ms counts attention work or waiting, not wages or productivity. Percentiles exclude pending work; pending counts and cutoff are reported separately. Work receipt/relay/owner approval never counts as physical aid. Attention lapses are explicit inconclusive outcomes, not invented false facts."
+      },
+      "wallMs": 41529.2105,
+      "proposalFunnel": {
+        "schema": "proposal-service-funnel-v1",
+        "scope": "observer_post_execution_only",
+        "asOfSourceClock": 1800000,
+        "denominators": {
+          "proposals": 6,
+          "reviewedProposals": 6,
+          "reviewedVersions": 6,
+          "reviewDecisions": 6,
+          "approvalDecisions": 6,
+          "rejectionDecisions": 0,
+          "clarificationDecisions": 0,
+          "approvedProposals": 6,
+          "sourceReviewedProposals": 6,
+          "sourceAuthorizedProposals": 6,
+          "issuedProposals": 6,
+          "physicallyReceivedProposals": 6,
+          "usefulServiceProposals": 6,
+          "partialUsefulServiceProposals": 0,
+          "completedWithoutDirectUsefulService": 0,
+          "rejectedProposals": 0,
+          "pendingOrFailedProposals": 0,
+          "proposalsWithMissingLinks": 0,
+          "uniqueUsefulSourceOperations": 4,
+          "nativePositiveReceipts": [
+            {
+              "owner": "org1",
+              "id": "operation-3",
+              "need": "bdd7fc500e50cd5c117bd4e8",
+              "type": "blankets",
+              "received": 11,
+              "serviceAtSourceClock": 682028
+            },
+            {
+              "owner": "org1",
+              "id": "operation-4",
+              "need": "face1a94041cc7b9a1ca0d68",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 1144528
+            },
+            {
+              "owner": "org3",
+              "id": "operation-2",
+              "need": "7dc6ad027326a7e5d1f8c678",
+              "type": "food",
+              "received": 17,
+              "serviceAtSourceClock": 833528
+            },
+            {
+              "owner": "org0",
+              "id": "operation-1",
+              "need": "44ea5f0f6a859bdbf6e9bafb",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 723026
+            }
+          ],
+          "usefulPerReviewedProposal": 1
+        },
+        "perOwner": [
+          {
+            "org": "org0",
+            "denominators": {
+              "proposals": 3,
+              "reviewedProposals": 3,
+              "reviewedVersions": 3,
+              "reviewDecisions": 3,
+              "approvalDecisions": 3,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 3,
+              "sourceReviewedProposals": 3,
+              "sourceAuthorizedProposals": 3,
+              "issuedProposals": 3,
+              "physicallyReceivedProposals": 3,
+              "usefulServiceProposals": 3,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 4,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org1",
+                  "id": "operation-3",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "type": "blankets",
+                  "received": 11,
+                  "serviceAtSourceClock": 682028
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-4",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 1144528
+                },
+                {
+                  "owner": "org3",
+                  "id": "operation-2",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 833528
+                },
+                {
+                  "owner": "org0",
+                  "id": "operation-1",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 723026
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org1",
+            "denominators": {
+              "proposals": 2,
+              "reviewedProposals": 2,
+              "reviewedVersions": 2,
+              "reviewDecisions": 2,
+              "approvalDecisions": 2,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 2,
+              "sourceReviewedProposals": 2,
+              "sourceAuthorizedProposals": 2,
+              "issuedProposals": 2,
+              "physicallyReceivedProposals": 2,
+              "usefulServiceProposals": 2,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org1",
+                  "id": "operation-3",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "type": "blankets",
+                  "received": 11,
+                  "serviceAtSourceClock": 682028
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-4",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 1144528
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org2",
+            "denominators": {
+              "proposals": 0,
+              "reviewedProposals": 0,
+              "reviewedVersions": 0,
+              "reviewDecisions": 0,
+              "approvalDecisions": 0,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 0,
+              "sourceReviewedProposals": 0,
+              "sourceAuthorizedProposals": 0,
+              "issuedProposals": 0,
+              "physicallyReceivedProposals": 0,
+              "usefulServiceProposals": 0,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 0,
+              "nativePositiveReceipts": [],
+              "usefulPerReviewedProposal": null
+            }
+          },
+          {
+            "org": "org3",
+            "denominators": {
+              "proposals": 1,
+              "reviewedProposals": 1,
+              "reviewedVersions": 1,
+              "reviewDecisions": 1,
+              "approvalDecisions": 1,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 1,
+              "sourceReviewedProposals": 1,
+              "sourceAuthorizedProposals": 1,
+              "issuedProposals": 1,
+              "physicallyReceivedProposals": 1,
+              "usefulServiceProposals": 1,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 1,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org3",
+                  "id": "operation-2",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 833528
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          }
+        ],
+        "records": [
+          {
+            "org": "org0",
+            "id": "proposal_1a9d52f6-83cf-43f2-a71f-91c5b378015f",
+            "version": 64,
+            "state": "completed",
+            "createdAtWallClock": 1791863559511,
+            "sourceProposalId": "proposal-4",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+              "proposalVersion": 1,
+              "atWallClock": 1791863559553,
+              "expiresAtWallClock": 1791865359553,
+              "conditional": false,
+              "planHash": "631b2886a2b445a057d91926d2bcb9ae1e8483be6f429577e78f72a4cd73f00f"
+            },
+            "reviews": [
+              {
+                "sequence": "83",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+                "atWallClock": 1791863559555,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "20b34a384b4b6670ebe9c9ec786ebc3f8e6ce3463438e8461be0459535e34cfb"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 393027,
+              "queuedAtSourceClock": 363027,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1236027
+            },
+            "validation": {
+              "checkedConstraintCount": 2,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-0",
+                  "quantity": 11,
+                  "resource": "r-org1-blankets"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-3",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-3",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "building": "b17",
+                  "resource": "r-org1-blankets",
+                  "resourceType": "blankets",
+                  "quantity": 11,
+                  "received": 11,
+                  "createdAtSourceClock": 486027,
+                  "times": {
+                    "authorized": 486027,
+                    "reserved": 486027,
+                    "orderReceived": 487028,
+                    "accepted": 487028,
+                    "prepared": 547028,
+                    "dispatched": 547028,
+                    "arrived": 622028,
+                    "unloadingStarted": 622028,
+                    "received": 682028,
+                    "service": 682028
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-3\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-1",
+                  "quantity": 20,
+                  "resource": "r-org1-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-4",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-4",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "building": "b40",
+                  "resource": "r-org1-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 486027,
+                  "times": {
+                    "authorized": 486027,
+                    "reserved": 486027,
+                    "orderReceived": 487028,
+                    "accepted": 487028,
+                    "prepared": 547028,
+                    "dispatched": 547028,
+                    "arrived": 1084528,
+                    "unloadingStarted": 1084528,
+                    "received": 1144528,
+                    "service": 1144528
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-4\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org0",
+            "id": "proposal_54df9990-7c47-49d5-8459-698e269ad7f5",
+            "version": 50,
+            "state": "completed",
+            "createdAtWallClock": 1791863556915,
+            "sourceProposalId": "proposal-2",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+              "proposalVersion": 1,
+              "atWallClock": 1791863556940,
+              "expiresAtWallClock": 1791865356940,
+              "conditional": false,
+              "planHash": "c72d6ab0bcd31bc81d1556ffda97702cdb44d54192383e7b0c5413e8a13749c0"
+            },
+            "reviews": [
+              {
+                "sequence": "68",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+                "atWallClock": 1791863556942,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "c1dd99a80bb9fc16b8b485aff5c5d9ae6e1b94d3426bc9b6a904b44d5347f2fc"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 332025,
+              "queuedAtSourceClock": 302025,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 928027
+            },
+            "validation": {
+              "checkedConstraintCount": 1,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-0",
+                  "quantity": 17,
+                  "resource": "r-org3-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-2",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-2",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org3-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 425027,
+                  "times": {
+                    "authorized": 425027,
+                    "reserved": 425027,
+                    "orderReceived": 426028,
+                    "accepted": 426028,
+                    "prepared": 486028,
+                    "dispatched": 486028,
+                    "arrived": 773528,
+                    "unloadingStarted": 773528,
+                    "received": 833528,
+                    "service": 833528
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-2\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org0",
+            "id": "proposal_c8f0d2d7-5c60-4432-8c05-ed5efa522560",
+            "version": 42,
+            "state": "completed",
+            "createdAtWallClock": 1791863554658,
+            "sourceProposalId": "proposal-1",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+              "proposalVersion": 1,
+              "atWallClock": 1791863554692,
+              "expiresAtWallClock": 1791865354692,
+              "conditional": false,
+              "planHash": "04942a0b759ce919a154174377d327fc2fb5cca5b499933dcf14d9305176698f"
+            },
+            "reviews": [
+              {
+                "sequence": "57",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_ad63f5e2-4768-4053-8b73-20e608387cd7",
+                "atWallClock": 1791863554695,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "081b3bd68b24b57f3203f41c5df8a7bfe50ec459cdc68a72c972f772ca7ed8eb"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 272023,
+              "queuedAtSourceClock": 242023,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 736027
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org0-0",
+                  "quantity": 20,
+                  "resource": "r-org0-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-1",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-1",
+                  "owner": "org0",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "building": "b12",
+                  "resource": "r-org0-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 302025,
+                  "times": {
+                    "authorized": 302025,
+                    "reserved": 302025,
+                    "orderReceived": 303026,
+                    "accepted": 303026,
+                    "prepared": 363026,
+                    "dispatched": 363026,
+                    "arrived": 663026,
+                    "unloadingStarted": 663026,
+                    "received": 723026,
+                    "service": 723026
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org0\",\"operation-1\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "partner_work_proposal_1a9d52f6-83cf-43f2-a71f-91c5b378015f_0",
+            "version": 24,
+            "state": "completed",
+            "createdAtWallClock": 1791863560286,
+            "sourceProposalId": "proposal-6",
+            "originPartner": "org0",
+            "originProposal": "proposal_1a9d52f6-83cf-43f2-a71f-91c5b378015f",
+            "originStep": 0,
+            "localAuthorization": {
+              "by": "user_3b57134d-a849-46b3-9ecd-acf27698ef88",
+              "proposalVersion": 1,
+              "atWallClock": 1791863560536,
+              "expiresAtWallClock": 1791865360536,
+              "conditional": false,
+              "planHash": "fc48731dc027fbe2b3a6deb058f448da07a577df6c798700450f6ad4f58a2bde"
+            },
+            "reviews": [
+              {
+                "sequence": "33",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_3b57134d-a849-46b3-9ecd-acf27698ef88",
+                "atWallClock": 1791863560540,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "58b8de7eb94e57e0a51fc760714908c1a8c6f367bbb4daf07322ba2689e32b0a"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 455027,
+              "queuedAtSourceClock": 425027,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 736027
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-0",
+                  "quantity": 11,
+                  "resource": "r-org1-blankets"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-3",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-3",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "building": "b17",
+                  "resource": "r-org1-blankets",
+                  "resourceType": "blankets",
+                  "quantity": 11,
+                  "received": 11,
+                  "createdAtSourceClock": 486027,
+                  "times": {
+                    "authorized": 486027,
+                    "reserved": 486027,
+                    "orderReceived": 487028,
+                    "accepted": 487028,
+                    "prepared": 547028,
+                    "dispatched": 547028,
+                    "arrived": 622028,
+                    "unloadingStarted": 622028,
+                    "received": 682028,
+                    "service": 682028
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-3\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "partner_work_proposal_1a9d52f6-83cf-43f2-a71f-91c5b378015f_1",
+            "version": 48,
+            "state": "completed",
+            "createdAtWallClock": 1791863560298,
+            "sourceProposalId": "proposal-5",
+            "originPartner": "org0",
+            "originProposal": "proposal_1a9d52f6-83cf-43f2-a71f-91c5b378015f",
+            "originStep": 1,
+            "localAuthorization": {
+              "by": "user_3b57134d-a849-46b3-9ecd-acf27698ef88",
+              "proposalVersion": 1,
+              "atWallClock": 1791863560411,
+              "expiresAtWallClock": 1791865360411,
+              "conditional": false,
+              "planHash": "7a09eff7ba5b1c0397abfc0f4fc31edd847e0f555e383218086d508f0b054988"
+            },
+            "reviews": [
+              {
+                "sequence": "32",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_3b57134d-a849-46b3-9ecd-acf27698ef88",
+                "atWallClock": 1791863560413,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "95eb31ed27a92e4a9ab4b147e5104d94d2c33d76e6fa41a2ec23c5b897835582"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 455027,
+              "queuedAtSourceClock": 425027,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1173027
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-1",
+                  "quantity": 20,
+                  "resource": "r-org1-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-4",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-4",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "building": "b40",
+                  "resource": "r-org1-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 486027,
+                  "times": {
+                    "authorized": 486027,
+                    "reserved": 486027,
+                    "orderReceived": 487028,
+                    "accepted": 487028,
+                    "prepared": 547028,
+                    "dispatched": 547028,
+                    "arrived": 1084528,
+                    "unloadingStarted": 1084528,
+                    "received": 1144528,
+                    "service": 1144528
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-4\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org3",
+            "id": "partner_work_proposal_54df9990-7c47-49d5-8459-698e269ad7f5_0",
+            "version": 36,
+            "state": "completed",
+            "createdAtWallClock": 1791863558757,
+            "sourceProposalId": "proposal-3",
+            "originPartner": "org0",
+            "originProposal": "proposal_54df9990-7c47-49d5-8459-698e269ad7f5",
+            "originStep": 0,
+            "localAuthorization": {
+              "by": "user_9c69a1de-2966-4507-80a9-38534d1f17eb",
+              "proposalVersion": 1,
+              "atWallClock": 1791863559068,
+              "expiresAtWallClock": 1791865359068,
+              "conditional": false,
+              "planHash": "c72d6ab0bcd31bc81d1556ffda97702cdb44d54192383e7b0c5413e8a13749c0"
+            },
+            "reviews": [
+              {
+                "sequence": "30",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_9c69a1de-2966-4507-80a9-38534d1f17eb",
+                "atWallClock": 1791863559070,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "7551f728c94e287d74ce7aa8720d3ecd13a01e0755c17ff4acbe65dec819ca4d"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 393027,
+              "queuedAtSourceClock": 363027,
+              "authorizedBy": "scripted-org3",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 865027
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-0",
+                  "quantity": 17,
+                  "resource": "r-org3-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-2",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-2",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org3-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 425027,
+                  "times": {
+                    "authorized": 425027,
+                    "reserved": 425027,
+                    "orderReceived": 426028,
+                    "accepted": 426028,
+                    "prepared": 486028,
+                    "dispatched": 486028,
+                    "arrived": 773528,
+                    "unloadingStarted": 773528,
+                    "received": 833528,
+                    "service": 833528
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-2\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          }
+        ],
+        "duplicateProposals": [],
+        "warnings": {
+          "unknownReviewHistory": [],
+          "missingPhysicalLinks": []
+        },
+        "definitions": {
+          "time": "Local review/audit wall-clock timestamps and source physical clocks are separate; never subtract or sum them.",
+          "denominator": "All stored owner-scoped proposals and exact historical local review decisions; not only successful/completed plans. Delegated copies remain identified separately.",
+          "service": "Positive independently recorded physical service of the exact issued delivery/evacuation. Payment, provision, assessment and activation alone get no direct-service credit.",
+          "duplicates": "A source operation may support coordinator and delegated review scopes. Unique owner+sourceID physical receipts are reported separately and never summed twice.",
+          "limits": "Internal scripted review and post-execution attribution are mechanisms; these ratios do not measure human comprehension, correctness of unseen semantic claims or field effectiveness."
+        }
+      },
+      "changed": {
+        "candidate": false,
+        "evaluator": false,
+        "simulator": false
+      }
+    },
+    {
+      "arm": "C_decentralized",
+      "status": "completed",
+      "errors": [],
+      "invariants": [],
+      "costUsd": 0,
+      "calls": 0,
+      "sufficient": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 723024
+      },
+      "first": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 723024
+      },
+      "coverage": {
+        "receivedOriginals": 31,
+        "progressSources": 3,
+        "routineSources": 2,
+        "modelBatches": 0,
+        "manualSources": 22,
+        "manualProcessed": 22,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 9,
+        "deferredInquiries": 0,
+        "compilations": 12,
+        "unchangedCompilationSkips": 9
+      },
+      "human": {
+        "profile": {
+          "profile": "zero",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 0,
+          "decisionMs": 0,
+          "relayMs": 0,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "stages": {
+          "read": {
+            "received": 22,
+            "completed": 22,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 22
+            },
+            "finishedTurnaroundMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 22
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "decide": {
+            "received": 25,
+            "completed": 25,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 25
+            },
+            "finishedTurnaroundMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 25
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "relay": {
+            "received": 174,
+            "completed": 174,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 174
+            },
+            "finishedTurnaroundMs": {
+              "p50": 1001,
+              "p95": 11001,
+              "samples": 174
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          }
+        },
+        "perOrg": {
+          "org3": {
+            "stages": {
+              "read": {
+                "received": 9,
+                "completed": 9,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 9
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 9
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 6,
+                "completed": 6,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 42,
+                "completed": 42,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 42
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 6001,
+                  "samples": 42
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 9,
+            "observedAt": 1313038,
+            "version": 214
+          },
+          "org0": {
+            "stages": {
+              "read": {
+                "received": 7,
+                "completed": 7,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 7
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 7
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 8,
+                "completed": 8,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 8
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 8
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 42,
+                "completed": 42,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 42
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 11001,
+                  "samples": 42
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 9,
+            "observedAt": 1254038,
+            "version": 214
+          },
+          "org1": {
+            "stages": {
+              "read": {
+                "received": 4,
+                "completed": 4,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 4
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 4
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 6,
+                "completed": 6,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 6
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 48,
+                "completed": 48,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 48
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 11001,
+                  "samples": 48
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 8,
+            "observedAt": 942034,
+            "version": 223
+          },
+          "org2": {
+            "stages": {
+              "read": {
+                "received": 2,
+                "completed": 2,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 2
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "decide": {
+                "received": 5,
+                "completed": 5,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 5
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 5
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              },
+              "relay": {
+                "received": 42,
+                "completed": 42,
+                "inconclusive": 0,
+                "failed": 0,
+                "queued": 0,
+                "working": 0,
+                "awaitingDelivery": 0,
+                "elapsedWorkPersonMs": 0,
+                "elapsedQueuePersonMs": 0,
+                "startedQueueMs": {
+                  "p50": 0,
+                  "p95": 0,
+                  "samples": 42
+                },
+                "finishedTurnaroundMs": {
+                  "p50": 1001,
+                  "p95": 11001,
+                  "samples": 42
+                },
+                "pendingCensored": 0,
+                "pendingCensoredAt": 1800000
+              }
+            },
+            "maximumBacklog": 11,
+            "observedAt": 1316039,
+            "version": 190
+          }
+        },
+        "maximumBacklog": 11,
+        "backgroundDropped": 0,
+        "note": "Declared experimental staffing and work durations, not empirical human performance. Person-ms counts attention work or waiting, not wages or productivity. Percentiles exclude pending work; pending counts and cutoff are reported separately. Work receipt/relay/owner approval never counts as physical aid. Attention lapses are explicit inconclusive outcomes, not invented false facts."
+      },
+      "wallMs": 67216.8157,
+      "proposalFunnel": {
+        "schema": "proposal-service-funnel-v1",
+        "scope": "observer_post_execution_only",
+        "asOfSourceClock": 1800000,
+        "denominators": {
+          "proposals": 5,
+          "reviewedProposals": 5,
+          "reviewedVersions": 5,
+          "reviewDecisions": 5,
+          "approvalDecisions": 5,
+          "rejectionDecisions": 0,
+          "clarificationDecisions": 0,
+          "approvedProposals": 5,
+          "sourceReviewedProposals": 5,
+          "sourceAuthorizedProposals": 5,
+          "issuedProposals": 5,
+          "physicallyReceivedProposals": 5,
+          "usefulServiceProposals": 5,
+          "partialUsefulServiceProposals": 0,
+          "completedWithoutDirectUsefulService": 0,
+          "rejectedProposals": 0,
+          "pendingOrFailedProposals": 0,
+          "proposalsWithMissingLinks": 0,
+          "uniqueUsefulSourceOperations": 8,
+          "nativePositiveReceipts": [
+            {
+              "owner": "org0",
+              "id": "operation-1",
+              "need": "44ea5f0f6a859bdbf6e9bafb",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 723024
+            },
+            {
+              "owner": "org0",
+              "id": "operation-2",
+              "need": "7dc6ad027326a7e5d1f8c678",
+              "type": "food",
+              "received": 17,
+              "serviceAtSourceClock": 1223024
+            },
+            {
+              "owner": "org1",
+              "id": "operation-6",
+              "need": "44ea5f0f6a859bdbf6e9bafb",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 908027
+            },
+            {
+              "owner": "org1",
+              "id": "operation-3",
+              "need": "bdd7fc500e50cd5c117bd4e8",
+              "type": "blankets",
+              "received": 11,
+              "serviceAtSourceClock": 498024
+            },
+            {
+              "owner": "org2",
+              "id": "operation-7",
+              "need": "44ea5f0f6a859bdbf6e9bafb",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 1183027
+            },
+            {
+              "owner": "org2",
+              "id": "operation-8",
+              "need": "7dc6ad027326a7e5d1f8c678",
+              "type": "food",
+              "received": 17,
+              "serviceAtSourceClock": 1277527
+            },
+            {
+              "owner": "org3",
+              "id": "operation-4",
+              "need": "7dc6ad027326a7e5d1f8c678",
+              "type": "food",
+              "received": 17,
+              "serviceAtSourceClock": 710524
+            },
+            {
+              "owner": "org3",
+              "id": "operation-5",
+              "need": "face1a94041cc7b9a1ca0d68",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 960524
+            }
+          ],
+          "usefulPerReviewedProposal": 1
+        },
+        "perOwner": [
+          {
+            "org": "org0",
+            "denominators": {
+              "proposals": 1,
+              "reviewedProposals": 1,
+              "reviewedVersions": 1,
+              "reviewDecisions": 1,
+              "approvalDecisions": 1,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 1,
+              "sourceReviewedProposals": 1,
+              "sourceAuthorizedProposals": 1,
+              "issuedProposals": 1,
+              "physicallyReceivedProposals": 1,
+              "usefulServiceProposals": 1,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org0",
+                  "id": "operation-1",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 723024
+                },
+                {
+                  "owner": "org0",
+                  "id": "operation-2",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 1223024
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org1",
+            "denominators": {
+              "proposals": 2,
+              "reviewedProposals": 2,
+              "reviewedVersions": 2,
+              "reviewDecisions": 2,
+              "approvalDecisions": 2,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 2,
+              "sourceReviewedProposals": 2,
+              "sourceAuthorizedProposals": 2,
+              "issuedProposals": 2,
+              "physicallyReceivedProposals": 2,
+              "usefulServiceProposals": 2,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org1",
+                  "id": "operation-6",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 908027
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-3",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "type": "blankets",
+                  "received": 11,
+                  "serviceAtSourceClock": 498024
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org2",
+            "denominators": {
+              "proposals": 1,
+              "reviewedProposals": 1,
+              "reviewedVersions": 1,
+              "reviewDecisions": 1,
+              "approvalDecisions": 1,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 1,
+              "sourceReviewedProposals": 1,
+              "sourceAuthorizedProposals": 1,
+              "issuedProposals": 1,
+              "physicallyReceivedProposals": 1,
+              "usefulServiceProposals": 1,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org2",
+                  "id": "operation-7",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 1183027
+                },
+                {
+                  "owner": "org2",
+                  "id": "operation-8",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 1277527
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org3",
+            "denominators": {
+              "proposals": 1,
+              "reviewedProposals": 1,
+              "reviewedVersions": 1,
+              "reviewDecisions": 1,
+              "approvalDecisions": 1,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 1,
+              "sourceReviewedProposals": 1,
+              "sourceAuthorizedProposals": 1,
+              "issuedProposals": 1,
+              "physicallyReceivedProposals": 1,
+              "usefulServiceProposals": 1,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org3",
+                  "id": "operation-4",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 710524
+                },
+                {
+                  "owner": "org3",
+                  "id": "operation-5",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 960524
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          }
+        ],
+        "records": [
+          {
+            "org": "org0",
+            "id": "proposal_9d0eea2a-a3f5-499d-aba8-bda489cce8f2",
+            "version": 126,
+            "state": "completed",
+            "createdAtWallClock": 1791863594696,
+            "sourceProposalId": "proposal-1",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_9fc99e71-129d-40c1-b830-f6ee8c06039b",
+              "proposalVersion": 1,
+              "atWallClock": 1791863594754,
+              "expiresAtWallClock": 1791865394754,
+              "conditional": false,
+              "planHash": "1807959bfa8d74570ed421d29172fda13bddab51897db2b1db59742250d341ab"
+            },
+            "reviews": [
+              {
+                "sequence": "53",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_9fc99e71-129d-40c1-b830-f6ee8c06039b",
+                "atWallClock": 1791863594757,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "1a0db03381c8a03f934d037ae4e16657c204b7f62d07da84fe5d864d0470a2b2"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 272021,
+              "queuedAtSourceClock": 242021,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1252037
+            },
+            "validation": {
+              "checkedConstraintCount": 6,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org0-0",
+                  "quantity": 20,
+                  "resource": "r-org0-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-1",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-1",
+                  "owner": "org0",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "building": "b12",
+                  "resource": "r-org0-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 302023,
+                  "times": {
+                    "authorized": 302023,
+                    "reserved": 302023,
+                    "orderReceived": 303024,
+                    "accepted": 303024,
+                    "prepared": 363024,
+                    "dispatched": 363024,
+                    "arrived": 663024,
+                    "unloadingStarted": 663024,
+                    "received": 723024,
+                    "service": 723024
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org0\",\"operation-1\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org0-1",
+                  "quantity": 17,
+                  "resource": "r-org0-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-2",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-2",
+                  "owner": "org0",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org0-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 302023,
+                  "times": {
+                    "authorized": 302023,
+                    "reserved": 302023,
+                    "orderReceived": 303024,
+                    "accepted": 303024,
+                    "prepared": 363024,
+                    "dispatched": 363024,
+                    "arrived": 1163024,
+                    "unloadingStarted": 1163024,
+                    "received": 1223024,
+                    "service": 1223024
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org0\",\"operation-2\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "proposal_359f063d-d149-400e-a6e6-9b6016b5ee9c",
+            "version": 76,
+            "state": "completed",
+            "createdAtWallClock": 1791863600488,
+            "sourceProposalId": "proposal-4",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_822d45ce-b090-4f2d-b386-5964600d81f2",
+              "proposalVersion": 1,
+              "atWallClock": 1791863600524,
+              "expiresAtWallClock": 1791865400524,
+              "conditional": false,
+              "planHash": "88b46ca157bb400ae503d107736b407d84a289d3919e64fbde2d5f105d3dfb9e"
+            },
+            "reviews": [
+              {
+                "sequence": "32",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_822d45ce-b090-4f2d-b386-5964600d81f2",
+                "atWallClock": 1791863600526,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "77e64d704c63b4f3566200596d7fe31449c05a623033f20826d63703df9663d4"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 332024,
+              "queuedAtSourceClock": 302024,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 936033
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-1",
+                  "quantity": 20,
+                  "resource": "r-org1-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-6",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-6",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "building": "b12",
+                  "resource": "r-org1-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 362026,
+                  "times": {
+                    "authorized": 362026,
+                    "reserved": 362026,
+                    "orderReceived": 363027,
+                    "accepted": 363027,
+                    "prepared": 423027,
+                    "dispatched": 423027,
+                    "arrived": 848027,
+                    "unloadingStarted": 848027,
+                    "received": 908027,
+                    "service": 908027
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-6\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "proposal_e5264571-d18b-4780-ad18-eb979b71eb2a",
+            "version": 51,
+            "state": "completed",
+            "createdAtWallClock": 1791863594994,
+            "sourceProposalId": "proposal-2",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_822d45ce-b090-4f2d-b386-5964600d81f2",
+              "proposalVersion": 1,
+              "atWallClock": 1791863595026,
+              "expiresAtWallClock": 1791865395026,
+              "conditional": false,
+              "planHash": "fc48731dc027fbe2b3a6deb058f448da07a577df6c798700450f6ad4f58a2bde"
+            },
+            "reviews": [
+              {
+                "sequence": "22",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_822d45ce-b090-4f2d-b386-5964600d81f2",
+                "atWallClock": 1791863595029,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "ff5ab684937ec2a26b844651e3c552a3ef00cbde399a6f86752db1d364e4ba3f"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 272021,
+              "queuedAtSourceClock": 242021,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 545029
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-0",
+                  "quantity": 11,
+                  "resource": "r-org1-blankets"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-3",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-3",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "building": "b17",
+                  "resource": "r-org1-blankets",
+                  "resourceType": "blankets",
+                  "quantity": 11,
+                  "received": 11,
+                  "createdAtSourceClock": 302023,
+                  "times": {
+                    "authorized": 302023,
+                    "reserved": 302023,
+                    "orderReceived": 303024,
+                    "accepted": 303024,
+                    "prepared": 363024,
+                    "dispatched": 363024,
+                    "arrived": 438024,
+                    "unloadingStarted": 438024,
+                    "received": 498024,
+                    "service": 498024
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-3\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org2",
+            "id": "proposal_24d53a4f-928c-4049-a4a4-d31a0ae19d0e",
+            "version": 116,
+            "state": "completed",
+            "createdAtWallClock": 1791863600906,
+            "sourceProposalId": "proposal-5",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_e4f3d556-71fa-4c57-bdb9-871492e765e0",
+              "proposalVersion": 1,
+              "atWallClock": 1791863600968,
+              "expiresAtWallClock": 1791865400969,
+              "conditional": false,
+              "planHash": "6f1110b535121a329c6ff97b2f7aa3ccb2daeb1858c17aa419d0ec9a4ebfc9ed"
+            },
+            "reviews": [
+              {
+                "sequence": "26",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_e4f3d556-71fa-4c57-bdb9-871492e765e0",
+                "atWallClock": 1791863600971,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "b5822c951bcd2832eb307ba2e4979bfff4b161d5cb31648b50765ecaa701394b"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 332024,
+              "queuedAtSourceClock": 302024,
+              "authorizedBy": "scripted-org2",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1313038
+            },
+            "validation": {
+              "checkedConstraintCount": 6,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org2",
+                "params": {
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org2-0",
+                  "quantity": 20,
+                  "resource": "r-org2-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-7",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-7",
+                  "owner": "org2",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "building": "b12",
+                  "resource": "r-org2-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 362026,
+                  "times": {
+                    "authorized": 362026,
+                    "reserved": 362026,
+                    "orderReceived": 363027,
+                    "accepted": 363027,
+                    "prepared": 423027,
+                    "dispatched": 423027,
+                    "arrived": 1123027,
+                    "unloadingStarted": 1123027,
+                    "received": 1183027,
+                    "service": 1183027
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org2\",\"operation-7\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org2",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org2-1",
+                  "quantity": 17,
+                  "resource": "r-org2-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-8",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-8",
+                  "owner": "org2",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org2-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 362026,
+                  "times": {
+                    "authorized": 362026,
+                    "reserved": 362026,
+                    "orderReceived": 363027,
+                    "accepted": 363027,
+                    "prepared": 423027,
+                    "dispatched": 423027,
+                    "arrived": 1217527,
+                    "unloadingStarted": 1217527,
+                    "received": 1277527,
+                    "service": 1277527
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org2\",\"operation-8\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org3",
+            "id": "proposal_5293b747-1b52-44c1-9712-a420230c9ed1",
+            "version": 100,
+            "state": "completed",
+            "createdAtWallClock": 1791863595406,
+            "sourceProposalId": "proposal-3",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_246e6415-549a-4e2e-8858-0b55b74047fc",
+              "proposalVersion": 1,
+              "atWallClock": 1791863595466,
+              "expiresAtWallClock": 1791865395466,
+              "conditional": false,
+              "planHash": "84eb8e078035d39d718cf129ca48d3e51565df6fd48b9156aa82226983d71de0"
+            },
+            "reviews": [
+              {
+                "sequence": "22",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_246e6415-549a-4e2e-8858-0b55b74047fc",
+                "atWallClock": 1791863595469,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "c0678fde423c4ea34d85fa23bd3001101e9ca7c87d1714b8aaca1909a9cd3bf5"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 272021,
+              "queuedAtSourceClock": 242021,
+              "authorizedBy": "scripted-org3",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1003034
+            },
+            "validation": {
+              "checkedConstraintCount": 6,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-0",
+                  "quantity": 17,
+                  "resource": "r-org3-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-4",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-4",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org3-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 302023,
+                  "times": {
+                    "authorized": 302023,
+                    "reserved": 302023,
+                    "orderReceived": 303024,
+                    "accepted": 303024,
+                    "prepared": 363024,
+                    "dispatched": 363024,
+                    "arrived": 650524,
+                    "unloadingStarted": 650524,
+                    "received": 710524,
+                    "service": 710524
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-4\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-1",
+                  "quantity": 20,
+                  "resource": "r-org3-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-5",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-5",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "building": "b40",
+                  "resource": "r-org3-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 302023,
+                  "times": {
+                    "authorized": 302023,
+                    "reserved": 302023,
+                    "orderReceived": 303024,
+                    "accepted": 303024,
+                    "prepared": 363024,
+                    "dispatched": 363024,
+                    "arrived": 900524,
+                    "unloadingStarted": 900524,
+                    "received": 960524,
+                    "service": 960524
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-5\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          }
+        ],
+        "duplicateProposals": [],
+        "warnings": {
+          "unknownReviewHistory": [],
+          "missingPhysicalLinks": []
+        },
+        "definitions": {
+          "time": "Local review/audit wall-clock timestamps and source physical clocks are separate; never subtract or sum them.",
+          "denominator": "All stored owner-scoped proposals and exact historical local review decisions; not only successful/completed plans. Delegated copies remain identified separately.",
+          "service": "Positive independently recorded physical service of the exact issued delivery/evacuation. Payment, provision, assessment and activation alone get no direct-service credit.",
+          "duplicates": "A source operation may support coordinator and delegated review scopes. Unique owner+sourceID physical receipts are reported separately and never summed twice.",
+          "limits": "Internal scripted review and post-execution attribution are mechanisms; these ratios do not measure human comprehension, correctness of unseen semantic claims or field effectiveness."
+        }
+      },
+      "changed": {
+        "candidate": false,
+        "evaluator": false,
+        "simulator": false
+      }
+    },
+    {
+      "arm": "B8",
+      "status": "completed",
+      "errors": [],
+      "invariants": [],
+      "costUsd": 0,
+      "calls": 0,
+      "sufficient": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 801517
+      },
+      "first": {
+        "eligible": 4,
+        "reached": 4,
+        "rightCensored": 0,
+        "restrictedMeanMs": 801517
+      },
+      "coverage": {
+        "receivedOriginals": 27,
+        "progressSources": 2,
+        "routineSources": 2,
+        "modelBatches": 0,
+        "manualSources": 0,
+        "manualProcessed": 0,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 17,
+        "deferredInquiries": 0,
+        "compilations": 15,
+        "unchangedCompilationSkips": 13
+      },
+      "human": {
+        "profile": {
+          "profile": "zero",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 0,
+          "decisionMs": 0,
+          "relayMs": 0,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "stages": {
+          "read": {
+            "received": 0,
+            "completed": 0,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "finishedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "decide": {
+            "received": 0,
+            "completed": 0,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "finishedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          },
+          "relay": {
+            "received": 0,
+            "completed": 0,
+            "inconclusive": 0,
+            "failed": 0,
+            "queued": 0,
+            "working": 0,
+            "awaitingDelivery": 0,
+            "elapsedWorkPersonMs": 0,
+            "elapsedQueuePersonMs": 0,
+            "startedQueueMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "finishedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "pendingCensored": 0,
+            "pendingCensoredAt": 1800000
+          }
+        },
+        "perOrg": {},
+        "maximumBacklog": 0,
+        "backgroundDropped": 0,
+        "note": "Declared experimental staffing and work durations, not empirical human performance. Person-ms counts attention work or waiting, not wages or productivity. Percentiles exclude pending work; pending counts and cutoff are reported separately. Work receipt/relay/owner approval never counts as physical aid. Attention lapses are explicit inconclusive outcomes, not invented false facts."
+      },
+      "wallMs": 32190.2019,
+      "proposalFunnel": {
+        "schema": "proposal-service-funnel-v1",
+        "scope": "observer_post_execution_only",
+        "asOfSourceClock": 1800000,
+        "denominators": {
+          "proposals": 5,
+          "reviewedProposals": 5,
+          "reviewedVersions": 5,
+          "reviewDecisions": 5,
+          "approvalDecisions": 5,
+          "rejectionDecisions": 0,
+          "clarificationDecisions": 0,
+          "approvedProposals": 5,
+          "sourceReviewedProposals": 5,
+          "sourceAuthorizedProposals": 5,
+          "issuedProposals": 5,
+          "physicallyReceivedProposals": 5,
+          "usefulServiceProposals": 5,
+          "partialUsefulServiceProposals": 0,
+          "completedWithoutDirectUsefulService": 0,
+          "rejectedProposals": 0,
+          "pendingOrFailedProposals": 0,
+          "proposalsWithMissingLinks": 0,
+          "uniqueUsefulSourceOperations": 4,
+          "nativePositiveReceipts": [
+            {
+              "owner": "org0",
+              "id": "operation-1",
+              "need": "44ea5f0f6a859bdbf6e9bafb",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 785017
+            },
+            {
+              "owner": "org1",
+              "id": "operation-4",
+              "need": "bdd7fc500e50cd5c117bd4e8",
+              "type": "blankets",
+              "received": 11,
+              "serviceAtSourceClock": 623017
+            },
+            {
+              "owner": "org3",
+              "id": "operation-3",
+              "need": "7dc6ad027326a7e5d1f8c678",
+              "type": "food",
+              "received": 17,
+              "serviceAtSourceClock": 774517
+            },
+            {
+              "owner": "org1",
+              "id": "operation-2",
+              "need": "face1a94041cc7b9a1ca0d68",
+              "type": "water",
+              "received": 20,
+              "serviceAtSourceClock": 1023517
+            }
+          ],
+          "usefulPerReviewedProposal": 1
+        },
+        "perOwner": [
+          {
+            "org": "org0",
+            "denominators": {
+              "proposals": 2,
+              "reviewedProposals": 2,
+              "reviewedVersions": 2,
+              "reviewDecisions": 2,
+              "approvalDecisions": 2,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 2,
+              "sourceReviewedProposals": 2,
+              "sourceAuthorizedProposals": 2,
+              "issuedProposals": 2,
+              "physicallyReceivedProposals": 2,
+              "usefulServiceProposals": 2,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 4,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org0",
+                  "id": "operation-1",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 785017
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-4",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "type": "blankets",
+                  "received": 11,
+                  "serviceAtSourceClock": 623017
+                },
+                {
+                  "owner": "org3",
+                  "id": "operation-3",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 774517
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-2",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 1023517
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org1",
+            "denominators": {
+              "proposals": 2,
+              "reviewedProposals": 2,
+              "reviewedVersions": 2,
+              "reviewDecisions": 2,
+              "approvalDecisions": 2,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 2,
+              "sourceReviewedProposals": 2,
+              "sourceAuthorizedProposals": 2,
+              "issuedProposals": 2,
+              "physicallyReceivedProposals": 2,
+              "usefulServiceProposals": 2,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 2,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org1",
+                  "id": "operation-4",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "type": "blankets",
+                  "received": 11,
+                  "serviceAtSourceClock": 623017
+                },
+                {
+                  "owner": "org1",
+                  "id": "operation-2",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "type": "water",
+                  "received": 20,
+                  "serviceAtSourceClock": 1023517
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          },
+          {
+            "org": "org2",
+            "denominators": {
+              "proposals": 0,
+              "reviewedProposals": 0,
+              "reviewedVersions": 0,
+              "reviewDecisions": 0,
+              "approvalDecisions": 0,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 0,
+              "sourceReviewedProposals": 0,
+              "sourceAuthorizedProposals": 0,
+              "issuedProposals": 0,
+              "physicallyReceivedProposals": 0,
+              "usefulServiceProposals": 0,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 0,
+              "nativePositiveReceipts": [],
+              "usefulPerReviewedProposal": null
+            }
+          },
+          {
+            "org": "org3",
+            "denominators": {
+              "proposals": 1,
+              "reviewedProposals": 1,
+              "reviewedVersions": 1,
+              "reviewDecisions": 1,
+              "approvalDecisions": 1,
+              "rejectionDecisions": 0,
+              "clarificationDecisions": 0,
+              "approvedProposals": 1,
+              "sourceReviewedProposals": 1,
+              "sourceAuthorizedProposals": 1,
+              "issuedProposals": 1,
+              "physicallyReceivedProposals": 1,
+              "usefulServiceProposals": 1,
+              "partialUsefulServiceProposals": 0,
+              "completedWithoutDirectUsefulService": 0,
+              "rejectedProposals": 0,
+              "pendingOrFailedProposals": 0,
+              "proposalsWithMissingLinks": 0,
+              "uniqueUsefulSourceOperations": 1,
+              "nativePositiveReceipts": [
+                {
+                  "owner": "org3",
+                  "id": "operation-3",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "type": "food",
+                  "received": 17,
+                  "serviceAtSourceClock": 774517
+                }
+              ],
+              "usefulPerReviewedProposal": 1
+            }
+          }
+        ],
+        "records": [
+          {
+            "org": "org0",
+            "id": "proposal_17d00bb2-5b9d-4bce-afdb-bad9c9577f97",
+            "version": 40,
+            "state": "completed",
+            "createdAtWallClock": 1791863660145,
+            "sourceProposalId": "proposal-4",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_f708b40a-bce7-4371-a2ef-87421f30bf6f",
+              "proposalVersion": 1,
+              "atWallClock": 1791863660196,
+              "expiresAtWallClock": 1791865460196,
+              "conditional": false,
+              "planHash": "2c83406a6d024c5ace5fc16fcd8f8839f806cfe67a6e5a20c9b916b1da933766"
+            },
+            "reviews": [
+              {
+                "sequence": "50",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_f708b40a-bce7-4371-a2ef-87421f30bf6f",
+                "atWallClock": 1791863660198,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "4d7343afcd191630a1683eb8633ec505ee99caf35cb207e6f4cf7f1c881542ca"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 334016,
+              "queuedAtSourceClock": 304016,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 805016
+            },
+            "validation": {
+              "checkedConstraintCount": 4,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org0",
+                "params": {
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org0-0",
+                  "quantity": 20,
+                  "resource": "r-org0-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-1",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-1",
+                  "owner": "org0",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "44ea5f0f6a859bdbf6e9bafb",
+                  "building": "b12",
+                  "resource": "r-org0-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 364016,
+                  "times": {
+                    "authorized": 364016,
+                    "reserved": 364016,
+                    "orderReceived": 365017,
+                    "accepted": 365017,
+                    "prepared": 425017,
+                    "dispatched": 425017,
+                    "arrived": 725017,
+                    "unloadingStarted": 725017,
+                    "received": 785017,
+                    "service": 785017
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org0\",\"operation-1\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-1",
+                  "quantity": 11,
+                  "resource": "r-org1-blankets"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-4",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-4",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "building": "b17",
+                  "resource": "r-org1-blankets",
+                  "resourceType": "blankets",
+                  "quantity": 11,
+                  "received": 11,
+                  "createdAtSourceClock": 427016,
+                  "times": {
+                    "authorized": 427016,
+                    "reserved": 427016,
+                    "orderReceived": 428017,
+                    "accepted": 428017,
+                    "prepared": 488017,
+                    "dispatched": 488017,
+                    "arrived": 563017,
+                    "unloadingStarted": 563017,
+                    "received": 623017,
+                    "service": 623017
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-4\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org0",
+            "id": "proposal_d9f653f9-ccb7-42d6-b5a0-fb622429a95c",
+            "version": 64,
+            "state": "completed",
+            "createdAtWallClock": 1791863658841,
+            "sourceProposalId": "proposal-1",
+            "originPartner": null,
+            "originProposal": null,
+            "originStep": null,
+            "localAuthorization": {
+              "by": "user_f708b40a-bce7-4371-a2ef-87421f30bf6f",
+              "proposalVersion": 1,
+              "atWallClock": 1791863658900,
+              "expiresAtWallClock": 1791865458900,
+              "conditional": false,
+              "planHash": "54737a5151af39d7bf8a9306abcb0f2ba495c712064314d0dc1e9b37ef103359"
+            },
+            "reviews": [
+              {
+                "sequence": "43",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_f708b40a-bce7-4371-a2ef-87421f30bf6f",
+                "atWallClock": 1791863658903,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "d1c5789ac42da9e6a6ceab8b5e54e8f3fc220161d5a0d35b7919d6f771d13c29"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 272016,
+              "queuedAtSourceClock": 242016,
+              "authorizedBy": "scripted-org0",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1116016
+            },
+            "validation": {
+              "checkedConstraintCount": 2,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-0",
+                  "quantity": 17,
+                  "resource": "r-org3-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-3",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-3",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org3-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 366016,
+                  "times": {
+                    "authorized": 366016,
+                    "reserved": 366016,
+                    "orderReceived": 367017,
+                    "accepted": 367017,
+                    "prepared": 427017,
+                    "dispatched": 427017,
+                    "arrived": 714517,
+                    "unloadingStarted": 714517,
+                    "received": 774517,
+                    "service": 774517
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-3\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              },
+              {
+                "index": 1,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-0",
+                  "quantity": 20,
+                  "resource": "r-org1-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-2",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-2",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "building": "b40",
+                  "resource": "r-org1-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 365016,
+                  "times": {
+                    "authorized": 365016,
+                    "reserved": 365016,
+                    "orderReceived": 366017,
+                    "accepted": 366017,
+                    "prepared": 426017,
+                    "dispatched": 426017,
+                    "arrived": 963517,
+                    "unloadingStarted": 963517,
+                    "received": 1023517,
+                    "service": 1023517
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-2\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "partner_work_proposal_17d00bb2-5b9d-4bce-afdb-bad9c9577f97_1",
+            "version": 24,
+            "state": "completed",
+            "createdAtWallClock": 1791863660774,
+            "sourceProposalId": "proposal-5",
+            "originPartner": "org0",
+            "originProposal": "proposal_17d00bb2-5b9d-4bce-afdb-bad9c9577f97",
+            "originStep": 1,
+            "localAuthorization": {
+              "by": "user_34fe8e38-27c6-412a-a1b0-e7f214cb8b3a",
+              "proposalVersion": 1,
+              "atWallClock": 1791863660901,
+              "expiresAtWallClock": 1791865460901,
+              "conditional": false,
+              "planHash": "a5ec8c5325a6489db8508178ed7ff0d7687daa1f6553ef233b081a27a5d07745"
+            },
+            "reviews": [
+              {
+                "sequence": "21",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_34fe8e38-27c6-412a-a1b0-e7f214cb8b3a",
+                "atWallClock": 1791863660903,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "039cfb02bdd21f4973a8bf297fe58e3875fa43eb758b7260e1bab7274d97178c"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 395016,
+              "queuedAtSourceClock": 365016,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 677016
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-1",
+                  "quantity": 11,
+                  "resource": "r-org1-blankets"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-4",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-4",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "bdd7fc500e50cd5c117bd4e8",
+                  "building": "b17",
+                  "resource": "r-org1-blankets",
+                  "resourceType": "blankets",
+                  "quantity": 11,
+                  "received": 11,
+                  "createdAtSourceClock": 427016,
+                  "times": {
+                    "authorized": 427016,
+                    "reserved": 427016,
+                    "orderReceived": 428017,
+                    "accepted": 428017,
+                    "prepared": 488017,
+                    "dispatched": 488017,
+                    "arrived": 563017,
+                    "unloadingStarted": 563017,
+                    "received": 623017,
+                    "service": 623017
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-4\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org1",
+            "id": "partner_work_proposal_d9f653f9-ccb7-42d6-b5a0-fb622429a95c_1",
+            "version": 50,
+            "state": "completed",
+            "createdAtWallClock": 1791863659382,
+            "sourceProposalId": "proposal-2",
+            "originPartner": "org0",
+            "originProposal": "proposal_d9f653f9-ccb7-42d6-b5a0-fb622429a95c",
+            "originStep": 1,
+            "localAuthorization": {
+              "by": "user_34fe8e38-27c6-412a-a1b0-e7f214cb8b3a",
+              "proposalVersion": 1,
+              "atWallClock": 1791863659493,
+              "expiresAtWallClock": 1791865459493,
+              "conditional": false,
+              "planHash": "55a362bfcf72eedf86ff2cb141aa9c80a66134decbe95cb4207b96c24e89f6b2"
+            },
+            "reviews": [
+              {
+                "sequence": "18",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_34fe8e38-27c6-412a-a1b0-e7f214cb8b3a",
+                "atWallClock": 1791863659495,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "5aee82dededa6bd081d1fe13d0bee84080e84009ac411b2a8eed9fbd48edde93"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 334016,
+              "queuedAtSourceClock": 304016,
+              "authorizedBy": "scripted-org1",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 1053016
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org1",
+                "params": {
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org1-0",
+                  "quantity": 20,
+                  "resource": "r-org1-water"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-2",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-2",
+                  "owner": "org1",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "face1a94041cc7b9a1ca0d68",
+                  "building": "b40",
+                  "resource": "r-org1-water",
+                  "resourceType": "water",
+                  "quantity": 20,
+                  "received": 20,
+                  "createdAtSourceClock": 365016,
+                  "times": {
+                    "authorized": 365016,
+                    "reserved": 365016,
+                    "orderReceived": 366017,
+                    "accepted": 366017,
+                    "prepared": 426017,
+                    "dispatched": 426017,
+                    "arrived": 963517,
+                    "unloadingStarted": 963517,
+                    "received": 1023517,
+                    "service": 1023517
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org1\",\"operation-2\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          },
+          {
+            "org": "org3",
+            "id": "partner_work_proposal_d9f653f9-ccb7-42d6-b5a0-fb622429a95c_0",
+            "version": 36,
+            "state": "completed",
+            "createdAtWallClock": 1791863659367,
+            "sourceProposalId": "proposal-3",
+            "originPartner": "org0",
+            "originProposal": "proposal_d9f653f9-ccb7-42d6-b5a0-fb622429a95c",
+            "originStep": 0,
+            "localAuthorization": {
+              "by": "user_79b02d1c-f307-47fa-bf5f-573df54e0fe8",
+              "proposalVersion": 1,
+              "atWallClock": 1791863659773,
+              "expiresAtWallClock": 1791865459773,
+              "conditional": false,
+              "planHash": "c72d6ab0bcd31bc81d1556ffda97702cdb44d54192383e7b0c5413e8a13749c0"
+            },
+            "reviews": [
+              {
+                "sequence": "18",
+                "decision": "approve",
+                "version": 1,
+                "actor": "user_79b02d1c-f307-47fa-bf5f-573df54e0fe8",
+                "atWallClock": 1791863659775,
+                "note": "Scripted laboratory operator; not a human UX trial.",
+                "pendingConditions": [],
+                "evidenceHash": "ab62dd017fb0db47bab029d9505b9ab65283e33d9f86dad79e6d020f3d2ff90e"
+              }
+            ],
+            "reviewHistoryMissing": false,
+            "sourceReview": {
+              "state": "authorized",
+              "version": 2,
+              "reviewedAtSourceClock": 334016,
+              "queuedAtSourceClock": 304016,
+              "authorizedBy": "scripted-org3",
+              "receivedState": "authorized",
+              "receivedAtSourceClock": 806016
+            },
+            "validation": {
+              "checkedConstraintCount": 3,
+              "failures": [],
+              "currentRejection": null,
+              "changedReason": null
+            },
+            "steps": [
+              {
+                "index": 0,
+                "type": "dispatch",
+                "owner": "org3",
+                "params": {
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "ttlMs": 900000,
+                  "vehicle": "v-org3-0",
+                  "quantity": 17,
+                  "resource": "r-org3-food"
+                },
+                "dependsOn": [],
+                "issued": true,
+                "issuedResultCount": 1,
+                "pendingPartner": false,
+                "sourceId": "operation-3",
+                "correctlyLinked": true,
+                "missing": [],
+                "sourceReceipt": {
+                  "id": "operation-3",
+                  "owner": "org3",
+                  "type": "delivery",
+                  "state": "completed",
+                  "need": "7dc6ad027326a7e5d1f8c678",
+                  "building": "b44",
+                  "resource": "r-org3-food",
+                  "resourceType": "food",
+                  "quantity": 17,
+                  "received": 17,
+                  "createdAtSourceClock": 366016,
+                  "times": {
+                    "authorized": 366016,
+                    "reserved": 366016,
+                    "orderReceived": 367017,
+                    "accepted": 367017,
+                    "prepared": 427017,
+                    "dispatched": 427017,
+                    "arrived": 714517,
+                    "unloadingStarted": 714517,
+                    "received": 774517,
+                    "service": 774517
+                  },
+                  "failure": null
+                },
+                "usefulPhysicalService": true,
+                "partialUsefulService": false,
+                "receivedByPlatform": true,
+                "nonServiceReason": null,
+                "receiptKey": "[\"org3\",\"operation-3\"]",
+                "financialReceipt": null,
+                "assessmentReceipt": null,
+                "note": "An issued ID, completed proposal, assessment, payment, provisioning receipt or arrival is not direct useful service. Physical credit requires the exact owner/action/operation and an independent positive service receipt."
+              }
+            ]
+          }
+        ],
+        "duplicateProposals": [],
+        "warnings": {
+          "unknownReviewHistory": [],
+          "missingPhysicalLinks": []
+        },
+        "definitions": {
+          "time": "Local review/audit wall-clock timestamps and source physical clocks are separate; never subtract or sum them.",
+          "denominator": "All stored owner-scoped proposals and exact historical local review decisions; not only successful/completed plans. Delegated copies remain identified separately.",
+          "service": "Positive independently recorded physical service of the exact issued delivery/evacuation. Payment, provision, assessment and activation alone get no direct-service credit.",
+          "duplicates": "A source operation may support coordinator and delegated review scopes. Unique owner+sourceID physical receipts are reported separately and never summed twice.",
+          "limits": "Internal scripted review and post-execution attribution are mechanisms; these ratios do not measure human comprehension, correctness of unseen semantic claims or field effectiveness."
+        }
+      },
+      "changed": {
+        "candidate": false,
+        "evaluator": false,
+        "simulator": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "plans": {
+    "S19": {
+      "version": "current-delegated-service-s19-v1",
+      "authorization": "ROOT_GO_S19_CURRENT",
+      "source": {
+        "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+        "evaluatorFingerprint": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+        "simulatorBuild": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+      },
+      "modelCapUsd": 0.15,
+      "totalBudgetUsd": 0.75,
+      "worlds": [
+        {
+          "scenario": "S19",
+          "variant": "distributed",
+          "arm": "B5",
+          "seed": "delegated-current-2026-distributed-01"
+        },
+        {
+          "scenario": "S19",
+          "variant": "distributed",
+          "arm": "B6",
+          "seed": "delegated-current-2026-distributed-01"
+        },
+        {
+          "scenario": "S19",
+          "variant": "distributed",
+          "arm": "B7",
+          "seed": "delegated-current-2026-distributed-01"
+        },
+        {
+          "scenario": "S19",
+          "variant": "delayed",
+          "arm": "B5",
+          "seed": "delegated-current-2026-delayed-01"
+        },
+        {
+          "scenario": "S19",
+          "variant": "delayed",
+          "arm": "B6",
+          "seed": "delegated-current-2026-delayed-01"
+        },
+        {
+          "scenario": "S19",
+          "variant": "delayed",
+          "arm": "B7",
+          "seed": "delegated-current-2026-delayed-01"
+        }
+      ],
+      "config": {
+        "planningRounds": 12,
+        "policyIntervalMs": 300000,
+        "maxCalls": 8,
+        "episodeBudgetUsd": 0.15,
+        "responseOrder": "deadline_then_priority"
+      },
+      "sourceDefaults": "Current PILOT_CONFIG: modeled, grid5/2km, no hazard/background traffic/posts/packet loss, review30s/inspection60s/load60s/unload60s/setup60s, horizon4h. Exact full normalized manifest retained; do not call this a3h human-primary world.",
+      "scope": "Current runEpisode B5/B6/B7 on identical distributed/delayed native dependency worlds and independent owner approval. Occupied shelter places/place-hours and native deficit, not activation alone. Modeled source-clock policy remains explicitly labeled; HTTP cost/wall separate.",
+      "negatives": "Keep failed, unsafe, late, partial and zero-occupancy worlds. B7 same model/tools is retained; no successful seed replacement or claim of universal composition."
+    },
+    "K22": {
+      "version": "current-source-recovery-nominal-burst-v1",
+      "authorization": "ROOT_GO_K22_CURRENT",
+      "source": {
+        "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+        "evaluatorFingerprint": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+        "simulatorBuild": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+      },
+      "totalBudgetUsd": 0.45,
+      "worlds": [
+        {
+          "name": "nominal-parser",
+          "mode": "parser",
+          "seed": "source-recovery-current-2026-01",
+          "count": 24,
+          "noise": 96,
+          "grid": 9,
+          "sourceCutoffMs": 300000,
+          "maxModelCalls": 32,
+          "budgetUsd": 0.15
+        },
+        {
+          "name": "nominal-real",
+          "mode": "real",
+          "seed": "source-recovery-current-2026-01",
+          "count": 24,
+          "noise": 96,
+          "grid": 9,
+          "sourceCutoffMs": 300000,
+          "maxModelCalls": 32,
+          "budgetUsd": 0.15
+        },
+        {
+          "name": "burst-parser",
+          "mode": "parser",
+          "seed": "source-recovery-current-2026-burst-01",
+          "count": 48,
+          "noise": 384,
+          "grid": 11,
+          "sourceCutoffMs": 600000,
+          "maxModelCalls": 64,
+          "budgetUsd": 0.2
+        },
+        {
+          "name": "burst-real",
+          "mode": "real",
+          "seed": "source-recovery-current-2026-burst-01",
+          "count": 48,
+          "noise": 384,
+          "grid": 11,
+          "sourceCutoffMs": 600000,
+          "maxModelCalls": 64,
+          "budgetUsd": 0.2
+        }
+      ],
+      "config": {
+        "reposts": 2,
+        "extentKm": 6,
+        "horizonMs": 10800000,
+        "wallLimitMs": 600000,
+        "batchSize": 30,
+        "clarificationWorkers": 2,
+        "reviewMs": 30000,
+        "formalDelayMs": 3600000,
+        "maxSourceAttempts": 2,
+        "retryCooldownMs": 60000,
+        "writeReport": true
+      },
+      "scope": "Received ID+version cohort sealed at the declared source cutoff, finite field and source review queues, same nominal/burst physics. Parser is a separate zero-paid substitution, real is configured provider. Recovery is not precision/recall or comparative GenAI benefit.",
+      "negatives": "Do not close by physical gold. Preserve rejected/truncated/revised sources, waiting_context operational attention, pending jobs/reviews/operations, wall/horizon censoring and unknown bills. Sources disposed and operational recovery are separate."
+    }
+  },
+  "newLock": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock"
+}

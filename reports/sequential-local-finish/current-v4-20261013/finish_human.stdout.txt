@@ -1,0 +1,45 @@
+{"phase":"study_started","id":"additional","stage":"human"}
+{"phase":"child_pid_issued","pid":3532}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"started"}
+{"phase":"child_boundary_progress","id":"additional","boundary":"settled"}
+{"phase":"study_settled","id":"additional","exitCode":1,"permitsNext":false,"chargedBudgetUsd":0.45,"totalProviderCostUsd":null}
+{
+  "folder": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\human",
+  "stage": "human",
+  "records": [
+    {
+      "id": "versioned_controls",
+      "state": "closed_external_versioned_coverage"
+    },
+    {
+      "id": "additional",
+      "state": "stopped_for_analysis"
+    }
+  ],
+  "stoppedReason": "child_failed_or_incomplete:additional",
+  "declaredStudies": 14,
+  "notLaunched": [
+    "read_relay",
+    "K11_K13",
+    "K07",
+    "K14",
+    "coupled100",
+    "physical_chain",
+    "S19",
+    "K15",
+    "K22",
+    "K18",
+    "federation12",
+    "local_latency"
+  ]
+}

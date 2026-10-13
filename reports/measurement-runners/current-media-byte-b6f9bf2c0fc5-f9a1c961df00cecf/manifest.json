@@ -1,0 +1,29 @@
+{
+  "state": "prepared_not_launched",
+  "runnerSha256": "f9a1c961df00cecff20697bfb0e7decc79731cd9e4ccbe9942a3f78dd037137d",
+  "planSha256": "45e9db6f46e493f1bd303023d28b5f49d8dc236db46e4b72ea6acf78cb708a77",
+  "providerCallsMadeDuringPreparation": 0,
+  "files": [
+    {
+      "name": "current-media-byte.mjs",
+      "sha256": "f9a1c961df00cecff20697bfb0e7decc79731cd9e4ccbe9942a3f78dd037137d",
+      "bytes": 14499
+    },
+    {
+      "name": "current-media-byte.test.mjs",
+      "sha256": "97e0aaf52bbd6033d2f36cbf17143012f646c03d2b1d5557ce63d0e7030f2daf",
+      "bytes": 5095
+    },
+    {
+      "name": "current-media-byte-guide.md",
+      "sha256": "4c7cad51dacac389da0c345ad019386db56562aa6d80e0daf15f8fbb20fd2fe8",
+      "bytes": 4735
+    },
+    {
+      "name": "evidence-probe-guards.mjs",
+      "sha256": "6d087a6b36a56b3c8640d05983e1bb914a5e02c935aa107de4ef88d5fee52c96",
+      "bytes": 4518
+    }
+  ],
+  "note": "Archive records prepared code and declared protocol only. No scenario, throughput, accuracy or latency result is implied."
+}

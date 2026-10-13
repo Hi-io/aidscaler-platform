@@ -1,0 +1,131 @@
+{
+  "recordedAt": "2026-10-13T04:07:15.374Z",
+  "scope": "New isolated human-capacity development; no old primary mutation.",
+  "simulatorCommit": "17bd7a446a1e7cd81fee2d9a14104753e3f90226",
+  "engineBuild": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+  "sourceEdited": false,
+  "paidCalls": 0,
+  "documentByteHashes": {
+    "docs/HUMAN_CAPACITY.md": "5da92e5e3db7718c6821ce461fa0c794708ca65614a1539d2d18e1c19d67e5f4",
+    "docs/API.md": "1a5cd3c8e596db76f37d6c2579cfdbb30f3fbc8f258793cda5c5c8a48f343105"
+  },
+  "newMechanisms": [
+    {
+      "name": "Finite native cognitive work",
+      "input": "O25 human_work plus declared humanCapacity profile",
+      "mechanism": "Received snapshot → finite read/decide/relay FIFO, source-time events, same owner-review decide pool, genuine delayed communicated peer cache.",
+      "scope": "No inferred intelligence or automatic physical action; intrinsic rates are declared assumptions, not observed professional statistics.",
+      "regression": "tests/human-capacity.test.mjs",
+      "passedTests": 15,
+      "safety": "Own scope, permission/version checks, no hidden snapshots, actual outage/TTL, per-source random key, duplicate commands use real stock/fuel/cargo, exact replay."
+    },
+    {
+      "name": "Embedded viewer activity",
+      "mechanism": "Authenticated finite200-record source-server presentation view; own actor display data separated from truth.",
+      "regression": "tests/viewer-activity.test.mjs",
+      "passedTests": 1,
+      "historicalFinding": "createLabServers embedded viewer returned405 for /api/activity. Legacy lab.mjs already had an observer proxy and remains compatible.",
+      "compatibility": "Historical conventional viewer policy stays algorithmic; selecting moderate alone does not create read/decide/relay stages. Manual runner explicitly submits native tasks."
+    }
+  ],
+  "currentEvidence": {
+    "simulator": {
+      "suitePassed": 247,
+      "suiteFailed": 0,
+      "checkModules": 106,
+      "inputs": 26,
+      "actions": 25,
+      "presets": 360,
+      "scope": "source local verification, not current platform whole gate"
+    },
+    "viewer": {
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\simulator-viewer\\1791863219274\\result.json",
+      "sha256": "c02a6cdb67d6392d1966ffbfa95d5297c96c3d8f12a123d5e0990cc0cfa98055",
+      "passed": true,
+      "checks": 15,
+      "initial": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "final": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "errors": [],
+      "modelCalls": 0,
+      "scope": "Actual Chromium WebGL,1920x1080/390x844,pan/zoom/LOD/follow,realHTTPnativequeues,actor display,source playback and synchronizedA/B. No human usability/FPS guarantee."
+    },
+    "arithmetic": {
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\arithmetic-proof\\1791863648801\\result.json",
+      "sha256": "427c5bfa2823f196833010c08b8361e818737df8167e9447d2e6854001b6bd10",
+      "passed": true,
+      "checks": 9,
+      "initial": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "final": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "replay": {
+        "expected": "f1777b0abd122f196fb09cb47d0f9ba6d7c8b60fd94fe16a3cf1e146d9fc18fc",
+        "actual": "f1777b0abd122f196fb09cb47d0f9ba6d7c8b60fd94fe16a3cf1e146d9fc18fc",
+        "matches": true
+      },
+      "scope": "Authored four-needs/two-vehicles/two-owners; independentL-ms/times/censures,120Lstockconservation,271505vehicle-ms and3000source-reviewperson-ms. No comparative benefit."
+    },
+    "benchmark": {
+      "file": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\benchmarks\\engine-native-human-1791863732836.json",
+      "sha256": "5c6bfbd8b026ca1f5e9e6be89b77c6b15482c74b0baeb41242525ef8a141a898",
+      "valid": true,
+      "initial": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "final": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b",
+      "profiles": [
+        {
+          "name": "unit",
+          "effectiveRate": 5747.469596684094,
+          "ledgerValid": true
+        },
+        {
+          "name": "city",
+          "effectiveRate": 1449.8838874584824,
+          "ledgerValid": true
+        },
+        {
+          "name": "region",
+          "effectiveRate": 297.17401564971607,
+          "ledgerValid": true
+        },
+        {
+          "name": "default-48h",
+          "effectiveRate": 1255.0183512044327,
+          "ledgerValid": true
+        },
+        {
+          "name": "information-10000",
+          "effectiveRate": 2294.6024830658125,
+          "ledgerValid": true
+        }
+      ],
+      "scope": "Current five default headless profiles; defaulthumanCapacityzero,sharedhostcompetitiondeclared. Region297x,notuniversalx1000. No provider/UI/platform throughput claim."
+    }
+  },
+  "localPending": [
+    {
+      "id": "T27",
+      "state": "prepared_waiting_parent_current_gate_UI_seal",
+      "next": "Archive exact committed platform+simulatorHEAD; fresh pnpm11.25.0 frozenlock/store/env; real scoped queries,independentownerreview and positivephysicalstartupreceipt; no inheritedkeys/env/node_modules/junction.",
+      "helper": "../nexo-platform/.local/local-closure-control.mjs"
+    },
+    {
+      "id": "Current platform gate/UI",
+      "state": "running_parent_controlled",
+      "next": "Must seal new three fingerprints; historic candidate verification cannot certify this native human source."
+    },
+    {
+      "id": "Temporal comparison",
+      "state": "planned_parent_current_native_controls",
+      "next": "Keep strong B5/B8,central/decentralizedmanual and zero/moderate/burst sensitivities; identical finite ownerreviews/stock/safety; errors0andexplicit1%assumed; preserve all censored/negative outcomes."
+    }
+  ],
+  "notNewMechanismGaps": [
+    "No further literal mandatory local mechanism confirmed in the prior exhaustive I/O/scenario audit. This does not assert all outcomes/semantic precision/scale pass.",
+    "S03/S05,K04federation,K07/K14,K18/K22,K11/K13,load/media/UIlatencies and comparative sensitivity evidence remain their parent-owned predeclared studies; these arithmetic/browser controls do not replace them."
+  ],
+  "externalGates": [
+    "GCP excluded by user for now.",
+    "Gemini/provider replacement requires a fresh same-protocol evaluation.",
+    "Professional human calibration/usability and live humanitarian adoption were not measured.",
+    "No top1/100of100,savedlives,realmortality or realbank efficacy follows from these local proofs."
+  ],
+  "failedAttempts": "All preparatory viewer and arithmetic attempts remain in their original report directories; fixed helper waits/active-owned-operation bookkeeping cannot amend those failed reports."
+}

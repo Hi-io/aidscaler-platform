@@ -1,0 +1,58 @@
+{
+  "schema": "final-two-response-v1",
+  "declaredAt": "2026-10-13T11:51:28.795Z",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa"
+  },
+  "worlds": [
+    {
+      "arm": "C_manual",
+      "profile": "moderate",
+      "condition": "moderate",
+      "seed": "native-human-capacity-primary-01"
+    },
+    {
+      "arm": "B6",
+      "profile": "moderate",
+      "condition": "moderate",
+      "seed": "native-human-capacity-primary-01"
+    }
+  ],
+  "common": {
+    "count": 24,
+    "noise": 192,
+    "reposts": 2,
+    "formalDelayMs": 1800000,
+    "horizonMs": 10800000,
+    "grid": 9,
+    "extentKm": 6,
+    "pumpMs": 60000,
+    "clarificationWorkers": 2,
+    "maxModelCalls": 16,
+    "budgetUsd": 0.15,
+    "wallLimitMs": 900000,
+    "humanCapacityOverrides": {
+      "readers": 2,
+      "deciders": 2,
+      "relayers": 1,
+      "readErrorBp": 0,
+      "decisionErrorBp": 0,
+      "relayErrorBp": 0
+    }
+  },
+  "helperSha256": "a1de373586841c67a8fcd5793fa2e0f7849ad7e6e79e85e8911ccd5ff82f9d45",
+  "actualModel": "google/gemma-4-31b-it",
+  "futureModel": "Gemini; not used or inferred here",
+  "maximumPaidExposureUsd": 0.15,
+  "checksReportedByRoot": {
+    "simulator": 249,
+    "affectedPlatform": 31,
+    "browser": 7,
+    "media": 5
+  },
+  "freshFullPlatformGateClaimed": false,
+  "scope": "Same original seed and common resources/permissions/physics. All negatives, unknown costs, failures and censored cases retained; no outcome retry."
+}

@@ -1,0 +1,594 @@
+{
+  "recordedAt": "2026-10-13T06:40:17.974Z",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+    "humanEvaluator": "fb5b95f31ce62b7287c20cf0a9ff01480a37158ba0aae8a17b765bebf538944a",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "protocol": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\protocol.json",
+  "records": [
+    {
+      "id": "zero",
+      "status": "closed_declared_subset_missing_unplanned_references",
+      "reservedCapUsd": 0.15,
+      "destination": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero",
+      "args": [
+        "scripts/human-capacity-campaign.mjs",
+        "--family=sensitivity",
+        "--profiles=zero",
+        "--arms=C_manual,B5,B8,B6",
+        "--seeds=1",
+        "--seed-prefix=native-human-capacity-control-zero",
+        "--budget=0.15",
+        "--episode-budget=0.15",
+        "--errors-bp=0",
+        "--freeze=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freeze-current.json",
+        "--lock=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero",
+        "--stop-file=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\STOP_COMPACT_HUMAN_CONTROLS",
+        "--run=ROOT_GO_HUMAN_CAPACITY"
+      ],
+      "startedAt": "2026-10-13T05:47:54.232Z",
+      "finishedAt": "2026-10-13T06:05:18.712Z",
+      "closure": {
+        "complete": true,
+        "allCompleted": true,
+        "comparisonsIntact": true,
+        "recoveredErrorCount": 0,
+        "errors": [],
+        "process": {
+          "exitCode": 1,
+          "signal": null
+        },
+        "expectedMissingUnplannedReferences": [
+          {
+            "seed": "native-human-capacity-control-zero-01",
+            "profile": "zero",
+            "condition": "zero",
+            "reference": "C_decentralized",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          }
+        ],
+        "classification": "closed_declared_subset_missing_unplanned_references",
+        "permitsNext": true,
+        "note": "Negative gains, physical deficits and recovered operational errors remain in every completed pair. Unplanned baseline pairs stay explicitly missing; the primary retains all strong baselines."
+      },
+      "budget": {
+        "costUsd": 0.0075974599999999995,
+        "knownCostUsd": 0.0075974599999999995,
+        "modelCalls": 7,
+        "chargedBudgetUsd": 0.0075974599999999995,
+        "usageUnknown": false,
+        "providerWallMs": 44061.57499999984,
+        "note": "Unknown fees/calls/wall remain null; missing paid ledger retains its full cap. Known cost is a lower bound, not a replacement for unknown total cost."
+      },
+      "summary": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\summary.json",
+        "sha256": "6196bf1c2f1954de9a885645b0829a9695587fd89b4842b3ba62b7911b04c4d9"
+      },
+      "worlds": [
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-C_manual.json",
+          "sha256": "5a5e63e5cd3dec56daee6434799dedbbf796abfa4263a1d3e56780fb8d58b545",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2152786.0416666665
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2152786.0416666665
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B5.json",
+          "sha256": "0bb3cd7381fc51e2c70df69ca39bab08fd3248c81b62564502eb945fa6218c34",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1774686.6666666667
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1774686.6666666667
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B8.json",
+          "sha256": "7ef5fff95a2ed42775a96f8fb013c0dcb19081a3bdd0a8348b166f1ca6b71626",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2429975.3333333335
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2429975.3333333335
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\zero\\zero-native-human-capacity-control-zero-01-B6.json",
+          "sha256": "5d1b49d9b3e0d9e37bf9a3cc40c126840e6a640a6938fde1d9a86f6441301ec7",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1960496.1666666667
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1960496.1666666667
+          },
+          "costUsd": 0.0075974599999999995,
+          "modelCalls": 7,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0.0075974599999999995,
+          "sourceChanged": false
+        }
+      ]
+    },
+    {
+      "id": "fast_read",
+      "status": "closed_declared_subset_missing_unplanned_references",
+      "reservedCapUsd": 0.15,
+      "destination": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read",
+      "args": [
+        "scripts/human-capacity-campaign.mjs",
+        "--family=sensitivity",
+        "--profiles=fast_read_5s",
+        "--arms=C_manual,B6",
+        "--seeds=1",
+        "--seed-prefix=native-human-capacity-control-fast-read",
+        "--budget=0.15",
+        "--episode-budget=0.15",
+        "--errors-bp=0",
+        "--freeze=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freeze-current.json",
+        "--lock=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read",
+        "--stop-file=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\STOP_COMPACT_HUMAN_CONTROLS",
+        "--run=ROOT_GO_HUMAN_CAPACITY"
+      ],
+      "startedAt": "2026-10-13T06:05:18.743Z",
+      "finishedAt": "2026-10-13T06:16:47.142Z",
+      "closure": {
+        "complete": true,
+        "allCompleted": true,
+        "comparisonsIntact": true,
+        "recoveredErrorCount": 0,
+        "errors": [],
+        "process": {
+          "exitCode": 1,
+          "signal": null
+        },
+        "expectedMissingUnplannedReferences": [
+          {
+            "seed": "native-human-capacity-control-fast-read-01",
+            "profile": "moderate",
+            "condition": "fast_read_5s",
+            "reference": "C_decentralized",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          },
+          {
+            "seed": "native-human-capacity-control-fast-read-01",
+            "profile": "moderate",
+            "condition": "fast_read_5s",
+            "reference": "B5",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          },
+          {
+            "seed": "native-human-capacity-control-fast-read-01",
+            "profile": "moderate",
+            "condition": "fast_read_5s",
+            "reference": "B8",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          }
+        ],
+        "classification": "closed_declared_subset_missing_unplanned_references",
+        "permitsNext": true,
+        "note": "Negative gains, physical deficits and recovered operational errors remain in every completed pair. Unplanned baseline pairs stay explicitly missing; the primary retains all strong baselines."
+      },
+      "budget": {
+        "costUsd": 0.0044840999999999995,
+        "knownCostUsd": 0.0044840999999999995,
+        "modelCalls": 5,
+        "chargedBudgetUsd": 0.0044840999999999995,
+        "usageUnknown": false,
+        "providerWallMs": 24216.719199999934,
+        "note": "Unknown fees/calls/wall remain null; missing paid ledger retains its full cap. Known cost is a lower bound, not a replacement for unknown total cost."
+      },
+      "summary": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read\\summary.json",
+        "sha256": "7549afe183263352ca941b2d8ac6cba49fc364290074271dbb1ef9ae9ccc662a"
+      },
+      "worlds": [
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read\\fast_read_5s-native-human-capacity-control-fast-read-01-C_manual.json",
+          "sha256": "5c8c7e41a6f5b98c0b5faf7eeef8c2b2e8ef295b0441315e338017eeeb77cefe",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2802204.5
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2802204.5
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\fast_read\\fast_read_5s-native-human-capacity-control-fast-read-01-B6.json",
+          "sha256": "80a814b09c4230c34490ca1d4ce2fba15c88b2b5e2e94cba3ce422224f1c3b5d",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1906829.5
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1906829.5
+          },
+          "costUsd": 0.0044840999999999995,
+          "modelCalls": 5,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0.0044840999999999995,
+          "sourceChanged": false
+        }
+      ]
+    },
+    {
+      "id": "readers8",
+      "status": "closed_declared_subset_missing_unplanned_references",
+      "reservedCapUsd": 0.15,
+      "destination": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8",
+      "args": [
+        "scripts/human-capacity-campaign.mjs",
+        "--family=sensitivity",
+        "--profiles=readers8",
+        "--arms=C_manual,B6",
+        "--seeds=1",
+        "--seed-prefix=native-human-capacity-control-readers8",
+        "--budget=0.15",
+        "--episode-budget=0.15",
+        "--errors-bp=0",
+        "--freeze=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freeze-current.json",
+        "--lock=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8",
+        "--stop-file=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\STOP_COMPACT_HUMAN_CONTROLS",
+        "--run=ROOT_GO_HUMAN_CAPACITY"
+      ],
+      "startedAt": "2026-10-13T06:16:47.175Z",
+      "finishedAt": "2026-10-13T06:27:32.204Z",
+      "closure": {
+        "complete": true,
+        "allCompleted": true,
+        "comparisonsIntact": true,
+        "recoveredErrorCount": 0,
+        "errors": [],
+        "process": {
+          "exitCode": 1,
+          "signal": null
+        },
+        "expectedMissingUnplannedReferences": [
+          {
+            "seed": "native-human-capacity-control-readers8-01",
+            "profile": "moderate",
+            "condition": "readers8",
+            "reference": "C_decentralized",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          },
+          {
+            "seed": "native-human-capacity-control-readers8-01",
+            "profile": "moderate",
+            "condition": "readers8",
+            "reference": "B5",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          },
+          {
+            "seed": "native-human-capacity-control-readers8-01",
+            "profile": "moderate",
+            "condition": "readers8",
+            "reference": "B8",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          }
+        ],
+        "classification": "closed_declared_subset_missing_unplanned_references",
+        "permitsNext": true,
+        "note": "Negative gains, physical deficits and recovered operational errors remain in every completed pair. Unplanned baseline pairs stay explicitly missing; the primary retains all strong baselines."
+      },
+      "budget": {
+        "costUsd": 0.00570586,
+        "knownCostUsd": 0.00570586,
+        "modelCalls": 6,
+        "chargedBudgetUsd": 0.00570586,
+        "usageUnknown": false,
+        "providerWallMs": 26286.954099999974,
+        "note": "Unknown fees/calls/wall remain null; missing paid ledger retains its full cap. Known cost is a lower bound, not a replacement for unknown total cost."
+      },
+      "summary": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8\\summary.json",
+        "sha256": "97f8370fd4868da16c47221f7cf1baead609773470a76be877c36100d725fd75"
+      },
+      "worlds": [
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8\\readers8-native-human-capacity-control-readers8-01-C_manual.json",
+          "sha256": "11604c0974c289679622138ed43b67183a8115417523544ca278ef3621250d02",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2576621.1666666665
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2576621.1666666665
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\readers8\\readers8-native-human-capacity-control-readers8-01-B6.json",
+          "sha256": "69f093ca35a36a93d2cdec24f8a89833226be6f53d62ddbdb5146d14e39179c3",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1892350.3333333333
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1892350.3333333333
+          },
+          "costUsd": 0.00570586,
+          "modelCalls": 6,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0.00570586,
+          "sourceChanged": false
+        }
+      ]
+    },
+    {
+      "id": "decentralized",
+      "status": "failed_or_incomplete_group",
+      "reservedCapUsd": 0.15,
+      "destination": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized",
+      "args": [
+        "scripts/human-capacity-campaign.mjs",
+        "--family=sensitivity",
+        "--profiles=moderate",
+        "--arms=C_manual,C_decentralized,B6",
+        "--seeds=1",
+        "--seed-prefix=native-human-capacity-control-decentralized",
+        "--budget=0.15",
+        "--episode-budget=0.15",
+        "--errors-bp=0",
+        "--freeze=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\measurement-freeze-current.json",
+        "--lock=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\PAID_RESEARCH_STUDY.lock",
+        "--folder=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized",
+        "--stop-file=C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\STOP_COMPACT_HUMAN_CONTROLS",
+        "--run=ROOT_GO_HUMAN_CAPACITY"
+      ],
+      "startedAt": "2026-10-13T06:27:32.244Z",
+      "finishedAt": "2026-10-13T06:40:17.971Z",
+      "closure": {
+        "complete": true,
+        "allCompleted": false,
+        "comparisonsIntact": false,
+        "recoveredErrorCount": 1,
+        "errors": [
+          {
+            "phase": "episode",
+            "code": "IDEMPOTENCY",
+            "message": "An idempotency key is required.",
+            "world": "moderate:native-human-capacity-control-decentralized-01:C_decentralized"
+          }
+        ],
+        "process": {
+          "exitCode": 1,
+          "signal": null
+        },
+        "expectedMissingUnplannedReferences": [
+          {
+            "seed": "native-human-capacity-control-decentralized-01",
+            "profile": "moderate",
+            "condition": "moderate",
+            "reference": "B5",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          },
+          {
+            "seed": "native-human-capacity-control-decentralized-01",
+            "profile": "moderate",
+            "condition": "moderate",
+            "reference": "B8",
+            "candidate": "B6",
+            "comparable": false,
+            "reason": "missing_pair"
+          }
+        ],
+        "classification": "failed_or_incomplete_group",
+        "permitsNext": false,
+        "note": "Negative gains, physical deficits and recovered operational errors remain in every completed pair. Unplanned baseline pairs stay explicitly missing; the primary retains all strong baselines."
+      },
+      "budget": {
+        "costUsd": 0.0077663,
+        "knownCostUsd": 0.0077663,
+        "modelCalls": 7,
+        "chargedBudgetUsd": 0.0077663,
+        "usageUnknown": false,
+        "providerWallMs": 44677.516,
+        "note": "Unknown fees/calls/wall remain null; missing paid ledger retains its full cap. Known cost is a lower bound, not a replacement for unknown total cost."
+      },
+      "summary": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\summary.json",
+        "sha256": "cf24ddcf210eef36743b31cd096680e17be33c4abe2337006d743397d47f9c5b"
+      },
+      "worlds": [
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+          "sha256": "6ffd2fbbef87aa73ebc0914aa5f0980161a5b18cfbb75996f343f608ad0a42ea",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2634412.8333333335
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 2634412.8333333335
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+          "sha256": "7272023e0ac72966a5fad8f21299a8ffa82a1e3c63a2f9060bd7f3a38c30ebb9",
+          "status": "failed",
+          "errors": [
+            {
+              "phase": "episode",
+              "code": "IDEMPOTENCY",
+              "message": "An idempotency key is required."
+            }
+          ],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 0,
+            "rightCensored": 24,
+            "restrictedMeanMs": 10800000
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 0,
+            "rightCensored": 24,
+            "restrictedMeanMs": 10800000
+          },
+          "costUsd": 0,
+          "modelCalls": 0,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0,
+          "sourceChanged": false
+        },
+        {
+          "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls\\native-controls-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json",
+          "sha256": "da8780eebf4cac983f54b0b63312cb35d50e640c489a5f41b8bedc5555286871",
+          "status": "completed",
+          "errors": [],
+          "sufficient": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1935621.1666666667
+          },
+          "firstUseful": {
+            "eligible": 24,
+            "reached": 24,
+            "rightCensored": 0,
+            "restrictedMeanMs": 1935621.1666666667
+          },
+          "costUsd": 0.0077663,
+          "modelCalls": 7,
+          "unknownCostRows": 0,
+          "chargedBudgetUsd": 0.0077663,
+          "sourceChanged": false
+        }
+      ]
+    }
+  ],
+  "chargedBudgetUsd": 0.02555372,
+  "stoppedReason": "failed_or_incomplete_group",
+  "unsettledReservedUsd": 0,
+  "conservativeCommittedUsd": 0.02555372,
+  "missingGroups": [
+    "stress48",
+    "stress96"
+  ],
+  "blocked": [
+    {
+      "group": "error_1pct",
+      "status": "BLOCKED_NOT_LAUNCHED",
+      "reason": "Native owner-review lapse lifecycle must be reviewed before this sensitivity; no source changes during active studies."
+    }
+  ]
+}

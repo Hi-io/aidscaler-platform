@@ -1,0 +1,210 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { pointAlong } from './geometry.js';
+import { mapTheme } from './theme.js';
+const views = [];
+let ready = false,
+  active = false,
+  lastChanged = 0;
+function initialize() {
+  for (const id of ['compareA', 'compareB']) {
+    const el = document.getElementById(id),
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    el.append(renderer.domElement);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(mapTheme.background);
+    scene.add(new THREE.HemisphereLight(mapTheme.light, mapTheme.ground, 1.6));
+    const sun = new THREE.DirectionalLight(mapTheme.light, 2);
+    sun.position.set(-10, 25, 10);
+    scene.add(sun);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000000),
+      controls = new OrbitControls(camera, renderer.domElement);
+    controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
+    controls.maxPolarAngle = Math.PI * 0.46;
+    const view = {
+      el,
+      renderer,
+      scene,
+      camera,
+      controls,
+      group: null,
+      extent: 1000,
+      initialized: false,
+    };
+    views.push(view);
+    controls.addEventListener('start', () => (lastChanged = views.indexOf(view)));
+    new ResizeObserver(() => resize(view)).observe(el);
+  }
+  const animate = () => {
+    requestAnimationFrame(animate);
+    if (!active) return;
+    const primary = views[lastChanged],
+      other = views[1 - lastChanged];
+    primary.controls.update();
+    other.camera.position.copy(primary.camera.position);
+    other.camera.quaternion.copy(primary.camera.quaternion);
+    other.camera.zoom = primary.camera.zoom;
+    other.controls.target.copy(primary.controls.target);
+    other.camera.updateProjectionMatrix();
+    window.__readOnlyPairProbe=views.map(v=>({position:v.camera.position.toArray(),target:v.controls.target.toArray(),zoom:v.camera.zoom,calls:v.renderer.info.render.calls,lost:v.renderer.getContext().isContextLost()}));
+for (const v of views) v.renderer.render(v.scene, v.camera);
+  };
+  animate();
+  ready = true;
+}
+function resize(v) {
+  const w = v.el.clientWidth,
+    h = Math.max(1, v.el.clientHeight);
+  v.renderer.setSize(w, h);
+  v.camera.left = (-v.extent * w) / h;
+  v.camera.right = (v.extent * w) / h;
+  v.camera.top = v.extent;
+  v.camera.bottom = -v.extent;
+  v.camera.updateProjectionMatrix();
+}
+function draw(v, s) {
+  if (v.group) {
+    v.group.traverse((o) => {
+      o.geometry?.dispose();
+      o.material?.dispose();
+    });
+    v.scene.remove(v.group);
+  }
+  const group = (v.group = new THREE.Group());
+  v.scene.add(group);
+  const map = s.state.map,
+    scale = map.extentM / map.grid,
+    nodes = new Map(map.nodes.map((n) => [n.id, n]));
+  const geo = new THREE.BoxGeometry(1, 1, 1),
+    mesh = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial(), map.buildings.length),
+    matrix = new THREE.Matrix4();
+  for (let i = 0; i < map.buildings.length; i++) {
+    const b = map.buildings[i],
+      h = (b.height * scale) / 150;
+    matrix.makeScale(b.width, h, b.width);
+    matrix.setPosition(b.x, h / 2, b.z);
+    mesh.setMatrixAt(i, matrix);
+    mesh.setColorAt(
+      i,
+      new THREE.Color(
+        b.state === 'operating'
+          ? mapTheme.buildings.operating
+          : b.damage
+            ? mapTheme.buildings.damaged
+            : mapTheme.buildings.ordinary,
+      ),
+    );
+  }
+  group.add(mesh);
+  const points = [],
+    closed = [],
+    bridges = [];
+  for (const e of map.edges) {
+    if (e.from > e.to) continue;
+    const a = nodes.get(e.from),
+      b = nodes.get(e.to);
+    const target = !e.open ? closed : e.bridge ? bridges : points;
+    const path = e.points ?? [a, b];
+    for (let i = 0; i < path.length - 1; i++)
+      target.push(path[i].x, 1, path[i].z, path[i + 1].x, 1, path[i + 1].z);
+  }
+  for (const [vertices, color] of [
+    [points, mapTheme.road],
+    [closed, mapTheme.coral],
+    [bridges, mapTheme.blue],
+  ]) {
+    const lines = new THREE.BufferGeometry();
+    lines.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    group.add(new THREE.LineSegments(lines, new THREE.LineBasicMaterial({ color })));
+  }
+  if (map.river) {
+    const vertices = [],
+      p = map.river.points,
+      d = map.river.widthM / 2;
+    for (let i = 0; i < p.length - 1; i++) {
+      const a = p[i],
+        b = p[i + 1];
+      vertices.push(
+        a.x - d,
+        0,
+        a.z,
+        a.x + d,
+        0,
+        a.z,
+        b.x + d,
+        0,
+        b.z,
+        a.x - d,
+        0,
+        a.z,
+        b.x + d,
+        0,
+        b.z,
+        b.x - d,
+        0,
+        b.z,
+      );
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    group.add(
+      new THREE.Mesh(
+        geo,
+        new THREE.MeshBasicMaterial({ color: mapTheme.river, side: THREE.DoubleSide }),
+      ),
+    );
+  }
+  for (const n of s.state.needs.filter((n) => n.served < n.quantity)) {
+    const b = map.buildings.find((b) => b.id === n.building),
+      ring = new THREE.Mesh(
+        new THREE.RingGeometry(scale * 0.08, scale * 0.11, 16),
+        new THREE.MeshBasicMaterial({ color: mapTheme.coral, side: THREE.DoubleSide }),
+      );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(b.x, 2, b.z);
+    group.add(ring);
+  }
+  for (const truck of s.state.vehicles) {
+    const node = nodes.get(truck.node);
+    if (!node) continue;
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(scale * 0.035, scale * 0.03, scale * 0.055),
+      new THREE.MeshStandardMaterial({ color: truck.background ? mapTheme.slate : mapTheme.blue }),
+    );
+    let x = node.x,
+      z = node.z;
+    if (truck.edge) {
+      const e = map.edges.find((e) => e.id === truck.edge),
+        to = nodes.get(e.to),
+        t = Math.min(1, Math.max(0, (s.now - truck.edgeStart) / (truck.edgeEnd - truck.edgeStart)));
+      const p = pointAlong(e.points ?? [node, to], t);
+      x = p.x;
+      z = p.z;
+    }
+    box.position.set(x, scale * 0.02, z);
+    group.add(box);
+  }
+  if (!v.initialized || v.mapHash !== map.hash) {
+    v.extent =
+      map.extentM * Math.max(0.54, 0.82 / Math.max(0.1, v.el.clientWidth / v.el.clientHeight));
+    v.camera.position.set(map.extentM * 1.5, map.extentM * 1.1, map.extentM * 1.5);
+    v.controls.target.set(map.extentM / 2, 0, map.extentM / 2);
+    v.camera.lookAt(v.controls.target);
+    v.camera.zoom = 1;
+    v.initialized = true;
+    v.mapHash = map.hash;
+    resize(v);
+  }
+}
+export function renderComparison(a, b) {
+  if (!ready) initialize();
+  active = true;
+  if (a && b) {
+    draw(views[0], a);
+    draw(views[1], b);
+  }
+}
+export function stopComparison() {
+  active = false;
+}

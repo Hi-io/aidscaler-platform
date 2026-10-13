@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-13T04:31:03.216Z",
+  "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+  "candidateChanged": false,
+  "checks": [
+    {
+      "width": 1920,
+      "exactApproval": true,
+      "pendingNotCredited": true,
+      "deliveredReceiptVisible": true,
+      "keyboardContained": true,
+      "horizontalOverflow": false,
+      "physicalInquiryCount": 1
+    },
+    {
+      "width": 390,
+      "exactApproval": true,
+      "pendingNotCredited": true,
+      "deliveredReceiptVisible": true,
+      "keyboardContained": true,
+      "horizontalOverflow": false,
+      "physicalInquiryCount": 1
+    }
+  ],
+  "errors": [],
+  "scope": "Automated local browser and real source-queue mechanism at two viewports; no paid inference or human-comprehension claim"
+}

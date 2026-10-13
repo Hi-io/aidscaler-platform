@@ -1,0 +1,98 @@
+{
+  "label": "Structural zero-paid smoke, not an impact or model benchmark",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "b050d21e12c85d0ac386e2f3530fef0c1503c635220c37ee13e7f87332f6fe4f",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "args": {
+    "profile": "zero",
+    "condition": "zero-smoke",
+    "seed": "native-human-capacity-smoke-01",
+    "count": 4,
+    "noise": 8,
+    "reposts": 2,
+    "formalDelayMs": 300000,
+    "horizonMs": 1800000,
+    "pumpMs": 60000,
+    "clarificationWorkers": 2,
+    "budgetUsd": 0.15,
+    "maxModelCalls": 1,
+    "wallLimitMs": 180000
+  },
+  "arms": [
+    "C_manual",
+    "C_decentralized",
+    "B8"
+  ],
+  "protocol": {
+    "version": "native-human-capacity-physical-response-v3",
+    "hypothesis": "Automation may reduce source-reading and manual coordination backlog and hence physical service time; strong automated conventional references may tie or win.",
+    "scope": "Separate internal scenario family with explicit hypothetical human-capacity parameters. It does not replace prior B5/B8 comparisons or claim empirically calibrated human productivity/errors.",
+    "arms": {
+      "C_manual": "Distributed finite human source reading, integration and real relay; finite received-need decisions and partner handoff; competent common allocator afterward.",
+      "C_decentralized": "Independent manual teams with native read/decide and factual need/intent/status relays; each drafts only its own capacity. Real stale communication may or may not cause duplicate physical supply.",
+      "B5": "Strong shared conventional planner: free exact parsing, native finite manual reading of other public sources, automated inquiries and common allocation.",
+      "B8": "Strong free broad keyword/public-location discovery with automated inquiries and the common allocator. No artificial reading/decision/relay penalty.",
+      "B6": "Bounded real-model public-source perception, automated received-data inquiries under the same approved policy and the common allocator. No extra human query gate."
+    },
+    "fairness": "Identical seed, public input bytes, formal report delay, resource/fleet/field capacities, physical rules, consent and owner reviews in every arm. Human reviews share the native decision pool in ALL arms. No human task creates truth, certifies safety or authorizes aid.",
+    "manualRouting": "Public source ID hash assigns each manual reader to one of four owners. After a completed read, competent common interpretation triages nonactionable material without extra decision/relay work; actionable local decisions stay local, other owners relay actual completed snapshots to owner0. Integrated operational needs are handed only to foreign owners selected by the common received-data allocation preview; owned capacity requires no partner relay. These are declared workflow assumptions, not measured universal practice.",
+    "profiles": {
+      "zero": "No source-reading/integration/relay duration, background load or human task error; native owner review remains finite.",
+      "moderate": "Source defaults: 2 readers/2 deciders/1 relayer per owner, 30s/60s/90s work, no background work or errors.",
+      "burst": "Same finite pools/work; source-generated exogenous background read360/decision120/relay60 tasks per owner/hour. Hypothetical sensitivity, not disaster calibration."
+    },
+    "conditions": {
+      "zero": {
+        "profile": "zero",
+        "errorBp": 0
+      },
+      "moderate": {
+        "profile": "moderate",
+        "errorBp": 0
+      },
+      "burst": {
+        "profile": "burst",
+        "errorBp": 0
+      },
+      "moderate_error_1pct": {
+        "profile": "moderate",
+        "errorBp": 100
+      },
+      "fast_read_5s": {
+        "profile": "moderate",
+        "errorBp": 0,
+        "readMs": 5000
+      },
+      "readers8": {
+        "profile": "moderate",
+        "errorBp": 0,
+        "readers": 8
+      },
+      "moderate_48": {
+        "profile": "moderate",
+        "errorBp": 0,
+        "count": 48,
+        "noise": 384,
+        "maxModelCalls": 24
+      },
+      "moderate_96": {
+        "profile": "moderate",
+        "errorBp": 0,
+        "count": 96,
+        "noise": 768,
+        "maxModelCalls": 32,
+        "grid": 13
+      }
+    },
+    "failurePolicy": "At most two attempts per inconclusive manual stage, with all receipts and errors retained. Missing relay, rejected work, unserved demand, unknown fees and provider failures are never counted as completed service.",
+    "clocks": "Publication, HTTP receipt, native human work, model availability, inquiry and physical receipt are separate source clocks. Provider measured wall time is charged at max(native model latency, measured provider duration). Host SQL/UI wall time is separately reported.",
+    "coalescing": "All arms recompile only after the received response material signature or eligible integrated need IDs change. Receipt ingestion, owner review, physical execution and unknown human/inquiry queues continue at each common60s pump or earlier received native readyAt; no private completion or skipped horizon. Public feed downloads occur only in the coordinator store actually consumed by this controller; distributed reading still obtains its own native authenticated source snapshot.",
+    "controls": "Keep zero profile, moderate, burst, B5/B8 upper bounds, failed and censored worlds. Human errors are source-seeded and apply to the same owner review mechanism for NEXO; no arm-specific random error or forced duplicate score.",
+    "endpoint": "First useful and sufficient physical service RMST at the fixed horizon, by native demand and resource units; background task completion or proposal approval is not aid."
+  },
+  "amendment": "Version3 common60s pump/earlier received readyAt and one coordinator source feed, with host profiling. Competent received-read triage and capacity-specific handoff; native parameters and runtime-error preservation repaired. Prior smokes1791862245383/1791862573655 retained unchanged; 180s common host cap and unchanged30min physics declared before repetition.",
+  "runnerSha256": "ae0aa3b02d38c907e87817e86f67901b102012c24ce6184e8212b9ee337987f3",
+  "declaredAt": "2026-10-13T03:52:20.446Z"
+}

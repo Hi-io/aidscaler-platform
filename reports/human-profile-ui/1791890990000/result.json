@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "Visible profile wins advanced profile; native manifest preserves finite reader and duration",
+      "passed": true,
+      "profile": "moderate",
+      "readers": 1,
+      "readMs": 30000,
+      "policy": "none"
+    },
+    {
+      "name": "Reset keeps actual selected native manifest and returns source clock to zero",
+      "passed": true
+    },
+    {
+      "name": "Invalid submitted profile rejected without resetting source or fabricating work",
+      "passed": true,
+      "status": 500,
+      "error": "ERROR"
+    }
+  ],
+  "errors": [],
+  "expectedRejections": [
+    {
+      "type": "HTTP",
+      "path": "/api/catalog",
+      "status": 401
+    },
+    {
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "type": "HTTP",
+      "path": "/api/state",
+      "status": 401
+    },
+    {
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "type": "HTTP",
+      "path": "/api/config",
+      "status": 500
+    },
+    {
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    }
+  ],
+  "externalRequests": [],
+  "initialBuild": "4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa",
+  "finalBuild": "4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa",
+  "error": {
+    "name": "AssertionError",
+    "message": "The expression evaluated to a falsy value:\n\n  assert.ok(feed.posts.length>0)\n"
+  },
+  "recordedAt": "2026-10-13T11:30:47.591Z"
+}

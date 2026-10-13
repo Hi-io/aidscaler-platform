@@ -1,84 +1,73 @@
-# Capacidad humana nativa: resultados físicos y alcance de la mejora
+# Coordinación convencional frente a NEXO con Gemma
 
-Estado al 13 de octubre de 2026: comparación primaria cerrada, doce mundos válidos. Los controles secundarios siguen en ejecución. Este documento acredita el resultado de esta versión y este protocolo; no convierte una hipótesis del simulador en productividad humana medida en campo.
+## Comparación actual
 
-## Resultado principal
+La comprobación más reciente, con el simulador actualizado y una pareja de la misma semilla, redujo el tiempo medio hasta ayuda suficiente **20,59%: 44,279 → 35,162 minutos**. Ambos métodos atendieron **24/24** necesidades, sin casos censurados, exceso, errores ni invariantes rotos. NEXO recorrió 209,25 km frente a 216 km y consumió 37,665 L frente a 38,880 L: **3,125% menos**. Seis llamadas reales a Gemma 4 costaron **USD 0,00613892**.
 
-NEXO con Gemma redujo **18,02%** el tiempo medio hasta recibir ayuda suficiente frente al flujo manual competente: **41,85 → 34,31 minutos**, una diferencia de **7,54 minutos por necesidad** en esta cohorte. Cada brazo atendió físicamente 24/24 necesidades en cada una de tres semillas. No hubo necesidades censuradas, exceso de recursos, errores de ejecución ni invariantes violadas.
+Agua y comida llegaron antes en promedio; las mantas tardaron más. [Tabla de los dos métodos, todos los recursos, trazas y límites](../reports/analysis/final-two-response-closed-20261013/readout.md). Es una pareja simulada, no evidencia de campo. Su motor es `4ea1bf88…`; la primaria de tres semillas que sigue conserva su versión original y se presenta por separado.
 
-| Referencia | Tiempo a ayuda suficiente | NEXO | Diferencia de NEXO |
-|---|---:|---:|---|
-| `C_manual`: lectura, integración y comunicación con pools humanos finitos | 41,85 min | 34,31 min | 18,02% más rápido |
-| `B5`: parser explícito, consultas automáticas y compilador común | 31,83 min | 34,31 min | 7,76% más lento |
-| `B8`: palabras/lugares públicos, comprobaciones automáticas y compilador común | 35,24 min | 34,31 min | 2,66% más rápido en el agregado; resultados mixtos por semilla |
+## Primaria anterior: tres semillas
 
-El contraste con `B8` va de una mejora del 13,98% a un empeoramiento del 7,29%. No se acredita una superioridad robusta frente a ese control. `B5` ganó en las tres semillas. La mejora frente a trabajo manual acredita el flujo automatizado bajo estos supuestos; su totalidad no puede atribuirse exclusivamente al LLM.
 
-Los endpoints de primera ayuda útil y ayuda suficiente coinciden en esta cohorte: cada necesidad se cubrió mediante un recibo suficiente. No se generaliza esa coincidencia a entregas parciales, evacuaciones, refugios ni otros escenarios.
+La comparación primaria cerrada del 13 de octubre de 2026 muestra una reducción del **18,02% en el tiempo medio hasta recibir ayuda física suficiente**: **41,846 → 34,305 minutos**, aproximadamente 7,54 minutos menos por necesidad. Se midieron tres semillas, con 24 necesidades por método en cada una. Ambos atendieron las 72 necesidades; ninguna quedó sin atender o censurada al horizonte de tres horas.
 
-Los doce manifiestos efectivos de esta primaria tienen `packetLoss: 0` y `silentFraction: 0`. Por tanto, el 18,02% no acredita robustez ante pérdida de conexión ni comunidades sin publicaciones. El harness conserva una configuración piloto propia; no corresponde atribuirle el default general de 2% del motor. Esos mecanismos y sus controles se evalúan por separado, conservando sus versiones.
-
-## Qué produjo la diferencia
-
-Las colas están dentro del motor: leer, integrar/decidir y transmitir son trabajos nativos, con inicio, espera, finalización y snapshot recibido. Un relay exige además entrega efectiva por el canal. El controlador no añade una penalización artificial al score final. Ambos métodos necesitan la misma revisión por el dueño, stock, flota, capacidades de comprobación y ejecución física.
-
-En los 72 pares de necesidades contra `C_manual`, la diferencia media de NEXO se descompone en:
-
-| Fase física comparable | NEXO menos manual |
-|---|---:|
-| Aparición de la necesidad → autorización | −8,41 min |
-| Autorización → salida con carga | +0,44 min |
-| Salida con carga → llegada | +0,43 min |
-| Llegada → recepción útil | 0,00 min |
-| Total hasta recepción | −7,54 min |
-
-La ganancia ocurre antes de autorizar, con costes posteriores que compensan parte de ella. Esta descomposición ubica el cuello de botella; por sí sola no separa causalmente cada comprobación, la lectura, el modelo y la revisión dentro de la fase previa.
-
-Contra `B5`, NEXO tarda 2,47 minutos adicionales: aproximadamente 2,10 antes de autorizar, 0,47 en preparación/recogida y −0,10 en viaje cargado. Los HTTP del modelo fueron inferiores a los 15 segundos mínimos modelados en los 21 intentos registrados. No corresponde explicar toda la desventaja simplemente por un proveedor lento.
-
-## Costes y regresiones que permanecen visibles
-
-| Recurso | Reducción del tiempo de NEXO frente al manual | Reducción del déficit acumulado en su propia unidad |
+| Resultado | Coordinación convencional manual | NEXO + Gemma |
 |---|---:|---:|
-| Agua | 10,99% | 9,64% |
-| Comida | 52,38% | 53,04% |
-| Mantas | −12,49% | −9,71% |
+| Tiempo medio hasta ayuda suficiente | 41,846 min | 34,305 min |
+| Necesidades atendidas suficientemente | 72/72 | 72/72 |
+| Necesidades sin atender / censuradas | 0 / 0 | 0 / 0 |
+| Llamadas al modelo | 0 | 21 |
+| Costo del modelo | USD 0 | USD 0,01992542 |
 
-Las mantas empeoran. NEXO recorrió y consumió aproximadamente 7,31% más que el manual, 2,64% más que `B5` y 4,77% menos que `B8`. Se conservan esos tradeoffs; no se presenta la mejora del promedio como mejora de todos los recursos ni de combustible. No se suman litros, porciones y mantas en un índice de bienes intercambiables.
+Se cuenta la recepción física útil, no una recomendación, aprobación o camión despachado. En esta cohorte, primera ayuda útil y suficiencia coinciden porque cada necesidad se cubrió con un recibo suficiente; esa coincidencia no se extiende automáticamente a entregas parciales, refugios o evacuaciones.
 
-Cada brazo sirvió en total 1.150 litros, 460 porciones y 429 mantas a través de 72 recibos. El servicio, stock, autoridades y operaciones quedan ligados a evidencia nativa exacta. Una propuesta aprobada o un recibo positivo redundante no incrementa automáticamente el beneficio útil.
+## Qué se comparó
 
-## Trabajo, colas e intervención del modelo
+El flujo convencional (C_manual) lee reportes recibidos, integra una decisión y comunica la información mediante tareas nativas del simulador. Cada tarea espera capacidad, ocupa una plaza y produce un recibo; un relay sólo llega cuando lo permite el canal de comunicación. NEXO usa Gemma para interpretar e investigar, junto con su compilador de acciones y sus conectores operacionales.
 
-La atención nativa modelada media por mundo fue: `C_manual` 281,67 persona-minutos; `B5` 112,50; `B8` 18,50; NEXO 17,17. NEXO reduce ese trabajo modelado un 93,91% frente al manual. La revisión ya está incluida en la etapa de decisión y no se suma dos veces. Las esperas acumuladas entre tareas se informan aparte: no son trabajo ni tiempo transcurrido del mundo. Estos valores no acreditan horas reales ahorradas por profesionales ni una reducción de plantilla.
+Ambos tienen las mismas cuatro organizaciones, dotación física, fuentes accesibles, comprobaciones y autoridad. Las acciones físicas requieren la misma revisión finita de sus propietarios. Ninguno recibe acceso al evaluador privado, necesidades ocultas o eventos futuros. La demora humana ocurre causalmente dentro del motor, no mediante una penalización añadida al KPI después del ensayo.
 
-Las colas nativas terminaron sin pendientes al horizonte de tres horas en los doce mundos. Eso no prueba recuperación completa de todas las fuentes: el gate `K22` utiliza una cohorte recibida ID+versión y sus disposiciones, atención, consultas, jobs y reviews; tiene su propio protocolo.
+Por mundo se declararon 24 necesidades, 192 distractores, dos reposts, informe formal a los 30 minutos, mapa grid9/6 km y horizonte de tres horas. Cada organización tiene dos lectores, dos decisores y un relayer, con duraciones de lectura/decisión/preparación de comunicación de 30/60/90 segundos. Se utilizó error humano cero. Las tres parejas tienen packetLoss:0 y silentFraction:0; esta cifra no demuestra robustez ante desconexión o comunidades sin publicaciones.
 
-De las 72 primeras pistas de NEXO para esta cohorte, 35 tienen un recibo real de percepción del modelo como origen, 36 proceden del parser explícito común y una no tiene actividad causal recuperable. Se mantiene ese caso desconocido. Esta atribución demuestra uso real del modelo; no demuestra que ninguna regla o profesional pueda interpretar las mismas pistas.
+Los tiempos y pools humanos son **supuestos de simulación**, no mediciones de una ONG. El 18,02% corresponde al flujo completo frente al proceso manual descrito; no atribuye toda la diferencia exclusivamente al modelo ni demuestra ahorro de tiempo de trabajadores reales.
 
-Se registraron **21 llamadas** a `google/gemma-4-31b-it`: 79.113 tokens de entrada, 22.124 de salida, **USD 0,01992542** y 125,61 segundos HTTP en total. No hubo facturación desconocida. No se hicieron llamadas tardías para consultar repetidamente viajes ya en marcha: la última disponibilidad de interpretación quedó antes de 8,6 minutos fuente en las tres semillas.
+## Dónde mejoró y dónde empeoró
 
-## Supuestos y controles
+| Recurso | Cambio del tiempo de NEXO frente al convencional |
+|---|---:|
+| Agua | 10,99% más rápido |
+| Comida | 52,38% más rápido |
+| Mantas | 12,49% más lento |
 
-El primario conserva cuatro organizaciones, 24 necesidades, 192 distractores, dos reposts, informe formal a 30 minutos, mapa grid9/6km y horizonte de tres horas. Por organización se declararon dos lectores, dos decidores y un relayer; duraciones de 30/60/90 segundos para esas etapas. Las reviews físicas finitas son comunes a todos los brazos. El primario usa error humano cero: el volumen y los pools producen demoras sin exigir incompetencia.
+NEXO consumió **7,31% más combustible**. La mejora del promedio no representa mejora en todos los recursos o costos. Litros, porciones y mantas conservan sus unidades; no se suman como bienes intercambiables.
 
-Esas duraciones y pools son hipótesis explícitas, no calibración de una ONG. Los controles de trabajo adicional cero, lectura de cinco segundos, ocho lectores, coordinación descentralizada y cargas de 48/96 necesidades se conservan por separado. No se elige una semilla favorable ni se agrega una entrega duplicada mediante un contador impuesto. Cuando termine esa tanda se añadirá su resultado completo.
+En los 72 pares de necesidades, la fase aparición → autorización fue aproximadamente 8,41 minutos más corta con NEXO. Preparación/recogida y viaje cargado añadieron aproximadamente 0,44 y 0,43 minutos, respectivamente; llegada → recepción no cambió. La diferencia final fue de 7,54 minutos. Esto localiza el cuello de botella previo a la autorización, sin separar por sí solo cada efecto de lectura, comprobación, modelo y revisión.
 
-El runner primario devolvió exit1 por solicitar además comparaciones con `C_decentralized`, que no pertenecía a sus doce mundos predeclarados. Los doce outcomes se cerraron y los tres contrastes planificados son íntegros. Ese error de presentación del harness permanece registrado; no fue usado para repetir una corrida favorable ni se interpreta como fallo del producto.
+Se registraron 21 llamadas reales a google/gemma-4-31b-it, con 79.113 tokens de entrada, 22.124 de salida y **USD 0,01992542**, sin facturación desconocida en esos intentos. El costo corresponde únicamente al proveedor del modelo; no incluye salarios, combustible, infraestructura ni tarifas reales de emergencia.
 
-## Identidad y evidencia revisable
+## Plataforma y visor actuales
 
-| Componente | SHA256 |
+La plataforma conserva el candidato 9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3, con [486 comprobaciones de núcleo selladas anteriormente](../reports/verifications/1791875155549.json). Tras actualizar los requisitos de personal de las instalaciones y los controles del visor, pasaron 249 comprobaciones del simulador, [31 integraciones afectadas](../reports/verifications/affected-facility-integration-20261013.json) y [7 comprobaciones reales de navegador](../reports/human-profile-ui/1791891190000/result.json). No se presenta esa revisión enfocada como repetición completa de todas las pruebas de plataforma. Las [113 comprobaciones anteriores de UI](../reports/ui-verifications/1791876005595.json) conservan su versión.
+
+El visor permite seleccionar zero/moderate/burst y ajustar tiempos, lectores, decisores, relayers, carga de fondo y errores mediante JSON avanzado. La prueba actual confirma que el selector conserva el manifiesto tras reset/reload, que dos lecturas con una sola plaza producen una trabajando y otra esperando, y que cada organización conserva su privacidad. Completar una lectura no mueve stock ni entrega ayuda.
+
+El selector de políticas de referencia del visor ejecuta código de referencia. Elegir un perfil de atención no convierte esa política en el flujo manual medido ni conecta Gemma. La comparación con el modelo necesita el controlador real y sus recibos, no contadores visuales.
+
+Estas actualizaciones del simulador y visor tienen huella 4ea1bf884ea8d8d2282436aac53367f121fa3b0d308688957849a4774e34f1fa. Las cifras primarias de tiempo provienen del build de comparación siguiente; no se atribuyen retroactivamente al visor actualizado.
+
+## Evidencia y alcance
+
+| Componente de la comparación primaria | SHA256 |
 |---|---|
-| Plataforma | `9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3` |
-| Evaluador base | `4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3` |
-| Evaluador de capacidad humana | `fb5b95f31ce62b7287c20cf0a9ff01480a37158ba0aae8a17b765bebf538944a` |
-| Simulador | `561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b` |
+| Plataforma | 9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3 |
+| Evaluador base | 4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3 |
+| Evaluador humano | fb5b95f31ce62b7287c20cf0a9ff01480a37158ba0aae8a17b765bebf538944a |
+| Simulador | 561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b |
 
-- [Readout sellado all12](../reports/analysis/native-human-primary-all12-20261013-closed.md) y [JSON completo](../reports/analysis/native-human-primary-all12-20261013-closed.json).
-- [Diagnóstico con todos los casos y etapas](../reports/analysis/native-human-primary-all12-20261013-diagnosis.md), [atribución de consultas](../reports/analysis/native-human-primary-all12-20261013-inquiry-attribution.json) y [manifest de soporte](../reports/analysis/native-human-primary-all12-20261013-support/manifest.json).
-- [K20/K22/K24/K09 descriptivos](../reports/kpi-companion/native-primary-all12-summary-1791870506706/readout.md). Sus definiciones se sellaron después de leer dos baselines anteriores; esa procedencia no se presenta como totalmente ciega.
-- [Protocolo de los doce mundos](../reports/human-capacity/native-primary-20261013/protocol.json) y [resumen íntegro](../reports/human-capacity/native-primary-20261013/summary.json).
-- [Instalación limpia y arranque físico actual](../reports/local-closure/1791870240228-clean/result.json): pnpm11.25/frozen-lockfile/store nuevo/configuración de paquetes aislada, mismas tres huellas y recibo de 300L, cero modelo. Conserva las rutas originales de Windows; no afirma un perfil de usuario nuevo ni instalación de Python/ASR/Chromium.
+- [Recibos primarios y métricas físicas](../reports/analysis/native-human-primary-all12-20261013-closed.json).
+- [Etapas físicas y diagnóstico](../reports/analysis/native-human-primary-all12-20261013-diagnosis.json).
+- [Protocolo y parámetros efectivos](../reports/human-capacity/native-primary-20261013/protocol.json).
+- [Definiciones de atención, colas y utilización](../reports/kpi-companion/native-primary-all12-summary-1791870506706/readout.md).
+- [Instalación limpia y arranque físico local](../reports/local-closure/1791876153508-clean/result.json), correspondiente a su build registrado.
 
-Los resultados negativos de versiones anteriores permanecen válidos para sus propias huellas. No se mezclan con esta cohorte para fabricar un efecto. Gemma, un mundo sintético y sus parámetros no prueban rendimiento de Gemini, campo, vidas salvadas, confianza pública ni calibración de tiempos humanos. GCP continúa fuera del alcance de esta fase.
+Los informes originales, costos, fallos y resultados anteriores se conservan con su identidad y fecha. No se mezclan versiones o condiciones para producir un efecto nuevo. Tres semillas no establecen una garantía universal: falta calibrar con organizaciones y usuarios reales, volver a medir con Gemini y validar el impacto en campo. Esta etapa utiliza Gemma y despliegue local; **GCP está excluido**. No se afirma una reducción demostrada de mortalidad ni una victoria garantizada en una competencia.

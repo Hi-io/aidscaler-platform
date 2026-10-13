@@ -1,0 +1,83 @@
+/** Pure closure/accounting checks; no runtime or model imports. */
+const nonnegative=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
+const empty=x=>Array.isArray(x)&&x.length===0;
+export const finalIntact=f=>!!f&&['candidateChanged','evaluatorChanged','simulatorChanged'].every(k=>f[k]===false)&&!f.invalidStatus;
+const states=(rows,status,key='invariants')=>Array.isArray(rows)&&rows.every(r=>r.status===status&&empty(r[key]));
+
+export function validateStudyClosure(id,a,process={exitCode:0,signal:null}){
+  const s=a.summary??a.index,raw=a.raw??[],reasons=[];let closed=false,expectedAdditionalExit=false;
+  if(id==='compact17')closed=s?.records?.length===6&&empty(s.missingGroups)&&!s.stoppedReason&&
+    s.records.every(r=>r.closure?.permitsNext===true&&r.closure?.allCompleted===true)&&
+    s.records.reduce((n,r)=>n+(r.worlds?.length??0),0)===17;
+  else if(id==='additional'){
+    closed=s?.declaredRuns===9&&s.observedRuns===6&&s.allSelectedPairsComparable===true&&s.actualNativeConfigurationsVerified===true&&
+      !s.stoppedReason&&s.requestedGroupIds?.join(',')==='formal_immediate,burst'&&s.missingRuns?.length===3&&
+      s.missingRuns.every(w=>w.condition==='silent_loss_human_control')&&s.completedRuns===6&&s.failedOrStoppedRuns===0;
+    expectedAdditionalExit=process.exitCode===1&&closed;
+  }else if(id==='read_relay')closed=s?.declaredRuns===4&&s.observedRuns===4&&empty(s.missingRuns)&&
+    s.allPlannedPairsComparable===true&&s.nativeConfigurationVerified===true&&!s.stoppedReason&&s.failedOrStoppedRuns===0;
+  else if(id==='K11_K13')closed=s?.eligibleForInternalScoring===true&&s.child?.exit?.code===0&&s.child?.timedOut===false&&
+    s.child?.operatorStop===false&&finalIntact(s.final)&&empty(s.invariants);
+  else if(id==='K07'||id==='K14'){
+    const expected=id==='K07'?4:6;
+    closed=s?.completed===expected&&s.planned===expected&&empty(s.missingOutcomes)&&empty(s.notAttempted)&&empty(s.incomplete)&&
+      !s.stoppedReason&&finalIntact(s.finalBuilds)&&s.cases?.length===expected&&states(s.cases,'completed','violations')&&
+      !(s.contrasts??[]).some(c=>c.comparisonRejected);
+  }else if(id==='coupled100')closed=s?.cases?.length===2&&empty(s.missingOutcomes)&&empty(s.notAttempted)&&
+    !s.stoppedReason&&finalIntact(s.finalBuilds)&&s.cases.every(c=>c.readout?.status==='recovered'&&empty(c.readout.invariants));
+  else if(id==='physical_chain')closed=s?.cases?.length===6&&empty(s.notAttempted)&&raw.length===6&&
+    states(raw,'completed')&&raw.every(r=>finalIntact(r.finalBuilds)&&Array.isArray(r.usage)&&r.usage.length===0);
+  else if(id==='S19'||id==='K22'){
+    const expected=id==='S19'?6:4,status=id==='S19'?'completed':'recovered';
+    closed=s?.declaredRuns===expected&&s.observedRuns===expected&&empty(s.missing)&&!s.stoppedReason&&finalIntact(s.finalBuilds)&&
+      s.worlds?.length===expected&&s.worlds.every(w=>w.status===status&&w.eligible===true&&w.source?.stable===true&&empty(w.invariants));
+    if(id==='S19')closed=closed&&s.pairs?.length===4&&s.pairs.every(p=>p.comparable===true);
+  }else if(id==='K15')closed=s?.comparable===true&&empty(s.missing)&&finalIntact(s.final)&&
+    s.worlds?.length===2&&s.worlds.every(w=>w.status==='completed'&&w.source?.stable===true&&empty(w.invariants));
+  else if(id==='federation12')closed=s?.allTwelveAttemptsRetained===true&&s.pairs?.length===6&&
+    s.pairs.every(p=>p.pairedCompleteValid===true)&&a.index?.completedAttempts===12&&a.index.expectedAttempts===12&&
+    a.index.artifacts?.length===12&&a.index.artifacts.every(r=>r.complete===true&&r.valid===true);
+  else if(id==='local_latency')closed=a.raw?.length===1&&states(a.raw,'completed')&&finalIntact(a.raw[0].finalBuilds)&&
+    Array.isArray(a.raw[0].usage)&&a.raw[0].usage.length===0&&
+    a.readout?.navigation?.missing===0&&a.readout?.durableCommand?.missing===0&&a.readout?.visibleAcknowledgedState?.missing===0;
+  else throw Error('Unknown declared study '+id);
+  if(!closed)reasons.push('incomplete_or_invalid_artifact_closure');
+  if(process.signal!=null)reasons.push('process_signal');
+  if(process.exitCode!==0&&!expectedAdditionalExit)reasons.push('child_nonzero_exit');
+  if(process.loggingErrors?.length)reasons.push('logging_failure');
+  return {closed,expectedAdditionalMissingExit:expectedAdditionalExit,permitsNext:reasons.length===0,reasons,
+    retainedMissing:id==='additional'?s?.missingRuns??null:null,
+    note:'Negative gains, low quality and native demand censored at horizon are outcomes, not failure selectors. Recovered errors remain. A failed process/native closure/build/invariant stops further studies.'};
+}
+
+export function studyAccounting(a,maxReserveUsd){
+  const s=a.summary??a.index,
+    candidates=[s?.chargedBudgetUsd,s?.chargedExposureUsd,s?.cost?.chargedBudgetUsd],
+    charge=candidates.find(nonnegative),cost=[s?.totalProviderCostUsd,s?.costUsd,s?.cost?.totalProviderCostUsd].find(nonnegative);
+  return {chargedBudgetUsd:charge??maxReserveUsd,totalProviderCostUsd:cost??null,
+    usageUnknown:cost===undefined,maximumDeclaredExposureUsd:maxReserveUsd,
+    note:'No missing usage is converted to zero invoice. If a study does not return charging evidence, retain its full maximum exposure; actual per-world usage remains in raw artifacts.'};
+}
+
+export function mechanismReview(id,a){
+  if(id==='physical_chain'){
+    const cases=(a.index??a.summary)?.cases??[],missing=['S03','S05'].filter(scenario=>
+      !cases.some(c=>c.scenario===scenario&&c.readout?.physicalChain?.proved===true));
+    return {claimGateClosed:missing.length===0,unmetMechanismRequiresRootReview:missing.length>0,
+      missingMechanisms:missing,stopAfterValidClosure:missing.length>0,
+      note:'All six outcomes remain valid and retained. Adverse/infeasible cases need not be positive; at least one actual produced-water delivery and one useful hazard evacuation are needed for these claims. No physics change or seed selection to force success.'};
+  }
+  if(id==='S19'){
+    const candidate=(a.summary?.worlds??[]).filter(w=>w.arm==='B6'),values=candidate.map(w=>w.physical?.collective?.shelterPlaceHours??null),
+      observed=values.some(x=>typeof x==='number'&&Number.isFinite(x)&&x>0);
+    return {candidateOccupiedServiceObserved:observed,occupiedPlaceHours:values,
+      unmetMechanismRequiresRootReview:!observed,stopAfterValidClosure:false,
+      note:'Opening alone is not collective benefit. This flags the unmet candidate claim for root review without invalidating completed negative comparisons or hiding baseline successes.'};
+  }
+  return null;
+}
+
+export function plannedStage(plan,stage){
+  if(!['all','human','evidence'].includes(stage))throw Error('Use stage all, human or evidence');
+  return plan.studies.filter(s=>stage==='all'||s.stage===stage);
+}

@@ -1,0 +1,66 @@
+{
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "records": [
+    {
+      "id": "offline_bridge_readout",
+      "process": {
+        "exitCode": 0,
+        "signal": null,
+        "loggingErrors": []
+      },
+      "closedAt": "2026-10-13T10:07:48.571Z",
+      "nativeReceipt": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json",
+        "sha256": "26452ff2dc22373f1140b310ac4e3b1ba645349f8918cf51139fcfeacc8beeb3"
+      },
+      "accounting": {
+        "declaredAdmissionUsd": 0,
+        "chargedExposureUsd": 0,
+        "knownCostSubtotalUsd": null,
+        "totalProviderCostUsd": null,
+        "usageUnknown": true,
+        "scope": "Current step only; excludes closed_external prior stages and bridge histories; unknown is not zero."
+      },
+      "state": "closed_valid"
+    },
+    {
+      "id": "finish_human",
+      "process": {
+        "exitCode": 1,
+        "signal": null,
+        "loggingErrors": []
+      },
+      "closedAt": "2026-10-13T11:07:59.171Z",
+      "nativeReceipt": {
+        "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\human\\index.json",
+        "sha256": "0d23d0edb61d6143e041a56f836bab9e1cc4b5af4e620a71f82ab8b178a26573",
+        "protocolSha256": "e39481f0b1eb42cb8848ddb3f0dedbb13832f43a6079d1be10a0a1120d52b3bc"
+      },
+      "accounting": {
+        "declaredAdmissionUsd": 0.6,
+        "chargedExposureUsd": 0.6,
+        "knownCostSubtotalUsd": 0.0119048,
+        "totalProviderCostUsd": null,
+        "usageUnknown": true,
+        "scope": "Current step only; excludes closed_external prior stages and bridge histories; unknown is not zero."
+      },
+      "state": "paused_for_diagnosis",
+      "error": {
+        "code": "Error",
+        "message": "CHILD_FAILED_OR_LOGGING:finish_human"
+      }
+    }
+  ],
+  "active": null,
+  "stoppedReason": "child_invalid:finish_human",
+  "state": "paused_for_diagnosis",
+  "planSha256": "113e1f1baf8b708b13532483372c6f9cfa641fd541f8fafee9f432e22389af6c",
+  "activeUnknownReserveUsd": 0,
+  "noChildKillOrStopWritten": true,
+  "v5Automatic": false
+}

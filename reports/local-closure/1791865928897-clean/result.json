@@ -1,0 +1,44 @@
+{
+  "passed": false,
+  "incomplete": true,
+  "error": {
+    "code": "ERR_ASSERTION",
+    "message": "Copied committed bytes differ from the sealed tested runtime\n+ actual - expected\n\n  {\n+   candidate: '9675e7e33569e70e80f288b872d1c1e509acf973d9d56c4914b11975de622f9c',\n+   evaluator: '523cb51903212009cf77b2218789572b5dfd54ce673f95a9126db6b219870c40',\n-   candidate: '9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3',\n-   evaluator: '4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3',\n    simulator: '561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b'\n  }\n"
+  },
+  "kind": "clean",
+  "wallMs": 33046.1718,
+  "sourceUnchanged": true,
+  "initialFingerprints": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "finalFingerprints": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "evaluator": "4b4d289e387b49da8d79fdccb260a67919b74339432731373204d96aee6668b3",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "hardware": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.19.0",
+    "cpus": [
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+      "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz"
+    ],
+    "totalMemoryBytes": 68644159488
+  },
+  "protocolSha256": "c9c27809606bfe8791cb31664abf1c74e2ac9d860135d5fddeb1a7ed7ba323e4",
+  "valid": false,
+  "modelSpendUsd": 0
+}

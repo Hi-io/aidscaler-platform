@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "fingerprints": {
+    "candidate": "9675e7e33569e70e80f288b872d1c1e509acf973d9d56c4914b11975de622f9c",
+    "evaluator": "523cb51903212009cf77b2218789572b5dfd54ce673f95a9126db6b219870c40",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "atSourceClock": 189004,
+  "readyQueries": [
+    {
+      "target": "map",
+      "state": "ready"
+    },
+    {
+      "target": "policy",
+      "state": "ready"
+    },
+    {
+      "target": "inventory",
+      "state": "ready"
+    },
+    {
+      "target": "vehicles",
+      "state": "ready"
+    }
+  ],
+  "receipts": [
+    {
+      "id": "operation-1",
+      "org": "org0",
+      "type": "delivery",
+      "received": 300,
+      "times": {
+        "authorized": 69004,
+        "reserved": 69004,
+        "orderReceived": 70005,
+        "accepted": 70005,
+        "prepared": 71005,
+        "dispatched": 71005,
+        "arrived": 183507,
+        "unloadingStarted": 183507,
+        "received": 184507,
+        "service": 184507
+      }
+    }
+  ],
+  "invariants": [],
+  "modelCalls": 0,
+  "sourceStore": "new in-memory PGlite; no copied DB or bootstrap credentials"
+}
