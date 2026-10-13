@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sealSourceCohort, sourceRecoveryDisposition, runSourceRecovery } from '../scripts/source-recovery.mjs';
+import { sealSourceCohort, sourceRecoveryDisposition, runSourceRecovery, selectSourceRetries } from '../scripts/source-recovery.mjs';
 
 const source = { id: 'public-post', sourceVersion: 2, publishedAt: 1000, text: 'Families need water.', location: null, attachments: [] };
 const receipt = { id: 'read-2', state: 'interpreted_unverified', sources: [{ id: source.id, version: 2 }],
@@ -38,6 +38,19 @@ test('truncated or rejected reading retains attention; a valid later exact-versi
   assert.equal(sourceRecoveryDisposition(item, { current: source, retainedVersion: true, receipts: [rejected, receipt] }).closed, true);
 });
 
+test('source retries are exact-version, bounded, cooled down and never close missing or revised sources', () => {
+  const cohort = sealSourceCohort([source, { ...source, id: 'different' }]);
+  const attempts = new Map(cohort.map(s => [s.key, { count: 1, availableAt: 1000 }]));
+  const dispositions = cohort.map(s => ({ key: s.key, closed: false, disposition: 'rejected_pending_review' }));
+  assert.deepEqual(selectSourceRetries(cohort, dispositions, attempts, 2000), []);
+  assert.deepEqual(selectSourceRetries(cohort, dispositions, attempts, 61000, { batchSize: 1 }).map(s => s.key), [cohort[0].key]);
+  attempts.set(cohort[0].key, { count: 2, availableAt: 1000 });
+  assert.deepEqual(selectSourceRetries(cohort, dispositions, attempts, 61000).map(s => s.key), [cohort[1].key]);
+  for (const state of ['source_revision_pending', 'missing_durable_version'])
+    assert.deepEqual(selectSourceRetries(cohort, dispositions.map(s => ({ ...s, disposition: state })), attempts, 61000), []);
+  assert.deepEqual(selectSourceRetries(cohort, dispositions.map(s => ({ ...s, closed: true })), attempts, 61000), []);
+});
+
 test('no-paid HTTP recovery fixture retains the fixed cohort, finite physical checks and truthful queue censoring', { timeout: 180000 }, async () => {
   const report = await runSourceRecovery({ mode: 'parser', seed: 'source-recovery-fixture-01', count: 2, noise: 4,
     reposts: 1, grid: 5, extentKm: 2, horizonMs: 3600000, formalDelayMs: 1800000,
@@ -65,7 +78,7 @@ test('no-paid HTTP recovery fixture retains the fixed cohort, finite physical ch
     assert.equal(report.localState.uncoveredReceivedNeeds, 0);
     assert.equal(report.recoveryCensored, false);
   } else {
-    assert.ok(['incomplete_horizon', 'incomplete_wall_limit'].includes(report.status), report.status);
+    assert.ok(['incomplete_horizon', 'incomplete_wall_limit', 'incomplete_source_attention'].includes(report.status), report.status);
     assert.equal(report.recoveryCensored, true);
   }
 });

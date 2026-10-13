@@ -5,6 +5,7 @@ import { Store } from "../src/store.mjs";
 import { SimulatorConnector } from "../src/connector.mjs";
 import { hash } from "../src/store.mjs";
 import { check } from "../src/errors.mjs";
+import { collectProposalServiceFunnel } from "./proposal-funnel.mjs";
 import {
   checkFinalBuilds,
   requireLoadedSimulatorBuild,
@@ -40,7 +41,7 @@ export async function buildFingerprint() {
         "requirements-media.txt",
         ...files.map((f) => "src/" + f),
         ...(await readdir(new URL("../ui/", import.meta.url)))
-          .filter((f) => /\.(mjs|css|html)$/.test(f))
+          .filter((f) => /\.(mjs|js|css|html)$/.test(f))
           .sort()
           .map((f) => "ui/" + f),
       ].map(async (f) => [
@@ -63,14 +64,18 @@ export async function evaluatorFingerprint() {
         "scripts/pdf-byte-continuation.mjs",
         "scripts/source-recovery.mjs",
         "evaluation/blocked-repair.mjs",
+        "evaluation/route-context.mjs",
         "scripts/blocked-repair.mjs",
         "evaluation/campaign-summary.mjs",
         "src/evaluation.mjs",
         "evaluation/discovery-benchmark.mjs",
+        "evaluation/human-capacity-benchmark.mjs",
         "evaluation/physical-trace.mjs",
+        "evaluation/proposal-funnel.mjs",
         "evaluation/conventional-source.mjs",
         "evaluation/simulator-build.mjs",
         "scripts/discovery-benchmark.mjs",
+        "scripts/human-capacity-campaign.mjs",
       ].map(async (f) => [
         f,
         await readFile(new URL("../" + f, import.meta.url), "utf8"),
@@ -115,6 +120,7 @@ export async function createHarness({
   budgetUsd = 1,
   platformConfig = {},
   awaitVerifications = true,
+  awaitReviews = true,
 } = {}) {
   const lab = await createLabServers({
       observerPort: 0,
@@ -159,7 +165,7 @@ export async function createHarness({
             "ready",
           300000,
         );
-      if (request.type === "review")
+      if (request.type === "review" && awaitReviews)
         advanceUntil(
           () =>
             !lab.world.state.proposals.find((p) => p.id === result.id)
@@ -408,6 +414,17 @@ export async function refreshResearchContext(app, episode, targets) {
 
 export async function conventionalSharedProposal(app, episode) {
   const { assessmentPlan } = await import("../src/services.mjs");
+  const { unloadingPlan, prepareUnloading, unloadingCheckpoint } = await import("../src/unloading.mjs");
+  for (const request of await app.store.list(app.config.org, "unloading_request", 2000)) {
+    if (request.receiverOrg !== app.config.org || request.state === "completed") continue;
+    const plan = await unloadingPlan(app.store, app.config.org, request.operation);
+    if (!plan.readyToDraft) continue;
+    const proposal = await prepareUnloading(app.domain, app.store,
+      { org: app.config.org, role: "analyst", id: "conventional" },
+      { operation: request.operation, checkpoint: unloadingCheckpoint(plan) }, episode + "-unloading-" + request.id);
+    return { proposalId: proposal.id, steps: [{ tool: "received-unloading-plan", result: plan }],
+      state: "completed", references: plan.references };
+  }
   const org = app.config.org,
     steps = [],
     queue = await responseQueue(app.store, org, { limit: 2000 }),
@@ -646,6 +663,9 @@ export async function runEpisode({
       provider,
       maxCalls,
       budgetUsd: episodeBudgetUsd,
+      // Comparative episodes enqueue finite owner review; the common receipt
+      // pump below progresses every minute without starting another model call.
+      awaitReviews: false,
       platformConfig: {
         modelScopePrefix: episodePrefix,
         modelScopeCalls: maxCalls * planningRounds,
@@ -1084,6 +1104,7 @@ export async function runEpisode({
         note: "Claim existence, input acknowledgment and model completion do not establish precision or recall. No independently annotated semantic or human study was supplied.",
       });
     }
+    const proposalFunnel = await collectProposalServiceFunnel(h.apps, h.lab.world);
     return {
       at: new Date().toISOString(),
       arm,
@@ -1132,6 +1153,7 @@ export async function runEpisode({
       wallMs: performance.now() - start,
       activities,
       platformEvidence,
+      proposalFunnel,
       usage,
       costUsd: usage.reduce((s, u) => s + Number(u.cost_usd ?? 0), 0),
       chargedBudgetUsd: usage.reduce(

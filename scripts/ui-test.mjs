@@ -1,8 +1,14 @@
 import { chromium } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import assert from "node:assert/strict";
-const base = process.env.UI_BASE_URL ?? "http://127.0.0.1:4400",
-  access = JSON.parse(await readFile(".local/access-org0.json", "utf8"));
+import { createHarness } from "../evaluation/harness.mjs";
+// By default test the current source bytes in a fresh owned harness, not a
+// pre-existing presentation server that may run an older candidate version.
+const harness = process.env.UI_BASE_URL ? null : await createHarness({
+  provider: { complete: async () => { throw Error("No inference is allowed in UI verification"); } },
+});
+const base = process.env.UI_BASE_URL ?? harness.apps[0].url,
+  access = harness ? { password: "evaluation-password" } : JSON.parse(await readFile(".local/access-org0.json", "utf8"));
 const browser = await chromium.launch({ headless: true });
 await mkdir(".local/screenshots", { recursive: true });
 const errors = [],
@@ -126,4 +132,5 @@ try {
   );
 } finally {
   await browser.close();
+  if (harness) await harness.close();
 }

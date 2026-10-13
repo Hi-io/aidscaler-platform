@@ -12,6 +12,7 @@ import { repairContext } from "./repair.mjs";
 import { reviewAuthority } from "./authority.mjs";
 import { publicText } from "./public-safety.mjs";
 import { assertComparisonSourcesCurrent } from "./response-comparison.mjs";
+import { receivedUsableQuantity, lotStatus, receivedSourceNow } from "./lot-capacity.mjs";
 const COMMAND = ["commander", "dispatcher"];
 export class Domain {
   constructor(store, config) {
@@ -413,6 +414,10 @@ export class Domain {
       "RESOURCE",
       "Type and nonnegative quantity required.",
     );
+    check(input.useByAt === undefined || Number.isSafeInteger(input.useByAt) && input.useByAt >= 0,
+      "SUPPLY_EXPIRY", "Use-by time must be a nonnegative source-clock millisecond.");
+    check(input.lotId === undefined || typeof input.lotId === "string" && input.lotId.length > 0 && input.lotId.length <= 120,
+      "LOT", "Use a bounded lot identifier.");
     const { id = uid("resource"), version = 0, ...d } = input;
     return this.store.command(actor.org, key, input, async (tx) => {
       const old = await tx.get(actor.org, "resource", id, false);
@@ -470,6 +475,8 @@ export class Domain {
     );
     return this.store.command(actor.org, key, input, async (tx) => {
       const r = await tx.get(actor.org, "resource", resource);
+      const lotClock = await receivedSourceNow(tx, actor.org);
+      check(lotStatus(r, lotClock).usable, "SUPPLY_EXPIRED", "The received lot is no longer usable.", 409);
       check(
         r.version === version,
         "VERSION_CONFLICT",
@@ -477,7 +484,7 @@ export class Domain {
         409,
       );
       check(
-        r.quantity - r.reserved - r.floor >= quantity,
+        receivedUsableQuantity(r, lotClock) >= quantity,
         "RESERVATION_CONFLICT",
         "Available stock is already committed or protected by a reserve floor.",
         409,

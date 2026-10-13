@@ -31,6 +31,8 @@ import { responseOptions } from "./src/response-options.mjs";
 import { Retention } from "./src/retention.mjs";
 import { SemanticIngestion } from "./src/semantic-ingestion.mjs";
 import { DiscoveryResponse } from "./src/discovery-response.mjs";
+import { Coverage } from "./src/coverage.mjs";
+import { unloadingPlan, unloadingCheckpoint, prepareUnloading, currentUnloadingRequests } from "./src/unloading.mjs";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -103,9 +105,10 @@ export async function createPlatform(overrides = {}) {
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
     semantic = new SemanticIngestion({ store, provider, connector, config }),
     ingestion = new Ingestion(store, connector, config),
+    coverage = new Coverage(store, connector, config),
     discovery = new DiscoveryResponse({ store, domain, connector, semantic, ingestion, config }),
     network = new Network(store, config, overrides.networkFetcher ?? fetch),
-    finance = new Finance(store, config),
+    finance = new Finance(store, config, connector),
     investigator = new Investigator({
       store,
       domain,
@@ -202,6 +205,7 @@ export async function createPlatform(overrides = {}) {
   investigator.ingestKnown = () => ingestion.sync({ sources: false });
   ingestion.afterSync = async () => {
     await network.refresh();
+    await coverage.sync();
     await integrations.pollDue();
     await discovery.resumePending();
     await intake.kick();
@@ -316,6 +320,7 @@ export async function createPlatform(overrides = {}) {
           organization: { id: config.org, name: config.orgName },
           updates: approved,
           finance: await finance.summary(config.org),
+          financeReview: await finance.publicSummary(config.org),
           sandbox: true,
           privacy: "Approved, aggregate updates only.",
         });
@@ -578,6 +583,34 @@ export async function createPlatform(overrides = {}) {
           role(actor, ["admin", "commander", "dispatcher", "analyst", "auditor"]);
           return json(res, 200, await responsePolicy(store, actor.org));
         }
+        if (url.pathname === "/api/coverage" && req.method === "GET") {
+          role(actor, ["admin", "commander", "dispatcher", "analyst", "auditor"]);
+          return json(res, 200, await coverage.summary());
+        }
+        if (url.pathname === "/api/unloading" && req.method === "GET") {
+          role(actor, ["commander", "dispatcher", "analyst", "auditor"]);
+          return json(res, 200, (await currentUnloadingRequests(store, actor.org)).slice(0, 100));
+        }
+        if (url.pathname === "/api/unloading/plan" && req.method === "POST") {
+          role(actor, ["commander", "dispatcher", "analyst"]);
+          const b = await body(req), plan = await unloadingPlan(store, actor.org, b.operation);
+          return json(res, 200, { ...plan, checkpoint: unloadingCheckpoint(plan) });
+        }
+        if (url.pathname === "/api/unloading/prepare" && req.method === "POST") {
+          role(actor, ["commander", "dispatcher", "analyst"]);
+          return json(res, 201, await prepareUnloading(domain, store, actor, await body(req), req.headers["idempotency-key"] ?? uid("unloading")));
+        }
+        if (url.pathname === "/api/coverage/policy" && req.method === "POST")
+          return json(res, 200, await coverage.configure(actor, await body(req), req.headers["idempotency-key"] ?? uid("coverage-policy")));
+        if (url.pathname === "/api/coverage/check" && req.method === "POST") {
+          const r = await coverage.request(actor, await body(req), req.headers["idempotency-key"] ?? uid("coverage-check"));
+          await coverage.sync();
+          return json(res, 202, await store.get(actor.org, "coverage_request", r.id));
+        }
+        if (url.pathname === "/api/coverage/cancel" && req.method === "POST") {
+          const b = await body(req);
+          return json(res, 200, await coverage.cancel(actor, b.id, b.version, req.headers["idempotency-key"] ?? uid("coverage-cancel")));
+        }
         if (url.pathname === "/api/retention-preview" && req.method === "GET")
           return json(res, 200, await retention.preview(actor, { kind: url.searchParams.get("kind"), id: url.searchParams.get("id") }));
         if (url.pathname === "/api/response-options" && req.method === "GET") {
@@ -603,6 +636,12 @@ export async function createPlatform(overrides = {}) {
               history: url.searchParams.get("history") === "true",
             }),
           );
+        if (url.pathname === "/api/finance/purchases" && req.method === "GET")
+          return json(res, 200, await finance.purchases(actor));
+        if (url.pathname === "/api/finance/review-snapshot" && req.method === "GET")
+          return json(res, 200, await finance.reviewSnapshot(actor));
+        if (url.pathname === "/api/finance/allocations" && req.method === "GET")
+          return json(res, 200, await finance.allocations(actor));
         if (url.pathname === "/api/finance/ledger" && req.method === "GET") {
           role(actor, ["finance", "commander", "auditor"]);
           return json(
@@ -1020,6 +1059,12 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await domain.retractPublication(actor, b, key));
         if (url.pathname === "/api/publication/proof")
           return json(res, 201, await publicEvidence.approve(actor, b, key));
+        if (url.pathname === "/api/finance/source-refresh")
+          return json(res, 202, await finance.requestPurchases(actor, key));
+        if (url.pathname === "/api/finance/reconcile")
+          return json(res, 200, await finance.reconcile(actor, b, key));
+        if (url.pathname === "/api/finance/publish-summary")
+          return json(res, 200, await finance.publishSummary(actor, b, key));
         if (url.pathname === "/api/finance/release")
           return json(res, 200, await finance.release(actor, b, key));
         if (url.pathname === "/api/finance/allocate")
@@ -1145,6 +1190,7 @@ export async function createPlatform(overrides = {}) {
     memory,
     semantic,
     discovery,
+    coverage,
     retention,
     config,
     url: `http://${config.host}:${server.address().port}`,

@@ -1,4 +1,5 @@
 import { check } from "./errors.mjs";
+import { receivedStaffCapacity } from "./staff-capacity.mjs";
 
 const FINISHED = new Set(["completed", "received", "service"]);
 const ownerOf = (operation) => operation.owner ?? operation.org;
@@ -100,6 +101,15 @@ export async function recordResponseReceipt(
       "PEER_RECEIPT",
       "The physical receipt has a different resource or need.",
     );
+    if (p.staffSkills?.length) {
+      check(source.resourceType === "staff" && Array.isArray(source.staffSkills) &&
+        source.staffSkills.length === p.staffSkills.length && new Set(source.staffSkills).size === source.staffSkills.length &&
+        p.staffSkills.every(skill => source.staffSkills.includes(skill)),
+        "PEER_STAFF_SCOPE", "The source operation must retain the exact owner-approved staff qualification selector.");
+      if (FINISHED.has(source.state) && source.received > 0) check(source.receivedStaff?.quantity === source.received &&
+        receivedStaffCapacity({ ...source.receivedStaff, type: "staff" }, p.staffSkills) >= source.received,
+        "PEER_STAFF_SCOPE", "The physical staff receipt must include the selected qualified people, not historic depot credentials.");
+    }
   } else {
     const needs = await tx.list(org, "need", 10000),
       need = needs.find((n) => n.type === "shelter" && n.building === p.from);
@@ -159,6 +169,8 @@ export async function recordResponseReceipt(
     type: source.type,
     quantity: source.quantity,
     received: source.received ?? 0,
+    ...(source.staffSkills === undefined ? {} : { staffSkills: source.staffSkills }),
+    ...(source.receivedStaff === undefined ? {} : { receivedStaff: source.receivedStaff }),
     failure: source.failure ?? null,
     commitment: source.commitment ?? null,
     phase: source.phase ?? null,

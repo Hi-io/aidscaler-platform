@@ -3,7 +3,8 @@ import { uid, hash } from "./store.mjs";
 import { syncReservation } from "./reservations.mjs";
 import { authorizationCurrent } from "./authority.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
-import { validateDispatchReservation } from "./planning.mjs";
+import { validateDispatchReservation, validatePlan } from "./planning.mjs";
+import { validateUnloadingAction, persistReceivedUnloadingRequests } from "./unloading.mjs";
 const PHYSICAL = new Set([
   "dispatch",
   "repair",
@@ -12,7 +13,26 @@ const PHYSICAL = new Set([
   "cancel",
 ]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
+// Purchase acknowledgements describe a financial order, not usable inventory.
+// Only a completed, scoped finance query can report the supplier's receipt.
+function receivedPurchase(state, id) {
+  const query = (state.queries ?? [])
+    .filter((q) => q.org === state.organization.id && q.state === "ready" && q.target === "finance" && q.result?.sandbox === true)
+    // Delivery order is not capture order: an older snapshot may arrive after
+    // a newer receipt during an outage. Prefer the source's material version.
+    .sort((a, b) => (b.result.version ?? 0) - (a.result.version ?? 0) ||
+      (b.completedAt ?? b.readyAt ?? b.observedAt ?? 0) - (a.completedAt ?? a.readyAt ?? a.observedAt ?? 0))[0];
+  return query?.result?.purchases?.find((p) => p.id === id && p.org === state.organization.id);
+}
 function resolution(action, receipt, state) {
+  if (action.type === "unload") {
+    const request = receipt?.owner && receipt.owner !== state.organization.id
+      ? receipt.partnerResult : state.unloadingRequests?.find(r => r.id === receipt?.result?.id && r.receiverOrg === state.organization.id);
+    return !!request && (receipt?.owner === state.organization.id || !receipt?.owner || request.confirmedBySource === true) &&
+      request.operation === action.params.operation && request.state === "completed" &&
+      request.deliveryQuantity === action.params.deliveryQuantity && request.received === action.params.deliveryQuantity &&
+      Number.isFinite(request.times?.received) && request.times.received <= state.now;
+  }
   if (action.type === "verify") {
     const inspection =
       receipt?.owner && receipt.owner !== state.organization.id
@@ -35,6 +55,13 @@ function resolution(action, receipt, state) {
       receipt.partnerResult?.confirmedBySource === true
     );
   if (!receipt?.result) return false;
+  if (action.type === "purchase") {
+    const purchase = receivedPurchase(state, receipt.result.id);
+    return purchase?.state === "received" &&
+      purchase.quantity === action.params.quantity && purchase.type === action.params.type &&
+      Number.isFinite(purchase.receivedQuantity) &&
+      purchase.receivedQuantity >= purchase.quantity;
+  }
   if (PHYSICAL.has(action.type))
     return state.operations.some(
       (o) =>
@@ -215,6 +242,200 @@ export class Worker {
       });
     }
   }
+  async refreshPurchaseStatus(proposal, state, results) {
+    for (const [index, action] of proposal.actions.entries()) {
+      if (action.type !== "purchase" || action.owner !== this.config.org) continue;
+      const receipt = results.find((r) => r.index === index)?.result;
+      if (!receipt?.id || resolution(action, { result: receipt }, state)) continue;
+      const purchase = receivedPurchase(state, receipt.id);
+      const nextReceiptAt = purchase?.nextArrivalAt ?? purchase?.expectedArrivalAt;
+      if (Number.isFinite(nextReceiptAt) && state.now < nextReceiptAt) continue;
+      const row = await this.store.get(this.config.org, "proposal", proposal.id);
+      if (!sameExecutionScope(row, proposal) ||
+          !(await authorizationCurrent(this.store, this.config.org, row.authorization))) return;
+      const previous = row.purchaseStatusQueries?.[index];
+      if (previous?.id && state.queries?.some((q) => q.id === previous.id && q.state === "pending")) continue;
+      // Bounded passive receipt refresh: no model call, no repeated query at
+      // the same source-clock instant, and no guess that an ETA means delivery.
+      const bucket = Math.floor(state.now / 60000);
+      if (previous?.bucket === bucket) continue;
+      const result = await this.connector.action("query", { target: "finance" },
+        "purchase_status_" + hash([this.config.org, proposal.id, index, receipt.id, bucket]));
+      await this.store.transaction(async (tx) => {
+        const current = await tx.get(this.config.org, "proposal", proposal.id);
+        if (!sameExecutionScope(current, proposal) ||
+            !(await authorizationCurrent(tx, this.config.org, current.authorization))) return;
+        await tx.put(this.config.org, "proposal", proposal.id, {
+          ...current,
+          purchaseStatusQueries: {
+            ...current.purchaseStatusQueries,
+            [index]: { id: result.id, bucket, requestedAt: state.now },
+          },
+        }, current.version);
+      });
+    }
+  }
+  async recordSourceReview(
+    proposal,
+    sourceProposal,
+    state,
+    { record = true } = {},
+  ) {
+    const org = this.config.org;
+    return this.store.transaction(async (tx) => {
+      const row = await tx.get(org, "proposal", proposal.id);
+      const current =
+        sameExecutionScope(row, proposal) &&
+        !row.conditions.some((c) => !c.satisfied) &&
+        (await authorizationCurrent(tx, org, row.authorization));
+      if (!current) {
+        // Source progress cannot undo a newer human decision. Keep any source
+        // proposal ID and already issued receipts for reconciliation only.
+        await tx.completeContinuation(org, row.id, {
+          authorityChanged: true,
+          state: row.state,
+        });
+        return { authorityChanged: true, state: row.state };
+      }
+      const sourceActions = sourceProposal?.plan?.actions;
+      const scopeChanged =
+        sourceProposal &&
+        (!Array.isArray(sourceActions) ||
+          hash(sourceActions) !== hash(row.actions) ||
+          (sourceProposal.org && sourceProposal.org !== org));
+      const sourceRejected = [
+        "rejected",
+        "needs_clarification",
+        "cancelled",
+      ].includes(sourceProposal?.state);
+      if (scopeChanged || sourceRejected) {
+        const reason = scopeChanged
+          ? "The operational owner's received plan is missing or differs from the locally authorized actions. Review the exact scope before continuing; preserve already issued work and physical receipts."
+          : "The operational owner did not authorize this source proposal.";
+        await tx.put(
+          org,
+          "proposal",
+          row.id,
+          {
+            ...row,
+            state: "requires_review",
+            previousAuthorization:
+              row.authorization ?? row.previousAuthorization,
+            authorization: null,
+            changedReason: reason,
+            sourceReview: {
+              ...row.sourceReview,
+              state: scopeChanged ? "scope_changed" : sourceProposal.state,
+              sourceState: sourceProposal.state,
+              sourceProposal: sourceProposal.id,
+              sourceVersion: sourceProposal.version ?? null,
+              approvedPlanHash: hash(row.actions),
+              receivedPlanHash: Array.isArray(sourceActions)
+                ? hash(sourceActions)
+                : null,
+              observedAtSourceClock: state.now,
+            },
+          },
+          row.version,
+        );
+        await tx.audit(
+          org,
+          "source-monitor",
+          "proposal.source_review_required",
+          row.id,
+          {
+            sourceProposal: sourceProposal.id,
+            sourceState: sourceProposal.state,
+            scopeChanged: Boolean(scopeChanged),
+            sourceVersion: sourceProposal.version ?? null,
+          },
+        );
+        await tx.completeContinuation(org, row.id, { requiresReview: true });
+        return {
+          requiresReview: true,
+          sourceProposal: sourceProposal.id,
+          sourceState: sourceProposal.state,
+          scopeChanged: Boolean(scopeChanged),
+        };
+      }
+      const authorized = sourceProposal?.state === "authorized";
+      if (!record)
+        return authorized
+          ? { sourceAuthorized: true }
+          : {
+              pendingReview: true,
+              complete: false,
+              sourceProposal: row.simId,
+            };
+      await tx.put(
+        org,
+        "proposal",
+        row.id,
+        {
+          ...row,
+          sourceReview: {
+            ...row.sourceReview,
+            state: authorized ? "authorized" : "pending",
+            sourceProposal: row.simId,
+            sourceVersion: sourceProposal?.version ?? null,
+            requestedAtSourceClock:
+              row.sourceReview?.requestedAtSourceClock ?? state.now,
+            observedAtSourceClock: state.now,
+            ...(authorized
+              ? { reviewedAtSourceClock: sourceProposal.reviewedAt ?? null }
+              : {}),
+          },
+        },
+        row.version,
+      );
+      if (!authorized) await tx.enqueueContinuation(org, row.id);
+      return authorized
+        ? { sourceAuthorized: true }
+        : {
+            pendingReview: true,
+            complete: false,
+            sourceProposal: row.simId,
+          };
+    });
+  }
+  async requestSourceReview(proposal, sourceProposal) {
+    // The authorization check and source approval are serialized with local
+    // human decisions. Source I/O is bounded by the connector timeout; the
+    // source version check prevents approval of a concurrently modified plan.
+    return this.store.transaction(async (tx) => {
+      const row = await tx.get(this.config.org, "proposal", proposal.id);
+      if (
+        !sameExecutionScope(row, proposal) ||
+        row.conditions.some((c) => !c.satisfied) ||
+        !(await authorizationCurrent(tx, this.config.org, row.authorization))
+      ) {
+        await tx.completeContinuation(this.config.org, row.id, {
+          authorityChanged: true,
+          state: row.state,
+        });
+        return { authorityChanged: true, state: row.state };
+      }
+      check(
+        Array.isArray(sourceProposal.plan?.actions) &&
+          hash(sourceProposal.plan.actions) === hash(row.actions),
+        "SOURCE_PLAN_SCOPE",
+        "Receive the exact operational owner's plan before approving it.",
+        409,
+      );
+      await this.connector.action(
+        "review",
+        { id: sourceProposal.id, decision: "approve" },
+        "sim_review_" + row.id,
+        {
+          human: true,
+          ...(Number.isSafeInteger(sourceProposal.version)
+            ? { version: sourceProposal.version }
+            : {}),
+        },
+      );
+      return { requested: true };
+    });
+  }
   async execute(id) {
     const org = this.config.org,
       p = await this.store.get(org, "proposal", id);
@@ -284,6 +505,8 @@ export class Worker {
     const issued = p.executionResults ?? [];
     const failed = issued.filter(
       (r) =>
+        (p.actions[r.index]?.type === "unload" && r.result && current.unloadingRequests?.some(u =>
+          u.id === r.result.id && ["inconclusive", "cancelled"].includes(u.state))) ||
         assessmentFailed(p.actions[r.index], r, current) ||
         (r.result &&
           PHYSICAL.has(p.actions[r.index]?.type) &&
@@ -383,25 +606,19 @@ export class Worker {
         preservedSteps: preserved,
       };
     }
-    if (sim?.state === "awaiting_approval")
-      await this.connector.action(
-        "review",
-        { id: simId, decision: "approve" },
-        "sim_review_" + id,
-        { human: true },
-      );
-    const end = Date.now() + 15000;
-    while (sim?.state !== "authorized" && Date.now() < end) {
-      await new Promise((r) => setTimeout(r, 150));
-      current = await this.connector.state();
-      sim = current.proposals.find((x) => x.id === simId);
+    const beforeReview = await this.recordSourceReview(p, sim, current, {
+      record: false,
+    });
+    if (beforeReview.authorityChanged || beforeReview.requiresReview)
+      return beforeReview;
+    if (sim?.state === "awaiting_approval" && !sim.reviewPending) {
+      const review = await this.requestSourceReview(p, sim);
+      if (review.authorityChanged) return review;
     }
-    check(
-      sim?.state === "authorized",
-      "REVIEW_PENDING",
-      "The finite operator review has not arrived.",
-      409,
-    );
+    current = await this.connector.state();
+    sim = current.proposals.find((x) => x.id === simId);
+    const sourceReview = await this.recordSourceReview(p, sim, current);
+    if (!sourceReview.sourceAuthorized) return sourceReview;
     let results =
       (await this.store.get(org, "proposal", id)).executionResults ?? [];
     for (const [i, a] of p.actions.entries()) {
@@ -474,6 +691,9 @@ export class Worker {
       }
       let result;
       try {
+        if (p.unloadingOperation && p.unloadingPlanCheckpoint) await validatePlan(this.store, org, p);
+        if (a.type === "unload")
+          await validateUnloadingAction(this.store, org, a, { excludeProposal: id });
         if (a.type === "dispatch")
           await validateDispatchReservation(
             this.store,
@@ -485,6 +705,7 @@ export class Worker {
           {
             ...resolveParams(a.params, results),
             ...(a.type === "dispatch" ? { proposal: simId } : {}),
+            ...(a.type === "unload" ? { proposal: simId, step: i } : {}),
             ...(a.type === "verify"
               ? {
                   proposal: simId,
@@ -580,7 +801,9 @@ export class Worker {
       current = await this.connector.state();
     }
     await this.refreshActivationStatus(p, current, results);
+    await this.refreshPurchaseStatus(p, current, results);
     current = await this.connector.state();
+    await this.store.transaction(tx => persistReceivedUnloadingRequests(tx, org, current));
     for (const a of p.actions.filter((a) => a.type === "verify")) {
       for (const inspection of current.inspections?.filter(
         (i) => i.entity === a.params.id && i.target === "building",
@@ -681,10 +904,16 @@ export class Worker {
           p.actions[0].type === "verify"
             ? current.inspections?.find((i) => i.id === r?.id)
             : null;
+      const purchase = p.actions[0].type === "purchase" ? receivedPurchase(current, r?.id) : null;
+      const unloading = p.actions[0].type === "unload" ? current.unloadingRequests?.find(u => u.id === r?.id) : null;
       await this.network.response(
         { ...p, version: latest.version },
         complete ? "completed" : "in_transit",
-        inspection
+        unloading
+          ? { ...unloading, confirmedBySource: true, observedAt: current.now }
+          : purchase
+          ? { ...purchase, confirmedBySource: true, observedAt: current.now }
+          : inspection
           ? {
               ...inspection,
               confirmedBySource: inspection.confirmedBySource === true,
@@ -700,11 +929,13 @@ export class Worker {
               resource: o?.resource ?? null,
               resourceType: o?.resourceType ?? null,
               quantity: o?.quantity,
-              received:
-                o?.received ??
-                (o?.type === "evacuation" && DONE.has(o.state)
-                  ? o.quantity
-                  : 0),
+              received: o?.received,
+              ...(o?.staffSkills === undefined
+                ? {}
+                : { staffSkills: o.staffSkills }),
+              ...(o?.receivedStaff === undefined
+                ? {}
+                : { receivedStaff: o.receivedStaff }),
               times: o?.times ?? {},
               unit: o?.unit,
               state: o?.state ?? r?.state,

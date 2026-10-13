@@ -18,6 +18,7 @@ export const CONTEXT_KINDS = [
   "road",
   "query",
   "location",
+  "unloading_request",
 ];
 const common = [
   "id",
@@ -28,6 +29,7 @@ const common = [
   "owner",
   "observedAt",
   "receivedAt",
+  "receivedAtSourceClock",
   "updatedAt",
   "expiresAt",
   "references",
@@ -39,6 +41,7 @@ const common = [
   "validUntil",
   "ownerConfirmation",
   "name",
+  "aliases",
   "description",
   "notes",
   "purpose",
@@ -83,6 +86,8 @@ const fields = {
     "compatibility",
     "capabilities",
     "qualifications",
+    "qualificationCounts",
+    "qualificationProfiles",
   ],
   vehicle: [
     "name",
@@ -138,6 +143,8 @@ const fields = {
     "reason",
     "error",
   ],
+  unloading_request: ["operation", "receiverOrg", "org", "building", "node", "operationVersion", "targetVersion",
+    "deliveryQuantity", "received", "staffQuantity", "requiredSkills", "workMs", "times", "confirmedBySource"],
   signal: [
     "text",
     "location",
@@ -156,6 +163,7 @@ const fields = {
     "correction",
     "supersedes",
     "uncertainty",
+    "entity",
   ],
   report: [
     "kind",
@@ -180,7 +188,17 @@ const fields = {
     "classifiedBy",
     "classifiedAt",
   ],
-  verification: ["target", "entity", "result", "completedAt", "reason"],
+  verification: [
+    "target",
+    "entity",
+    "method",
+    "purpose",
+    "targetVersion",
+    "confirmedBySource",
+    "result",
+    "completedAt",
+    "reason",
+  ],
   location: ["name", "use", "node", "x", "y", "capacity"],
 };
 const privateField =
@@ -316,9 +334,11 @@ export function caseContext(input) {
       buildings: preview("facility", ranked(input.known?.buildings), 10),
     },
     operations: preview("operation", operations, 12),
+    unloadingRequests: preview("unloading_request", ranked(input.unloadingRequests), 8),
     sharedOffers: preview("peer_offer", ranked(input.sharedOffers), 20),
     repair: input.repair ? boundedContext(redact(input.repair)) : null,
     knownLocations: preview("location", ranked(input.knownLocations), 12),
+    knownEntities: (input.knownEntities ?? []).slice(0, 100),
     media: input.media,
     integrations: input.integrations,
     coverage: {
@@ -327,6 +347,15 @@ export function caseContext(input) {
       resourceTypesObserved: [
         ...new Set(values(input.known?.resources).map((r) => r.type)),
       ],
+      sharedResourceTypesObserved: [
+        ...new Set(
+          values(input.sharedOffers)
+            .map((o) => o.projection?.type)
+            .filter(Boolean),
+        ),
+      ],
+      operationalAccess:
+        "verify(resource) checks own stock only. Refresh a known partner using lookup(target=capabilities,org=<owner ID>) or read its received peer_offer. read_context.type filters resource type such as staff/sanitation, not the offer kind resource/vehicle. Partner projections are not execution consent.",
       note: "A preview is not exhaustive. Missing from this preview does NOT mean absent, false, zero demand or unavailable. Read omitted records with read_context; refresh external state with lookup/verify. No hidden world state is supplied.",
     },
   };
@@ -423,6 +452,13 @@ export async function readContext(store, org, args) {
     totalAvailable: total,
     offset,
     nextOffset: offset + limit < total ? offset + limit : null,
+    filters: { ids, location: location ?? null, type: type ?? null },
+    ...(kind === "peer_offer"
+      ? {
+          typeFilter: "projection.type",
+          note: "Use a resource type such as staff or sanitation, not offer.kind=resource/vehicle. No records in a filtered page is not proof that other owners have no capacity. Omit type to read the received offer categories.",
+        }
+      : {}),
     source: "organization_received_store",
     refresh:
       "Use lookup/verify for new source observations. This read does not independently verify or authorize anything.",

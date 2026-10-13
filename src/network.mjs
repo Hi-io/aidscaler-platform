@@ -5,6 +5,11 @@ import { recordAssessmentReceipt } from "./assessment-receipts.mjs";
 import { uid, hash } from "./store.mjs";
 import { actionSchema } from "./contracts.mjs";
 import { Domain } from "./domain.mjs";
+import { receivedStaffCapacity, staffCapacityProjection } from "./staff-capacity.mjs";
+import { lotProjection, receivedUsableQuantity, receivedSourceNow } from "./lot-capacity.mjs";
+const transportProjection = row => row.transport && Object.fromEntries(
+  ["massKgPerUnit", "volumeM3PerUnit", "seatsPerUnit"].filter(k => Number.isFinite(row.transport[k]))
+    .map(k => [k, row.transport[k]]));
 export const sign = (key, payload) =>
   createHmac("sha256", key).update(JSON.stringify(payload)).digest("hex");
 const vehicleProjection = (row, owner) =>
@@ -20,11 +25,18 @@ const vehicleProjection = (row, owner) =>
       maxCargoKg: row.maxCargoKg,
       volumeM3: row.volumeM3,
       seats: row.seats,
+      crewQuantity: Number.isSafeInteger(row.crewQuantity) ? row.crewQuantity : undefined,
       fuelMlPerKm: row.fuelMlPerKm,
       maxWaterDepth: row.maxWaterDepth,
       shiftEnd: row.shiftEnd,
       fuel: row.fuel,
       at: row.at,
+      driverAvailable:typeof row.driverAvailable==='boolean'?row.driverAvailable:undefined,
+      calendar:row.calendar&&Object.fromEntries(Object.entries({version:row.calendar.version,observedAt:row.calendar.observedAt,
+        availableAfter:row.calendar.availableAfter,availableUntil:row.calendar.availableUntil,
+        nextCommitment:row.calendar.nextCommitment&&{id:row.calendar.nextCommitment.id,startsAt:row.calendar.nextCommitment.startsAt,node:row.calendar.nextCommitment.node},
+        plannedReturn:row.calendar.plannedReturn&&{departureAt:row.calendar.plannedReturn.departureAt,destination:row.calendar.plannedReturn.destination,cargo:row.calendar.plannedReturn.cargo}
+      }).filter(([,v])=>v!==undefined)),
     }).filter(([, v]) => v !== undefined),
   );
 export class Network {
@@ -86,14 +98,14 @@ export class Network {
             ? {
                 id: record.id,
                 type: record.type,
-                available: Math.max(
-                  0,
-                  record.quantity - record.reserved - record.floor,
-                ),
+                available: receivedUsableQuantity(record, await receivedSourceNow(tx, actor.org)),
+                ...lotProjection(record),
                 unit: record.unit,
+                transport: transportProjection(record),
                 node: record.node,
                 compatibility: record.compatibility,
                 qualifications: record.qualifications,
+                ...staffCapacityProjection(record),
                 owner: actor.org,
                 sourceVersion: record.version,
               }
@@ -212,10 +224,13 @@ export class Network {
           owner: org,
           type: row.type,
           node: row.node,
-          available: Math.max(0, row.quantity - row.reserved - row.floor),
+          available: receivedUsableQuantity(row, await receivedSourceNow(this.store, org)),
+          ...lotProjection(row),
           compatibility: row.compatibility,
           qualifications: row.qualifications,
+          ...staffCapacityProjection(row),
           unit: row.unit,
+          transport: transportProjection(row),
         };
       else if (permission.kind === "vehicle")
         projection = vehicleProjection(row, org);
@@ -611,7 +626,7 @@ export class Network {
           const future = p.actions.filter(
             (a, index) =>
               a.owner === from &&
-              a.params[m.kind] === m.entityId &&
+              (a.params[m.kind] === m.entityId || m.kind === "resource" && a.type === "verify" && a.params.staff === m.entityId) &&
               !p.executionResults?.some(
                 (r) => r.index === index && (r.result || r.requestId),
               ),
@@ -622,7 +637,14 @@ export class Network {
             (future.reduce((s, a) => s + (a.params.quantity ?? 0), 0) >
               (m.projection?.available ?? 0) ||
               hash(old.projection?.compatibility ?? {}) !==
-                hash(m.projection?.compatibility ?? {}));
+                hash(m.projection?.compatibility ?? {}) ||
+              hash(lotProjection(old.projection ?? {})) !== hash(lotProjection(m.projection ?? {})) ||
+              future.some((a, index) => {
+                const skills = a.type === "verify" ? ["field_assessment"] : a.params.staffSkills;
+                return skills?.length && receivedStaffCapacity(m.projection, skills,
+                  future.slice(0, index).reduce((n, x) => n + (x.type === "verify" ? 1 : x.params.quantity ?? 0), 0)) <
+                  (a.type === "verify" ? 1 : a.params.quantity ?? 0);
+              }));
           const vehicleLost =
             m.kind === "vehicle" &&
             future.length &&

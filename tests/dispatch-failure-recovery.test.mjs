@@ -106,7 +106,13 @@ async function setup(t) {
       state: async () => ({
         now: 1200000,
         organization: { id: "org1" },
-        proposals: [{ id: "sim", state: "authorized" }],
+        proposals: [
+          {
+            id: "sim",
+            state: "authorized",
+            plan: { actions: [structuredClone(action)] },
+          },
+        ],
         operations: [operation],
       }),
     },

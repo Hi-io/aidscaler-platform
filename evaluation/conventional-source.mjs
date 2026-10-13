@@ -64,13 +64,24 @@ function timeStatus(source) {
   return "unknown";
 }
 
-function quantityFor(text, resourceType) {
+function quantityFor(text, resourceType, { demand = false } = {}) {
   const matches = (quantityPatterns[resourceType] ?? []).flatMap((pattern) => {
     const flags = pattern.flags.includes("g") ? pattern.flags : pattern.flags + "g";
     return [...text.matchAll(new RegExp(pattern.source, flags))];
   });
   // Do not combine two quoted quantities, different deliveries or alternatives.
   if (matches.length !== 1) return { quantity: null, unit: null };
+  const match = matches[0], before = text.slice(0, match.index), after = text.slice(match.index + match[0].length),
+    clauseBefore = before.split(/[.;!?|\n]/).at(-1), clauseAfter = after.split(/[.;!?|\n]/)[0],
+    explicitDemand = /\b(?:need(?:s|ed)?|request(?:s|ed|ing)?|shortfall|require(?:s|d)?|waiting for|additional|another|outstanding)\b/i.test(clauseBefore) ||
+      /^\s*(?:are |is |still )?(?:needed|required|outstanding|short)\b/i.test(clauseAfter),
+    stockAfterQuantity = /^\s*(?:(?:are|is) )?(?:still )?(?:left|remaining|available|in stock|already delivered)\b/i.test(clauseAfter),
+    availability = /\b(?:we have|only|stock|available|remaining|already (?:received|delivered)|provided|donated|delivered)\b/i.test(clauseBefore) ||
+      stockAfterQuantity;
+  // A general plea earlier in this clause does not turn "15 meals left" into
+  // a request for 15 meals. A direct "only 15 meals needed" remains demand.
+  if (demand && (stockAfterQuantity || !explicitDemand))
+    return { quantity: null, unit: null, ...(availability ? { quantityRole: "available_stock" } : {}) };
   const literal = matches[0][1];
   // A thousands separator is common; an ambiguous decimal comma remains
   // unresolved instead of silently changing the native quantity.
@@ -120,9 +131,13 @@ export function parseExplicitCurrentRequest(source, places = []) {
   if (!sourceIds(source).length || locations.length !== 1 || types.length !== 1 ||
     status === "historical" || cancellationLanguage.test(text) || capacityLanguage.test(text) ||
     supportOnly.test(text) && !activeOperations.test(text) || !activeOperations.test(text)) return null;
-  const quantity = quantityFor(text, types[0]);
-  if (quantity.quantity === null) return null;
-  return observation(source, { location: locations[0], resourceType: types[0], ...quantity, status: "current" });
+  const quantity = quantityFor(text, types[0], { demand: true });
+  // "Only 15 meals left" is stock, never a request for 15 meals. A plainly
+  // current shortage still supplies a cheap location lead for the same owner
+  // inquiry; that inquiry, rather than this parser, establishes real demand.
+  if (quantity.quantity === null && quantity.quantityRole !== "available_stock") return null;
+  return { ...observation(source, { location: locations[0], resourceType: types[0], ...quantity, status: "current" }),
+    ...(quantity.quantityRole ? { quantityRole: quantity.quantityRole } : {}) };
 }
 
 /** Approximation of a competent finite-attention reader. It recognizes common
@@ -144,7 +159,7 @@ export function conventionalInterpret(source, places = []) {
   // quantity is not assigned to every place. Field results determine demand.
   const relevantLocations = locations.length ? locations : [null];
   return relevantLocations.flatMap(location => types.map(resourceType => observation(source, {
-    location, resourceType, ...(locations.length === 1 ? quantityFor(text, resourceType) : {}), status,
+    location, resourceType, ...(locations.length === 1 ? quantityFor(text, resourceType, { demand: true }) : {}), status,
   })));
 }
 

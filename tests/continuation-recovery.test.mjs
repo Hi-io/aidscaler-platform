@@ -41,7 +41,13 @@ async function fixture(t) {
   const source = {
     now: 1000,
     organization: { id: "org0" },
-    proposals: [{ id: "source-plan", state: "authorized" }],
+    proposals: [
+      {
+        id: "source-plan",
+        state: "authorized",
+        plan: { actions: structuredClone(actions) },
+      },
+    ],
     operations: [],
     known: { buildings: {} },
     inspections: [],

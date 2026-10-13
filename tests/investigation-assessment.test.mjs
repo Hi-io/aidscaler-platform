@@ -22,7 +22,7 @@ async function fixture(t, { changeAfterPlan = false } = {}) {
     qualifications: ["field_assessment"],
   });
   await store.upsert("org0", "vehicle", "crew", {
-    owner: "org0", state: "idle", node: "node-b", capacity: 100,
+    owner: "org0", state: "idle", node: "node-b", capacity: 100, seats: 1,
   });
   const replay = new ReplayProvider([
     message("plan_assessment", { building: "site" }),

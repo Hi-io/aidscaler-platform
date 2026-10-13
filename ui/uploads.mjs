@@ -12,7 +12,7 @@ export async function readAttachment(file, limit = 2_000_000) {
 export function actionBrief(a) {
   const p = a.params;
   if (a.type === "dispatch")
-    return `Deliver ${p.quantity} of ${p.resource} to ${p.need ?? p.building ?? p.destination} using ${p.vehicle}; ${p.commitment || p.transfer ? "existing reservation expiry unchanged" : `${Math.round(((p.ttlMs ?? 900000) / 60000) * 10) / 10}-minute stock reservation for pickup and loading`}`;
+    return `Deliver ${p.quantity} of ${p.resource}${p.staffSkills?.length ? `, qualified for ${p.staffSkills.map(s => s.replaceAll("_", " ")).join(" and ")}` : ""} to ${p.need ?? p.building ?? p.destination} using ${p.vehicle}; ${p.commitment || p.transfer ? "existing reservation expiry unchanged" : `${Math.round(((p.ttlMs ?? 900000) / 60000) * 10) / 10}-minute stock reservation for pickup and loading`}`;
   if (a.type === "evacuate")
     return `Move ${p.quantity} people from ${p.from} to ${p.to} using ${p.vehicle}`;
   if (a.type === "activate")

@@ -75,6 +75,11 @@ async function laboratory(t, organizations = 1) {
         key: "integration-shared-hmac",
       }));
   lab.world.advance(60000);
+  for (const app of apps) {
+    for (const target of ["inventory", "vehicles", "map", "policy"])
+      await app.connector.action("query", { target }, `integration-bootstrap-${app.config.org}-${target}`);
+  }
+  lab.world.advance(lab.world.now + 5000);
   for (const app of apps) await app.ingestion.sync();
   const clock = async (play) => {
     const r = await fetch(`http://127.0.0.1:${lab.observerPort}/api/control`, {
@@ -95,6 +100,19 @@ async function laboratory(t, organizations = 1) {
       )
     ).rows[0];
   return { lab, apps, clock, operator };
+}
+
+async function executeUntilEmission(lab, app, id, emitted = async result => result.results?.length > 0) {
+  for (let i = 0; i < 30; i++) {
+    const result = await app.worker.execute(id);
+    if (await emitted(result)) return result;
+    // Source approval is a pending finite queue entry, not a synchronous
+    // return from execute. Progress the real source clock and receive it.
+    lab.world.advance(Math.min(lab.world.config.durationMs, lab.world.now + 10000));
+    await app.ingestion.sync({ sources: false });
+  }
+  assert.fail("Owner-approved source work did not emit within the declared observation window: " +
+    JSON.stringify({ state: (await app.store.get(app.config.org, "proposal", id)).state }));
 }
 test("authorization, physical loading/travel, receipt and retry do not create duplicate aid", async (t) => {
   const {
@@ -137,9 +155,7 @@ test("authorization, physical loading/travel, receipt and retry do not create du
     { version: p.version, decision: "approve" },
     "functional-review",
   );
-  await clock(true);
-  const first = await app.worker.execute(p.id);
-  await clock(false);
+  const first = await executeUntilEmission(lab, app, p.id);
   assert.equal(first.results.length, 1);
   assert.equal(
     lab.world.state.operations.filter((o) => o.type === "delivery").length,
@@ -206,9 +222,8 @@ test("two independent databases communicate over signed HTTP and each owner must
     { version: p.version, decision: "approve" },
     "joint-origin-review",
   );
-  await clock(true);
-  await a.worker.execute(p.id);
-  await clock(false);
+  await executeUntilEmission(lab, a, p.id, async () =>
+    (await a.store.query("SELECT id FROM jobs WHERE kind='peer_send' AND state='queued'")).rows.length > 0);
   const outgoing = (
     await a.store.query(
       "SELECT payload FROM jobs WHERE kind='peer_send' AND state='queued'",
@@ -226,9 +241,7 @@ test("two independent databases communicate over signed HTTP and each owner must
     { version: partner.version, decision: "approve" },
     "joint-owner-review",
   );
-  await clock(true);
-  await b.worker.execute(partner.id);
-  await clock(false);
+  await executeUntilEmission(lab, b, partner.id);
   lab.world.advance(14400000);
   await b.ingestion.sync({ sources: false });
   const complete = await b.worker.execute(partner.id);

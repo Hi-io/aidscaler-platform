@@ -48,7 +48,13 @@ test("a definitive source-command refusal returns prospective work for review on
     connector: {
       state: async () => ({
         organization: { id: org },
-        proposals: [{ id: "sim", state: "authorized" }],
+        proposals: [
+          {
+            id: "sim",
+            state: "authorized",
+            plan: { actions: structuredClone(actions) },
+          },
+        ],
         operations: [{ id: "completed-delivery", state: "completed" }],
       }),
       action: async () => {
@@ -100,7 +106,13 @@ test("a failed issued operation invalidates only its plan, retaining completed s
     connector: {
       state: async () => ({
         organization: { id: org },
-        proposals: [{ id: "sim", state: "authorized" }],
+        proposals: [
+          {
+            id: "sim",
+            state: "authorized",
+            plan: { actions: structuredClone(actions) },
+          },
+        ],
         operations: [
           { id: "delivered", state: "completed" },
           { id: "failed", state: "failed", times: { dispatched: 1000 } },

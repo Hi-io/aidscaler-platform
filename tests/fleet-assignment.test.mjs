@@ -136,3 +136,14 @@ test("matching never replaces a priority-admitted need with a lower priority req
   );
   assert.equal(plan.unserved.find((n) => n.need === "unselected").remaining, 1);
 });
+
+test("a shorter concurrent assignment cannot move a received lot past its use-by date", () => {
+  const f = fixture();
+  f.now = 0;
+  f.resources[0].lotId = 'short-life';
+  f.resources[0].useByAt = 1500;
+  const plan = allocationPlan(f);
+  assert.deepEqual(plan.allocations.map(a => a.owner), ['a', 'b']);
+  assert.equal(plan.assignment.swaps, 0);
+  assert.equal(plan.allocations[0].travelEstimate.seconds, 1);
+});

@@ -7,6 +7,8 @@ import {
 import { responseQueue, outstanding } from "./response-policy.mjs";
 import { validatePlan } from "./planning.mjs";
 import { effectiveNeed } from "./response-receipts.mjs";
+import { processSourceOpportunities } from "./source-opportunities.mjs";
+import { requestReceivedInquiry } from "./received-inquiries.mjs";
 
 async function stopped(store, org, episode) {
   const activity = await store.get(org, "activity", episode, false);
@@ -196,9 +198,10 @@ export class DiscoveryResponse {
     if (!snapshot) return;
     const signature = hash([
       (await responseQueue(this.store, org)).signature,
-      snapshot.known,
-      snapshot.inspections,
-      snapshot.operations,
+      (snapshot.inspections ?? []).map(i => [i.id, i.target, i.entity, i.method, i.purpose,
+        i.state, i.observedAt ?? null, i.result ?? null]),
+      (snapshot.operations ?? []).map(o => [o.id, o.state, o.phase, o.quantity,
+        o.deliveredQuantity, o.receivedQuantity, o.destination, o.vehicle, o.route]),
       (await this.store.list(org, "peer_offer", 2000)).map((o) => [
         o.id,
         o.version,
@@ -208,7 +211,7 @@ export class DiscoveryResponse {
       ]),
     ]);
     for (const r of (await this.store.list(org, "discovery_run", 2000))
-      .filter((r) => ["waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(r.state))
+      .filter((r) => ["waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt", "waiting_context"].includes(r.state) || r.sourceOpportunities?.deferred?.length)
       .slice(0, 4)) {
       if (await stopped(this.store, org, r.id)) {
         await cancel(this, r.id);
@@ -275,7 +278,8 @@ export class DiscoveryResponse {
     let receipt = await this.store.get(org, "discovery_run", episode, false);
     if (
       receipt &&
-      ["ready", "cancelled", "inconclusive"].includes(receipt.state)
+      ["ready", "cancelled", "inconclusive"].includes(receipt.state) &&
+      !receipt.sourceOpportunities?.deferred?.length
     )
       return receipt;
     if (!receipt) {
@@ -339,6 +343,7 @@ export class DiscoveryResponse {
                 ),
               ],
             })),
+            opportunityObservations: semantic.observations.filter(o => o.kind !== "need"),
             model: this.config.modelId,
             startedAt: Date.now(),
             interpretation:
@@ -399,25 +404,16 @@ export class DiscoveryResponse {
         // Different source batches may refer to the same current incident.
         // Reuse the owner's actual pending inquiry across runs; merely reusing
         // an episode key would enqueue the same work again for every repost.
-        const existing = known.inspections?.find((i) =>
-          i.target === "building" && i.entity === location &&
-          i.method === receipt.verificationMethod &&
-          !["completed", "inconclusive", "timeout", "cancelled", "failed"].includes(i.state),
-        );
-        const inquiry = existing ?? await this.connector.action(
-          "verify",
-          {
+        const inquiry = await requestReceivedInquiry(this, {
             target: "building",
             id: location,
             method: receipt.verificationMethod,
-          },
-          "discovery-check-" + hash([episode, location]),
-        );
+          }, { assertCurrent: tx => currentProvenance(tx, org, episode), requestClass: "foreground" });
         receipt.verifications.push({
           location,
           id: inquiry.id,
           state: inquiry.state,
-          reused: Boolean(existing),
+          reused: Boolean(inquiry.reused),
         });
       }
       if (await stopped(this.store, org, episode)) return cancel(this, episode);
@@ -443,12 +439,12 @@ export class DiscoveryResponse {
     }));
     const pending = receipt.verifications.filter(
       (v) =>
-        !["already_received", "completed", "inconclusive", "timeout", "failed", "cancelled"].includes(
+        !["already_received", "completed", "inconclusive", "timeout", "failed", "cancelled", "requires_review"].includes(
           v.state,
         ),
     );
     const unresolved = receipt.verifications.filter(v =>
-      ["inconclusive", "timeout", "failed", "cancelled"].includes(v.state),
+      ["inconclusive", "timeout", "failed", "cancelled", "requires_review"].includes(v.state),
     );
     // Received structured demand, not the model's estimated quantity, is used.
     const needs = await this.store.list(org, "need", 10000);
@@ -477,7 +473,15 @@ export class DiscoveryResponse {
           ),
       )
       .map((c) => c.id);
-    const draft = checked.length
+    const opportunities = receipt.opportunityObservations?.length
+      ? await processSourceOpportunities(this, episode, {
+          observations: receipt.opportunityObservations,
+          references: receipt.claimIds,
+          assertCurrent: tx => currentProvenance(tx, org, episode),
+          stopRequested: tx => stopped(tx, org, episode),
+        }) : null;
+    const receivedCapacityOrDemand = opportunities?.opportunities.some(o => o.received && o.target !== "road");
+    const draft = checked.length || receivedCapacityOrDemand
       ? await draftReceivedResponse(this, episode, {
           // The interpreted batch supplies evidence, not a competing dispatch
           // policy. Compile against ALL received needs in the approved order.
@@ -494,7 +498,16 @@ export class DiscoveryResponse {
         };
     if (draft.state === "cancelled") return draft;
     if (await stopped(this.store, org, episode)) return cancel(this, episode);
-    if (pending.length) draft.state = "waiting_evidence";
+    if (!draft.proposalId && opportunities?.proposalIds.length) {
+      draft.proposalId = opportunities.proposalIds[0];
+      draft.state = "ready";
+      draft.reason = "Received road checks support repair of existing cargo, pending human owner review.";
+    }
+    if (pending.length || opportunities?.pending.length) draft.state = "waiting_evidence";
+    else if (!draft.proposalId && !checkedNeeds.length && opportunities?.deferred?.length) {
+      draft.state = "waiting_context";
+      draft.reason = "Unverified context remains visible. Explicit need and safety checks take precedence; bounded background inquiry resumes when received operational material changes.";
+    }
     else if (!draft.proposalId && checkedNeeds.length) {
       const operations = await this.store.list(org, "operation", 10000),
         unmet = checkedNeeds.map(n => effectiveNeed(n, operations)).filter(n => n.quantity > (n.served ?? 0)),
@@ -522,11 +535,13 @@ export class DiscoveryResponse {
         checkedLocations: checked,
         pendingLocations: pending.map((v) => v.location),
         unresolvedLocations: unresolved.map(v => ({ location: v.location, inspection: v.id, state: v.state })),
+        sourceOpportunities: opportunities,
         finishedAt: Date.now(),
         proposalIds: [
           ...new Set([
             ...(receipt.proposalIds ?? []),
             ...(draft.proposalId ? [draft.proposalId] : []),
+            ...(opportunities?.proposalIds ?? []),
           ]),
         ],
         noModelAuthority: true,
@@ -562,6 +577,10 @@ export class DiscoveryResponse {
             at: Date.now(),
             allocations: draft.allocations ?? 0,
           },
+          ...(opportunities?.attentionRequired ? [{ type: "source_context", state: "pending",
+            label: `${opportunities.deferred.length} deferred hypotheses and ${opportunities.unresolved.length} unresolved observations remain unverified and available for review`,
+            result: { deferred: opportunities.deferred, unresolved: opportunities.unresolved, note: "Deferred context is not false or safe; no need is erased by this admission decision." },
+            at: Date.now() }] : []),
         ],
       });
       return result;

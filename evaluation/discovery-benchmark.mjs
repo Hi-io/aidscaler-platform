@@ -15,6 +15,7 @@ import {
 } from "./conventional-source.mjs";
 import { draftReceivedResponse } from "../src/discovery-response.mjs";
 import { configureResponsePolicy } from "../src/response-policy.mjs";
+import { requestReceivedInquiry } from "../src/received-inquiries.mjs";
 import { hash } from "../src/store.mjs";
 import { percentile, pairedBootstrap } from "../src/evaluation.mjs";
 import { ModelBudgetPool } from "../src/budget-pool.mjs";
@@ -23,6 +24,7 @@ import {
   capturePhysicalDepartures,
   operationTrace,
 } from "./physical-trace.mjs";
+import { collectProposalServiceFunnel } from "./proposal-funnel.mjs";
 
 export const DISCOVERY_PROTOCOL = {
   version: "public-discovery-physical-response-v2",
@@ -42,7 +44,7 @@ export const DISCOVERY_PROTOCOL = {
   negatives:
     "Zero human-reading delay, immediate formal reports, failures, unserved needs and no advantage against a stronger keyword baseline must remain visible.",
   verification:
-    "Requests return a pending receipt. The same finite field queue progresses while owners review and trucks move; no controller must wait synchronously for all inquiries before acting on an already received need.",
+    "Requests and operational owner reviews return pending receipts. The same finite field and owner queues progress while trucks move; submitting a review never advances the whole world synchronously to its approval. No controller must wait for all inquiries before acting on an already received need.",
   generalAgentScope:
     "B9 is this explicit finite general-agent reference implementation, not all possible agents. It receives the same public sources, free structured parsing, approved policy, deterministic planner, owners, model configuration and total call/cost cap. The general agent chooses its own queries and drafts; no observer facts or specialized perception receipt are supplied.",
 };
@@ -119,6 +121,7 @@ export async function runDiscoveryEpisode({
         }),
       },
       awaitVerifications: false,
+      awaitReviews: false,
     });
   const w = h.lab.world,
     physicalDepartures = capturePhysicalDepartures(w),
@@ -222,11 +225,9 @@ export async function runDiscoveryEpisode({
         continue;
       checked.add(o.location);
       const at = w.now;
-      const q = await app.connector.action(
-        "verify",
+      const q = await requestReceivedInquiry(app,
         { target: "building", id: o.location, method: "clarification" },
-        episode + "-check-" + o.location,
-      );
+        { requestClass: "foreground" });
       activities.push({
         stage: "source-directed-confirmation",
         location: o.location,
@@ -234,6 +235,7 @@ export async function runDiscoveryEpisode({
         requestedAt: at,
         observedAt: w.now,
         inspection: q.id,
+        reused: Boolean(q.reused),
       });
     }
     await app.ingestion.sync({ sources: false });
@@ -347,7 +349,7 @@ export async function runDiscoveryEpisode({
     await receiveSourceBatch();
     let batchOffset = 0;
     while (w.now < horizonMs) {
-      if (shouldStop()) {
+      if (await shouldStop()) {
         status = "aborted";
         errors.push({
           phase: "episode",
@@ -638,6 +640,7 @@ export async function runDiscoveryEpisode({
         departures: physicalDepartures,
       },
     },
+    proposalFunnel: await collectProposalServiceFunnel(h.apps, w),
     usage,
     invariants: w.invariants(),
     wallMs: performance.now() - start,

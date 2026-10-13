@@ -12,7 +12,7 @@ test("four scoped instances independently authorize complementary physical deliv
   t.after(() => h.close());
   h.lab.world.advance(60000);
   for (const app of h.apps) {
-    for (const target of ["inventory", "vehicles", "map"])
+    for (const target of ["inventory", "vehicles", "map", "policy"])
       await app.connector.action(
         "query",
         { target },

@@ -2,6 +2,48 @@ import { z } from "zod";
 import { check, role } from "./errors.mjs";
 import { hash } from "./store.mjs";
 import { effectiveNeed } from "./response-receipts.mjs";
+import { receivedStaffCalendar } from "./staff-capacity.mjs";
+import { receivedSourceNow } from "./lot-capacity.mjs";
+
+// Reopen an inquiry when eligibility changes, not when an identical poll
+// advances its timestamp. Only received, already permission-scoped metadata
+// enters this signature; private roster/assignment fields never do.
+function receivedAvailabilityMaterial(record, sourceNow) {
+  const calendar = record?.calendar,
+    staff = record?.staffCalendar ?? record?.staffCapacity?.staffCalendar,
+    humanWindow = record?.type === "staff" ? receivedStaffCalendar(record, { now: sourceNow }) : null,
+    before = value => Number.isFinite(sourceNow) && Number.isFinite(value) ? sourceNow < value : null;
+  return {
+    driverAvailable: typeof record?.driverAvailable === "boolean" ? record.driverAvailable : null,
+    calendar: calendar === undefined ? null : {
+      availableAfter: calendar?.availableAfter ?? null,
+      availableUntil: calendar?.availableUntil ?? null,
+      nextCommitment: calendar?.nextCommitment && {
+        startsAt: calendar.nextCommitment.startsAt ?? null,
+        node: calendar.nextCommitment.node ?? null,
+      },
+      plannedReturn: calendar?.plannedReturn && {
+        departureAt: calendar.plannedReturn.departureAt ?? null,
+        destination: calendar.plannedReturn.destination ?? null,
+        cargo: calendar.plannedReturn.cargo ?? null,
+      },
+      notYetAvailable: before(calendar?.availableAfter),
+      windowOpen: before(calendar?.availableUntil),
+      nextCommitmentPending: before(calendar?.nextCommitment?.startsAt),
+    },
+    staffCalendar: staff === undefined ? null : {
+      epochAt: staff?.epochAt ?? null, shiftMs: staff?.shiftMs ?? null, restMs: staff?.restMs ?? null,
+      window: { usable: humanWindow?.usable ?? false, reason: humanWindow?.reason ?? null,
+        currentShiftEnd: humanWindow?.currentShiftEnd ?? null,
+        nextAvailableAt: humanWindow?.nextAvailableAt ?? null },
+    },
+  };
+}
+const staffCapacityMaterial = capacity => capacity === undefined ? null : {
+  quantity: capacity?.quantity ?? null, reserved: capacity?.reserved ?? null, floor: capacity?.floor ?? null,
+  qualifications: capacity?.qualifications ?? null, qualificationCounts: capacity?.qualificationCounts ?? null,
+  qualificationProfiles: capacity?.qualificationProfiles ?? null,
+};
 
 const schema = z
   .object({
@@ -104,6 +146,11 @@ export async function responseQueue(
     needs = (await store.list(org, "need", 10000)).map((need) =>
       effectiveNeed(need, operations),
     ),
+    verifications = await store.list(org, "verification", 2000),
+    unloadingRunId = (await store.get(org, "source", "simulator", false))?.runId ??
+      (await store.get(org, "context", "operational", false))?.snapshot?.runId,
+    unloadingRequests = (await store.list(org, "unloading_request", 2000)).filter(r =>
+      r.sourceRunId ? r.sourceRunId === unloadingRunId : !unloadingRunId),
     proposals = (await store.list(org, "proposal", 2000)).filter(
       (p) =>
         p.id !== excludeProposal &&
@@ -131,10 +178,27 @@ export async function responseQueue(
           : [];
       for (const id of needIds)
         covered.set(id, [...(covered.get(id) ?? []), p.id]);
-      if (!["dispatch", "evacuate"].includes(a.type)) continue;
+      if (a.type === "unload") {
+        const received = unloadingRequests.find(r => r.operation === a.params.operation && r.receiverOrg === a.owner && r.confirmedBySource),
+          request = received?.sourceSnapshot ?? received;
+        if (!received) continue;
+        if (request && ["completed", "inconclusive", "cancelled"].includes(request.state)) continue;
+        planningHolds.push({ proposal: p.id, step: index, owner: a.owner, resource: a.params.staff,
+          building: request?.building ?? null, vehicle: null, needIds: [], kind: "unloading_crew",
+          staffSkills: request?.requiredSkills ?? [], operation: a.params.operation,
+          // Once source work starts, its received reserved crew already reduces
+          // capacity. Prospective holds must not count those people twice.
+          quantity: request && ["queued", "working"].includes(request.state) ? 0 : a.params.quantity });
+        continue;
+      }
+      if (!["dispatch", "evacuate", "verify"].includes(a.type)) continue;
       const receipt = p.executionResults?.find((r) => r.index === index),
-        sourceId = receipt?.result?.operation ?? receipt?.result?.id ??
-          receipt?.partnerResult?.operation ?? receipt?.partnerResult?.id,
+        inspection = a.type === "verify" ? verifications.find(v =>
+          v.proposalId === p.id && v.step === index ||
+          [receipt?.result?.id, receipt?.partnerResult?.id].filter(Boolean).some(id => v.id === id || v.sourceId === id) &&
+            (v.sourceOwner ?? v.org) === a.owner) : null,
+        sourceId = receipt?.result?.operation ?? receipt?.partnerResult?.operation ?? inspection?.operation ??
+          receipt?.result?.id ?? receipt?.partnerResult?.id,
         operation = operations.find((o) =>
           o.proposalId === p.id && o.step === index ||
           sourceId && (o.id === sourceId || o.sourceId === sourceId) &&
@@ -142,7 +206,7 @@ export async function responseQueue(
         ),
         physicallyComplete = operation &&
           ["completed", "received", "service", "cancelled", "failed"].includes(operation.state);
-      if (physicallyComplete) continue;
+      if (physicallyComplete || inspection && ["completed", "inconclusive", "timeout", "failed", "cancelled"].includes(inspection.state)) continue;
       // A draft hold only guides subsequent planning. It is not stock reserved
       // at the owner, owner consent, a dispatch or a physical receipt. Once the
       // operation is observed, its incoming quantity is already counted below.
@@ -151,9 +215,11 @@ export async function responseQueue(
         step: index,
         owner: a.owner,
         vehicle: a.params.vehicle,
-        resource: a.type === "dispatch" ? a.params.resource : null,
+        resource: a.type === "verify" ? a.params.staff : a.type === "dispatch" ? a.params.resource : null,
+        building: a.type === "evacuate" ? a.params.to : a.type === "verify" ? a.params.id : a.params.building ?? null,
         needIds,
-        quantity: operation ? 0 : Math.max(0, a.params.quantity ?? 0),
+        quantity: a.type === "verify" ? inspection?.staff ? 0 : 1 : operation ? 0 : Math.max(0, a.params.quantity ?? 0),
+        ...(a.type === "verify" ? { kind: "field_assessment", staffSkills: ["field_assessment"], inspection: inspection?.id ?? null } : {}),
         operation: operation?.id ?? null,
       });
     }
@@ -180,7 +246,8 @@ export async function responseQueue(
   });
   // Ignore changing wall time/telemetry; only changed material observations may
   // restart the same inquiry. Versions and busy/available resources matter.
-  const material = [
+  const sourceNow = await receivedSourceNow(store, org),
+    material = [
     policy.version,
     rows.map((n) => [
       n.id,
@@ -223,6 +290,10 @@ export async function responseQueue(
             r.maxWeight,
             r.compatibility,
             r.qualifications,
+            r.qualificationCounts,
+            r.qualificationProfiles,
+            staffCapacityMaterial(r.staffCapacity),
+            receivedAvailabilityMaterial(r, sourceNow),
             r.projection && {
               id: r.projection.id,
               type: r.projection.type,
@@ -231,6 +302,8 @@ export async function responseQueue(
               available: r.projection.available,
               compatibility: r.projection.compatibility,
               qualifications: r.projection.qualifications,
+              staffCapacity: staffCapacityMaterial(r.projection.staffCapacity),
+              availability: receivedAvailabilityMaterial(r.projection, sourceNow),
             },
           ])
           .sort((a, b) => a[0].localeCompare(b[0])),

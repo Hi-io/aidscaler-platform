@@ -101,3 +101,39 @@ test("the explicit native unit-of-blankets control is parsed without charged sem
   assert.equal(observation.unit, "unit");
   assert.equal(observation.timeStatus, "current");
 });
+
+test("available stock is never assigned as requested demand; a current food shortage keeps the same cheap location inquiry", () => {
+  const s = post("stock", "b1 | 40 people have not eaten. Only 15 meal portions left. We need help with food today."),
+    lead = parseExplicitCurrentRequest(s, places);
+  assert.equal(lead.location, "b1");
+  assert.equal(lead.resourceType, "food");
+  assert.equal(lead.quantity, null);
+  assert.equal(lead.unit, null);
+  assert.equal(lead.quantityRole, "available_stock");
+  assert.equal(conventionalInterpret(s, places)[0].quantity, null);
+  assert.equal(keywordCandidates(s, places)[0].location, "b1");
+  assert.equal(parseExplicitCurrentRequest(post("noneed", "b1 | We have 15 meals left. Sending encouragement."), places), null);
+  assert.equal(parseExplicitCurrentRequest(post("explicit", "b1 needs 15 meals today."), places).quantity, 15);
+  assert.equal(parseExplicitCurrentRequest(post("ambiguous", "b1 needs 15 meals or 30 meals today."), places), null);
+});
+
+test("a same-clause plea for help preserves stock as unresolved demand in the shared free inquiry path", () => {
+  for (const [text, resourceType] of [
+    ["We need help at b1, only 15 meal portions left today.", "food"],
+    ["b1 needs help, 15 litres of water are still available.", "water"],
+    ["We need help with blankets at b1, only 15 blankets remaining.", "blankets"],
+  ]) {
+    const source = post("same-clause-stock", text), lead = parseExplicitCurrentRequest(source, places);
+    assert.ok(lead, "The public location remains a free lead for the same responsible inquiry.");
+    assert.equal(lead.location, "b1");
+    assert.equal(lead.resourceType, resourceType);
+    assert.equal(lead.quantity, null);
+    assert.equal(lead.unit, null);
+    assert.equal(lead.quantityRole, "available_stock");
+    assert.equal(lead.requiresVerification, true);
+    assert.equal(conventionalInterpret(source, places)[0].quantity, null);
+    assert.equal(keywordCandidates(source, places)[0].location, "b1");
+  }
+  assert.equal(parseExplicitCurrentRequest(post("literal", "b1 needs only 15 meals today."), places).quantity, 15);
+  assert.equal(parseExplicitCurrentRequest(post("literal-after", "At b1, only 15 meals are needed today."), places).quantity, 15);
+});

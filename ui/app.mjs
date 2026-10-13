@@ -3,13 +3,17 @@ import { icons } from "./icons.mjs";
 import { operationalMap, bindMap } from "./map.mjs";
 import { createExtras } from "./extras.mjs";
 import { createOperationalDraft } from "./operational.mjs";
-import { createFinanceControls } from "./finance.mjs";
+import { createFinanceControls, publicProcurement } from "./finance.mjs";
 import { createWorkforceControls } from "./workforce.mjs";
 import { readAttachment, actionBrief } from "./uploads.mjs";
 import { createPublicationControls } from "./publications.mjs";
 import { createCaseControls } from "./casework.mjs";
 import { createOrganizationControls } from "./organization.mjs";
 import { createResponseControls } from "./response.mjs";
+import { createCoverageControls } from "./coverage.mjs";
+import { createUnloadingControls } from "./unloading.mjs";
+import { driverAvailabilityBadge } from "./fleet.mjs";
+import { staffAvailabilityState, staffAvailabilityBadge, simulationClock, sourceExpiryLabel } from "./staff.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
   String(s ?? "").replace(
@@ -79,6 +83,7 @@ const pageRoles = {
   finance: ["finance", "overview"],
   auditor: [
     "overview",
+    "finance",
     "audit",
     "operations",
     "signals",
@@ -250,6 +255,8 @@ const organizationControls = createOrganizationControls({
   close: () => runAction("close", ""),
 });
 const responseControls = createResponseControls({ api, escape, action, state, modal, toast });
+const coverageControls = createCoverageControls({ api, escape, action, state, modal, toast, render, time });
+const unloadingControls = createUnloadingControls({ api, escape, state, toast, render });
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -325,7 +332,7 @@ function shell(content) {
 }
 function activityCard(a) {
   const active = ["reading", "checking", "queued"].includes(a?.state);
-  const waitLabels = { waiting_evidence: "Waiting for field confirmation", waiting_capacity: "Waiting for eligible response capacity", waiting_review: "Waiting for owner review", waiting_receipt: "Waiting for physical delivery" };
+  const waitLabels = { waiting_evidence: "Waiting for field confirmation", waiting_context: "Unverified context awaits a relevant need or review", waiting_capacity: "Waiting for eligible response capacity", waiting_review: "Waiting for owner review", waiting_receipt: "Waiting for physical delivery" };
   const waiting = Object.hasOwn(waitLabels, a?.state ?? ""), stoppable = active || waiting;
   if (!a)
     return `<div class="card soft"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">Ready to investigate</h3><p class="sub">Select a case. The model checks what could unlock useful help.</p></div></div><p class="small">No inference is running. Every tool call and result will appear here.</p></div>`;
@@ -404,7 +411,7 @@ async function overview() {
           : empty(
               "No verified priorities yet. Connect sources or request a field assessment. Unknown areas remain unknown.",
             )
-    }<div class="toolbar">${action("Open decision queue →", "navigate", "review", "quiet")}</div></section><div class="grid">${activityCard(d.activity[0])}<section class="card"><div class="cardheader"><h3>Source health</h3>${action("Manage", "navigate", "settings", "quiet")}</div>${d.source.length ? d.source.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal network & operational systems</h3><p>${s.changed ?? 0} new or revised signals · ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "No successful sync"}</p></div>${badge(s.state)}</div>`).join("") : empty("No source is connected yet. Public feeds are ingested automatically when configured.", "radio")}<p class="small">A gap in reports does not mean a gap in needs.</p></section></div></div>`
+    }<div class="toolbar">${action("Open decision queue →", "navigate", "review", "quiet")}</div></section><div class="grid">${activityCard(d.activity[0])}${await coverageControls.card()}<section class="card"><div class="cardheader"><h3>Source health</h3>${action("Manage", "navigate", "settings", "quiet")}</div>${d.source.length ? d.source.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal network & operational systems</h3><p>${s.changed ?? 0} new or revised signals · ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "No successful sync"}</p></div>${badge(s.state)}</div>`).join("") : empty("No source is connected yet. Public feeds are ingested automatically when configured.", "radio")}<p class="small">A gap in reports does not mean a gap in needs.</p></section></div></div>`
   );
 }
 async function signals() {
@@ -504,7 +511,7 @@ async function operations() {
         "accent",
       ),
     ) +
-    `<section class="card">${table(
+    (await unloadingControls.view()) + `<section class="card">${table(
       ["Operation", "State", "Authorized by", "Latest confirmation", ""],
       rows.map(
         (o) =>
@@ -514,9 +521,13 @@ async function operations() {
   );
 }
 async function resources() {
-  const [items, facilities, vehicles] = await Promise.all(
-    ["resource", "facility", "vehicle"].map((k) => record(k)),
+  const [items, facilities, vehicles, dashboard] = await Promise.all(
+    ["resource", "facility", "vehicle"].map((k) => record(k)).concat([api("/api/dashboard")]),
   );
+  const usable = r => !["expired", "damaged", "quarantined"].includes(r.condition) &&
+    (r.useByAt === undefined || Number.isFinite(dashboard.simulatedAt) && r.useByAt > dashboard.simulatedAt) &&
+    (r.type !== "staff" || staffAvailabilityState(r, dashboard.simulatedAt).usable),
+    available = r => usable(r) ? Math.max(0, Math.min(r.quantity - (r.reserved ?? 0) - (r.floor ?? 0), r.usableQuantity ?? Infinity)) : 0;
   return (
     title(
       "Know what can be committed.",
@@ -527,7 +538,7 @@ async function resources() {
       ["Resource", "Type", "Available", "Reserved", "Version", ""],
       items.map(
         (r) =>
-          `<tr><td><strong>${escape(r.label ?? r.id)}</strong><small>${escape(r.owner)} · ${escape(r.node ?? "Location unknown")}</small></td><td>${escape(r.type)}</td><td>${number(Math.max(0, r.quantity - r.reserved - r.floor))} ${escape(r.unit ?? "units")}</td><td>${number(r.reserved)} <small>Protected floor: ${number(r.floor)}</small></td><td>v${r.version} ${r.sourceVersion ? "· source v" + r.sourceVersion : ""}</td><td>${action("Reserve", "reserve", r.id)} ${action("Share", "share", r.id)}</td></tr>`,
+          `<tr><td><strong>${escape(r.label ?? r.id)}</strong><small>${escape(r.owner)} · ${escape(r.node ?? "Location unknown")}${r.lotId ? " · Lot " + escape(r.lotId) : ""}${r.useByAt !== undefined ? " · " + escape(sourceExpiryLabel(r.useByAt, dashboard.simulatedAt)) : ""}</small></td><td>${escape(r.type)}</td><td>${number(available(r))} ${escape(r.unit ?? "units")}${r.type === "staff" ? " " + staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }) : usable(r) ? "" : " " + badge(r.condition ?? "expired")}</td><td>${number(r.reserved)} <small>Protected floor: ${number(r.floor)}</small></td><td>v${r.version} ${r.sourceVersion ? "· source v" + r.sourceVersion : ""}</td><td>${usable(r) ? action("Reserve", "reserve", r.id) : ""} ${action("Share", "share", r.id)}</td></tr>`,
       ),
     )}${!items.length ? empty("Query inventory or sync your operational systems.", "package") : ""}</section><div class="grid cols2" style="margin-top:22px"><section class="card"><div class="cardheader"><h2>Facilities</h2>${action("Request facility check", "verifyform", "", "quiet")}</div>${
       facilities
@@ -546,7 +557,7 @@ async function resources() {
         .slice(0, 8)
         .map(
           (v) =>
-            `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.id)}</h3><p>Capacity ${number(v.capacity)} · ${escape(v.owner)} · position may be delayed</p></div>${badge(v.state)}</div>`,
+            `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.id)}</h3><p>Capacity ${number(v.capacity)} · ${escape(v.owner)} · position may be delayed</p>${driverAvailabilityBadge(v)}</div>${badge(v.state)}</div>`,
         )
         .join("") ||
       empty("No observed vehicles. Query your transport system.", "truck")
@@ -802,6 +813,12 @@ async function proposal(id) {
       : action("Close", "close"),
   );
   state.currentProposal = p;
+  if (p.sourceReview?.state === "pending") {
+    const sourceReview = document.createElement("p");
+    sourceReview.className = "note";
+    sourceReview.textContent = "Locally authorized · waiting for operational owner review.";
+    dialog.querySelector(".dialogbody").insertBefore(sourceReview, dialog.querySelector(".detailgrid"));
+  }
   const scope = document.createElement("section");
   scope.className = "decision";
   scope.innerHTML = `<span class="eyebrow">EXACT CURRENT COMMITMENT · VERSION ${p.version}</span><ul class="conditions">${p.actions
@@ -935,6 +952,7 @@ async function flush() {
 }
 async function runAction(name, id) {
   if (await responseControls.run(name, id)) return;
+  if (await coverageControls.run(name, id)) return;
   if (await organizationControls.run(name, id)) return;
   if (await caseControls.run(name, id)) return;
   if (await publicationControls.run(name, id)) return;
@@ -1312,6 +1330,7 @@ async function runAction(name, id) {
   }
 }
 function bind(root = app) {
+  unloadingControls.bind(root);
   organizationControls.bind(root);
   caseControls.bind(root);
   publicationControls.bind(root);
@@ -1374,7 +1393,7 @@ function bind(root = app) {
 }
 async function publicView() {
   const d = await api("/api/public");
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Support the organization and follow shared progress. Clear status, useful evidence and honest uncertainty build informed trust.</p></div><div class="grid cols3">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(p.title)}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div><details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">NEXO · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
+  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">nexo.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Support the organization and follow shared progress. Clear status, useful evidence and honest uncertainty build informed trust.</p></div><div class="grid cols3">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(p.title)}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div>${publicProcurement(d.financeReview, escape, time)}<details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">NEXO · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
   document.querySelector("#contributeform").onsubmit = async (e) => {
     e.preventDefault();
     try {

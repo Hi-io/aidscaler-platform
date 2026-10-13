@@ -1404,3 +1404,8 @@ audio {
   width: 100%;
   margin: 18px 0;
 }
+
+
+
+:root .coverage-list { max-height: 270px; overflow-y: auto; }
+:root .coverage-card > p { margin: 8px 0; }

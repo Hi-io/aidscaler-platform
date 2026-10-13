@@ -1,11 +1,26 @@
 import { check } from "./errors.mjs";
+import { validateUnloadingAction, unloadingPlan, unloadingCheckpoint } from "./unloading.mjs";
 import { compareNeeds, outstanding } from "./response-policy.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
+import { receivedStaffCapacity, receivedStaffCalendar } from "./staff-capacity.mjs";
+import { receivedVehicleWeight } from "./received-vehicle-weight.mjs";
+import { receivedVehicleCalendar } from "./received-vehicle-calendar.mjs";
+import { receivedCargoProfile, receivedCargoCapacity, assertReceivedCargoCapacity, assertReceivedPassengerCapacity } from "./received-cargo.mjs";
+import { receivedUsableQuantity, lotStatus, receivedSourceNow, nominalServiceAt } from "./lot-capacity.mjs";
 import {
   dispatchReservationEstimate,
   receivedExecutionPolicy,
   validateDispatchTtl,
 } from "./reservation-policy.mjs";
+function staffTripEnd(now, pickup, delivery, execution, setupRequired = false) {
+  const timing = execution?.delivery,
+    setupMs = setupRequired ? execution?.service?.setupMs : 0;
+  if (![now, pickup?.seconds, delivery?.seconds, timing?.loadMs,
+    timing?.unloadMs, timing?.commandNominalLatencyMs, setupMs]
+    .every(value => Number.isFinite(value) && value >= 0)) return null;
+  return now + Math.ceil((pickup.seconds + delivery.seconds) * 1000) +
+    timing.loadMs + timing.unloadMs + timing.commandNominalLatencyMs + setupMs;
+}
 export function shortestRoute(map, from, to, vehicle = {}, observed = {}) {
   if (from === to)
     return { nodes: [from], distanceM: 0, seconds: 0, unknownEdges: [] };
@@ -44,8 +59,9 @@ export function shortestRoute(map, from, to, vehicle = {}, observed = {}) {
     for (const e of adj.get(current.id) ?? []) {
       const unknown = observed[e.id]?.open == null && e.open == null;
       const seconds =
-        (e.lengthM ?? 100) /
-        (Math.min(e.speedMps ?? 8, vehicle.speedMps ?? 15) || 1);
+        Math.ceil(((e.lengthM ?? 100) /
+          (Math.min(e.speedMps ?? 8, vehicle.speedMps ?? 15) || 1)) * 1000) / 1000 +
+        (Number.isFinite(e.congestionMs) && e.congestionMs > 0 ? e.congestionMs / 1000 : 0);
       q.push({
         id: e.to,
         cost: current.cost + seconds,
@@ -84,7 +100,13 @@ export function allocationPlan({
         .map((o) => ownedKey({ owner: o.owner ?? o.org, id: o.vehicle })),
     ),
     hasMap = Boolean(map && (Array.isArray(map.roads) || map.edges)),
-    routes = new Map();
+    routes = new Map(),
+    calendarRefusals = [],
+    staffCalendarRefusals = [],
+    refusedStaffCalendars = new Set(),
+    driverRefusals = [],
+    refusedDrivers = new Set(),
+    refusedCalendars = new Set();
   // This is a travel estimate from received topology/observations, never a
   // promise of service or knowledge of future traffic, loading or owner review.
   const routeFor = (vehicle, from, to, weightKg = vehicle.weightKg) => {
@@ -98,7 +120,33 @@ export function allocationPlan({
     return routes.get(key);
   };
   const travelFor = (resource, vehicle, need, quantity) => {
-    if (!hasMap) return null;
+    if (vehicle.driverAvailable === false) {
+      const key = JSON.stringify([need.id, vehicle.owner, vehicle.id]);
+      if (!refusedDrivers.has(key) && driverRefusals.length < 20) {
+        refusedDrivers.add(key);
+        driverRefusals.push({ need: need.id, owner: vehicle.owner,
+          vehicle: vehicle.id, quantity, code: "VEHICLE_DRIVER",
+          reason: "No driver available in the received vehicle report" });
+      }
+      return false;
+    }
+    const staffWindow = (pickup, delivery) => {
+      if (resource.type !== "staff") return true;
+      const useAt = staffTripEnd(now, pickup, delivery, executionPolicy),
+        humanWindow = receivedStaffCalendar(resource, { now, workAt: useAt, useAt });
+      if (!humanWindow.usable) {
+        const key = JSON.stringify([need.id, resource.owner, resource.id, humanWindow.reason]);
+        if (!refusedStaffCalendars.has(key) && staffCalendarRefusals.length < 20) {
+          refusedStaffCalendars.add(key);
+          staffCalendarRefusals.push({ need: need.id, owner: resource.owner,
+            resource: resource.id, quantity, code: "STAFF_CALENDAR",
+            reason: humanWindow.reason, humanWindow });
+        }
+        return false;
+      }
+      return quantity <= receivedStaffCapacity(resource, [], 0, { now, workAt: useAt, useAt });
+    };
+    if (!hasMap) return staffWindow(null, null) ? null : false;
     const destination =
         need.node ?? map.places?.find((p) => p.id === need.building)?.node,
       pickup = routeFor(vehicle, vehicle.node, resource.node),
@@ -107,13 +155,33 @@ export function allocationPlan({
         resource.node,
         destination,
         (vehicle.weightKg ?? 0) +
-          quantity * (resource.type === "energy" ? 150 : 1),
+          quantity * receivedCargoProfile(resource, executionPolicy).massKgPerUnit,
       );
     if (!pickup || !delivery) return false;
+    if (!staffWindow(pickup, delivery)) return false;
+    const nextNode = vehicle.calendar?.nextCommitment?.node,
+      returnRoute = nextNode ? routeFor(vehicle, destination, nextNode) : null,
+      calendar = receivedVehicleCalendar(vehicle, {
+        now, pickup, delivery, returnRoute, executionPolicy,
+      });
+    if (!calendar.usable) {
+      const refusalKey = JSON.stringify([need.id, vehicle.owner, vehicle.id, quantity, calendar.reason]);
+      if (!refusedCalendars.has(refusalKey) && calendarRefusals.length < 20) {
+        refusedCalendars.add(refusalKey);
+        calendarRefusals.push({ need: need.id, owner: vehicle.owner, vehicle: vehicle.id,
+          quantity, code: "VEHICLE_CALENDAR", reason: calendar.reason,
+          calendarVersion: vehicle.calendar?.version ?? null,
+          availableAfter: vehicle.calendar?.availableAfter ?? null,
+          availableUntil: vehicle.calendar?.availableUntil ?? null,
+          nextCommitment: vehicle.calendar?.nextCommitment ?? null });
+      }
+      return false;
+    }
     const seconds = pickup.seconds + delivery.seconds,
       distanceM = pickup.distanceM + delivery.distanceM,
+      occupiedDistanceM = distanceM + (returnRoute?.distanceM ?? 0),
       fuelMl = Number.isFinite(vehicle.fuelMlPerKm)
-        ? (distanceM / 1000) * vehicle.fuelMlPerKm
+        ? (occupiedDistanceM / 1000) * vehicle.fuelMlPerKm
         : null;
     if (
       (fuelMl !== null &&
@@ -126,6 +194,7 @@ export function allocationPlan({
     return {
       pickup,
       delivery,
+      ...(calendar.declared ? { calendar, returnRoute, occupiedDistanceM } : {}),
       seconds,
       distanceM,
       fuelMl,
@@ -138,7 +207,7 @@ export function allocationPlan({
   const stock = new Map(
       resources.map((r) => [
         ownedKey(r),
-        Math.max(0, r.quantity - (r.reserved ?? 0) - (r.floor ?? 0)),
+        receivedUsableQuantity(r, now),
       ]),
     ),
     usedVehicles = new Set(),
@@ -164,15 +233,7 @@ export function allocationPlan({
                 Math.min(
                   remaining,
                   stock.get(ownedKey(resource)),
-                  vehicle.capacity ?? 0,
-                  (vehicle.maxCargoKg ?? Infinity) /
-                    (resource.type === "water"
-                      ? 1
-                      : resource.type === "energy"
-                        ? 150
-                        : 1),
-                  (vehicle.volumeM3 ?? Infinity) /
-                    (resource.type === "energy" ? 0.2 : 0.001),
+                  receivedCargoCapacity(vehicle, resource, executionPolicy),
                 ),
               );
               return {
@@ -196,6 +257,10 @@ export function allocationPlan({
         .filter(
           (candidate) =>
             candidate.travel !== false &&
+            (!candidate.vehicle.calendar || Boolean(candidate.travel)) &&
+            lotStatus(candidate.resource, now, candidate.travel ? now +
+              Math.ceil(candidate.travel.seconds * 1000) + (executionPolicy?.delivery?.loadMs ?? 0) +
+              (executionPolicy?.delivery?.unloadMs ?? 0) + (executionPolicy?.delivery?.commandNominalLatencyMs ?? 0) : now).usable &&
             candidate.reservationEstimate.recommendedTtlMs <=
               candidate.reservationEstimate.maxTtlMs,
         );
@@ -231,6 +296,8 @@ export function allocationPlan({
         remaining,
         unit: need.unit,
         reason: "No uncommitted eligible capacity in this planning round",
+        ...([...calendarRefusals, ...driverRefusals, ...staffCalendarRefusals].some(r => r.need === need.id)
+          ? { blockingReasons: [...calendarRefusals, ...driverRefusals, ...staffCalendarRefusals].filter(r => r.need === need.id) } : {}),
       });
   }
   // Admission above preserves the approved need order and exact native-unit
@@ -239,6 +306,7 @@ export function allocationPlan({
   // No unreceived need, future availability or observer road state enters here.
   const assignment = {
     swaps: 0,
+    cycles: 0,
     beforeSeconds: allocations.reduce(
       (n, a) => n + (a.travelEstimate?.seconds ?? 0),
       0,
@@ -264,15 +332,13 @@ export function allocationPlan({
         !resource ||
         !vehicle ||
         resource.type !== need.type ||
-        quantity > (vehicle.capacity ?? 0) ||
-        quantity * (resource.type === "energy" ? 150 : 1) >
-          (vehicle.maxCargoKg ?? Infinity) ||
-        quantity * (resource.type === "energy" ? 0.2 : 0.001) >
-          (vehicle.volumeM3 ?? Infinity)
+        quantity > receivedCargoCapacity(vehicle, resource, executionPolicy)
       )
         return null;
       const travel = travelFor(resource, vehicle, need, quantity);
       if (!travel) return null;
+      if (!lotStatus(resource, now, nominalServiceAt(now, travel.pickup, travel.delivery,
+        executionPolicy)).usable) return null;
       const reservationEstimate = dispatchReservationEstimate(
         travel.pickup,
         executionPolicy,
@@ -282,6 +348,10 @@ export function allocationPlan({
       // Do not introduce or increase a known missed useful window to shorten
       // another trip. Unknown windows remain unknown, never invented deadlines.
       if (Number.isFinite(need.deadline)) {
+        if (![now, executionPolicy?.delivery?.loadMs,
+          executionPolicy?.delivery?.unloadMs,
+          executionPolicy?.delivery?.commandNominalLatencyMs]
+          .every(value => Number.isFinite(value) && value >= 0)) return null;
         const serviceMs = (t) =>
           now +
           t.seconds * 1000 +
@@ -336,6 +406,37 @@ export function allocationPlan({
           assignment.swaps++;
           improved = true;
         }
+      // Pair swaps can stop at a local minimum even when three already-admitted
+      // deliveries can use less travel. Explore bounded three-way rotations,
+      // preserving every admitted need/quantity and each owner's stock ledger.
+      // This common deterministic compiler is also used by all reference arms.
+      if (!improved && pass < 4) {
+        const limit = Math.min(allocations.length, 24);
+        for (let i = 0; i < limit; i++)
+          for (let j = i + 1; j < limit; j++)
+            for (let k = j + 1; k < limit; k++) {
+              const positions = [i, j, k], before = positions.map(n => allocations[n]);
+              for (const rotation of [[1, 2, 0], [2, 0, 1]]) {
+                const after = before.map((a, n) => changed(a, before[rotation[n]]));
+                if (after.some(a => !a) ||
+                    after.reduce((n,a) => n + a.travelEstimate.seconds, 0) >=
+                    before.reduce((n,a) => n + a.travelEstimate.seconds, 0) - 1e-8) continue;
+                const delta = new Map();
+                for (let n = 0; n < before.length; n++) {
+                  const oldKey = ownedKey({owner: before[n].owner, id: before[n].resource}),
+                    newKey = ownedKey({owner: after[n].owner, id: after[n].resource});
+                  delta.set(oldKey, (delta.get(oldKey) ?? 0) + before[n].quantity);
+                  delta.set(newKey, (delta.get(newKey) ?? 0) - after[n].quantity);
+                }
+                if ([...delta].some(([key, change]) => (stock.get(key) ?? 0) + change < 0)) continue;
+                for (const [key, change] of delta) stock.set(key, stock.get(key) + change);
+                positions.forEach((position,n) => allocations[position] = after[n]);
+                assignment.cycles++;
+                improved = true;
+                break;
+              }
+            }
+      }
       if (!improved) break;
     }
   }
@@ -349,6 +450,9 @@ export function allocationPlan({
     algorithm:
       "deterministic priority admission with bounded received fleet assignment",
     assignment,
+    ...(calendarRefusals.length ? { calendarRefusals } : {}),
+    ...(driverRefusals.length ? { driverRefusals } : {}),
+    ...(staffCalendarRefusals.length ? { staffCalendarRefusals } : {}),
     routing: hasMap
       ? "received pickup and delivery travel estimates"
       : "no received map; no travel estimate",
@@ -443,6 +547,7 @@ export async function validateConditions(store, org, conditions) {
         const v = await store.get(org, "vehicle", c.id, false);
         satisfied =
           !!v &&
+          v.driverAvailable !== false &&
           ["idle", "arrived"].includes(v.state) &&
           (c.version === undefined || v.version === c.version);
         evidenceId = v?.id;
@@ -482,6 +587,11 @@ export async function validateConditions(store, org, conditions) {
   );
 }
 export async function validatePlan(store, org, proposal) {
+  if (proposal.unloadingOperation && proposal.unloadingPlanCheckpoint) {
+    const current = await unloadingPlan(store, org, proposal.unloadingOperation, { excludeProposal: proposal.id });
+    check(current.readyToDraft && unloadingCheckpoint(current) === proposal.unloadingPlanCheckpoint,
+      "UNLOAD_CHANGED", "The received unloading continuation or recovery scope changed before owner review.", 409);
+  }
   const checks = [],
     usedStock = new Map(),
     usedVehicles = new Set(),
@@ -497,10 +607,15 @@ export async function validatePlan(store, org, proposal) {
     for (const [index, a] of p.actions.entries()) {
       if (
         a.owner !== org ||
-        !["dispatch", "evacuate"].includes(a.type) ||
+        !["dispatch", "evacuate", "verify"].includes(a.type) ||
         p.executionResults?.some((r) => r.index === index && r.result)
       )
         continue;
+      if (a.type === "verify") {
+        usedStock.set(a.params.staff, (usedStock.get(a.params.staff) ?? 0) + 1);
+        usedVehicles.add(a.params.vehicle); externalVehicles.add(a.params.vehicle);
+        continue;
+      }
       if (a.type === "evacuate") {
         usedPlaces.set(
           a.params.to,
@@ -531,6 +646,17 @@ export async function validatePlan(store, org, proposal) {
       });
       continue;
     }
+    if (a.type === "unload") {
+      checks.push({ index, ...await validateUnloadingAction(store, org, a, {
+        excludeProposal: proposal.id ?? null,
+        held: proposal.actions.slice(0, index).filter(previous => previous.owner === org &&
+          (previous.type === "unload" && previous.params.staff === a.params.staff ||
+           previous.type === "verify" && previous.params.staff === a.params.staff ||
+           previous.type === "dispatch" && previous.params.resource === a.params.staff))
+          .reduce((n, previous) => n + (previous.type === "verify" ? 1 : previous.params.quantity ?? 0), 0),
+      }) });
+      usedStock.set(a.params.staff, (usedStock.get(a.params.staff) ?? 0) + a.params.quantity);
+    }
     if (a.type === "reroute") {
       const vehicle = await store.get(org, "vehicle", a.params.vehicle, false),
         operation = (await store.list(org, "operation", 10000)).find(
@@ -558,6 +684,8 @@ export async function validatePlan(store, org, proposal) {
         "Only a received vehicle's owner may authorize rerouting.",
         403,
       );
+      check(vehicle.driverAvailable !== false, "VEHICLE_DRIVER",
+        "The received vehicle report has no driver available. Refresh the owner's transport report before reviewing a new route.", 409);
       check(
         operation,
         "ACTIVE_OPERATION",
@@ -582,7 +710,16 @@ export async function validatePlan(store, org, proposal) {
         "Another reviewed reroute for this vehicle is still active.",
         409,
       );
-      if (operation.type === "evacuation" && operation.phase === "pickup") {
+      if (["inspection", "repair"].includes(operation.type)) {
+        check(!need && !facility && a.params.destination === operation.destination,
+          "DESTINATION", "An assessment or repair reroute must preserve its exact approved work site.", 409);
+      } else if (["delivery", "transfer"].includes(operation.type) && operation.phase === "pickup") {
+        const resource = await store.get(org, "resource", operation.resource, false);
+        check(resource?.owner === org && resource.node && !need && !facility &&
+          a.params.destination === resource.node &&
+          (!vehicle.destination || vehicle.destination === resource.node),
+          "DESTINATION", "An empty cargo pickup reroute must preserve the received stock location and the original aid destination.", 409);
+      } else if (operation.type === "evacuation" && operation.phase === "pickup") {
         check(
           !need && !facility && a.params.destination === operation.destination,
           "DESTINATION",
@@ -619,11 +756,25 @@ export async function validatePlan(store, org, proposal) {
       const roads = Object.fromEntries(
         (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
       );
+      const cargoResource = operation.resource
+        ? await store.get(org, "resource", operation.resource, false) : null;
+      const grossMass = receivedVehicleWeight(vehicle, operation, cargoResource);
+      if (Number.isSafeInteger(vehicle.crewQuantity) && vehicle.crewQuantity > 0)
+        assertReceivedPassengerCapacity(vehicle, vehicle.crewQuantity);
+      if (["delivery", "transfer", "recovery", "evacuation"].includes(operation.type)) {
+        const cargo = operation.type === "evacuation" ? { type: "staff" }
+          : cargoResource ?? { type: operation.resourceType };
+        if (receivedCargoProfile(cargo) && Number.isSafeInteger(operation.quantity) && operation.quantity > 0 &&
+            !(operation.received >= operation.quantity))
+          operation.type === "evacuation"
+            ? assertReceivedPassengerCapacity(vehicle, operation.quantity - Math.max(0, operation.received ?? 0))
+            : assertReceivedCargoCapacity(vehicle, cargo, operation.quantity - Math.max(0, operation.received ?? 0));
+      }
       const route = shortestRoute(
         map,
         vehicle.node,
         a.params.destination,
-        vehicle,
+        { ...vehicle, weightKg: grossMass.weightKg },
         roads,
       );
       check(
@@ -632,6 +783,40 @@ export async function validatePlan(store, org, proposal) {
         "No received accessible route supports this reroute.",
         409,
       );
+      let calendar = null;
+      if (vehicle.calendar) {
+        const executionPolicy = await receivedExecutionPolicy(store, org),
+          sourceNow = await receivedSourceNow(store, org),
+          pickupPhase = operation.phase === "pickup",
+          supported = ["delivery", "transfer", "evacuation"].includes(operation.type);
+        check(supported, "VEHICLE_CALENDAR", "Receive the remaining work and return timing before reviewing this vehicle's constrained reroute.", 409);
+        let pickup = { seconds: 0, distanceM: 0 }, delivery = route,
+          finalNode = a.params.destination;
+        if (pickupPhase) {
+          check(Number.isSafeInteger(operation.quantity) && operation.quantity > 0,
+            "VEHICLE_LOAD_UNKNOWN", "Receive the assigned cargo or passenger quantity before checking the rest of this pickup trip.", 409);
+          pickup = route;
+          finalNode = operation.type === "evacuation"
+            ? (await store.get(org, "facility", operation.building, false))?.node
+            : operation.destination;
+          const fullProfile = receivedCargoProfile(operation.type === "evacuation" ? { type: "staff" }
+            : cargoResource ?? { type: operation.resourceType });
+          check(fullProfile, "CARGO_PROFILE", "Receive the planned load's transport unit profile before checking this pickup reroute.", 409);
+          const fullWeight = (vehicle.weightKg ?? 0) + operation.quantity * fullProfile.massKgPerUnit;
+          delivery = finalNode ? shortestRoute(map, a.params.destination, finalNode,
+            { ...vehicle, weightKg: fullWeight }, roads) : null;
+        }
+        const returnRoute = vehicle.calendar.nextCommitment?.node && finalNode
+          ? shortestRoute(map, finalNode, vehicle.calendar.nextCommitment.node, vehicle, roads) : null,
+          remainingExecution = executionPolicy ? { ...executionPolicy,
+            delivery: { ...executionPolicy.delivery, ...(pickupPhase ? {} : { loadMs: 0 }) } } : null;
+        calendar = receivedVehicleCalendar(vehicle, { now: sourceNow, pickup, delivery,
+          returnRoute, executionPolicy: remainingExecution });
+        check(calendar.usable, "VEHICLE_CALENDAR", "The remaining received trip and return cannot preserve this vehicle's availability window or next commitment.", 409);
+        const requiredDistance = pickup.distanceM + delivery.distanceM + (returnRoute?.distanceM ?? 0);
+        check((vehicle.fuel ?? Infinity) >= requiredDistance / 1000 * (vehicle.fuelMlPerKm ?? 0),
+          "FUEL", "Fuel is insufficient for the remaining checked trip and return.", 409);
+      }
       checks.push({
         index,
         type: "reroute",
@@ -639,8 +824,47 @@ export async function validatePlan(store, org, proposal) {
         sourceOperation: operation.id,
         vehicleVersion: vehicle.version,
         operationVersion: operation.version,
+        grossMass,
+        ...(calendar ? { calendar } : {}),
         ...route,
       });
+    }
+    if (a.type === "verify") {
+      const r = await store.get(org, "resource", a.params.staff, false),
+        v = await store.get(org, "vehicle", a.params.vehicle, false),
+        site = await store.get(org, "facility", a.params.id, false);
+      check(r?.owner === org && v?.owner === org, "ASSESSOR_OWNER", "Only the crew owner can authorize its staff and vehicle.", 403);
+      check(v.driverAvailable !== false, "VEHICLE_DRIVER", "The received assessment vehicle has no driver available.", 409);
+      const assessmentCargo = assertReceivedPassengerCapacity(v, 1);
+      const sourceNow = await receivedSourceNow(store, org),
+        execution = await receivedExecutionPolicy(store, org),
+        map = (await store.get(org, "context", "geography", false))?.map,
+        roads = Object.fromEntries((await store.list(org, "road", 5000)).map(e => [e.id, e])),
+        siteNode = site?.node ?? map?.places?.find(p => p.id === a.params.id)?.node,
+        pickup = map && v.node && r.node ? shortestRoute(map, v.node, r.node, v, roads) : null,
+        fieldTrip = map && r.node && siteNode ? shortestRoute(map, r.node, siteNode,
+          { ...v, weightKg: (v.weightKg ?? 0) + assessmentCargo.massKgPerUnit }, roads) : null,
+        fieldTiming = execution?.fieldAssessment,
+        workAt = [sourceNow, pickup?.seconds, fieldTrip?.seconds,
+          fieldTiming?.commandNominalLatencyMs].every(value => Number.isFinite(value) && value >= 0)
+          ? sourceNow + Math.ceil((pickup.seconds + fieldTrip.seconds) * 1000) +
+            fieldTiming.commandNominalLatencyMs : null,
+        useAt = Number.isFinite(workAt) && Number.isFinite(fieldTiming?.inspectionMs) && fieldTiming.inspectionMs >= 0
+          ? workAt + fieldTiming.inspectionMs : null,
+        humanWindow = receivedStaffCalendar(r, { now: sourceNow, workAt, useAt });
+      check(humanWindow.usable, "STAFF_CALENDAR", "The received crew's shift or rest window cannot cover this trip and field assessment. Receive current timing or choose another crew.", 409);
+      check(receivedStaffCapacity(r, ["field_assessment"], usedStock.get(r.id) ?? 0, { now: sourceNow, workAt, useAt }) >= 1,
+        "STAFF_QUALIFICATIONS", "The received mobile assessor is reserved, protected or insufficiently qualified.", 409);
+      check(["idle", "arrived"].includes(v.state) && !usedVehicles.has(v.id),
+        "VEHICLE_CONFLICT", "The assessment vehicle is already busy or assigned to concurrent work.", 409);
+      // A delegated owner can approve the received exact target-version request
+      // without possessing the coordinator's private site record. If this owner
+      // does have newer metadata, do not ignore the conflict. The source still
+      // checks the requested version before travel and again before completion.
+      check(!site || site.sourceVersion === a.params.targetVersion, "ASSESSMENT_VERSION", "The site's received version changed before crew approval.", 409);
+      usedStock.set(r.id, (usedStock.get(r.id) ?? 0) + 1); usedVehicles.add(v.id);
+      checks.push({ index, type: "qualified_field_crew", resource: r.id, vehicle: v.id, targetVersion: a.params.targetVersion,
+        ...(humanWindow.declared ? { humanWindow, nominalWorkStartsAt: workAt, nominalWorkEndsAt: useAt } : {}) });
     }
     if (a.type === "dispatch") {
       const r = await store.get(org, "resource", a.params.resource, false),
@@ -673,9 +897,14 @@ export async function validatePlan(store, org, proposal) {
         "Only the owner can authorize this resource and vehicle.",
         403,
       );
+      check(v.driverAvailable !== false, "VEHICLE_DRIVER",
+        "The received vehicle report has no driver available. Capacity alone does not make it executable.", 409);
+      const lotClock = await receivedSourceNow(store, org),
+        priorHeldStock = usedStock.get(r.id) ?? 0;
+      check(lotStatus(r, lotClock).usable, "SUPPLY_EXPIRED", "The received lot is expired, damaged or has no valid source clock for its use-by date.", 409);
       check(
-        q + (usedStock.get(r.id) ?? 0) <=
-          r.quantity - (r.reserved ?? 0) - (r.floor ?? 0),
+        q + priorHeldStock <=
+          receivedUsableQuantity(r, lotClock),
         "INSUFFICIENT_RESOURCE",
         "The requested stock is already allocated, reserved or protected.",
         409,
@@ -685,18 +914,10 @@ export async function validatePlan(store, org, proposal) {
         "VEHICLE_CAPACITY",
         "Vehicle capacity is insufficient.",
       );
-      const massPerUnit = r.type === "energy" ? 150 : 1,
-        volumePerUnit = r.type === "energy" ? 0.2 : 0.001;
-      check(
-        q * massPerUnit <= (v.maxCargoKg ?? Infinity),
-        "CARGO_WEIGHT",
-        "The vehicle cannot carry this cargo mass.",
-      );
-      check(
-        q * volumePerUnit <= (v.volumeM3 ?? Infinity),
-        "CARGO_VOLUME",
-        "The vehicle cannot carry this cargo volume.",
-      );
+      if (a.params.staffSkills !== undefined) {
+        check(r.type === "staff", "STAFF_SELECTOR", "A staff qualification selector cannot be applied to other cargo.");
+      }
+      const { massKgPerUnit: massPerUnit } = assertReceivedCargoCapacity(v, r, q);
       check(
         !externalVehicles.has(v.id) &&
           (!usedVehicles.has(v.id) ||
@@ -729,10 +950,10 @@ export async function validatePlan(store, org, proposal) {
         "RESOURCE_TYPE",
         "Resource does not satisfy the need.",
       );
-      usedStock.set(r.id, (usedStock.get(r.id) ?? 0) + q);
+      usedStock.set(r.id, priorHeldStock + q);
       usedVehicles.add(v.id);
       const map = (await store.get(org, "context", "geography", false))?.map;
-      let pickup = null;
+      let pickup = null, staffUseAt = null, staffWorkAt = null;
       if (map?.roads) {
         const roads = Object.fromEntries(
           (await store.list(org, "road", 5000)).map((e) => [e.id, e]),
@@ -761,9 +982,22 @@ export async function validatePlan(store, org, proposal) {
           "No accessible known route can carry this vehicle to the destination.",
           409,
         );
+        const executionPolicy = await receivedExecutionPolicy(store, org),
+          returnRoute = v.calendar?.nextCommitment?.node
+            ? shortestRoute(map, destination, v.calendar.nextCommitment.node, v, roads)
+            : null,
+          calendar = receivedVehicleCalendar(v, {
+            now: lotClock, pickup, delivery: route, returnRoute, executionPolicy,
+          });
+        staffWorkAt = staffTripEnd(lotClock, pickup, route, executionPolicy);
+        staffUseAt = staffTripEnd(lotClock, pickup, route, executionPolicy, Boolean(a.params.building));
+        check(calendar.usable, "VEHICLE_CALENDAR", "The received vehicle window, return route or next commitment cannot accommodate this trip. Refresh the owner's calendar or select another vehicle.", 409);
+        check(lotStatus(r, lotClock, nominalServiceAt(lotClock, pickup, route,
+          executionPolicy)).usable,
+          "SUPPLY_EXPIRED", "The received nominal pickup, travel and handling exceed the lot's use-by time. Select another usable lot.", 409);
         check(
           (v.fuel ?? Infinity) >=
-            ((pickup.distanceM + route.distanceM) / 1000) *
+            ((pickup.distanceM + route.distanceM + (returnRoute?.distanceM ?? 0)) / 1000) *
               (v.fuelMlPerKm ?? 0),
           "FUEL",
           "Fuel is insufficient for this checked route.",
@@ -774,8 +1008,17 @@ export async function validatePlan(store, org, proposal) {
           state: "checked",
           ...route,
           pickup,
+          ...(calendar.declared ? { calendar, returnRoute } : {}),
         });
       }
+      if (r.type === "staff") {
+        const humanWindow = receivedStaffCalendar(r, { now: lotClock, workAt: staffWorkAt, useAt: staffUseAt });
+        check(humanWindow.usable, "STAFF_CALENDAR", "The received staff shift or rest window cannot cover transport, handling and the declared service setup. Receive current timing or choose eligible staff.", 409);
+        check(q <= receivedStaffCapacity(r, a.params.staffSkills ?? [], priorHeldStock,
+          { now: lotClock, workAt: staffWorkAt, useAt: staffUseAt }), "STAFF_QUALIFICATIONS", "The selected received staff are reserved, protected or insufficient for the planned work.", 409);
+        if (humanWindow.declared) checks.push({ index, type: "staff_calendar", state: "checked", humanWindow, nominalWorkStartsAt: staffWorkAt, nominalWorkEndsAt: staffUseAt });
+      }
+      check(!v.calendar || map?.roads, "VEHICLE_CALENDAR", "A declared vehicle calendar requires received route evidence before owner review.", 409);
       const reservation = await validateDispatchReservation(
         store,
         org,
@@ -809,6 +1052,7 @@ export async function validatePlan(store, org, proposal) {
         "Only the vehicle owner can authorize an evacuation.",
         403,
       );
+      check(v.driverAvailable !== false, "VEHICLE_DRIVER", "The received evacuation vehicle has no driver available.", 409);
       check(
         n && to,
         "EVACUATION_OBSERVATION",
@@ -819,6 +1063,7 @@ export async function validatePlan(store, org, proposal) {
         "SEATS",
         "Not enough observed passenger seats.",
       );
+      const passengerProfile = assertReceivedPassengerCapacity(v, a.params.quantity);
       const activation = a.dependsOn.some(
         (j) =>
           proposal.actions[j]?.type === "activate" &&
@@ -874,7 +1119,8 @@ export async function validatePlan(store, org, proposal) {
           "Query both shelter and pickup locations.",
         );
         const pickup = shortestRoute(map, v.node, from, v, roads),
-          dropoff = shortestRoute(map, from, to.node, v, roads);
+          dropoff = shortestRoute(map, from, to.node,
+            { ...v, weightKg: (v.weightKg ?? 0) + a.params.quantity * passengerProfile.massKgPerUnit }, roads);
         check(
           pickup && dropoff,
           "NO_KNOWN_ROUTE",

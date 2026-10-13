@@ -1,4 +1,4 @@
-const CACHE = "nexo-shell-v10";
+const CACHE = "nexo-shell-v12";
 const ASSETS = [
   "/",
   "/styles.css",
@@ -16,6 +16,10 @@ const ASSETS = [
   "/casework.mjs",
   "/organization.mjs",
   "/response.mjs",
+  "/fleet.mjs",
+  "/staff.mjs",
+  "/coverage.mjs",
+  "/unloading.mjs",
   "/mark.svg",
 ];
 self.addEventListener("install", (e) =>

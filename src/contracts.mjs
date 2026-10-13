@@ -13,6 +13,7 @@ export const ACTIONS = [
   "publish",
   "coverage",
   "record_outcome",
+  "unload",
 ];
 export const QUERIES = [
   "inventory",
@@ -51,7 +52,12 @@ export const fieldReport = z
   .strict();
 const ID = z.string().min(1).max(180),
   POS = z.number().int().positive();
+const STAFF_SKILLS = z.array(z.string().regex(/^[a-z][a-z0-9_]{0,79}$/)).max(32)
+  .refine(xs => new Set(xs).size === xs.length, "Staff skills must be unique");
 export const parameterSchemas = {
+  unload: z.object({ operation: ID, staff: ID, quantity: POS,
+    targetVersion: z.number().int().nonnegative(), requestVersion: z.number().int().nonnegative(),
+    sourceVersion: z.number().int().nonnegative(), deliveryQuantity: POS }).strict(),
   dispatch: z
     .object({
       vehicle: ID,
@@ -63,6 +69,7 @@ export const parameterSchemas = {
       commitment: ID.optional(),
       transfer: ID.optional(),
       ttlMs: POS.max(86400000).optional(),
+      staffSkills: STAFF_SKILLS.optional(),
     })
     .strict(),
   activate: z.object({ building: ID, permit: z.boolean() }).strict(),
@@ -115,6 +122,7 @@ export const parameterSchemas = {
       requester: ID.optional(),
       ttlMs: POS.optional(),
       conditions: z.array(z.record(z.string(), z.unknown())).optional(),
+      staffSkills: STAFF_SKILLS.optional(),
     })
     .strict(),
   transfer: z
@@ -127,6 +135,7 @@ export const parameterSchemas = {
       vehicle: ID.optional(),
       loan: z.boolean().optional(),
       returnBy: POS.optional(),
+      staffSkills: STAFF_SKILLS.optional(),
     })
     .strict(),
   cancel: z.object({ id: ID }).strict(),

@@ -78,7 +78,14 @@ export async function checkedRepairPlan(store, config, { proposalId }) {
       });
       continue;
     }
-    const params = { vehicle: vehicle.id, destination: operation.destination };
+    const cargoPickup = ["delivery", "transfer"].includes(operation.type) && operation.phase === "pickup",
+      pickupResource = cargoPickup ? await store.get(org, "resource", operation.resource, false) : null;
+    if (cargoPickup && (!pickupResource?.node || pickupResource.owner !== org)) {
+      pending.push({ index: receipt.index, operationId,
+        code: "PICKUP_OBSERVATION", reason: "Receive the exact owned stock location before repairing this empty pickup trip." });
+      continue;
+    }
+    const params = { vehicle: vehicle.id, destination: cargoPickup ? pickupResource.node : operation.destination };
     if (operation.type === "evacuation" && operation.phase !== "pickup")
       params.building = operation.building;
     const reroute = { type: "reroute", owner: org, params, dependsOn: [] };
@@ -90,6 +97,7 @@ export async function checkedRepairPlan(store, config, { proposalId }) {
       actions.push(reroute);
       references.add(operation.id);
       references.add(vehicle.id);
+      if (pickupResource) references.add(pickupResource.id);
       if (operation.need) references.add(operation.need);
       if (operation.building) references.add(operation.building);
       versions.push({

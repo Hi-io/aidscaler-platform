@@ -1,0 +1,14 @@
+# Preserve the exact verified source bytes on every operating system.
+/src/* -text
+/ui/* -text
+/evaluation/* -text
+/scripts/* -text
+/tests/* -text
+/server.mjs -text
+/package.json -text
+/pnpm-lock.yaml -text
+/requirements-media.txt -text
+/.gitignore -text
+/.gitattributes -text
+# Reports keep their original bytes and recorded hashes.
+/reports/** -text

@@ -1,5 +1,7 @@
 import { hash } from "./store.mjs";
 import { check } from "./errors.mjs";
+import { persistReceivedPurchases } from "./received-purchases.mjs";
+import { persistReceivedUnloadingRequests } from "./unloading.mjs";
 export class Ingestion {
   constructor(store, connector, config) {
     Object.assign(this, { store, connector, config });
@@ -28,11 +30,13 @@ export class Ingestion {
           if (cursor !== 0)
             backfillCursor = feed.nextCursor ?? feed.next ?? 100;
           const fresh = [];
+          const pageIds = feed.posts.map((p) => p.id),
+            erased = await this.store.getMany(org, "erased_source", pageIds),
+            stored = await this.store.getMany(org, "signal", pageIds);
           for (const p of feed.posts) {
             downloaded++;
-            if (await this.store.get(org, "erased_source", p.id, false))
-              continue;
-            const old = await this.store.get(org, "signal", p.id, false);
+            if (erased.has(p.id)) continue;
+            const old = stored.get(p.id);
             if (old?.sourceVersion >= p.version) continue;
             fresh.push(p);
           }
@@ -49,27 +53,34 @@ export class Ingestion {
           const accepted = [],
             acceptJob = `source_accept_${org}_${hash(fresh.map((p) => [p.id, p.version]))}`;
           await this.store.transaction(async (tx) => {
+            // Re-read inside the committing transaction: a download receipt
+            // must not resurrect an erased source or overwrite a newer page.
+            const ids = fresh.map((p) => p.id),
+              erased = await tx.getMany(org, "erased_source", ids),
+              stored = await tx.getMany(org, "signal", ids);
             for (const p of fresh) {
-              if (await tx.get(org, "erased_source", p.id, false)) continue;
-              const old = await tx.get(org, "signal", p.id, false);
+              if (erased.has(p.id)) continue;
+              const old = stored.get(p.id);
               if (old?.sourceVersion >= p.version) continue;
               const group = hash(
                 p.references?.[0] ??
                   p.text.toLowerCase().replace(/\s+/g, " ").trim(),
               );
-              await tx.upsert(org, "signal", p.id, {
+              const written = await tx.put(org, "signal", p.id, {
                 ...p,
                 sourceVersion: p.version,
                 source: "Signal social network",
                 sourceUrl: `${this.config.sourceUrl}/posts/${p.id}`,
                 contentHash: hash(p),
                 receivedAt: Date.now(),
+                receivedAtSourceClock: state.now,
                 state: p.deleted ? "withdrawn" : "unverified",
                 group,
                 modality: p.attachments?.[0]?.kind ?? "text",
                 permissions: "organization",
                 originalReferences: p.references ?? [],
-              });
+              }, old?.version ?? 0);
+              stored.set(p.id, written);
               await tx.upsert(org, "source_version", `${p.id}_${p.version}`, {
                 snapshot: p,
                 sourceVersion: p.version,
@@ -254,17 +265,18 @@ export class Ingestion {
           ["need", state.known.needs],
           ["facility", state.known.buildings],
           ["road", state.known.edges],
-        ])
-          for (const [sourceId, raw] of Object.entries(items ?? {})) {
-            const data = { ...raw, id: raw.id ?? sourceId };
-            const previous = await tx.get(org, kind, data.id, false);
+        ]) {
+          const records = Object.entries(items ?? {}).map(([sourceId, raw]) => ({ ...raw, id: raw.id ?? sourceId })),
+            previousById = await tx.getMany(org, kind, records.map((data) => data.id));
+          for (const data of records) {
+            const previous = previousById.get(data.id);
             // A shared/manual record may exist before its owner's first direct
             // source snapshot. It is not evidence that the source was read.
             if (
               !previous?.sourceSnapshot ||
               hash(previous.sourceSnapshot) !== hash(data)
             ) {
-              await tx.upsert(org, kind, data.id, {
+              await tx.put(org, kind, data.id, {
                 ...data,
                 sourceSnapshot: data,
                 owner: data.owner ?? org,
@@ -277,7 +289,7 @@ export class Ingestion {
                         .reduce((n, c) => n + c.quantity, 0)
                     : 0),
                 floor: data.floor ?? 0,
-              });
+              }, previous?.version ?? 0);
               const changedRestriction =
                 (kind === "road" &&
                   data.open === false &&
@@ -294,14 +306,26 @@ export class Ingestion {
                 );
             }
           }
-        for (const data of state.operations ?? [])
-          await tx.upsert(org, "operation", data.id, {
-            ...data,
-            sourceSnapshot: data,
-            confirmedBySource: true,
-          });
-        for (const i of state.inspections ?? [])
-          await tx.upsert(org, "verification", i.id, i);
+        }
+        const operationRecords = await tx.getMany(org, "operation", (state.operations ?? []).map((data) => data.id));
+        for (const data of state.operations ?? []) {
+          const previous = operationRecords.get(data.id);
+          if (previous?.confirmedBySource === true && previous.sourceSnapshot && hash(previous.sourceSnapshot) === hash(data)) continue;
+          await tx.put(org, "operation", data.id, {
+            ...previous, ...data, sourceSnapshot: data, confirmedBySource: true,
+          }, previous?.version ?? 0);
+        }
+        const verificationRecords = await tx.getMany(org, "verification", (state.inspections ?? []).map((data) => data.id));
+        for (const i of state.inspections ?? []) {
+          const previous = verificationRecords.get(i.id);
+          if (previous?.sourceSnapshot && hash(previous.sourceSnapshot) === hash(i)) continue;
+          const material = hash([i.target, i.entity, i.method, i.state, i.result, i.reason]);
+          await tx.put(org, "verification", i.id, { ...previous, ...i, sourceSnapshot: i,
+            receivedMaterialHash: material,
+            receivedAtSourceClock: previous?.receivedMaterialHash === material ? previous.receivedAtSourceClock : state.now,
+            receivedAt: previous?.receivedMaterialHash === material ? previous.receivedAt : Date.now(),
+          }, previous?.version ?? 0);
+        }
         const mapQuery = state.queries
           ?.filter((q) => q.target === "map" && q.state === "ready")
           .at(-1);
@@ -310,6 +334,8 @@ export class Ingestion {
             map: mapQuery.result,
             observedAt: mapQuery.completedAt,
           });
+        await persistReceivedPurchases(tx, org, state);
+        await persistReceivedUnloadingRequests(tx, org, state);
         await tx.audit(org, "connector", "source.synced", "simulator", {
           downloaded,
           changed,

@@ -69,7 +69,7 @@ test("campaign startup refuses source bytes that differ from the simulator loade
   );
 });
 
-test("simulator fingerprint normalizes LF and includes added behavior modules and viewer geometry", async (t) => {
+test("simulator fingerprint normalizes LF and includes behavior modules and every recursive viewer asset", async (t) => {
   const { root, files } = await fixture(t);
   const original = await simulatorFingerprint({ root });
   for (const file of files) {
@@ -99,6 +99,17 @@ test("simulator fingerprint normalizes LF and includes added behavior modules an
     "export const geometry = 2;",
   );
   assert.notEqual(await simulatorFingerprint({ root }), original);
+  await writeFile(new URL("viewer/geometry.js", root), `// viewer/geometry.js\nexport const version = 1;\n`);
+  assert.equal(await simulatorFingerprint({ root }), original);
+  await mkdir(new URL("viewer/nested/", root));
+  for (const file of ["viewer/app.js", "viewer/nested/panel.mjs", "viewer/nested/index.html", "viewer/nested/style.css"]) {
+    await writeFile(new URL(file, root), "viewer behavior");
+    assert.notEqual(await simulatorFingerprint({ root }), original, file + " must be pinned");
+    await rm(new URL(file, root));
+    assert.equal(await simulatorFingerprint({ root }), original);
+  }
+  await writeFile(new URL("viewer/nested/readme.txt", root), "not a runtime asset");
+  assert.equal(await simulatorFingerprint({ root }), original);
 });
 
 test("final gates detect independent candidate, evaluator and simulator fixture edits without touching live code", async (t) => {

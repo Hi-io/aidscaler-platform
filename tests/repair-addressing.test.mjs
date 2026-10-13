@@ -103,7 +103,13 @@ test("completed replacement work does not close an inherited physical blockage t
     connector: {
       state: async () => ({
         organization: { id: "org0" },
-        proposals: [{ id: "sim", state: "authorized" }],
+        proposals: [
+          {
+            id: "sim",
+            state: "authorized",
+            plan: { actions: structuredClone(actions) },
+          },
+        ],
         operations: [{ id: "blocked", state: "blocked" }],
       }),
     },

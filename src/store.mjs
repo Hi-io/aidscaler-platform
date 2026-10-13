@@ -95,6 +95,25 @@ export class Store {
       updatedAt: Number(r.updated_at),
     }));
   }
+  // A page-sized scoped read, including inside the caller's transaction. Never
+  // reuse this map across transactions: erasure and version changes must be
+  // re-read after a remote download acknowledgement.
+  async getMany(org, kind, ids) {
+    check(
+      Array.isArray(ids) && ids.length <= 10000 &&
+        ids.every((id) => typeof id === "string" && id.length > 0),
+      "BATCH_SCOPE", "Use a bounded list of exact entity IDs.",
+    );
+    if (!ids.length) return new Map();
+    const { rows } = await this.query(
+      "SELECT id,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND id=ANY($3::text[])",
+      [org, kind, [...new Set(ids)]],
+    );
+    return new Map(rows.map((r) => [r.id, {
+      ...r.data, id: r.id, version: r.version,
+      createdAt: Number(r.created_at), updatedAt: Number(r.updated_at),
+    }]));
+  }
   async dependents(org, kind, dependency) {
     const { rows } = await this.query(
       "SELECT id,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND data->'dependencies' @> $3::jsonb ORDER BY id",

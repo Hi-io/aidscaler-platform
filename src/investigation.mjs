@@ -15,6 +15,7 @@ import {
 } from "./received-allocation.mjs";
 import { composeService } from "./planning.mjs";
 import { servicePlan, assessmentPlan } from "./services.mjs";
+import { unloadingPlan, prepareUnloading, unloadingCheckpoint } from "./unloading.mjs";
 import { responseQueue } from "./response-policy.mjs";
 import {
   receivedProgressReference,
@@ -28,6 +29,7 @@ import {
 } from "./response-comparison.mjs";
 import { checkedRepairPlan } from "./response-repair.mjs";
 import { SemanticIngestion } from "./semantic-ingestion.mjs";
+import { scopedReceivedEntities } from "./received-entities.mjs";
 import { boundedContext } from "./model-context.mjs";
 import {
   caseContext,
@@ -97,7 +99,7 @@ export const researchTools = [
   ),
   tool(
     "read_context",
-    "Read a focused page of this organization's RECEIVED evidence or operational records omitted from the initial preview. Filter by IDs, location or resource type. detail=true opens the full bounded record. Does not refresh the external world or grant authority.",
+    "Read a focused page of this organization's RECEIVED records. kind chooses the record category. type filters the resource/use type, including peer_offer.projection.type (for example staff or sanitation), NOT the offer's kind=resource/vehicle. Omit type to discover available offer categories. detail=true opens a full bounded record. Does not refresh the world or grant authority.",
     {
       ...obj({
         kind: { type: "string", enum: CONTEXT_KINDS },
@@ -124,9 +126,13 @@ export const researchTools = [
   ),
   tool(
     "plan_service",
-    "Build a sourced dependency draft for an inspected facility using owned and explicitly shared capabilities. Missing safety, technical compatibility, stock or transport remain visible. No activation or authority.",
+    "Check actual site feasibility for a received facility using current safety assessment, exact requirements, owned/consented stock, qualified staff, transport and existing planning holds. Missing dependencies and their received diagnostics remain visible. Use this, rather than compose_service's generic template, before prepare_service. No activation or authority.",
     { ...obj({ building: STR }), required: ["building"] },
   ),
+  tool("plan_unloading", "Check a received unloading request for an ARRIVED original delivery. The receiver needs its own qualified onsite crew; otherwise prepare a real crew trip first. Arrival, crew transport and unloading are separate. Never redispatch the original aid.",
+    { ...obj({ operation: STR }), required: ["operation"] }),
+  tool("prepare_unloading", "Prepare the last checked plan_unloading result for HUMAN owner review. After a crew trip, wait for its receipt and recheck before separately approving finite unloading work. It does not certify delivery.",
+    { ...obj({ title: STR, rationale: STR, benefit: STR }), required: ["title", "rationale", "benefit"] }),
   tool(
     "prepare_service",
     "Prepare the last fully checked plan_service result for HUMAN review. Each partner must approve its own part; only physical receipts permit activation.",
@@ -150,7 +156,7 @@ export const researchTools = [
   ),
   tool(
     "compose_service",
-    "Check complementary capabilities for a shelter or water plant. The result preserves missing safety, permission and technical dependencies. It does not activate a facility.",
+    "Explore a GENERIC shelter or water-plant capability template. This is not site feasibility: it does not prove actual transport, staff qualifications, holds, current facility safety or permission. Select a received site and use plan_service before prepare_service. No activation or authority.",
     {
       ...obj({
         service: { type: "string", enum: ["shelter", "water_plant"] },
@@ -174,7 +180,7 @@ export const researchTools = [
   ),
   tool(
     "lookup",
-    "Read an authorized operational system. A query may require waiting for its result.",
+    "Read an authorized operational system. target=capabilities REQUIRES explicit org (the owner ID, including your own organization). Foreign owners return only their permitted projection, not private inventory or consent to execute. Inspect already received peer_offer records before requesting a refresh. A query may require waiting for its received result.",
     {
       ...obj({ target: { type: "string", enum: QUERIES }, id: STR, org: STR }),
       required: ["target"],
@@ -182,7 +188,7 @@ export const researchTools = [
   ),
   tool(
     "verify",
-    "Request an available verification channel for a need, building, road or resource. field is the default; radio/clarification may remain inconclusive and do not bypass service safety. Reuses an existing pending check of the same target and method. This costs time.",
+    "Request verification of a need, building, road or OWN resource. A partner's resource cannot be directly verified: read its consented peer_offer or lookup capabilities with that explicit owner's org. field is the default; radio/clarification can remain inconclusive and cannot certify facility safety. Reuses pending checks of the same target/method. This costs time; it never grants owner permission.",
     {
       ...obj({
         target: {
@@ -253,6 +259,125 @@ Look for capabilities described for another purpose, conditional collaboration, 
 Dispatch parameter names are exactly vehicle, resource, quantity and need (or building/destination). Quantity is an integer in the resource's native unit. available = quantity - reserved - floor. Partial delivery is valid. Do not empty protected reserves to satisfy an entire need. A current authorized need observation can be the basis for a proportionate partial response; uncertainty must be recorded but do not invent unnecessary conditions. If verification is important, use verify and cite the returned inspection ID, not an invented evidence ID. Use a condition only if it truly prevents the planned action. Do not mark an unverified condition satisfied.
 Produce a draft_response with evidence IDs from the available inputs or recorded claims, clear pending conditions, responsible owners, alternatives and a SHORT decision rationale. Do not expose private chain-of-thought. Your rationale explains evidence, checked constraints and remaining uncertainty only. If tools cannot establish feasibility, finish_without_proposal rather than invent IDs. All actions are drafts, human authorization is required. Use native English.`;
 const EXECUTION_CONTRACT = `Execution-tool contract for every planning policy: If repair is supplied and an existing loaded trip is blocked, use plan_repair then prepare_repair. A different dispatch does not repair that trip; preserve its operation ID, cargo and owner. Missing current route evidence requires a targeted query, not invented recovery. when plan_service returns readyToDraft=true, use prepare_service to prepare THAT checked plan. When plan_allocations returns allocations, use prepare_allocation with selected ZERO-BASED indices. It includes consented current peer offers as well as owned capacity. Do not transcribe either computed plan into draft_response; quantities, IDs and physical dependencies are already compiled. prepare_* still requires every human owner to approve. Do NOT add a made-up owner approval condition: the built-in independent owner workflow already enforces consent. An approval condition is only for a dependency on an EXISTING different proposal ID. Use draft_response only for a custom plan. Custom action index 0 must have dependsOn:[], index 1 may depend on [0], NEVER on itself. A vehicle condition has type vehicle; a stock condition has type resource. Never invent approval IDs or make already checked facts into impossible conditions. If focusNeed is supplied, prioritize investigating that unmet need. If focusMode=automatic and it cannot currently be served, preserve it as pending and use compare_responses/plan_allocations to prepare useful aid for other received needs in one reviewed batch. Do not label another delivery as solving the focus need. plan_allocations without needIds covers concurrent demand; only provide needIds when deliberately limiting a batch. Explicit manual focus remains specific to the selected case. A shelter need's building is the place where people need help, NOT necessarily a suitable shelter. find_facilities searches the received map for possible service sites; inspect any chosen site and check its capacity and dependencies before plan_service. This directory is not a safety assessment or permission.\n`;
+
+// Only real advertised tools are suggested. A pending external workflow is a
+// wait state, not a fictitious tool or an instruction to create duplicate work.
+export function planningToolGuidance(name, result) {
+  const prepared = {
+    plan_assessment: "prepare_assessment",
+    plan_service: "prepare_service",
+    plan_repair: "prepare_repair",
+  }[name];
+  check(
+    prepared,
+    "TOOL_SCOPE",
+    "This guidance only describes assessment, service or repair plans.",
+  );
+  if (result.readyToDraft) return { nextTool: prepared };
+  if (name === "plan_assessment") {
+    if (result.satisfied)
+      return {
+        nextTool: "plan_service",
+        nextArguments: { building: result.building },
+      };
+    if (result.pending?.length)
+      return {
+        nextTool: null,
+        waitFor: "current_received_assessment",
+        noDuplicateWork: true,
+      };
+    if (result.missing?.some((m) => m.type === "facility_metadata"))
+      return {
+        nextTool: "verify",
+        nextArguments: {
+          target: "building",
+          id: result.building,
+          method: "clarification",
+          reason:
+            "Receive current site requirements before assigning a safety assessment.",
+        },
+      };
+    return {
+      nextTool: "read_context",
+      nextArguments: { kind: "peer_offer", type: "staff" },
+      nextCheck:
+        "Only received qualified staff plus an available consented crew vehicle can support a field assessment. Missing from this page is not proof that other owners have none.",
+    };
+  }
+  if (name === "plan_service") {
+    const pending = (result.pending ?? []).filter(p => p.building === result.building &&
+      (p.proposal || p.operation || p.operationId || p.inspection) &&
+      !["completed", "received", "failed", "cancelled", "rejected", "requires_review", "expired"].includes(p.state));
+    if (result.waitReceipt && pending.length)
+      return {
+        nextTool: null,
+        waitFor: pending.every(p => ["awaiting_review", "needs_clarification", "conditionally_authorized"].includes(p.state))
+          ? "owner_review_of_this_site" : "current_received_physical_work",
+        pendingReferences: pending.map(p => ({ building: p.building, proposal: p.proposal ?? null,
+          operation: p.operation ?? p.operationId ?? null, inspection: p.inspection ?? null, state: p.state ?? null })),
+        noDuplicateWork: true,
+      };
+    if (result.refreshRequest?.target === "facility" && result.refreshRequest.id === result.building)
+      return { nextTool: "lookup", nextArguments: { target: "facility", id: result.building },
+        nextCheck: "Read this site's current status after its newly received provision. A historical receipt is not stock still available." };
+    if (result.missing?.some((m) => m.type === "current_safety_assessment"))
+      return {
+        nextTool: "plan_assessment",
+        nextArguments: { building: result.building },
+      };
+    const missing = result.missing?.find((m) => m.type),
+      diagnostic = missing?.diagnostics?.find(d => ["transport", "hold", "qualification", "compatibility", "stock", "expiry"].includes(d.reason) &&
+        typeof d.owner === "string" && typeof d.resource === "string" && typeof d.evidence === "string");
+    if (diagnostic) {
+      const ownRecord = diagnostic.evidence === diagnostic.resource,
+        resourceRecord = { kind: ownRecord ? "resource" : "peer_offer", ids: [diagnostic.evidence], detail: true },
+        vehicleIds = [...new Set(diagnostic.reason === "hold" && diagnostic.heldVehicleIds?.length
+          ? diagnostic.heldVehicleIds : diagnostic.vehicleIds ?? [])].slice(0, 20),
+        scopedCapabilities = { target: "capabilities", org: diagnostic.owner },
+        blocker = { type: missing.type, quantity: missing.quantity, reason: diagnostic.reason, owner: diagnostic.owner,
+          resource: diagnostic.resource, evidence: diagnostic.evidence };
+      if (["transport", "hold"].includes(diagnostic.reason))
+        return { nextTool: ownRecord && vehicleIds.length ? "read_context" : "lookup",
+          nextArguments: ownRecord && vehicleIds.length ? { kind: "vehicle", ids: vehicleIds, detail: true } : scopedCapabilities,
+          blockingDependency: blocker,
+          nextCheck: diagnostic.reason === "hold"
+            ? "Check the received assignment holding this owner's capacity. Do not assume a release time or wait on an unrelated site; no duplicate vehicle assignment."
+            : "Stock is received, but this owner's usable transport is missing. Check the indicated fleet, not another inventory verification; a shared projection still needs owner approval." };
+      if (["qualification", "compatibility"].includes(diagnostic.reason))
+        return { nextTool: "read_context", nextArguments: resourceRecord, blockingDependency: blocker,
+          nextCheck: diagnostic.reason === "qualification"
+            ? "Check the received qualified profiles and required skills. Headcount alone cannot satisfy the dependency; do not directly verify a partner's private resource."
+            : "Check the received technical specification against this site's requirements. Quantity alone does not establish compatibility." };
+      return { nextTool: "lookup", nextArguments: scopedCapabilities, blockingDependency: blocker,
+        nextCheck: diagnostic.reason === "expiry"
+          ? "Look for currently usable lots through this identified owner's permitted projection. Expired or damaged stock cannot become usable by waiting."
+          : "Check current permitted capacity for this identified owner or another received offer. Preserve protected reserves and existing commitments; no stock is invented." };
+    }
+    return {
+      nextTool: "read_context",
+      nextArguments: {
+        kind: "peer_offer",
+        ...(missing ? { type: missing.type } : {}),
+      },
+      planningScope: "received_site_feasibility",
+      nextCheck:
+        "Use the missing diagnostics to check received stock, qualification, compatibility, transport and holds. Refresh an identified owner's permitted capabilities with lookup(target=capabilities,org). A missing offer is not permission or proof of zero stock.",
+    };
+  }
+  return {
+    nextTool: "read_context",
+    nextArguments: {
+      kind: "operation",
+      ids: [
+        ...new Set(
+          (result.pending ?? []).map((p) => p.operationId).filter(Boolean),
+        ),
+      ].slice(0, 20),
+    },
+    nextCheck:
+      "Preserve existing cargo. Read the owner's current physical receipt and received road evidence; request a grounded road verification if needed, then rerun plan_repair. Another owner's private trip needs that owner's update.",
+  };
+}
 export class Investigator {
   constructor({ store, domain, connector, provider, config }) {
     Object.assign(this, { store, domain, connector, provider, config });
@@ -472,6 +597,8 @@ export class Investigator {
       ).filter((g) => g.state === "active"),
       known: context?.known,
       operations: context?.operations,
+      unloadingRequests: (await this.store.list(org, "unloading_request", 100)).filter(r =>
+        r.receiverOrg === org && !["completed", "cancelled"].includes(r.state)),
       sharedOffers: (await this.store.list(org, "peer_offer", 60)).filter(
         (o) => o.active && o.expiresAt > Date.now(),
       ),
@@ -487,6 +614,8 @@ export class Investigator {
         : null,
       knownLocations: (await this.store.get(org, "context", "geography", false))
         ?.map?.places,
+      knownEntities: (await scopedReceivedEntities(this.store, org, signals))
+        .entities,
       media: (await this.store.list(org, "media", 30))
         .filter((m) => m.state !== "erased")
         .map((m) => ({
@@ -510,6 +639,7 @@ export class Investigator {
         role: "system",
         content:
           EXECUTION_CONTRACT +
+          "For a received unloadingRequests entry, use plan_unloading(operation) then prepare_unloading. Preserve its original cargo: a crew trip and finite receiver-approved unloading are separate stages; an arrived truck is not received help.\n" +
           "Facility assessments are a separate physical task. If the site has only directory metadata, verify the building using method clarification to receive its current version and requirements; this cannot certify safety. Use plan_assessment to find a qualified, consented mobile crew, then prepare_assessment when readyToDraft. Stop that episode after preparing the assessment request: its human owners must approve and the crew must travel and finish the field work. A later current source receipt can unlock plan_service and prepare_service. A pending assessment, radio answer or missing assessor never counts as safe.\n" +
           "The responsePolicy belongs to the human coordinator. When approved, follow its ordering and focusNeed. Competing needs remain separate native-unit goals. Before committing scarce vehicles, use compare_responses when materially different options exist. Record the alternatives and postponed needs in your short rationale. Do not mix liters and shelter places into an invented score. If a higher-priority option is impossible now, preserve it and prepare a useful partial response instead.\n" +
           "The input is a focused preview, NOT all records. Missing from preview is not absent or false. Use read_context for omitted received data; lookup/verify for fresh observations. Preserve source versions and conflicting evidence.\n" +
@@ -544,6 +674,7 @@ export class Investigator {
       allocation = checkpoint?.allocation ?? null,
       service = checkpoint?.service ?? null,
       assessment = checkpoint?.assessment ?? null,
+      unloading = checkpoint?.unloading ?? null,
       repairPlan = checkpoint?.repairPlan ?? null,
       comparison = checkpoint?.comparison ?? null,
       pendingMessage = checkpoint?.pendingMessage ?? null,
@@ -559,6 +690,7 @@ export class Investigator {
         allocation,
         service,
         assessment,
+        unloading,
         repairPlan,
         comparison,
         messages,
@@ -789,9 +921,7 @@ export class Investigator {
               });
               response = {
                 ...repairPlan,
-                nextTool: repairPlan.readyToDraft
-                  ? "prepare_repair"
-                  : "request_current_owner_evidence_or_custom_repair",
+                ...planningToolGuidance(name, repairPlan),
               };
               step.label = "Checked how to recover the existing physical trip";
             } else if (name === "prepare_repair") {
@@ -889,6 +1019,21 @@ export class Investigator {
                 note: "Directory use is a potential site, not current safety, capacity, owner permission or operation. Request a current assessment before planning.",
               };
               step.label = "Found candidate service sites in the received map";
+            } else if (name === "plan_unloading") {
+              await this.ingestKnown?.();
+              unloading = await unloadingPlan(this.store, org, args.operation);
+              response = { ...unloading, checkpoint: unloadingCheckpoint(unloading),
+                nextTool: unloading.readyToDraft ? "prepare_unloading" : null,
+                ...(unloading.waitReceipt ? { waitFor: "receiver_review_or_finite_unloading_work", noDuplicateWork: true } : {}) };
+              step.label = "Checked the receiving crew for the original arrived delivery";
+              if (unloading.waitReceipt) { activity.waitReceipt = unloading.pending; activity.reason = unloading.note; done = true; }
+            } else if (name === "prepare_unloading") {
+              check(unloading?.readyToDraft, "UNLOAD_PENDING", "Run plan_unloading and resolve its missing received conditions first.");
+              response = await prepareUnloading(this.domain, this.store, actor, { ...args,
+                operation: unloading.operation, checkpoint: unloadingCheckpoint(unloading) }, "draft_" + jobId);
+              activity.proposalId = response.id;
+              step.label = "Prepared receiver crew work for independent owner review";
+              done = true;
             } else if (name === "plan_assessment") {
               await this.ingestKnown?.();
               assessment = await assessmentPlan(
@@ -899,9 +1044,7 @@ export class Investigator {
               );
               response = {
                 ...assessment,
-                nextTool: assessment.readyToDraft
-                  ? "prepare_assessment"
-                  : "wait_for_current_receipt_or_plan_service",
+                ...planningToolGuidance(name, assessment),
               };
               step.label =
                 "Checked a qualified owner's field-assessment capacity";
@@ -975,11 +1118,7 @@ export class Investigator {
               });
               response = {
                 ...service,
-                nextTool: service.readyToDraft
-                  ? "prepare_service"
-                  : service.waitReceipt
-                    ? "wait_for_current_physical_receipt"
-                    : "verify_or_lookup_missing_dependencies",
+                ...planningToolGuidance(name, service),
               };
               step.label = "Checked a service across complementary owners";
               if (service.waitReceipt) {
@@ -1059,18 +1198,33 @@ export class Investigator {
                     false,
                   )
                 : null;
-              response = composeService({
-                service: args.service,
-                offers,
-                inspection,
-                permit: null,
-              });
+              response = {
+                ...composeService({
+                  service: args.service,
+                  offers,
+                  inspection,
+                  permit: null,
+                }),
+                planningScope: "generic_capability_template",
+                siteFeasibilityChecked: false,
+                nextTool: "plan_service",
+                nextCheck:
+                  "Choose a received eligible building. The generic template does not establish that this site has current safety, required staff qualifications, available transport, unheld stock or permission.",
+              };
               step.label = "Checked complementary service dependencies";
             } else if (name === "lookup") {
               check(
                 QUERIES.includes(args.target),
                 "TOOL_SCOPE",
                 "Unknown query target.",
+              );
+              check(
+                args.target !== "capabilities" ||
+                  (typeof args.org === "string" &&
+                    args.org.length > 0 &&
+                    args.org.length <= 200),
+                "TOOL_ARGUMENTS",
+                "lookup(target=capabilities) requires the explicit owner's org ID. Use received peer_offer.from or your own organization ID; no partner is inferred.",
               );
               const q = await this.connector.action(
                 "query",
@@ -1091,6 +1245,31 @@ export class Investigator {
                 "TOOL_SCOPE",
                 "Unknown verification target.",
               );
+              if (args.target === "resource") {
+                const received = await this.store.get(
+                  org,
+                  "resource",
+                  args.id,
+                  false,
+                );
+                const partner = (
+                  await this.store.list(org, "peer_offer", 2000)
+                ).find(
+                  (o) =>
+                    o.from !== org &&
+                    o.kind === "resource" &&
+                    (o.projection?.id === args.id || o.entity === args.id),
+                );
+                check(
+                  !(
+                    (received?.owner && received.owner !== org) ||
+                    (!received && partner)
+                  ),
+                  "TOOL_OWNER_SCOPE",
+                  "Direct resource verification is limited to this owner. Read the received peer_offer projection or lookup(target=capabilities,org=<received owner ID>); permission and separate human owner review remain required.",
+                  403,
+                );
+              }
               const method = args.method ?? "field";
               check(
                 ["field", "radio", "clarification"].includes(method),
@@ -1359,6 +1538,7 @@ export class Investigator {
           allocation: null,
           service: null,
           assessment: null,
+          unloading: null,
         });
       await this.store.transaction((tx) =>
         tx.audit(org, actor.id, "investigation.finished", jobId, {

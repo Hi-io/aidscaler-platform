@@ -3,7 +3,7 @@ import path from "node:path";
 import { role, check } from "./errors.mjs";
 import { hash, uid } from "./store.mjs";
 const originals = ["signal", "media"],
-  derived = new Set(["signal", "source_version", "media", "media_analysis", "claim", "claim_history", "group_history", "external", "report", "pattern", "evidence_group", "investigation_checkpoint", "semantic_receipt", "discovery_run"]);
+  derived = new Set(["signal", "source_version", "media", "media_analysis", "claim", "claim_history", "group_history", "external", "report", "pattern", "evidence_group", "investigation_checkpoint", "semantic_receipt", "discovery_run", "source_opportunity", "source_attention"]);
 const refers = (v, ids) => typeof v === "string" ? ids.has(v) : v && typeof v === "object" && Object.values(v).some((x) => refers(x, ids));
 function fragmentsOf(value, into = new Set()) {
   if (value && typeof value === "object") for (const [key, v] of Object.entries(value)) {

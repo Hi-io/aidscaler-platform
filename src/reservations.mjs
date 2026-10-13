@@ -57,6 +57,7 @@ export async function syncReservation(worker, { id, action }) {
           "ACCESS",
           "OWNER",
           "EXPIRED",
+          "SUPPLY_EXPIRED",
         ].includes(e.code)
       ) {
         await store.transaction(async (tx) => {

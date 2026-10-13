@@ -19,7 +19,6 @@ const DIRECTORIES = [
 const EXTRA_FILES = [
   "adapters/reference.mjs",
   "evaluation/metrics.mjs",
-  "viewer/geometry.js",
 ];
 
 export async function simulatorFingerprint({ root = SIMULATOR_ROOT } = {}) {
@@ -33,7 +32,12 @@ export async function simulatorFingerprint({ root = SIMULATOR_ROOT } = {}) {
     )
   )
     .flat()
-    .concat(EXTRA_FILES)
+    .concat(
+      (await readdir(new URL("viewer/", root), { recursive: true }))
+        .filter((name) => /\.(?:m?js|html|css)$/.test(name))
+        .map((name) => "viewer/" + name.replaceAll("\\", "/")),
+      EXTRA_FILES,
+    )
     .sort();
   return digest(
     Object.fromEntries(

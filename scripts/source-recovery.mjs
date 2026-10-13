@@ -10,6 +10,7 @@ import { draftReceivedResponse } from '../src/discovery-response.mjs';
 import { ModelBudgetPool } from '../src/budget-pool.mjs';
 import { operationTrace, capturePhysicalDepartures } from '../evaluation/physical-trace.mjs';
 import { hash } from '../src/store.mjs';
+import { semanticSourceAttention } from '../src/source-attention.mjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -27,6 +28,14 @@ export function sealSourceCohort(sources) {
     .sort((a, b) => (a.source.publishedAt ?? 0) - (b.source.publishedAt ?? 0) || a.key.localeCompare(b.key));
 }
 
+export function selectSourceRetries(cohort, dispositions, attempts, now, { maxAttempts = 2, cooldownMs = 60000, batchSize = 30 } = {}) {
+  const pending = new Set(dispositions.filter(d => !d.closed && ["pending", "truncated_pending_review", "rejected_pending_review", "receipt_state_pending"].includes(d.disposition)).map(d => d.key));
+  return cohort.filter(item => {
+    const previous = attempts.get(item.key);
+    return pending.has(item.key) && previous && previous.count < maxAttempts && now - previous.availableAt >= cooldownMs;
+  }).slice(0, batchSize);
+}
+
 /** A valid interpretation receipt acknowledges reading, never truth/accuracy.
  * Failed/truncated/rejected batches and changed versions remain attention. */
 export function sourceRecoveryDisposition(item, { current, receipts = [], freeDisposition, retainedVersion } = {}) {
@@ -38,16 +47,18 @@ export function sourceRecoveryDisposition(item, { current, receipts = [], freeDi
       note: 'The sealed original is retained; the current revision requires its own reading/withdrawal receipt.' };
   if (freeDisposition) return { ...base, ...freeDisposition, closed: true };
   const matching = receipts.filter(r => r.sources?.some(s => s.id === item.id && s.version === item.version));
-  const valid = r => !r.coverage?.truncatedSources?.includes(item.id) && !r.coverage?.rejectedObservations?.length &&
-    ['interpreted_unverified', 'reconciled_progress_unverified', 'routine_commentary_unverified'].includes(r.state);
+  const attentionHistory = matching.map(r => ({ receipt: r.id, state: r.state, ...semanticSourceAttention(r, item.id) }));
+  base.attentionHistory = attentionHistory;
+  const valid = r => !semanticSourceAttention(r, item.id).requiresReview;
   const receipt = matching.find(valid) ?? matching[0];
   if (!receipt) return { ...base, disposition: 'pending' };
   if (receipt.coverage?.truncatedSources?.includes(item.id))
     return { ...base, disposition: 'truncated_pending_review', receipt: receipt.id };
-  if (receipt.coverage?.rejectedObservations?.length || receipt.state === 'partially_interpreted_unverified')
+  if (semanticSourceAttention(receipt, item.id).requiresReview && (receipt.coverage?.rejectedObservations?.length || receipt.state === 'partially_interpreted_unverified'))
     return { ...base, disposition: 'rejected_pending_review', receipt: receipt.id,
-      note: 'Batch-level rejection cannot be assigned safely to an uncited individual source.' };
-  if (!['interpreted_unverified', 'reconciled_progress_unverified', 'routine_commentary_unverified'].includes(receipt.state))
+      attention: semanticSourceAttention(receipt, item.id),
+      note: 'Complete grounded references restrict attention to cited sources; unknown or missing references keep the whole batch in review.' };
+  if (semanticSourceAttention(receipt, item.id).requiresReview)
     return { ...base, disposition: 'receipt_state_pending', receipt: receipt.id };
   return { ...base, disposition: 'valid_semantic_receipt_unverified', receipt: receipt.id, closed: true,
     note: 'Schema/provenance-valid interpretation, not independent accuracy or a verified need.' };
@@ -57,13 +68,14 @@ export async function runSourceRecovery(options = {}) {
   const cfg = { mode: 'parser', seed: 'source-recovery-01', count: 24, noise: 96, reposts: 2,
     grid: 9, extentKm: 6, sourceCutoffMs: 300000, horizonMs: 10800000,
     wallLimitMs: 600000, batchSize: 30, maxModelCalls: 32, budgetUsd: 0.15,
-    clarificationWorkers: 2, reviewMs: 30000, formalDelayMs: 3600000, writeReport: true, ...options };
+    clarificationWorkers: 2, reviewMs: 30000, formalDelayMs: 3600000, maxSourceAttempts: 2, retryCooldownMs: 60000, writeReport: true, ...options };
   if (!['parser', 'real'].includes(cfg.mode) || !Number.isSafeInteger(cfg.sourceCutoffMs) || cfg.sourceCutoffMs < 0 ||
     !Number.isSafeInteger(cfg.horizonMs) || cfg.horizonMs <= cfg.sourceCutoffMs ||
     !Number.isSafeInteger(cfg.batchSize) || cfg.batchSize < 1 || cfg.batchSize > 35 ||
     !Number.isSafeInteger(cfg.wallLimitMs) || cfg.wallLimitMs < 1000 ||
     !Number.isSafeInteger(cfg.maxModelCalls) || cfg.maxModelCalls < 1 || cfg.maxModelCalls > 64 ||
-    !(cfg.budgetUsd > 0 && cfg.budgetUsd <= 1)) throw Error('Invalid bounded source recovery protocol');
+    !(cfg.budgetUsd > 0 && cfg.budgetUsd <= 1) || !Number.isSafeInteger(cfg.maxSourceAttempts) || cfg.maxSourceAttempts < 1 || cfg.maxSourceAttempts > 3 ||
+    !Number.isSafeInteger(cfg.retryCooldownMs) || cfg.retryCooldownMs < 0) throw Error('Invalid bounded source recovery protocol');
   const id = `source-recovery-${cfg.mode}-${Date.now()}`, started = performance.now(),
     fingerprints = { candidate: await buildFingerprint(), evaluator: await evaluatorFingerprint(), simulator: await requireLoadedSimulatorBuild() },
     scriptFingerprint = hash(await readFile(new URL(import.meta.url), 'utf8')),
@@ -100,7 +112,7 @@ export async function runSourceRecovery(options = {}) {
   let h, report;
   try {
     h = await createHarness({ scenario: 'S23', seed: cfg.seed, organizations: 4, provider,
-      awaitVerifications: false, config: { grid: cfg.grid, extentKm: cfg.extentKm, durationMs: cfg.horizonMs,
+      awaitVerifications: false, awaitReviews: false, config: { grid: cfg.grid, extentKm: cfg.extentKm, durationMs: cfg.horizonMs,
         healthReports: false, recurringNeeds: false, postsPerHour: 0, observationRate: 1, sourceIndexMs: 0,
         clarificationWorkers: cfg.clarificationWorkers, backgroundTraffic: 0, packetLoss: 0,
         reviewMs: cfg.reviewMs, toolQuota: 20000, sourceRequestLimit: 1000000 },
@@ -181,17 +193,20 @@ export async function runSourceRecovery(options = {}) {
       }
     }
     let cursor = 0, turns = 0, status = 'incomplete_horizon', dispositions = [], localState = {}, recoveredAt = null;
+    const attempts = new Map();
     async function snapshot() {
       const signals = new Map((await app.store.list('org0', 'signal', 10000)).map(s => [s.id, s]));
       const receipts = await app.store.list('org0', 'semantic_receipt', 10000);
+      const retainedVersions = await app.store.getMany('org0', 'source_version', cohort.map(item => `${item.id}_${item.version}`));
       dispositions = await Promise.all(cohort.map(async item => sourceRecoveryDisposition(item, {
         current: signals.get(item.id), receipts, freeDisposition: freeDispositions.get(item.key),
-        retainedVersion: await app.store.get('org0', 'source_version', `${item.id}_${item.version}`, false) })));
+        retainedVersion: retainedVersions.get(`${item.id}_${item.version}`) })));
       const states = await Promise.all(h.apps.map(owner => owner.connector.state()));
       const jobs = (await Promise.all(h.apps.map(owner => owner.store.query("SELECT kind,state,count(*)::int AS count FROM jobs WHERE org=$1 GROUP BY kind,state", [owner.config.org])))).flatMap(r => r.rows);
       const proposals = (await Promise.all(h.apps.map(owner => owner.store.list(owner.config.org, 'proposal', 2000)))).flat();
       const discoveries = await app.store.list('org0', 'discovery_run', 10000), queue = await responseQueue(app.store, 'org0');
       localState = { openJobs: jobs.filter(j => ['queued', 'retry', 'running'].includes(j.state)).reduce((n, j) => n + j.count, 0), jobs,
+        pendingSourceReviews: states.flatMap(s => s.proposals ?? []).filter(p => p.reviewPending).length,
         openProposals: proposals.filter(p => ['awaiting_review', 'authorized', 'executing', 'awaiting_partner', 'conditionally_authorized', 'needs_clarification'].includes(p.state)).length,
         pendingQueries: states.flatMap(s => s.queries ?? []).filter(q => q.state === 'pending').length,
         pendingInspections: states.flatMap(s => s.inspections ?? []).filter(i => !['completed', 'inconclusive', 'timeout', 'failed', 'cancelled'].includes(i.state)).length,
@@ -204,6 +219,7 @@ export async function runSourceRecovery(options = {}) {
         !localState.pendingInspections && !localState.activeReceivedOperations && !localState.unresolvedDiscoveries.length && !localState.uncoveredReceivedNeeds;
     }
     while (w.now < cfg.horizonMs) {
+      if (await cfg.shouldStop?.()) { status = 'aborted_operator'; break; }
       if (performance.now() - started >= cfg.wallLimitMs) { status = 'incomplete_wall_limit'; break; }
       await propagate();
       await actDraft(await draftReceivedResponse(app, `${id}-turn-${turns++}`));
@@ -221,18 +237,37 @@ export async function runSourceRecovery(options = {}) {
           note: 'The public historical label is retained, not independently validated by this control.' });
         else selected.push(item);
       }
+      const retry = !selected.length && cursor === pending.length;
+      if (retry) selected.push(...selectSourceRetries(cohort, dispositions, attempts, w.now, {
+        maxAttempts: cfg.maxSourceAttempts, cooldownMs: cfg.retryCooldownMs, batchSize: cfg.batchSize,
+      }));
+      // A revision is never reinterpreted as the old sealed version. Keep it
+      // in attention for a separate episode with an explicit new denominator.
+      for (let i = selected.length - 1; i >= 0; i--) {
+        const current = await app.store.get('org0', 'signal', selected[i].id, false);
+        if (!current || versionOf(current) !== selected[i].version || hash(content(current)) !== selected[i].contentHash) selected.splice(i, 1);
+      }
       if (selected.length) {
         const episode = `${id}-batch-${batches.length}`, requestedAt = w.now;
         try {
           const result = await app.discovery.run({ ids: selected.map(s => s.id) }, episode);
-          batches.push({ episode, requestedAt, availableAt: w.now, sourceKeys: selected.map(s => s.key), state: result.state, semanticReceipt: result.semanticReceipt });
+          batches.push({ episode, retry, requestedAt, availableAt: w.now, sourceKeys: selected.map(s => s.key), state: result.state, semanticReceipt: result.semanticReceipt });
           await actDraft(result);
         } catch (e) {
-          batches.push({ episode, requestedAt, availableAt: w.now, sourceKeys: selected.map(s => s.key), state: 'failed', code: e.code ?? e.name });
+          batches.push({ episode, retry, requestedAt, availableAt: w.now, sourceKeys: selected.map(s => s.key), state: 'failed', code: e.code ?? e.name });
           errors.push({ phase: 'perception', at: w.now, code: e.code ?? e.name, sourceKeys: selected.map(s => s.key) });
         }
+        for (const item of selected) attempts.set(item.key, { count: (attempts.get(item.key)?.count ?? 0) + 1, availableAt: w.now });
       }
       if (await snapshot()) { status = 'recovered'; recoveredAt = w.now; break; }
+      const unfinished = dispositions.filter(d => !d.closed);
+      const canReadAgain = unfinished.some(d => ["pending", "truncated_pending_review", "rejected_pending_review", "receipt_state_pending"].includes(d.disposition) &&
+        (attempts.get(d.key)?.count ?? 0) < cfg.maxSourceAttempts);
+      if (cursor === pending.length && unfinished.length && !canReadAgain &&
+        !localState.openJobs && !localState.openProposals && !localState.pendingQueries && !localState.pendingInspections &&
+        !localState.activeReceivedOperations && !localState.unresolvedDiscoveries.length && !localState.uncoveredReceivedNeeds) {
+        status = 'incomplete_source_attention'; break;
+      }
       if (!selected.length) w.advance(Math.min(cfg.horizonMs, w.now + 60000), { maxEvents: 1000000 });
     }
     const stoppedAt = w.now;
@@ -240,6 +275,8 @@ export async function runSourceRecovery(options = {}) {
     const sourceReviewReceipts = sourceReviews.map(r => {
       const p = w.state.proposals.find(p => p.id === r.id);
       return { ...r, createdAt: p?.createdAt ?? null, reviewedAt: p?.reviewedAt ?? null,
+        reviewQueuedAt: p?.reviewQueuedAt ?? null,
+        observedQueueWaitMs: p?.reviewedAt == null ? null : p.reviewedAt - (p.reviewQueuedAt ?? r.requestedAt),
         censored: p?.reviewedAt == null, state: p?.state ?? 'unknown' };
     });
     // Scoring is isolated from the above controller. Preserve horizon outcomes
@@ -266,11 +303,13 @@ export async function runSourceRecovery(options = {}) {
       recoveryDurationMs: recoveredAt == null ? cfg.horizonMs - cfg.sourceCutoffMs : recoveredAt - cfg.sourceCutoffMs,
       recoveryCensored: recoveredAt == null, actualWallMs: performance.now() - started,
       cohort: cohort.map(({ source, ...item }) => item), cohortHash: hash(cohort.map(c => [c.key, c.contentHash])),
+      sourceAttempts: Object.fromEntries(attempts),
       dispositions, results: { eligible: cohort.length, closed: dispositions.filter(d => d.closed).length,
         retainedAttention: dispositions.filter(d => !d.closed).length,
         dispositions: Object.fromEntries(Object.entries(Object.groupBy(dispositions, d => d.disposition)).map(([k, rows]) => [k, rows.length])),
         durable, physicalSufficient: outcomes.filter(n => !n.sufficientCensored).length, physicalEligible: outcomes.length },
-      localState, timeline, batches, confirmations, sourceReviewReceipts, outcomes, usage, http, providerCalls,
+      localState, timeline, batches, confirmations, sourceReviewReceipts,
+      maxPendingSourceReviews: Math.max(0, ...timeline.map(t => t.pendingSourceReviews ?? 0)), outcomes, usage, http, providerCalls,
       paidCalls: cfg.mode === 'parser' ? 0 : usage.filter(r => r.model !== 'public-parser-source-recovery-control').length,
       paidCostUsd: cfg.mode === 'parser' ? 0 : usage.reduce((n, r) => n + Number(r.cost_usd ?? 0), 0),
       unknownCostReserveUsd: usage.filter(r => r.cost_usd == null).reduce((n, r) => n + Number(r.reserved_usd ?? 0), 0),

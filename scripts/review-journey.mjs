@@ -1,11 +1,37 @@
 import { chromium } from "@playwright/test";
 import { createHarness } from "../evaluation/harness.mjs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
-const h = await createHarness(),
+// The public rendition is decoded with the actual local Pillow runtime. Fail
+// before launching a world/browser when this required dependency is missing.
+const mediaPython =
+  process.env.NEXO_MEDIA_PYTHON ??
+  fileURLToPath(
+    new URL(
+      process.platform === "win32"
+        ? "../.local/asr-venv/Scripts/python.exe"
+        : "../.local/asr-venv/bin/python",
+      import.meta.url,
+    ),
+  );
+await access(mediaPython).catch(() => {
+  throw new Error(
+    "Review journey requires the real local image runtime. Run npm run setup:media or set NEXO_MEDIA_PYTHON to an installed runtime.",
+  );
+});
+await promisify(execFile)(
+  mediaPython,
+  ["-c", "import PIL; from PIL import Image, ImageOps"],
+  { windowsHide: true },
+);
+const h = await createHarness({ platformConfig: { mediaPython } }),
   browser = await chromium.launch(),
   checks = [],
-  errors = [];
+  errors = [],
+  failedRequests = [];
 const app = h.apps[0],
   base = app.url,
   context = await browser.newContext({
@@ -14,6 +40,17 @@ const app = h.apps[0],
   }),
   page = await context.newPage();
 page.on("pageerror", (e) => errors.push(e.message));
+page.on("response", async (response) => {
+  const pathname = new URL(response.url()).pathname;
+  if (!pathname.startsWith("/api/publication/") || response.ok()) return;
+  const body = await response.json().catch(() => ({}));
+  failedRequests.push({
+    path: pathname,
+    status: response.status(),
+    error: body.error ?? null,
+    message: body.message ?? null,
+  });
+});
 const login = async (role) => {
   await page.goto(base);
   await page
@@ -31,7 +68,14 @@ const close = () =>
   page.getByRole("button", { name: "Close dialog", exact: true }).click();
 const submit = async (name) => {
   await page.getByRole("button", { name, exact: true }).click();
-  await page.locator("dialog").waitFor({ state: "detached" });
+  try {
+    await page.locator("dialog").waitFor({ state: "detached" });
+  } catch (error) {
+    throw new Error(
+      `${name} did not complete. Publication HTTP failures: ${JSON.stringify(failedRequests)}`,
+      { cause: error },
+    );
+  }
 };
 try {
   await mkdir(".local/screenshots", { recursive: true });
@@ -246,6 +290,7 @@ try {
     "Versioned organization setup resumes after reload; finite model limits persist and remain inside server maxima",
   );
   assert.equal(errors.length, 0, errors.join("\n"));
+  assert.equal(failedRequests.length, 0, JSON.stringify(failedRequests));
   await writeFile(
     "reports/ui-review-journeys.json",
     JSON.stringify(
@@ -253,6 +298,11 @@ try {
         at: new Date().toISOString(),
         checks,
         errors,
+        failedRequests,
+        mediaRuntime: {
+          python: mediaPython,
+          decoder: "actual local Pillow; no decoder stub",
+        },
         scope:
           "Automated UI workflows; publication receipt explicitly injected as a synthetic UI fixture, not physical-delivery evidence; no human comprehension study",
       },
@@ -272,6 +322,7 @@ try {
     "Review journey stopped:",
     (await page.locator("body").innerText()).slice(-2400),
     errors,
+    failedRequests,
   );
   throw err;
 } finally {
