@@ -1,0 +1,55 @@
+{
+  "schema": "closed-host3600-derived-presentation-only-v1",
+  "recordedAt": "2026-10-13T10:25:15.862Z",
+  "authorization": "ROOT_GO_DERIVE_CLOSED_HOST3600_SUMMARY",
+  "sourceJson": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json",
+    "sha256": "26452ff2dc22373f1140b310ac4e3b1ba645349f8918cf51139fcfeacc8beeb3",
+    "bytes": 13398973,
+    "beforeAfterShaMatches": true
+  },
+  "originalJsonSeal": {
+    "path": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\.local\\host3600-readout-archive\\ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c\\seal.json",
+    "sha256": "41eb7f628d93a8cb3ac3aab1f8003868f3dc3cfc44cb028fee8482b91499653a"
+  },
+  "originalReaderWrapperSha256": "ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c",
+  "estimatorSha256": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+  "rendererFunction": "renderMarkdown",
+  "helperSha256": "577a9abea4ea2256fff93fff21e94330d3a8214327d739edeb4048bfe93760d7",
+  "groups": [
+    {
+      "id": "decentralized",
+      "rows": 3,
+      "recoveredErrors": 0,
+      "newScoring": false
+    },
+    {
+      "id": "stress48",
+      "rows": 3,
+      "recoveredErrors": 0,
+      "newScoring": false
+    },
+    {
+      "id": "stress96",
+      "rows": 3,
+      "recoveredErrors": 1,
+      "newScoring": false
+    }
+  ],
+  "rendered": {
+    "path": "bridge-readout-summary.md",
+    "sha256": "409ac2a7ad278f8c81bb181a0a18607604d962dc931ea2850db95f50088512e8",
+    "bytes": 6162
+  },
+  "helper": {
+    "path": "derived-presentation-helper.mjs.txt",
+    "sha256": "577a9abea4ea2256fff93fff21e94330d3a8214327d739edeb4048bfe93760d7",
+    "bytes": 5509
+  },
+  "rescoring": false,
+  "crossGroupAggregate": null,
+  "crossVersionAggregate": null,
+  "worldsStarted": 0,
+  "modelCalls": 0,
+  "note": "Only formatting of already sealed group evidence. This Markdown is not retroactively part of the ad544 JSON seal."
+}

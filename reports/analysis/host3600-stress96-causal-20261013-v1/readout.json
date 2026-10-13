@@ -1,0 +1,4019 @@
+{
+  "schema": "closed-stress96-causal-offline-v1",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "input": {
+    "path": "reports/sequential-local-finish/current-v4-20261013/bridge-readout.json",
+    "sha256": "26452ff2dc22373f1140b310ac4e3b1ba645349f8918cf51139fcfeacc8beeb3"
+  },
+  "reader": "f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9",
+  "comparisons": [
+    {
+      "seed": "native-human-capacity-control-stress96-01",
+      "condition": "moderate_96",
+      "profile": "moderate",
+      "reference": "C_manual",
+      "candidate": "B6",
+      "comparable": true,
+      "reasons": [],
+      "firstUseful": {
+        "referenceRmstMs": 8446243.270833334,
+        "candidateRmstMs": 7076370.020833333,
+        "reductionFraction": 0.16218728327781692,
+        "referenceCoverage": {
+          "eligible": 96,
+          "reached": 53,
+          "rightCensored": 43,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 8446243.270833334,
+          "restrictedMedianMs": 10346351,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10740019,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "sufficient": {
+        "referenceRmstMs": 8446243.270833334,
+        "candidateRmstMs": 7076370.020833333,
+        "reductionFraction": 0.16218728327781692,
+        "referenceCoverage": {
+          "eligible": 96,
+          "reached": 53,
+          "rightCensored": 43,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 8446243.270833334,
+          "restrictedMedianMs": 10346351,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10740019,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "stages": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -2118224.3725490198,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 20097.941176470587,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 16503.235294117647,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -2081623.1960784313,
+            "pairedObserved": 51,
+            "eligible": 96
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -2118224.3725490198,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 20097.941176470587,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 16503.235294117647,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 51,
+            "eligible": 96
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -2081623.1960784313,
+            "pairedObserved": 51,
+            "eligible": 96
+          }
+        }
+      }
+    },
+    {
+      "seed": "native-human-capacity-control-stress96-01",
+      "condition": "moderate_96",
+      "profile": "moderate",
+      "reference": "B8",
+      "candidate": "B6",
+      "comparable": true,
+      "reasons": [],
+      "firstUseful": {
+        "referenceRmstMs": 7154937.052083333,
+        "candidateRmstMs": 7076370.020833333,
+        "reductionFraction": 0.010980813762313019,
+        "referenceCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7154937.052083333,
+          "restrictedMedianMs": 7955019,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10032685,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "sufficient": {
+        "referenceRmstMs": 7154937.052083333,
+        "candidateRmstMs": 7076370.020833333,
+        "reductionFraction": 0.010980813762313019,
+        "referenceCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7154937.052083333,
+          "restrictedMedianMs": 7955019,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10032685,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "candidateCoverage": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        }
+      },
+      "stages": {
+        "firstContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -278659.1935483871,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 591.2741935483871,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 2822.4032258064517,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -275245.51612903224,
+            "pairedObserved": 62,
+            "eligible": 96
+          }
+        },
+        "thresholdContribution": {
+          "preAuthorizationMs": {
+            "candidateMinusReferenceMeanMs": -278659.1935483871,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "pickupAndPreparationMs": {
+            "candidateMinusReferenceMeanMs": 591.2741935483871,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "loadedTravelMs": {
+            "candidateMinusReferenceMeanMs": 2822.4032258064517,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "arrivalToServiceMs": {
+            "candidateMinusReferenceMeanMs": 0,
+            "pairedObserved": 62,
+            "eligible": 96
+          },
+          "totalMs": {
+            "candidateMinusReferenceMeanMs": -275245.51612903224,
+            "pairedObserved": 62,
+            "eligible": 96
+          }
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "arm": "C_manual",
+      "status": "completed",
+      "rawPath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-C_manual.json",
+      "rawSha256": "e4b9fa63a9c3f054cb2bc3fab28b7af66982695109ecf5f31bec03c4625c7399",
+      "source": {
+        "initial": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "final": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "stable": true,
+        "reasons": []
+      },
+      "protocolHash": "2c8a78c0d0d8337b0c5defe315a9f8d3d2db70273ee320b5ae7fbb404b9ad63e",
+      "corpusHash": "1372d7154f03ba2d67c8252d6eb9c753d91335f516dd5ad13ae5572013b6d1dd",
+      "cohortHash": "e2c8fcd3c7c35aeaff0233e247babafc9cf03cd86beb22af3e66072831be35d8",
+      "parameters": {
+        "version": "native-human-capacity-physical-response-v4",
+        "count": 96,
+        "noise": 768,
+        "reposts": 2,
+        "formalDelayMs": 1800000,
+        "horizonMs": 10800000,
+        "grid": 13,
+        "extentKm": 6,
+        "pumpMs": 60000,
+        "clarificationWorkers": 2,
+        "humanCapacityOverrides": {
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0
+        },
+        "condition": "moderate_96",
+        "budgetUsd": 0.15,
+        "maxModelCalls": 32,
+        "wallLimitMs": 3600000
+      },
+      "physical": {
+        "firstUseful": {
+          "eligible": 96,
+          "reached": 53,
+          "rightCensored": 43,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 8446243.270833334,
+          "restrictedMedianMs": 10346351,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10740019,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "sufficient": {
+          "eligible": 96,
+          "reached": 53,
+          "rightCensored": 43,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 8446243.270833334,
+          "restrictedMedianMs": 10346351,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10740019,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "resources": [
+          {
+            "type": "water",
+            "unit": "L",
+            "demand": 1700,
+            "usefulServed": 860,
+            "outstanding": 840,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 15192783360,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 17,
+              "rightCensored": 15,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 8867603.96875,
+              "restrictedMedianMs": 10740019,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10740019,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 18,
+            "positivePhysicalReceipts": 17
+          },
+          {
+            "type": "food",
+            "unit": "portions",
+            "demand": 625,
+            "usefulServed": 320,
+            "outstanding": 305,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 5405880436,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 16,
+              "rightCensored": 16,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 8491478.3125,
+              "restrictedMedianMs": 10800000,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10797021,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 18,
+            "positivePhysicalReceipts": 16
+          },
+          {
+            "type": "blankets",
+            "unit": "unit",
+            "demand": 624,
+            "usefulServed": 390,
+            "outstanding": 234,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 4988461506,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 20,
+              "rightCensored": 12,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7979647.53125,
+              "restrictedMedianMs": 8519017,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10784351,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 21,
+            "positivePhysicalReceipts": 20
+          }
+        ],
+        "stages": {
+          "firstContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 5538072.603773585,
+              "observed": 53,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 461002.0188679245,
+              "observed": 53,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 477516.96226415096,
+              "observed": 53,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 53,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 6536591.584905661,
+              "observed": 53,
+              "eligible": 96
+            }
+          },
+          "thresholdContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 5538072.603773585,
+              "observed": 53,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 461002.0188679245,
+              "observed": 53,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 477516.96226415096,
+              "observed": 53,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 53,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 6536591.584905661,
+              "observed": 53,
+              "eligible": 96
+            }
+          }
+        }
+      },
+      "unresolved": [
+        {
+          "need": "fdf87e5863adc1e946b0effb",
+          "building": "b105",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "c9e6011a05ffc1944976f3d2",
+          "building": "b58",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "f3f2b134d25fccc2ea10c7ad",
+          "building": "b143",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 28,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-54",
+              "state": "arrived",
+              "vehicle": "v-org2-0",
+              "quantity": 28,
+              "received": 0,
+              "createdAt": 9942016,
+              "times": {
+                "authorized": 9942016,
+                "reserved": 9942016,
+                "orderReceived": 9943017,
+                "accepted": 9943017,
+                "pickupDispatched": 9943017,
+                "pickupArrived": 10743019
+              }
+            }
+          ],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "be1c54d1bcd6d6bc68377676",
+          "building": "b163",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "5d6574bc8532ba3a62d4a473",
+          "building": "b122",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "cca7a9865a6dd454c4877efa",
+          "building": "b60",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 15,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "5d256c1db5be0e645b418df4",
+          "building": "b94",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "27d1b3e9ba495b39c19a4f7a",
+          "building": "b166",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "a6c36f008328af2c2f7340be",
+          "building": "b14",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 23,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "a5833399d1645c4b01a5a858",
+          "building": "b70",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 23,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "09edac38b503c37d69e0559a",
+          "building": "b44",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 22,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "2e33f478579085c41e44929e",
+          "building": "b87",
+          "type": "water",
+          "unit": "L",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "047fb8a45d66428ca1f0698e",
+          "building": "b26",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-57",
+              "state": "dispatched",
+              "vehicle": "v-org0-1",
+              "quantity": 11,
+              "received": 0,
+              "createdAt": 10407016,
+              "times": {
+                "authorized": 10407016,
+                "reserved": 10407016,
+                "orderReceived": 10408017,
+                "accepted": 10408017,
+                "pickupDispatched": 10408017,
+                "pickupArrived": 10658017,
+                "prepared": 10718017,
+                "dispatched": 10718017
+              }
+            }
+          ],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "46016b6fd701b3a6537edb1f",
+          "building": "b101",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 17,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "719294534120b52231eea48f",
+          "building": "b81",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "26fd2efa79497b3957ed95bd",
+          "building": "b61",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "0ec10168c5ea715fae0aca52",
+          "building": "b52",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "43aba8facd9d4743be11c55d",
+          "building": "b80",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 18,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "43ac868bad45875da1a7e68b",
+          "building": "b113",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "cb6532553335902fa2c4b40c",
+          "building": "b5",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "d604fdec664eb7e18a522037",
+          "building": "b100",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "94076bc4123c7c4359753dab",
+          "building": "b82",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 27,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "7102758000bacef93d600036",
+          "building": "b11",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 28,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "258583cdbf13c120d0b24938",
+          "building": "b15",
+          "type": "water",
+          "unit": "L",
+          "quantity": 50,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "4d979f8a2acbd6115eecc05f",
+          "building": "b150",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "68b5a39b4156ce52013ed117",
+          "building": "b147",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "490e297230c7bc8501925285",
+          "building": "b16",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "0e19b663042472ba5c6b38e8",
+          "building": "b49",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "aae836cbe0310159f658c7da",
+          "building": "b22",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 27,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-55",
+              "state": "unloading",
+              "vehicle": "v-org1-0",
+              "quantity": 27,
+              "received": 0,
+              "createdAt": 10280016,
+              "times": {
+                "authorized": 10280016,
+                "reserved": 10280016,
+                "orderReceived": 10281017,
+                "accepted": 10281017,
+                "pickupDispatched": 10281017,
+                "pickupArrived": 10481017,
+                "prepared": 10541017,
+                "dispatched": 10541017,
+                "arrived": 10741017,
+                "unloadingStarted": 10741017
+              }
+            }
+          ],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "cf2f1dfa9220eceeeeab74a9",
+          "building": "b86",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 29,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "cffbb060597f5b2a224d18a3",
+          "building": "b54",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "5fc91dc77a57a1210d9cf039",
+          "building": "b124",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 16,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "7f8bde6598f6ee73a3d7f500",
+          "building": "b72",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 16,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "befcdb8184723ad60d7ddf81",
+          "building": "b112",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 18,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "a831b296909b897838ff63c9",
+          "building": "b3",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-53",
+              "state": "dispatched",
+              "vehicle": "v-org0-0",
+              "quantity": 40,
+              "received": 0,
+              "createdAt": 9780016,
+              "times": {
+                "authorized": 9780016,
+                "reserved": 9780016,
+                "orderReceived": 9781017,
+                "accepted": 9781017,
+                "pickupDispatched": 9781017,
+                "pickupArrived": 10597687,
+                "prepared": 10657687,
+                "dispatched": 10657687
+              }
+            }
+          ],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "7e664352e8d1c435232e8af6",
+          "building": "b134",
+          "type": "water",
+          "unit": "L",
+          "quantity": 70,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "798a3926671a733d0d998381",
+          "building": "b152",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "c5043ca130f82ce2c884e343",
+          "building": "b34",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 21,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "1284438fd328a4b230c1b67b",
+          "building": "b2",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 14,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "5f0d1b7aaeea3d914a82c6d6",
+          "building": "b102",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 19,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "a3be2a526e66efe990b09b8f",
+          "building": "b119",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        },
+        {
+          "need": "47842af1c3ef7446b488b6ab",
+          "building": "b116",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 16,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-delivered-relay"
+        },
+        {
+          "need": "bc52f90f63acc48c3a4a3e8b",
+          "building": "b121",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "native-manual-read-decide-local"
+        }
+      ],
+      "operations": {
+        "issued": 57,
+        "positiveReceipts": 53,
+        "states": {
+          "completed": 53,
+          "dispatched": 2,
+          "arrived": 1,
+          "unloading": 1
+        },
+        "issuedQuantityByType": {
+          "food": 358,
+          "water": 900,
+          "blankets": 418
+        },
+        "vehicleTrips": [
+          {
+            "vehicle": "v-org1-0",
+            "trips": 8,
+            "completed": 7,
+            "firstAuthorization": 753016,
+            "lastAuthorization": 10280016
+          },
+          {
+            "vehicle": "v-org1-1",
+            "trips": 7,
+            "completed": 7,
+            "firstAuthorization": 783016,
+            "lastAuthorization": 10280016
+          },
+          {
+            "vehicle": "v-org0-0",
+            "trips": 6,
+            "completed": 5,
+            "firstAuthorization": 812016,
+            "lastAuthorization": 9780016
+          },
+          {
+            "vehicle": "v-org3-0",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 934016,
+            "lastAuthorization": 9619016
+          },
+          {
+            "vehicle": "v-org3-1",
+            "trips": 7,
+            "completed": 7,
+            "firstAuthorization": 1116016,
+            "lastAuthorization": 9380016
+          },
+          {
+            "vehicle": "v-org0-1",
+            "trips": 7,
+            "completed": 6,
+            "firstAuthorization": 1142016,
+            "lastAuthorization": 10407016
+          },
+          {
+            "vehicle": "v-org2-0",
+            "trips": 6,
+            "completed": 5,
+            "firstAuthorization": 1146016,
+            "lastAuthorization": 9942016
+          },
+          {
+            "vehicle": "v-org2-1",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 1176016,
+            "lastAuthorization": 9526016
+          }
+        ]
+      },
+      "human": {
+        "nativeStages": {
+          "read": {
+            "received": 779,
+            "completed": 779,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 23370000,
+            "waitingPersonMs": 869520000,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": 1230000,
+              "p95": 1860000,
+              "samples": 779
+            },
+            "completedTurnaroundMs": {
+              "p50": 1260000,
+              "p95": 1890000,
+              "samples": 779
+            }
+          },
+          "decide": {
+            "received": 366,
+            "completed": 366,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 19140000,
+            "waitingPersonMs": 150046000,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": 0,
+              "p95": 2006000,
+              "samples": 366
+            },
+            "completedTurnaroundMs": {
+              "p50": 60000,
+              "p95": 2066000,
+              "samples": 366
+            }
+          },
+          "relay": {
+            "received": 173,
+            "completed": 173,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 15570000,
+            "waitingPersonMs": 96231000,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": 330000,
+              "p95": 1826000,
+              "samples": 173
+            },
+            "completedTurnaroundMs": {
+              "p50": 421001,
+              "p95": 1917001,
+              "samples": 173
+            }
+          }
+        },
+        "maxIndividualOrgBacklog": 138,
+        "profile": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "K20": {
+          "elapsedAttentionWorkPersonMs": 58080000,
+          "elapsedAttentionWorkPersonMinutes": 968,
+          "source": "Sum of native stage elapsedWorkPersonMs",
+          "independentlyRecomputedWorkPersonMs": 58080000,
+          "workReconciliationMatches": true,
+          "operatorReviewMsExcludedFromAdditionalSum": true,
+          "operatorReviewMsReported": 2820000,
+          "sufficientPositiveCohortCases": 53,
+          "positiveCohortCases": 96,
+          "attentionMinutesPerPhysicallySufficientCohortCase": 18.264150943396228,
+          "minutesPerIndependentlyCorrectResolution": null,
+          "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+        }
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 520500,
+          "fuelMl": 93690,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 15.475678333333333,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "proposalFunnel": {
+        "records": 94,
+        "states": {
+          "completed": 86,
+          "executing": 8
+        },
+        "pendingOwnerReviews": 0,
+        "warning": "Origin and partner mirrors can describe the same operation. Proposal executing is not a count of unique pending physical trips."
+      },
+      "sourceCoverage": {
+        "receivedOriginals": 1257,
+        "progressSources": 29,
+        "routineSources": 185,
+        "modelBatches": 0,
+        "manualSources": 779,
+        "manualProcessed": 779,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 176,
+        "deferredInquiries": 0,
+        "compilations": 313,
+        "unchangedCompilationSkips": 13
+      },
+      "firstInquiryProvenance": {
+        "native-manual-read-decide-delivered-relay": 73,
+        "native-manual-read-decide-local": 23
+      },
+      "provenanceByPhysicalStatus": {
+        "completed": {
+          "native-manual-read-decide-delivered-relay": 41,
+          "native-manual-read-decide-local": 12
+        },
+        "censored": {
+          "native-manual-read-decide-delivered-relay": 32,
+          "native-manual-read-decide-local": 11
+        }
+      },
+      "attributionScope": "All96 kept. Association to first request only, not correctness/necessity or confirmed-verification receipt.",
+      "errors": [],
+      "invariants": [],
+      "cost": {
+        "usageRecords": 0,
+        "providerCalls": 0,
+        "reportedProviderCalls": 0,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 0,
+        "providerWallTotalMs": 0,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "modelAvailability": [],
+      "host": {
+        "wallMs": 1679320.3884,
+        "httpCalls": 27919,
+        "sqlCalls": 164349,
+        "warning": "Host CPU/SQL/HTTP metrics are separate from source time; nested totals are not additive exclusive CPU."
+      },
+      "sourceManifestConfig": {
+        "seed": "native-human-capacity-control-stress96-01",
+        "scenario": "S23",
+        "hazard": "none",
+        "variant": "standard",
+        "compositionVariant": "standard",
+        "grid": 13,
+        "extentKm": 6,
+        "organizations": 4,
+        "durationMs": 10800000,
+        "populationPerSector": 60,
+        "backgroundTraffic": 0,
+        "postsPerHour": 0,
+        "falseRate": 0.12,
+        "observationRate": 1,
+        "operatorCount": 2,
+        "reviewMs": 30000,
+        "inspectionMs": 60000,
+        "clarificationWorkers": 2,
+        "loadMs": 60000,
+        "unloadMs": 60000,
+        "setupMs": 60000,
+        "networkLatencyMs": 1000,
+        "packetLoss": 0,
+        "networkCapacity": 30,
+        "sourceIndexMs": 0,
+        "queryLatencyMs": 1000,
+        "bandwidthBytesPerSecond": 1000000,
+        "toolQuota": 10000,
+        "funds": 5000,
+        "stockWater": 2400,
+        "reservedWater": 100,
+        "policy": "none",
+        "mode": "modeled",
+        "clockLatency": "modeled",
+        "split": "development",
+        "language": "mixed",
+        "logMode": "compact",
+        "maxEvents": 2000000,
+        "maxPosts": 1000000,
+        "topology": "grid",
+        "bridgeCount": 3,
+        "healthTickMs": 600000,
+        "waterMlPerPersonDay": 3000,
+        "foodKcalPerPersonDay": 2100,
+        "initialWaterHours": 6,
+        "initialFoodHours": 12,
+        "waterCriticalHours": 30,
+        "foodCriticalHours": 72,
+        "injuryCriticalHours": 2,
+        "exposureCriticalHours": 4,
+        "waterFatalityBpPerHour": 150,
+        "foodFatalityBpPerHour": 25,
+        "injuryFatalityBpPerHour": 1000,
+        "exposureFatalityBpPerHour": 600,
+        "injuryFractionBp": 1500,
+        "temperatureC": 24,
+        "healthReports": false,
+        "recurringNeeds": false,
+        "resupplyReviewHours": 6,
+        "resupplyHorizonHours": 24,
+        "authorshipMs": 1000,
+        "staffShiftMs": 28800000,
+        "staffRestMs": 3600000,
+        "vehicleFuelMl": 80000,
+        "fuelMlPerKm": 180,
+        "sourceRequestLimit": 1000000,
+        "modelLatencyMs": 15000,
+        "modelCallLimit": 1000,
+        "subsystemSeeds": {},
+        "supply": {
+          "purchaseTranches": null,
+          "purchaseTerminalState": "backordered"
+        },
+        "humanCapacity": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        }
+      },
+      "failedTrips": 0,
+      "blockedVehicleMs": 0,
+      "cohort": [
+        "b105",
+        "b58",
+        "b143",
+        "b163",
+        "b133",
+        "b132",
+        "b122",
+        "b60",
+        "b164",
+        "b10",
+        "b45",
+        "b161",
+        "b94",
+        "b7",
+        "b149",
+        "b158",
+        "b159",
+        "b59",
+        "b168",
+        "b145",
+        "b166",
+        "b67",
+        "b14",
+        "b70",
+        "b106",
+        "b55",
+        "b131",
+        "b141",
+        "b44",
+        "b154",
+        "b87",
+        "b30",
+        "b123",
+        "b4",
+        "b26",
+        "b39",
+        "b135",
+        "b36",
+        "b101",
+        "b81",
+        "b61",
+        "b52",
+        "b62",
+        "b97",
+        "b66",
+        "b160",
+        "b80",
+        "b113",
+        "b103",
+        "b5",
+        "b24",
+        "b100",
+        "b82",
+        "b25",
+        "b42",
+        "b11",
+        "b165",
+        "b15",
+        "b104",
+        "b51",
+        "b150",
+        "b9",
+        "b79",
+        "b75",
+        "b126",
+        "b147",
+        "b53",
+        "b33",
+        "b16",
+        "b49",
+        "b22",
+        "b86",
+        "b54",
+        "b124",
+        "b72",
+        "b47",
+        "b118",
+        "b43",
+        "b28",
+        "b112",
+        "b89",
+        "b3",
+        "b19",
+        "b162",
+        "b134",
+        "b32",
+        "b125",
+        "b152",
+        "b34",
+        "b2",
+        "b130",
+        "b102",
+        "b153",
+        "b119",
+        "b116",
+        "b121"
+      ]
+    },
+    {
+      "arm": "B8",
+      "status": "completed",
+      "rawPath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-B8.json",
+      "rawSha256": "d1f193f26e6e5c1bcc3dd527dc0ad7c3714e17755e40eed14a6f5efea1f64ab0",
+      "source": {
+        "initial": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "final": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "stable": true,
+        "reasons": []
+      },
+      "protocolHash": "2c8a78c0d0d8337b0c5defe315a9f8d3d2db70273ee320b5ae7fbb404b9ad63e",
+      "corpusHash": "1372d7154f03ba2d67c8252d6eb9c753d91335f516dd5ad13ae5572013b6d1dd",
+      "cohortHash": "e2c8fcd3c7c35aeaff0233e247babafc9cf03cd86beb22af3e66072831be35d8",
+      "parameters": {
+        "version": "native-human-capacity-physical-response-v4",
+        "count": 96,
+        "noise": 768,
+        "reposts": 2,
+        "formalDelayMs": 1800000,
+        "horizonMs": 10800000,
+        "grid": 13,
+        "extentKm": 6,
+        "pumpMs": 60000,
+        "clarificationWorkers": 2,
+        "humanCapacityOverrides": {
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0
+        },
+        "condition": "moderate_96",
+        "budgetUsd": 0.15,
+        "maxModelCalls": 32,
+        "wallLimitMs": 3600000
+      },
+      "physical": {
+        "firstUseful": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7154937.052083333,
+          "restrictedMedianMs": 7955019,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10032685,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "sufficient": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7154937.052083333,
+          "restrictedMedianMs": 7955019,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10032685,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "resources": [
+          {
+            "type": "water",
+            "unit": "L",
+            "demand": 1700,
+            "usefulServed": 1040,
+            "outstanding": 660,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 13289940110,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 20,
+              "rightCensored": 12,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7720949.71875,
+              "restrictedMedianMs": 8693685,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 9979687,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 21,
+            "positivePhysicalReceipts": 20
+          },
+          {
+            "type": "food",
+            "unit": "portions",
+            "demand": 625,
+            "usefulServed": 457,
+            "outstanding": 168,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 4547769155,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 23,
+              "rightCensored": 9,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7145295.5,
+              "restrictedMedianMs": 8326688,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 9640022,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 25,
+            "positivePhysicalReceipts": 23
+          },
+          {
+            "type": "blankets",
+            "unit": "unit",
+            "demand": 624,
+            "usefulServed": 463,
+            "outstanding": 161,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 4145626567,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 23,
+              "rightCensored": 9,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 6598565.9375,
+              "restrictedMedianMs": 6449687,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10591688,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 23,
+            "positivePhysicalReceipts": 23
+          }
+        ],
+        "stages": {
+          "firstContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 4441531.151515151,
+              "observed": 66,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 488603.1515151515,
+              "observed": 66,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 507955.95454545453,
+              "observed": 66,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 66,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 5498090.257575758,
+              "observed": 66,
+              "eligible": 96
+            }
+          },
+          "thresholdContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 4441531.151515151,
+              "observed": 66,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 488603.1515151515,
+              "observed": 66,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 507955.95454545453,
+              "observed": 66,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 66,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 5498090.257575758,
+              "observed": 66,
+              "eligible": 96
+            }
+          }
+        }
+      },
+      "unresolved": [
+        {
+          "need": "fdf87e5863adc1e946b0effb",
+          "building": "b105",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "c9e6011a05ffc1944976f3d2",
+          "building": "b58",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "cca7a9865a6dd454c4877efa",
+          "building": "b60",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 15,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "5d256c1db5be0e645b418df4",
+          "building": "b94",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "2d7e375e4ebc7ae2016ec947",
+          "building": "b168",
+          "type": "water",
+          "unit": "L",
+          "quantity": 50,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-68",
+              "state": "dispatched",
+              "vehicle": "v-org3-0",
+              "quantity": 50,
+              "received": 0,
+              "createdAt": 10114016,
+              "times": {
+                "authorized": 10114016,
+                "reserved": 10114016,
+                "orderReceived": 10115017,
+                "accepted": 10115017,
+                "pickupDispatched": 10115017
+              }
+            }
+          ],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "27d1b3e9ba495b39c19a4f7a",
+          "building": "b166",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "a6c36f008328af2c2f7340be",
+          "building": "b14",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 23,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "a5833399d1645c4b01a5a858",
+          "building": "b70",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 23,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "09edac38b503c37d69e0559a",
+          "building": "b44",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 22,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "2e33f478579085c41e44929e",
+          "building": "b87",
+          "type": "water",
+          "unit": "L",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "047fb8a45d66428ca1f0698e",
+          "building": "b26",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "46016b6fd701b3a6537edb1f",
+          "building": "b101",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 17,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "719294534120b52231eea48f",
+          "building": "b81",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "26fd2efa79497b3957ed95bd",
+          "building": "b61",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-66",
+              "state": "dispatched",
+              "vehicle": "v-org2-0",
+              "quantity": 20,
+              "received": 0,
+              "createdAt": 9346016,
+              "times": {
+                "authorized": 9346016,
+                "reserved": 9346016,
+                "orderReceived": 9347017,
+                "accepted": 9347017,
+                "pickupDispatched": 9347017,
+                "pickupArrived": 10097019,
+                "prepared": 10157019,
+                "dispatched": 10157019
+              }
+            }
+          ],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "0ec10168c5ea715fae0aca52",
+          "building": "b52",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "43aba8facd9d4743be11c55d",
+          "building": "b80",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 18,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "43ac868bad45875da1a7e68b",
+          "building": "b113",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "d604fdec664eb7e18a522037",
+          "building": "b100",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "94076bc4123c7c4359753dab",
+          "building": "b82",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 27,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "4d979f8a2acbd6115eecc05f",
+          "building": "b150",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "68b5a39b4156ce52013ed117",
+          "building": "b147",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "490e297230c7bc8501925285",
+          "building": "b16",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "0e19b663042472ba5c6b38e8",
+          "building": "b49",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "cffbb060597f5b2a224d18a3",
+          "building": "b54",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "7e664352e8d1c435232e8af6",
+          "building": "b134",
+          "type": "water",
+          "unit": "L",
+          "quantity": 70,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "798a3926671a733d0d998381",
+          "building": "b152",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "c5043ca130f82ce2c884e343",
+          "building": "b34",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 21,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-69",
+              "state": "dispatched",
+              "vehicle": "v-org1-1",
+              "quantity": 21,
+              "received": 0,
+              "createdAt": 10208016,
+              "times": {
+                "authorized": 10208016,
+                "reserved": 10208016,
+                "orderReceived": 10209017,
+                "accepted": 10209017,
+                "pickupDispatched": 10209017,
+                "pickupArrived": 10625685,
+                "prepared": 10685685,
+                "dispatched": 10685685
+              }
+            }
+          ],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "1284438fd328a4b230c1b67b",
+          "building": "b2",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 14,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "a3be2a526e66efe990b09b8f",
+          "building": "b119",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        },
+        {
+          "need": "bc52f90f63acc48c3a4a3e8b",
+          "building": "b121",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-broad-keyword"
+        }
+      ],
+      "operations": {
+        "issued": 69,
+        "positiveReceipts": 66,
+        "states": {
+          "completed": 66,
+          "dispatched": 3
+        },
+        "issuedQuantityByType": {
+          "water": 1090,
+          "food": 498,
+          "blankets": 463
+        },
+        "vehicleTrips": [
+          {
+            "vehicle": "v-org0-0",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 302016,
+            "lastAuthorization": 9074016
+          },
+          {
+            "vehicle": "v-org3-0",
+            "trips": 9,
+            "completed": 8,
+            "firstAuthorization": 335016,
+            "lastAuthorization": 10114016
+          },
+          {
+            "vehicle": "v-org2-0",
+            "trips": 10,
+            "completed": 9,
+            "firstAuthorization": 365016,
+            "lastAuthorization": 9346016
+          },
+          {
+            "vehicle": "v-org3-1",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 366016,
+            "lastAuthorization": 9252016
+          },
+          {
+            "vehicle": "v-org1-0",
+            "trips": 9,
+            "completed": 9,
+            "firstAuthorization": 459016,
+            "lastAuthorization": 8942016
+          },
+          {
+            "vehicle": "v-org2-1",
+            "trips": 7,
+            "completed": 7,
+            "firstAuthorization": 460016,
+            "lastAuthorization": 8044016
+          },
+          {
+            "vehicle": "v-org0-1",
+            "trips": 10,
+            "completed": 10,
+            "firstAuthorization": 522016,
+            "lastAuthorization": 9677016
+          },
+          {
+            "vehicle": "v-org1-1",
+            "trips": 8,
+            "completed": 7,
+            "firstAuthorization": 553016,
+            "lastAuthorization": 10208016
+          }
+        ]
+      },
+      "human": {
+        "nativeStages": {
+          "read": {
+            "received": 0,
+            "completed": 0,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 0,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "completedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            }
+          },
+          "decide": {
+            "received": 106,
+            "completed": 106,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 3180000,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 106
+            },
+            "completedTurnaroundMs": {
+              "p50": 30000,
+              "p95": 30000,
+              "samples": 106
+            }
+          },
+          "relay": {
+            "received": 0,
+            "completed": 0,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 0,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "completedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            }
+          }
+        },
+        "maxIndividualOrgBacklog": 1,
+        "profile": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "K20": {
+          "elapsedAttentionWorkPersonMs": 3180000,
+          "elapsedAttentionWorkPersonMinutes": 53,
+          "source": "Sum of native stage elapsedWorkPersonMs",
+          "independentlyRecomputedWorkPersonMs": 3180000,
+          "workReconciliationMatches": true,
+          "operatorReviewMsExcludedFromAdditionalSum": true,
+          "operatorReviewMsReported": 3180000,
+          "sufficientPositiveCohortCases": 66,
+          "positiveCohortCases": 96,
+          "attentionMinutesPerPhysicallySufficientCohortCase": 0.803030303030303,
+          "minutesPerIndependentlyCorrectResolution": null,
+          "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+        }
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 687500,
+          "fuelMl": 123750,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 20.129125833333333,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "proposalFunnel": {
+        "records": 106,
+        "states": {
+          "completed": 100,
+          "executing": 6
+        },
+        "pendingOwnerReviews": 0,
+        "warning": "Origin and partner mirrors can describe the same operation. Proposal executing is not a count of unique pending physical trips."
+      },
+      "sourceCoverage": {
+        "receivedOriginals": 1272,
+        "progressSources": 34,
+        "routineSources": 185,
+        "modelBatches": 0,
+        "manualSources": 0,
+        "manualProcessed": 0,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 456,
+        "deferredInquiries": 0,
+        "compilations": 185,
+        "unchangedCompilationSkips": 1
+      },
+      "firstInquiryProvenance": {
+        "common-free-explicit-parser": 30,
+        "common-free-broad-keyword": 66
+      },
+      "provenanceByPhysicalStatus": {
+        "completed": {
+          "common-free-broad-keyword": 49,
+          "common-free-explicit-parser": 17
+        },
+        "censored": {
+          "common-free-explicit-parser": 13,
+          "common-free-broad-keyword": 17
+        }
+      },
+      "attributionScope": "All96 kept. Association to first request only, not correctness/necessity or confirmed-verification receipt.",
+      "errors": [],
+      "invariants": [],
+      "cost": {
+        "usageRecords": 0,
+        "providerCalls": 0,
+        "reportedProviderCalls": 0,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0,
+        "totalProviderCostUsd": 0,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 0,
+        "providerWallTotalMs": 0,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "modelAvailability": [],
+      "host": {
+        "wallMs": 674368.3345000001,
+        "httpCalls": 17115,
+        "sqlCalls": 97741,
+        "warning": "Host CPU/SQL/HTTP metrics are separate from source time; nested totals are not additive exclusive CPU."
+      },
+      "sourceManifestConfig": {
+        "seed": "native-human-capacity-control-stress96-01",
+        "scenario": "S23",
+        "hazard": "none",
+        "variant": "standard",
+        "compositionVariant": "standard",
+        "grid": 13,
+        "extentKm": 6,
+        "organizations": 4,
+        "durationMs": 10800000,
+        "populationPerSector": 60,
+        "backgroundTraffic": 0,
+        "postsPerHour": 0,
+        "falseRate": 0.12,
+        "observationRate": 1,
+        "operatorCount": 2,
+        "reviewMs": 30000,
+        "inspectionMs": 60000,
+        "clarificationWorkers": 2,
+        "loadMs": 60000,
+        "unloadMs": 60000,
+        "setupMs": 60000,
+        "networkLatencyMs": 1000,
+        "packetLoss": 0,
+        "networkCapacity": 30,
+        "sourceIndexMs": 0,
+        "queryLatencyMs": 1000,
+        "bandwidthBytesPerSecond": 1000000,
+        "toolQuota": 10000,
+        "funds": 5000,
+        "stockWater": 2400,
+        "reservedWater": 100,
+        "policy": "none",
+        "mode": "modeled",
+        "clockLatency": "modeled",
+        "split": "development",
+        "language": "mixed",
+        "logMode": "compact",
+        "maxEvents": 2000000,
+        "maxPosts": 1000000,
+        "topology": "grid",
+        "bridgeCount": 3,
+        "healthTickMs": 600000,
+        "waterMlPerPersonDay": 3000,
+        "foodKcalPerPersonDay": 2100,
+        "initialWaterHours": 6,
+        "initialFoodHours": 12,
+        "waterCriticalHours": 30,
+        "foodCriticalHours": 72,
+        "injuryCriticalHours": 2,
+        "exposureCriticalHours": 4,
+        "waterFatalityBpPerHour": 150,
+        "foodFatalityBpPerHour": 25,
+        "injuryFatalityBpPerHour": 1000,
+        "exposureFatalityBpPerHour": 600,
+        "injuryFractionBp": 1500,
+        "temperatureC": 24,
+        "healthReports": false,
+        "recurringNeeds": false,
+        "resupplyReviewHours": 6,
+        "resupplyHorizonHours": 24,
+        "authorshipMs": 1000,
+        "staffShiftMs": 28800000,
+        "staffRestMs": 3600000,
+        "vehicleFuelMl": 80000,
+        "fuelMlPerKm": 180,
+        "sourceRequestLimit": 1000000,
+        "modelLatencyMs": 15000,
+        "modelCallLimit": 1000,
+        "subsystemSeeds": {},
+        "supply": {
+          "purchaseTranches": null,
+          "purchaseTerminalState": "backordered"
+        },
+        "humanCapacity": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        }
+      },
+      "failedTrips": 0,
+      "blockedVehicleMs": 0,
+      "cohort": [
+        "b105",
+        "b58",
+        "b143",
+        "b163",
+        "b133",
+        "b132",
+        "b122",
+        "b60",
+        "b164",
+        "b10",
+        "b45",
+        "b161",
+        "b94",
+        "b7",
+        "b149",
+        "b158",
+        "b159",
+        "b59",
+        "b168",
+        "b145",
+        "b166",
+        "b67",
+        "b14",
+        "b70",
+        "b106",
+        "b55",
+        "b131",
+        "b141",
+        "b44",
+        "b154",
+        "b87",
+        "b30",
+        "b123",
+        "b4",
+        "b26",
+        "b39",
+        "b135",
+        "b36",
+        "b101",
+        "b81",
+        "b61",
+        "b52",
+        "b62",
+        "b97",
+        "b66",
+        "b160",
+        "b80",
+        "b113",
+        "b103",
+        "b5",
+        "b24",
+        "b100",
+        "b82",
+        "b25",
+        "b42",
+        "b11",
+        "b165",
+        "b15",
+        "b104",
+        "b51",
+        "b150",
+        "b9",
+        "b79",
+        "b75",
+        "b126",
+        "b147",
+        "b53",
+        "b33",
+        "b16",
+        "b49",
+        "b22",
+        "b86",
+        "b54",
+        "b124",
+        "b72",
+        "b47",
+        "b118",
+        "b43",
+        "b28",
+        "b112",
+        "b89",
+        "b3",
+        "b19",
+        "b162",
+        "b134",
+        "b32",
+        "b125",
+        "b152",
+        "b34",
+        "b2",
+        "b130",
+        "b102",
+        "b153",
+        "b119",
+        "b116",
+        "b121"
+      ]
+    },
+    {
+      "arm": "B6",
+      "status": "completed",
+      "rawPath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-B6.json",
+      "rawSha256": "2554939425ee19589d2ca3066c1e14d0aecb3e4ca667ace015ed908f8e910c01",
+      "source": {
+        "initial": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "final": {
+          "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+          "evaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+          "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+        },
+        "stable": true,
+        "reasons": []
+      },
+      "protocolHash": "2c8a78c0d0d8337b0c5defe315a9f8d3d2db70273ee320b5ae7fbb404b9ad63e",
+      "corpusHash": "1372d7154f03ba2d67c8252d6eb9c753d91335f516dd5ad13ae5572013b6d1dd",
+      "cohortHash": "e2c8fcd3c7c35aeaff0233e247babafc9cf03cd86beb22af3e66072831be35d8",
+      "parameters": {
+        "version": "native-human-capacity-physical-response-v4",
+        "count": 96,
+        "noise": 768,
+        "reposts": 2,
+        "formalDelayMs": 1800000,
+        "horizonMs": 10800000,
+        "grid": 13,
+        "extentKm": 6,
+        "pumpMs": 60000,
+        "clarificationWorkers": 2,
+        "humanCapacityOverrides": {
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0
+        },
+        "condition": "moderate_96",
+        "budgetUsd": 0.15,
+        "maxModelCalls": 32,
+        "wallLimitMs": 3600000
+      },
+      "physical": {
+        "firstUseful": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "sufficient": {
+          "eligible": 96,
+          "reached": 66,
+          "rightCensored": 30,
+          "unknownCensor": 0,
+          "restrictedMeanMs": 7076370.020833333,
+          "restrictedMedianMs": 7829161,
+          "restrictedP95Ms": 10800000,
+          "reachedOnlyP95Ms": 10414827,
+          "issues": [],
+          "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+        },
+        "resources": [
+          {
+            "type": "water",
+            "unit": "L",
+            "demand": 1700,
+            "usefulServed": 1090,
+            "outstanding": 610,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 13779931720,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 21,
+              "rightCensored": 11,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 7831550.125,
+              "restrictedMedianMs": 9329495,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10712828,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 22,
+            "positivePhysicalReceipts": 21
+          },
+          {
+            "type": "food",
+            "unit": "portions",
+            "demand": 625,
+            "usefulServed": 464,
+            "outstanding": 161,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 4168918333,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 23,
+              "rightCensored": 9,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 6659536.9375,
+              "restrictedMedianMs": 7814828,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 9308498,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 25,
+            "positivePhysicalReceipts": 23
+          },
+          {
+            "type": "blankets",
+            "unit": "unit",
+            "demand": 624,
+            "usefulServed": 444,
+            "outstanding": 180,
+            "excessReceived": 0,
+            "uncoveredUnitMs": 4177615165,
+            "sufficient": {
+              "eligible": 32,
+              "reached": 22,
+              "rightCensored": 10,
+              "unknownCensor": 0,
+              "restrictedMeanMs": 6738023,
+              "restrictedMedianMs": 6353494,
+              "restrictedP95Ms": 10800000,
+              "reachedOnlyP95Ms": 10414827,
+              "issues": [],
+              "note": "Restricted mean/percentiles retain right-censored cases at their declared observation horizon. Reached-only p95 excludes censored cases and must be read with coverage."
+            },
+            "issuedOperations": 22,
+            "positivePhysicalReceipts": 22
+          }
+        ],
+        "stages": {
+          "firstContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 4318868.303030303,
+              "observed": 66,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 495850.51515151514,
+              "observed": 66,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 509092.1212121212,
+              "observed": 66,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 66,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 5383810.939393939,
+              "observed": 66,
+              "eligible": 96
+            }
+          },
+          "thresholdContribution": {
+            "preAuthorizationMs": {
+              "meanMs": 4318868.303030303,
+              "observed": 66,
+              "eligible": 96
+            },
+            "pickupAndPreparationMs": {
+              "meanMs": 495850.51515151514,
+              "observed": 66,
+              "eligible": 96
+            },
+            "loadedTravelMs": {
+              "meanMs": 509092.1212121212,
+              "observed": 66,
+              "eligible": 96
+            },
+            "arrivalToServiceMs": {
+              "meanMs": 60000,
+              "observed": 66,
+              "eligible": 96
+            },
+            "totalMs": {
+              "meanMs": 5383810.939393939,
+              "observed": 66,
+              "eligible": 96
+            }
+          }
+        }
+      },
+      "unresolved": [
+        {
+          "need": "fdf87e5863adc1e946b0effb",
+          "building": "b105",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "c9e6011a05ffc1944976f3d2",
+          "building": "b58",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-68",
+              "state": "unloading",
+              "vehicle": "v-org1-0",
+              "quantity": 11,
+              "received": 0,
+              "createdAt": 9834159,
+              "times": {
+                "authorized": 9834159,
+                "reserved": 9834159,
+                "orderReceived": 9835160,
+                "accepted": 9835160,
+                "pickupDispatched": 9835160,
+                "pickupArrived": 10226827,
+                "prepared": 10286827,
+                "dispatched": 10286827,
+                "arrived": 10745162,
+                "unloadingStarted": 10745162
+              }
+            }
+          ],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "cca7a9865a6dd454c4877efa",
+          "building": "b60",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 15,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "28a951d5c1877f2347fe9fd0",
+          "building": "b164",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 26,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "2d7e375e4ebc7ae2016ec947",
+          "building": "b168",
+          "type": "water",
+          "unit": "L",
+          "quantity": 50,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "27d1b3e9ba495b39c19a4f7a",
+          "building": "b166",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "09edac38b503c37d69e0559a",
+          "building": "b44",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 22,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "2e33f478579085c41e44929e",
+          "building": "b87",
+          "type": "water",
+          "unit": "L",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "047fb8a45d66428ca1f0698e",
+          "building": "b26",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 11,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "46016b6fd701b3a6537edb1f",
+          "building": "b101",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 17,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "719294534120b52231eea48f",
+          "building": "b81",
+          "type": "water",
+          "unit": "L",
+          "quantity": 60,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-66",
+              "state": "dispatched",
+              "vehicle": "v-org3-0",
+              "quantity": 60,
+              "received": 0,
+              "createdAt": 9444159,
+              "times": {
+                "authorized": 9444159,
+                "reserved": 9444159,
+                "orderReceived": 9445160,
+                "accepted": 9445160,
+                "pickupDispatched": 9445160,
+                "pickupArrived": 10078494,
+                "prepared": 10138494,
+                "dispatched": 10138494
+              }
+            }
+          ],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "26fd2efa79497b3957ed95bd",
+          "building": "b61",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": true,
+          "operations": [
+            {
+              "id": "operation-64",
+              "state": "dispatched",
+              "vehicle": "v-org2-1",
+              "quantity": 20,
+              "received": 0,
+              "createdAt": 9337159,
+              "times": {
+                "authorized": 9337159,
+                "reserved": 9337159,
+                "orderReceived": 9338160,
+                "accepted": 9338160,
+                "pickupDispatched": 9338160,
+                "pickupArrived": 10088162,
+                "prepared": 10148162,
+                "dispatched": 10148162
+              }
+            }
+          ],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "0ec10168c5ea715fae0aca52",
+          "building": "b52",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "43aba8facd9d4743be11c55d",
+          "building": "b80",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 18,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "43ac868bad45875da1a7e68b",
+          "building": "b113",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 24,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "d604fdec664eb7e18a522037",
+          "building": "b100",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "94076bc4123c7c4359753dab",
+          "building": "b82",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 27,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "258583cdbf13c120d0b24938",
+          "building": "b15",
+          "type": "water",
+          "unit": "L",
+          "quantity": 50,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "4d979f8a2acbd6115eecc05f",
+          "building": "b150",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "68b5a39b4156ce52013ed117",
+          "building": "b147",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "unrecorded_first_inquiry"
+        },
+        {
+          "need": "490e297230c7bc8501925285",
+          "building": "b16",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 13,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "0e19b663042472ba5c6b38e8",
+          "building": "b49",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "5fc91dc77a57a1210d9cf039",
+          "building": "b124",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 16,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "7f8bde6598f6ee73a3d7f500",
+          "building": "b72",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 16,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "7e664352e8d1c435232e8af6",
+          "building": "b134",
+          "type": "water",
+          "unit": "L",
+          "quantity": 70,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "798a3926671a733d0d998381",
+          "building": "b152",
+          "type": "water",
+          "unit": "L",
+          "quantity": 40,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "c5043ca130f82ce2c884e343",
+          "building": "b34",
+          "type": "food",
+          "unit": "portions",
+          "quantity": 21,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "1284438fd328a4b230c1b67b",
+          "building": "b2",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 14,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "common-free-explicit-parser"
+        },
+        {
+          "need": "a3be2a526e66efe990b09b8f",
+          "building": "b119",
+          "type": "water",
+          "unit": "L",
+          "quantity": 80,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        },
+        {
+          "need": "bc52f90f63acc48c3a4a3e8b",
+          "building": "b121",
+          "type": "blankets",
+          "unit": "unit",
+          "quantity": 20,
+          "served": 0,
+          "hasIssuedPhysicalOperation": false,
+          "operations": [],
+          "firstInquiryProvenance": "actual-model-perception-receipt"
+        }
+      ],
+      "operations": {
+        "issued": 69,
+        "positiveReceipts": 66,
+        "states": {
+          "completed": 66,
+          "dispatched": 2,
+          "unloading": 1
+        },
+        "issuedQuantityByType": {
+          "food": 495,
+          "water": 1150,
+          "blankets": 444
+        },
+        "vehicleTrips": [
+          {
+            "vehicle": "v-org1-0",
+            "trips": 8,
+            "completed": 7,
+            "firstAuthorization": 304016,
+            "lastAuthorization": 9834159
+          },
+          {
+            "vehicle": "v-org2-0",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 305016,
+            "lastAuthorization": 8703159
+          },
+          {
+            "vehicle": "v-org0-0",
+            "trips": 9,
+            "completed": 9,
+            "firstAuthorization": 381016,
+            "lastAuthorization": 9033159
+          },
+          {
+            "vehicle": "v-org1-1",
+            "trips": 10,
+            "completed": 10,
+            "firstAuthorization": 414016,
+            "lastAuthorization": 9537159
+          },
+          {
+            "vehicle": "v-org2-1",
+            "trips": 9,
+            "completed": 8,
+            "firstAuthorization": 415016,
+            "lastAuthorization": 9337159
+          },
+          {
+            "vehicle": "v-org3-0",
+            "trips": 9,
+            "completed": 8,
+            "firstAuthorization": 416016,
+            "lastAuthorization": 9444159
+          },
+          {
+            "vehicle": "v-org0-1",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 495995,
+            "lastAuthorization": 9402159
+          },
+          {
+            "vehicle": "v-org3-1",
+            "trips": 8,
+            "completed": 8,
+            "firstAuthorization": 595995,
+            "lastAuthorization": 9875159
+          }
+        ]
+      },
+      "human": {
+        "nativeStages": {
+          "read": {
+            "received": 0,
+            "completed": 0,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 0,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "completedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            }
+          },
+          "decide": {
+            "received": 107,
+            "completed": 107,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 3210000,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": 0,
+              "p95": 0,
+              "samples": 107
+            },
+            "completedTurnaroundMs": {
+              "p50": 30000,
+              "p95": 30000,
+              "samples": 107
+            }
+          },
+          "relay": {
+            "received": 0,
+            "completed": 0,
+            "queued": 0,
+            "working": 0,
+            "pendingCensored": 0,
+            "cutoffMs": 10800000,
+            "workPersonMs": 0,
+            "waitingPersonMs": 0,
+            "startedQueueMsIncludingWorkingExplicit": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            },
+            "completedTurnaroundMs": {
+              "p50": null,
+              "p95": null,
+              "samples": 0
+            }
+          }
+        },
+        "maxIndividualOrgBacklog": 1,
+        "profile": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        },
+        "K20": {
+          "elapsedAttentionWorkPersonMs": 3210000,
+          "elapsedAttentionWorkPersonMinutes": 53.5,
+          "source": "Sum of native stage elapsedWorkPersonMs",
+          "independentlyRecomputedWorkPersonMs": 3210000,
+          "workReconciliationMatches": true,
+          "operatorReviewMsExcludedFromAdditionalSum": true,
+          "operatorReviewMsReported": 3210000,
+          "sufficientPositiveCohortCases": 66,
+          "positiveCohortCases": 96,
+          "attentionMinutesPerPhysicallySufficientCohortCase": 0.8106060606060606,
+          "minutesPerIndependentlyCorrectResolution": null,
+          "note": "All native attention work, including source review and routine tasks, once. Queue waiting is separate; native owner reviews already occupy decide. Physical sufficiency is not independent semantic correctness. No missing quality annotation is replaced by approval."
+        }
+      },
+      "K09": {
+        "allVehicles": {
+          "distanceM": 697500,
+          "fuelMl": 125550,
+          "scope": "Native aggregate includes background traffic. A zero-traffic profile does not change that definition."
+        },
+        "ownedVehicles": null,
+        "ownedUnknownReason": "No complete offline vehicle ledger with explicit background classification; no ownership split inferred from aggregate metrics.",
+        "utilization": {
+          "available": true,
+          "vehicleCommittedHours": 20.57520472222222,
+          "staffCommittedPersonHours": 0,
+          "staffFieldWorkPersonHours": 0,
+          "definition": "Piecewise source-clock integrals. Vehicle commitment includes preparation, handling, queue, blockage, cargo and actual return; idle/empty arrived capacity and background traffic are excluded. Staff commitment counts reserved people plus physical staff cargo once. Field work counts only assigned inspections/repairs in working phase. These are separate scopes, not sums of independent productive labor, wages or all responder work."
+        },
+        "costPerUsefulUnit": null,
+        "note": "No fuel price, wages, per-resource allocation of shared transport cost or semantic correctness is invented."
+      },
+      "proposalFunnel": {
+        "records": 107,
+        "states": {
+          "completed": 98,
+          "executing": 9
+        },
+        "pendingOwnerReviews": 0,
+        "warning": "Origin and partner mirrors can describe the same operation. Proposal executing is not a count of unique pending physical trips."
+      },
+      "sourceCoverage": {
+        "receivedOriginals": 1274,
+        "progressSources": 32,
+        "routineSources": 185,
+        "modelBatches": 54,
+        "manualSources": 0,
+        "manualProcessed": 0,
+        "manualFailed": 0,
+        "manualPending": 0,
+        "inquiries": 164,
+        "deferredInquiries": 0,
+        "compilations": 182,
+        "unchangedCompilationSkips": 1
+      },
+      "firstInquiryProvenance": {
+        "common-free-explicit-parser": 53,
+        "actual-model-perception-receipt": 40,
+        "unrecorded_first_inquiry": 3
+      },
+      "provenanceByPhysicalStatus": {
+        "completed": {
+          "actual-model-perception-receipt": 26,
+          "common-free-explicit-parser": 38,
+          "unrecorded_first_inquiry": 2
+        },
+        "censored": {
+          "common-free-explicit-parser": 15,
+          "actual-model-perception-receipt": 14,
+          "unrecorded_first_inquiry": 1
+        }
+      },
+      "attributionScope": "All96 kept. Association to first request only, not correctness/necessity or confirmed-verification receipt.",
+      "errors": [
+        {
+          "phase": "model-perception",
+          "code": "EXTRACTION_SCHEMA",
+          "sourceCount": 30
+        }
+      ],
+      "invariants": [],
+      "cost": {
+        "usageRecords": 25,
+        "providerCalls": 25,
+        "reportedProviderCalls": 25,
+        "usageCountMismatch": false,
+        "knownCostSubtotalUsd": 0.021807220000000002,
+        "totalProviderCostUsd": 0.021807220000000002,
+        "totalCostKnown": true,
+        "unknownCostCalls": 0,
+        "unknownCostReserveUsd": 0,
+        "chargedBudgetUsd": 0.021807220000000002,
+        "fullEpisodeCapExposureWhenMissingUsd": null,
+        "providerWallKnownSubtotalMs": 211040.7296000002,
+        "providerWallTotalMs": 211040.7296000002,
+        "providerWallMissingCalls": 0,
+        "failedCalls": 0,
+        "attempts": [
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00068548,
+            "reservedUsd": 0.00691534,
+            "wallMs": 7340.729700000025,
+            "inputTokens": 3873,
+            "outputTokens": 877,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00077372,
+            "reservedUsd": 0.00688978,
+            "wallMs": 8534.4114000001,
+            "inputTokens": 3817,
+            "outputTokens": 1153,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00101666,
+            "reservedUsd": 0.00690436,
+            "wallMs": 13128.04469999997,
+            "inputTokens": 3846,
+            "outputTokens": 1859,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00079704,
+            "reservedUsd": 0.006910299999999999,
+            "wallMs": 8925.376900000032,
+            "inputTokens": 3921,
+            "outputTokens": 1191,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00078252,
+            "reservedUsd": 0.00689752,
+            "wallMs": 9557.478999999817,
+            "inputTokens": 3956,
+            "outputTokens": 1138,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00112282,
+            "reservedUsd": 0.0069526,
+            "wallMs": 18978.70479999995,
+            "inputTokens": 4146,
+            "outputTokens": 2083,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00094864,
+            "reservedUsd": 0.006934419999999999,
+            "wallMs": 12139.467799999751,
+            "inputTokens": 4043,
+            "outputTokens": 1601,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0011593,
+            "reservedUsd": 0.00770302,
+            "wallMs": 13013.193899999838,
+            "inputTokens": 5847,
+            "outputTokens": 1690,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0009814,
+            "reservedUsd": 0.00693172,
+            "wallMs": 15163.577000000048,
+            "inputTokens": 4068,
+            "outputTokens": 1690,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00082814,
+            "reservedUsd": 0.006939279999999999,
+            "wallMs": 9167.036700000055,
+            "inputTokens": 4011,
+            "outputTokens": 1256,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00091432,
+            "reservedUsd": 0.006922899999999999,
+            "wallMs": 11006.972099999897,
+            "inputTokens": 4050,
+            "outputTokens": 1498,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00101924,
+            "reservedUsd": 0.006886,
+            "wallMs": 13036.881300000008,
+            "inputTokens": 3967,
+            "outputTokens": 1831,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00099552,
+            "reservedUsd": 0.0069722199999999995,
+            "wallMs": 11856.763300000224,
+            "inputTokens": 4556,
+            "outputTokens": 1588,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0012239,
+            "reservedUsd": 0.00699202,
+            "wallMs": 16743.44439999992,
+            "inputTokens": 4555,
+            "outputTokens": 2260,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00103308,
+            "reservedUsd": 0.00690544,
+            "wallMs": 6212.857199999969,
+            "inputTokens": 4082,
+            "outputTokens": 1154,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0008916,
+            "reservedUsd": 0.006903459999999999,
+            "wallMs": 4144.843899999745,
+            "inputTokens": 4000,
+            "outputTokens": 829,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00081504,
+            "reservedUsd": 0.006921279999999999,
+            "wallMs": 2452.57470000023,
+            "inputTokens": 4036,
+            "outputTokens": 625,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00078484,
+            "reservedUsd": 0.00692704,
+            "wallMs": 4379.164400000125,
+            "inputTokens": 4026,
+            "outputTokens": 553,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0008454,
+            "reservedUsd": 0.00678376,
+            "wallMs": 3260.5145000000484,
+            "inputTokens": 3530,
+            "outputTokens": 878,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00067958,
+            "reservedUsd": 0.006613299999999999,
+            "wallMs": 3813.7754000001587,
+            "inputTokens": 2997,
+            "outputTokens": 650,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0008515,
+            "reservedUsd": 0.006607539999999999,
+            "wallMs": 4835.535399999935,
+            "inputTokens": 3125,
+            "outputTokens": 1035,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00080436,
+            "reservedUsd": 0.0066771999999999995,
+            "wallMs": 3679.0518000000156,
+            "inputTokens": 3294,
+            "outputTokens": 858,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0008335,
+            "reservedUsd": 0.00665758,
+            "wallMs": 3907.8055000002496,
+            "inputTokens": 3185,
+            "outputTokens": 969,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.0008772,
+            "reservedUsd": 0.00690526,
+            "wallMs": 4642.913300000131,
+            "inputTokens": 3940,
+            "outputTokens": 814,
+            "error": null
+          },
+          {
+            "state": "completed",
+            "model": "google/gemma-4-31b-it",
+            "costUsd": 0.00014242,
+            "reservedUsd": 0.00578404,
+            "wallMs": 1119.6104999999516,
+            "inputTokens": 503,
+            "outputTokens": 180,
+            "error": null
+          }
+        ],
+        "note": "Known subtotals are not total bills when usage is missing. A reserved cap is exposure, not an invented charge. SQL/CPU wall, infrastructure and human wages are separate."
+      },
+      "modelAvailability": [
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-1",
+          "nativeDeclaredAvailableAt": 137016,
+          "measuredProviderWallMs": 7340.729700000025,
+          "controllerObservedAt": 137016,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-2",
+          "nativeDeclaredAvailableAt": 212016,
+          "measuredProviderWallMs": 8534.4114000001,
+          "controllerObservedAt": 212016,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-3",
+          "nativeDeclaredAvailableAt": 289016,
+          "measuredProviderWallMs": 13128.04469999997,
+          "controllerObservedAt": 289016,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-4",
+          "nativeDeclaredAvailableAt": 321016,
+          "measuredProviderWallMs": 8925.376900000032,
+          "controllerObservedAt": 321016,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-5",
+          "nativeDeclaredAvailableAt": 401016,
+          "measuredProviderWallMs": 9557.478999999817,
+          "controllerObservedAt": 401016,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-6",
+          "nativeDeclaredAvailableAt": 432016,
+          "measuredProviderWallMs": 18978.70479999995,
+          "controllerObservedAt": 435995,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-7",
+          "nativeDeclaredAvailableAt": 516995,
+          "measuredProviderWallMs": 12139.467799999751,
+          "controllerObservedAt": 516995,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-8",
+          "nativeDeclaredAvailableAt": 531995,
+          "measuredProviderWallMs": 13013.193899999838,
+          "controllerObservedAt": 531995,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-9",
+          "nativeDeclaredAvailableAt": 612995,
+          "measuredProviderWallMs": 15163.577000000048,
+          "controllerObservedAt": 613159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-10",
+          "nativeDeclaredAvailableAt": 695159,
+          "measuredProviderWallMs": 9167.036700000055,
+          "controllerObservedAt": 695159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-11",
+          "nativeDeclaredAvailableAt": 779159,
+          "measuredProviderWallMs": 11006.972099999897,
+          "controllerObservedAt": 779159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-12",
+          "nativeDeclaredAvailableAt": 863159,
+          "measuredProviderWallMs": 13036.881300000008,
+          "controllerObservedAt": 863159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-13",
+          "nativeDeclaredAvailableAt": 898159,
+          "measuredProviderWallMs": 11856.763300000224,
+          "controllerObservedAt": 898159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-14",
+          "nativeDeclaredAvailableAt": 983159,
+          "measuredProviderWallMs": 16743.44439999992,
+          "controllerObservedAt": 984903,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-15",
+          "nativeDeclaredAvailableAt": 1012159,
+          "measuredProviderWallMs": 6212.857199999969,
+          "controllerObservedAt": 1012159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-16",
+          "nativeDeclaredAvailableAt": 1032903,
+          "measuredProviderWallMs": 4144.843899999745,
+          "controllerObservedAt": 1032903,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-17",
+          "nativeDeclaredAvailableAt": 1062159,
+          "measuredProviderWallMs": 2452.57470000023,
+          "controllerObservedAt": 1062159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-18",
+          "nativeDeclaredAvailableAt": 1094159,
+          "measuredProviderWallMs": 4379.164400000125,
+          "controllerObservedAt": 1094159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-19",
+          "nativeDeclaredAvailableAt": 1178159,
+          "measuredProviderWallMs": 3260.5145000000484,
+          "controllerObservedAt": 1178159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-20",
+          "nativeDeclaredAvailableAt": 1260159,
+          "measuredProviderWallMs": 3813.7754000001587,
+          "controllerObservedAt": 1260159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-21",
+          "nativeDeclaredAvailableAt": 1344159,
+          "measuredProviderWallMs": 4835.535399999935,
+          "controllerObservedAt": 1344159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-22",
+          "nativeDeclaredAvailableAt": 1425159,
+          "measuredProviderWallMs": 3679.0518000000156,
+          "controllerObservedAt": 1425159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-23",
+          "nativeDeclaredAvailableAt": 1540159,
+          "measuredProviderWallMs": 3907.8055000002496,
+          "controllerObservedAt": 1540159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-24",
+          "nativeDeclaredAvailableAt": 1624159,
+          "measuredProviderWallMs": 4642.913300000131,
+          "controllerObservedAt": 1624159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        },
+        {
+          "stage": "model-controller-availability",
+          "request": "model-request-25",
+          "nativeDeclaredAvailableAt": 1705159,
+          "measuredProviderWallMs": 1119.6104999999516,
+          "controllerObservedAt": 1705159,
+          "note": "Controller availability uses max(native latency, measured provider duration) from original requestedAt; native receipt timestamp remains unchanged and is not presented as exact HTTP availability."
+        }
+      ],
+      "host": {
+        "wallMs": 865544.0633,
+        "httpCalls": 17015,
+        "sqlCalls": 99402,
+        "warning": "Host CPU/SQL/HTTP metrics are separate from source time; nested totals are not additive exclusive CPU."
+      },
+      "sourceManifestConfig": {
+        "seed": "native-human-capacity-control-stress96-01",
+        "scenario": "S23",
+        "hazard": "none",
+        "variant": "standard",
+        "compositionVariant": "standard",
+        "grid": 13,
+        "extentKm": 6,
+        "organizations": 4,
+        "durationMs": 10800000,
+        "populationPerSector": 60,
+        "backgroundTraffic": 0,
+        "postsPerHour": 0,
+        "falseRate": 0.12,
+        "observationRate": 1,
+        "operatorCount": 2,
+        "reviewMs": 30000,
+        "inspectionMs": 60000,
+        "clarificationWorkers": 2,
+        "loadMs": 60000,
+        "unloadMs": 60000,
+        "setupMs": 60000,
+        "networkLatencyMs": 1000,
+        "packetLoss": 0,
+        "networkCapacity": 30,
+        "sourceIndexMs": 0,
+        "queryLatencyMs": 1000,
+        "bandwidthBytesPerSecond": 1000000,
+        "toolQuota": 10000,
+        "funds": 5000,
+        "stockWater": 2400,
+        "reservedWater": 100,
+        "policy": "none",
+        "mode": "modeled",
+        "clockLatency": "modeled",
+        "split": "development",
+        "language": "mixed",
+        "logMode": "compact",
+        "maxEvents": 2000000,
+        "maxPosts": 1000000,
+        "topology": "grid",
+        "bridgeCount": 3,
+        "healthTickMs": 600000,
+        "waterMlPerPersonDay": 3000,
+        "foodKcalPerPersonDay": 2100,
+        "initialWaterHours": 6,
+        "initialFoodHours": 12,
+        "waterCriticalHours": 30,
+        "foodCriticalHours": 72,
+        "injuryCriticalHours": 2,
+        "exposureCriticalHours": 4,
+        "waterFatalityBpPerHour": 150,
+        "foodFatalityBpPerHour": 25,
+        "injuryFatalityBpPerHour": 1000,
+        "exposureFatalityBpPerHour": 600,
+        "injuryFractionBp": 1500,
+        "temperatureC": 24,
+        "healthReports": false,
+        "recurringNeeds": false,
+        "resupplyReviewHours": 6,
+        "resupplyHorizonHours": 24,
+        "authorshipMs": 1000,
+        "staffShiftMs": 28800000,
+        "staffRestMs": 3600000,
+        "vehicleFuelMl": 80000,
+        "fuelMlPerKm": 180,
+        "sourceRequestLimit": 1000000,
+        "modelLatencyMs": 15000,
+        "modelCallLimit": 1000,
+        "subsystemSeeds": {},
+        "supply": {
+          "purchaseTranches": null,
+          "purchaseTerminalState": "backordered"
+        },
+        "humanCapacity": {
+          "profile": "moderate",
+          "readers": 2,
+          "deciders": 2,
+          "relayers": 1,
+          "queueLimit": 10000,
+          "readMs": 30000,
+          "decisionMs": 60000,
+          "relayMs": 90000,
+          "readErrorBp": 0,
+          "decisionErrorBp": 0,
+          "relayErrorBp": 0,
+          "backgroundReadPerHour": 0,
+          "backgroundDecisionPerHour": 0,
+          "backgroundRelayPerHour": 0
+        }
+      },
+      "failedTrips": 0,
+      "blockedVehicleMs": 0,
+      "cohort": [
+        "b105",
+        "b58",
+        "b143",
+        "b163",
+        "b133",
+        "b132",
+        "b122",
+        "b60",
+        "b164",
+        "b10",
+        "b45",
+        "b161",
+        "b94",
+        "b7",
+        "b149",
+        "b158",
+        "b159",
+        "b59",
+        "b168",
+        "b145",
+        "b166",
+        "b67",
+        "b14",
+        "b70",
+        "b106",
+        "b55",
+        "b131",
+        "b141",
+        "b44",
+        "b154",
+        "b87",
+        "b30",
+        "b123",
+        "b4",
+        "b26",
+        "b39",
+        "b135",
+        "b36",
+        "b101",
+        "b81",
+        "b61",
+        "b52",
+        "b62",
+        "b97",
+        "b66",
+        "b160",
+        "b80",
+        "b113",
+        "b103",
+        "b5",
+        "b24",
+        "b100",
+        "b82",
+        "b25",
+        "b42",
+        "b11",
+        "b165",
+        "b15",
+        "b104",
+        "b51",
+        "b150",
+        "b9",
+        "b79",
+        "b75",
+        "b126",
+        "b147",
+        "b53",
+        "b33",
+        "b16",
+        "b49",
+        "b22",
+        "b86",
+        "b54",
+        "b124",
+        "b72",
+        "b47",
+        "b118",
+        "b43",
+        "b28",
+        "b112",
+        "b89",
+        "b3",
+        "b19",
+        "b162",
+        "b134",
+        "b32",
+        "b125",
+        "b152",
+        "b34",
+        "b2",
+        "b130",
+        "b102",
+        "b153",
+        "b119",
+        "b116",
+        "b121"
+      ]
+    }
+  ],
+  "completionOverlap": [
+    {
+      "reference": "C_manual",
+      "jointCompleted": 51,
+      "onlyReference": 2,
+      "onlyCandidate": 15,
+      "jointCensored": 28
+    },
+    {
+      "reference": "B8",
+      "jointCompleted": 62,
+      "onlyReference": 4,
+      "onlyCandidate": 4,
+      "jointCensored": 26
+    }
+  ],
+  "stageScope": "Pairwise stage differences are observed only for joint completed cases (51/manual,62/B8); unknown/censored cases remain unknown, not imputed. Full96 restricted endpoint remains primary.",
+  "stockEvidence": {
+    "source": "Frozen engine/world.mjs:147–169 and raw source manifest config, S23 standard with retired zero pilot.",
+    "declaredInitialUsableByType": {
+      "water": {
+        "quantity": 2000,
+        "unit": "L"
+      },
+      "food": {
+        "quantity": 800,
+        "unit": "portions"
+      },
+      "blankets": {
+        "quantity": 800,
+        "unit": "unit"
+      }
+    },
+    "definition": "Four owners: water2400 total minus four declared100 floors; food/blankets200 per owner. Aggregate sufficiency is not proof of each local resource being free or an optimal routing lower bound."
+  },
+  "semanticAccuracy": null,
+  "modelNecessityEffect": null,
+  "worldsStarted": 0,
+  "providerCalls": 0,
+  "scope": "Only closed96 triplet; retain every96 case,errors/censor/unknownfee. No crossgroup pooling or reestimated sealed effects."
+}

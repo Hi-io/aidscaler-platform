@@ -1,0 +1,413 @@
+{
+  "schema": "append-only-whole-terminal-host3600-bridge-v4",
+  "source": {
+    "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+    "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+    "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+    "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+  },
+  "files": [
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\coordinator.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\coordinator.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/coordinator.mjs",
+      "sha256": "f04f3c3e542c044e8c765b5f449f47b73443150858a2e7e1a6d90aef1e4d3f36",
+      "bytes": 16568,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized.stderr.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized.stderr.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized.stdout.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized.stdout.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized.stdout.txt",
+      "sha256": "bc93a26118549b99a0c37b095c754088494fc6f5ea77fc12463fa89607ac7029",
+      "bytes": 14957,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\human-capacity-benchmark.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\human-capacity-benchmark.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/human-capacity-benchmark.mjs",
+      "sha256": "08fdcd43be56937c20e16db4fc72fc230d858f5d0dc192db68ee3719e1fc6889",
+      "bytes": 45453,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\human-capacity-campaign.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\human-capacity-campaign.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "bytes": 12980,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-B6.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-B6.json",
+      "sha256": "7d9b859f3b42eb88374b8bd0d9028c5bf0a74a1a7d7315d4355c351fb785bf79",
+      "bytes": 926632,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-C_decentralized.json",
+      "sha256": "a7f2f7ad678c1fd14a1f7b83edeaec07f0658b69a742a0df80db12ed068f08d9",
+      "bytes": 10637574,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/moderate-native-human-capacity-control-decentralized-01-C_manual.json",
+      "sha256": "84db12966499a1a2ae56350fc8f98c57716bf03dd1691063539a05fb81080860",
+      "bytes": 3504936,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\protocol.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\protocol.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/protocol.json",
+      "sha256": "af8412a5982507525effb547a7e9c6cdfc5206b214d26848b6666ad363e8d19f",
+      "bytes": 6963,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\summary.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\decentralized\\summary.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/decentralized/summary.json",
+      "sha256": "2fc0bbf4f2c3645d0d1ce8bec04e86357cfa5681fea7c99c9abc09d1d319650c",
+      "bytes": 4752,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\human-capacity-benchmark.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\human-capacity-benchmark.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/human-capacity-benchmark.mjs",
+      "sha256": "08fdcd43be56937c20e16db4fc72fc230d858f5d0dc192db68ee3719e1fc6889",
+      "bytes": 45453,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\human-capacity-campaign.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\human-capacity-campaign.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "bytes": 12980,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\index.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\index.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/index.json",
+      "sha256": "6857a0109373ae2b8c24df9306cb703c1a8c479de3e5adce0b76f39cfd321002",
+      "bytes": 38668,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\protocol.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\protocol.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/protocol.json",
+      "sha256": "986ae066293e04f299301816436e77c767e7af33743d323585afab38abbb95cc",
+      "bytes": 44906,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48.stderr.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48.stderr.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48.stdout.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48.stdout.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48.stdout.txt",
+      "sha256": "26e2f4074a2f87dc0fd4a27156230e8daafdf72b515691eba5e46de3cb020130",
+      "bytes": 13732,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\human-capacity-benchmark.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\human-capacity-benchmark.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/human-capacity-benchmark.mjs",
+      "sha256": "08fdcd43be56937c20e16db4fc72fc230d858f5d0dc192db68ee3719e1fc6889",
+      "bytes": 45453,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\human-capacity-campaign.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\human-capacity-campaign.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "bytes": 12980,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B6.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B6.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-B6.json",
+      "sha256": "8ba5bb367f825d42ff68aa83f6858bfe5d9656facb0d60787fe895e4e35392fe",
+      "bytes": 1702442,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B8.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-B8.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-B8.json",
+      "sha256": "59d1f1ebc539f3bad51cbac18a3b1595f18e37f83086a38528fec5cd163724d8",
+      "bytes": 1646401,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-C_manual.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\moderate_48-native-human-capacity-control-stress48-01-C_manual.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/moderate_48-native-human-capacity-control-stress48-01-C_manual.json",
+      "sha256": "ddd926b4a02e20368c139ec06776fb9a87aa032d86fc1da0741daf417d70eec8",
+      "bytes": 6024189,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\protocol.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\protocol.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/protocol.json",
+      "sha256": "4730a665a261188e5d513e7072a6e522f37b849b087d528387da37c41c14b481",
+      "bytes": 7132,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\summary.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress48\\summary.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress48/summary.json",
+      "sha256": "31a633d33ae0f9bb83805b7759fe4df763feb529daf94a5701dcb8835cd9449d",
+      "bytes": 4714,
+      "alreadyPresent": true
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96.stderr.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96.stderr.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96.stdout.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96.stdout.txt",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96.stdout.txt",
+      "sha256": "f78fab8a3e089b4c1468c7d06b629e80a2d7671ce55079a25fb467c77a4bec08",
+      "bytes": 14939,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\human-capacity-benchmark.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\human-capacity-benchmark.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/human-capacity-benchmark.mjs",
+      "sha256": "08fdcd43be56937c20e16db4fc72fc230d858f5d0dc192db68ee3719e1fc6889",
+      "bytes": 45453,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\human-capacity-campaign.mjs",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\human-capacity-campaign.mjs",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/human-capacity-campaign.mjs",
+      "sha256": "5f1b2c91a1a2f8bae8ba87c3c9d97aac135d7bcf986fdc56f1f882c7a8df7575",
+      "bytes": 12980,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B6.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B6.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-B6.json",
+      "sha256": "2554939425ee19589d2ca3066c1e14d0aecb3e4ca667ace015ed908f8e910c01",
+      "bytes": 2859598,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B8.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-B8.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-B8.json",
+      "sha256": "d1f193f26e6e5c1bcc3dd527dc0ad7c3714e17755e40eed14a6f5efea1f64ab0",
+      "bytes": 2660039,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-C_manual.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\moderate_96-native-human-capacity-control-stress96-01-C_manual.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/moderate_96-native-human-capacity-control-stress96-01-C_manual.json",
+      "sha256": "e4b9fa63a9c3f054cb2bc3fab28b7af66982695109ecf5f31bec03c4625c7399",
+      "bytes": 11116817,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\protocol.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\protocol.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/protocol.json",
+      "sha256": "2bb1517bc21c664d2e613949d2f053fed95174646d886d1598ee5dfcd3ae77d8",
+      "bytes": 7186,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\summary.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\human-capacity-controls-bridge\\native-bridge-host3600-v2-20261013\\stress96\\summary.json",
+      "relativePath": "reports/human-capacity-controls-bridge/native-bridge-host3600-v2-20261013/stress96/summary.json",
+      "sha256": "6c7ccf533860e537d31d9d92164bb3175fd57d800df67b4cac4636f7581cbdbe",
+      "bytes": 4930,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\sequential-local-finish\\current-v4-20261013\\bridge-readout.json",
+      "relativePath": "reports/sequential-local-finish/current-v4-20261013/bridge-readout.json",
+      "sha256": "26452ff2dc22373f1140b310ac4e3b1ba645349f8918cf51139fcfeacc8beeb3",
+      "bytes": 13398973,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\helper.mjs.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\helper.mjs.txt",
+      "relativePath": "reports/analysis/host3600-stress96-causal-20261013-v1/helper.mjs.txt",
+      "sha256": "61f234bc16f3451b03eea30204fb58b82f58072045a4d62494262c80d0f7383e",
+      "bytes": 9428,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\manifest.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\manifest.json",
+      "relativePath": "reports/analysis/host3600-stress96-causal-20261013-v1/manifest.json",
+      "sha256": "c7001be826ddc9d6b33513a21624a83855b925938e8df3538ae5c438a49bed72",
+      "bytes": 1864,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\publication-manifest.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\publication-manifest.json",
+      "relativePath": "reports/analysis/host3600-stress96-causal-20261013-v1/publication-manifest.json",
+      "sha256": "6b5331280fe0d554920eb3c14c1aeeaa60a62fd384801ebe036502cb6d104b5f",
+      "bytes": 1420,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\readout.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\readout.json",
+      "relativePath": "reports/analysis/host3600-stress96-causal-20261013-v1/readout.json",
+      "sha256": "da28dd9afa07dc5e463bfcccea1dc6286ecf1db75658e4b67d1c3106e0a2155d",
+      "bytes": 134326,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\readout.md",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-stress96-causal-20261013-v1\\readout.md",
+      "relativePath": "reports/analysis/host3600-stress96-causal-20261013-v1/readout.md",
+      "sha256": "34a558e6d4559100dd8438d52054f36f7e1dcd447bef19ed82363083b0a5105e",
+      "bytes": 10302,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\bridge-readout-summary.md",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\bridge-readout-summary.md",
+      "relativePath": "reports/analysis/host3600-bridge-summary-20261013/bridge-readout-summary.md",
+      "sha256": "409ac2a7ad278f8c81bb181a0a18607604d962dc931ea2850db95f50088512e8",
+      "bytes": 6162,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\derived-presentation-helper.mjs.txt",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\derived-presentation-helper.mjs.txt",
+      "relativePath": "reports/analysis/host3600-bridge-summary-20261013/derived-presentation-helper.mjs.txt",
+      "sha256": "577a9abea4ea2256fff93fff21e94330d3a8214327d739edeb4048bfe93760d7",
+      "bytes": 5509,
+      "alreadyPresent": false
+    },
+    {
+      "sourcePath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\.human-capacity-development\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\provenance.json",
+      "targetPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\analysis\\host3600-bridge-summary-20261013\\provenance.json",
+      "relativePath": "reports/analysis/host3600-bridge-summary-20261013/provenance.json",
+      "sha256": "a872d019704690c9a1d5c8b9cd038c47b24751b8b81e0d4824197f62d79f62fc",
+      "bytes": 2104,
+      "alreadyPresent": false
+    }
+  ],
+  "validatedGroups": [
+    {
+      "group": "decentralized",
+      "worlds": 3,
+      "comparisons": 2,
+      "recoveredErrors": 0,
+      "source": {
+        "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+        "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+        "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+        "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+      },
+      "noGainThreshold": true,
+      "aggregateCreated": false
+    },
+    {
+      "group": "stress48",
+      "worlds": 3,
+      "comparisons": 2,
+      "recoveredErrors": 0,
+      "source": {
+        "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+        "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+        "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+        "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+      },
+      "noGainThreshold": true,
+      "aggregateCreated": false
+    },
+    {
+      "group": "stress96",
+      "worlds": 3,
+      "comparisons": 2,
+      "recoveredErrors": 1,
+      "source": {
+        "candidate": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+        "baseEvaluator": "d64f62747ecd5a36f77b9cd34dc6e1b2b37a77220cae9f206bb773a0a4263090",
+        "humanEvaluator": "75c635a59eda752820aabef317a42799915a46a5fc7fba82ad9d0382d69ea29e",
+        "simulator": "561e6a02fbde1d047f999c4f077cbff83c438ba5c508c4d8d18bbf59ff78e94b"
+      },
+      "noGainThreshold": true,
+      "aggregateCreated": false
+    }
+  ],
+  "allDeclaredWorlds": 9,
+  "allRetainedWorlds": 9,
+  "recoveredErrorsRetained": 1,
+  "totalPayloadBytes": 55061895,
+  "additionalBytes": 30479294,
+  "maximumFileBytes": 13398973,
+  "readout": {
+    "path": "reports/sequential-local-finish/current-v4-20261013/bridge-readout.json",
+    "sha256": "26452ff2dc22373f1140b310ac4e3b1ba645349f8918cf51139fcfeacc8beeb3",
+    "originalSealedJson": true,
+    "requestedOriginalMarkdownExists": false,
+    "derivedMarkdown": "reports/analysis/host3600-bridge-summary-20261013/bridge-readout-summary.md",
+    "derivedProvenance": "reports/analysis/host3600-bridge-summary-20261013/provenance.json"
+  },
+  "noActiveSequentialIndex": true,
+  "noHumanOrEvidenceFolders": true,
+  "noNewScoring": true,
+  "noCrossGroupOrVersionAggregation": true,
+  "privacy": "Synthetic internal evaluator evidence, includes explicitly post-execution observer trace; never live private operational inventory or credentials. Not a public-portal projection.",
+  "worldsStarted": 0,
+  "modelCalls": 0,
+  "state": "INSTALLED_APPEND_ONLY",
+  "declaredAt": "2026-10-13T10:29:51.270Z",
+  "helperSha256": "5d56c5b67dbdde98c47cf93c41d096095cdc864c927e92cbe061031d492cc101",
+  "testSha256": "2a1850fb0a65e09683b1898cfbcd271be0d8d5426a2f91a63ae33ef4ee885976",
+  "receiptPath": "C:\\Users\\Hiros\\OneDrive\\Documentos\\AI Builder Cup\\nexo-platform\\reports\\imports\\closed-host3600-bridge-1791887391270.json",
+  "recordedAt": "2026-10-13T10:31:28.058Z",
+  "planSha256": "a07d14716e774c1e29e7ca034fbc58eeaaab77e97ee2aeaa32b55dba6cafa02d",
+  "reportWrites": 27,
+  "sourceWrites": 0
+}

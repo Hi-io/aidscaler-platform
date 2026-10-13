@@ -1,0 +1,54 @@
+/** Derived presentation only: calls the sealed f325 renderer once per closed group. */
+import {readFile,writeFile,mkdir,stat} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+export const ROOT_GO='ROOT_GO_DERIVE_CLOSED_HOST3600_SUMMARY';
+export const JSON_PREFIX='26452ff2',RENDERER_SHA='f3256a5fd685b8411491d41d1c03cf257e0a058ec31a16582eea24a7d7ddd3e9';
+const origin=resolve('../.human-capacity-development/nexo-platform');
+const jsonPath=resolve(origin,'reports/sequential-local-finish/current-v4-20261013/bridge-readout.json');
+const rendererPath=resolve(origin,'.local/human-capacity-reader-archive',RENDERER_SHA,'read-human-capacity-evidence.mjs');
+const destination=resolve(origin,'reports/analysis/host3600-bridge-summary-20261013');
+const sha=b=>createHash('sha256').update(b).digest('hex');
+export function derivedPreamble(jsonSha){return '# Closed HOST3600 bridge: derived presentation\n\n'+
+  'This Markdown is a NEW derived presentation, not the JSON output sealed by ad544. Source JSON SHA256: '+jsonSha+'.\n'+
+  'The sealed f325 renderMarkdown function is applied independently to each of the three existing evidence groups. No rescoring or cross-group/version aggregate is created.\n\n'+
+  'All errors, physical censoring and costs remain in the original JSON. Completed recovered-error runs stay included. B8 is a strong free keyword reference; no general GenAI superiority or weaker-baseline substitution is claimed. The primary strong B5 result and its losses remain in the separate historical primary report; B5 was not planned in these groups. Native human rates are hypothetical, not calibrated, and physical units are not lives saved.\n';}
+export async function run(options={}){
+  if(options.run!==ROOT_GO)return {state:'PREPARED_NO_RENDER_NO_REPORT_WRITES',sourceJson:jsonPath,destination,worldsStarted:0,modelCalls:0};
+  const own=await readFile(fileURLToPath(import.meta.url)),input=await readFile(jsonPath),jsonSha=sha(input),r=JSON.parse(input);
+  if(!jsonSha.startsWith(JSON_PREFIX)||r.schema!=='closed-host3600-bridge-offline-v1'||r.declaredCurrentWorlds!==9||
+    r.observedCurrentRawRuns!==9||r.allDeclaredCurrentRetained!==true||r.terminal?.settled!==true||r.terminal?.terminalIncomplete!==false||
+    r.estimatorSha256!==RENDERER_SHA||r.groups?.map(g=>g.id).join(',')!=='decentralized,stress48,stress96')throw Error('EXACT_CLOSED_JSON_REQUIRED');
+  const rendererBytes=await readFile(rendererPath);if(sha(rendererBytes)!==RENDERER_SHA)throw Error('SEALED_RENDERER_CHANGED');
+  const {renderMarkdown}=await import(pathToFileURL(rendererPath).href);
+  let md=derivedPreamble(jsonSha);const groups=[];
+  for(const g of r.groups){
+    if(g.evidence?.validRuns!==3||g.evidence?.rows?.length!==3||g.evidence.rows.some(x=>x.validForComparison!==true||x.status!=='completed'))
+      throw Error('ALL_GROUP_ROWS_REQUIRED');
+    const errors=g.evidence.rows.flatMap(row=>(row.errors??[]).map(e=>({arm:row.arm,...e})));
+    md+='\n---\n\n## Separate group: '+g.id+'\n\n'+renderMarkdown({...g.evidence,reader:{sha256:RENDERER_SHA}});
+    md+='\nRetained recovered operational errors: '+errors.length+'.\n';
+    for(const e of errors)md+='- '+e.arm+': '+e.phase+' / '+e.code+'; retained in the completed comparison.\n';
+    groups.push({id:g.id,rows:3,recoveredErrors:errors.length,newScoring:false});
+  }
+  md+='\nExposure/accounting is retained without new arithmetic in the source JSON costOnly and missingCurrentPaidCapExposureUsd fields. Historical fees are not turned into a new invoice or a statistical aggregate here.\n';
+  if(sha(await readFile(jsonPath))!==jsonSha)throw Error('SOURCE_JSON_CHANGED_DURING_RENDER');
+  await mkdir(destination,{recursive:true});
+  const helperName='derived-presentation-helper.mjs.txt',mdName='bridge-readout-summary.md';
+  await writeFile(resolve(destination,helperName),own,{flag:'wx'});
+  await writeFile(resolve(destination,mdName),md,{flag:'wx'});
+  const provenance={schema:'closed-host3600-derived-presentation-only-v1',recordedAt:new Date().toISOString(),
+    authorization:ROOT_GO,sourceJson:{path:jsonPath,sha256:jsonSha,bytes:input.length,beforeAfterShaMatches:true},
+    originalJsonSeal:r.seal,originalReaderWrapperSha256:'ad544ff824283aba6c859a205db9e699bac9d748e30a619ccdaa328de8aa960c',
+    estimatorSha256:RENDERER_SHA,rendererFunction:'renderMarkdown',helperSha256:sha(own),groups,
+    rendered:{path:mdName,sha256:sha(md),bytes:Buffer.byteLength(md)},helper:{path:helperName,sha256:sha(own),bytes:own.length},
+    rescoring:false,crossGroupAggregate:null,crossVersionAggregate:null,worldsStarted:0,modelCalls:0,
+    note:'Only formatting of already sealed group evidence. This Markdown is not retroactively part of the ad544 JSON seal.'};
+  await writeFile(resolve(destination,'provenance.json'),JSON.stringify(provenance,null,2)+'\n',{flag:'wx'});
+  return {state:'DERIVED_APPEND_ONLY',destination,sourceJsonSha256:jsonSha,helperSha256:sha(own),markdownSha256:sha(md),groups,worldsStarted:0,modelCalls:0};
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+  const o=Object.fromEntries(process.argv.slice(2).map(a=>{const at=a.indexOf('=');return [a.slice(2,at<0?undefined:at),at<0?true:a.slice(at+1)];}));
+  try{console.log(JSON.stringify(await run(o),null,2));}catch(e){console.error(JSON.stringify({state:'DERIVED_REJECTED',code:e.code??e.name,message:e.message}));process.exitCode=1;}
+}
