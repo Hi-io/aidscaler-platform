@@ -16,6 +16,8 @@ El contraste con `B8` va de una mejora del 13,98% a un empeoramiento del 7,29%. 
 
 Los endpoints de primera ayuda útil y ayuda suficiente coinciden en esta cohorte: cada necesidad se cubrió mediante un recibo suficiente. No se generaliza esa coincidencia a entregas parciales, evacuaciones, refugios ni otros escenarios.
 
+Los doce manifiestos efectivos de esta primaria tienen `packetLoss: 0` y `silentFraction: 0`. Por tanto, el 18,02% no acredita robustez ante pérdida de conexión ni comunidades sin publicaciones. El harness conserva una configuración piloto propia; no corresponde atribuirle el default general de 2% del motor. Esos mecanismos y sus controles se evalúan por separado, conservando sus versiones.
+
 ## Qué produjo la diferencia
 
 Las colas están dentro del motor: leer, integrar/decidir y transmitir son trabajos nativos, con inicio, espera, finalización y snapshot recibido. Un relay exige además entrega efectiva por el canal. El controlador no añade una penalización artificial al score final. Ambos métodos necesitan la misma revisión por el dueño, stock, flota, capacidades de comprobación y ejecución física.
