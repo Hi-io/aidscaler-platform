@@ -1,0 +1,146 @@
+{
+  "hand": [
+    {
+      "id": "hand-a",
+      "owner": "org0",
+      "quantity": 50,
+      "send": 50,
+      "deadline": 600000,
+      "building": "b1",
+      "type": "water",
+      "unit": "L",
+      "createdAt": 0,
+      "served": 50,
+      "uncoveredUnitMs": 1600050,
+      "firstServiceAt": 32001,
+      "sufficientServiceAt": 32001,
+      "firstCensored": false,
+      "sufficientCensored": false,
+      "restrictedFirstMs": 32001,
+      "restrictedSufficientMs": 32001,
+      "deadlineMatured": true,
+      "missedMatureDeadline": false,
+      "receipts": [
+        {
+          "at": 32001,
+          "quantity": 50,
+          "index": 38
+        }
+      ]
+    },
+    {
+      "id": "hand-b",
+      "owner": "org0",
+      "quantity": 90,
+      "send": 30,
+      "deadline": 600000,
+      "building": "b4",
+      "type": "water",
+      "unit": "L",
+      "createdAt": 0,
+      "served": 30,
+      "uncoveredUnitMs": 76795050,
+      "firstServiceAt": 159835,
+      "sufficientServiceAt": null,
+      "firstCensored": false,
+      "sufficientCensored": true,
+      "restrictedFirstMs": 159835,
+      "restrictedSufficientMs": 1200000,
+      "deadlineMatured": true,
+      "missedMatureDeadline": true,
+      "receipts": [
+        {
+          "at": 159835,
+          "quantity": 30,
+          "index": 118
+        }
+      ]
+    },
+    {
+      "id": "hand-c",
+      "owner": "org1",
+      "quantity": 40,
+      "send": 40,
+      "deadline": 600000,
+      "building": "b5",
+      "type": "water",
+      "unit": "L",
+      "createdAt": 0,
+      "served": 40,
+      "uncoveredUnitMs": 4946760,
+      "firstServiceAt": 123669,
+      "sufficientServiceAt": 123669,
+      "firstCensored": false,
+      "sufficientCensored": false,
+      "restrictedFirstMs": 123669,
+      "restrictedSufficientMs": 123669,
+      "deadlineMatured": true,
+      "missedMatureDeadline": false,
+      "receipts": [
+        {
+          "at": 123669,
+          "quantity": 40,
+          "index": 95
+        }
+      ]
+    },
+    {
+      "id": "hand-d",
+      "owner": "org1",
+      "quantity": 25,
+      "send": 0,
+      "deadline": 1800000,
+      "building": "b6",
+      "type": "water",
+      "unit": "L",
+      "createdAt": 0,
+      "served": 0,
+      "uncoveredUnitMs": 30000000,
+      "firstServiceAt": null,
+      "sufficientServiceAt": null,
+      "firstCensored": true,
+      "sufficientCensored": true,
+      "restrictedFirstMs": 1200000,
+      "restrictedSufficientMs": 1200000,
+      "deadlineMatured": false,
+      "missedMatureDeadline": false,
+      "receipts": []
+    }
+  ],
+  "formulas": [
+    "A=50*tA",
+    "B=90*tB+60*(H-tB)",
+    "C=40*tC",
+    "D=25*H"
+  ],
+  "horizonMs": 1200000,
+  "unit": "L·ms",
+  "initialStock": 2400,
+  "stock": 2280,
+  "cargo": 0,
+  "received": 120,
+  "journeys": [
+    {
+      "id": "operation-1",
+      "requestedAt": 4000,
+      "physicalReceiptAt": 32001,
+      "vehicleCommittedMs": 28001
+    },
+    {
+      "id": "operation-2",
+      "requestedAt": 4000,
+      "physicalReceiptAt": 123669,
+      "vehicleCommittedMs": 119669
+    },
+    {
+      "id": "operation-3",
+      "requestedAt": 36000,
+      "physicalReceiptAt": 159835,
+      "vehicleCommittedMs": 123835
+    }
+  ],
+  "vehicleCommittedMs": 271505,
+  "nativeOwnerReviewPersonMs": 3000,
+  "empiricalHumanHours": null,
+  "empiricalHumanHoursReason": "Source review timing is modeled, not a measurement of professional cognitive effort."
+}

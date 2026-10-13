@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-13T07:20:43.714Z",
+  "candidateFingerprint": "9b4de8b7769c69a3279067a8a093ef6d2392ec8a9728e704f871a184a69934e3",
+  "candidateChanged": false,
+  "checks": [
+    "Coordinator approves priorities and protected types through the UI; native units and delivery authority remain separate",
+    "Received-source batch is queued through the UI; sourced interpretations do not create operational authority or a proposal",
+    "Discover a response invokes the durable source pipeline; unresolved locations stay inconclusive without fabricated delivery authority",
+    "Waiting for owner review is visible and stoppable; synthetic UI state fixture, not a physical-delivery claim",
+    "Waiting for physical delivery is visible and stoppable; synthetic UI state fixture, not a physical-delivery claim",
+    "A waiting field-confirmation inquiry exposes Stop and cannot be resumed after operator cancellation",
+    "A delayed investigation response cannot replace the newly selected sources screen",
+    "Explicit local erasure review removes linked source content, completes durable cleanup and pauses automatic investigation without deleting physical history",
+    "Response-policy dialog remains usable at 390px with reduced motion and without page overflow"
+  ],
+  "errors": [],
+  "scope": "Automated browser mechanism exercise with a recorded semantic provider fixture; not real-model accuracy or human understanding"
+}
