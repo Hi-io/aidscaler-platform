@@ -1,6 +1,6 @@
 {
-  "name": "NEXO Response Workspace",
-  "short_name": "NEXO",
+  "name": "AidScaler Response Workspace",
+  "short_name": "AidScaler",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f5f6fa",

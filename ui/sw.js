@@ -1,4 +1,4 @@
-const CACHE = "nexo-shell-v12";
+const CACHE = "aidscaler-shell-v13";
 const ASSETS = [
   "/",
   "/styles.css",
@@ -39,7 +39,7 @@ self.addEventListener("activate", (e) =>
         .then((keys) =>
           Promise.all(
             keys
-              .filter((k) => k.startsWith("nexo-shell-") && k !== CACHE)
+              .filter((k) => (k.startsWith("aidscaler-shell-") || k.startsWith("nexo-shell-")) && k !== CACHE)
               .map((k) => caches.delete(k)),
           ),
         ),

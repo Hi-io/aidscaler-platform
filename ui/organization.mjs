@@ -96,7 +96,7 @@ export function createOrganizationControls(h) {
           }),
         );
       link.href = url;
-      link.download = `nexo-private-${result.organization}-${result.kind}-${result.offset}.json`;
+      link.download = `aidscaler-private-${result.organization}-${result.kind}-${result.offset}.json`;
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast(
