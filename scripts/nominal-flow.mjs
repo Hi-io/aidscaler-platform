@@ -166,7 +166,7 @@ try {
   await page.locator(".workspace").waitFor();
   const pages = [
     ["signals", "The world speaks in fragments."],
-    ["overview", "A clearer picture. A faster response."],
+    ["overview", "Response overview"],
     ["resources", "Know what can be committed."],
     ["investigations", "Investigate what could unlock help."],
   ];

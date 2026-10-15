@@ -1,4 +1,6 @@
 import { offlineQueue } from "./offline.mjs";
+import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
+import { createActivityView } from "./activity.mjs";
 import { icons } from "./icons.mjs";
 import { operationalMap, bindMap } from "./map.mjs";
 import { createExtras } from "./extras.mjs";
@@ -257,6 +259,8 @@ const organizationControls = createOrganizationControls({
 const responseControls = createResponseControls({ api, escape, action, state, modal, toast });
 const coverageControls = createCoverageControls({ api, escape, action, state, modal, toast, render, time });
 const unloadingControls = createUnloadingControls({ api, escape, state, toast, render });
+const presentation = createPresentation({ escape, icon, badge, action, table, empty, number, time, state });
+const activityView = createActivityView({ escape, icon, action, time, labelModel: displayModel });
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -269,6 +273,7 @@ function action(label, act, id = "", cls = "") {
     investigate: ["analyst", "commander", "dispatcher"],
     investigatesignal: ["analyst", "commander", "dispatcher"],
     "discover-page": ["analyst", "commander", "dispatcher"],
+    "interpret-page": ["analyst", "commander", "dispatcher"],
     "investigate-facility": ["analyst", "commander", "dispatcher"],
     "stop-inquiry": ["analyst", "commander", "dispatcher"],
     automation: ["admin", "commander"],
@@ -312,163 +317,50 @@ function login(error = "") {
   };
 }
 function shell(content) {
-  const active = nav.find((n) => n[0] === state.page);
-  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><div class="org"><span>RESPONSE WORKSPACE</span>${escape(state.user.org)} · Disaster operations</div><nav aria-label="Workspace">${visibleNav()
-    .map(
-      ([id, i, label, group]) =>
-        `${group ? `<div class="navlabel">${group}</div>` : ""}<button class="navitem ${state.page === id ? "active" : ""}" data-page="${id}" ${state.page === id ? 'aria-current="page"' : ""}>${icon(i)}${label}</button>`,
-    )
-    .join(
-      "",
-    )}</nav><div class="sidebarfooter"><strong>${escape(state.user.name)}</strong>${escape(state.user.role)} · ${escape(state.user.org)}<br>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span> / </span><b>${active?.[2] ?? "Workspace"}</b></div><div class="topstatus"><span><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Local workspace connected"}</span><a href="/public" target="_blank" rel="noopener">Public portal ${icon("external-link")}</a><span class="avatar" aria-label="${escape(state.user.name)}">${escape(state.user.name.slice(0, 1))}</span></div><select class="mobile-nav" aria-label="Workspace page">${visibleNav()
-    .map(
-      ([id, , label]) =>
-        `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`,
-    )
-    .join(
-      "",
-    )}</select></header><main id="main">${content}<div class="footnote">AidScaler local prototype · ${escape(state.model ?? "Model not connected")} · Sources and simulation results remain distinct from real-world outcomes.</div></main></div></div>`;
+  const active = nav.find(n => n[0] === state.page), scope = `${state.user.org}:${state.user.id}`;
+  const previousPage = app.querySelector("main[data-view]")?.dataset.view;
+  rememberPresentation(app, scope);
+  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(state.user.org)}</strong><span class="org-role">${escape(state.user.role)}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(state.user.role)}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}">${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p></details></main></div></div>`;
   bind();
+  restorePresentation(app, scope, state.page, { restoreFocus: previousPage === state.page });
 }
 function activityCard(a) {
-  const active = ["reading", "checking", "queued"].includes(a?.state);
-  const waitLabels = { waiting_evidence: "Waiting for field confirmation", waiting_context: "Unverified context awaits a relevant need or review", waiting_capacity: "Waiting for eligible response capacity", waiting_review: "Waiting for owner review", waiting_receipt: "Waiting for physical delivery" };
-  const waiting = Object.hasOwn(waitLabels, a?.state ?? ""), stoppable = active || waiting;
-  if (!a)
-    return `<div class="card soft"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">Ready to investigate</h3><p class="sub">Select a case. The model checks what could unlock useful help.</p></div></div><p class="small">No inference is running. Every tool call and result will appear here.</p></div>`;
-  return `<div class="card soft ${active ? "processing" : ""}"><div class="activityhead"><span class="spark">✦</span><div><h3 class="gradient">${escape(active ? "Gemma is " + { reading: "reading the evidence", checking: "checking a possibility", queued: "queued for investigation" }[a.state] : waiting ? waitLabels[a.state] : a.state === "cancelled" ? "Inquiry stopped" : a.state === "ready" ? (a.kind === "source_interpretation" ? "Sourced interpretations are ready to review" : "A response is ready to review") : a.state === "failed" ? "Investigation needs attention" : "Evidence remains incomplete")}</h3><p class="small">${escape(a.model ?? state.model)} · ${badge(a.state)}</p></div></div>${
-    a.steps
-      ?.slice(-2)
-      .map(
-        (s) =>
-          `<div class="activitystep">${icon(s.state === "failed" ? "circle-alert" : "check")} ${escape(s.label ?? s.tool)}<small>${escape(s.state)} · ${time(s.at)}</small></div>`,
-      )
-      .join("") ?? ""
-  }${a.cancelRequested ? `<p class="small">${a.state === "cancelled" ? "Stopped. Previously completed calls remain recorded." : "Stop requested. Waiting for the current call to finish."}</p>` : a.reason ? `<p class="small">${escape(a.reason)}</p>` : ""}<div class="toolbar">${action("Open activity & evidence", "activity", a.id, "quiet")}${a.proposalId ? action("Review response", "proposal", a.proposalId, "accent") : ""}${stoppable && !a.cancelRequested && ["analyst", "commander", "dispatcher"].includes(state.user.role) ? action("Stop inquiry", "stop-inquiry", a.id) : ""}</div></div>`;
+  return activityView.card(a, { role: state.user.role, model: state.model, now: Date.now() });
 }
 async function overview() {
   const d = await api("/api/dashboard");
   state.data = d;
-  const queue = d.proposal.filter((p) =>
-    ["awaiting_review", "requires_review", "needs_clarification"].includes(
-      p.state,
-    ),
-  );
-  const unresolved = d.need.filter((n) => n.quantity > n.served);
-  return (
-    title(
-      "A clearer picture. A faster response.",
-      "Prioritize urgent needs, review useful options and keep track of what actually reached people.",
-      action(`${icon("refresh-cw")} Sync sources`, "sync") +
-        action(
-          `${icon("sparkles")} Investigate signals`,
-          "investigate",
-          "",
-          "primary",
-        ),
-    ) +
-    `<div class="metricrow">${[
-      [
-        "Active needs",
-        d.activeNeedCount,
-        "Known needs, not total affected population",
-      ],
-      ["Decisions waiting", d.decisionCount, "Human authorization required"],
-      [
-        "Signals collected",
-        d.signalCount,
-        "Versioned public & authorized sources",
-      ],
-      [
-        "Operations in progress",
-        d.activeOperationCount,
-        "Dispatch is separate from confirmed receipt",
-      ],
-    ]
-      .map(
-        ([label, n, note]) =>
-          `<div class="metric"><span class="label">${label}</span><strong>${number(n)}</strong><span>${note}</span></div>`,
-      )
-      .join(
-        "",
-      )}</div><div class="grid split"><section class="card"><div class="cardheader"><h2>What needs your attention</h2>${badge("urgent")}</div>${
-      queue.length
-        ? queue
-            .slice(0, 4)
-            .map(
-              (p) =>
-                `<div class="listrow"><div class="rowicon coral">${icon("clipboard-check")}</div><div class="grow"><h3>${escape(p.title)}</h3><p>${escape(p.benefit)}</p>${badge(p.state)} <span class="small">${p.conditions.filter((c) => !c.satisfied).length} conditions pending</span></div>${action("Review", "proposal", p.id)}</div>`,
-            )
-            .join("")
-        : unresolved.length
-          ? unresolved
-              .slice(0, 5)
-              .map(
-                (n) =>
-                  `<div class="listrow"><div class="rowicon coral">${icon("circle-alert")}</div><div class="grow"><h3>${escape(n.type)} needed · ${escape(n.building)}</h3><p>${number(n.quantity - n.served)} ${escape(n.unit)} still needed. Confirm the situation before committing resources.</p></div>${action("Case", "need", n.id)}</div>`,
-              )
-              .join("")
-          : empty(
-              "No verified priorities yet. Connect sources or request a field assessment. Unknown areas remain unknown.",
-            )
-    }<div class="toolbar">${action("Open decision queue →", "navigate", "review", "quiet")}</div></section><div class="grid">${activityCard(d.activity[0])}${await coverageControls.card()}<section class="card"><div class="cardheader"><h3>Source health</h3>${action("Manage", "navigate", "settings", "quiet")}</div>${d.source.length ? d.source.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal network & operational systems</h3><p>${s.changed ?? 0} new or revised signals · ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "No successful sync"}</p></div>${badge(s.state)}</div>`).join("") : empty("No source is connected yet. Public feeds are ingested automatically when configured.", "radio")}<p class="small">A gap in reports does not mean a gap in needs.</p></section></div></div>`
-  );
+  const queue = d.proposal.filter(p => ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state));
+  const unresolved = d.need.filter(n => n.quantity > n.served);
+  return title("Response overview", "Your priorities, the agent's progress, and the next decision that needs you.",
+    action(`${icon("refresh-cw")} Sync sources`, "sync", "", "quiet") +
+    action(`${icon("sparkles")} Investigate signals`, "investigate", "", "primary")) +
+    presentation.overview({ data: d, queue, unresolved, activity: activityCard(d.activity[0]), coverage: await coverageControls.card(),
+      sourceStatus: d.source.length ? d.source.map(source => source.state).join(" · ") : "Not connected" });
 }
 async function signals() {
-  const rows = (await record("signal")).filter((s) => s.state !== "erased");
+  const rows = (await record("signal")).filter(s => s.state !== "erased");
   state.signalRows = rows;
-  const filtered = rows.filter((s) =>
-      `${s.text} ${s.source} ${s.location}`
-        .toLowerCase()
-        .includes(state.filter.toLowerCase()),
-    ),
-    start = state.signalPage * 12;
-  return (
-    title(
-      "The world speaks in fragments.",
-      "Public posts, media and authorized reports arrive automatically. Keep the original evidence and its uncertainty.",
-      action(`${icon("refresh-cw")} Sync`, "sync") +
-        action("Discover a response", "discover-page", "", "primary") + action("Interpret only", "interpret-page", "", "accent"),
-    ) +
-    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="badge">${filtered.length} collected signals</span></div><div class="card">${
-      filtered
-        .slice(start, start + 12)
-        .map(
-          (s) =>
-            `<article class="listrow"><div class="socialavatar">${escape((s.authorName ?? s.source ?? "S").slice(0, 1))}</div><div class="grow"><div class="cardheader"><div class="sourceavatars"><strong>${escape(s.authorName ?? s.source)}</strong><span>${escape(s.source)} · v${s.sourceVersion ?? 1}</span></div>${badge(s.state)}</div><p class="signaltext">${escape(s.text)}</p>${s.attachments?.map((m) => `<div class="media">${icon(m.kind === "video" ? "video" : m.kind === "audio" ? "audio-lines" : "image")}<div><strong>${escape(m.kind)} attachment</strong><br>${escape(m.description)}<br><span class="small">Synthetic description · not a verified real-world recording</span></div></div>`).join("") ?? ""}<div class="sourceavatars">${icon("map-pin")}${escape(s.location ?? "Location not confirmed")} · ${ago(s.receivedAt)} ${action("Inspect source", "signal", s.id, "quiet")}</div></div></article>`,
-        )
-        .join("") ||
-      empty(
-        "No signals match. Sources will appear here after the first sync.",
-        "radio",
-      )
-    }</div><div class="pagination">${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`
-  );
+  const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location}`.toLowerCase().includes(state.filter.toLowerCase()));
+  const start = state.signalPage * 12;
+  return title("The world speaks in fragments.", "Public posts, media and authorized reports arrive here. Open a source when you need its full context.",
+    action(`${icon("refresh-cw")} Sync`, "sync", "", "quiet") +
+    action("Discover a response", "discover-page", "", "primary") + action("Interpret only", "interpret-page", "", "quiet")) +
+    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Investigation scope</summary><p class="small">Discovery and interpretation use up to the first 35 received sources, not just the search results or this page. Source originals and uncertainty are retained.</p></details>` +
+    presentation.signals(filtered.slice(start, start + 12)) +
+    `<div class="pagination"><span class="small">${filtered.length ? start + 1 : 0}–${Math.min(start + 12, filtered.length)} of ${number(filtered.length)}</span>${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`;
 }
 async function investigations() {
-  const rows = await record("activity"),
-    intake = await api("/api/automation");
-  return (
-    title(
-      "Investigate what could unlock help.",
-      "See real model activity, checked constraints and useful unanswered questions.",
-      action(
-        `${icon("sparkles")} Start investigation`,
-        "investigate",
-        "",
-        "primary",
-      ),
-    ) +
-    `<div class="toolbar"><span class="small">Automatic intake ${intake.policy.enabled ? "enabled" : "paused"} · ${intake.counts.pending ?? 0} source groups pending · ${intake.policy.hourlyCallLimit} calls / hour limit</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Enable automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}</div>${activityCard(rows[0])}<section class="card" style="margin-top:22px"><h2>Recent investigations</h2>${
-      rows
-        .slice(1, 7)
-        .map(
-          (a) =>
-            `<div class="listrow"><div class="grow"><strong>${escape(a.state === "ready" ? "Response prepared" : a.state.replaceAll("_", " "))}</strong><p>${escape(a.reason ?? a.steps?.at(-1)?.label ?? "Recorded activity")}</p></div>${badge(a.state)}${action("Inspect", "activity", a.id)}</div>`,
-        )
-        .join("") || '<p class="sub">Earlier work will appear here.</p>'
-    }<p class="note">A processing state describes model activity, never physical help or confirmed truth.</p></section>`
-  );
+  const rows = await record("activity"), intake = await api("/api/automation");
+  const ongoing = rows.filter(a => ["reading", "checking", "queued", "waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(a.state));
+  const focus = ongoing[0] ?? rows[0];
+  const earlier = rows.filter(a => a.id !== focus?.id);
+  return title("Investigate what could unlock help.", "Follow the current step. Expand the evidence when you want to see how a response came together.",
+    action(`${icon("sparkles")} Start investigation`, "investigate", "", "primary")) +
+    `<div class="status-strip"><span>${icon("radio")} ${intake.counts.pending ?? 0} source groups pending</span><span>${ongoing.length} active or waiting</span><span>Automatic intake ${intake.policy.enabled ? "enabled" : "paused"}</span></div>` +
+    activityCard(focus) +
+    `<section class="card investigation-history"><div class="section-heading"><h2>Recent investigations</h2><span class="small">${earlier.length} recorded</span></div>${earlier.slice(0, 6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("") || empty("Earlier investigations will appear here.", "sparkles")}${earlier.length > 6 ? `<details class="secondary-disclosure" data-ui-key="investigations:earlier"><summary>All earlier investigations · ${earlier.length - 6} more</summary>${earlier.slice(6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("")}</details>` : ""}</section>
+    <details class="secondary-disclosure" data-ui-key="investigations:automation"><summary>Automatic intake & model limits</summary><div class="toolbar"><span class="small">${intake.policy.hourlyCallLimit} calls / hour limit</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Enable automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}</div><p class="small">Model activity is distinct from physical help or confirmed truth. Human approval remains required.</p></details>`;
 }
 async function review() {
   let page = state.reviewPage ?? 0,
@@ -534,15 +426,8 @@ async function resources() {
       "Availability includes reserve floors, existing commitments and owner permission.",
       action("Add a local resource", "addresource", "", "primary"),
     ) +
-    `<section class="card"><div class="cardheader"><h2>Inventory & operational capacity</h2><span class="small">Source versions remain visible</span></div>${table(
-      ["Resource", "Type", "Available", "Reserved", "Version", ""],
-      items.map(
-        (r) =>
-          `<tr><td><strong>${escape(r.label ?? r.id)}</strong><small>${escape(r.owner)} · ${escape(r.node ?? "Location unknown")}${r.lotId ? " · Lot " + escape(r.lotId) : ""}${r.useByAt !== undefined ? " · " + escape(sourceExpiryLabel(r.useByAt, dashboard.simulatedAt)) : ""}</small></td><td>${escape(r.type)}</td><td>${number(available(r))} ${escape(r.unit ?? "units")}${r.type === "staff" ? " " + staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }) : usable(r) ? "" : " " + badge(r.condition ?? "expired")}</td><td>${number(r.reserved)} <small>Protected floor: ${number(r.floor)}</small></td><td>v${r.version} ${r.sourceVersion ? "· source v" + r.sourceVersion : ""}</td><td>${usable(r) ? action("Reserve", "reserve", r.id) : ""} ${action("Share", "share", r.id)}</td></tr>`,
-      ),
-    )}${!items.length ? empty("Query inventory or sync your operational systems.", "package") : ""}</section><div class="grid cols2" style="margin-top:22px"><section class="card"><div class="cardheader"><h2>Facilities</h2>${action("Request facility check", "verifyform", "", "quiet")}</div>${
+    `<section class="card resource-group"><div class="section-heading"><h2>Inventory & operational capacity</h2><span class="small">${items.length} received records</span></div>${presentation.resourceTable(items.filter(r => r.owner === state.user.org || !r.owner), { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) })}${items.some(r => r.owner && r.owner !== state.user.org) ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner-owned resources · ${items.filter(r => r.owner && r.owner !== state.user.org).length}</summary><p class="small">Known capacity remains under its owner's control. An observation is not a commitment.</p>${presentation.resourceTable(items.filter(r => r.owner && r.owner !== state.user.org), { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) })}</details>` : ""}${!items.length ? empty("Query inventory or sync your operational systems.", "package") : ""}</section><div class="grid cols2" style="margin-top:22px"><section class="card"><div class="cardheader"><h2>Facilities</h2>${action("Request facility check", "verifyform", "", "quiet")}</div>${
       facilities
-        .slice(0, 8)
         .map(
           (f) =>
             `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(f.id)} · ${escape(f.use ?? "Facility")}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"} · ${escape(f.state ?? "Unknown operating state")}</p></div>${action("Investigate", "investigate-facility", f.id)}${badge(f.state ?? "unknown")}</div>`,
@@ -552,9 +437,8 @@ async function resources() {
         "Facilities require a relevant assessment before activation.",
         "building-2",
       )
-    }</section><section class="card"><h2>Transport</h2>${
+    }</section><section class="card"><div class="section-heading"><h2>Transport</h2><span class="small">${vehicles.length} received vehicles</span></div>${
       vehicles
-        .slice(0, 8)
         .map(
           (v) =>
             `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.id)}</h3><p>Capacity ${number(v.capacity)} · ${escape(v.owner)} · position may be delayed</p>${driverAvailabilityBadge(v)}</div>${badge(v.state)}</div>`,
@@ -642,7 +526,7 @@ async function finance() {
       )
       .join(
         "",
-      )}</div>${controls}<section class="card"><div class="cardheader"><h2>Real model usage</h2><span class="small">Provider receipts, including failed attempts</span></div>${table(
+      )}</div>${controls}<details class="card secondary-disclosure" data-ui-key="finance:model-usage"><summary>Model usage & provider receipts · ${usage.length} records</summary><div class="disclosure-content"><div class="cardheader"><h2>Real model usage</h2><span class="small">Provider receipts, including failed attempts</span></div>${table(
       ["Episode", "Model", "State", "Tokens in / out", "Cost", "Wall time"],
       usage
         .slice(0, 15)
@@ -650,7 +534,7 @@ async function finance() {
           (u) =>
             `<tr><td>${escape(u.episode.slice(-10))}</td><td>${escape(u.model)}</td><td>${badge(u.state)}</td><td>${number(u.input_tokens)} / ${number(u.output_tokens)}</td><td>${u.cost_usd == null ? "Not reported" : "$" + Number(u.cost_usd).toFixed(6)}</td><td>${u.wall_ms == null ? "Pending" : (u.wall_ms / 1000).toFixed(1) + " s"}</td></tr>`,
         ),
-    )}${!usage.length ? empty("No model call has been recorded.", "sparkles") : ""}</section><p class="note">The local payment provider exercises signatures, retries and refunds. External payment-provider onboarding is a separate integration.</p>`
+    )}${!usage.length ? empty("No model call has been recorded.", "sparkles") : ""}</div></details><p class="note">The local payment provider exercises signatures, retries and refunds. External payment-provider onboarding is a separate integration.</p>`
   );
 }
 async function field() {
@@ -738,10 +622,6 @@ const views = {
 };
 async function render() {
   const version = ++renderVersion;
-  const focused = document.activeElement,
-    focusKey = focused?.dataset?.action
-      ? { action: focused.dataset.action, id: focused.dataset.id ?? "" }
-      : null;
   try {
     if (!visibleNav().some((n) => n[0] === state.page))
       state.page =
@@ -755,12 +635,6 @@ async function render() {
     if (version !== renderVersion || page !== state.page || !state.user) return;
     shell(content);
     bindMap();
-    if (focusKey)
-      app
-        .querySelector(
-          `[data-action="${CSS.escape(focusKey.action)}"][data-id="${CSS.escape(focusKey.id)}"]`,
-        )
-        ?.focus({ preventScroll: true });
   } catch (e) {
     if (version !== renderVersion || !state.user) return;
     if (e.code === "AUTHENTICATION") {
@@ -780,6 +654,7 @@ function modal(name, content, footer = "") {
   document.querySelector("dialog")?.remove();
   dialog = document.createElement("dialog");
   dialog.className = "dialog";
+  dialog.setAttribute("aria-label", name);
   dialog.innerHTML = `<header class="dialoghead"><h2>${name}</h2><button class="iconbutton" aria-label="Close dialog" data-action="close">${icon("x")}</button></header><div class="dialogbody">${content}</div>${footer ? `<footer class="dialogfoot">${footer}</footer>` : ""}`;
   document.body.append(dialog);
   dialog.showModal();
@@ -798,7 +673,7 @@ async function proposal(id) {
     pending = p.conditions.filter((c) => !c.satisfied);
   modal(
     "Review a response",
-    `<div class="cardheader">${badge(p.state)}${badge(p.priority)}</div><h2>${escape(p.title)}</h2><div class="detailgrid" style="margin:22px 0"><div class="decision"><span class="eyebrow">What can we do?</span><p>${escape(p.summary)}</p></div><div class="decision"><span class="eyebrow">Who benefits?</span><p>${escape(p.benefit)}</p></div><div class="decision"><span class="eyebrow">Why is this viable?</span><p>${escape(p.rationale)}</p></div><div class="decision"><span class="eyebrow">What still needs checking?</span>${pending.length ? `<ul class="conditions">${pending.map((c) => `<li>${icon("circle-alert")}<span>${escape(c.description)}</span></li>`).join("")}</ul>` : "<p>No declared pending conditions. Verify the evidence before approving.</p>"}</div></div>${p.changedReason ? `<div class="warning">Changed: ${escape(p.changedReason)}. Previous authorization no longer applies.</div>` : ""}<details class="collapse"><summary>${p.references.length} evidence references</summary>${p.references.map((r) => `<div class="listrow"><code>${escape(r)}</code>${action("Open evidence", "evidence", r)}</div>`).join("")}</details><details class="collapse"><summary>Planned actions & responsible organizations</summary>${table(
+    `<div class="cardheader">${badge(p.state)}${badge(p.priority)}</div><h2>${escape(p.title)}</h2><div class="detailgrid" style="margin:22px 0"><div class="decision"><span class="eyebrow">What can we do?</span><p>${escape(p.summary)}</p><p class="sub"><strong>Who benefits:</strong> ${escape(p.benefit)}</p></div><div class="decision"><span class="eyebrow">What still needs checking?</span>${pending.length ? `<ul class="conditions">${pending.map((c) => `<li>${icon("circle-alert")}<span>${escape(c.description)}</span></li>`).join("")}</ul>` : "<p>No declared pending conditions. Verify the evidence before approving.</p>"}</div></div><details class="collapse"><summary>Why this response?</summary><p class="sub">${escape(p.rationale)}</p></details>${p.changedReason ? `<div class="warning">Changed: ${escape(p.changedReason)}. Previous authorization no longer applies.</div>` : ""}<details class="collapse"><summary>${p.references.length} evidence references</summary>${p.references.map((r) => `<div class="listrow"><code>${escape(r)}</code>${action("Open evidence", "evidence", r)}</div>`).join("")}</details><details class="collapse"><summary>Planned actions & responsible organizations</summary>${table(
       ["Step", "Action", "Owner", "Dependencies"],
       p.actions.map(
         (a, i) =>
@@ -849,7 +724,7 @@ async function sourceDetail(id) {
   const context = await caseControls.context(id);
   modal(
     "Original source & context",
-    `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Simulation timestamp: ${number(s.publishedAt)} ms<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location & version</span><p>${escape(s.location ?? "Not confirmed")}<br>Source version ${s.sourceVersion}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><pre class="trace">${escape(JSON.stringify({ references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre>`,
+    `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Simulation timestamp: ${number(s.publishedAt)} ms<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location & version</span><p>${escape(s.location ?? "Not confirmed")}<br>Source version ${s.sourceVersion}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><details class="collapse"><summary>Source references & attachment records</summary><pre class="trace">${escape(JSON.stringify({ references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre></details>`,
     action("Investigate this signal", "investigatesignal", id, "primary") + (["admin", "commander"].includes(state.user.role) ? action("Review local erasure", "erase-source", id) : ""),
   );
   const review = document.createElement("div");
@@ -859,13 +734,7 @@ async function sourceDetail(id) {
 }
 async function activityDetail(id) {
   const a = await record("activity", id);
-  modal(
-    "Observed investigation activity",
-    `<div class="cardheader">${badge(a.state)}<span class="small">${escape(a.model)} · ${a.calls ?? "…"} calls</span></div><p class="sub">These are tool requests, returned results and a short decision rationale. They are not a private chain of thought.</p>${a.steps.map((s) => `<details class="collapse"><summary>${escape(s.label ?? s.tool)} · ${escape(s.state)}</summary><pre class="trace">${escape(JSON.stringify({ parameters: s.params, result: s.result }, null, 2))}</pre></details>`).join("")}${a.reason ? `<div class="warning">${escape(a.reason)}</div>` : ""}`,
-    a.proposalId
-      ? action("Review response", "proposal", a.proposalId, "primary")
-      : a.semanticReceipt ? action("Inspect interpretations", "semantic-receipt", a.semanticReceipt, "primary") : action("Close", "close"),
-  );
+  modal("Investigation activity", activityView.detail(a, { role: state.user.role, model: state.model, now: Date.now() }));
 }
 async function operationDetail(id) {
   const o = await record("operation", id);
@@ -1049,6 +918,7 @@ async function runAction(name, id) {
   }
   if (name === "stop-inquiry") {
     await api("/api/investigation/stop", { id });
+    dialog?.close();
     toast("Stop requested. Completed reads and costs remain recorded.");
     await render();
     return;

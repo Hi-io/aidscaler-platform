@@ -32,10 +32,10 @@ try {
     await page.getByLabel("Password", { exact: true }).fill(access.password);
     await page.getByRole("button", { name: "Enter workspace" }).click();
     await page
-      .getByRole("heading", { name: "A clearer picture. A faster response." })
+      .getByRole("heading", { name: "Response overview", exact: true })
       .waitFor();
     for (const [hash, title] of [
-      ["overview", "A clearer picture. A faster response."],
+      ["overview", "Response overview"],
       ["map", "A map of what your team knows."],
       ["signals", "The world speaks in fragments."],
       ["investigations", "Investigate what could unlock help."],

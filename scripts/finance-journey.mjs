@@ -126,7 +126,7 @@ try {
     p.on("pageerror", e => errors.push(e.message));
     await login(role, p); await p.goto(app.url + "/#finance");
     if (role === "auditor") await p.getByRole("heading", { name: "Manage settled support", exact: true }).waitFor();
-    else await p.getByRole("heading", { name: "A clearer picture. A faster response.", exact: true }).waitFor();
+    else await p.getByRole("heading", { name: "Response overview", exact: true }).waitFor();
     assert.equal(await p.locator("#allocateform,.reconcileform,#financepublishform").count(), 0);
     checks.push(`${role} has no financial reconciliation, allocation or publication form`); await other.close();
   }

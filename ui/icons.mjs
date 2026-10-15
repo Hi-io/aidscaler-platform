@@ -1,5 +1,7 @@
 // Lucide icons · ISC license. See LICENSE-LUCIDE.txt.
 export const icons = {
+  "chevron-down": '<path d="m6 9 6 6 6-6" />',
+  "loader-circle": '<path d="M21 12a9 9 0 1 1-6.219-8.56" />',
   "layout-dashboard":
     '<rect width="7" height="9" x="3" y="3" rx="1" />\n  <rect width="7" height="5" x="14" y="3" rx="1" />\n  <rect width="7" height="9" x="14" y="12" rx="1" />\n  <rect width="7" height="5" x="3" y="16" rx="1" />',
   radio:

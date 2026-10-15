@@ -80,6 +80,7 @@ try {
   });
   checks.push("Received operational map and keyboard fallback render");
   await page.goto(base + "/#media");
+  await page.locator("#media-intake > summary").filter({ hasText: /^Add an attachment$/ }).click();
   await page.locator("#mediaform [name=file]").setInputFiles({
     name: "field-observation.txt",
     mimeType: "text/plain",

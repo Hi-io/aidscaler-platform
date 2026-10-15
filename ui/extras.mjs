@@ -30,15 +30,15 @@ export function createExtras(h) {
         "Evidence you can inspect.",
         "Original image, video, audio and document bytes stay with their source. Interpretation remains unverified.",
       ) +
-      `<div class="grid ${canUpload ? "split" : ""}">${canUpload ? `<section class="card"><h2>Add source media</h2><form id="mediaform" class="fieldform"><label>Source file<input type="file" name="file" accept="image/png,image/jpeg,video/mp4,audio/wav,audio/mpeg,application/pdf,text/plain" required></label><label>Source or owner<input name="source" placeholder="Authorized field team or source URL" required></label><label>Short description<input name="title" placeholder="What does this source represent?" required maxlength="150"></label><button class="primary" type="submit">${icon("upload")} Preserve original evidence</button><p class="note">Up to 10 MB. Audio uses local speech recognition. Images and sampled video frames use the configured model. Scanned PDFs may require additional OCR. No analysis certifies safety or confirms a need.</p></form></section>` : ""}<section class="card"><h2>Recent source media</h2>${
+      `<section class="card" aria-labelledby="recent-media-heading"><div class="cardheader section-heading"><div><h2 id="recent-media-heading">Recent source media</h2><p class="small">Inspect the original file, its source and processing state.</p></div><span class="badge">${rows.length} ${rows.length === 1 ? "source file" : "source files"}</span></div>${
         rows
           .slice(0, 12)
           .map(
             (m) =>
               `<div class="listrow"><div class="rowicon">${icon(m.mime.startsWith("audio") ? "volume-2" : m.mime.startsWith("video") ? "play" : m.mime.includes("pdf") ? "file-text" : "image")}</div><div class="grow"><h3>${e(m.title)}</h3><p>${e(m.source)} · ${Math.round(m.size / 1024)} KB</p>${badge(m.state)}</div>${action("Inspect", "media-open", m.id)}</div>`,
           )
-          .join("") || empty("Your uploaded sources will appear here.", "image")
-      }</section></div>`
+          .join("") || empty("No source files are available yet. Received attachments appear here." + (canUpload ? " You can also add an original file below." : ""), "image")
+      }${rows.length > 12 ? `<p class="note">Showing the 12 most recent of ${rows.length} source files.</p>` : ""}</section>${canUpload ? `<details id="media-intake" class="card collapse secondary-disclosure media-intake" ${state.user.role === "field" ? "open" : ""}><summary>Add an attachment</summary><p class="sub">Add an original file from an authorized source when it is not already available through a connected channel.</p><form id="mediaform" class="fieldform"><label>Source file<input type="file" name="file" accept="image/png,image/jpeg,video/mp4,audio/wav,audio/mpeg,application/pdf,text/plain" required></label><label>Source or owner<input name="source" placeholder="Authorized field team or source URL" required></label><label>Short description<input name="title" placeholder="What does this source represent?" required maxlength="150"></label><button class="primary" type="submit">${icon("upload")} Preserve original evidence</button><p class="note">Up to 10 MB. Audio uses local speech recognition. Images and sampled video frames use the configured model. Scanned PDFs may require additional OCR. No analysis certifies safety or confirms a need.</p></form></details>` : ""}`
     );
   }
   async function mediaOpen(id) {
@@ -73,7 +73,7 @@ export function createExtras(h) {
         "Connect the sources your team trusts.",
         "Read existing services through scoped JSON or MCP connectors. External data remains evidence, not operational authority.",
       ) +
-      `<section class="card"><div class="cardheader"><h2>Approved connections</h2>${allowed(["admin"]) ? action("Add a read connector", "integration-new", "", "accent") : ""}</div>${rows.map((c) => `<div class="listrow"><div class="rowicon">${icon("plug")}</div><div class="grow"><h3>${e(c.name)}</h3><p>${e(c.purpose)}</p><small>${e(c.type)} · ${e(new URL(c.url).origin)}</small></div>${badge(c.state)}${allowed(["admin", "analyst", "commander", "dispatcher"]) ? action("Read source", "integration-read", c.id) : ""}</div>`).join("") || empty("Register a permitted source once. No need to paste every report manually.", "plug")}<details class="collapse"><summary>What happens to an external result?</summary><p class="sub">AidScaler preserves its origin, collection time, license and hash. Received records enter the evidence queue as unverified. Credentials stay on the server. MCP permissions are explicit and this instance exposes a separate read-only MCP endpoint.</p></details></section>`
+      `<section class="card"><div class="cardheader section-heading"><h2>Approved connections</h2>${allowed(["admin"]) ? action("Add a read connector", "integration-new", "", "accent") : ""}</div>${rows.map((c) => `<div class="listrow"><div class="rowicon">${icon("plug")}</div><div class="grow"><h3>${e(c.name)}</h3><p>${e(c.purpose)}</p><small>${e(c.type)} · ${e(new URL(c.url).origin)}</small></div>${badge(c.state)}${allowed(["admin", "analyst", "commander", "dispatcher"]) ? action("Read source", "integration-read", c.id) : ""}</div>`).join("") || empty("Register a permitted source once. No need to paste every report manually.", "plug")}<details class="collapse secondary-disclosure"><summary>What happens to an external result?</summary><p class="sub">AidScaler preserves its origin, collection time, license and hash. Received records enter the evidence queue as unverified. Credentials stay on the server. MCP permissions are explicit and this instance exposes a separate read-only MCP endpoint.</p></details></section>`
     );
   }
   function integrationNew() {
@@ -158,7 +158,7 @@ export function createExtras(h) {
         "Community reports need context.",
         "Keep legitimate requests visible while checking origin, place, time and duplicates.",
       ) +
-      `<section class="card">${
+      `<section class="card"><div class="cardheader section-heading"><h2>Awaiting review</h2><span class="badge">${rows.length} ${rows.length === 1 ? "report" : "reports"}</span></div><p class="note">Accepting a report preserves an observation; it does not confirm it or dispatch aid.</p>${
         rows
           .slice(0, 16)
           .map(
@@ -167,7 +167,7 @@ export function createExtras(h) {
           )
           .join("") ||
         empty("No community reports are awaiting moderation.", "check")
-      }<p class="note">Accepting a report preserves an observation; it does not confirm it or dispatch aid.</p></section>`
+      }${rows.length > 16 ? `<p class="note">Showing 16 of ${rows.length} reports awaiting moderation.</p>` : ""}</section>`
     );
   }
   async function run(name, id) {

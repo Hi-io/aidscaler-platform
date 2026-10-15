@@ -1,9 +1,11 @@
-const CACHE = "aidscaler-shell-v14";
+const CACHE = "aidscaler-shell-v15";
 const ASSETS = [
   "/",
   "/styles.css",
   "/fonts.css",
   "/app.mjs",
+  "/activity.mjs",
+  "/presentation.mjs",
   "/offline.mjs",
   "/icons.mjs",
   "/map.mjs",
