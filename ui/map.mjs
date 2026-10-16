@@ -7,6 +7,28 @@ const esc = (s) =>
         c
       ],
   );
+const finitePoint = (node) => node && Number.isFinite(node.x) && Number.isFinite(node.z);
+function projectGeography(geo) {
+  const extent = geo.extentM ?? geo.geography?.extentM;
+  let minX = Infinity, minZ = Infinity, maxX = -Infinity, maxZ = -Infinity;
+  for (const node of geo.nodes) {
+    if (!finitePoint(node)) continue;
+    minX = Math.min(minX, node.x); minZ = Math.min(minZ, node.z);
+    maxX = Math.max(maxX, node.x); maxZ = Math.max(maxZ, node.z);
+  }
+  if (!Number.isFinite(minX)) return () => null;
+  if (Number.isFinite(extent) && extent > 0) {
+    minX = Math.min(0, minX); minZ = Math.min(0, minZ);
+    maxX = Math.max(extent, maxX); maxZ = Math.max(extent, maxZ);
+  }
+  // Both axes use the same scale: geographic distances keep their proportions.
+  const width = Math.max(1, maxX - minX), height = Math.max(1, maxZ - minZ);
+  const scale = Math.min(840 / width, 420 / height);
+  const offsetX = (920 - width * scale) / 2, offsetZ = (480 - height * scale) / 2;
+  return (node) => finitePoint(node)
+    ? { x: offsetX + (node.x - minX) * scale, y: offsetZ + (node.z - minZ) * scale }
+    : null;
+}
 export function operationalMap(data) {
   const geo = data.geography;
   setDisplayContext({ geography: geo });
@@ -15,24 +37,28 @@ export function operationalMap(data) {
   const nodes = new Map(geo.nodes.map((n) => [n.id, n])),
     places = new Map(geo.places?.map((b) => [b.id, b]) ?? []),
     roads = new Map(data.roads.map((r) => [r.id, r]));
-  const maxX = Math.max(...geo.nodes.map((n) => n.x), 1),
-    maxZ = Math.max(...geo.nodes.map((n) => n.z), 1),
-    point = (n) =>
-      n ? { x: 40 + (n.x / maxX) * 840, y: 30 + (n.z / maxZ) * 420 } : null;
+  const point = projectGeography(geo);
+  const source = geo.geography ?? {}, mapName = source.name || "Received source map";
+  const extent = geo.extentM ?? source.extentM;
+  const description = ["Received geography",
+    Number.isFinite(extent) && extent > 0 ? `${extent / 1000} × ${extent / 1000} km` : null,
+    source.projection?.northUp === true ? "North up" : null].filter(Boolean).join(" · ");
   const lines = geo.roads
     .map((e) => {
       const a = point(nodes.get(e.from)),
         b = point(nodes.get(e.to));
       if (!a || !b) return "";
       const s = roads.get(e.id);
-      return `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="maproad ${s?.open === false ? "closed" : s?.open === true ? "known" : ""}"><title>${esc(e.id)} · ${s?.open === false ? "Reported closed" : s?.open === true ? "Reported open" : "No current condition report"}</title></line>`;
+      const points = e.points?.length > 1 ? e.points.map(point).filter(Boolean) : [a, b];
+      return `<polyline points="${points.map(p => `${p.x},${p.y}`).join(" ")}" fill="none" class="maproad ${s?.open === false ? "closed" : s?.open === true ? "known" : ""}"><title>${esc(e.name || e.id)} · ${s?.open === false ? "Reported closed" : s?.open === true ? "Reported open" : "No current condition report"}</title></polyline>`;
     })
     .join("");
+  const placeSize = places.size > 1000 ? 1.8 : 6;
   const buildings = [...places.values()]
     .map((b) => {
       const p = point(nodes.get(b.node));
       return p
-        ? `<rect x="${p.x - 3}" y="${p.y - 3}" width="6" height="6" rx="1" class="mapbuilding"/>`
+        ? `<rect x="${p.x - placeSize / 2}" y="${p.y - placeSize / 2}" width="${placeSize}" height="${placeSize}" rx="0.7" class="mapbuilding"/>`
         : "";
     })
     .join("");
@@ -55,7 +81,7 @@ export function operationalMap(data) {
         : "";
     })
     .join("");
-  return `<div class="operationalmap"><div class="maplegend"><span><i class="mapdot need"></i>Observed unmet need</span><span><i class="mapdot vehicle"></i>Last vehicle report</span><span><i class="mapdot road"></i>Reported closed road</span></div><svg id="responsemap" viewBox="0 0 920 480" role="img" aria-label="Map of received needs, vehicle observations and road reports"><rect width="920" height="480" fill="#f5f5fc"/>${lines}${buildings}${vehicles}${needs}</svg><div class="mapfooter"><span>Geography is public. Operating conditions are received observations. Unreported areas remain uncertain.</span><div><button data-map="in" aria-label="Zoom in">+</button><button data-map="out" aria-label="Zoom out">−</button><button data-map="reset">Reset view</button></div></div></div>`;
+  return `<div class="operationalmap"><div class="mapidentity"><div><strong>${esc(mapName)}</strong><span>${esc(description)}</span></div>${source.attribution ? `<span class="mapcredit">${esc(source.attribution)}</span>` : ""}</div><div class="maplegend"><span><i class="mapdot need"></i>Observed unmet need</span><span><i class="mapdot vehicle"></i>Last vehicle report</span><span><i class="mapdot road"></i>Reported closed road</span></div><svg id="responsemap" viewBox="0 0 920 480" role="img" aria-label="${esc(mapName)}: received needs, vehicle observations and road reports"><rect width="920" height="480" fill="#f5f5fc"/>${lines}${buildings}${vehicles}${needs}</svg><div class="mapfooter"><span>Geography is public. Operating conditions are received observations. Unreported areas remain uncertain.</span><div><button data-map="in" aria-label="Zoom in">+</button><button data-map="out" aria-label="Zoom out">−</button><button data-map="reset">Reset view</button></div></div></div>`;
 }
 export function bindMap() {
   const svg = document.querySelector("#responsemap");

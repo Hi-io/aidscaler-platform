@@ -11,6 +11,7 @@ import { sign } from "./network.mjs";
 import { check, role, AppError } from "./errors.mjs";
 import { actionSchema } from "./contracts.mjs";
 import { validatePlan } from "./planning.mjs";
+import { jsonBody as input } from "./json-body.mjs";
 const terminal = new Set(["received", "completed", "service"]);
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -20,23 +21,6 @@ const json = (res, status, data) => {
   });
   res.end(JSON.stringify(data));
 };
-async function input(req) {
-  let text = "";
-  for await (const chunk of req) {
-    text += chunk;
-    check(
-      Buffer.byteLength(text) <= 1000000,
-      "BODY_LIMIT",
-      "Request too large.",
-      413,
-    );
-  }
-  try {
-    return JSON.parse(text || "{}");
-  } catch {
-    throw new AppError("JSON", "Invalid JSON.");
-  }
-}
 export async function createExternalGateway({
   org,
   connector,
@@ -68,8 +52,19 @@ export async function createExternalGateway({
     });
   let timer,
     stopping = false,
-    loopPromise;
-  async function observe() {
+    loopPromise,
+    observationPromise;
+  function observe() {
+    // Startup, owner actions and the background worker can request the same
+    // snapshot concurrently. Share its complete fetch/commit, never overlap it
+    // with an older observation that could overwrite newer scoped records.
+    if (!observationPromise)
+      observationPromise = observeSource().finally(() => {
+        observationPromise = null;
+      });
+    return observationPromise;
+  }
+  async function observeSource() {
     const s = await connector.state();
     check(
       s.organization.id === org,
@@ -83,30 +78,61 @@ export async function createExternalGateway({
       ["need", s.known.needs],
       ["facility", s.known.buildings],
       ["road", s.known.edges],
-    ])
-      for (const [id, r] of Object.entries(items ?? {}))
-        if (
-          hash(
-            (await store.get(org, kind, r.id ?? id, false))?.sourceSnapshot ??
-              {},
-          ) !== hash(r)
-        )
-          await store.upsert(org, kind, r.id ?? id, {
-            ...r,
-            id: r.id ?? id,
-            owner: r.owner ?? org,
-            reserved: r.reserved ?? 0,
-            floor: r.floor ?? 0,
-            sourceSnapshot: r,
-          });
-    if (s.known.map)
-      await store.upsert(org, "context", "geography", { map: s.known.map });
+    ]) {
+      const records = Object.entries(items ?? {}).map(([id, source]) => ({ id: source.id ?? id, source }));
+      // Bound both exact-ID reads and JSON write payloads. A city map can carry
+      // more roads than getMany's limit; individual SQL round trips per road
+      // also block the contractor's first observation for many seconds.
+      for (let offset = 0; offset < records.length; offset += 500) {
+        const page = records.slice(offset, offset + 500);
+        await store.transaction(async tx => {
+          const previous = await tx.getMany(org, kind, page.map(record => record.id));
+          const changed = [];
+          for (const { id, source } of page) {
+            const old = previous.get(id);
+            if (old?.sourceSnapshot && hash(old.sourceSnapshot) === hash(source)) continue;
+            const data = { ...old, ...source, owner: source.owner ?? org,
+              reserved: source.reserved ?? 0, floor: source.floor ?? 0, sourceSnapshot: source };
+            for (const key of ["id", "version", "createdAt", "updatedAt"]) delete data[key];
+            changed.push({ id, data, expectedVersion: old?.version ?? 0 });
+          }
+          if (!changed.length) return;
+          const result = await tx.query(`
+            WITH incoming AS (
+              SELECT item->>'id' AS id, item->'data' AS data,
+                (item->>'expectedVersion')::integer AS expected_version
+              FROM jsonb_array_elements($3::jsonb) AS item
+            )
+            INSERT INTO entities(org,kind,id,data,created_at,updated_at)
+            SELECT $1,$2,id,data,$4,$4 FROM incoming
+            ON CONFLICT (org,kind,id) DO UPDATE SET data=EXCLUDED.data,
+              version=entities.version+1,updated_at=EXCLUDED.updated_at
+            WHERE entities.version=(SELECT expected_version FROM incoming WHERE id=EXCLUDED.id)
+            RETURNING id`, [org, kind, JSON.stringify(changed), Date.now()]);
+          check(result.rows.length === changed.length, "VERSION_CONFLICT",
+            "Contractor source records changed during observation. Retry the scoped read.", 409);
+        });
+      }
+    }
     // The map is a read returned by the actor gateway, never observer truth.
     const maps = s.queries?.filter(
       (q) => q.target === "map" && q.state === "ready",
     );
     const map = maps?.at(-1)?.result?.map ?? maps?.at(-1)?.result;
-    if (map?.roads) await store.upsert(org, "context", "geography", { map });
+    const receivedMap = map?.roads ? map : s.known.map;
+    if (receivedMap) {
+      const sourceMapHash = hash(receivedMap);
+      await store.transaction(async tx => {
+        // Read only the small receipt hash when unchanged; avoid repeatedly
+        // downloading and rewriting the multi-megabyte static directory.
+        const { rows } = await tx.query(
+          "SELECT data->>'sourceMapHash' AS source_map_hash FROM entities WHERE org=$1 AND kind='context' AND id='geography'",
+          [org],
+        );
+        if (rows[0]?.source_map_hash !== sourceMapHash)
+          await tx.upsert(org, "context", "geography", { map: receivedMap, sourceMapHash });
+      });
+    }
     return s;
   }
   async function queueReceipt(work, state, operation = {}) {
@@ -768,6 +794,7 @@ export async function createExternalGateway({
       stopping = true;
       clearTimeout(timer);
       await loopPromise;
+      await observationPromise;
       await new Promise((r) => server.close(r));
       if (!providedStore) await store.close();
     },

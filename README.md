@@ -41,7 +41,7 @@ pnpm lab
 | Open | Purpose |
 |---|---|
 | [Workspace · localhost:4400](http://127.0.0.1:4400/) | First organization's operational workspace |
-| [3D laboratory · localhost:4328](http://127.0.0.1:4328/) | Inspect and control the simulated world |
+| [3D laboratory · localhost:4328](http://127.0.0.1:4328/) | Inspect and control the connected Takamatsu world |
 | [Source feed · localhost:4329/feed](http://127.0.0.1:4329/feed) | Fictional public reports consumed over HTTP |
 | [Public portal](http://127.0.0.1:4400/public) | Approved public updates |
 

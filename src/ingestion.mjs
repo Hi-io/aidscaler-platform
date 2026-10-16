@@ -2,6 +2,48 @@ import { hash } from "./store.mjs";
 import { check } from "./errors.mjs";
 import { persistReceivedPurchases } from "./received-purchases.mjs";
 import { persistReceivedUnloadingRequests } from "./unloading.mjs";
+
+async function sourceRecords(store, org, kind, ids) {
+  const records = new Map();
+  // A city snapshot can exceed the store's page bound. Keep every exact-ID
+  // read scoped to the same transaction; never broaden it to a kind-wide scan.
+  for (let offset = 0; offset < ids.length; offset += 10000)
+    for (const [id, record] of await store.getMany(org, kind, ids.slice(offset, offset + 10000)))
+      records.set(id, record);
+  return records;
+}
+
+async function writeSourceRecords(store, org, kind, changes) {
+  // Bound SQL work and payload size without thousands of individual WASM/SQL
+  // round trips. The caller's transaction remains the atomic snapshot boundary.
+  for (let offset = 0; offset < changes.length; offset += 500) {
+    const page = changes.slice(offset, offset + 500).map(change => {
+      const data = { ...change.data };
+      for (const key of ["id", "version", "createdAt", "updatedAt"]) delete data[key];
+      return { ...change, data };
+    });
+    const result = await store.query(`
+      WITH incoming AS (
+        SELECT item->>'id' AS id, item->'data' AS data,
+          (item->>'expectedVersion')::integer AS expected_version
+        FROM jsonb_array_elements($3::jsonb) AS item
+      ), inserted AS (
+        INSERT INTO entities(org,kind,id,data,created_at,updated_at)
+        SELECT $1,$2,id,data,$4,$4 FROM incoming WHERE expected_version=0
+        ON CONFLICT (org,kind,id) DO NOTHING RETURNING id
+      ), updated AS (
+        UPDATE entities AS entity SET data=incoming.data,
+          version=entity.version+1,updated_at=$4 FROM incoming
+        WHERE entity.org=$1 AND entity.kind=$2 AND entity.id=incoming.id
+          AND incoming.expected_version>0 AND entity.version=incoming.expected_version
+        RETURNING entity.id
+      ) SELECT id FROM inserted UNION ALL SELECT id FROM updated`,
+      [org, kind, JSON.stringify(page), Date.now()]);
+    check(result.rows.length === page.length, "VERSION_CONFLICT",
+      "Source records changed during observation. Retry the scoped read.", 409);
+  }
+}
+
 export class Ingestion {
   constructor(store, connector, config) {
     Object.assign(this, { store, connector, config });
@@ -274,7 +316,8 @@ export class Ingestion {
           ["road", state.known.edges],
         ]) {
           const records = Object.entries(items ?? {}).map(([sourceId, raw]) => ({ ...raw, id: raw.id ?? sourceId })),
-            previousById = await tx.getMany(org, kind, records.map((data) => data.id));
+            previousById = await sourceRecords(tx, org, kind, records.map((data) => data.id)),
+            changes = [], restrictions = [];
           for (const data of records) {
             const previous = previousById.get(data.id);
             // A shared/manual record may exist before its owner's first direct
@@ -283,7 +326,7 @@ export class Ingestion {
               !previous?.sourceSnapshot ||
               hash(previous.sourceSnapshot) !== hash(data)
             ) {
-              await tx.put(org, kind, data.id, {
+              changes.push({ id: data.id, data: {
                 ...data,
                 sourceSnapshot: data,
                 owner: data.owner ?? org,
@@ -296,7 +339,7 @@ export class Ingestion {
                         .reduce((n, c) => n + c.quantity, 0)
                     : 0),
                 floor: data.floor ?? 0,
-              }, previous?.version ?? 0);
+              }, expectedVersion: previous?.version ?? 0 });
               const changedRestriction =
                 (kind === "road" &&
                   data.open === false &&
@@ -305,42 +348,57 @@ export class Ingestion {
                   previous?.safe === true &&
                   data.safe === false);
               if (previous && changedRestriction)
-                await tx.enqueue(
-                  org,
-                  "invalidate",
-                  { dependency: data.id, reason: "Source state changed" },
-                  `change_${kind}_${data.id}_${data.version}`,
-                );
+                restrictions.push(data);
             }
           }
+          await writeSourceRecords(tx, org, kind, changes);
+          for (const data of restrictions)
+            await tx.enqueue(
+              org,
+              "invalidate",
+              { dependency: data.id, reason: "Source state changed" },
+              `change_${kind}_${data.id}_${data.version}`,
+            );
         }
-        const operationRecords = await tx.getMany(org, "operation", (state.operations ?? []).map((data) => data.id));
+        const operationRecords = await sourceRecords(tx, org, "operation", (state.operations ?? []).map((data) => data.id)),
+          operationChanges = [];
         for (const data of state.operations ?? []) {
           const previous = operationRecords.get(data.id);
           if (previous?.confirmedBySource === true && previous.sourceSnapshot && hash(previous.sourceSnapshot) === hash(data)) continue;
-          await tx.put(org, "operation", data.id, {
+          operationChanges.push({ id: data.id, data: {
             ...previous, ...data, sourceSnapshot: data, confirmedBySource: true,
-          }, previous?.version ?? 0);
+          }, expectedVersion: previous?.version ?? 0 });
         }
-        const verificationRecords = await tx.getMany(org, "verification", (state.inspections ?? []).map((data) => data.id));
+        await writeSourceRecords(tx, org, "operation", operationChanges);
+        const verificationRecords = await sourceRecords(tx, org, "verification", (state.inspections ?? []).map((data) => data.id)),
+          verificationChanges = [];
         for (const i of state.inspections ?? []) {
           const previous = verificationRecords.get(i.id);
           if (previous?.sourceSnapshot && hash(previous.sourceSnapshot) === hash(i)) continue;
           const material = hash([i.target, i.entity, i.method, i.state, i.result, i.reason]);
-          await tx.put(org, "verification", i.id, { ...previous, ...i, sourceSnapshot: i,
+          verificationChanges.push({ id: i.id, data: { ...previous, ...i, sourceSnapshot: i,
             receivedMaterialHash: material,
             receivedAtSourceClock: previous?.receivedMaterialHash === material ? previous.receivedAtSourceClock : state.now,
             receivedAt: previous?.receivedMaterialHash === material ? previous.receivedAt : Date.now(),
-          }, previous?.version ?? 0);
+          }, expectedVersion: previous?.version ?? 0 });
         }
+        await writeSourceRecords(tx, org, "verification", verificationChanges);
         const mapQuery = state.queries
           ?.filter((q) => q.target === "map" && q.state === "ready")
           .at(-1);
-        if (mapQuery?.result)
-          await tx.upsert(org, "context", "geography", {
-            map: mapQuery.result,
-            observedAt: mapQuery.completedAt,
-          });
+        if (mapQuery?.result) {
+          const sourceMapHash = hash(mapQuery.result),
+            { rows } = await tx.query(
+              "SELECT data->>'sourceMapHash' AS source_map_hash FROM entities WHERE org=$1 AND kind='context' AND id='geography'",
+              [org],
+            );
+          if (rows[0]?.source_map_hash !== sourceMapHash)
+            await tx.upsert(org, "context", "geography", {
+              map: mapQuery.result,
+              sourceMapHash,
+              observedAt: mapQuery.completedAt,
+            });
+        }
         await persistReceivedPurchases(tx, org, state);
         await persistReceivedUnloadingRequests(tx, org, state);
         await tx.audit(org, "connector", "source.synced", "simulator", {

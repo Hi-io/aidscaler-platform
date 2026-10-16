@@ -14,11 +14,12 @@ async function currentSession(rootDir) {
   const directory=path.join(rootDir,'.local','labs',current.sessionId);await stat(directory);
   return {current,directory};
 }
-export function spawnLabChild({rootDir,instanceDir,org,port,entry=org==='org4'?'scripts/partner.mjs':'server.mjs',spawnProcess=spawn}) {
+export function spawnLabChild({rootDir,instanceDir,org,port,bootstrapPassword,entry=org==='org4'?'scripts/partner.mjs':'server.mjs',spawnProcess=spawn}) {
   const token=randomBytes(32).toString('hex'),child=spawnProcess(process.execPath,
     ['--env-file-if-exists=.env.local','--import',preload,entry],{
       cwd:rootDir,windowsHide:true,stdio:['ignore','pipe','pipe','ipc'],
       env:{...process.env,AIDSCALER_LOCAL_DIR:instanceDir,AIDSCALER_ORG:org,PORT:String(port),
+        ...(bootstrapPassword === undefined ? {} : { AIDSCALER_BOOTSTRAP_PASSWORD: bootstrapPassword }),
         DATA_DIR:path.join(instanceDir,'pgdata'),EVIDENCE_DIR:path.join(instanceDir,'evidence'),DATABASE_URL:'',AIDSCALER_CHILD_CONTROL_TOKEN:token},
     });
   childTokens.set(child,token);return child;

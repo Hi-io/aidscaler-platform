@@ -3,13 +3,13 @@ import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import {spawnLabChild,stopLabChildren,installLauncherControl} from './lab-lifecycle.mjs';
 import {captureLab} from './resume-lab.mjs';
+import {laboratoryConfig,existingLabPassword} from './lab-config.mjs';
 import { fileURLToPath, pathToFileURL } from "node:url";
 const root = path.resolve(fileURLToPath(new URL("..", import.meta.url))),
   simRoot = path.resolve(root, "../disaster-response-simulator");
 const { createLabServers } = await import(
   pathToFileURL(path.join(simRoot, "sources/server.mjs")).href
 );
-const scenario = process.env.AIDSCALER_SCENARIO ?? "S01";
 const initialRate = Number(process.env.AIDSCALER_LAB_RATE ?? 10);
 if (!Number.isFinite(initialRate) || initialRate <= 0 || initialRate > 1000)
   throw Error("AIDSCALER_LAB_RATE must be greater than zero and at most 1000.");
@@ -22,27 +22,7 @@ const sessionId =
 const lab = await createLabServers({
   observerPort: Number(process.env.LAB_OBSERVER_PORT ?? 4328),
   sourcePort: Number(process.env.LAB_SOURCE_PORT ?? 4329),
-  config: {
-    scenario,
-    organizations: 5,
-    seed: process.env.AIDSCALER_SEED ?? "aidscaler-development-001",
-    grid: 9,
-    extentKm: 12,
-    topology: process.env.AIDSCALER_TOPOLOGY ?? "regional",
-    hazard: process.env.AIDSCALER_HAZARD ?? "none",
-    durationMs: 21600000,
-    policy: "none",
-    mode: "interactive",
-    clockLatency: "wall",
-    continuousDemo: true,
-    maxEvents: 100000000,
-    modelCallLimit: 100000,
-    postsPerHour: 240,
-    backgroundTraffic: 30,
-    packetLoss: 0,
-    observationRate: 1,
-    sourceRequestLimit: 5000,
-  },
+  config: laboratoryConfig(),
 });
 const configs = [],
   children = [],
@@ -126,7 +106,8 @@ for (let i = 0; i < 5; i++) {
     { mode: 0o600 },
   );
   configs.push({ org, url: `http://127.0.0.1:${4400 + i}` });
-  const child = spawnLabChild({rootDir:root,instanceDir,org,port:4400+i});
+  const bootstrapPassword = await existingLabPassword(root, org);
+  const child = spawnLabChild({rootDir:root,instanceDir,org,port:4400+i,bootstrapPassword});
   children.push(child);
   child.stdout.on("data", (d) => process.stdout.write(`[${org}] ${d}`));
   child.stderr.on("data", (d) => process.stderr.write(`[${org}] ${d}`));

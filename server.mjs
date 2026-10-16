@@ -31,6 +31,8 @@ import { workspacePulse } from "./src/workspace-pulse.mjs";
 import { publicResponseMetrics } from "./src/public-response-metrics.mjs";
 import { configureResponsePolicy, responsePolicy, responseQueue } from "./src/response-policy.mjs";
 import { responseOptions } from "./src/response-options.mjs";
+import { operationalMapData } from "./src/map-data.mjs";
+import { jsonBody as body } from "./src/json-body.mjs";
 import { Retention } from "./src/retention.mjs";
 import { SemanticIngestion } from "./src/semantic-ingestion.mjs";
 import { DiscoveryResponse } from "./src/discovery-response.mjs";
@@ -45,23 +47,6 @@ const json = (res, status, data) => {
   });
   res.end(JSON.stringify(data));
 };
-async function body(req, limit = 1_000_000) {
-  let s = "";
-  for await (const chunk of req) {
-    s += chunk;
-    check(
-      Buffer.byteLength(s) <= limit,
-      "BODY_LIMIT",
-      "Request is too large.",
-      413,
-    );
-  }
-  try {
-    return JSON.parse(s || "{}");
-  } catch {
-    throw new AppError("JSON", "Invalid JSON.");
-  }
-}
 const cookie = (req) => req.headers.cookie?.match(/(?:^|; )aidscaler=([^;]+)/)?.[1];
 const KINDS = [
   "signal",
@@ -704,15 +689,7 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, found);
         }
         if (url.pathname === "/api/map")
-          return json(res, 200, {
-            geography:
-              (await store.get(actor.org, "context", "geography", false))
-                ?.map ?? null,
-            needs: await store.list(actor.org, "need", 1000),
-            vehicles: await store.list(actor.org, "vehicle", 1000),
-            roads: await store.list(actor.org, "road", 5000),
-            facilities: await store.list(actor.org, "facility", 1000),
-          });
+          return json(res, 200, await operationalMapData(store, actor.org));
         if (url.pathname === "/api/media" && req.method === "GET") {
           const { metadata, bytes } = await evidence.read(
             actor.org,

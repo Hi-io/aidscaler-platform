@@ -36,7 +36,7 @@ Services bind to localhost. The standalone simulator's defaults are separate fro
 
 Find the generated account addresses, roles and password in `.local/access-org0.json`; organizations 1–3 have equivalent files. The independent partner uses `.local/access-partner-org4.json`. Use the listed address rather than constructing an account name. `.env.local`, `.local/`, session databases and credentials are local, Git-ignored data.
 
-Each launch creates a new session under `.local/labs/<session>/`, with separate databases and credentials per organization. Earlier sessions are retained. `.local/lab.json` identifies the current session and contains the observer access details. The observer controls and inspects the laboratory; it is not an information source for the model.
+Each launch creates a new session under `.local/labs/<session>/`, with separate databases and source credentials per organization. Existing generated account passwords are reused, so local sign-in addresses and passwords remain familiar. Earlier sessions are retained. `.local/lab.json` identifies the current session and contains the observer access details. The observer controls and inspects the laboratory; it is not an information source for the model.
 
 ## A short operator walkthrough
 
@@ -71,7 +71,9 @@ Automatic source ingestion is enabled by the launcher; automatic investigations 
 
 If provider credit is exhausted, new model work pauses while the workspace and human actions remain available. Restore the provider account's credit and restart the affected backend with its existing configuration; avoid replacing the operational database to recover model access.
 
-The interactive laboratory starts at ×10 on an irregular regional map. Its continuous demo clock keeps moving while model work is pending and can run beyond the scenario horizon; benchmark runners reject this demo mode. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
+The interactive laboratory starts at ×10 on Takamatsu's 10 × 10 km mapped road network. The 3D viewer at `4328`, social feed at `4329/feed` and all organization workspaces share this world. The operational map comes from the connector's authorized map query; it is not a fixed illustration or a connection to an independent preview. Set `AIDSCALER_TOPOLOGY` to choose another map for a new laboratory session. Its continuous demo clock keeps moving while model work is pending and can run beyond the scenario horizon; benchmark runners reject this demo mode. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
+
+Use **pause/play** to control the connected world and `lab:resume` to restart its services without replacing that world. To reset the world or change its map, shut down the laboratory and run `pnpm lab` for a new isolated session. A simulator-only reset does not clear AidScaler's durable proposals, operations or evidence; do not pair a reset world with a previous world's database. Separate previews on other ports are separate worlds.
 
 To select another scenario before launching, for example in PowerShell:
 
