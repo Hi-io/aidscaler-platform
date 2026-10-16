@@ -102,8 +102,8 @@ export function createExtras(h) {
         .reduce((s, o) => s + (o.quantity ?? 0), 0);
     modal(
       "Response case",
-      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h2><div class="stats cols3 case-stats"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div>${n.population ? `<p class="case-population">${n.population} people reported at this location</p>` : ""}<section class="decision"><h3>Responses and responsible owners</h3>${related.filter(p => !["rejected", "cancelled"].includes(p.state)).map((p) => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong><p>${e(readableText(p.benefit))}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response yet. Investigate options to prepare a plan for review.</p>"}</section>${related.some(p => ["rejected", "cancelled"].includes(p.state)) ? `<details class="collapse"><summary>Previous responses · ${related.filter(p => ["rejected", "cancelled"].includes(p.state)).length}</summary>${related.filter(p => ["rejected", "cancelled"].includes(p.state)).map(p => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("")}</details>` : ""}<details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
-      `${allowed(["analyst", "commander", "dispatcher"]) ? action("Investigate options", "investigatecase", id, "primary") + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}${action("Close", "close")}`,
+      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h2><div class="stats cols3 case-stats"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div>${n.population ? `<p class="case-population">${n.population} people reported at this location</p>` : ""}<section class="decision"><h3>Responses and responsible owners</h3>${related.filter(p => !["rejected", "cancelled"].includes(p.state)).map((p) => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong><p>${e(readableText(p.benefit))}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response has been prepared yet. The agent checks received information as it arrives.</p>"}</section>${related.some(p => ["rejected", "cancelled"].includes(p.state)) ? `<details class="collapse"><summary>Previous responses · ${related.filter(p => ["rejected", "cancelled"].includes(p.state)).length}</summary>${related.filter(p => ["rejected", "cancelled"].includes(p.state)).map(p => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("")}</details>` : ""}<details class="collapse"><summary>Request an additional check</summary><p class="note">The agent processes received information automatically. Ask for another check when you have new context.</p>${allowed(["analyst", "commander", "dispatcher"]) ? action("Request another investigation", "investigatecase", id) + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}</details><details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
+      action("Close", "close"),
     );
   }
   async function manual(id) {
@@ -151,7 +151,9 @@ export function createExtras(h) {
     );
   }
   async function moderation() {
-    const rows = (await record("report")).filter(
+    const all = (await record("report")).filter(r => r.origin === "community-public"),
+      reviewed = all.filter(r => r.state !== "pending_moderation");
+    const rows = all.filter(
       (r) => r.state === "pending_moderation",
     );
     return (
@@ -168,7 +170,7 @@ export function createExtras(h) {
           )
           .join("") ||
         empty("No community reports are awaiting moderation.", "check")
-      }${rows.length > 16 ? `<p class="note">Showing 16 of ${rows.length} reports awaiting moderation.</p>` : ""}</section>`
+      }${rows.length > 16 ? `<p class="note">Showing 16 of ${rows.length} reports awaiting moderation.</p>` : ""}</section>${reviewed.length ? `<section class="card"><div class="cardheader"><h2>Keep people informed</h2><span class="badge">${reviewed.length} reviewed</span></div><p class="note">Share a short update with the person who sent a report, or link a source-confirmed response.</p>${reviewed.slice(0, 12).map(r => `<article class="listrow"><div class="rowicon">${icon("message-square")}</div><div class="grow"><h3>${e(r.location || "Community report")}</h3><p>${e(r.text.length > 180 ? r.text.slice(0, 180) + "…" : r.text)}</p>${badge(r.state)}</div>${allowed(["analyst", "commander", "dispatcher"]) ? action("Send update", "report-followup", r.id) : ""}</article>`).join("")}</section>` : ""}`
     );
   }
   async function run(name, id) {

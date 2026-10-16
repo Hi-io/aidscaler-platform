@@ -2,10 +2,23 @@ import test from "node:test";
 // The competent shared reference must also terminate after an owner declines
 // an infeasible second-round request. Previously it retried the same review.
 import assert from "node:assert/strict";
-import { runEpisode } from "../evaluation/harness.mjs";
+import { createHarness, runEpisode } from "../evaluation/harness.mjs";
 import { Store } from "../src/store.mjs";
 import { OpenRouterProvider } from "../src/provider.mjs";
 import { pairedBootstrap } from "../src/evaluation.mjs";
+
+test("controlled evaluation source refreshes cannot enqueue undeclared background model rounds", async t => {
+  const h = await createHarness({ config: { durationMs: 180000, postsPerHour: 0 },
+    provider: { complete: async () => { throw Error("Undeclared background inference"); } } });
+  t.after(() => h.close());
+  const app = h.apps[0];
+  assert.equal(app.config.autoInvestigate, false);
+  assert.equal(app.config.autoDiscover, false);
+  await app.ingestion.sync();
+  await app.worker.drain(8);
+  const jobs = await app.store.query("SELECT id FROM jobs WHERE org=$1 AND kind IN ('investigate','discover_response','compile_response','interpret_sources')", [app.config.org]);
+  assert.equal(jobs.rows.length, 0);
+});
 
 test("shared incident research does not repeat at each resource owner, while four scoped owner instances remain", async () => {
   const calls = [];

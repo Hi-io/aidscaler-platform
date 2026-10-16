@@ -59,13 +59,19 @@ The model prepares options; it does not acquire an owner's authority. Acknowledg
 
 The public portal shows approved aggregates. Community submissions enter moderation. A financial settlement does not establish a physical delivery, and the local payment sandbox does not move real money.
 
+## Organization-owned public pages
+
+In **Sources & access → Public page appearance**, a commander or administrator can edit the organization name, public and reporting page copy, accent color and an optional PNG/JPEG banner. Public pages lead with the organization and keep AidScaler in the footer.
+
+Community reports receive a private tracking key. People can return to `/community` to see the review and team updates. In **Community reports**, operators can review a submission, send a progress update and link a real operational response. Tracking does not expose the original report or manufacture a dispatch status. Test contributions display a dismissible inline receipt and collect no money.
+
 ## Model controls and simulation
 
-Automatic source ingestion is enabled by the launcher; automatic investigations start disabled. Enable them in the organization settings only with the desired call and spending limits. `.env.example` documents provider, timeout and episode-budget settings. Investigations use bounded context and fetch further evidence through scoped tools.
+Automatic source ingestion is enabled by the launcher; automatic investigations start enabled with bounded source batches and the configured call and spending limits. The coordinator can pause or resume them in organization settings. `.env.example` documents provider, timeout and episode-budget settings. Investigations use bounded context and fetch further evidence through scoped tools.
 
 If provider credit is exhausted, new model work pauses while the workspace and human actions remain available. Restore the provider account's credit and restart the affected backend with its existing configuration; avoid replacing the operational database to recover model access.
 
-The laboratory starts at ×10. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
+The interactive laboratory starts at ×10 on an irregular regional map. Its continuous demo clock keeps moving while model work is pending and can run beyond the scenario horizon; benchmark runners reject this demo mode. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
 
 To select another scenario before launching, for example in PowerShell:
 

@@ -13,6 +13,7 @@ const PHYSICAL = new Set([
   "cancel",
 ]);
 const DONE = new Set(["received", "completed", "service", "operating"]);
+const INFERENCE_JOBS = ["investigate", "discover_response", "compile_response", "interpret_sources", "analyze_media"];
 // Purchase acknowledgements describe a financial order, not usable inventory.
 // Only a completed, scoped finance query can report the supplier's receipt.
 function receivedPurchase(state, id) {
@@ -946,8 +947,8 @@ export class Worker {
     }
     return { simId, results, complete };
   }
-  async once({ asOf = Date.now() } = {}) {
-    const job = await this.store.lease(this.config.org, 180000, asOf);
+  async once({ asOf = Date.now(), includeKinds = null, excludeKinds = null } = {}) {
+    const job = await this.store.lease(this.config.org, 180000, asOf, { includeKinds, excludeKinds });
     if (!job) return false;
     const heartbeat = setInterval(
       () => this.store.renewJob(job).catch(() => {}),
@@ -1097,34 +1098,35 @@ export class Worker {
       clearInterval(heartbeat);
     }
   }
-  async drain(limit = 32) {
+  async drain(limit = 32, filter = {}) {
     // A finite snapshot prevents a continuation from perpetually consuming its
     // own newly created jobs while the modeled world has no chance to advance.
     const asOf = Date.now();
     let count = 0;
-    while (count < limit && (await this.once({ asOf }))) count++;
+    while (count < limit && (await this.once({ asOf, ...filter }))) count++;
     return { processed: count, limited: count === limit };
   }
   start() {
     if (this.running) return;
     this.running = true;
-    const loop = async () => {
-      try {
-        if (this.running) await this.drain();
-      } catch (e) {
-        this.lastError = e.code ?? "WORKER";
-      } finally {
-        if (this.running)
-          this.timer = setTimeout(() => {
-            this.loopPromise = loop();
-          }, 500);
-      }
-    };
-    this.loopPromise = loop();
+    // Source receipts, monitoring and peer messages must keep moving while a
+    // provider request waits. Model work remains bounded to one lane per org.
+    this.lanes = [{ includeKinds: INFERENCE_JOBS }, { excludeKinds: INFERENCE_JOBS }].map(filter => {
+      const lane = { filter };
+      const loop = async () => {
+        try { if (this.running) await this.drain(32, filter); }
+        catch (e) { this.lastError = e.code ?? "WORKER"; }
+        finally {
+          if (this.running) lane.timer = setTimeout(() => { lane.promise = loop(); }, 500);
+        }
+      };
+      lane.promise = loop();
+      return lane;
+    });
   }
   async stop() {
     this.running = false;
-    clearTimeout(this.timer);
-    await this.loopPromise;
+    for (const lane of this.lanes ?? []) clearTimeout(lane.timer);
+    await Promise.all((this.lanes ?? []).map(lane => lane.promise));
   }
 }

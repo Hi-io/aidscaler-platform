@@ -75,13 +75,24 @@ export function createPresentation({ escape: e, icon, badge, action, table, empt
       ["Signals collected", d.signalCount, "Versioned public and authorized sources", "radio"],
       ["Operations in progress", d.activeOperationCount, "Dispatch is separate from confirmed receipt", "truck"],
     ];
-    const decisions = queue.slice(0, 4).map(p => `<div class="listrow priority-row"><div class="rowicon coral">${icon("clipboard-check")}</div><div class="grow"><h3>${e(readableText(p.title))}</h3><p>${e(readableText(p.benefit))}</p><div class="details-meta">${badge(p.state)}<span>${p.conditions.filter(c => !c.satisfied).length} conditions pending</span></div></div>${action("Review", "proposal", p.id, "accent")}</div>`).join("");
-    const needs = unresolved.slice(0, 5).map(n => `<div class="listrow priority-row"><div class="rowicon coral">${icon("circle-alert")}</div><div class="grow"><h3>${e(humanLabel(n.type))} · ${e(entityLabel(n.building))}</h3><p><strong>${number(n.quantity - n.served)} ${e(n.unit)}</strong> still needed</p></div>${action("Open case", "need", n.id)}</div>`).join("");
+    const relatedIds = new Set();
+    const cases = unresolved.slice(0, 5).map(n => {
+      const solutions = queue.filter(p => (p.actions ?? []).some(a => a.params?.need === n.id) || (p.references ?? []).includes(n.id));
+      solutions.forEach(p => relatedIds.add(p.id));
+      const proposed = solutions.slice(0, 3).map(p => {
+        const waiting = (p.conditions ?? []).filter(c => !c.satisfied).length;
+        const deliveries = (p.actions ?? []).filter(a => a.type === "dispatch" && a.params?.need === n.id).length;
+        const headline = deliveries ? `${deliveries} ${humanLabel(n.type).toLowerCase()} ${deliveries===1 ? "delivery" : "deliveries"} proposed` : readableText(p.title);
+        return `<div class="case-suggestion"><span class="case-link-dot">${icon("sparkles")}</span><div class="grow"><span class="small">Proposed response</span><h4>${e(headline)}</h4><span class="small">${waiting ? `${waiting} checks still pending` : "Ready for your review"}</span></div>${action("Review response", "proposal", p.id, "accent")}</div>`;
+      }).join("");
+      return `<article class="response-priority"><div class="case-need-row"><span class="rowicon coral">${icon("circle-alert")}</span><div class="grow"><h3>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h3><p><strong>${number(n.quantity - (n.served ?? 0))} ${e(n.unit)}</strong> still needed${n.population ? ` · ${number(n.population)} people reported` : ""}</p></div>${action("Open case", "need", n.id, "quiet")}</div>${proposed || '<p class="case-watching">No response prepared yet. The agent monitors received reports and available resources.</p>'}${solutions.length > 3 ? `<p class="small">${solutions.length-3} more responses in the decision queue.</p>` : ""}</article>`;
+    }).join("");
+    const unmatched = queue.filter(p => !relatedIds.has(p.id));
+    const decisions = unmatched.slice(0, 4).map(p => `<div class="listrow priority-row"><div class="rowicon coral">${icon("clipboard-check")}</div><div class="grow"><h3>${e(readableText(p.title))}</h3>${badge(p.state)}</div>${action("Review", "proposal", p.id, "accent")}</div>`).join("");
     return `<div class="overview-metrics metricrow">${metrics.map(([label, count, meaning, glyph]) => `<div class="metric" title="${e(meaning)}"><span class="label">${icon(glyph)} ${label}</span><strong>${number(count)}</strong></div>`).join("")}</div>
-      <div class="overview-layout"><section class="card priority-panel"><div class="section-heading"><div><h2>Needs your attention</h2></div><span class="count-badge">${number(queue.length + unresolved.length)}</span></div>
-      ${decisions ? `<div class="worklist-heading">Awaiting your decision</div>${decisions}` : ""}
-      ${needs ? `<div class="worklist-heading">Unmet needs</div>${needs}<p class="small priority-caption">Confirm the situation before committing resources.</p>` : ""}
-      ${!decisions && !needs ? empty("No verified priorities yet. Connect sources or request a field assessment. Unknown areas remain unknown.", "clipboard-check") : ""}
+      <div class="overview-layout"><section class="card priority-panel"><div class="section-heading"><div><h2>Needs & response options</h2></div><span class="count-badge">${number(unresolved.length)}</span></div>
+      ${cases}${decisions ? `<div class="worklist-heading">Other decisions to review</div>${decisions}` : ""}
+      ${!cases && !decisions ? empty("No received needs awaiting a response. Unknown areas remain unknown.", "clipboard-check") : ""}
       <div class="panel-footer">${action("Open decision queue →", "navigate", "review", "quiet")}</div></section>
       <aside class="context-rail" aria-label="Investigation and operational context">${activity}${coverage}</aside></div>
       <details class="secondary-disclosure overview-secondary" data-ui-key="overview:source-health"><summary><span>${icon("radio")} Source health</span><span class="details-meta">${e(sourceStatus)}</span></summary><div class="disclosure-content">${d.source.length ? d.source.map(s => `<div class="listrow"><div class="grow"><h3>Signal network & operational systems</h3><p>${s.changed ?? 0} new or revised signals · ${s.lastSuccessAt ? "Last sync " + e(time(s.lastSuccessAt)) : "No successful sync"}</p></div>${badge(s.state)}</div>`).join("") : empty("No source is connected yet. Public feeds are ingested automatically when configured.", "radio")}<div class="toolbar">${action("Manage", "navigate", "settings", "quiet")}<span class="small">A gap in reports does not mean a gap in needs.</span></div></div></details>`;

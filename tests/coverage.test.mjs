@@ -191,6 +191,87 @@ test("wrong coverage schema, future timestamps and older versions retain explici
   }
 });
 
+test("a live coverage read may advance beyond its earlier operational snapshot, bounded by a later scoped clock receipt", async t => {
+  const f = await fixture(t), order = [], original = f.connector.action;
+  f.setDto({ version: 2, observedAt: 1500, contacts: [{ sector: "s0", lastContactAt: 1400 }],
+    buildingContacts: [{ building: "a", sector: "s0", lastContactAt: 1400, receivedAt: 1500 }], scope: "received" });
+  f.connector.action = async (...args) => { order.push(args[0]); return original(...args); };
+  f.connector.state = async () => { order.push("scoped-clock"); return { ...f.snapshot(), organization: { id: "org0" }, now: 1600 }; };
+  await f.coverage.sync();
+  const received = await f.store.get("org0", "coverage_snapshot", "received");
+  assert.equal(received.sourceObservedAt, 1500);
+  assert.equal(received.sourceClockAtReceipt, 1600);
+  assert.equal((await f.coverage.summary()).sourceError, null);
+  assert.deepEqual(order, ["coverage", "scoped-clock"], "An independent scoped clock must be received after the coverage response");
+  assert.equal((await f.coverage.summary()).rows.find(r => r.id === "a").state, "unknown", "A later contact does not advance the separately received operational world by itself");
+  await f.receive({ now: 1600 });
+  assert.equal((await f.coverage.summary()).rows.find(r => r.id === "a").lastContactAt, 1400);
+  assert.equal((await f.coverage.summary()).rows.find(r => r.id === "b").state, "unknown");
+  assert.equal((await f.store.list("org0", "need")).length, 0);
+});
+
+test("fresh clock validation still rejects truly future contact, a backwards clock, and a changed owner or run", async t => {
+  for (const invalid of ["future", "clock_backwards", "owner", "run"]) {
+    const f = await fixture(t);
+    f.setDto({ version: 1, observedAt: 1000, contacts: [],
+      buildingContacts: [{ building: "a", sector: "s0", lastContactAt: 900, receivedAt: 1000 }], scope: "received" });
+    await f.coverage.sync();
+    f.setDto({ version: 2, observedAt: invalid === "future" ? 1700 : 1500, contacts: [],
+      buildingContacts: [{ building: "a", sector: "s0", lastContactAt: 1400, receivedAt: 1500 }], scope: "received" });
+    await f.receive({ known: { ...f.snapshot().known, sectorContacts: { new: 1000 } } });
+    f.connector.state = async () => ({ ...f.snapshot(), now: invalid === "clock_backwards" ? 900 : 1600,
+      organization: { id: invalid === "owner" ? "org-other" : "org0" },
+      runId: invalid === "run" ? "another-run" : "source-run" });
+    await f.coverage.sync();
+    const received = await f.store.get("org0", "coverage_snapshot", "received");
+    assert.equal(received.sourceVersion, 1, invalid);
+    assert.equal(received.buildingContacts[0].lastContactAt, 900, invalid);
+    assert.equal((await f.coverage.summary()).sourceError, "COVERAGE_SCHEMA", invalid);
+  }
+});
+
+test("a reordered slow coverage response cannot overwrite a newer received contact version", async t => {
+  const f = await fixture(t);
+  let releaseOld, signalStarted, coverageCalls = 0;
+  const oldGate = new Promise(resolve => { releaseOld = resolve; }), started = new Promise(resolve => { signalStarted = resolve; });
+  f.connector.action = async type => {
+    assert.equal(type, "coverage");
+    const first = ++coverageCalls === 1;
+    if (first) { signalStarted(); await oldGate; }
+    return { version: first ? 2 : 3, observedAt: first ? 1200 : 1300, contacts: [],
+      buildingContacts: [{ building: "a", sector: "s0", lastContactAt: first ? 1100 : 1250, receivedAt: first ? 1200 : 1300 }], scope: "received" };
+  };
+  f.connector.state = async () => ({ ...f.snapshot(), organization: { id: "org0" }, now: 1400 });
+  const slow = f.coverage.sync();
+  await started;
+  await f.coverage.sync();
+  releaseOld();
+  await slow;
+  const received = await f.store.get("org0", "coverage_snapshot", "received");
+  assert.equal(received.sourceVersion, 3);
+  assert.equal(received.sourceObservedAt, 1300);
+  assert.equal(received.buildingContacts[0].lastContactAt, 1250);
+  assert.equal((await f.coverage.summary()).sourceError, "COVERAGE_SCHEMA");
+  await f.receive({ now: 1400 });
+  assert.equal((await f.coverage.summary()).rows.find(r => r.id === "a").lastContactAt, 1250);
+});
+
+test("a fresh coverage clock cannot move behind a previously received coverage clock even before operational ingest catches up", async t => {
+  const f = await fixture(t);
+  let clock = 1600;
+  f.connector.state = async () => ({ ...f.snapshot(), organization: { id: "org0" }, now: clock });
+  f.setDto({ version: 2, observedAt: 1400, contacts: [], buildingContacts: [], scope: "received" });
+  await f.coverage.sync();
+  clock = 1550;
+  f.setDto({ version: 3, observedAt: 1500, contacts: [], buildingContacts: [], scope: "received" });
+  await f.receive({ now: 1100, known: { ...f.snapshot().known, sectorContacts: { changed: 1100 } } });
+  await f.coverage.sync();
+  const received = await f.store.get("org0", "coverage_snapshot", "received");
+  assert.equal(received.sourceVersion, 2);
+  assert.equal(received.sourceClockAtReceipt, 1600);
+  assert.equal((await f.coverage.summary()).sourceError, "COVERAGE_SCHEMA");
+});
+
 test("local cancellation and human role downgrade stop only prospective checks and keep previously issued physical work", async t => {
   const f = await fixture(t), row = await f.request(["a", "b"]);
   await f.coverage.sync(); const current = await f.store.get("org0", "coverage_request", row.id);

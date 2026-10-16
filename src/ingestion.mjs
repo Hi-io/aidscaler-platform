@@ -6,7 +6,14 @@ export class Ingestion {
   constructor(store, connector, config) {
     Object.assign(this, { store, connector, config });
   }
-  async sync({ sources = true } = {}) {
+  sync(options = {}) {
+    // An investigation may refresh facts while the background lane receives
+    // sources. Fetch each snapshot only after its predecessor has committed.
+    const current = (this.syncTail ?? Promise.resolve()).then(() => this.syncSnapshot(options));
+    this.syncTail = current.catch(() => {});
+    return current;
+  }
+  async syncSnapshot({ sources = true } = {}) {
     const org = this.config.org;
     let downloaded = 0,
       changed = 0;

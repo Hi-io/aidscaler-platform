@@ -49,6 +49,8 @@ export class Intake {
       priority: Math.max(priority, old?.priority ?? 0),
       firstSeenAt: old?.firstSeenAt ?? Date.now(),
       lastChangedAt: Date.now(),
+      pendingSinceAt: old?.state === "pending" ? (old.pendingSinceAt ?? old.lastChangedAt) : Date.now(),
+      urgentHint: old?.urgentHint || /\b(urgent|trapped|collapsed|fire|rescue|no water|need help|urgente|atrapad|incendio|sin agua)\b/i.test(signal.text ?? ""),
       attempts: 0,
       grouping:
         "Explicit source relation or location-aware fingerprint; not independent verification",
@@ -63,9 +65,9 @@ export class Intake {
     );
     return {
       enabled: saved?.enabled ?? this.config.autoInvestigate ?? false,
-      interpretSources: saved?.interpretSources ?? false,
-      discoveryMode: saved?.discoveryMode ?? false,
-      maxGroups: saved?.maxGroups ?? (saved?.discoveryMode ? 35 : 3),
+      interpretSources: saved?.interpretSources ?? this.config.autoInterpretSources ?? false,
+      discoveryMode: saved?.discoveryMode ?? this.config.autoDiscover ?? false,
+      maxGroups: saved?.maxGroups ?? ((saved?.discoveryMode ?? this.config.autoDiscover) ? 35 : 3),
       maxSignals: saved?.maxSignals ?? 35,
       hourlyCallLimit: Math.min(
         saved?.hourlyCallLimit ?? Infinity,
@@ -217,6 +219,12 @@ export class Intake {
           .slice(0, policy.maxSignals),
         selected = groups.filter((g) => ids.some((s) => s in g.versions));
       if (!ids.length && !focus && !repair) return { empty: true };
+      const batchWaitMs = Math.max(0, Number(this.config.autoBatchWaitMs ?? 0));
+      const oldestPendingAt = Math.min(...selected.map(g => g.pendingSinceAt ?? g.firstSeenAt));
+      const timeToBatch = batchWaitMs && ids.length < (this.config.autoBatchMinSignals ?? 8) &&
+        Date.now() - oldestPendingAt < batchWaitMs;
+      if (timeToBatch && !responseChanged && !repair && !selected.some(g => g.priority > 0 || g.urgentHint))
+        return { batching: true, signals: ids.length, retryAfterMs: batchWaitMs - (Date.now() - oldestPendingAt) };
       for (const g of selected)
         await tx.upsert(org, "intake", g.id, {
           state: "queued",
@@ -313,8 +321,20 @@ export class Intake {
     const groups = await this.store.list(this.config.org, "intake", 10000),
       counts = {};
     for (const g of groups) counts[g.state] = (counts[g.state] ?? 0) + 1;
+    const policy = await this.policy();
+    const work = (await this.store.query(
+      "SELECT state,COUNT(*) AS n FROM jobs WHERE org=$1 AND kind IN ('investigate','discover_response','compile_response','interpret_sources','analyze_media') AND state IN ('queued','running','retry') GROUP BY state", [this.config.org],
+    )).rows;
+    const jobs = Object.fromEntries(work.map(row => [row.state, Number(row.n)]));
+    const usage = (await this.store.query("SELECT COUNT(*) AS calls,COALESCE(SUM(COALESCE(cost_usd,reserved_usd)),0) AS cost FROM usage WHERE org=$1 AND started_at>$2", [this.config.org, Date.now()-3600000])).rows[0];
+    const limited = Number(usage.calls) >= policy.hourlyCallLimit || Number(usage.cost) >= policy.hourlyBudgetUsd;
     return {
-      policy: await this.policy(),
+      policy,
+      runtime: {
+        active: jobs.running ?? 0, queued: (jobs.queued ?? 0) + (jobs.retry ?? 0),
+        state: !policy.enabled ? "paused" : jobs.running ? "processing" : limited ? "budget_limit" : jobs.queued || jobs.retry ? "queued" : "monitoring",
+        hourlyCalls: Number(usage.calls), hourlyCostUsd: Number(usage.cost),
+      },
       counts,
       groups: groups.length,
       note: "Queue states describe processing, never independently confirmed needs.",

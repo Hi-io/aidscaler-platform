@@ -5,21 +5,28 @@ const uses = { residential: 'Homes', shelter: 'Shelter', school: 'School', clini
 const types = { water: 'Drinking water', food: 'Food', fuel: 'Fuel', blankets: 'Blankets', energy: 'Power equipment', sanitation: 'Sanitation supplies', staff: 'Response crew', rescue: 'Rescue equipment', medicine: 'Medical supplies' };
 const labels = new Map();
 let demo = false;
+let usingAliases = false;
 export function setDisplayContext({ organization, geography } = {}) {
   if (organization) {
     labels.clear();
+    usingAliases = false;
     demo = /^org\d+$/.test(organization.id) && demoOrganizations.includes(organization.name);
     if (demo) demoOrganizations.forEach((name, i) => labels.set(`org${i}`, name));
     labels.set(organization.id, organization.name);
   }
   if (geography) {
+    usingAliases = false;
     const assigned = new Map();
+    const nodeNames = new Map((geography.nodes ?? []).map(node => [node.id, node.name]));
     for (const place of [...(geography.places ?? [])].sort((a,b) => a.id.localeCompare(b.id, 'en', {numeric:true}))) {
       const index = /^b(\d+)$/.exec(place.id)?.[1];
       const base = demo && index ? `${districts[Number(index) % districts.length]} ${uses[place.use] || 'Site'}` : null;
       const ordinal = (assigned.get(base) ?? 0) + 1;
       assigned.set(base, ordinal);
-      const name = place.name || place.label || (base ? base + (ordinal > 1 ? ' ' + ordinal : '') : null);
+      const declaredJunction = nodeNames.get(place.node);
+      const laboratoryName = demo && / Junction$/.test(declaredJunction ?? '') ? declaredJunction.replace(/ Junction$/, '') : null;
+      const name = place.name || place.label || laboratoryName || (base ? base + (ordinal > 1 ? ' ' + ordinal : '') : null);
+      if (name && !place.name && !place.label && !laboratoryName) usingAliases = true;
       if (name) labels.set(place.id, name);
       if (name && place.node && !labels.has(place.node)) labels.set(place.node, `${name} access`);
     }
@@ -53,4 +60,4 @@ export function registerDisplayRecords(kind, records) {
 export function readableText(value) {
   return String(value ?? '').replace(/\b(?:need-[\w-]+|r-org\d+-[a-z_]+(?:-\w+)?|v-org\d+-\d+|org\d+|b\d+|n\d+)\b/g, entityLabel);
 }
-export function labelHints() { return demo ? 'Sample place names are display aliases for this laboratory map. Original identifiers remain in source records.' : ''; }
+export function labelHints() { return usingAliases ? 'Sample place names are display aliases for this laboratory map. Original identifiers remain in source records.' : ''; }

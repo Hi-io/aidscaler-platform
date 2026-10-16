@@ -32,3 +32,9 @@ test('real names take precedence and unknown identifiers are not invented', () =
   registerDisplayRecords('vehicle',{id:'vehicle-1',name:'Van A'});
   assert.equal(entityLabel('vehicle-1'),'Van A');
 });
+
+test('an older laboratory directory uses its declared junction name rather than conflicting with source reports', () => {
+  setDisplayContext({organization:{id:'org0',name:'Relief North'},geography:{places:[{id:'b41',node:'n41',use:'shelter'}],nodes:[{id:'n41',name:'South Hill Shelter Junction'}]}});
+  assert.equal(entityLabel('b41'),'South Hill Shelter');
+  assert.equal(entityLabel('n41'),'South Hill Shelter Junction');
+});

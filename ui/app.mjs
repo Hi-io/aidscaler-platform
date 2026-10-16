@@ -1,4 +1,7 @@
 import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints } from "./labels.mjs";
+import { createPortalViews } from "./portal.mjs";
+import { agentMonitor } from "./autonomy.mjs";
+import { createDecisionExperience } from "./decision.mjs";
 import { offlineQueue } from "./offline.mjs";
 import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
 import { createActivityView } from "./activity.mjs";
@@ -193,6 +196,8 @@ const extras = createExtras({
   render,
   toast,
 });
+const portalViews = createPortalViews({ api, escape, icon, money, time, publicProcurement, readAttachment, toast });
+const decisionExperience = createDecisionExperience({ api, escape, icon, badge, action, time, state });
 const operational = createOperationalDraft({
   api,
   record,
@@ -337,13 +342,13 @@ function activityCard(a) {
   return activityView.card(a, { role: state.user.role, model: state.model, now: Date.now() });
 }
 async function overview() {
-  const d = await api("/api/dashboard");
-  state.data = d;
+  const [d, intake] = await Promise.all([api("/api/dashboard"), api("/api/automation")]);
+  state.data = d; state.intake = intake; state.model = d.model ?? state.model;
+  registerDisplayRecords("need", d.need);
   const queue = d.proposal.filter(p => ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state));
-  const unresolved = d.need.filter(n => n.quantity > n.served);
-  return title("Response overview", "Your priorities, the agent's progress, and the next decision that needs you.",
-    action(`${icon("refresh-cw")} Sync sources`, "sync", "", "quiet") +
-    action(`${icon("sparkles")} Investigate signals`, "investigate", "", "primary")) +
+  const unresolved = d.need.filter(n => n.quantity > (n.served ?? 0));
+  return title("Response overview", "See the need, the proposed response, and where your decision makes a difference.") +
+    agentMonitor(intake, {escape, icon, model:state.model}) +
     presentation.overview({ data: d, queue, unresolved, activity: activityCard(d.activity[0]), coverage: await coverageControls.card(),
       sourceStatus: d.source.length ? d.source.map(source => source.state).join(" · ") : "Not connected" });
 }
@@ -352,24 +357,23 @@ async function signals() {
   state.signalRows = rows;
   const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location} ${entityLabel(s.location)}`.toLowerCase().includes(state.filter.toLowerCase()));
   const start = state.signalPage * 12;
-  return title("Signals & evidence", "Public posts, media and authorized reports arrive here. Open a source when you need its full context.",
-    action(`${icon("refresh-cw")} Sync`, "sync", "", "quiet") +
-    action("Discover a response", "discover-page", "", "primary")) +
-    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Investigation scope</summary><p class="small">Discovery and interpretation use up to the first 35 received sources, not just the search results or this page. Source originals and uncertainty are retained.</p>${action("Interpret only", "interpret-page", "", "quiet")}</details>` +
+  const intake = await api("/api/automation");
+  return title("Signals & evidence", "Public posts, media and authorized reports are collected automatically. Open a source for its original context.") +
+    agentMonitor(intake, {escape, icon, model:state.model, compact:true}) +
+    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Processing & additional checks</summary><p class="small">New source versions enter the agent's bounded processing queue automatically. Original sources and uncertainty remain available.</p><div class="actions">${action("Recheck received sources", "discover-page", "", "quiet")}${action("Interpret selected context", "interpret-page", "", "quiet")}${action("Refresh sources", "sync", "", "quiet")}</div></details>` +
     presentation.signals(filtered.slice(start, start + 12)) +
     `<div class="pagination"><span class="small">${filtered.length ? start + 1 : 0}–${Math.min(start + 12, filtered.length)} of ${number(filtered.length)}</span>${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`;
 }
 async function investigations() {
-  const rows = await record("activity"), intake = await api("/api/automation");
+  const [rows, intake] = await Promise.all([record("activity"), api("/api/automation")]);
   const ongoing = rows.filter(a => ["reading", "checking", "queued", "waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(a.state));
   const focus = ongoing[0] ?? rows[0];
   const earlier = rows.filter(a => a.id !== focus?.id);
-  return title("Investigations", "Follow the current step. Expand the evidence when you want to see how a response came together.",
-    action(`${icon("sparkles")} Start investigation`, "investigate", "", "primary")) +
-    `<div class="status-strip"><span>${icon("radio")} ${intake.counts.pending ?? 0} source groups pending</span><span>${ongoing.length} active or waiting</span><span>Automatic intake ${intake.policy.enabled ? "enabled" : "paused"}</span></div>` +
+  return title("Agent activity", "The agent watches new reports, checks possibilities and prepares responses for human review.") +
+    agentMonitor(intake, {escape, icon, model:state.model}) +
     activityCard(focus) +
     `<section class="card investigation-history"><div class="section-heading"><h2>Recent investigations</h2><span class="small">${earlier.length} recorded</span></div>${earlier.slice(0, 6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("") || empty("Earlier investigations will appear here.", "sparkles")}${earlier.length > 6 ? `<details class="secondary-disclosure" data-ui-key="investigations:earlier"><summary>All earlier investigations · ${earlier.length - 6} more</summary>${earlier.slice(6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("")}</details>` : ""}</section>
-    <details class="secondary-disclosure" data-ui-key="investigations:automation"><summary>Automatic intake & model limits</summary><div class="toolbar"><span class="small">${intake.policy.hourlyCallLimit} calls / hour limit</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Enable automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}</div><p class="small">Model activity is distinct from physical help or confirmed truth. Human approval remains required.</p></details>`;
+    <details class="secondary-disclosure" data-ui-key="investigations:automation"><summary>Processing controls & model limits</summary><div class="toolbar"><span class="small">${intake.policy.hourlyCallLimit} calls / hour · $${intake.policy.hourlyBudgetUsd}/hour maximum</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Resume automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}${action("Request an additional check", "investigate", "", "quiet")}</div><p class="small">The source connection and operational monitoring continue while the model works. Recorded checks and tool results are available above.</p></details>`;
 }
 async function review() {
   let page = state.reviewPage ?? 0,
@@ -641,9 +645,10 @@ function modal(name, content, footer = "") {
   dialog.innerHTML = `<header class="dialoghead"><h2>${name}</h2><button class="iconbutton" aria-label="Close dialog" data-action="close">${icon("x")}</button></header><div class="dialogbody">${content}</div>${footer ? `<footer class="dialogfoot">${footer}</footer>` : ""}`;
   document.body.append(dialog);
   dialog.showModal();
+  const openedDialog = dialog;
   dialog.onclose = () => {
-    dialog.remove();
-    dialog = null;
+    openedDialog.remove();
+    if (dialog === openedDialog) dialog = null;
   };
   bind(dialog);
 }
@@ -656,13 +661,7 @@ async function proposal(id) {
     pending = p.conditions.filter((c) => !c.satisfied);
   modal(
     "Review a response",
-    `<div class="cardheader">${badge(p.state)}${badge(p.priority)}</div><h2>${escape(readableText(p.title))}</h2><div class="detailgrid" style="margin:22px 0"><div class="decision"><span class="eyebrow">What can we do?</span><p>${escape(readableText(p.summary))}</p>${p.benefit && p.benefit.trim() !== p.summary?.trim() ? `<p class="sub"><strong>Who benefits:</strong> ${escape(readableText(p.benefit))}</p>` : ""}</div><div class="decision"><span class="eyebrow">What still needs checking?</span>${pending.length ? `<ul class="conditions">${pending.map((c) => `<li>${icon("circle-alert")}<span>${escape(c.description)}</span></li>`).join("")}</ul>` : "<p>No declared pending conditions. Verify the evidence before approving.</p>"}</div></div><details class="collapse"><summary>Why this response?</summary><p class="sub">${escape(p.rationale)}</p></details>${p.changedReason ? `<div class="warning">Changed: ${escape(p.changedReason)}. Previous authorization no longer applies.</div>` : ""}<details class="collapse"><summary>${p.references.length} evidence references</summary>${p.references.map((r) => `<div class="listrow"><code>${escape(r)}</code>${action("Open evidence", "evidence", r)}</div>`).join("")}</details><details class="collapse"><summary>Planned actions & responsible organizations</summary>${table(
-      ["Step", "Action", "Owner", "Dependencies"],
-      p.actions.map(
-        (a, i) =>
-          `<tr><td>${i + 1}</td><td>${escape(a.type)}</td><td>${escape(entityLabel(a.owner))}</td><td>${a.dependsOn.map((i) => i + 1).join(", ") || "None"}</td></tr>`,
-      ),
-    )}<pre class="trace">${escape(JSON.stringify(p.actions, null, 2))}</pre></details>${p.alternatives.length ? `<details class="collapse"><summary>Alternatives considered</summary>${p.alternatives.map((a) => `<p class="sub"><strong>${escape(a.title)}</strong><br>${escape(a.reason)}</p>`).join("")}</details>` : ""}${p.authorization ? `<p class="note">Authorized by ${escape(p.authorization.name)} at ${time(p.authorization.at)}. Evidence snapshot: ${escape(p.authorization.evidenceHash.slice(0, 16))}.</p>` : ""}${canReview && ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state) ? `<label>Decision note<textarea id="reviewnote" placeholder="Record constraints, clarification or the reason for your decision."></textarea></label>${pending.length ? `<label class="checkbox"><input type="checkbox" id="allowconditional">Authorize a conditional reservation only. Physical execution remains blocked until conditions are checked and a new authorization is given.</label>` : ""}` : ""}`,
+    await decisionExperience.renderProposal(p, {canReview}),
     canReview &&
       ["awaiting_review", "requires_review", "needs_clarification"].includes(
         p.state,
@@ -671,44 +670,15 @@ async function proposal(id) {
       : action("Close", "close"),
   );
   state.currentProposal = p;
-  if (p.sourceReview?.state === "pending") {
-    const sourceReview = document.createElement("p");
-    sourceReview.className = "note";
-    sourceReview.textContent = "Locally authorized · waiting for operational owner review.";
-    dialog.querySelector(".dialogbody").insertBefore(sourceReview, dialog.querySelector(".detailgrid"));
-  }
-  const scope = document.createElement("section");
-  scope.className = "decision";
-  scope.innerHTML = `<span class="eyebrow">EXACT CURRENT COMMITMENT · VERSION ${p.version}</span><ul class="conditions">${p.actions
-    .slice(0, 3)
-    .map(
-      (a) =>
-        `<li><span><strong>${escape(entityLabel(a.owner))}</strong> · ${escape(readableText(actionBrief(a)))}</span></li>`,
-    )
-    .join(
-      "",
-    )}</ul>${p.actions.length > 3 ? `<p class="small">${p.actions.length - 3} additional steps are in the action table. Review every owner and dependency before authorizing.</p>` : ""}<p class="note">These current typed actions define the authorization; a descriptive summary cannot override them.</p>`;
-  dialog
-    .querySelector(".dialogbody")
-    .insertBefore(scope, dialog.querySelector(".detailgrid"));
-  if (p.repairOf) {
-    const summary = document.createElement("details");
-    summary.className = "collapse";
-    summary.innerHTML = `<summary>Repair of an earlier response · ${(p.inheritedWork ?? []).length} physical steps preserved</summary><p class="sub">${escape(p.repairReason)}. Completed work remains historical; the new decision authorizes only prospective actions.</p>${(p.inheritedWork ?? []).map((w) => `<p class="small">${escape(w.action.type)} · ${escape(w.state.replaceAll("_", " "))} · source receipt ${escape(w.operationId ?? w.receipt?.id ?? "partner confirmation")}</p>`).join("")}`;
-    const body = dialog.querySelector(".dialogbody");
-    body.insertBefore(
-      summary,
-      body.querySelector("#reviewnote")?.closest("label") ?? null,
-    );
-  }
 }
+
 async function sourceDetail(id) {
   const s = await record("signal", id);
   const context = await caseControls.context(id);
   modal(
     "Original source & context",
     `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Posted ${time(s.publishedAt)}<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location</span><p>${escape(entityLabel(s.location) || "Not confirmed")}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><details class="collapse"><summary>Source references & attachment records</summary><pre class="trace">${escape(JSON.stringify({ sourceVersion: s.sourceVersion, locationId: s.location, references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre></details>`,
-    action("Investigate this signal", "investigatesignal", id, "primary") + (["admin", "commander"].includes(state.user.role) ? action("Review local erasure", "erase-source", id) : ""),
+    action("Close", "close") + action("Request another check", "investigatesignal", id, "quiet") + (["admin", "commander"].includes(state.user.role) ? action("Review local erasure", "erase-source", id) : ""),
   );
   const review = document.createElement("div");
   review.innerHTML = context;
@@ -806,6 +776,7 @@ async function flush() {
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
+  if (name === "close") { dialog?.close(); return; }
   if (name === "resource-tab") { state.resourceTab = id; await render(); return; }
   if (name === "audit-page" || name === "audit-sync-page") { state[name === "audit-page" ? "auditPage" : "syncAuditPage"] = Number(id); await render(); return; }
   if (await responseControls.run(name, id)) return;
@@ -946,7 +917,8 @@ async function runAction(name, id) {
         );
       modal(
         "Evidence record",
-        `<pre class="trace">${escape(JSON.stringify(r, null, 2))}</pre>`,
+        await decisionExperience.renderEvidence(found),
+        action("Close", "close"),
       );
       return;
     } catch {}
@@ -1249,66 +1221,8 @@ function bind(root = app) {
     else await render();
   });
 }
-async function publicView() {
-  const d = await api("/api/public");
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Follow approved updates and support the organization’s next response.</p></div><div class="grid cols3 public-updates">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(readableText(p.title))}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div>${publicProcurement(d.financeReview, escape, time)}<details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">AidScaler · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
-  document.querySelector("#contributeform").onsubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const amountCents = Math.round(
-        Number(new FormData(e.target).get("amount")) * 100,
-      );
-      const r = await api("/api/contribute", { amountCents });
-      modal(
-        "Test contribution created",
-        `<div class="success">${money(r.amountCents)} · pending test payment</div><p class="sub">No money was collected. A signed provider confirmation is required before these funds count as settled.</p>`,
-      );
-    } catch (e) {
-      toast(e.message);
-    }
-  };
-}
-async function communityView() {
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><a href="/public">Response updates</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">COMMUNITY ACCESS</span><h1>Make a need visible.</h1><p>Tell the response team what is happening. Public reports enter a review queue; reporting does not guarantee an immediate dispatch.</p></div><section class="card"><form id="communityform" class="fieldform"><label>Location<input name="location" required placeholder="An approximate place or district"></label><details class="form-disclosure"><summary>Add a photo or recording <span>Optional</span></summary><label>Photo or audio recording<input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg"></label><p class="note">Optional · up to 2 MB. You can send source media without writing a description. Avoid identifiable people and sensitive details.</p></details><label>What is needed? <span class="small">A description or attachment is required</span><textarea name="text" maxlength="6000" placeholder="Describe the situation and quantities, if known."></textarea></label><button class="primary">Submit for review</button></form><p class="note">No account required. This channel needs an internet connection and is not guaranteed to be monitored continuously. Reports and attachments stay private until the organization reviews them.</p></section></main></div>`;
-  let pendingSubmission;
-  document.querySelector("#communityform").onsubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    try {
-      const attachment = await readAttachment(data.get("attachment"));
-      if (!attachment && !String(data.get("text")).trim())
-        throw new Error("Add a short description or a photo/audio recording.");
-      const signature = JSON.stringify({
-        location: data.get("location"),
-        text: data.get("text"),
-        attachment,
-      });
-      if (pendingSubmission?.signature !== signature)
-        pendingSubmission = {
-          signature,
-          clientId: crypto.randomUUID(),
-          observedAt: Date.now(),
-        };
-      const r = await api("/api/community/report", {
-        location: String(data.get("location")),
-        text: String(data.get("text")),
-        attachment,
-        clientId: pendingSubmission.clientId,
-        kind: "need",
-        observedAt: pendingSubmission.observedAt,
-        references: [],
-      });
-      modal(
-        "Report received for review",
-        `<div class="success">${escape(r.notice)}</div>`,
-      );
-      pendingSubmission = null;
-      e.target.reset();
-    } catch (e) {
-      toast(e.message);
-    }
-  };
-}
+async function publicView() { await portalViews.publicView(app); }
+async function communityView() { await portalViews.communityView(app); }
 window.addEventListener("online", () => {
   state.offline = false;
   toast("Connection restored. Queued field reports can be retried.");

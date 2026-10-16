@@ -252,6 +252,10 @@ export async function createHarness({
         networkFetcher,
         provider,
         autoIngest: false,
+        // The evaluator dispatches its declared planning rounds. Product
+        // defaults must not add background inference to controlled arms.
+        autoInvestigate: false,
+        autoDiscover: false,
         startWorker: false,
         writeAccessFile: false,
         bootstrapPassword: "evaluation-password",

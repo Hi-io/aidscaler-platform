@@ -1,0 +1,75 @@
+.response-review > h2,.friendly-evidence > h2 { margin:16px 0 22px; font-size:25px; letter-spacing:-.6px; line-height:1.22; }
+.response-impact { padding:22px; background:#f7f5fd; border:1px solid #e4ddf7; border-radius:14px; margin:0 0 18px; }
+.response-impact-row + .response-impact-row { margin-top:20px; padding-top:20px; border-top:1px solid #ded7f1; }
+.response-impact-place { display:flex; align-items:center; gap:7px; font-size:13px; margin-bottom:19px; }
+.response-impact-place .icon { color:var(--accent); width:16px; height:16px; }
+.response-impact-numbers { display:grid; grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) minmax(0,1fr); gap:12px; align-items:center; }
+.response-impact-numbers > div { display:flex; flex-direction:column; gap:5px; }
+.response-impact-numbers span { font-size:11px; color:var(--muted); }
+.response-impact-numbers strong { font-size:25px; letter-spacing:-.6px; overflow-wrap:anywhere; }
+.response-impact-numbers small { font-size:13px; letter-spacing:0; font-weight:500; }
+.response-impact-numbers .proposed strong { color:var(--accent); }
+.response-impact-arrow { color:#a99bc9; }
+.response-coverage-track { height:4px; background:#e3dded; border-radius:5px; margin-top:20px; overflow:hidden; }
+.response-coverage-track i { display:block; height:100%; background:linear-gradient(90deg,#4b8be8,#8b61d5); border-radius:5px; }
+.approval-explanation { display:flex; gap:12px; align-items:flex-start; padding:4px 0; margin:15px 0; }
+.approval-explanation h3 { margin:0 0 5px; font-size:14px; }
+.approval-explanation p { margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
+.decision-step-icon { display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:9px; background:var(--accent-soft); color:var(--accent); flex-shrink:0; }
+.decision-step-icon .icon { width:17px; height:17px; }
+.response-readiness { display:flex; flex-wrap:wrap; gap:8px 15px; padding:12px 0 20px; }
+.response-readiness > span { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); }
+.response-readiness .icon { height:14px; width:14px; }
+.response-readiness .ready { color:var(--green); }
+.response-readiness .attention { color:#9c6527; }
+.response-plan { border-top:1px solid var(--line); padding-top:20px; }
+.response-plan .section-heading { margin-bottom:5px; }
+.response-steps { list-style:none; padding:0; margin:0; }
+.response-step { display:flex; gap:12px; padding:17px 0; }
+.response-step + .response-step { border-top:1px solid var(--line); }
+.response-step-count { border:1px solid var(--line); border-radius:50%; width:24px; height:24px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--muted); margin-top:4px; }
+.response-step-content { flex:1; min-width:0; }
+.response-step-title { display:flex; gap:10px; align-items:center; }
+.response-step-title h3 { font-size:13px; margin:0 0 3px; }
+.response-step-title p { margin:0; font-size:14px; line-height:1.5; overflow-wrap:anywhere; }
+.delivery-trail { display:flex; flex-wrap:wrap; list-style:none; padding:13px 0 0 42px; gap:5px; font-size:11px; color:var(--muted); }
+.delivery-trail li:not(:last-child)::after { content:'→'; margin:0 5px; color:#aaa3b7; }
+.delivery-trail li:last-child { color:var(--ink); font-weight:550; }
+.response-step-meta { padding:10px 0 0 42px; display:flex; flex-wrap:wrap; gap:5px 12px; font-size:10px; color:var(--muted); }
+.response-step-meta span + span::before { content:'·'; margin-right:12px; }
+.response-step-detail { margin:8px 0 0 42px; font-size:11px; color:var(--muted); }
+.response-step-detail summary { cursor:pointer; color:var(--muted); }
+.response-step-detail p { font-size:11px; margin:7px 0 0; }
+.evidence-reference { display:flex; gap:11px; align-items:center; padding:13px 0; }
+.evidence-reference + .evidence-reference { border-top:1px solid var(--line); }
+.evidence-reference strong { font-size:12px; }
+.evidence-reference p { color:var(--muted); font-size:11px; margin:4px 0 0; line-height:1.5; }
+.evidence-lead { color:var(--muted); font-size:14px; line-height:1.6; }
+.evidence-original { margin:18px 0; padding:15px 18px; border-left:3px solid #b3a1e4; background:var(--surface-muted); font-size:14px; line-height:1.65; white-space:pre-wrap; overflow-wrap:anywhere; border-radius:0 8px 8px 0; }
+.evidence-facts { display:grid; grid-template-columns:1fr 1fr; gap:0 25px; margin:12px 0 22px; }
+.evidence-facts > div { padding:13px 0; border-bottom:1px solid var(--line); min-width:0; }
+.evidence-facts dt { font-size:10px; color:var(--muted); margin-bottom:5px; }
+.evidence-facts dd { font-size:13px; margin:0; line-height:1.5; overflow-wrap:anywhere; }
+.decision-note { display:flex; gap:10px; padding:14px; border-radius:9px; background:#fbf5eb; margin:10px 0 18px; font-size:12px; }
+.decision-note > .icon { flex-shrink:0; margin-top:2px; color:#9c6527; }
+.decision-note p { margin:0; line-height:1.6; }
+.decision-note ul { margin:8px 0 0; padding-left:17px; line-height:1.6; }
+.recorded-checks { list-style:none; padding:0; margin:12px 0; color:var(--muted); }
+.recorded-checks li { display:flex; align-items:center; gap:7px; margin:8px 0; font-size:12px; }
+.recorded-checks .icon { height:14px; width:14px; color:var(--green); }
+.decision-note-field label { margin-top:15px; }
+@media (max-width:600px) {
+  .response-impact { padding:17px; }
+  .response-impact-numbers { gap:8px; grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) minmax(0,1fr); }
+  .response-impact-numbers strong { font-size:21px; }
+  .response-impact-numbers span { font-size:10px; }
+  .response-impact-numbers small { font-size:11px; }
+  .response-impact-numbers .icon { width:16px; height:16px; }
+  .response-step { gap:9px; }
+  .response-step-meta,.response-step-detail,.delivery-trail { padding-left:0; margin-left:0; }
+  .evidence-reference { gap:8px; }
+  .evidence-reference > .decision-step-icon { display:none; }
+  .evidence-facts { gap:0 15px; }
+}
+
+.response-coverage-label { margin:8px 0 0; font-size:11px; color:#6f638a; }

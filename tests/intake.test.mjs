@@ -5,6 +5,14 @@ import { Intake } from "../src/intake.mjs";
 import { OpenRouterProvider } from "../src/provider.mjs";
 import { Investigator } from "../src/investigation.mjs";
 const org = "org0";
+test("automatic source batching coalesces routine posts but urgent hints are checked promptly", async t => {
+  const s=await setup(t), intake=new Intake(s,{org,autoInvestigate:true,autoBatchWaitMs:15000,autoBatchMinSignals:8});
+  await intake.stage(org,{id:"routine",text:"Thinking of the response team",group:"routine",sourceVersion:1});
+  assert.equal((await intake.kick()).batching,true);
+  assert.equal(Number((await s.query("SELECT COUNT(*) AS n FROM jobs")).rows[0].n),0);
+  await intake.stage(org,{id:"urgent",text:"Urgent: people trapped",group:"urgent",sourceVersion:1});
+  assert.equal((await intake.kick()).queued,true);
+});
 async function setup(t) {
   const s = await Store.open();
   await s.organization(org);

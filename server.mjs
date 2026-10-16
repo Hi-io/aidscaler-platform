@@ -26,6 +26,7 @@ import { Workforce } from "./src/workforce.mjs";
 import { PublicEvidence } from "./src/public-evidence.mjs";
 import { Casework } from "./src/casework.mjs";
 import { Organization } from "./src/organization.mjs";
+import { CommunityFollowup } from "./src/community-followup.mjs";
 import { configureResponsePolicy, responsePolicy, responseQueue } from "./src/response-policy.mjs";
 import { responseOptions } from "./src/response-options.mjs";
 import { Retention } from "./src/retention.mjs";
@@ -99,6 +100,7 @@ export async function createPlatform(overrides = {}) {
     domain = new Domain(store, config),
     casework = new Casework(store, domain),
     organization = new Organization(store, config),
+    community = new CommunityFollowup(store, config),
     retention = new Retention(store, domain, config),
     workforce = new Workforce(store, domain),
     connector = overrides.connector ?? new SimulatorConnector(config),
@@ -222,7 +224,7 @@ export async function createPlatform(overrides = {}) {
       res.setHeader("Referrer-Policy", "same-origin");
       res.setHeader(
         "Permissions-Policy",
-        "camera=(), microphone=(), geolocation=()",
+        "camera=(), microphone=(), geolocation=" + (req.url?.split("?")[0] === "/community" ? "(self)" : "()"),
       );
       const url = new URL(req.url, "http://localhost");
       if (url.pathname === "/mcp") {
@@ -317,7 +319,7 @@ export async function createPlatform(overrides = {}) {
           });
         }
         return json(res, 200, {
-          organization: { id: config.org, name: config.orgName },
+          organization: await organization.publicProfile(config.org),
           updates: approved,
           finance: await finance.summary(config.org),
           financeReview: await finance.publicSummary(config.org),
@@ -365,6 +367,7 @@ export async function createPlatform(overrides = {}) {
         );
         communityLimits.set(k, n);
         const input = await body(req, 3_000_000);
+        if (input.trackingToken !== undefined) check(typeof input.trackingToken === "string" && /^[a-zA-Z0-9_-]{32,180}$/.test(input.trackingToken), "TRACKING_TOKEN", "Use a valid private tracking reference.");
         check(
           Number.isSafeInteger(input.observedAt) && input.observedAt >= 0,
           "REPORT_TIME",
@@ -422,12 +425,22 @@ export async function createPlatform(overrides = {}) {
           },
           "community_" + input.clientId,
         );
+        const trackingToken = await community.attach(r, input.trackingToken);
         return json(res, 201, {
           id: r.id,
+          trackingToken,
           state: "received_for_review",
           notice:
             "Recorded for review by the organization. This is not a dispatch confirmation.",
         });
+      }
+      if (url.pathname === "/api/community/track") {
+        check(req.method === "POST", "METHOD", "POST required.", 405);
+        const k = "track-" + req.socket.remoteAddress + "-" + Math.floor(Date.now() / 60000), n = (communityLimits.get(k) ?? 0) + 1;
+        communityLimits.set(k, n);
+        check(n <= 60, "COMMUNITY_RATE", "Please wait a moment before checking again.", 429);
+        const input = await body(req, 1000);
+        return json(res, 200, await community.track(input.token));
       }
       if (url.pathname === "/api/login") {
         check(req.method === "POST", "METHOD", "POST required.", 405);
@@ -579,6 +592,12 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await intake.summary());
         if (url.pathname === "/api/organization" && req.method === "GET")
           return json(res, 200, await organization.read(actor.org));
+        if (url.pathname === "/api/report/followup" && req.method === "GET") {
+          role(actor, ["analyst", "commander", "dispatcher"]);
+          const report = await store.get(actor.org, "report", url.searchParams.get("id"));
+          check(report.origin === "community-public", "FOLLOWUP_REPORT", "Choose a community report.");
+          return json(res, 200, { report, followup: await store.get(actor.org, "community_followup", report.id, false) });
+        }
         if (url.pathname === "/api/response-policy" && req.method === "GET") {
           role(actor, ["admin", "commander", "dispatcher", "analyst", "auditor"]);
           return json(res, 200, await responsePolicy(store, actor.org));
@@ -927,6 +946,8 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await domain.commitment(actor, b.id, b, key));
         if (url.pathname === "/api/report")
           return json(res, 201, await domain.report(actor, b, key));
+        if (url.pathname === "/api/report/followup")
+          return json(res, 200, await community.update(actor, b, key));
         if (url.pathname === "/api/report/moderate") {
           role(actor, ["analyst", "commander", "dispatcher"]);
           const r = await store.get(actor.org, "report", b.id);

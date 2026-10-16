@@ -340,11 +340,11 @@ export class Store {
       ["continue_" + hash([org, proposalId]), org, JSON.stringify(result)],
     );
   }
-  async lease(org, leaseMs = 180000, asOf = Date.now()) {
+  async lease(org, leaseMs = 180000, asOf = Date.now(), { includeKinds = null, excludeKinds = null } = {}) {
     return this.transaction(async (tx) => {
       const { rows } = await tx.query(
-        "SELECT * FROM jobs WHERE org=$1 AND created_at<=$3 AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY due_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",
-        [org, asOf, asOf],
+        "SELECT * FROM jobs WHERE org=$1 AND created_at<=$3 AND ($4::text[] IS NULL OR kind=ANY($4)) AND ($5::text[] IS NULL OR NOT(kind=ANY($5))) AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY due_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",
+        [org, asOf, asOf, includeKinds, excludeKinds],
       );
       if (!rows[0]) return null;
       const token = uid("lease");

@@ -163,15 +163,32 @@ export class Coverage {
         const raw = await this.connector.action("coverage", {}, "coverage-snapshot-" + material), parsed = snapshotSchema.safeParse(raw);
         check(parsed.success, "COVERAGE_SCHEMA", "Contact metadata did not match the received coverage contract.", 409);
         const result = parsed.data;
-        check(result.observedAt <= c.snapshot.now && new Set(result.contacts.map(p => p.sector)).size === result.contacts.length &&
+        // The coverage request is a later source read than the operational
+        // snapshot above. In a running world its observation may legitimately
+        // be newer. Bound it to an actual subsequent scoped clock receipt,
+        // never to local wall time or the coverage response's own timestamp.
+        const canRefreshClock = typeof this.connector.state === "function",
+          clock = canRefreshClock ? await this.connector.state() : c.snapshot;
+        check((!canRefreshClock || clock?.organization?.id === org) &&
+          clock?.runId === c.snapshot.runId && Number.isFinite(clock.now) && clock.now >= c.snapshot.now,
+          "COVERAGE_SCHEMA", "The contact receipt's scoped source clock changed run, owner or moved backwards.", 409);
+        check(result.observedAt <= clock.now && new Set(result.contacts.map(p => p.sector)).size === result.contacts.length &&
           result.contacts.every(p => p.lastContactAt <= result.observedAt) &&
           new Set(result.buildingContacts.map(p => p.building)).size === result.buildingContacts.length &&
-          result.buildingContacts.every(p => p.lastContactAt <= p.receivedAt && p.receivedAt <= result.observedAt) &&
-          (!c.received || c.received.runId !== c.snapshot.runId || result.version >= c.received.sourceVersion && result.observedAt >= c.received.sourceObservedAt),
+          result.buildingContacts.every(p => p.lastContactAt <= p.receivedAt && p.receivedAt <= result.observedAt),
           "COVERAGE_SCHEMA", "Contact metadata is duplicated, future-dated or older than its prior source receipt.", 409);
-        await this.store.upsert(org, "coverage_snapshot", "received", { contacts: result.contacts, buildingContacts: result.buildingContacts, scope: result.scope,
-          sourceVersion: result.version, sourceObservedAt: result.observedAt, runId: c.snapshot.runId, material });
-        await this.store.upsert(org, "coverage_status", "source", { error: null });
+        await this.store.transaction(async tx => {
+          const current = (await tx.get(org, "context", "operational", false))?.snapshot,
+            previous = await tx.get(org, "coverage_snapshot", "received", false);
+          check(current?.runId === clock.runId && Number.isFinite(current.now) && current.now <= clock.now &&
+            (!previous || previous.runId !== clock.runId || result.version >= previous.sourceVersion && result.observedAt >= previous.sourceObservedAt &&
+              clock.now >= (previous.sourceClockAtReceipt ?? previous.sourceObservedAt)),
+            "COVERAGE_SCHEMA", "Contact metadata or its source clock is older than the latest received evidence.", 409);
+          await tx.upsert(org, "coverage_snapshot", "received", { contacts: result.contacts, buildingContacts: result.buildingContacts, scope: result.scope,
+            sourceVersion: result.version, sourceObservedAt: result.observedAt, sourceClockAtReceipt: clock.now,
+            runId: clock.runId, material });
+          await tx.upsert(org, "coverage_status", "source", { error: null });
+        });
       } catch (error) {
         // A snapshot error remains explicit without losing already-issued
         // verification receipts or claiming that unknown contacts succeeded.
