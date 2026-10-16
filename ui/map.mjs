@@ -16,18 +16,20 @@ function projectGeography(geo) {
     minX = Math.min(minX, node.x); minZ = Math.min(minZ, node.z);
     maxX = Math.max(maxX, node.x); maxZ = Math.max(maxZ, node.z);
   }
-  if (!Number.isFinite(minX)) return () => null;
+  if (!Number.isFinite(minX)) return { width: 920, height: 920, point: () => null };
   if (Number.isFinite(extent) && extent > 0) {
     minX = Math.min(0, minX); minZ = Math.min(0, minZ);
     maxX = Math.max(extent, maxX); maxZ = Math.max(extent, maxZ);
   }
   // Both axes use the same scale: geographic distances keep their proportions.
   const width = Math.max(1, maxX - minX), height = Math.max(1, maxZ - minZ);
-  const scale = Math.min(840 / width, 420 / height);
-  const offsetX = (920 - width * scale) / 2, offsetZ = (480 - height * scale) / 2;
-  return (node) => finitePoint(node)
-    ? { x: offsetX + (node.x - minX) * scale, y: offsetZ + (node.z - minZ) * scale }
-    : null;
+  const canvasWidth = 920, padding = 20;
+  const scale = (canvasWidth - padding * 2) / width;
+  const canvasHeight = height * scale + padding * 2;
+  return { width: canvasWidth, height: canvasHeight,
+    point: (node) => finitePoint(node)
+      ? { x: padding + (node.x - minX) * scale, y: padding + (node.z - minZ) * scale }
+      : null };
 }
 export function operationalMap(data) {
   const geo = data.geography;
@@ -37,7 +39,7 @@ export function operationalMap(data) {
   const nodes = new Map(geo.nodes.map((n) => [n.id, n])),
     places = new Map(geo.places?.map((b) => [b.id, b]) ?? []),
     roads = new Map(data.roads.map((r) => [r.id, r]));
-  const point = projectGeography(geo);
+  const projection = projectGeography(geo), point = projection.point;
   const source = geo.geography ?? {}, mapName = source.name || "Received source map";
   const extent = geo.extentM ?? source.extentM;
   const description = ["Received geography",
@@ -81,46 +83,11 @@ export function operationalMap(data) {
         : "";
     })
     .join("");
-  return `<div class="operationalmap"><div class="mapidentity"><div><strong>${esc(mapName)}</strong><span>${esc(description)}</span></div>${source.attribution ? `<span class="mapcredit">${esc(source.attribution)}</span>` : ""}</div><div class="maplegend"><span><i class="mapdot need"></i>Observed unmet need</span><span><i class="mapdot vehicle"></i>Last vehicle report</span><span><i class="mapdot road"></i>Reported closed road</span></div><svg id="responsemap" viewBox="0 0 920 480" role="img" aria-label="${esc(mapName)}: received needs, vehicle observations and road reports"><rect width="920" height="480" fill="#f5f5fc"/>${lines}${buildings}${vehicles}${needs}</svg><div class="mapfooter"><span>Geography is public. Operating conditions are received observations. Unreported areas remain uncertain.</span><div><button data-map="in" aria-label="Zoom in">+</button><button data-map="out" aria-label="Zoom out">−</button><button data-map="reset">Reset view</button></div></div></div>`;
+  return `<div class="operationalmap"><div class="mapidentity"><div><strong>${esc(mapName)}</strong><span>${esc(description)}</span></div>${source.attribution ? `<span class="mapcredit">${esc(source.attribution)}</span>` : ""}</div><div class="maplegend"><span><i class="mapdot need"></i>Observed unmet need</span><span><i class="mapdot vehicle"></i>Last vehicle report</span><span><i class="mapdot road"></i>Reported closed road</span></div><svg id="responsemap" width="${projection.width}" height="${projection.height}" viewBox="0 0 ${projection.width} ${projection.height}" role="img" aria-label="${esc(mapName)}: received needs, vehicle observations and road reports"><rect width="100%" height="100%" fill="#f5f5fc"/>${lines}${buildings}${vehicles}${needs}</svg><div class="mapfooter"><span>Geography is public. Operating conditions are received observations. Unreported areas remain uncertain.</span></div></div>`;
 }
 export function bindMap() {
   const svg = document.querySelector("#responsemap");
   if (!svg) return;
-  let box = [0, 0, 920, 480],
-    drag;
-  const draw = () => svg.setAttribute("viewBox", box.join(" "));
-  for (const button of document.querySelectorAll("[data-map]"))
-    button.onclick = () => {
-      const op = button.dataset.map;
-      if (op === "reset") box = [0, 0, 920, 480];
-      else {
-        const f = op === "in" ? 0.8 : 1.25;
-        box = [
-          box[0] + (box[2] * (1 - f)) / 2,
-          box[1] + (box[3] * (1 - f)) / 2,
-          Math.max(50, Math.min(3680, box[2] * f)),
-          Math.max(26, Math.min(1920, box[3] * f)),
-        ];
-      }
-      draw();
-    };
-  svg.onpointerdown = (e) => {
-    if (e.target.closest("[data-action]")) return;
-    drag = { x: e.clientX, y: e.clientY, box: [...box] };
-    svg.setPointerCapture(e.pointerId);
-  };
-  svg.onpointermove = (e) => {
-    if (!drag) return;
-    const r = svg.getBoundingClientRect();
-    box = [
-      drag.box[0] - ((e.clientX - drag.x) / r.width) * drag.box[2],
-      drag.box[1] - ((e.clientY - drag.y) / r.height) * drag.box[3],
-      drag.box[2],
-      drag.box[3],
-    ];
-    draw();
-  };
-  svg.onpointerup = () => (drag = null);
   svg.querySelectorAll("[role=button]").forEach(
     (g) =>
       (g.onkeydown = (e) => {

@@ -2301,12 +2301,15 @@ svg .needpulse {
   overflow: hidden;
   background: #fff;
 }
+main[data-view="map"] {
+  max-width: none;
+}
 .operationalmap svg {
   display: block;
   width: 100%;
-  max-height: 600px;
-  touch-action: none;
-  cursor: grab;
+  height: auto;
+  max-height: none;
+  touch-action: pan-y;
 }
 .mapidentity {
   display: flex;
@@ -2508,7 +2511,6 @@ main { padding-top: 32px; }
 .activity-disclosure > summary { font-size: 13px; padding-top: 16px; padding-bottom: 16px; }
 .activity-evidence { flex-wrap: wrap; }
 .activity-evidence button { max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
-.operationalmap svg { max-height: min(470px, 54vh); }
 .operationalmap { border-radius: 12px; }
 .maplegend { padding: 14px 20px; }
 .mapfooter { padding: 12px 20px; }
