@@ -1,3 +1,4 @@
+import { readableText } from "./labels.mjs";
 // Presentation only: activity records describe observed requests and returned
 // results. They never confer authority or prove that physical aid was delivered.
 const RUNNING = new Set(["queued", "reading", "checking"]);
@@ -357,7 +358,7 @@ export function createActivityView({
     );
   const evidence = (rows) =>
     rows.length
-      ? `<div class="activity-evidence" aria-label="Evidence references">${rows.map((reference) => action(e(reference.label), "evidence", reference.id, "quiet")).join("")}</div>`
+      ? `<div class="activity-evidence" aria-label="Evidence references">${rows.map((reference) => action(e(readableText(reference.label)), "evidence", reference.id, "quiet")).join("")}</div>`
       : "";
   const meta = (a) =>
     `<div class="activity-meta"><span>${e(labelModel(a.model))}</span>${a.elapsedMs !== null ? `<span>${e(a.elapsedLabel)} · ${e(duration(a.elapsedMs))}</span>` : "<span>Run time not recorded</span>"}${a.calls !== null ? `<span>${a.calls} ${a.calls === 1 ? "call" : "calls"} recorded</span>` : ""}${a.id ? `<span title="${e(a.id)}">Run ${e(a.id.slice(-8))}</span>` : ""}</div>`;

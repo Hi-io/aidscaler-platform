@@ -1,3 +1,4 @@
+import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints } from "./labels.mjs";
 import { offlineQueue } from "./offline.mjs";
 import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
 import { createActivityView } from "./activity.mjs";
@@ -138,6 +139,7 @@ function cacheSession() {
     JSON.stringify({
       user: state.user,
       model: state.model,
+      organization: state.organization,
       expiresAt: Number(state.user.expiresAt) || Date.now() + 8 * 3600000,
     }),
   );
@@ -169,8 +171,11 @@ async function api(url, body) {
   }
   return result;
 }
-const record = (kind, id) =>
-  api("/api/records?" + new URLSearchParams({ kind, ...(id ? { id } : {}) }));
+const record = async (kind, id) => {
+  const rows = await api("/api/records?" + new URLSearchParams({ kind, ...(id ? { id } : {}) }));
+  registerDisplayRecords(kind, rows);
+  return rows;
+};
 const empty = (text, name = "inbox") =>
   `<div class="empty">${icon(name)}${escape(text)}</div>`;
 const extras = createExtras({
@@ -309,6 +314,9 @@ function login(error = "") {
       const me = await api("/api/me");
       state.delegatedReviews = me.delegatedReviews;
       state.model = me.model;
+    state.organization = me.organization;
+    setDisplayContext({ organization: me.organization });
+    try { setDisplayContext({ geography: (await api("/api/map")).geography }); } catch {}
       cacheSession();
       await render();
     } catch (e) {
@@ -320,8 +328,9 @@ function shell(content) {
   const active = nav.find(n => n[0] === state.page), scope = `${state.user.org}:${state.user.id}`;
   const previousPage = app.querySelector("main[data-view]")?.dataset.view;
   rememberPresentation(app, scope);
-  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(state.user.org)}</strong><span class="org-role">${escape(state.user.role)}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(state.user.role)}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}">${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p></details></main></div></div>`;
+  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(entityLabel(state.user.org))}</strong><span class="org-role">${escape(humanLabel(state.user.role))}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(humanLabel(state.user.role))}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}">${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p>${labelHints() ? `<p>${escape(labelHints())}</p>` : ""}</details></main></div></div>`;
   bind();
+  if (previousPage !== state.page) window.scrollTo({ top: 0, behavior: "instant" });
   restorePresentation(app, scope, state.page, { restoreFocus: previousPage === state.page });
 }
 function activityCard(a) {
@@ -341,12 +350,12 @@ async function overview() {
 async function signals() {
   const rows = (await record("signal")).filter(s => s.state !== "erased");
   state.signalRows = rows;
-  const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location}`.toLowerCase().includes(state.filter.toLowerCase()));
+  const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location} ${entityLabel(s.location)}`.toLowerCase().includes(state.filter.toLowerCase()));
   const start = state.signalPage * 12;
-  return title("The world speaks in fragments.", "Public posts, media and authorized reports arrive here. Open a source when you need its full context.",
+  return title("Signals & evidence", "Public posts, media and authorized reports arrive here. Open a source when you need its full context.",
     action(`${icon("refresh-cw")} Sync`, "sync", "", "quiet") +
-    action("Discover a response", "discover-page", "", "primary") + action("Interpret only", "interpret-page", "", "quiet")) +
-    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Investigation scope</summary><p class="small">Discovery and interpretation use up to the first 35 received sources, not just the search results or this page. Source originals and uncertainty are retained.</p></details>` +
+    action("Discover a response", "discover-page", "", "primary")) +
+    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Investigation scope</summary><p class="small">Discovery and interpretation use up to the first 35 received sources, not just the search results or this page. Source originals and uncertainty are retained.</p>${action("Interpret only", "interpret-page", "", "quiet")}</details>` +
     presentation.signals(filtered.slice(start, start + 12)) +
     `<div class="pagination"><span class="small">${filtered.length ? start + 1 : 0}–${Math.min(start + 12, filtered.length)} of ${number(filtered.length)}</span>${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`;
 }
@@ -355,7 +364,7 @@ async function investigations() {
   const ongoing = rows.filter(a => ["reading", "checking", "queued", "waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(a.state));
   const focus = ongoing[0] ?? rows[0];
   const earlier = rows.filter(a => a.id !== focus?.id);
-  return title("Investigate what could unlock help.", "Follow the current step. Expand the evidence when you want to see how a response came together.",
+  return title("Investigations", "Follow the current step. Expand the evidence when you want to see how a response came together.",
     action(`${icon("sparkles")} Start investigation`, "investigate", "", "primary")) +
     `<div class="status-strip"><span>${icon("radio")} ${intake.counts.pending ?? 0} source groups pending</span><span>${ongoing.length} active or waiting</span><span>Automatic intake ${intake.policy.enabled ? "enabled" : "paused"}</span></div>` +
     activityCard(focus) +
@@ -378,14 +387,14 @@ async function review() {
     total = queue.total;
   return (
     title(
-      "The decision belongs to you.",
+      "Decision queue",
       "Understand the benefit, evidence and conditions before authorizing a response.",
     ) +
-    `<section class="card">${table(
+    `<section class="card ${!rows.length ? "empty-table" : ""}">${table(
       ["Proposed response", "Priority", "State", "Pending conditions", ""],
       rows.map(
         (p) =>
-          `<tr><td><strong>${escape(p.title)}</strong><small>${escape(p.benefit)}</small></td><td>${badge(p.priority)}</td><td>${badge(p.state)}</td><td>${p.conditions.filter((c) => !c.satisfied).length}</td><td>${action("Review", "proposal", p.id)}</td></tr>`,
+          `<tr><td><strong>${escape(p.title)}</strong><small>${escape(readableText(p.benefit))}</small></td><td>${badge(p.priority)}</td><td>${badge(p.state)}</td><td>${p.conditions.filter((c) => !c.satisfied).length}</td><td>${action("Review", "proposal", p.id)}</td></tr>`,
       ),
     )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}${total > 12 ? `<div class="toolbar"><span class="small">${page * 12 + 1}–${Math.min(total, page * 12 + 12)} of ${total} actionable responses</span>${page ? action("Previous", "review-page", String(page - 1), "quiet") : ""}${(page + 1) * 12 < total ? action("Next", "review-page", String(page + 1), "quiet") : ""}</div>` : ""}<details class="collapse" ${state.historyOpen ? "open" : ""}><summary>Decision & execution history · ${history.total} responses</summary>${history.rows.map((p) => `<div class="listrow"><div class="grow"><strong>${escape(p.title)}</strong>${badge(p.state)}</div>${action("Inspect", "proposal", p.id)}</div>`).join("")}${history.offset ? action("Earlier page", "history-page", String((state.historyPage ?? 0) - 1), "quiet") : ""}${history.offset + 12 < history.total ? action("Next history page", "history-page", String((state.historyPage ?? 0) + 1), "quiet") : ""}</details></section>`
   );
@@ -394,7 +403,7 @@ async function operations() {
   const rows = await record("operation");
   return (
     title(
-      "From an order to useful help.",
+      "Operations",
       "Follow acknowledgements, travel and receipt. Arrival is not the same as service.",
       action(
         "Prepare an operational action",
@@ -403,50 +412,33 @@ async function operations() {
         "accent",
       ),
     ) +
-    (await unloadingControls.view()) + `<section class="card">${table(
+    (await unloadingControls.view()) + `<section class="card ${!rows.length ? "empty-table" : ""}">${table(
       ["Operation", "State", "Authorized by", "Latest confirmation", ""],
       rows.map(
         (o) =>
-          `<tr><td><strong>${escape(o.type ?? o.kind ?? "Delivery")} · ${escape(o.id.slice(-8))}</strong><small>${number(o.quantity)} ${escape(o.unit ?? "units")} ${o.need ? "· need " + escape(o.need) : ""}</small></td><td>${badge(o.state)}${o.requiresRepair ? " " + badge("requires_review") : ""}</td><td>${escape(o.authorizedBy ?? "Source authority")}</td><td>${o.confirmedBySource ? "Operational source confirmed" : "Awaiting source acknowledgement"}</td><td>${action("Follow", "operation", o.id)}</td></tr>`,
+          `<tr><td><strong>${escape(humanLabel(o.type ?? o.kind ?? "Delivery"))} · ${escape(o.id.slice(-8))}</strong><small>${number(o.quantity)} ${escape(o.unit ?? "units")} ${o.need ? "· " + escape(entityLabel(o.need)) : ""}</small></td><td>${badge(o.state)}${o.requiresRepair ? " " + badge("requires_review") : ""}</td><td>${escape(o.authorizedBy ?? "Source authority")}</td><td>${o.times?.received != null ? "Receipt recorded" : o.times?.arrived != null ? "Arrived · receipt pending" : o.confirmedBySource || o.times?.acknowledged != null ? "Source acknowledged" : "Awaiting source acknowledgement"}</td><td>${action("Follow", "operation", o.id)}</td></tr>`,
       ),
     )}${!rows.length ? empty("No authorized physical operations yet. Draft proposals do not count as deliveries.", "truck") : ""}</section>`
   );
 }
 async function resources() {
   const [items, facilities, vehicles, dashboard] = await Promise.all(
-    ["resource", "facility", "vehicle"].map((k) => record(k)).concat([api("/api/dashboard")]),
+    ["resource", "facility", "vehicle"].map(k => record(k)).concat([api("/api/dashboard")])
   );
   const usable = r => !["expired", "damaged", "quarantined"].includes(r.condition) &&
     (r.useByAt === undefined || Number.isFinite(dashboard.simulatedAt) && r.useByAt > dashboard.simulatedAt) &&
-    (r.type !== "staff" || staffAvailabilityState(r, dashboard.simulatedAt).usable),
-    available = r => usable(r) ? Math.max(0, Math.min(r.quantity - (r.reserved ?? 0) - (r.floor ?? 0), r.usableQuantity ?? Infinity)) : 0;
-  return (
-    title(
-      "Know what can be committed.",
-      "Availability includes reserve floors, existing commitments and owner permission.",
-      action("Add a local resource", "addresource", "", "primary"),
-    ) +
-    `<section class="card resource-group"><div class="section-heading"><h2>Inventory & operational capacity</h2><span class="small">${items.length} received records</span></div>${presentation.resourceTable(items.filter(r => r.owner === state.user.org || !r.owner), { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) })}${items.some(r => r.owner && r.owner !== state.user.org) ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner-owned resources · ${items.filter(r => r.owner && r.owner !== state.user.org).length}</summary><p class="small">Known capacity remains under its owner's control. An observation is not a commitment.</p>${presentation.resourceTable(items.filter(r => r.owner && r.owner !== state.user.org), { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) })}</details>` : ""}${!items.length ? empty("Query inventory or sync your operational systems.", "package") : ""}</section><div class="grid cols2" style="margin-top:22px"><section class="card"><div class="cardheader"><h2>Facilities</h2>${action("Request facility check", "verifyform", "", "quiet")}</div>${
-      facilities
-        .map(
-          (f) =>
-            `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(f.id)} · ${escape(f.use ?? "Facility")}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"} · ${escape(f.state ?? "Unknown operating state")}</p></div>${action("Investigate", "investigate-facility", f.id)}${badge(f.state ?? "unknown")}</div>`,
-        )
-        .join("") ||
-      empty(
-        "Facilities require a relevant assessment before activation.",
-        "building-2",
-      )
-    }</section><section class="card"><div class="section-heading"><h2>Transport</h2><span class="small">${vehicles.length} received vehicles</span></div>${
-      vehicles
-        .map(
-          (v) =>
-            `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.id)}</h3><p>Capacity ${number(v.capacity)} · ${escape(v.owner)} · position may be delayed</p>${driverAvailabilityBadge(v)}</div>${badge(v.state)}</div>`,
-        )
-        .join("") ||
-      empty("No observed vehicles. Query your transport system.", "truck")
-    }</section></div>`
-  );
+    (r.type !== "staff" || staffAvailabilityState(r, dashboard.simulatedAt).usable);
+  const available = r => usable(r) ? Math.max(0, Math.min(r.quantity - (r.reserved ?? 0) - (r.floor ?? 0), r.usableQuantity ?? Infinity)) : 0;
+  const tab = state.resourceTab ?? "inventory";
+  const own = items.filter(r => r.owner === state.user.org || !r.owner), peers = items.filter(r => r.owner && r.owner !== state.user.org);
+  const inventory = rows => presentation.resourceTable(rows, { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) });
+  const fleet = rows => rows.map(v => `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.label || entityLabel(v.id))}</h3><p>Capacity ${number(v.capacity)} · ${escape(entityLabel(v.owner))}</p>${driverAvailabilityBadge(v)}<details class="row-details"><summary>Vehicle record</summary><pre class="trace">${escape(JSON.stringify(v,null,2))}</pre></details></div>${badge(v.state)}</div>`).join("");
+  const tabs = [["inventory","Inventory",own.length],["transport","Transport",vehicles.filter(v => v.owner === state.user.org).length],["facilities","Facilities",facilities.length]];
+  return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.", action("Add a local resource", "addresource", "", "primary")) +
+    `<div class="view-tabs" role="group" aria-label="Resource category">${tabs.map(([id,name,count]) => `<button data-action="resource-tab" data-id="${id}" aria-pressed="${tab===id}">${name} <span>${count}</span></button>`).join("")}</div>` +
+    (tab === "inventory" ? `<section class="card resource-group"><div class="section-heading"><h2>Your inventory</h2><span class="small">Ready to commit, after protected stock</span></div>${own.length ? inventory(own) : empty("No owned resources received. Sync your inventory source.","package")}${peers.length ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner inventory <span>${peers.length} resources</span></summary><p class="small">Observed capacity. A partner must confirm any commitment.</p>${inventory(peers)}</details>` : ""}</section>` :
+    tab === "transport" ? `<section class="card"><div class="section-heading"><h2>Your transport</h2><span class="small">Last received vehicle states</span></div>${fleet(vehicles.filter(v => v.owner === state.user.org)) || empty("No owned vehicles have been received.","truck")}<details class="secondary-disclosure"><summary>Partner vehicles <span>${vehicles.filter(v => v.owner !== state.user.org).length} vehicles</span></summary>${fleet(vehicles.filter(v => v.owner !== state.user.org)) || '<p class="small">No partner vehicles received.</p>'}</details></section>` :
+    `<section class="card"><div class="section-heading"><h2>Facilities</h2>${action("Request facility check","verifyform","","quiet")}</div>${facilities.map(f => `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(entityLabel(f.id))}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"}</p></div>${badge(f.state ?? "unknown")}${action("Investigate","investigate-facility",f.id)}</div>`).join("") || empty("No assessed facilities received. Request a check before planning their use.","building-2")}</section>`);
 }
 async function network() {
   const [offers, commitments, permissions] = await Promise.all(
@@ -454,28 +446,28 @@ async function network() {
   );
   return (
     title(
-      "Independent teams. A connected response.",
+      "Partner network",
       "Each organization controls its data, resources and authorizations. Connecting does not grant access to everything.",
     ) +
-    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Partner capabilities</h2>${badge("permissioned")}</div>${
+    `<div class="grid ${commitments.length ? "cols2" : ""}"><section class="card"><div class="cardheader"><h2>Partner capabilities</h2>${badge("permissioned")}</div>${
       offers
         .filter((o) => o.active)
         .map(
           (o) =>
-            `<div class="listrow"><div class="rowicon">${icon("network")}</div><div class="grow"><h3>${escape(o.projection?.type ?? o.kind)} · ${escape(o.from)}</h3><p>${o.projection?.available != null ? number(o.projection.available) + " available · " : ""}Shared v${o.sourceVersion}. An offer is not a confirmed commitment.</p></div>${badge(o.expiresAt < Date.now() ? "expired" : "shared")}</div>`,
+            `<div class="listrow"><div class="rowicon">${icon("network")}</div><div class="grow"><h3>${escape(o.projection?.type ?? o.kind)} · ${escape(entityLabel(o.from))}</h3><p>${o.projection?.available != null ? number(o.projection.available) + " available · " : ""}Shared v${o.sourceVersion}. An offer is not a confirmed commitment.</p></div>${badge(o.expiresAt < Date.now() ? "expired" : "shared")}</div>`,
         )
         .join("") ||
       empty(
         "No partner capabilities have been explicitly shared yet. A single instance remains usable.",
         "network",
       )
-    }</section><section class="card"><div class="cardheader"><h2>Owner commitments</h2></div>${commitments.map((c) => `<div class="listrow"><div class="grow"><h3>${number(c.quantity)} · ${escape(c.resource)}</h3><p>For ${escape(c.requester)} · expires ${time(c.expiresAt)}<br>${c.conditions.length} conditions · authorized by ${escape(c.authorizedBy)}</p>${badge(c.state)}</div>${["reserved", "confirmed"].includes(c.state) ? action("Manage", "commitment", c.id) : ""}</div>`).join("") || empty("No reservations yet. Concurrent requests are checked transactionally.", "lock-keyhole")}</section></div><section class="card" style="margin-top:22px"><h2>What your organization shares</h2>${table(
+    }</section>${commitments.length ? `<section class="card"><div class="cardheader"><h2>Owner commitments</h2></div>${commitments.map((c) => `<div class="listrow"><div class="grow"><h3>${number(c.quantity)} · ${escape(entityLabel(c.resource))}</h3><p>For ${escape(entityLabel(c.requester))} · expires ${time(c.expiresAt)}<br>${c.conditions.length} conditions · authorized by ${escape(c.authorizedBy)}</p>${badge(c.state)}</div>${["reserved", "confirmed"].includes(c.state) ? action("Manage", "commitment", c.id) : ""}</div>`).join("") || empty("No reservations yet. Concurrent requests are checked transactionally.", "lock-keyhole")}</section>` : `<details class="card secondary-disclosure"><summary>Owner commitments <span>No reservations</span></summary><p class="small">Concurrent resource requests are checked transactionally. Confirmed commitments will appear here.</p></details>`}</div><details class="card secondary-disclosure"><summary>What your organization shares <span>${permissions.length} permissions</span></summary>${permissions.length ? table(
       ["Record", "Partner", "Permission", ""],
       permissions.map(
         (p) =>
-          `<tr><td>${escape(p.kind)} · ${escape(p.recordId)}</td><td>${escape(p.to)}</td><td>${badge(p.active ? "shared" : "withdrawn")}</td><td>${p.active ? action("Revoke", "revoke", p.id) : ""}</td></tr>`,
+          `<tr><td>${escape(p.kind)} · ${escape(p.recordId)}</td><td>${escape(entityLabel(p.to))}</td><td>${badge(p.active ? "shared" : "withdrawn")}</td><td>${p.active ? action("Revoke", "revoke", p.id) : ""}</td></tr>`,
       ),
-    )}${!permissions.length ? empty("Nothing is shared by default.", "shield-check") : ""}</section>`
+    ) : `<p class="small">Nothing is shared by default. Choose Share on an owned resource to prepare a scoped permission.</p>`}</details>`
   );
 }
 async function publications() {
@@ -486,7 +478,7 @@ async function publications() {
       "Publish approved, understandable progress without exposing people or promising unconfirmed delivery.",
       action("Prepare an update", "draftpublication", "", "primary"),
     ) +
-    `<div class="grid cols2">${rows.map((p) => `<article class="card"><div class="cardheader">${badge(p.state)}${badge(p.status)}</div><h2>${escape(p.title)}</h2><p class="sub">${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.publishedAt ? "Published " + time(p.publishedAt) : "Not visible to the public"}</div><div class="toolbar">${p.state === "draft" ? action("Review & publish", "publish", p.id, "primary") : ""}</div></article>`).join("") || `<section class="card">${empty("No update has been published. Drafts stay internal until a responsible person approves them.", "globe")}</section>`}</div>`
+    `<div class="grid cols2">${rows.map((p) => `<article class="card"><div class="cardheader">${badge(p.state)}${badge(p.status)}</div><h2>${escape(readableText(p.title))}</h2><p class="sub">${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.publishedAt ? "Published " + time(p.publishedAt) : "Not visible to the public"}</div><div class="toolbar">${p.state === "draft" ? action("Review & publish", "publish", p.id, "primary") : ""}</div></article>`).join("") || `<section class="card">${empty("No update has been published. Drafts stay internal until a responsible person approves them.", "globe")}</section>`}</div>`
   );
 }
 async function finance() {
@@ -495,7 +487,7 @@ async function finance() {
   const controls = await financeControls.view();
   return (
     title(
-      "Shared support. Clear accounting.",
+      "Pooled funds",
       "Pooled funds belong to the organization. Contributions are not promises to deliver one specific item.",
     ) +
     `<div class="metricrow">${[
@@ -543,11 +535,11 @@ async function field() {
   );
   return (
     title(
-      "Report from the field.",
+      "Field workspace",
       "Capture a need, restriction or receipt. Offline reports remain queued until the server acknowledges them.",
     ) +
     (await workforceControls.field()) +
-    `<div class="grid split"><section class="card"><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="Place name or known location ID" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Delivery status</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon(q.lastError ? "circle-alert" : "clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(String(q.text ?? "").slice(0, 150))}</p>${badge(q.lastError ? "requires_review" : "queued")} <span class="small">${q.lastError ? escape(q.lastError) : "Saved on this device. Not yet received."}</span>${q.lastError ? action("Resolve pending update", "queue-conflict", q.clientId, "accent") : ""}</div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
+    `<div class="grid split field-layout"><section class="card"><h2>New observation</h2><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="e.g. Sakura Shelter" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><details class="form-disclosure"><summary>Observation time <span>Defaults to now · change for an earlier report</span></summary><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label></details><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Report outbox</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon(q.lastError ? "circle-alert" : "clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(String(q.text ?? "").slice(0, 150))}</p>${badge(q.lastError ? "requires_review" : "queued")} <span class="small">${q.lastError ? escape(q.lastError) : "Saved on this device. Not yet received."}</span>${q.lastError ? action("Resolve pending update", "queue-conflict", q.clientId, "accent") : ""}</div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
   );
 }
 async function settings() {
@@ -555,31 +547,22 @@ async function settings() {
   const readiness = await organizationControls.summary();
   return (
     title(
-      "Sources, permissions & continuity.",
+      "Sources & access",
       "Automatic ingestion is the default. Configure access once; operators should not copy every post manually.",
     ) +
-    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<div class="warning">The model is ${escape(state.model)}. These results do not demonstrate Gemini performance; that requires a new evaluation.</div></section></div>` +
+    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><details class="collapse"><summary>Request specific source data</summary><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></details></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<details class="collapse"><summary>Configured model · ${escape(displayModel(state.model))}</summary><p class="small">${escape(state.model)}. Results belong to this configured model; Gemini requires its own evaluation.</p></details></section></div>` +
     readiness
   );
 }
 async function audit() {
   const rows = await api("/api/audit");
-  return (
-    title(
-      "Every decision has an owner.",
-      "The evidence snapshot and authorization history survive corrections and restarts.",
-      ["admin", "commander", "auditor"].includes(state.user.role)
-        ? action("Export records", "organization-export", "", "accent")
-        : "",
-    ) +
-    `<section class="card">${table(
-      ["Time", "Action", "Responsible actor", "Record", ""],
-      rows.map(
-        (r) =>
-          `<tr><td>${time(r.occurred_at)}</td><td>${escape(r.action)}</td><td>${escape(r.actor)}</td><td>${escape(r.entity?.slice(-15) ?? "—")}</td><td>${action("Inspect", "auditdetail", String(r.sequence))}</td></tr>`,
-      ),
-    )}${!rows.length ? empty("No audited decisions yet.", "shield-check") : ""}</section>`
-  );
+  const syncs = rows.filter(r => r.action === "source.synced"), decisions = rows.filter(r => r.action !== "source.synced");
+  const page = Math.max(0, Math.min(state.auditPage ?? 0, Math.ceil(decisions.length/12)-1));
+  const syncPage = Math.max(0, Math.min(state.syncAuditPage ?? 0, Math.ceil(syncs.length/12)-1));
+  const list = records => table(["Time", "Event", "Responsible actor", ""],records.map(r => `<tr><td>${time(r.occurred_at)}</td><td><strong>${escape(humanLabel(r.action.replaceAll("."," ")))}</strong></td><td>${escape(r.actor === state.user.id ? state.user.name : r.actor === "connector" ? "Source connector" : entityLabel(r.actor))}</td><td>${action("Inspect","auditdetail",String(r.sequence))}</td></tr>`));
+  const pages = (records, page, act) => records.length > 12 ? `<div class="pagination"><span class="small">${page*12+1}–${Math.min(page*12+12,records.length)} of ${records.length}</span><div class="actions">${page ? action("Previous",act,String(page-1)) : ""}${(page+1)*12 < records.length ? action("Next",act,String(page+1)) : ""}</div></div>` : "";
+  return title("Decision history","Review decisions, owners and evidence. Routine source syncs are grouped below.",["admin","commander","auditor"].includes(state.user.role) ? action("Export records","organization-export","","accent") : "") +
+    `<section class="card"><div class="section-heading"><h2>Decisions & workspace events</h2><span class="small">${decisions.length} recent records</span></div>${decisions.length ? list(decisions.slice(page*12,page*12+12)) : empty("No decision events in the recent record window. Export records for a complete history.","shield-check")}${pages(decisions,page,"audit-page")}</section><details class="card secondary-disclosure" data-ui-key="audit:syncs"><summary>Routine source syncs <span>${syncs.length} recent records</span></summary><div class="disclosure-content">${list(syncs.slice(syncPage*12,syncPage*12+12))}${pages(syncs,syncPage,"audit-sync-page")}</div></details><p class="note">The recent window contains ${rows.length} events. Export records preserves the full audit trail.</p>`;
 }
 const views = {
   media: extras.media,
@@ -589,8 +572,8 @@ const views = {
     const data = await api("/api/map");
     return (
       title(
-        "A map of what your team knows.",
-        "Received needs and operating conditions. The map does not show hidden simulator truth.",
+        "Operational map",
+        "Locate reported needs and open a case. Conditions reflect the latest received reports.",
         action("Query maps", "lookup", "map") + action("Sync updates", "sync"),
       ) +
       operationalMap(data) +
@@ -600,7 +583,7 @@ const views = {
           .slice(0, 30)
           .map(
             (n) =>
-              `<div class="listrow"><div class="grow"><h3>${escape(n.type)} · ${escape(n.building)}</h3><p>${number(n.quantity - (n.served ?? 0))} ${escape(n.unit)} pending</p></div>${action("Review need", "need", n.id)}</div>`,
+              `<div class="listrow"><div class="grow"><h3>${escape(humanLabel(n.type))} · ${escape(entityLabel(n.building))}</h3><p>${number(n.quantity - (n.served ?? 0))} ${escape(n.unit)} pending</p></div>${action("Review need", "need", n.id)}</div>`,
           )
           .join("") || empty("No unmet needs have reached your team.")
       }</section>`
@@ -673,11 +656,11 @@ async function proposal(id) {
     pending = p.conditions.filter((c) => !c.satisfied);
   modal(
     "Review a response",
-    `<div class="cardheader">${badge(p.state)}${badge(p.priority)}</div><h2>${escape(p.title)}</h2><div class="detailgrid" style="margin:22px 0"><div class="decision"><span class="eyebrow">What can we do?</span><p>${escape(p.summary)}</p><p class="sub"><strong>Who benefits:</strong> ${escape(p.benefit)}</p></div><div class="decision"><span class="eyebrow">What still needs checking?</span>${pending.length ? `<ul class="conditions">${pending.map((c) => `<li>${icon("circle-alert")}<span>${escape(c.description)}</span></li>`).join("")}</ul>` : "<p>No declared pending conditions. Verify the evidence before approving.</p>"}</div></div><details class="collapse"><summary>Why this response?</summary><p class="sub">${escape(p.rationale)}</p></details>${p.changedReason ? `<div class="warning">Changed: ${escape(p.changedReason)}. Previous authorization no longer applies.</div>` : ""}<details class="collapse"><summary>${p.references.length} evidence references</summary>${p.references.map((r) => `<div class="listrow"><code>${escape(r)}</code>${action("Open evidence", "evidence", r)}</div>`).join("")}</details><details class="collapse"><summary>Planned actions & responsible organizations</summary>${table(
+    `<div class="cardheader">${badge(p.state)}${badge(p.priority)}</div><h2>${escape(readableText(p.title))}</h2><div class="detailgrid" style="margin:22px 0"><div class="decision"><span class="eyebrow">What can we do?</span><p>${escape(readableText(p.summary))}</p>${p.benefit && p.benefit.trim() !== p.summary?.trim() ? `<p class="sub"><strong>Who benefits:</strong> ${escape(readableText(p.benefit))}</p>` : ""}</div><div class="decision"><span class="eyebrow">What still needs checking?</span>${pending.length ? `<ul class="conditions">${pending.map((c) => `<li>${icon("circle-alert")}<span>${escape(c.description)}</span></li>`).join("")}</ul>` : "<p>No declared pending conditions. Verify the evidence before approving.</p>"}</div></div><details class="collapse"><summary>Why this response?</summary><p class="sub">${escape(p.rationale)}</p></details>${p.changedReason ? `<div class="warning">Changed: ${escape(p.changedReason)}. Previous authorization no longer applies.</div>` : ""}<details class="collapse"><summary>${p.references.length} evidence references</summary>${p.references.map((r) => `<div class="listrow"><code>${escape(r)}</code>${action("Open evidence", "evidence", r)}</div>`).join("")}</details><details class="collapse"><summary>Planned actions & responsible organizations</summary>${table(
       ["Step", "Action", "Owner", "Dependencies"],
       p.actions.map(
         (a, i) =>
-          `<tr><td>${i + 1}</td><td>${escape(a.type)}</td><td>${escape(a.owner)}</td><td>${a.dependsOn.map((i) => i + 1).join(", ") || "None"}</td></tr>`,
+          `<tr><td>${i + 1}</td><td>${escape(a.type)}</td><td>${escape(entityLabel(a.owner))}</td><td>${a.dependsOn.map((i) => i + 1).join(", ") || "None"}</td></tr>`,
       ),
     )}<pre class="trace">${escape(JSON.stringify(p.actions, null, 2))}</pre></details>${p.alternatives.length ? `<details class="collapse"><summary>Alternatives considered</summary>${p.alternatives.map((a) => `<p class="sub"><strong>${escape(a.title)}</strong><br>${escape(a.reason)}</p>`).join("")}</details>` : ""}${p.authorization ? `<p class="note">Authorized by ${escape(p.authorization.name)} at ${time(p.authorization.at)}. Evidence snapshot: ${escape(p.authorization.evidenceHash.slice(0, 16))}.</p>` : ""}${canReview && ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state) ? `<label>Decision note<textarea id="reviewnote" placeholder="Record constraints, clarification or the reason for your decision."></textarea></label>${pending.length ? `<label class="checkbox"><input type="checkbox" id="allowconditional">Authorize a conditional reservation only. Physical execution remains blocked until conditions are checked and a new authorization is given.</label>` : ""}` : ""}`,
     canReview &&
@@ -700,7 +683,7 @@ async function proposal(id) {
     .slice(0, 3)
     .map(
       (a) =>
-        `<li><span><strong>${escape(a.owner)}</strong> · ${escape(actionBrief(a))}</span></li>`,
+        `<li><span><strong>${escape(entityLabel(a.owner))}</strong> · ${escape(readableText(actionBrief(a)))}</span></li>`,
     )
     .join(
       "",
@@ -724,7 +707,7 @@ async function sourceDetail(id) {
   const context = await caseControls.context(id);
   modal(
     "Original source & context",
-    `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Simulation timestamp: ${number(s.publishedAt)} ms<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location & version</span><p>${escape(s.location ?? "Not confirmed")}<br>Source version ${s.sourceVersion}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><details class="collapse"><summary>Source references & attachment records</summary><pre class="trace">${escape(JSON.stringify({ references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre></details>`,
+    `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Posted ${time(s.publishedAt)}<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location</span><p>${escape(entityLabel(s.location) || "Not confirmed")}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><details class="collapse"><summary>Source references & attachment records</summary><pre class="trace">${escape(JSON.stringify({ sourceVersion: s.sourceVersion, locationId: s.location, references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre></details>`,
     action("Investigate this signal", "investigatesignal", id, "primary") + (["admin", "commander"].includes(state.user.role) ? action("Review local erasure", "erase-source", id) : ""),
   );
   const review = document.createElement("div");
@@ -751,7 +734,7 @@ async function operationDetail(id) {
     last = Math.max(-1, ...stages.map((s, i) => (times[s] != null ? i : -1)));
   modal(
     "Follow the operation",
-    `<div class="cardheader"><h2>${escape(o.type ?? "Aid delivery")}</h2>${badge(o.state)}</div><div class="stepper">${stages.map((s, i) => `<div class="step ${i <= last ? "done" : ""} ${i === last ? "active" : ""}">${s.replace("dispatched", "In transit").replace("acknowledged", "Accepted")}</div>`).join("")}</div><div class="detailgrid"><div class="decision"><span class="eyebrow">What is confirmed?</span><p>${o.times?.received != null ? "Receipt recorded by the operational source." : o.times?.arrived != null ? "Vehicle has arrived. Receipt is still pending." : "The operation has not yet reached confirmed receipt."}</p></div><div class="decision"><span class="eyebrow">Responsible owner</span><p>${escape(o.authorizedBy ?? "Source authority")}<br>${escape(o.owner ?? state.user.org)}</p></div></div>${o.requiresRepair ? `<div class="warning" style="margin-top:20px">${escape(o.changedReason ?? "A dependency changed. Review the affected plan.")}</div>` : ""}<details class="collapse"><summary>Operational record & timestamps</summary><pre class="trace">${escape(JSON.stringify(o, null, 2))}</pre></details>`,
+    `<div class="cardheader"><h2>${escape(o.type ?? "Aid delivery")}</h2>${badge(o.state)}</div><div class="stepper">${stages.map((s, i) => `<div class="step ${i <= last ? "done" : ""} ${i === last ? "active" : ""}">${s.replace("dispatched", "In transit").replace("acknowledged", "Accepted")}</div>`).join("")}</div><div class="detailgrid"><div class="decision"><span class="eyebrow">What is confirmed?</span><p>${o.times?.received != null ? "Receipt recorded by the operational source." : o.times?.arrived != null ? "Vehicle has arrived. Receipt is still pending." : "The operation has not yet reached confirmed receipt."}</p></div><div class="decision"><span class="eyebrow">Responsible owner</span><p>${escape(o.authorizedBy ?? "Source authority")}<br>${escape(entityLabel(o.owner ?? state.user.org))}</p></div></div>${o.requiresRepair ? `<div class="warning" style="margin-top:20px">${escape(o.changedReason ?? "A dependency changed. Review the affected plan.")}</div>` : ""}<details class="collapse"><summary>Operational record & timestamps</summary><pre class="trace">${escape(JSON.stringify(o, null, 2))}</pre></details>`,
     (["commander", "dispatcher"].includes(state.user.role)
       ? action("Assign field task", "task-assign", o.id, "accent")
       : "") +
@@ -772,6 +755,9 @@ async function flush() {
     state.user = me.user;
     state.csrf = me.user.csrf;
     state.model = me.model;
+    state.organization = me.organization;
+    setDisplayContext({ organization: me.organization });
+    try { setDisplayContext({ geography: (await api("/api/map")).geography }); } catch {}
     cacheSession();
   } catch (e) {
     toast(
@@ -820,6 +806,8 @@ async function flush() {
   if (state.page === "field") await render();
 }
 async function runAction(name, id) {
+  if (name === "resource-tab") { state.resourceTab = id; await render(); return; }
+  if (name === "audit-page" || name === "audit-sync-page") { state[name === "audit-page" ? "auditPage" : "syncAuditPage"] = Number(id); await render(); return; }
   if (await responseControls.run(name, id)) return;
   if (await coverageControls.run(name, id)) return;
   if (await organizationControls.run(name, id)) return;
@@ -1006,7 +994,7 @@ async function runAction(name, id) {
     const n = await record("need", id);
     modal(
       "Known need",
-      `<h2>${escape(n.type)} · ${escape(n.building)}</h2><div class="metric"><span>Still needed</span><strong>${number(n.quantity - n.served)} ${escape(n.unit)}</strong></div><p class="note">Observed data can be delayed. A need is not an authorization to consume resources.</p>`,
+      `<h2>${escape(humanLabel(n.type))} · ${escape(entityLabel(n.building))}</h2><div class="metric"><span>Still needed</span><strong>${number(n.quantity - n.served)} ${escape(n.unit)}</strong></div><p class="note">Observed data can be delayed. A need is not an authorization to consume resources.</p>`,
       action("Request field verification", "verifyneed", id, "accent") +
         action("Investigate options", "investigate", "", "primary"),
     );
@@ -1108,7 +1096,7 @@ async function runAction(name, id) {
     const c = await record("commitment", id);
     modal(
       "Owner commitment",
-      `<p class="sub">${number(c.quantity)} units of ${escape(c.resource)} for ${escape(c.requester)}.</p><div class="note">${badge(c.state)} · expires ${time(c.expiresAt)}</div><pre class="trace">${escape(JSON.stringify(c.conditions, null, 2))}</pre>`,
+      `<p class="sub">${number(c.quantity)} units of ${escape(entityLabel(c.resource))} for ${escape(entityLabel(c.requester))}.</p><div class="note">${badge(c.state)} · expires ${time(c.expiresAt)}</div><pre class="trace">${escape(JSON.stringify(c.conditions, null, 2))}</pre>`,
       action("Withdraw", "withdraw", id, "danger") +
         action("Confirm conditions", "confirmcommitment", id, "primary"),
     );
@@ -1148,7 +1136,7 @@ async function runAction(name, id) {
     const p = await record("publication", id);
     modal(
       "Approve the public update",
-      `<h2>${escape(p.title)}</h2><p class="sub">${escape(p.text)}</p><div class="warning">You are approving this aggregate public update. Check accuracy, privacy and the difference between dispatch and receipt.</div>`,
+      `<h2>${escape(readableText(p.title))}</h2><p class="sub">${escape(p.text)}</p><div class="warning">You are approving this aggregate public update. Check accuracy, privacy and the difference between dispatch and receipt.</div>`,
       action("Publish approved update", "publishconfirm", id, "primary"),
     );
     state.currentPublication = p;
@@ -1263,7 +1251,7 @@ function bind(root = app) {
 }
 async function publicView() {
   const d = await api("/api/public");
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Support the organization and follow shared progress. Clear status, useful evidence and honest uncertainty build informed trust.</p></div><div class="grid cols3">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(p.title)}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div>${publicProcurement(d.financeReview, escape, time)}<details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">AidScaler · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
+  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><span class="small">${escape(d.organization.name)} · Approved response updates</span><a href="/">Team sign in ${icon("arrow-up-right")}</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">A PUBLIC WINDOW INTO DISASTER RESPONSE</span><h1>Know what's needed.<br><span class="gradient">See help moving forward.</span></h1><p>Follow approved updates and support the organization’s next response.</p></div><div class="grid cols3 public-updates">${d.updates.map((p) => `<article class="card publiccard ${escape(p.status)}"><div class="topicon">${icon(p.status === "support_needed" ? "heart-handshake" : p.status === "en_route" ? "truck" : p.status === "retracted" ? "circle-alert" : "package-check")}</div>${badge(p.status)}<h2 style="margin-top:18px">${escape(readableText(p.title))}</h2><p>${escape(p.text)}</p><div class="note">${escape(p.area)} · ${p.status === "retracted" ? "withdrawn" : "approved"} ${time(p.publishedAt)}${p.corrected ? " · corrected update" : ""}</div>${(p.proofs ?? []).map((f) => `<figure class="publicproof"><img src="${escape(f.url)}" alt="${escape(f.caption)}" loading="lazy"><figcaption>${escape(f.caption)} · reviewed delivery evidence</figcaption></figure>`).join("")}</article>`).join("") || `<section class="card">${empty("The organization has not published an approved update yet. Unverified reports stay in its internal workspace.", "globe")}</section>`}</div><div class="grid cols2" style="margin-top:28px"><section class="card"><span class="eyebrow">POOLED ORGANIZATIONAL SUPPORT</span><h2>Support the next useful response.</h2><p class="sub">Funds support what the organization needs most at the time. Your contribution is not tied to a particular medicine, truck or individual item.</p><form id="contributeform"><label>Test contribution in USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="primary">Try test contribution ${icon("arrow-right")}</button></form><p class="note">Local sandbox · No money is collected.</p></section><section class="card soft"><span class="eyebrow">AGGREGATE TRANSPARENCY · TEST FUNDS</span><div class="fundnumber">${money(d.finance.receivedCents)}</div><p class="sub">Settled organizational support</p><hr class="divider"><div class="cardheader"><span class="small">Allocated</span><strong>${money(d.finance.allocatedCents)}</strong></div><div class="cardheader"><span class="small">Refunded</span><strong>${money(d.finance.refundedCents)}</strong></div><div class="cardheader"><span class="small">Available</span><strong>${money(d.finance.availableCents)}</strong></div><p class="note">An approved update is not a guarantee of future outcomes. Dispatch, arrival, receipt and actual help remain different stages.</p></section></div>${publicProcurement(d.financeReview, escape, time)}<details class="collapse" style="margin-top:32px"><summary>How should I read these updates?</summary><p class="sub">Support needed means the response still has an unmet requirement. On the way means an authorized operation is travelling; it has not yet been received. Received means the organization has recorded a receipt. The organization approves every public update. Personal details and sensitive locations are omitted.</p></details><div class="footnote">AidScaler · Local prototype · Test payments only · ${escape(d.privacy)}</div></main></div>`;
   document.querySelector("#contributeform").onsubmit = async (e) => {
     e.preventDefault();
     try {
@@ -1281,7 +1269,7 @@ async function publicView() {
   };
 }
 async function communityView() {
-  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><a href="/public">Response updates</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">COMMUNITY ACCESS</span><h1>Make a need visible.</h1><p>Tell the response team what is happening. Public reports enter a review queue; reporting does not guarantee an immediate dispatch.</p></div><section class="card"><form id="communityform" class="fieldform"><label>Location<input name="location" required placeholder="An approximate place or district"></label><label>Photo or audio recording<input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg"></label><p class="note">Optional · up to 2 MB. You can send source media without writing a description. Avoid identifiable people and sensitive details.</p><label>What is needed? <span class="small">Optional when attaching media</span><textarea name="text" maxlength="6000" placeholder="Describe the situation and quantities, if known."></textarea></label><button class="primary">Submit for review</button></form><p class="note">No account required. This channel needs an internet connection and is not guaranteed to be monitored continuously. Reports and attachments stay private until the organization reviews them.</p></section></main></div>`;
+  app.innerHTML = `<div class="publicshell"><header class="publicnav"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><a href="/public">Response updates</a></header><main class="publicmain" id="main"><div class="publichero"><span class="eyebrow">COMMUNITY ACCESS</span><h1>Make a need visible.</h1><p>Tell the response team what is happening. Public reports enter a review queue; reporting does not guarantee an immediate dispatch.</p></div><section class="card"><form id="communityform" class="fieldform"><label>Location<input name="location" required placeholder="An approximate place or district"></label><details class="form-disclosure"><summary>Add a photo or recording <span>Optional</span></summary><label>Photo or audio recording<input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg"></label><p class="note">Optional · up to 2 MB. You can send source media without writing a description. Avoid identifiable people and sensitive details.</p></details><label>What is needed? <span class="small">A description or attachment is required</span><textarea name="text" maxlength="6000" placeholder="Describe the situation and quantities, if known."></textarea></label><button class="primary">Submit for review</button></form><p class="note">No account required. This channel needs an internet connection and is not guaranteed to be monitored continuously. Reports and attachments stay private until the organization reviews them.</p></section></main></div>`;
   let pendingSubmission;
   document.querySelector("#communityform").onsubmit = async (e) => {
     e.preventDefault();
@@ -1345,6 +1333,9 @@ else
     state.user = me.user;
     state.csrf = me.user.csrf;
     state.model = me.model;
+    state.organization = me.organization;
+    setDisplayContext({ organization: me.organization });
+    try { setDisplayContext({ geography: (await api("/api/map")).geography }); } catch {}
     cacheSession();
     if (location.pathname === "/field") state.page = "field";
     await render();
@@ -1356,6 +1347,8 @@ else
     if (!navigator.onLine && cached?.expiresAt > Date.now()) {
       state.user = cached.user;
       state.model = cached.model;
+      state.organization = cached.organization;
+      setDisplayContext({ organization: cached.organization });
       state.page = "field";
       state.offline = true;
       await render();
@@ -1372,10 +1365,10 @@ setInterval(async () => {
   )
     return;
   polling = true;
-  const scroll = window.scrollY;
+  const scroll = window.scrollY, pollPage = state.page;
   try {
     await render();
-    window.scrollTo(0, scroll);
+    if (state.page === pollPage) window.scrollTo(0, scroll);
   } finally {
     polling = false;
   }

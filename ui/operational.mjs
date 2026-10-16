@@ -1,3 +1,4 @@
+import { entityLabel, resourceLabel, humanLabel } from "./labels.mjs";
 export function createOperationalDraft({
   api,
   record,
@@ -26,7 +27,7 @@ export function createOperationalDraft({
       rows
         .map((r) => `<option value="${e(r.id)}">${e(label(r))}</option>`)
         .join("");
-    const select = (name, label, rows, display = (r) => r.id) =>
+    const select = (name, label, rows, display = (r) => r.label || entityLabel(r.id)) =>
         `<label>${label}<select name="${name}" required>${options(rows, display)}</select></label>`,
       quantity =
         '<label>Quantity in native units<input name="quantity" type="number" min="1" step="1" required></label>',
@@ -39,13 +40,13 @@ export function createOperationalDraft({
             "need",
             "Observed need",
             needs,
-            (n) => n.type + " · " + (n.building ?? n.node),
+            (n) => humanLabel(n.type) + " · " + entityLabel(n.building ?? n.node),
           ) +
           select(
             "resource",
             "Owned inventory",
             owned(resources),
-            (r) => r.type + " · " + r.id,
+            (r) => resourceLabel(r),
           ) +
           select("vehicle", "Owned vehicle", owned(vehicles)) +
           quantity,

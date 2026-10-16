@@ -24,13 +24,13 @@ export function createPublicationControls(h) {
     const rows = await record("publication");
     return (
       title(
-        "Transparency that earns trust.",
+        "Public updates",
         "Approved progress, useful evidence and clear limits. Internal drafts never appear in the public portal.",
         allowed()
           ? action("Prepare an update", "publication-new", "", "primary")
           : "",
       ) +
-      `<div class="grid cols2">${
+      `<div class="grid cols2 publication-list">${
         rows
           .slice(0, 20)
           .map(
@@ -39,7 +39,7 @@ export function createPublicationControls(h) {
           )
           .join("") ||
         `<section class="card">${empty("No update is public until a responsible person reviews it.", "globe")}</section>`
-      }</div>${allowed() ? `<div class="toolbar" style="margin-top:24px">${action("Review a delivery photo", "publication-photo", "", "accent")}<span class="small">Photos require a confirmed receipt and a human privacy review.</span></div>` : ""}`
+      }</div>${allowed() ? `<details class="card secondary-disclosure" style="margin-top:24px"><summary>Delivery photo evidence</summary><div class="toolbar">${action("Review a delivery photo", "publication-photo", "", "accent")}<span class="small">Photos require a confirmed receipt and a human privacy review.</span></div></details>` : ""}`
     );
   }
   async function prepare(p = null) {

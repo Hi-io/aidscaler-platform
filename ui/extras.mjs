@@ -1,3 +1,4 @@
+import { entityLabel, humanLabel, readableText } from "./labels.mjs";
 import { actionBrief } from "./uploads.mjs";
 /** Progressive disclosure for evidence, connector setup and manual fallbacks. */
 export function createExtras(h) {
@@ -27,7 +28,7 @@ export function createExtras(h) {
       canUpload = allowed(["field", "analyst", "commander", "dispatcher"]);
     return (
       title(
-        "Evidence you can inspect.",
+        "Source media",
         "Original image, video, audio and document bytes stay with their source. Interpretation remains unverified.",
       ) +
       `<section class="card" aria-labelledby="recent-media-heading"><div class="cardheader section-heading"><div><h2 id="recent-media-heading">Recent source media</h2><p class="small">Inspect the original file, its source and processing state.</p></div><span class="badge">${rows.length} ${rows.length === 1 ? "source file" : "source files"}</span></div>${
@@ -38,7 +39,7 @@ export function createExtras(h) {
               `<div class="listrow"><div class="rowicon">${icon(m.mime.startsWith("audio") ? "volume-2" : m.mime.startsWith("video") ? "play" : m.mime.includes("pdf") ? "file-text" : "image")}</div><div class="grow"><h3>${e(m.title)}</h3><p>${e(m.source)} · ${Math.round(m.size / 1024)} KB</p>${badge(m.state)}</div>${action("Inspect", "media-open", m.id)}</div>`,
           )
           .join("") || empty("No source files are available yet. Received attachments appear here." + (canUpload ? " You can also add an original file below." : ""), "image")
-      }${rows.length > 12 ? `<p class="note">Showing the 12 most recent of ${rows.length} source files.</p>` : ""}</section>${canUpload ? `<details id="media-intake" class="card collapse secondary-disclosure media-intake" ${state.user.role === "field" ? "open" : ""}><summary>Add an attachment</summary><p class="sub">Add an original file from an authorized source when it is not already available through a connected channel.</p><form id="mediaform" class="fieldform"><label>Source file<input type="file" name="file" accept="image/png,image/jpeg,video/mp4,audio/wav,audio/mpeg,application/pdf,text/plain" required></label><label>Source or owner<input name="source" placeholder="Authorized field team or source URL" required></label><label>Short description<input name="title" placeholder="What does this source represent?" required maxlength="150"></label><button class="primary" type="submit">${icon("upload")} Preserve original evidence</button><p class="note">Up to 10 MB. Audio uses local speech recognition. Images and sampled video frames use the configured model. Scanned PDFs may require additional OCR. No analysis certifies safety or confirms a need.</p></form></details>` : ""}`
+      }${rows.length > 12 ? `<p class="note">Showing the 12 most recent of ${rows.length} source files.</p>` : ""}</section>${canUpload ? `<details id="media-intake" class="card collapse secondary-disclosure media-intake" ${state.user.role === "field" ? "open" : ""}><summary>Add an attachment</summary><p class="sub">Add an original file from an authorized source when it is not already available through a connected channel.</p><form id="mediaform" class="fieldform"><label>Source file<input type="file" name="file" accept="image/png,image/jpeg,video/mp4,audio/wav,audio/mpeg,application/pdf,text/plain" required></label><label>Source or owner<input name="source" placeholder="Authorized field team or source URL" required></label><label>Short description<input name="title" placeholder="What does this source represent?" required maxlength="150"></label><button class="primary" type="submit">${icon("upload")} Preserve original evidence</button><p class="note">Up to 10 MB. Processing keeps the original available.</p><details class="form-disclosure"><summary>Supported analysis & limits</summary><p class="small">Audio uses local speech recognition. Images and sampled video frames use the configured model. Scanned PDFs may require OCR. Interpretation still needs verification.</p></details></form></details>` : ""}`
     );
   }
   async function mediaOpen(id) {
@@ -70,7 +71,7 @@ export function createExtras(h) {
     const rows = await record("integration");
     return (
       title(
-        "Connect the sources your team trusts.",
+        "External connections",
         "Read existing services through scoped JSON or MCP connectors. External data remains evidence, not operational authority.",
       ) +
       `<section class="card"><div class="cardheader section-heading"><h2>Approved connections</h2>${allowed(["admin"]) ? action("Add a read connector", "integration-new", "", "accent") : ""}</div>${rows.map((c) => `<div class="listrow"><div class="rowicon">${icon("plug")}</div><div class="grow"><h3>${e(c.name)}</h3><p>${e(c.purpose)}</p><small>${e(c.type)} · ${e(new URL(c.url).origin)}</small></div>${badge(c.state)}${allowed(["admin", "analyst", "commander", "dispatcher"]) ? action("Read source", "integration-read", c.id) : ""}</div>`).join("") || empty("Register a permitted source once. No need to paste every report manually.", "plug")}<details class="collapse secondary-disclosure"><summary>What happens to an external result?</summary><p class="sub">AidScaler preserves its origin, collection time, license and hash. Received records enter the evidence queue as unverified. Credentials stay on the server. MCP permissions are explicit and this instance exposes a separate read-only MCP endpoint.</p></details></section>`
@@ -101,7 +102,7 @@ export function createExtras(h) {
         .reduce((s, o) => s + (o.quantity ?? 0), 0);
     modal(
       "Response case",
-      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(n.type)} · ${e(n.building ?? n.node)}</h2><div class="stats cols3"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div><p class="note">Unknown is not zero. Received observations can lag behind physical events.</p><section class="decision"><h3>Responses and responsible owners</h3>${related.map((p) => `<div class="listrow"><div class="grow"><strong>${e(p.title)}</strong><p>${e(p.benefit)}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response is linked yet.</p>"}</section><details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
+      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h2><div class="stats cols3 case-stats"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div>${n.population ? `<p class="case-population">${n.population} people reported at this location</p>` : ""}<section class="decision"><h3>Responses and responsible owners</h3>${related.filter(p => !["rejected", "cancelled"].includes(p.state)).map((p) => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong><p>${e(readableText(p.benefit))}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response yet. Investigate options to prepare a plan for review.</p>"}</section>${related.some(p => ["rejected", "cancelled"].includes(p.state)) ? `<details class="collapse"><summary>Previous responses · ${related.filter(p => ["rejected", "cancelled"].includes(p.state)).length}</summary>${related.filter(p => ["rejected", "cancelled"].includes(p.state)).map(p => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("")}</details>` : ""}<details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
       `${allowed(["analyst", "commander", "dispatcher"]) ? action("Investigate options", "investigatecase", id, "primary") + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}${action("Close", "close")}`,
     );
   }
@@ -111,7 +112,7 @@ export function createExtras(h) {
     );
     modal(
       "Prepare a manual response",
-      `<p class="sub">The same constraints and human review apply when a model or connector is unavailable.</p><form id="manualform" class="fieldform"><label>Need<select name="need">${options(needs, (n) => n.type + " · " + (n.building ?? n.node))}</select></label><label>Owned inventory<select name="resource">${options(
+      `<p class="sub">The same constraints and human review apply when a model or connector is unavailable.</p><form id="manualform" class="fieldform"><label>Need<select name="need">${options(needs, (n) => humanLabel(n.type) + " · " + entityLabel(n.building ?? n.node))}</select></label><label>Owned inventory<select name="resource">${options(
         resources.filter((r) => r.owner === state.user.org),
         (r) =>
           r.type +
@@ -120,7 +121,7 @@ export function createExtras(h) {
           " available",
       )}</select></label><label>Owned vehicle<select name="vehicle">${options(
         vehicles.filter((v) => v.owner === state.user.org),
-        (v) => v.id + " · " + v.state,
+        (v) => entityLabel(v.id) + " · " + v.state,
       )}</select></label><label>Quantity in the resource's native unit<input name="quantity" type="number" min="1" step="1" required></label><label>Why is this response appropriate?<textarea name="rationale" required></textarea></label><button class="primary" type="submit">Prepare for review</button></form>`,
     );
     if (id) document.querySelector('#manualform [name="need"]').value = id;
@@ -155,7 +156,7 @@ export function createExtras(h) {
     );
     return (
       title(
-        "Community reports need context.",
+        "Community reports",
         "Keep legitimate requests visible while checking origin, place, time and duplicates.",
       ) +
       `<section class="card"><div class="cardheader section-heading"><h2>Awaiting review</h2><span class="badge">${rows.length} ${rows.length === 1 ? "report" : "reports"}</span></div><p class="note">Accepting a report preserves an observation; it does not confirm it or dispatch aid.</p>${

@@ -1,3 +1,4 @@
+import { entityLabel } from "./labels.mjs";
 export function createWorkforceControls(h) {
   const {
     api,
@@ -38,8 +39,8 @@ export function createWorkforceControls(h) {
         (r) => r.to === state.user.id && !r.acknowledgedAt,
       );
     const card = (t) =>
-      `<article class="card"><div class="cardheader"><h2>${e(t.title)}</h2>${badge(t.state)}</div><p class="sub">${e(t.instructions || "Follow the received operational instructions. Report any change before proceeding.")}</p><p><strong>Destination</strong> ${e(t.destination ?? "See operational instructions")}${t.quantity != null ? ` · ${e(t.quantity)} ${e(t.unit ?? "units")}` : ""}</p>${t.contact ? `<p class="small">Responsible contact: ${e(t.contact)}</p>` : ""}<div class="actions">${action("Open current task", "task-open", t.id, "primary")}</div><p class="note">${navigator.onLine ? "Last state acknowledged by the workspace." : "Saved task snapshot · new instructions may be pending."} A field report does not itself confirm physical receipt.</p></article>`;
-    return `<div class="grid">${own[0] ? card(own[0]) : `<section class="card"><h2>Your current task</h2>${empty("No task is assigned to this account. A dispatcher can assign an existing operation.", "clipboard-check")}</section>`}${handovers.length ? `<section class="card"><h2>Shift handover</h2>${handovers.map((r) => `<div class="listrow"><div class="grow"><p>${e(r.note)}</p><small>${r.tasks.length} tasks · ${r.proposals.length} decisions</small></div>${action("Acknowledge", "handover-ack", r.id)}</div>`).join("")}</section>` : ""}</div>${own.length > 1 ? `<details class="collapse"><summary>${own.length - 1} other assigned tasks</summary>${own.slice(1).map(card).join("")}</details>` : ""}`;
+      `<article class="card"><div class="cardheader"><h2>${e(t.title)}</h2>${badge(t.state)}</div><p class="sub">${e(t.instructions || "Follow the received operational instructions. Report any change before proceeding.")}</p><p><strong>Destination</strong> ${e(entityLabel(t.destination) || "See operational instructions")}${t.quantity != null ? ` · ${e(t.quantity)} ${e(t.unit ?? "units")}` : ""}</p>${t.contact ? `<p class="small">Responsible contact: ${e(t.contact)}</p>` : ""}<div class="actions">${action("Open current task", "task-open", t.id, "primary")}</div><p class="note">${navigator.onLine ? "Last state acknowledged by the workspace." : "Saved task snapshot · new instructions may be pending."} A field report does not itself confirm physical receipt.</p></article>`;
+    return `<div class="grid">${own[0] ? card(own[0]) : `<section class="inline-notice"><strong>No assigned task</strong><span>You can still report an observation below.</span></section>`}${handovers.length ? `<section class="card"><h2>Shift handover</h2>${handovers.map((r) => `<div class="listrow"><div class="grow"><p>${e(r.note)}</p><small>${r.tasks.length} tasks · ${r.proposals.length} decisions</small></div>${action("Acknowledge", "handover-ack", r.id)}</div>`).join("")}</section>` : ""}</div>${own.length > 1 ? `<details class="collapse"><summary>${own.length - 1} other assigned tasks</summary>${own.slice(1).map(card).join("")}</details>` : ""}`;
   }
   async function coordination() {
     const [tasks, grants, handovers] = await Promise.all([
@@ -49,10 +50,10 @@ export function createWorkforceControls(h) {
     ]);
     return (
       title(
-        "Keep a responsible person on every pending action.",
+        "People & handovers",
         "Assign field work, hand over unresolved items and delegate one exact decision for a limited time.",
       ) +
-      `<section class="card"><div class="cardheader"><h2>Field assignments</h2>${managers() ? action("Assign an operation", "task-assign", "", "primary") : ""}</div>${
+      `<section class="card workforce-card"><div class="cardheader"><h2>Field assignments</h2>${managers() ? action("Assign an operation", "task-assign", "", "primary") : ""}</div>${
         tasks
           .slice(0, 8)
           .map(
@@ -64,7 +65,7 @@ export function createWorkforceControls(h) {
           "Assignment follows an existing operation; it never creates a dispatch.",
         )
       }<details class="collapse"><summary>Field status and confirmed aid are different</summary><p class="sub">Acknowledgement, departure, arrival and receipt reports are signed by the assigned person. Actual stock, people arriving and service remain confirmed by the source system. A shift handover requires a new acknowledgement and transfers no approval.</p></details></section>` +
-      `<section class="card"><div class="cardheader"><h2>Bounded review delegations</h2>${managers() ? action("Delegate a decision", "delegation-new", "", "accent") : ""}</div>${
+      `<section class="card workforce-card"><div class="cardheader"><h2>Decision delegates</h2>${managers() ? action("Delegate a decision", "delegation-new", "", "accent") : ""}</div>${
         grants
           .slice(0, 8)
           .map(
