@@ -9,7 +9,8 @@ const h={escape:e, icon:n=>`<svg data-name="${n}"></svg>`, number:n=>String(n??0
 test("agent status describes real waiting, active, disabled and budget-limited states",()=>{
   const render=(state,active,queued,enabled=true)=>agentMonitor({policy:{enabled},runtime:{state,active,queued}},{...h,model:"google/gemma-4-31b-it"});
   assert.match(render("queued",0,2),/2 investigations queued/);
-  assert.match(render("processing",1,3),/1 investigation running · 3 queued/);
+  assert.match(render("processing",1,3),/1 active workflow/);
+  assert.match(render("processing",1,3),/3 queued/);
   assert.match(render("paused",0,0,false),/Automatic investigation is paused/);
   assert.match(render("budget_limit",0,0),/Model budget reached/);
   assert.doesNotMatch(render("monitoring",0,0),/investigations running/);

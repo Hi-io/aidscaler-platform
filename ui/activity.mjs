@@ -374,7 +374,7 @@ export function createActivityView({
     const a = activitySummary(activity, options);
     if (a.empty)
       return `<section class="card activity-console activity-empty" data-state="idle" data-busy="false" aria-label="Investigation activity"><div class="activity-topline"><span class="activity-presence" aria-hidden="true">${icon("sparkles")}</span><span>Activity</span><span class="activity-status">Idle</span></div><h2 class="activity-focus">${e(a.title)}</h2><p class="activity-context">${e(a.latest)}</p></section>`;
-    return `<section class="card activity-console" data-state="${e(a.state)}" data-busy="${a.busy}" aria-label="Investigation activity"><div class="activity-topline"><span class="activity-presence" aria-hidden="true">${icon("sparkles")}</span><span>Activity</span><span class="activity-status" role="status" aria-live="polite">${e(a.title)}</span></div><h2 class="activity-focus">${e(a.latest)}</h2>${meta(a)}${context(a, true)}${history(a, options.historyOpen === true)}${controls(a, options)}</section>`;
+    return `<section class="card activity-console" data-live-activity="${e(a.id)}" data-state="${e(a.state)}" data-busy="${a.busy}" aria-label="Investigation activity"><div class="activity-topline"><span class="activity-presence" aria-hidden="true">${icon("sparkles")}</span><span>Activity</span><span class="activity-status" data-live-activity-state role="status" aria-live="polite">${e(a.title)}</span></div><h2 class="activity-focus">${e(a.latest)}</h2>${meta(a)}<p class="activity-live-progress" data-live-activity-progress>${a.steps.length} recorded steps</p>${context(a, true)}${history(a, options.historyOpen === true)}${controls(a, options)}</section>`;
   }
   function detail(activity, options = {}) {
     const a = activitySummary(activity, options);
@@ -384,7 +384,7 @@ export function createActivityView({
   function row(activity, options = {}) {
     const a = activitySummary(activity, options);
     if (a.empty) return "";
-    return `<div class="activity-record" data-state="${e(a.state)}"><span class="activity-event-mark" aria-hidden="true">${icon(a.state === "failed" ? "circle-alert" : "clock")}</span><div class="grow"><p class="activity-event-meta">${e(a.title)}</p><h3>${e(a.latest)}</h3>${meta(a)}</div>${action("View activity", "activity", a.id, "quiet")}</div>`;
+    return `<div class="activity-record" data-live-activity="${e(a.id)}" data-state="${e(a.state)}"><span class="activity-event-mark" aria-hidden="true">${icon(a.state === "failed" ? "circle-alert" : "clock")}</span><div class="grow"><p class="activity-event-meta" data-live-activity-state>${e(a.title)}</p><h3>${e(a.latest)}</h3>${meta(a)}<span class="activity-live-progress" data-live-activity-progress>${a.steps.length} recorded steps</span></div>${action("View activity", "activity", a.id, "quiet")}</div>`;
   }
-  return { card, detail, row };
+  return { card, detail, row, metadata: (activity, options = {}) => meta(activitySummary(activity, options)) };
 }

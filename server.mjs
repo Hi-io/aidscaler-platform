@@ -27,6 +27,8 @@ import { PublicEvidence } from "./src/public-evidence.mjs";
 import { Casework } from "./src/casework.mjs";
 import { Organization } from "./src/organization.mjs";
 import { CommunityFollowup } from "./src/community-followup.mjs";
+import { workspacePulse } from "./src/workspace-pulse.mjs";
+import { publicResponseMetrics } from "./src/public-response-metrics.mjs";
 import { configureResponsePolicy, responsePolicy, responseQueue } from "./src/response-policy.mjs";
 import { responseOptions } from "./src/response-options.mjs";
 import { Retention } from "./src/retention.mjs";
@@ -320,6 +322,7 @@ export async function createPlatform(overrides = {}) {
         }
         return json(res, 200, {
           organization: await organization.publicProfile(config.org),
+          responseProgress: await publicResponseMetrics(store, config.org, publications),
           updates: approved,
           finance: await finance.summary(config.org),
           financeReview: await finance.publicSummary(config.org),
@@ -588,6 +591,16 @@ export async function createPlatform(overrides = {}) {
                 ?.simulatedAt ?? null,
           });
         }
+        if (url.pathname === "/api/workspace-snapshot" && req.method === "GET") {
+          const kind = url.searchParams.get("kind");
+          check(["signal", "activity"].includes(kind), "KIND", "Choose signals or activity.");
+          return json(res, 200, await store.transaction(async tx => ({
+            rows: await tx.list(actor.org, kind, kind === "signal" ? 250 : 50),
+            pulse: await workspacePulse(tx, actor.org),
+          })));
+        }
+        if (url.pathname === "/api/workspace-pulse" && req.method === "GET")
+          return json(res, 200, await workspacePulse(store, actor.org));
         if (url.pathname === "/api/automation" && req.method === "GET")
           return json(res, 200, await intake.summary());
         if (url.pathname === "/api/organization" && req.method === "GET")

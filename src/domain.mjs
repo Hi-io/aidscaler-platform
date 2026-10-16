@@ -14,6 +14,38 @@ import { publicText } from "./public-safety.mjs";
 import { assertComparisonSourcesCurrent } from "./response-comparison.mjs";
 import { receivedUsableQuantity, lotStatus, receivedSourceNow } from "./lot-capacity.mjs";
 const COMMAND = ["commander", "dispatcher"];
+const CHANGED_CAPACITY = new Set([
+  "VEHICLE_BUSY", "VEHICLE_CONFLICT", "VEHICLE_CALENDAR", "VEHICLE_DRIVER",
+  "INSUFFICIENT_RESOURCE", "STAFF_CALENDAR", "STAFF_QUALIFICATIONS",
+  "NO_KNOWN_ROUTE", "FUEL", "SUPPLY_EXPIRED", "ACTIVE_OPERATION",
+]);
+
+/** A failed approval creates a recheck, never an authorization or a peer request.
+ * This runs after the approval transaction rolls back. A newer human decision
+ * wins, and already issued physical work remains untouched. */
+export async function recordBlockedReview(store, actor, id, version, error, key) {
+  if (!CHANGED_CAPACITY.has(error?.code)) return null;
+  return store.command(actor.org, `${key}:blocked-review`, { id, version, code: error.code }, async tx => {
+    const current = await tx.get(actor.org, "proposal", id, false);
+    if (!current || current.version !== version || current.authorization ||
+        !["awaiting_review", "requires_review", "needs_clarification"].includes(current.state))
+      return { superseded: true };
+    await reviewAuthority(tx, actor, current);
+    const message = String(error.message).slice(0, 1000),
+      row = await tx.put(actor.org, "proposal", id, {
+        ...current,
+        state: "requires_review",
+        authorization: null,
+        changedReason: current.changedReason || "Operational availability changed before approval. A revised plan must be checked.",
+        reviewBlocked: { code: error.code, message, at: Date.now(), attemptedVersion: version, by: actor.id },
+      }, version);
+    await tx.audit(actor.org, actor.id, "proposal.approval_blocked", id, {
+      code: error.code, version, automaticRecheckRequired: true,
+      newAuthorization: false, newPartnerRequest: false, issuedWorkPreserved: true,
+    });
+    return row;
+  });
+}
 export class Domain {
   constructor(store, config) {
     this.store = store;
@@ -127,7 +159,8 @@ export class Domain {
       "DECISION",
       "Choose approve, reject or clarify.",
     );
-    return this.store.command(
+    try {
+      return await this.store.command(
       actor.org,
       key,
       { id, decision, version, note, allowConditional },
@@ -211,6 +244,7 @@ export class Domain {
             state,
             authorization,
             checkedConstraints,
+            reviewBlocked: null,
             reviewNote: note,
             dependencies: [
               ...new Set([
@@ -265,7 +299,11 @@ export class Domain {
         }
         return result;
       },
-    );
+      );
+    } catch (error) {
+      if (decision === "approve") await recordBlockedReview(this.store, actor, id, version, error, key);
+      throw error;
+    }
   }
   async satisfy(actor, id, { conditionId, version, evidenceId }, key) {
     role(actor, ["analyst", ...COMMAND]);
@@ -386,6 +424,7 @@ export class Domain {
           simId: null,
           previousComparison: p.comparison ?? p.previousComparison ?? null,
           comparison: null,
+          reviewBlocked: null,
           dependencies: [...d.references, ...d.conditions.map((c) => c.id)],
           changedReason: note,
           revisedBy: actor.id,

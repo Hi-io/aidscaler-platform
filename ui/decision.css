@@ -73,3 +73,16 @@
 }
 
 .response-coverage-label { margin:8px 0 0; font-size:11px; color:#6f638a; }
+.approval-feedback { display:flex; align-items:flex-start; gap:12px; padding:18px; margin:0 0 20px; border:1px solid #ead0b5; border-radius:12px; background:#fff9f1; scroll-margin-top:15px; }
+.approval-feedback > div { min-width:0; }
+.approval-feedback .decision-step-icon { background:#f5e5d2; color:#8b572b; }
+.approval-feedback h3 { margin:0 0 7px; font-size:15px; }
+.approval-feedback p { margin:5px 0; font-size:12px; line-height:1.55; overflow-wrap:anywhere; }
+.approval-feedback-next { font-weight:550; color:var(--ink); }
+.approval-feedback small { display:block; margin-top:10px; font-size:11px; line-height:1.5; color:var(--muted); }
+.response-execution-status { border:1px solid var(--line); border-radius:12px; padding:15px 18px; margin:0 0 20px; background:var(--surface-muted); }
+.response-execution-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; }
+.response-execution-row + .response-execution-row { border-top:1px solid var(--line); }
+.response-execution-row > .icon { width:17px; height:17px; color:var(--accent); flex-shrink:0; margin-top:2px; }
+.response-execution-row strong { font-size:12px; }
+.response-execution-row p { margin:4px 0 0; color:var(--muted); line-height:1.5; font-size:11px; }

@@ -16,9 +16,9 @@ export function defaultPortal(name = "Response team") {
     description: `Follow ${name}'s response, see what is needed and support the next step. Updates are reviewed by our team.`,
     communityTitle: "Tell us what is needed",
     communityDescription: `Send a need to ${name}. Our team reviews reports and shares progress through your private tracking reference.`,
-    accent: "#466765",
+    accent: "#2458e5",
     bannerDataUrl: "",
-    bannerAlt: "Community response teams working across a connected region",
+    bannerAlt: "",
   };
 }
 function validatePortal(value) {

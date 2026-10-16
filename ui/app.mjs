@@ -1,6 +1,7 @@
 import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints } from "./labels.mjs";
 import { createPortalViews } from "./portal.mjs";
 import { agentMonitor } from "./autonomy.mjs";
+import { createLiveWorkspace, freshnessNotice } from "./live.mjs";
 import { createDecisionExperience } from "./decision.mjs";
 import { offlineQueue } from "./offline.mjs";
 import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
@@ -148,6 +149,11 @@ function cacheSession() {
   );
 }
 function toast(s) {
+  if (dialog?.open) {
+    let notice=dialog.querySelector('[data-dialog-message]');
+    if(!notice){notice=document.createElement('p');notice.dataset.dialogMessage='true';notice.className='dialog-inline-notice';notice.setAttribute('role','status');dialog.querySelector('.dialogbody').prepend(notice);}
+    notice.textContent=s;notice.scrollIntoView({block:'nearest'});return;
+  }
   const el = document.querySelector("#toast");
   el.textContent = s;
   el.classList.add("visible");
@@ -170,6 +176,7 @@ async function api(url, body) {
   if (!response.ok) {
     const e = new Error(result.message ?? "The request failed.");
     e.code = result.error;
+    e.httpStatus = response.status;
     throw e;
   }
   return result;
@@ -198,6 +205,7 @@ const extras = createExtras({
 });
 const portalViews = createPortalViews({ api, escape, icon, money, time, publicProcurement, readAttachment, toast });
 const decisionExperience = createDecisionExperience({ api, escape, icon, badge, action, time, state });
+const liveWorkspace = createLiveWorkspace({api, state, escape, icon, renderActivityMetadata:a=>activityView.metadata(a,{model:state.model})});
 const operational = createOperationalDraft({
   api,
   record,
@@ -342,38 +350,47 @@ function activityCard(a) {
   return activityView.card(a, { role: state.user.role, model: state.model, now: Date.now() });
 }
 async function overview() {
-  const [d, intake] = await Promise.all([api("/api/dashboard"), api("/api/automation")]);
-  state.data = d; state.intake = intake; state.model = d.model ?? state.model;
+  const [d, intake, pulse] = await Promise.all([api("/api/dashboard"), api("/api/automation"), api("/api/workspace-pulse")]);
+  liveWorkspace.rememberPolicy(intake);
+  state.data = d; state.intake = intake; state.model = d.model ?? state.model; state.overviewVersion=pulse.overviewVersion;
   registerDisplayRecords("need", d.need);
   const queue = d.proposal.filter(p => ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state));
+  const descriptions = await decisionExperience.describeProposals(queue);
   const unresolved = d.need.filter(n => n.quantity > (n.served ?? 0));
-  return title("Response overview", "See the need, the proposed response, and where your decision makes a difference.") +
-    agentMonitor(intake, {escape, icon, model:state.model}) +
-    presentation.overview({ data: d, queue, unresolved, activity: activityCard(d.activity[0]), coverage: await coverageControls.card(),
+  return title("Response overview", "See what is needed. Review the response. Put help in motion.") +
+    agentMonitor(intake, {escape, icon, model:state.model, pulse}) +
+    presentation.overview({ data: d, queue, unresolved, descriptions,
       sourceStatus: d.source.length ? d.source.map(source => source.state).join(" · ") : "Not connected" });
 }
 async function signals() {
-  const rows = (await record("signal")).filter(s => s.state !== "erased");
-  state.signalRows = rows;
+  if (!state.signalSnapshot || app.querySelector('main[data-view]')?.dataset.view !== 'signals')
+    state.signalSnapshot = await api('/api/workspace-snapshot?kind=signal');
+  const {rows:allRows,pulse} = state.signalSnapshot, rows = allRows.filter(s => s.state !== "erased");
+  liveWorkspace.capture('signal',pulse);
+  registerDisplayRecords('signal',rows); state.signalRows = rows;
   const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location} ${entityLabel(s.location)}`.toLowerCase().includes(state.filter.toLowerCase()));
-  const start = state.signalPage * 12;
-  const intake = await api("/api/automation");
-  return title("Signals & evidence", "Public posts, media and authorized reports are collected automatically. Open a source for its original context.") +
-    agentMonitor(intake, {escape, icon, model:state.model, compact:true}) +
-    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search a place, need or phrase" value="${escape(state.filter)}"><span class="small">${number(filtered.length)} collected signals</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Processing & additional checks</summary><p class="small">New source versions enter the agent's bounded processing queue automatically. Original sources and uncertainty remain available.</p><div class="actions">${action("Recheck received sources", "discover-page", "", "quiet")}${action("Interpret selected context", "interpret-page", "", "quiet")}${action("Refresh sources", "sync", "", "quiet")}</div></details>` +
+  const start = state.signalPage * 12, intake = await api("/api/automation");
+  liveWorkspace.rememberPolicy(intake);
+  return title("Signals & evidence", "Read collected reports at your own pace. New signals arrive in the background.") +
+    agentMonitor(intake, {escape, icon, model:state.model, compact:true, pulse}) +
+    freshnessNotice('signal',{icon}) +
+    `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search the loaded reports" value="${escape(state.filter)}"><span class="small">${number(pulse.signals.available)} signals collected · ${number(rows.length)} recent reports loaded</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Processing & additional checks</summary><p class="small">New source versions enter the processing queue automatically. This list stays in place until you load the latest reports.</p><div class="actions">${action("Recheck received sources", "discover-page", "", "quiet")}${action("Interpret selected context", "interpret-page", "", "quiet")}${action("Refresh sources", "sync", "", "quiet")}</div></details>` +
     presentation.signals(filtered.slice(start, start + 12)) +
-    `<div class="pagination"><span class="small">${filtered.length ? start + 1 : 0}–${Math.min(start + 12, filtered.length)} of ${number(filtered.length)}</span>${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`;
+    `<div class="pagination"><span class="small">${filtered.length ? start + 1 : 0}–${Math.min(start + 12, filtered.length)} of ${number(filtered.length)} loaded reports</span>${start > 0 ? action("← Previous", "signalprev") : ""}${start + 12 < filtered.length ? action("More signals →", "signalnext") : ""}</div>`;
 }
 async function investigations() {
-  const [rows, intake] = await Promise.all([record("activity"), api("/api/automation")]);
-  const ongoing = rows.filter(a => ["reading", "checking", "queued", "waiting_evidence", "waiting_capacity", "waiting_review", "waiting_receipt"].includes(a.state));
-  const focus = ongoing[0] ?? rows[0];
+  if (!state.activitySnapshot || app.querySelector('main[data-view]')?.dataset.view !== 'investigations')
+    state.activitySnapshot = await api('/api/workspace-snapshot?kind=activity');
+  const {rows,pulse}=state.activitySnapshot, intake=await api('/api/automation');
+  liveWorkspace.rememberPolicy(intake);
+  const focus = rows.find(a=>['reading','checking','queued'].includes(a.state)) ?? rows[0];
   const earlier = rows.filter(a => a.id !== focus?.id);
-  return title("Agent activity", "The agent watches new reports, checks possibilities and prepares responses for human review.") +
-    agentMonitor(intake, {escape, icon, model:state.model}) +
-    activityCard(focus) +
-    `<section class="card investigation-history"><div class="section-heading"><h2>Recent investigations</h2><span class="small">${earlier.length} recorded</span></div>${earlier.slice(0, 6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("") || empty("Earlier investigations will appear here.", "sparkles")}${earlier.length > 6 ? `<details class="secondary-disclosure" data-ui-key="investigations:earlier"><summary>All earlier investigations · ${earlier.length - 6} more</summary>${earlier.slice(6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("")}</details>` : ""}</section>
-    <details class="secondary-disclosure" data-ui-key="investigations:automation"><summary>Processing controls & model limits</summary><div class="toolbar"><span class="small">${intake.policy.hourlyCallLimit} calls / hour · $${intake.policy.hourlyBudgetUsd}/hour maximum</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Resume automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}${action("Request an additional check", "investigate", "", "quiet")}</div><p class="small">The source connection and operational monitoring continue while the model works. Recorded checks and tool results are available above.</p></details>`;
+  liveWorkspace.capture('activity',pulse,[focus,...earlier.slice(0,6)].filter(Boolean));
+  return title("Agent activity", "Follow a flow without losing your place. Load newer investigations when you are ready.") +
+    agentMonitor(intake, {escape, icon, model:state.model, pulse}) +
+    freshnessNotice('activity',{icon}) + activityCard(focus) +
+    `<section class="card investigation-history"><div class="section-heading"><h2>Investigations in this view</h2><span class="small">${earlier.length} recorded</span></div>${earlier.slice(0, 6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("") || empty("Earlier investigations will appear here.", "sparkles")}${earlier.length > 6 ? `<details class="secondary-disclosure" data-ui-key="investigations:earlier"><summary>Earlier investigations · ${earlier.length - 6} more</summary>${earlier.slice(6).map(a => activityView.row(a, { role: state.user.role, model: state.model })).join("")}</details>` : ""}</section>
+    <details class="secondary-disclosure" data-ui-key="investigations:automation"><summary>Processing controls & model limits</summary><div class="toolbar"><span class="small">${intake.policy.hourlyCallLimit} calls / hour · $${intake.policy.hourlyBudgetUsd}/hour maximum</span>${["admin", "commander"].includes(state.user.role) ? action(intake.policy.enabled ? "Pause automatic intake" : "Resume automatic intake", "automation", String(!intake.policy.enabled), "quiet") : ""}${action("Request an additional check", "investigate", "", "quiet")}</div><p class="small">Source collection and operational monitoring continue while the model works.</p></details>`;
 }
 async function review() {
   let page = state.reviewPage ?? 0,
@@ -389,6 +406,7 @@ async function review() {
         (state.historyPage ?? 0) * 12,
     ),
     total = queue.total;
+  const descriptions = await decisionExperience.describeProposals([...rows,...history.rows]);
   return (
     title(
       "Decision queue",
@@ -398,9 +416,9 @@ async function review() {
       ["Proposed response", "Priority", "State", "Pending conditions", ""],
       rows.map(
         (p) =>
-          `<tr><td><strong>${escape(p.title)}</strong><small>${escape(readableText(p.benefit))}</small></td><td>${badge(p.priority)}</td><td>${badge(p.state)}</td><td>${p.conditions.filter((c) => !c.satisfied).length}</td><td>${action("Review", "proposal", p.id)}</td></tr>`,
+          `<tr><td><strong>${escape(descriptions.get(p.id)?.title ?? p.title)}</strong><small>${escape(descriptions.get(p.id)?.summary ?? readableText(p.benefit))}</small></td><td>${badge(p.priority)}</td><td>${badge(p.state)}</td><td>${p.conditions.filter((c) => !c.satisfied).length}</td><td>${action("Review", "proposal", p.id)}</td></tr>`,
       ),
-    )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}${total > 12 ? `<div class="toolbar"><span class="small">${page * 12 + 1}–${Math.min(total, page * 12 + 12)} of ${total} actionable responses</span>${page ? action("Previous", "review-page", String(page - 1), "quiet") : ""}${(page + 1) * 12 < total ? action("Next", "review-page", String(page + 1), "quiet") : ""}</div>` : ""}<details class="collapse" ${state.historyOpen ? "open" : ""}><summary>Decision & execution history · ${history.total} responses</summary>${history.rows.map((p) => `<div class="listrow"><div class="grow"><strong>${escape(p.title)}</strong>${badge(p.state)}</div>${action("Inspect", "proposal", p.id)}</div>`).join("")}${history.offset ? action("Earlier page", "history-page", String((state.historyPage ?? 0) - 1), "quiet") : ""}${history.offset + 12 < history.total ? action("Next history page", "history-page", String((state.historyPage ?? 0) + 1), "quiet") : ""}</details></section>`
+    )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}${total > 12 ? `<div class="toolbar"><span class="small">${page * 12 + 1}–${Math.min(total, page * 12 + 12)} of ${total} actionable responses</span>${page ? action("Previous", "review-page", String(page - 1), "quiet") : ""}${(page + 1) * 12 < total ? action("Next", "review-page", String(page + 1), "quiet") : ""}</div>` : ""}<details class="collapse" ${state.historyOpen ? "open" : ""}><summary>Decision & execution history · ${history.total} responses</summary>${history.rows.map((p) => `<div class="listrow"><div class="grow"><strong>${escape(descriptions.get(p.id)?.title ?? p.title)}</strong>${badge(p.state)}</div>${action("Inspect", "proposal", p.id)}</div>`).join("")}${history.offset ? action("Earlier page", "history-page", String((state.historyPage ?? 0) - 1), "quiet") : ""}${history.offset + 12 < history.total ? action("Next history page", "history-page", String((state.historyPage ?? 0) + 1), "quiet") : ""}</details></section>`
   );
 }
 async function operations() {
@@ -554,7 +572,7 @@ async function settings() {
       "Sources & access",
       "Automatic ingestion is the default. Configure access once; operators should not copy every post manually.",
     ) +
-    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><details class="collapse"><summary>Request specific source data</summary><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></details></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<details class="collapse"><summary>Configured model · ${escape(displayModel(state.model))}</summary><p class="small">${escape(state.model)}. Results belong to this configured model; Gemini requires its own evaluation.</p></details></section></div>` +
+    `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Contact coverage", "coverage-open", "", "quiet")}${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><details class="collapse"><summary>Request specific source data</summary><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></details></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<details class="collapse"><summary>Configured model · ${escape(displayModel(state.model))}</summary><p class="small">${escape(state.model)}. Results belong to this configured model; Gemini requires its own evaluation.</p></details></section></div>` +
     readiness
   );
 }
@@ -648,30 +666,85 @@ function modal(name, content, footer = "") {
   const openedDialog = dialog;
   dialog.onclose = () => {
     openedDialog.remove();
-    if (dialog === openedDialog) dialog = null;
+    if (dialog === openedDialog) {
+      dialog = null;
+      if(openedDialog.dataset.proposal&&state.user&&['overview','review','operations'].includes(state.page))render();
+    }
   };
   bind(dialog);
 }
-async function proposal(id) {
-  state.delegatedReviews = (await api("/api/me")).delegatedReviews;
-  const p = await record("proposal", id),
-    canReview =
-      ["commander", "dispatcher"].includes(state.user.role) ||
-      state.delegatedReviews?.includes(id),
-    pending = p.conditions.filter((c) => !c.satisfied);
-  modal(
-    "Review a response",
-    await decisionExperience.renderProposal(p, {canReview}),
-    canReview &&
-      ["awaiting_review", "requires_review", "needs_clarification"].includes(
-        p.state,
-      )
-      ? `${p.state === "requires_review" ? action("Investigate a repair", "repair", id) : ""}${!p.executionResults?.length ? action("Edit draft", "edit-response", id) : ""}${action("Ask for clarification", "reviewclarify", id)}${action("Reject", "reviewreject", id, "danger")}${action(pending.length ? "Authorize conditionally" : "Authorize response", "reviewapprove", id, "primary")}`
-      : action("Close", "close"),
-  );
-  state.currentProposal = p;
+function proposalFooter(p, canReview) {
+  if(p.reviewBlocked) return action('View agent recheck','navigate','investigations','primary')+action('Close','close');
+  if(canReview && ['awaiting_review','requires_review','needs_clarification'].includes(p.state)) {
+    const pending=(p.conditions??[]).some(c=>!c.satisfied);
+    return `${p.state==='requires_review'?action('Investigate a repair','repair',p.id):''}${!p.executionResults?.length?action('Edit draft','edit-response',p.id):''}${action('Ask for clarification','reviewclarify',p.id)}${action('Reject','reviewreject',p.id,'danger')}${action(pending?'Authorize conditionally':'Authorize response','reviewapprove',p.id,'primary')}`;
+  }
+  return action('Follow operations','navigate','operations','primary')+action('Close','close');
 }
-
+async function proposal(id) {
+  state.delegatedReviews=(await api('/api/me')).delegatedReviews;
+  const p=await record('proposal',id), canReview=['commander','dispatcher'].includes(state.user.role)||state.delegatedReviews?.includes(id);
+  await presentProposal(p,canReview);
+}
+async function presentProposal(p,canReview,expectedDialog=null) {
+  const content=await decisionExperience.renderProposal(p,{canReview});
+  // A slow source lookup must not reopen a review the operator closed or left.
+  if(expectedDialog&&(dialog!==expectedDialog||!expectedDialog.open))return false;
+  modal('Review a response',content,proposalFooter(p,canReview));
+  dialog.dataset.proposal=p.id;dialog.dataset.canReview=String(canReview);
+  state.currentProposal=p;
+  return true;
+}
+function setDecisionBusy(opened,busy) {
+  if(!opened)return;
+  opened.setAttribute('aria-busy',String(busy));
+  opened.querySelectorAll('[data-action="reviewapprove"],[data-action="reviewreject"],[data-action="reviewclarify"]').forEach(button=>{button.disabled=busy||opened.dataset.outdated==='true';});
+}
+function requireProposalReload(opened,id,message='Load its latest plan and checks before making a decision.') {
+  opened.dataset.outdated='true';
+  let notice=opened.querySelector('[data-proposal-outdated]');
+  if(!notice){notice=document.createElement('section');notice.dataset.proposalOutdated='true';notice.className='dialog-inline-notice';notice.setAttribute('role','status');notice.tabIndex=-1;opened.querySelector('.dialogbody').prepend(notice);}
+  notice.innerHTML=`<strong>Review the latest response.</strong><p>${escape(message)}</p>${action('Load latest response','reload-proposal',id,'primary')}`;
+  bind(notice);setDecisionBusy(opened,false);
+  return notice;
+}
+function proposalNotice(opened,heading,message) {
+  const notice=document.createElement('section');notice.className='dialog-inline-notice';notice.setAttribute('role','status');notice.tabIndex=-1;
+  notice.innerHTML=`<strong>${escape(heading)}</strong><p>${escape(message)}</p>`;
+  opened.querySelector('.dialogbody').prepend(notice);notice.focus();
+  return notice;
+}
+async function refreshProposalProgress() {
+  const opened=dialog, old=state.currentProposal;
+  if(!opened?.open||!opened.dataset.proposal||!old||state.reviewInFlight)return;
+  const p=await record('proposal',old.id);
+  if(dialog!==opened||state.reviewInFlight||p.version===old.version||opened.dataset.outdated==='true')return;
+  const blockChanged=JSON.stringify(p.reviewBlocked??null)!==JSON.stringify(old.reviewBlocked??null),
+    materiallyInvalidated=(p.state==='requires_review'&&old.state!=='requires_review')||Boolean(old.authorization&&!p.authorization),
+    scopeChanged=JSON.stringify(p.actions)!==JSON.stringify(old.actions)||JSON.stringify(p.conditions)!==JSON.stringify(old.conditions);
+  if(scopeChanged||blockChanged||materiallyInvalidated) {
+    // A saved blocked banner is no longer current after another reviewer edits,
+    // rejects or resolves the draft. Never pair it with a fresh approve button.
+    if(blockChanged)opened.querySelectorAll('.approval-feedback').forEach(element=>element.remove());
+    requireProposalReload(opened,p.id,blockChanged&&!p.reviewBlocked?'The previous blocker is no longer the latest state. Reload this response to see its current decision and available actions.':p.changedReason??'The plan or its approval checks changed. Load the latest response before making a decision.');
+    return;
+  }
+  state.currentProposal=p;
+  const progress=opened.querySelector('[data-response-progress]');if(progress)progress.outerHTML=decisionExperience.renderExecutionProgress(p);
+  const cardHeader=opened.querySelector('.response-review > .cardheader');if(cardHeader)cardHeader.innerHTML=badge(p.state)+badge(p.priority);
+  if(p.reviewBlocked&&!opened.querySelector('.approval-feedback'))opened.querySelector('.dialogbody').insertAdjacentHTML('afterbegin',decisionExperience.renderApprovalFeedback({code:p.reviewBlocked.code,message:p.reviewBlocked.message},{proposal:p}));
+  const footer=opened.querySelector('.dialogfoot');if(footer){footer.innerHTML=proposalFooter(p,opened.dataset.canReview==='true');bind(footer);}
+}
+async function refreshOverview(pulse) {
+  const count=app.querySelector('[data-overview-count="signalCount"]');if(count)count.textContent=number(pulse.signals.available);
+  if(pulse.overviewVersion===state.overviewVersion)return;
+  const d=await api('/api/dashboard');if(state.page!=='overview'||dialog)return;
+  registerDisplayRecords('need',d.need);
+  const queue=d.proposal.filter(p=>['awaiting_review','requires_review','needs_clarification'].includes(p.state)), descriptions=await decisionExperience.describeProposals(queue);
+  const holder=document.createElement('div');holder.innerHTML=presentation.overview({data:d,queue,descriptions,unresolved:d.need.filter(n=>n.quantity>(n.served??0)),sourceStatus:d.source.map(s=>s.state).join(' · ')});
+  for(const selector of ['.overview-metrics','.overview-layout']) { const current=app.querySelector(selector),next=holder.querySelector(selector);if(current&&next){current.replaceWith(next);bind(next);} }
+  state.data=d;state.overviewVersion=pulse.overviewVersion;
+}
 async function sourceDetail(id) {
   const s = await record("signal", id);
   const context = await caseControls.context(id);
@@ -777,6 +850,7 @@ async function flush() {
 }
 async function runAction(name, id) {
   if (name === "close") { dialog?.close(); return; }
+  if (name === "refresh-live") { state.signalSnapshot=null; state.activitySnapshot=null; state.signalPage=0; await render(); return; }
   if (name === "resource-tab") { state.resourceTab = id; await render(); return; }
   if (name === "audit-page" || name === "audit-sync-page") { state[name === "audit-page" ? "auditPage" : "syncAuditPage"] = Number(id); await render(); return; }
   if (await responseControls.run(name, id)) return;
@@ -848,6 +922,7 @@ async function runAction(name, id) {
     return;
   }
   if (name === "navigate") {
+    dialog?.close();
     state.page = id;
     location.hash = id;
     await render();
@@ -927,28 +1002,48 @@ async function runAction(name, id) {
     );
     return;
   }
+  if (name === "reload-proposal") return proposal(id);
   if (name.startsWith("review")) {
-    const p = state.currentProposal;
-    const decision = {
-      reviewapprove: "approve",
-      reviewreject: "reject",
-      reviewclarify: "clarify",
-    }[name];
-    await api("/api/review", {
-      id: p.id,
-      version: p.version,
-      decision,
-      note: document.querySelector("#reviewnote")?.value ?? "",
-      allowConditional:
-        document.querySelector("#allowconditional")?.checked ?? false,
-    });
-    dialog?.close();
-    toast(
-      decision === "approve"
-        ? "Authorization recorded. Execution still requires valid conditions."
-        : "Decision recorded.",
-    );
-    await render();
+    if(state.reviewInFlight)return;
+    const p = state.currentProposal, opened=dialog;
+    if (dialog?.dataset.outdated === 'true') return toast('Load the latest response before making a decision.');
+    const decision = {reviewapprove:"approve",reviewreject:"reject",reviewclarify:"clarify"}[name];
+    if (!decision || !p || !opened?.open) return;
+    const note=document.querySelector('#reviewnote')?.value ?? '';
+    const canReview=opened.dataset.canReview==='true';
+    state.reviewInFlight=true;setDecisionBusy(opened,true);
+    let reviewed=null,decisionError=null,latest=null,refreshError=null;
+    try {
+      // A later GET failure is not a failed decision. Keep the authoritative
+      // POST receipt separate, and never retry a decision automatically.
+      try {reviewed=await api('/api/review',{id:p.id,version:p.version,decision,note,allowConditional:document.querySelector('#allowconditional')?.checked??false});}
+      catch(error){decisionError=error;}
+      try {latest=await record('proposal',p.id);}catch(error){refreshError=error;}
+      if(dialog!==opened||!opened.open||!state.user) {
+        if(state.user){toast(reviewed?'Decision recorded.':decisionError?.httpStatus>=400&&decisionError.httpStatus<500?decisionError.message:'The decision could not be confirmed. Load the response before trying again.');if(!dialog)await render();}
+        return;
+      }
+      const received=latest??reviewed;
+      if(received&&!await presentProposal(received,canReview,opened))return;
+      if(!dialog?.open||dialog.dataset.proposal!==p.id)return;
+      if(reviewed) {
+        if(refreshError)proposalNotice(dialog,'Decision recorded. Live progress is temporarily unavailable.','The server confirmed your decision. Load the latest response to follow subsequent owner reviews and operations.');
+        else if(decision!=='approve'){dialog.close();await render();}
+      } else if(decisionError?.httpStatus>=400&&decisionError.httpStatus<500) {
+        if(!dialog.querySelector('.approval-feedback'))dialog.querySelector('.dialogbody').insertAdjacentHTML('afterbegin',decisionExperience.renderApprovalFeedback(decisionError,{proposal:received??p}));
+        const field=dialog.querySelector('#reviewnote');if(field)field.value=note;
+        dialog.querySelector('.approval-feedback')?.focus();
+        if(refreshError)requireProposalReload(dialog,p.id,'The server did not complete this decision, and the latest state could not be loaded. Refresh before trying again.');
+      } else {
+        // A lost response or HTTP 5xx can follow a committed command. Report
+        // uncertainty without claiming that no work was authorized or sent.
+        const confirmedAuthorization=received?.authorization??received?.previousAuthorization,
+          authorizationKnown=confirmedAuthorization?.proposalVersion===p.version;
+        proposalNotice(dialog,authorizationKnown?'The latest record confirms an authorization.':'We could not confirm whether your decision was recorded.',
+          authorizationKnown?'The confirmation response was interrupted. Follow the recorded owner reviews and operations below; no decision was automatically repeated.':'The connection ended before a reliable confirmation arrived. No decision was automatically repeated. Load the latest response before trying again.');
+        if(!authorizationKnown)requireProposalReload(dialog,p.id,'The decision outcome is unconfirmed. Check the latest saved state before submitting another decision.');
+      }
+    } finally {state.reviewInFlight=false;if(dialog?.dataset.proposal)setDecisionBusy(dialog,false);}
     return;
   }
   if (name === "lookup") {
@@ -1184,7 +1279,8 @@ function bind(root = app) {
         } catch (e) {
           toast(e.message);
         } finally {
-          b.disabled = false;
+          const decisionControl=['reviewapprove','reviewreject','reviewclarify'].includes(b.dataset.action), owner=b.closest('dialog');
+          b.disabled = decisionControl&&(state.reviewInFlight||owner?.dataset.outdated==='true');
         }
       }),
   );
@@ -1269,21 +1365,17 @@ else
     } else login();
   }
 setInterval(async () => {
-  if (
-    polling ||
-    !state.user ||
-    dialog ||
-    !navigator.onLine ||
-    !["overview", "investigations", "operations"].includes(state.page) ||
-    document.activeElement?.matches("input,textarea,select")
-  )
-    return;
-  polling = true;
-  const scroll = window.scrollY, pollPage = state.page;
+  if(polling||!state.user||!navigator.onLine||document.hidden)return;
+  polling=true;
   try {
-    await render();
-    if (state.page === pollPage) window.scrollTo(0, scroll);
-  } finally {
-    polling = false;
-  }
-}, 4500);
+    if(dialog) {await refreshProposalProgress();return;}
+    if(['overview','signals','investigations'].includes(state.page)) {
+      const pulse=await liveWorkspace.poll(app);
+      if(state.page==='overview'&&!dialog)await refreshOverview(pulse);
+    } else if(state.page==='operations'&&!document.activeElement?.matches('input,textarea,select')) {
+      const scroll=window.scrollY;await render();window.scrollTo(0,scroll);
+    }
+  } catch(error) {
+    if(error.code==='AUTHENTICATION') {state.user=null;login();}
+  } finally {polling=false;}
+},4000);
