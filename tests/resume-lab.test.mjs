@@ -134,3 +134,48 @@ test('an unclean launcher marker refuses pairing an older world capture with pot
   await json(path.join(f.directory,'launcher-status.json'),{sessionId:'local-resume-fixture',state:'running',pid:999999});
   await assert.rejects(()=>resumeLab({rootDir:f.rootDir,simulatorRoot,spawnChildren:false}),/older world snapshot must not be paired with newer databases/);
 });
+
+test("isolated worker resume retains the exact world and can capture and resume again through materialized APIs", async (t) => {
+  const f = await fixture(t),
+    before = checkpointIdentity(f.lab.world.checkpoint());
+  await captureLab({ rootDir: f.rootDir });
+  await f.close();
+  const running = await resumeLab({
+    rootDir: f.rootDir,
+    simulatorRoot,
+    spawnChildren: false,
+    isolated: true,
+  });
+  try {
+    assert.ok(
+      running.lab.runtime,
+      "the connected runtime owns a separate engine worker",
+    );
+    assert.equal(checkpointIdentity(await running.lab.checkpoint()), before);
+    const response = await fetch(
+      "http://127.0.0.1:" +
+        running.lab.sourcePort +
+        "/api/actor/state?compact=1",
+      {
+        headers: { Authorization: "Bearer agent-0" },
+      },
+    );
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).compact.version, 1);
+    const capture = await running.close({ capture: true });
+    assert.equal(capture.now, 60000);
+  } finally {
+    await running.close();
+  }
+  const resumed = await resumeLab({
+    rootDir: f.rootDir,
+    simulatorRoot,
+    spawnChildren: false,
+    isolated: true,
+  });
+  try {
+    assert.equal(checkpointIdentity(await resumed.lab.checkpoint()), before);
+  } finally {
+    await resumed.close();
+  }
+});

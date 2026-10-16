@@ -14,6 +14,8 @@ export class SimulatorConnector {
     this.humanKey = sourceHumanKey;
     this.fetcher = fetcher;
     this.transportRetries = 0;
+    this.sourceResults = new Map();
+    this.sourceResultReads = new Map();
   }
   async request(endpoint, { method = "GET", body, human = false } = {}) {
     check(
@@ -73,8 +75,124 @@ export class SimulatorConnector {
       }
     }
   }
-  state() {
-    return this.request("/api/actor/state");
+  async state() {
+    if (this.compactStateSupported === false)
+      return this.request("/api/actor/state");
+    for (let attempt = 0; ; attempt++) {
+      let state;
+      try {
+        state = await this.request("/api/actor/state?compact=1");
+      } catch (error) {
+        // Older sources may reject the compact endpoint. Authentication and
+        // transport failures must stay visible rather than widening access.
+        if (error.status !== 404) throw error;
+        this.compactStateSupported = false;
+        return this.request("/api/actor/state");
+      }
+      if (!state.compact) {
+        this.compactStateSupported = false;
+        return state;
+      }
+      this.compactStateSupported = true;
+      try {
+        return await this.hydrateState(state);
+      } catch (error) {
+        // A result can be revised between its frame and its separate read.
+        // Refetch the whole frame once; never substitute a different revision.
+        if (attempt || ![404, 409].includes(error.status)) throw error;
+      }
+    }
+  }
+  async hydrateState(state) {
+    check(
+      state.compact.version === 1 &&
+        typeof state.organization?.id === "string" &&
+        typeof state.runId === "string" &&
+        (state.compact.runId === undefined ||
+          state.compact.runId === state.runId) &&
+        Array.isArray(state.queries) &&
+        state.known &&
+        typeof state.known === "object",
+      "SOURCE_SCHEMA",
+      "Unexpected compact state schema. The connector needs a version update.",
+      502,
+    );
+    const scope = JSON.stringify([state.runId, state.organization.id]);
+    if (this.sourceResultScope !== scope) {
+      this.sourceResultScope = scope;
+      this.sourceResults.clear();
+      this.sourceResultReads.clear();
+    }
+    const used = new Set(),
+      queries = [];
+    for (const query of state.queries) {
+      if (!query.resultRef) {
+        queries.push(query);
+        continue;
+      }
+      const { id, version } = query.resultRef;
+      check(
+        id === query.id &&
+          typeof id === "string" &&
+          id.length &&
+          typeof version === "string" &&
+          version.length,
+        "SOURCE_SCHEMA",
+        "Unexpected query result reference. No unscoped data was requested.",
+        502,
+      );
+      // Versions are content digests, shared by identical query results. Each
+      // organization and episode has its own cache, including in-flight reads.
+      const key = JSON.stringify([scope, version]);
+      used.add(key);
+      let result = this.sourceResults.get(key);
+      if (!this.sourceResults.has(key)) {
+        let reading = this.sourceResultReads.get(key);
+        if (!reading) {
+          reading = this.request(
+            "/api/actor/query-result?" + new URLSearchParams({ id, version }),
+          ).then((row) => {
+            check(
+              row.id === id &&
+                row.version === version &&
+                Object.hasOwn(row, "result"),
+              "SOURCE_SCHEMA",
+              "The source returned a different query result revision.",
+              502,
+            );
+            this.sourceResults.set(key, row.result);
+            return row.result;
+          });
+          this.sourceResultReads.set(key, reading);
+        }
+        try {
+          result = await reading;
+        } finally {
+          if (this.sourceResultReads.get(key) === reading)
+            this.sourceResultReads.delete(key);
+        }
+      }
+      const { resultRef: _reference, ...rest } = query;
+      // Callers receive an independent snapshot, just as with the original
+      // JSON response. Their mutations cannot corrupt subsequent receipts.
+      queries.push({ ...rest, result: structuredClone(result) });
+    }
+    const { compact, ...rest } = state;
+    const known = { ...state.known };
+    if (compact.mapQueryId !== null && compact.mapQueryId !== undefined) {
+      const map = queries.find((q) => q.id === compact.mapQueryId);
+      check(
+        map?.target === "map" && Object.hasOwn(map, "result"),
+        "SOURCE_SCHEMA",
+        "The compact state references an unavailable map.",
+        502,
+      );
+      known.map = structuredClone(map.result);
+    }
+    if (this.sourceResultScope === scope)
+      for (const key of this.sourceResults.keys())
+        if (!used.has(key)) this.sourceResults.delete(key);
+    return { ...rest, known, queries };
   }
   async feed(cursor = 0, limit = 100) {
     const result = await this.request(

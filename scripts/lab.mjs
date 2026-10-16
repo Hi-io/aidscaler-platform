@@ -20,9 +20,11 @@ const sessionId =
   "-" +
   randomBytes(3).toString("hex");
 const lab = await createLabServers({
+  isolated: true,
   observerPort: Number(process.env.LAB_OBSERVER_PORT ?? 4328),
   sourcePort: Number(process.env.LAB_SOURCE_PORT ?? 4329),
   config: laboratoryConfig(),
+  storageDir: path.join(root, ".local", "labs", sessionId, "transport"),
 });
 const configs = [],
   children = [],
@@ -115,7 +117,7 @@ for (let i = 0; i < 5; i++) {
     if (code) console.error(`${org} exited (${code}).`);
   });
 }
-lab.world.advance(45000);
+await lab.advance(45000);
 await fetch(`http://127.0.0.1:${lab.observerPort}/api/control`, {
   method: "POST",
   headers: {

@@ -139,7 +139,7 @@ async function assertPortsFree(ports) {
     server.listen(port, '127.0.0.1', () => server.close(resolve));
   });
 }
-export async function resumeLab({ rootDir = defaultRoot, simulatorRoot = path.resolve(rootDir, '../disaster-response-simulator'), upgradeDemoBuild = false, spawnChildren = true, spawnProcess = spawn } = {}) {
+export async function resumeLab({ rootDir = defaultRoot, simulatorRoot = path.resolve(rootDir, '../disaster-response-simulator'), upgradeDemoBuild = false, spawnChildren = true, spawnProcess = spawn, isolated = spawnChildren } = {}) {
   const saved = await session(rootDir), { current, directory, instances } = saved,
     latest = await parse(path.join(directory, 'resume-latest.json')),
     dir = within(directory, latest.directory),
@@ -198,7 +198,8 @@ export async function resumeLab({ rootDir = defaultRoot, simulatorRoot = path.re
   const observerPort = Number(localURL(current.observerUrl).port), sourcePort = Number(localURL(current.sourceUrl).port);
   await assertPortsFree([observerPort, sourcePort, ...(spawnChildren ? instances.map(i => Number(i.config.port)) : [])]);
   const lab = await createLabServers({ observerPort, sourcePort, observerKey: current.observerKey,
-    actorKeys: structuredClone(credentials.actors), persistCredentials: false, config: checkpoint.manifest.config });
+    actorKeys: structuredClone(credentials.actors), persistCredentials: false, config: checkpoint.manifest.config,
+    isolated, ...(isolated ? {checkpoint,storageDir:path.join(directory,'transport')} : {}) });
   const children = []; let closed = false,closePromise=null;
   const close = async ({ capture = false } = {}) => {
     if (closed) return;
@@ -216,7 +217,8 @@ export async function resumeLab({ rootDir = defaultRoot, simulatorRoot = path.re
   try {
     // Restore via the normal observer API, before any platform/partner child can
     // issue a command. The general simulator restore contract stays unchanged.
-    const restored = await observerJSON(current, '/api/restore', checkpoint), after = lab.world.checkpoint();
+    const restored = isolated ? {runId:checkpoint.runId} : await observerJSON(current, '/api/restore', checkpoint),
+      after = isolated ? await lab.checkpoint() : lab.world.checkpoint();
     if (restored.runId !== original.runId || checkpointIdentity(after) !== expectedStateIdentity)
       throw Error('Restored physical/event state differs from the captured checkpoint. No platform was started.');
     const receipt = { format: 'aidscaler-lab-resume-receipt-v1', at: Date.now(), sessionId: current.sessionId,
