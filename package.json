@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env.local server.mjs",
     "lab": "node --env-file-if-exists=.env.local scripts/lab.mjs",
+    "lab:resume": "node --env-file-if-exists=.env.local scripts/resume-lab.mjs",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "check": "node scripts/check.mjs",
     "verify": "node scripts/verify.mjs",

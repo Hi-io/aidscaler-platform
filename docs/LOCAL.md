@@ -81,7 +81,15 @@ $env:AIDSCALER_LAB_RATE = '10'
 pnpm lab
 ```
 
-Stop the launcher with **Ctrl+C** before starting a new session.
+Stop the launcher from a second terminal with `pnpm lab:resume --shutdown` before starting another session. This uses a private localhost control and waits for its own backend workers and stores to close before saving the final world checkpoint. On Windows, terminating a process tree or sending Ctrl+C through a noninteractive execution tool can bypass Node's shutdown handlers.
+
+### Resume an existing demo after a code update
+
+`pnpm lab` starts a fresh world. To preserve the current world, proposals, organization databases and sign-in credentials, run `pnpm lab:resume --shutdown` and wait for its coordinated-shutdown receipt, then run `pnpm lab:resume`. No missing database or bootstrap is recreated. The private control token is saved only in the session's ignored local control file; it is never printed. The endpoint cannot terminate arbitrary processes.
+
+`pnpm lab:resume --capture` is a world-only capture for controlled maintenance; it pauses the clock but does not stop source-writing backends. Do not pair it with databases that continued changing afterward. An unclean launcher status causes resume to refuse an older world snapshot rather than pretend it matches newer operational records. Preserve that session for diagnosis and recover a coordinated snapshot or start a separate demo session. There is no periodic world-only backup presented as a consistent platform recovery.
+
+Strict resume requires the same simulator build. An explicitly authorized update to an **interactive continuous demo** may use `pnpm lab:resume --upgrade-demo-build`. This preserves the original checkpoint and run identity, verifies physical/event-state integrity, and records old/new build provenance privately. An older demo may add only the missing public-publication counter, independently reconstructed from its saved public history and recorded in the migration receipt; every other state value must match. It refuses changed configuration or engine contracts and cannot migrate a benchmark run. Resumed-launcher shutdown saves another private checkpoint after stopping its owned children. Resume bundles and credentials stay Git-ignored in `.local/`.
 
 ## Optional media and checks
 

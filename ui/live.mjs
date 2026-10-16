@@ -78,7 +78,7 @@ export function createLiveWorkspace({api, state, escape:e, icon, renderActivityM
         const headline=element.querySelector('.activity-focus, h3');if(headline)headline.textContent=summary.latest;
         const progress=element.querySelector('[data-live-activity-progress]');
         const visibleSteps=element.querySelector('.activity-timeline')?.children.length ?? (old.steps??[]).length;
-        if(progress) progress.textContent=`${summary.steps.length} recorded ${summary.steps.length===1?'step':'steps'}${summary.steps.length>visibleSteps ? ' · open activity for the latest results' : ''}`;
+        if(progress) progress.textContent=summary.steps.length>visibleSteps ? `${summary.steps.length-visibleSteps} new recorded steps · open activity for the latest results` : summary.busy ? 'Processing this investigation' : '';
         const metadata=element.querySelector('.activity-meta');if(metadata&&renderActivityMetadata)metadata.outerHTML=renderActivityMetadata(row);
         const historySummary=element.querySelector('.activity-disclosure > summary');
         if(historySummary&&summary.steps.length>visibleSteps)historySummary.firstChild.textContent=`${visibleSteps} steps in this snapshot`;
