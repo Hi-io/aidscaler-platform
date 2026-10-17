@@ -36,25 +36,27 @@ try {
       .waitFor();
     for (const [hash, title] of [
       ["overview", "Response overview"],
-      ["map", "A map of what your team knows."],
-      ["signals", "The world speaks in fragments."],
-      ["investigations", "Investigate what could unlock help."],
-      ["review", "The decision belongs to you."],
-      ["operations", "From an order to useful help."],
-      ["resources", "Know what can be committed."],
-      ["network", "Independent teams. A connected response."],
-      ["publications", "Transparency that earns trust."],
-      ["finance", "Shared support. Clear accounting."],
-      ["field", "Report from the field."],
-      ["coordination", "Keep a responsible person on every pending action."],
-      ["settings", "Sources, permissions & continuity."],
-      ["audit", "Every decision has an owner."],
-      ["media", "Evidence you can inspect."],
-      ["connections", "Connect the sources your team trusts."],
-      ["moderation", "Community reports need context."],
+      ["map", "Operational map"],
+      ["signals", "Signals & evidence"],
+      ["investigations", "Agent activity"],
+      ["review", "Decision queue"],
+      ["operations", "Operations"],
+      ["resources", "Resources & facilities"],
+      ["network", "Partner network"],
+      ["publications", "Public updates"],
+      ["finance", "Pooled funds"],
+      ["field", "Field workspace"],
+      ["coordination", "People & handovers"],
+      ["settings", "Sources & access"],
+      ["audit", "Decision history"],
+      ["media", "Source media"],
+      ["connections", "External connections"],
+      ["moderation", "Community reports"],
     ]) {
       await page.goto(base + "/#" + hash);
       await page.getByRole("heading", { name: title, exact: true }).waitFor();
+      assert.equal(await page.locator('[data-agent-monitor]').count(), ["overview", "investigations"].includes(hash) ? 1 : 0,
+        `${hash} should display only its relevant work status`);
       const horizontal = await page.evaluate(
         () => document.documentElement.scrollWidth > innerWidth + 1,
       );
@@ -75,8 +77,9 @@ try {
           fullPage: true,
         });
     }
+    const publicData = await (await fetch(base + '/api/public')).json();
     await page.goto(base + "/public");
-    await page.getByRole("heading", { name: /Know what's needed/ }).waitFor();
+    await page.getByRole("heading", { name: publicData.organization.portal.title, exact: true }).waitFor();
     assert.equal(
       await page.evaluate(
         () => document.documentElement.scrollWidth > innerWidth + 1,
@@ -95,7 +98,7 @@ try {
     });
     await page.goto(base + "/community");
     await page
-      .getByRole("heading", { name: "Make a need visible.", exact: true })
+      .getByRole("heading", { name: publicData.organization.portal.communityTitle, exact: true })
       .waitFor();
     assert.equal(
       await page.evaluate(

@@ -23,7 +23,8 @@ export class Retention {
     check(originals.includes(kind), "RETENTION_KIND", "Select an original signal or uploaded source.");
     const original = await store.get(actor.org, kind, id), ids = new Set([id]), hashes = new Set([original.contentHash].filter(Boolean));
     if (kind === "media") ids.add("media_interpretation_" + id);
-    const rows = (await store.query("SELECT kind,id,version,data FROM entities WHERE org=$1 ORDER BY kind,id", [actor.org])).rows;
+    const rows = await store.hydrateRows(actor.org, (await store.query("SELECT kind,id,version,data,data_refs FROM entities WHERE org=$1 ORDER BY kind,id", [actor.org])).rows);
+    for (const row of rows) delete row.data_refs;
     for (const r of rows.filter((r) => r.kind === "media" && hashes.has(r.data.contentHash))) ids.add(r.id);
     let affected = [], previous = -1;
     while (affected.length !== previous) {
@@ -73,7 +74,7 @@ export class Retention {
           await tx.put(actor.org, r.kind, r.id, { ...clean, erasure: id }, old.version);
         }
       }
-      for (const row of (await tx.query("SELECT kind,id,version,data FROM entities WHERE org=$1", [actor.org])).rows) {
+      for (const row of await tx.hydrateRows(actor.org, (await tx.query("SELECT kind,id,version,data,data_refs FROM entities WHERE org=$1", [actor.org])).rows)) {
         if (affectedIds.has(row.id) || row.kind === "erasure") continue;
         const cleaned = scrub(row.data, fragments);
         if (hash(cleaned) !== hash(row.data)) await tx.put(actor.org, row.kind, row.id, { ...cleaned, erasure: id }, row.version);
@@ -83,6 +84,9 @@ export class Retention {
       }
       await this.domain.invalidateTx(tx, actor.org, input.id, "A cited original source was erased under an approved policy");
       await tx.upsert(actor.org, "retention_epoch", "active", { at: Date.now(), erasure: id });
+      // Scrubbing expands affected contexts and clears their storage refs.
+      // Delete only now-unreferenced pieces; live replay references remain.
+      await tx.pruneFragments(actor.org);
       await tx.upsert(actor.org, "automation", "intake", { enabled: false, pausedReason: "Source erasure; review before resuming" });
       for (const row of (await tx.query("SELECT key,result FROM idempotency WHERE org=$1", [actor.org])).rows)
         if (refers(row.result, affectedIds) || hash(scrub(row.result, fragments)) !== hash(row.result))

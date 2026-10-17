@@ -10,6 +10,7 @@ import { icons } from "./icons.mjs";
 import { operationalMap, bindMap } from "./map.mjs";
 import { createExtras } from "./extras.mjs";
 import { createOperationalDraft } from "./operational.mjs";
+import { createOperationView } from "./operation-view.mjs";
 import { createFinanceControls, publicProcurement } from "./finance.mjs";
 import { createWorkforceControls } from "./workforce.mjs";
 import { readAttachment, actionBrief } from "./uploads.mjs";
@@ -20,6 +21,7 @@ import { createResponseControls } from "./response.mjs";
 import { createCoverageControls } from "./coverage.mjs";
 import { createUnloadingControls } from "./unloading.mjs";
 import { driverAvailabilityBadge } from "./fleet.mjs";
+import { receivedLocations, localResourceInput, localResourceForm, registrationGuide } from "./registration.mjs";
 import { staffAvailabilityState, staffAvailabilityBadge, simulationClock, sourceExpiryLabel } from "./staff.mjs";
 const app = document.querySelector("#app");
 const escape = (s) =>
@@ -279,6 +281,7 @@ const coverageControls = createCoverageControls({ api, escape, action, state, mo
 const unloadingControls = createUnloadingControls({ api, escape, state, toast, render });
 const presentation = createPresentation({ escape, icon, badge, action, table, empty, number, time, state });
 const activityView = createActivityView({ escape, icon, action, time, labelModel: displayModel });
+const operationView = createOperationView({ escape, badge, action, number });
 function title(text, sub, actions = "") {
   return `<div class="pagetitle"><div><h1>${text}</h1><p class="sub">${sub}</p></div><div class="actions">${actions}</div></div>`;
 }
@@ -369,10 +372,8 @@ async function signals() {
   liveWorkspace.capture('signal',pulse);
   registerDisplayRecords('signal',rows); state.signalRows = rows;
   const filtered = rows.filter(s => `${s.text} ${s.source} ${s.location} ${entityLabel(s.location)}`.toLowerCase().includes(state.filter.toLowerCase()));
-  const start = state.signalPage * 12, intake = await api("/api/automation");
-  liveWorkspace.rememberPolicy(intake);
+  const start = state.signalPage * 12;
   return title("Signals & evidence", "Read collected reports at your own pace. New signals arrive in the background.") +
-    agentMonitor(intake, {escape, icon, model:state.model, compact:true, pulse}) +
     freshnessNotice('signal',{icon}) +
     `<div class="filterbar"><input id="signalfilter" aria-label="Search collected signals" placeholder="Search the loaded reports" value="${escape(state.filter)}"><span class="small">${number(pulse.signals.available)} signals collected · ${number(rows.length)} recent reports loaded</span></div><details class="secondary-disclosure" data-ui-key="signals:scope"><summary>Processing & additional checks</summary><p class="small">New source versions enter the processing queue automatically. This list stays in place until you load the latest reports.</p><div class="actions">${action("Recheck received sources", "discover-page", "", "quiet")}${action("Interpret selected context", "interpret-page", "", "quiet")}${action("Refresh sources", "sync", "", "quiet")}</div></details>` +
     presentation.signals(filtered.slice(start, start + 12)) +
@@ -421,8 +422,15 @@ async function review() {
     )}${!rows.length ? empty("No response is awaiting a decision. An investigation can produce a sourced proposal.", "clipboard-check") : ""}${total > 12 ? `<div class="toolbar"><span class="small">${page * 12 + 1}–${Math.min(total, page * 12 + 12)} of ${total} actionable responses</span>${page ? action("Previous", "review-page", String(page - 1), "quiet") : ""}${(page + 1) * 12 < total ? action("Next", "review-page", String(page + 1), "quiet") : ""}</div>` : ""}<details class="collapse" ${state.historyOpen ? "open" : ""}><summary>Decision & execution history · ${history.total} responses</summary>${history.rows.map((p) => `<div class="listrow"><div class="grow"><strong>${escape(descriptions.get(p.id)?.title ?? p.title)}</strong>${badge(p.state)}</div>${action("Inspect", "proposal", p.id)}</div>`).join("")}${history.offset ? action("Earlier page", "history-page", String((state.historyPage ?? 0) - 1), "quiet") : ""}${history.offset + 12 < history.total ? action("Next history page", "history-page", String((state.historyPage ?? 0) + 1), "quiet") : ""}</details></section>`
   );
 }
+async function operationContext() {
+  const [needs, resources, vehicles, people] = await Promise.all([
+    record("need"), record("resource"), record("vehicle"),
+    ["commander", "dispatcher"].includes(state.user.role) ? api("/api/people").catch(() => []) : [],
+  ]);
+  return { needs, resources, vehicles, people, currentUser: state.user, organization: state.user.org };
+}
 async function operations() {
-  const rows = await record("operation");
+  const [rows, context] = await Promise.all([record("operation"), operationContext()]);
   return (
     title(
       "Operations",
@@ -436,10 +444,7 @@ async function operations() {
     ) +
     (await unloadingControls.view()) + `<section class="card ${!rows.length ? "empty-table" : ""}">${table(
       ["Operation", "State", "Authorized by", "Latest confirmation", ""],
-      rows.map(
-        (o) =>
-          `<tr><td><strong>${escape(humanLabel(o.type ?? o.kind ?? "Delivery"))} · ${escape(o.id.slice(-8))}</strong><small>${number(o.quantity)} ${escape(o.unit ?? "units")} ${o.need ? "· " + escape(entityLabel(o.need)) : ""}</small></td><td>${badge(o.state)}${o.requiresRepair ? " " + badge("requires_review") : ""}</td><td>${escape(o.authorizedBy ?? "Source authority")}</td><td>${o.times?.received != null ? "Receipt recorded" : o.times?.arrived != null ? "Arrived · receipt pending" : o.confirmedBySource || o.times?.acknowledged != null ? "Source acknowledged" : "Awaiting source acknowledgement"}</td><td>${action("Follow", "operation", o.id)}</td></tr>`,
-      ),
+      rows.map(o => operationView.row(o, context)),
     )}${!rows.length ? empty("No authorized physical operations yet. Draft proposals do not count as deliveries.", "truck") : ""}</section>`
   );
 }
@@ -456,7 +461,7 @@ async function resources() {
   const inventory = rows => presentation.resourceTable(rows, { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) });
   const fleet = rows => rows.map(v => `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.label || entityLabel(v.id))}</h3><p>Capacity ${number(v.capacity)} · ${escape(entityLabel(v.owner))}</p>${driverAvailabilityBadge(v)}<details class="row-details"><summary>Vehicle record</summary><pre class="trace">${escape(JSON.stringify(v,null,2))}</pre></details></div>${badge(v.state)}</div>`).join("");
   const tabs = [["inventory","Inventory",own.length],["transport","Transport",vehicles.filter(v => v.owner === state.user.org).length],["facilities","Facilities",facilities.length]];
-  return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.", action("Add a local resource", "addresource", "", "primary")) +
+  return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.", action("Add or update records", "register-record", "", "primary")) +
     `<div class="view-tabs" role="group" aria-label="Resource category">${tabs.map(([id,name,count]) => `<button data-action="resource-tab" data-id="${id}" aria-pressed="${tab===id}">${name} <span>${count}</span></button>`).join("")}</div>` +
     (tab === "inventory" ? `<section class="card resource-group"><div class="section-heading"><h2>Your inventory</h2><span class="small">Ready to commit, after protected stock</span></div>${own.length ? inventory(own) : empty("No owned resources received. Sync your inventory source.","package")}${peers.length ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner inventory <span>${peers.length} resources</span></summary><p class="small">Observed capacity. A partner must confirm any commitment.</p>${inventory(peers)}</details>` : ""}</section>` :
     tab === "transport" ? `<section class="card"><div class="section-heading"><h2>Your transport</h2><span class="small">Last received vehicle states</span></div>${fleet(vehicles.filter(v => v.owner === state.user.org)) || empty("No owned vehicles have been received.","truck")}<details class="secondary-disclosure"><summary>Partner vehicles <span>${vehicles.filter(v => v.owner !== state.user.org).length} vehicles</span></summary>${fleet(vehicles.filter(v => v.owner !== state.user.org)) || '<p class="small">No partner vehicles received.</p>'}</details></section>` :
@@ -571,6 +576,7 @@ async function settings() {
     title(
       "Sources & access",
       "Automatic ingestion is the default. Configure access once; operators should not copy every post manually.",
+      action("Add or update records", "register-record", "", "accent"),
     ) +
     `<div class="grid cols2"><section class="card"><div class="cardheader"><h2>Connected sources</h2>${action("Contact coverage", "coverage-open", "", "quiet")}${action("Sync now", "sync", "", "accent")}</div>${sources.map((s) => `<div class="listrow"><div class="rowicon">${icon("radio")}</div><div class="grow"><h3>Signal & operational gateway</h3><p>Last success ${s.lastSuccessAt ? ago(s.lastSuccessAt) : "not yet"}<br>Scoped organization data. No observer access.</p></div>${badge(s.state)}</div>`).join("") || empty("Start the local lab to provision the scoped source connector.", "radio")}<details class="collapse"><summary>What can be ingested?</summary><p class="sub">Public social posts and their revisions, images and voice-note descriptions, authorized field channels, official bulletins, operational inventory, vehicles, roads, facilities, staff, commitments and receipts. Real media tests are kept separate from synthetic descriptions.</p></details><details class="collapse"><summary>Request specific source data</summary><div class="actions">${action("Query inventory", "lookup", "inventory")}${action("Query vehicles", "lookup", "vehicles")}${action("Query personnel", "lookup", "personnel")}${action("Query maps", "lookup", "map")}</div></details></section><section class="card"><h2>Roles & authority</h2><p class="sub">Analysts investigate. Commanders and dispatchers authorize operations. Publishers approve public updates. Field teams submit observations. Auditors inspect history.</p><details class="collapse"><summary>How does the model get permission?</summary><p class="sub">It does not inherit a human role. Model tools can query, verify and draft. Server checks remain authoritative regardless of source text or model output.</p></details>${state.user.role === "admin" ? action("Manage users", "users", "", "accent") : ""}<details class="collapse"><summary>Configured model · ${escape(displayModel(state.model))}</summary><p class="small">${escape(state.model)}. Results belong to this configured model; Gemini requires its own evaluation.</p></details></section></div>` +
     readiness
@@ -763,21 +769,10 @@ async function activityDetail(id) {
   modal("Investigation activity", activityView.detail(a, { role: state.user.role, model: state.model, now: Date.now() }));
 }
 async function operationDetail(id) {
-  const o = await record("operation", id);
-  const stages = [
-      "ordered",
-      "acknowledged",
-      "loading",
-      "dispatched",
-      "arrived",
-      "received",
-      "service",
-    ],
-    times = o.times ?? {},
-    last = Math.max(-1, ...stages.map((s, i) => (times[s] != null ? i : -1)));
+  const [o, context] = await Promise.all([record("operation", id), operationContext()]);
   modal(
     "Follow the operation",
-    `<div class="cardheader"><h2>${escape(o.type ?? "Aid delivery")}</h2>${badge(o.state)}</div><div class="stepper">${stages.map((s, i) => `<div class="step ${i <= last ? "done" : ""} ${i === last ? "active" : ""}">${s.replace("dispatched", "In transit").replace("acknowledged", "Accepted")}</div>`).join("")}</div><div class="detailgrid"><div class="decision"><span class="eyebrow">What is confirmed?</span><p>${o.times?.received != null ? "Receipt recorded by the operational source." : o.times?.arrived != null ? "Vehicle has arrived. Receipt is still pending." : "The operation has not yet reached confirmed receipt."}</p></div><div class="decision"><span class="eyebrow">Responsible owner</span><p>${escape(o.authorizedBy ?? "Source authority")}<br>${escape(entityLabel(o.owner ?? state.user.org))}</p></div></div>${o.requiresRepair ? `<div class="warning" style="margin-top:20px">${escape(o.changedReason ?? "A dependency changed. Review the affected plan.")}</div>` : ""}<details class="collapse"><summary>Operational record & timestamps</summary><pre class="trace">${escape(JSON.stringify(o, null, 2))}</pre></details>`,
+    operationView.detail(o, context),
     (["commander", "dispatcher"].includes(state.user.role)
       ? action("Assign field task", "task-assign", o.id, "accent")
       : "") +
@@ -1086,22 +1081,27 @@ async function runAction(name, id) {
     return;
   }
   if (name === "addresource") {
-    modal(
-      "Add a local resource",
-      `<form id="resourceform"><label>Resource type<select name="type"><option>water</option><option>food</option><option>energy</option><option>sanitation</option><option>medical</option><option>staff</option><option>shelter</option></select></label><div class="detailgrid"><label>Quantity<input name="quantity" type="number" min="0" required></label><label>Protected reserve floor<input name="floor" type="number" min="0" value="0"></label></div><label>Unit<input name="unit" required placeholder="L, kits, kW, staff hours…"></label><label>Location / node<input name="node" placeholder="Known location ID"></label><button class="primary">Save resource</button></form>`,
-    );
+    const map = await api("/api/map"), locations = receivedLocations(map.geography);
+    modal("Record local inventory", localResourceForm(locations, {escape}));
     document.querySelector("#resourceform").onsubmit = async (e) => {
       e.preventDefault();
-      const d = Object.fromEntries(new FormData(e.target));
-      await api("/api/resource", {
-        ...d,
-        quantity: Number(d.quantity),
-        floor: Number(d.floor),
-      });
-      dialog.close();
-      toast("Local resource recorded.");
-      await render();
+      const button = e.target.querySelector('button[type="submit"]');
+      button.disabled = true;
+      try {
+        await api("/api/resource", localResourceInput(Object.fromEntries(new FormData(e.target)), locations));
+        dialog.close();
+        toast("Local resource recorded. Connected source stock is unchanged.");
+        await render();
+      } catch (error) {
+        toast(error.message);
+      } finally {
+        button.disabled = false;
+      }
     };
+    return;
+  }
+  if (name === "register-record") {
+    modal("Add or update operational records", registrationGuide({icon, action, role: state.user.role}));
     return;
   }
   if (name === "reserve") {

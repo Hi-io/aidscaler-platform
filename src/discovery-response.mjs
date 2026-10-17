@@ -9,6 +9,7 @@ import { validatePlan } from "./planning.mjs";
 import { effectiveNeed } from "./response-receipts.mjs";
 import { processSourceOpportunities } from "./source-opportunities.mjs";
 import { requestReceivedInquiry } from "./received-inquiries.mjs";
+import { receivedSnapshotFields } from "./context-projection.mjs";
 
 async function stopped(store, org, episode) {
   const activity = await store.get(org, "activity", episode, false);
@@ -192,9 +193,7 @@ export class DiscoveryResponse {
   }
   async resumePending() {
     const org = this.config.org;
-    const snapshot = (
-      await this.store.get(org, "context", "operational", false)
-    )?.snapshot;
+    const snapshot = await receivedSnapshotFields(this.store, org, { fields: ["inspections", "operations"] });
     if (!snapshot) return;
     const signature = hash([
       (await responseQueue(this.store, org)).signature,

@@ -1,12 +1,44 @@
 import { AppError, check } from "./errors.mjs";
 import { hash } from "./store.mjs";
-const decoder = (s) =>
-  s
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&");
+import { deepFreezeJson, rememberImmutableSourceResult, immutableSourceResult } from './immutable-source-result.mjs';
+const decoder = (s) => s.replace(/&(?:quot|apos|lt|gt|amp|#\d{1,7}|#x[0-9a-f]{1,6});/gi, entity => {
+  const token = entity.slice(1, -1).toLowerCase(),
+    named = { quot: '"', apos: "'", lt: '<', gt: '>', amp: '&' };
+  if (Object.hasOwn(named, token)) return named[token];
+  const point = token.startsWith('#x') ? Number.parseInt(token.slice(2), 16) : Number(token.slice(1));
+  return point > 0 && point <= 0x10ffff && !(point >= 0xd800 && point <= 0xdfff)
+    ? String.fromCodePoint(point) : entity;
+});
+function nextFeedCursor(html, sourceUrl) {
+  const origin = new URL(sourceUrl).origin;
+  // A public document may offer navigation, never a new source authority.
+  // Bound each candidate and parse its query rather than depending on the
+  // cursor's position or on whether other preserved filters follow it.
+  for (const anchor of html.matchAll(/<a\b([^>]{0,4096})>/gi)) {
+    const attrs = new Map();
+    for (const match of anchor[1].matchAll(/(?:^|\s)([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+      const name = match[1].toLowerCase();
+      if (!attrs.has(name)) attrs.set(name, decoder(match[2] ?? match[3]));
+    }
+    if (!attrs.get('rel')?.toLowerCase().split(/\s+/).includes('next')) continue;
+    const href = attrs.get('href');
+    if (!href || href.length > 2048) continue;
+    try {
+      const next = new URL(href, sourceUrl);
+      if (next.origin !== origin || next.pathname !== '/feed' || next.username || next.password || next.hash) continue;
+      const values = next.searchParams.getAll('cursor'), cursor = values[0];
+      if (values.length === 1 && /^\d{1,16}$/.test(cursor) && Number.isSafeInteger(Number(cursor))) return Number(cursor);
+    } catch { /* A malformed public link is not an available next page. */ }
+  }
+  return NaN;
+}
+const legacyResultSnapshot = (state, immutableResults) => {
+  if (immutableResults) {
+    for (const query of state.queries ?? []) if (Object.hasOwn(query,'result')) deepFreezeJson(query.result);
+    if (state.known && Object.hasOwn(state.known,'map')) deepFreezeJson(state.known.map);
+  }
+  return state;
+};
 export class SimulatorConnector {
   constructor({ sourceUrl, sourceAgentKey, sourceHumanKey, fetcher = fetch }) {
     this.url = sourceUrl.replace(/\/$/, "");
@@ -15,6 +47,7 @@ export class SimulatorConnector {
     this.fetcher = fetcher;
     this.transportRetries = 0;
     this.sourceResults = new Map();
+    this.sourceResultJson = new Map();
     this.sourceResultReads = new Map();
   }
   async request(endpoint, { method = "GET", body, human = false } = {}) {
@@ -75,9 +108,9 @@ export class SimulatorConnector {
       }
     }
   }
-  async state() {
+  async state({ immutableResults = false } = {}) {
     if (this.compactStateSupported === false)
-      return this.request("/api/actor/state");
+      return legacyResultSnapshot(await this.request("/api/actor/state"), immutableResults);
     for (let attempt = 0; ; attempt++) {
       let state;
       try {
@@ -87,15 +120,15 @@ export class SimulatorConnector {
         // transport failures must stay visible rather than widening access.
         if (error.status !== 404) throw error;
         this.compactStateSupported = false;
-        return this.request("/api/actor/state");
+        return legacyResultSnapshot(await this.request("/api/actor/state"), immutableResults);
       }
       if (!state.compact) {
         this.compactStateSupported = false;
-        return state;
+        return legacyResultSnapshot(state, immutableResults);
       }
       this.compactStateSupported = true;
       try {
-        return await this.hydrateState(state);
+        return await this.hydrateState(state, { immutableResults });
       } catch (error) {
         // A result can be revised between its frame and its separate read.
         // Refetch the whole frame once; never substitute a different revision.
@@ -103,7 +136,7 @@ export class SimulatorConnector {
       }
     }
   }
-  async hydrateState(state) {
+  async hydrateState(state, { immutableResults = false } = {}) {
     check(
       state.compact.version === 1 &&
         typeof state.organization?.id === "string" &&
@@ -121,12 +154,14 @@ export class SimulatorConnector {
     if (this.sourceResultScope !== scope) {
       this.sourceResultScope = scope;
       this.sourceResults.clear();
+      this.sourceResultJson.clear();
       this.sourceResultReads.clear();
     }
     const used = new Set(),
       queries = [];
     for (const query of state.queries) {
       if (!query.resultRef) {
+        if (immutableResults && Object.hasOwn(query,'result')) deepFreezeJson(query.result);
         queries.push(query);
         continue;
       }
@@ -160,7 +195,12 @@ export class SimulatorConnector {
               "The source returned a different query result revision.",
               502,
             );
-            this.sourceResults.set(key, row.result);
+            const document = JSON.stringify(row.result);
+            rememberImmutableSourceResult(row.result, version, document);
+            if (this.sourceResultScope === scope) {
+              this.sourceResults.set(key, row.result);
+              this.sourceResultJson.set(key, document);
+            }
             return row.result;
           });
           this.sourceResultReads.set(key, reading);
@@ -175,7 +215,13 @@ export class SimulatorConnector {
       const { resultRef: _reference, ...rest } = query;
       // Callers receive an independent snapshot, just as with the original
       // JSON response. Their mutations cannot corrupt subsequent receipts.
-      queries.push({ ...rest, result: structuredClone(result) });
+      // These documents came from response.json(), so their wire type is
+      // strictly JSON. Parse a retained immutable wire document instead of
+      // traversing a city map with structuredClone on every polling cycle.
+      // Each returned query and known-map copy remains independently mutable.
+      const document = this.sourceResultJson.get(key) ?? JSON.stringify(result);
+      queries.push({ ...rest, result: immutableResults && immutableSourceResult(result)
+        ? result : immutableResults ? deepFreezeJson(JSON.parse(document)) : JSON.parse(document) });
     }
     const { compact, ...rest } = state;
     const known = { ...state.known };
@@ -187,11 +233,14 @@ export class SimulatorConnector {
         "The compact state references an unavailable map.",
         502,
       );
-      known.map = structuredClone(map.result);
+      const reference = state.queries.find(q=>q.id===compact.mapQueryId).resultRef,
+        document = reference && this.sourceResultJson.get(JSON.stringify([scope,reference.version]));
+      known.map = immutableResults ? map.result
+        : document === undefined ? JSON.parse(JSON.stringify(map.result)) : JSON.parse(document);
     }
     if (this.sourceResultScope === scope)
       for (const key of this.sourceResults.keys())
-        if (!used.has(key)) this.sourceResults.delete(key);
+        if (!used.has(key)) { this.sourceResults.delete(key); this.sourceResultJson.delete(key); }
     return { ...rest, known, queries };
   }
   async feed(cursor = 0, limit = 100) {
@@ -209,9 +258,13 @@ export class SimulatorConnector {
   inbox() {
     return this.request("/api/actor/inbox");
   }
-  async scrape(cursor = 0) {
+  async scrape(cursor = 0, query = {}) {
+    const params = new URLSearchParams({ cursor: String(cursor) });
+    for (const name of ['q', 'author', 'location', 'since', 'limit'])
+      if (query[name] !== undefined && query[name] !== null && String(query[name]) !== '')
+        params.set(name, String(query[name]));
     const r = await this.readOrIdempotentFetch(
-      "/feed?cursor=" + cursor,
+      "/feed?" + params,
       {},
       true,
     );
@@ -223,9 +276,7 @@ export class SimulatorConnector {
       ids: [...html.matchAll(/data-post-id="([a-f0-9]{24})"/g)].map(
         (m) => m[1],
       ),
-      nextCursor: Number(
-        html.match(/rel="next" href="\/feed\?cursor=(\d+)"/)?.[1] ?? NaN,
-      ),
+      nextCursor: nextFeedCursor(html, this.url),
     };
   }
   action(type, params, key, { human = false, version } = {}) {

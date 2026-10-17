@@ -69,18 +69,17 @@ test("an empty city database receives 12716 roads with bounded writes and preser
   const connector = { state: async () => structuredClone(state), feed: async () => ({ posts: [], nextCursor: 100 }),
     inbox: async () => ({ posts: [] }), ackBatch: async () => [] };
   const ingestion = new Ingestion(s, connector, { org: "org0" });
-  const getMany = Store.prototype.getMany, query = Store.prototype.query;
+  const query = Store.prototype.query;
   let batches = [], writePages = [], rowReads = 0;
-  Store.prototype.getMany = function(org, kind, ids) {
-    if (kind === "road") { assert.equal(org, "org0"); batches.push([...ids]); }
-    return getMany.call(this, org, kind, ids);
-  };
   Store.prototype.query = function(sql, values) {
-    if (sql.startsWith("SELECT") && values?.[1] === "road" && !sql.includes("ANY(")) rowReads++;
+    if (sql.startsWith("SELECT incoming.item") && values?.[1] === "road") {
+      assert.equal(values[0], "org0"); batches.push(JSON.parse(values[2]).map(row => row.id));
+    }
+    if (sql.startsWith("SELECT") && values?.[1] === "road" && sql.includes("AND id=$3")) rowReads++;
     if (sql.includes("WITH incoming AS") && values?.[1] === "road") writePages.push(JSON.parse(values[2]));
     return query.call(this, sql, values);
   };
-  t.after(() => { Store.prototype.getMany = getMany; Store.prototype.query = query; });
+  t.after(() => { Store.prototype.query = query; });
   const checkBatches = () => {
     assert.deepEqual(batches.map(b => b.length), [10000, 2716]);
     assert.deepEqual(batches.flat(), roads.map(r => r.id), "no road may be skipped at the page boundary");
@@ -189,4 +188,44 @@ test("batched updates reject a changed or removed expected version instead of re
     assert.deepEqual(await s.get("org0", "road", before.id), original, race);
     assert.equal(await s.get("org0", "context", "operational", false), null, race);
   }
+});
+
+test("material SQL comparison preserves context receipts, silent corrections, run changes and restart reads", async (t) => {
+  const s = await Store.open(); t.after(() => s.close()); await s.organization("org0"); await s.organization("org1");
+  let wall = 1900000000000;
+  t.mock.method(Date, "now", () => wall);
+  const road = { id: "road", open: true, version: 1 },
+    state = { organization: { id: "org0" }, runId: "first-run", now: 60000,
+      known: { resources: {}, vehicles: {}, needs: {}, buildings: {}, edges: { road } },
+      queries: [], commitments: [], operations: [], inspections: [] },
+    connector = { state: async () => structuredClone(state), feed: async () => ({ posts: [], nextCursor: 100 }),
+      inbox: async () => ({ posts: [] }), ackBatch: async () => [] };
+  await s.put("org0", "context", "operational", { unrelated: "Keep this metadata" }, 0);
+  const ingestion = new Ingestion(s, connector, { org: "org0" });
+  await ingestion.sync({ sources: false });
+  const before = await s.get("org0", "context", "operational"), previousRoad = await s.get("org0", "road", "road");
+  assert.equal(before.unrelated, "Keep this metadata");
+  wall += 1000;
+  await new Ingestion(s, connector, { org: "org0" }).sync({ sources: false });
+  assert.deepEqual(await s.get("org0", "context", "operational"), before, "a restarted reader must not rewrite an identical material receipt");
+  assert.deepEqual(await s.get("org0", "road", "road"), previousRoad);
+  road.open = false; // No source-version bump: content must still be checked.
+  wall += 1000;
+  await ingestion.sync({ sources: false });
+  const corrected = await s.get("org0", "context", "operational"), correctedRoad = await s.get("org0", "road", "road");
+  assert.equal(corrected.version, before.version + 1); assert.equal(corrected.observedAt, wall);
+  assert.equal(corrected.snapshot.known.edges.road.open, false);
+  assert.equal(correctedRoad.version, previousRoad.version + 1); assert.equal(correctedRoad.open, false);
+  assert.equal(correctedRoad.sourceVersion, 1);
+  assert.equal((await s.query("SELECT id FROM jobs WHERE org=$1 AND kind='invalidate'", ["org0"])).rows.length, 1);
+  state.now += 1000; state.runId = "replacement-run"; wall += 1000;
+  await ingestion.sync({ sources: false });
+  const replaced = await s.get("org0", "context", "operational");
+  assert.equal(replaced.snapshot.runId, "replacement-run"); assert.equal(replaced.snapshot.now, state.now);
+  assert.equal(replaced.observedAt, wall); assert.equal(replaced.version, corrected.version + 1);
+  assert.equal(await s.get("org1", "road", "road", false), null);
+  assert.equal(await s.get("org1", "context", "operational", false), null);
+  state.organization.id = "org1";
+  await assert.rejects(ingestion.sync({ sources: false }), { code: "SOURCE_ORG" });
+  assert.deepEqual(await s.get("org0", "context", "operational"), replaced);
 });

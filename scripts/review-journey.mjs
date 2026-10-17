@@ -80,19 +80,21 @@ const submit = async (name) => {
 try {
   await mkdir(".local/screenshots", { recursive: true });
   await page.goto(base + "/community");
-  await page.getByLabel("Location", { exact: true }).fill("North district");
+  await page.getByRole("button", { name: "Attach location", exact: false }).click();
+  await page.getByLabel("Or enter a nearby place", { exact: true }).fill("North district");
+  await page.getByRole("button", { name: "Done", exact: true }).click();
   await page
-    .getByLabel("Photo or audio recording", { exact: true })
+    .locator('#communityform input[name="attachment"]')
     .setInputFiles({
       name: "supply.png",
       mimeType: "image/png",
       buffer: await readFile(".local/media-fixtures/water-storage.png"),
     });
   await page
-    .getByRole("button", { name: "Submit for review", exact: true })
+    .getByRole("button", { name: "Submit", exact: true })
     .click();
   await page
-    .getByRole("heading", { name: "Report received for review", exact: true })
+    .getByText("YOUR REPORT HAS BEEN RECEIVED", { exact: true })
     .waitFor();
   const report = (await app.store.list("org0", "report", 100))[0];
   assert.equal(report.state, "pending_moderation");
@@ -100,7 +102,6 @@ try {
   checks.push(
     "Anonymous image submission without written narrative stays private and creates no model work",
   );
-  await close();
   await login("commander");
   await page.goto(base + "/#moderation");
   await page
@@ -183,6 +184,7 @@ try {
     0,
   );
   await page.goto(base + "/#publications");
+  await page.getByText("Delivery photo evidence", { exact: true }).click();
   await page
     .getByRole("button", { name: "Review a delivery photo", exact: true })
     .click();

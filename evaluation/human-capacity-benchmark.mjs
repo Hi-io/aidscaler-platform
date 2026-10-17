@@ -14,6 +14,7 @@ import { ModelBudgetPool } from '../src/budget-pool.mjs';
 import { hash } from '../src/store.mjs';
 import { collectProposalServiceFunnel } from './proposal-funnel.mjs';
 import { capturePhysicalDepartures, operationTrace } from './physical-trace.mjs';
+import { receivedDirectoryPlaces } from '../src/context-projection.mjs';
 
 export const HUMAN_CAPACITY_PROTOCOL = {
   version: 'native-human-capacity-physical-response-v4',
@@ -172,15 +173,17 @@ export async function humanCapacityEvaluatorFingerprint() {
  * references below belong to outer orchestration and final scoring. */
 export async function runHumanCapacityEpisode({
   arm = 'B6', profile = 'moderate', condition = profile, seed = 'human-capacity-01', count = 24, noise = 192,
-  reposts = 2, formalDelayMs = 1800000, horizonMs = 10800000, grid = 9, extentKm = 6,
+  reposts = 2, formalDelayMs = 1800000, horizonMs = 10800000, grid = 9, extentKm = 6, topology = 'grid',
   pumpMs = 60000, clarificationWorkers = 2, budgetUsd = .15, maxModelCalls = 16,
   wallLimitMs = 900000, provider, humanCapacityOverrides = {},
+  evaluationDatabaseUrl,
   candidateFingerprint, evaluatorBuild, onProgress = () => {}, shouldStop = () => false,
 } = {}) {
   if (!Object.hasOwn(HUMAN_CAPACITY_PROTOCOL.arms, arm) || !Object.hasOwn(HUMAN_CAPACITY_PROTOCOL.profiles, profile) ||
       !Number.isSafeInteger(count) || count < 1 || count > 100 || !Number.isSafeInteger(noise) || noise < 0 || noise > 2000 ||
       !Number.isSafeInteger(pumpMs) || pumpMs < 1000 || pumpMs > 60000 || !finite(horizonMs) || horizonMs <= 0 ||
-      !finite(budgetUsd) || budgetUsd <= 0 || !Number.isSafeInteger(maxModelCalls) || maxModelCalls < 1 || maxModelCalls > 64)
+      !finite(budgetUsd) || budgetUsd <= 0 || !Number.isSafeInteger(maxModelCalls) || maxModelCalls < 1 || maxModelCalls > 64 ||
+      !['grid', 'regional', 'honmura', 'takamatsu'].includes(topology))
     throw Error('Invalid declared human capacity episode');
   candidateFingerprint ??= await buildFingerprint();
   evaluatorBuild ??= await humanCapacityEvaluatorFingerprint();
@@ -188,8 +191,8 @@ export async function runHumanCapacityEpisode({
   const episodeIdentity = nativeHumanEpisodeIdentity({ arm, profile, condition, seed }, Date.now());
   const episode = episodeIdentity.id;
   const started = performance.now();
-  const h = await createHarness({ scenario: 'S23', seed, organizations: 4,
-    config: { grid, extentKm, durationMs: horizonMs, healthReports: false, recurringNeeds: false,
+  const h = await createHarness({ scenario: 'S23', seed, organizations: 4, evaluationDatabaseUrl,
+    config: { grid, extentKm, topology, durationMs: horizonMs, healthReports: false, recurringNeeds: false,
       postsPerHour: 0, observationRate: 1, sourceIndexMs: 0, clarificationWorkers,
       toolQuota: 10000, sourceRequestLimit: 1000000,
       humanCapacity: { readers: 2, deciders: 2, relayers: 1, ...humanCapacityOverrides, profile } },
@@ -271,7 +274,7 @@ export async function runHumanCapacityEpisode({
     // authenticate/read their own public snapshot via native human_work; their
     // operational actor-state ingestion continues in propagate every turn.
     await app.ingestion.sync();
-    const places = (await app.store.get('org0', 'context', 'geography', false))?.map?.places ?? [];
+    const places = (await receivedDirectoryPlaces(app.store, 'org0'))?.places ?? [];
     const originals = selectOriginalSources(await app.store.list('org0', 'signal', 10000))
       .sort((a,b) => a.publishedAt-b.publishedAt || a.id.localeCompare(b.id));
     const operations = await app.store.list('org0', 'operation', 10000);
@@ -474,7 +477,7 @@ export async function runHumanCapacityEpisode({
       if (performance.now()-started > wallLimitMs) { status = 'wall_limit'; errors.push({ phase: 'episode', code: 'WALL_LIMIT' }); break; }
       if (w.now-sourcePollAt >= 60000) await measured('source-poll',pollSources);
       await measured('owner-receipts-review-execution',propagate);
-      const states = await measured('scoped-actor-snapshots',()=>Promise.all(h.apps.map(a => a.connector.state())));
+      const states = await measured('scoped-actor-snapshots',()=>Promise.all(h.apps.map(a => a.connector.state({immutableResults:true}))));
       for (let i=0;i<states.length;i++) { states[i].org = h.apps[i].config.org; await recordReceived(h.apps[i], states[i]); }
       if (arm === 'C_manual' || arm === 'C_decentralized' || arm === 'B5') await measured('consume-native-manual',()=>consumeManual(states));
       if (arm==='C_decentralized')await measured('decentralized-real-coordination',()=>manualCoordination(states));
@@ -539,8 +542,10 @@ export async function runHumanCapacityEpisode({
   if (final.invalidStatus) status = final.invalidStatus;
   const result = finalizedResult = { arm, profile, condition, seed, episodeIdentity, candidateFingerprint, evaluatorFingerprint: evaluatorBuild,
     baseEvaluatorFingerprint: await evaluatorFingerprint(), ...finalizeEpisodeIntegrity({status,errors},final),
-    protocol: { ...HUMAN_CAPACITY_PROTOCOL, count, noise, reposts, formalDelayMs, horizonMs, grid, extentKm,
-      pumpMs, clarificationWorkers, humanCapacityOverrides, condition, budgetUsd, maxModelCalls, wallLimitMs },
+    protocol: { ...HUMAN_CAPACITY_PROTOCOL, count, noise, reposts, formalDelayMs, horizonMs, grid, extentKm, topology,
+      pumpMs, clarificationWorkers, humanCapacityOverrides, condition, budgetUsd, maxModelCalls, wallLimitMs,
+      storageBackend:h.storage.backend },
+    storage:h.storage,
     manifest: w.manifest, corpus: { manifest: corpus.manifest, config: corpus.config,rawPublicInputHash:hash(publicInputs),rawPublicInputCount:publicInputs.length }, outcomes, metrics,
     timeToSufficientService: nativeServiceSummary(outcomes), timeToFirstUsefulService: nativeServiceSummary(outcomes, 'firstUseful'),
     sourceCoverage: { receivedOriginals: seen.size, progressSources, routineSources, modelBatches: batches,

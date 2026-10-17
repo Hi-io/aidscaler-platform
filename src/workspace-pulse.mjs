@@ -1,4 +1,5 @@
 /** Small, scoped live projection. It exposes recorded work, never model reasoning. */
+import { receivedSnapshotFields } from "./context-projection.mjs";
 const inferenceKinds = ["investigate", "discover_response", "compile_response", "interpret_sources", "analyze_media"];
 const toolLabels = {
   lookup: "Checking operational data", query: "Requesting current source data",
@@ -39,12 +40,12 @@ export async function workspacePulse(store, org, { now = Date.now() } = {}) {
     store.query("SELECT COUNT(*) AS total,COUNT(*) FILTER (WHERE created_at >= $2) AS hour,COUNT(*) FILTER (WHERE created_at >= $3) AS minute FROM entities WHERE org=$1 AND kind='activity'", [org, now - 3600000, now - 60000]),
     store.query("SELECT state,COUNT(*) AS n FROM jobs WHERE org=$1 AND kind=ANY($2::text[]) AND (state IN ('queued','retry') OR (state='running' AND leased_until>$3)) GROUP BY state", [org, inferenceKinds, now]),
     store.list(org, "activity", 12),
-    store.get(org, "context", "operational", false),
+    receivedSnapshotFields(store, org, { fields: ["runId"] }),
     store.query("SELECT kind,COUNT(*) AS n,COALESCE(SUM(version),0) AS revisions FROM entities WHERE org=$1 AND kind IN ('need','proposal','operation') GROUP BY kind ORDER BY kind", [org]),
   ]);
   const jobs = Object.fromEntries(work.rows.map(r => [r.state, Number(r.n)])), counts = activityCounts.rows[0];
   return {
-    at: now, runId: source?.snapshot?.runId ?? null, overviewVersion: JSON.stringify(overview.rows),
+    at: now, runId: source?.runId ?? null, overviewVersion: JSON.stringify(overview.rows),
     signals: { received: Number(signals.rows[0].received), available: Number(signals.rows[0].available) },
     flows: { total: Number(counts.total), lastHour: Number(counts.hour), lastMinute: Number(counts.minute), active: jobs.running ?? 0, queued: (jobs.queued ?? 0) + (jobs.retry ?? 0) },
     recent: recent.map(a => ({ id: a.id, version: a.version, state: a.state, startedAt: a.startedAt ?? a.createdAt,

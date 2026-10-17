@@ -35,6 +35,13 @@ export async function backupLocal(store, config) {
     const tables = {};
     for (const table of TABLES)
       tables[table] = (await tx.query(`SELECT * FROM ${table}`)).rows;
+    // Recovery bundles retain the established self-contained JSON format.
+    // Storage deduplication must never leave references to an unexported table.
+    for (const org of new Set(tables.entities.map(row => row.org))) {
+      const indices = tables.entities.flatMap((row, index) => row.org === org ? [index] : []),
+        hydrated = await tx.hydrateRows(org, indices.map(index => tables.entities[index]));
+      indices.forEach((index, i) => { tables.entities[index] = { ...hydrated[i], data_refs: [] }; });
+    }
     return {
       format: "aidscaler-local-backup-v1",
       createdAt: new Date().toISOString(),

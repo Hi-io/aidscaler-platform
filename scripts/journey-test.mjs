@@ -31,11 +31,14 @@ try {
     page = await context.newPage();
   page.on("pageerror", (e) => errors.push(e.message));
   await login(page, "commander");
-  await page.getByRole("button", { name: "Case", exact: true }).click();
+  await page.getByRole("button", { name: "Open case", exact: true }).first().click();
   await page
     .getByRole("dialog")
     .getByRole("heading", { name: "Response case", exact: true })
     .waitFor();
+  await page
+    .getByText("Request an additional check", { exact: true })
+    .click();
   await page
     .getByRole("button", { name: "Prepare a manual response", exact: true })
     .click();
@@ -123,7 +126,7 @@ try {
   await field.evaluate(() => navigator.serviceWorker.ready);
   await field.reload();
   await field
-    .getByRole("heading", { name: "Report from the field.", exact: true })
+    .getByRole("heading", { name: "Field workspace", exact: true })
     .waitFor();
   await mobile.setOffline(true);
   await field
@@ -141,7 +144,7 @@ try {
     .waitFor();
   await field.reload();
   await field
-    .getByRole("heading", { name: "Report from the field.", exact: true })
+    .getByRole("heading", { name: "Field workspace", exact: true })
     .waitFor();
   assert.ok(
     (await field.locator("body").innerText()).includes("Offline field request"),

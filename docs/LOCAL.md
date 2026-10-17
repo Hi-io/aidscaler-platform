@@ -97,6 +97,20 @@ Strict resume requires the same simulator build. An explicitly authorized update
 
 ## Optional media and checks
 
+### Native PostgreSQL for larger local runs
+
+The Store supports an embedded database or a PostgreSQL connection through `DATABASE_URL`. On Windows, a portable, user-owned PostgreSQL runtime can run separately from Node:
+
+```powershell
+pwsh -NoProfile -File scripts/native-postgres.ps1 setup
+pwsh -NoProfile -File scripts/native-postgres.ps1 status
+node scripts/native-postgres-smoke.mjs
+```
+
+The setup verifies the vendor archive, initializes a private cluster under `.local/native-postgres/`, and listens only on `127.0.0.1:5488`. Its generated connection details remain in the ignored `connection.json`; commands do not print the password. Database durability remains enabled. Start or cleanly stop this owned cluster with the same script's `start` and `stop` actions. Existing laboratory databases are retained separately; this setup does not migrate them. The smoke check compares the two Store backends in an isolated temporary schema.
+
+The portable distribution is available through [PostgreSQL's Windows downloads](https://www.postgresql.org/download/windows/) and [EDB's binary archives](https://www.enterprisedb.com/download-postgresql-binaries). This runtime pins PostgreSQL 17.11-3 to the [checksum published by EDB](https://github.com/EnterpriseDB/edb-installers/issues/682).
+
 ```sh
 pnpm setup:media
 pnpm check

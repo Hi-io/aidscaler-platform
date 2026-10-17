@@ -2,6 +2,30 @@ import { hash } from "./store.mjs";
 import { check } from "./errors.mjs";
 import { persistReceivedPurchases } from "./received-purchases.mjs";
 import { persistReceivedUnloadingRequests } from "./unloading.mjs";
+import { persistOperationalReadModel, persistDirectoryReadModel, receivedDirectoryRevision } from "./context-projection.mjs";
+import { immutableSourceResult } from "./immutable-source-result.mjs";
+import { persistFragments } from "./entity-fragments.mjs";
+
+function splitSnapshot(snapshot) {
+  const chunks = new Map(), refs = [], selected = { ...snapshot };
+  const add = (value, path) => {
+    if (!value || typeof value !== "object") return false;
+    const metadata = immutableSourceResult(value), digest = metadata?.digest ?? hash(value);
+    if (!chunks.has(digest)) chunks.set(digest, metadata?.json ?? JSON.stringify(value));
+    refs.push({ path, digest });
+    return true;
+  };
+  if (snapshot.known && typeof snapshot.known === "object" && !Array.isArray(snapshot.known)) {
+    selected.known = { ...snapshot.known };
+    if (add(snapshot.known.map, ["snapshot", "known", "map"])) delete selected.known.map;
+  }
+  if (Array.isArray(snapshot.queries)) selected.queries = snapshot.queries.map((query, i) => {
+    if (query?.target !== "map" && !immutableSourceResult(query?.result)) return query;
+    if (!add(query.result, ["snapshot", "queries", String(i), "result"])) return query;
+    const copy = { ...query }; delete copy.result; return copy;
+  });
+  return { snapshot: selected, refs, chunks };
+}
 
 async function sourceRecords(store, org, kind, ids) {
   const records = new Map();
@@ -11,6 +35,63 @@ async function sourceRecords(store, org, kind, ids) {
     for (const [id, record] of await store.getMany(org, kind, ids.slice(offset, offset + 10000)))
       records.set(id, record);
   return records;
+}
+
+async function changedSourceRecords(store, org, kind, records) {
+  const previousById = new Map(), changedIds = new Set();
+  // Compare every received value, including silent corrections at the same
+  // source version. Return only changed database rows across the SQL boundary;
+  // a city-sized unchanged road directory need not be decoded and hashed in JS.
+  for (let offset = 0; offset < records.length; offset += 10000) {
+    const page = records.slice(offset, offset + 10000);
+    const { rows } = await store.query(`SELECT incoming.item->>'id' AS id,
+      entity.version,entity.data,entity.created_at,entity.updated_at
+      FROM jsonb_array_elements($3::jsonb) AS incoming(item)
+      LEFT JOIN entities AS entity ON entity.org=$1 AND entity.kind=$2
+        AND entity.id=incoming.item->>'id'
+      WHERE entity.data->'sourceSnapshot' IS DISTINCT FROM incoming.item->'data'`,
+      [org, kind, JSON.stringify(page.map(data => ({ id: data.id, data })))]);
+    for (const row of rows) {
+      changedIds.add(row.id);
+      if (row.version !== null) previousById.set(row.id, {
+        ...row.data, id: row.id, version: row.version,
+        createdAt: Number(row.created_at), updatedAt: Number(row.updated_at),
+      });
+    }
+  }
+  return { records: records.filter(data => changedIds.has(data.id)), previousById };
+}
+
+async function writeOperationalContext(store, org, snapshot) {
+  const at = Date.now(), split = splitSnapshot(snapshot);
+  await persistFragments(store, org, split.chunks);
+  // Static received documents are durable by content digest. Clock changes
+  // rewrite only dynamic JSON; full Store reads still reconstruct every value.
+  // A legacy or arbitrary full write is compared after exact reconstruction.
+  const { rows } = await store.query(`INSERT INTO entities(org,kind,id,data,data_refs,created_at,updated_at)
+    VALUES($1,'context','operational',$2::jsonb,$4::jsonb,$3,$3)
+    ON CONFLICT(org,kind,id) DO UPDATE SET
+      data=entities.data || EXCLUDED.data,data_refs=EXCLUDED.data_refs,version=entities.version+1,
+      updated_at=EXCLUDED.updated_at
+    WHERE CASE WHEN jsonb_path_query_array(entities.data_refs,'$[*].path')=
+        jsonb_path_query_array(EXCLUDED.data_refs,'$[*].path')
+      THEN entities.data->'snapshot' IS DISTINCT FROM EXCLUDED.data->'snapshot'
+        OR entities.data_refs IS DISTINCT FROM EXCLUDED.data_refs
+      WHEN jsonb_typeof(entities.data#>'{snapshot,queries}')='array'
+        AND jsonb_typeof(EXCLUDED.data#>'{snapshot,queries}')='array'
+        AND jsonb_array_length(entities.data#>'{snapshot,queries}')<>
+          jsonb_array_length(EXCLUDED.data#>'{snapshot,queries}') THEN true
+      ELSE aidscaler_entity_data(entities.org,entities.data,entities.data_refs)->'snapshot'
+        IS DISTINCT FROM aidscaler_entity_data(EXCLUDED.org,EXCLUDED.data,EXCLUDED.data_refs)->'snapshot' END
+    RETURNING version`,
+    [org, JSON.stringify({ snapshot: split.snapshot, observedAt: at }), at, JSON.stringify(split.refs)]);
+  const version = rows[0]?.version ?? (await store.query(
+    "SELECT version FROM entities WHERE org=$1 AND kind='context' AND id='operational'", [org])).rows[0].version;
+  if (!rows.length && split.refs.length) await store.query(`UPDATE entities SET
+    data=jsonb_set(data,'{snapshot}',$2::jsonb),data_refs=$3::jsonb
+    WHERE org=$1 AND kind='context' AND id='operational' AND version=$4 AND data_refs<>$3::jsonb`,
+    [org, JSON.stringify(split.snapshot), JSON.stringify(split.refs), version]);
+  await persistOperationalReadModel(store, org, snapshot, version);
 }
 
 async function writeSourceRecords(store, org, kind, changes) {
@@ -61,7 +142,7 @@ export class Ingestion {
       changed = 0;
     const began = performance.now();
     try {
-      const state = await this.connector.state();
+      const state = await this.connector.state({ immutableResults: true });
       check(
         state.organization.id === org,
         "SOURCE_ORG",
@@ -269,7 +350,6 @@ export class Ingestion {
           lastTransientCode: this.connector.lastTransientCode ?? null,
           wallMs: performance.now() - began,
         });
-        const old = await tx.get(org, "context", "operational", false);
         const localHolds = (await tx.list(org, "commitment", 2000)).filter(
           (c) =>
             ["reserved", "confirmed"].includes(c.state) &&
@@ -303,11 +383,7 @@ export class Ingestion {
               );
           }
         }
-        if (!old?.snapshot || hash(old.snapshot) !== hash(state))
-          await tx.upsert(org, "context", "operational", {
-            snapshot: state,
-            observedAt: Date.now(),
-          });
+        await writeOperationalContext(tx, org, state);
         for (const [kind, items] of [
           ["resource", state.known.resources],
           ["vehicle", state.known.vehicles],
@@ -315,17 +391,14 @@ export class Ingestion {
           ["facility", state.known.buildings],
           ["road", state.known.edges],
         ]) {
-          const records = Object.entries(items ?? {}).map(([sourceId, raw]) => ({ ...raw, id: raw.id ?? sourceId })),
-            previousById = await sourceRecords(tx, org, kind, records.map((data) => data.id)),
+          const received = Object.entries(items ?? {}).map(([sourceId, raw]) => ({ ...raw, id: raw.id ?? sourceId })),
+            { records, previousById } = await changedSourceRecords(tx, org, kind, received),
             changes = [], restrictions = [];
           for (const data of records) {
             const previous = previousById.get(data.id);
             // A shared/manual record may exist before its owner's first direct
             // source snapshot. It is not evidence that the source was read.
-            if (
-              !previous?.sourceSnapshot ||
-              hash(previous.sourceSnapshot) !== hash(data)
-            ) {
+            {
               changes.push({ id: data.id, data: {
                 ...data,
                 sourceSnapshot: data,
@@ -387,17 +460,18 @@ export class Ingestion {
           ?.filter((q) => q.target === "map" && q.state === "ready")
           .at(-1);
         if (mapQuery?.result) {
-          const sourceMapHash = hash(mapQuery.result),
-            { rows } = await tx.query(
-              "SELECT data->>'sourceMapHash' AS source_map_hash FROM entities WHERE org=$1 AND kind='context' AND id='geography'",
-              [org],
-            );
-          if (rows[0]?.source_map_hash !== sourceMapHash)
-            await tx.upsert(org, "context", "geography", {
+          const sourceMapHash = immutableSourceResult(mapQuery.result)?.digest ?? hash(mapQuery.result),
+            previous = await receivedDirectoryRevision(tx, org);
+          let version = previous?.version;
+          if (previous?.source_map_hash !== sourceMapHash) {
+            const saved = await tx.upsert(org, "context", "geography", {
               map: mapQuery.result,
               sourceMapHash,
               observedAt: mapQuery.completedAt,
             });
+            version = saved.version;
+          }
+          await persistDirectoryReadModel(tx, org, mapQuery.result, version, sourceMapHash);
         }
         await persistReceivedPurchases(tx, org, state);
         await persistReceivedUnloadingRequests(tx, org, state);

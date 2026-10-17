@@ -8,6 +8,33 @@ const normalize = (text) => String(text ?? "").normalize("NFKC").toLowerCase().r
 const cleanText = (source) => String(source?.text ?? "");
 const sourceIds = (source) => typeof source?.id === "string" ? [source.id] : [];
 const boundary = (word) => new RegExp(`(^|[^a-z0-9])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?=$|[^a-z0-9])`, "i");
+const locationDirectories = new Map();
+function locationDirectory(places) {
+  // This key includes every actual name/identifier and its order. Same-version
+  // corrections, changed metadata and newly decoded SQL objects cannot reuse a
+  // stale directory. No private world state or future events enter this index.
+  const material=places.map(p=>p&&typeof p.id==='string'?[p.id,typeof p.name==='string'&&p.name.length>=3?p.name:null]:null);
+  const key=JSON.stringify(material);
+  if(locationDirectories.has(key))return locationDirectories.get(key);
+  const aliases=[],tokens=new Map(),fallback=[],ids=new Map();
+  for(let position=0;position<material.length;position++) {
+    const row=material[position];if(!row)continue;
+    if(!ids.has(row[0]))ids.set(row[0],[]);ids.get(row[0]).push(position);
+    for(const word of row.filter(x=>x!==null)) {
+      const index=aliases.length;
+      aliases.push({position,pattern:boundary(word)});
+      // A literal match must contain each of its ASCII word tokens. Pick one
+      // for candidate admission, then apply the ORIGINAL exact boundary regex.
+      // Words without such a token still take the full, exact fallback path.
+      const token=(word.match(/[a-z0-9]+/gi)??[]).sort((a,b)=>b.length-a.length)[0]?.toLowerCase();
+      if(token){if(!tokens.has(token))tokens.set(token,[]);tokens.get(token).push(index);}
+      else fallback.push(index);
+    }
+  }
+  const directory={material,aliases,tokens,fallback,ids};
+  if(locationDirectories.size>=8)locationDirectories.delete(locationDirectories.keys().next().value);
+  locationDirectories.set(key,directory);return directory;
+}
 const activeOperations = /\b(?:need(?:s|ed)?|request(?:s|ed|ing)?|shortfall|outstanding|waiting for|nearly gone|ran out|running out|without|no clean|no drinking|empty containers|stranded|trapped|displaced|freezing|hungry|haven.t eaten|have not eaten|cannot keep warm)\b/i;
 const supportOnly = /\b(?:thinking of|sending strength|sending love|sending encouragement|wishing|hope everyone|thoughts and prayers|thank.you)\b/i;
 const capacityLanguage = /\b(?:we can (?:provide|share|send)|we have (?:spare|available)|offering|spare (?:stock|capacity)|available (?:stock|capacity)|can help with|ready to supply)\b/i;
@@ -45,13 +72,12 @@ const canonicalUnits = { water: "L", food: "portion", blankets: "unit", shelter:
 /** Resolve only identifiers/names supplied in a received public directory.
  * Metadata location is a lead, never proof that a need exists there. */
 export function publicLocations(source, places = []) {
-  const text = cleanText(source), matches = new Set();
-  for (const place of places) {
-    if (!place || typeof place.id !== "string") continue;
-    if (source?.location === place.id || boundary(place.id).test(text) ||
-      typeof place.name === "string" && place.name.length >= 3 && boundary(place.name).test(text)) matches.add(place.id);
-  }
-  return [...matches];
+  const text=cleanText(source),directory=locationDirectory(places),positions=new Set(directory.ids.get(source?.location)??[]),
+    candidates=new Set(directory.fallback);
+  for(const token of new Set((text.match(/[a-z0-9]+/gi)??[]).map(t=>t.toLowerCase())))
+    for(const index of directory.tokens.get(token)??[])candidates.add(index);
+  for(const index of candidates){const alias=directory.aliases[index];if(alias.pattern.test(text))positions.add(alias.position);}
+  return [...new Set([...positions].sort((a,b)=>a-b).map(position=>directory.material[position][0]))];
 }
 
 function timeStatus(source) {

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { check, role } from "./errors.mjs";
 import { hash, uid } from "./store.mjs";
 import { authorizationCurrent } from "./authority.mjs";
+import { receivedSnapshotFields, receivedDirectoryPlaces } from "./context-projection.mjs";
 
 const methods = z.enum(["clarification", "radio"]);
 const policySchema = z.object({
@@ -44,8 +45,11 @@ export class Coverage {
       "SELECT id FROM entities WHERE org=$1 AND kind='coverage_request' AND data->>'state' IN ('queued','checking') ORDER BY created_at,id",
       [org])).rows.map(r => r.id), pending = await store.getMany(org, "coverage_request", pendingIds);
     return {
-      map: (await store.get(org, "context", "geography", false))?.map,
-      snapshot: (await store.get(org, "context", "operational", false))?.snapshot,
+      map: await receivedDirectoryPlaces(store, org),
+      snapshot: await receivedSnapshotFields(store, org, {
+        fields: ["now", "runId", "inspections"],
+        known: ["sectorContacts", "buildingContacts", "buildings"],
+      }),
       policy: await store.get(org, "coverage_policy", "active", false),
       received: await store.get(org, "coverage_snapshot", "received", false),
       requests: [...new Map([...recent, ...pending.values()].map(r => [r.id, r])).values()],
@@ -178,7 +182,7 @@ export class Coverage {
           result.buildingContacts.every(p => p.lastContactAt <= p.receivedAt && p.receivedAt <= result.observedAt),
           "COVERAGE_SCHEMA", "Contact metadata is duplicated, future-dated or older than its prior source receipt.", 409);
         await this.store.transaction(async tx => {
-          const current = (await tx.get(org, "context", "operational", false))?.snapshot,
+          const current = await receivedSnapshotFields(tx, org, { fields: ["now", "runId"] }),
             previous = await tx.get(org, "coverage_snapshot", "received", false);
           check(current?.runId === clock.runId && Number.isFinite(current.now) && current.now <= clock.now &&
             (!previous || previous.runId !== clock.runId || result.version >= previous.sourceVersion && result.observedAt >= previous.sourceObservedAt &&

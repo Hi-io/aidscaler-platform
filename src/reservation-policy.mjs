@@ -1,4 +1,5 @@
 import { check } from "./errors.mjs";
+import { receivedPolicyQueries } from "./context-projection.mjs";
 
 export const DEFAULT_DISPATCH_TTL_MS = 900000;
 export const MAX_DISPATCH_TTL_MS = 86400000;
@@ -7,9 +8,7 @@ export const RESERVATION_MARGIN_MS = 120000;
 /** Execution timing is an observation from the actor's source query. Never
  * obtain loading or communication latency from the observer's world config. */
 export async function receivedExecutionPolicy(store, org) {
-  const snapshot = (await store.get(org, "context", "operational", false))
-    ?.snapshot;
-  const query = snapshot?.queries
+  const query = (await receivedPolicyQueries(store, org))
     ?.filter(
       (q) =>
         q.target === "policy" && q.state === "ready" && q.result?.execution,

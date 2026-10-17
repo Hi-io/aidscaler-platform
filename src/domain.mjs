@@ -448,11 +448,18 @@ export class Domain {
     role(actor, [...COMMAND, "admin"]);
     check(
       typeof input.type === "string" &&
+        input.type.trim().length > 0 && input.type.length <= 80 &&
         Number.isFinite(input.quantity) &&
         input.quantity >= 0,
       "RESOURCE",
       "Type and nonnegative quantity required.",
     );
+    check(Number.isFinite(input.floor ?? 0) && (input.floor ?? 0) >= 0 && (input.floor ?? 0) <= input.quantity,
+      "RESOURCE_FLOOR", "Protected reserve must be nonnegative and cannot exceed the quantity.");
+    check(input.label === undefined || typeof input.label === "string" && input.label.trim().length >= 2 && input.label.length <= 120,
+      "RESOURCE_LABEL", "Resource name must be between 2 and 120 characters.");
+    check(input.unit === undefined || typeof input.unit === "string" && input.unit.trim().length > 0 && input.unit.length <= 60,
+      "RESOURCE_UNIT", "Enter a resource unit up to 60 characters.");
     check(input.useByAt === undefined || Number.isSafeInteger(input.useByAt) && input.useByAt >= 0,
       "SUPPLY_EXPIRY", "Use-by time must be a nonnegative source-clock millisecond.");
     check(input.lotId === undefined || typeof input.lotId === "string" && input.lotId.length > 0 && input.lotId.length <= 120,

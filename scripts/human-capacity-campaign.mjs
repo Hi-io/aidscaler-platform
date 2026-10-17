@@ -40,9 +40,10 @@ export function campaignPlan(o={}) {
       !profiles.every(p=>Object.hasOwn(HUMAN_CAPACITY_PROTOCOL.conditions,p))) throw Error('Invalid predeclared human-capacity campaign');
   const config = { count:Number(o.needs??24),noise:Number(o.noise??192),reposts:Number(o.reposts??2),
     formalDelayMs:Number(o['formal-ms']??1800000),horizonMs:Number(o['horizon-ms']??10800000),
-    grid:Number(o.grid??9),extentKm:Number(o.km??6),pumpMs:Number(o['pump-ms']??60000),
+    grid:Number(o.grid??9),extentKm:Number(o.km??6),topology:o.topology??'grid',pumpMs:Number(o['pump-ms']??60000),
     clarificationWorkers:Number(o['confirm-workers']??2),wallLimitMs:Number(o['wall-ms']??900000),
     budgetUsd:cap,maxModelCalls:Number(o.calls??16) };
+  if(!['grid','regional','honmura','takamatsu'].includes(config.topology))throw Error('Invalid declared topology');
   const worlds=[];
   for (const condition of profiles) {
     const {profile,errorBp,...sensitivity}=HUMAN_CAPACITY_PROTOCOL.conditions[condition],

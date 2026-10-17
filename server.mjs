@@ -47,7 +47,10 @@ const json = (res, status, data) => {
   });
   res.end(JSON.stringify(data));
 };
-const cookie = (req) => req.headers.cookie?.match(/(?:^|; )aidscaler=([^;]+)/)?.[1];
+const cookie = (req, name) => req.headers.cookie?.split(";").map(part => part.trim())
+  .find(part => part.startsWith(name + "="))?.slice(name.length + 1);
+const sessionCookie = (name, token = "", maxAge = 28800) =>
+  `${name}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${maxAge}`;
 const KINDS = [
   "signal",
   "claim",
@@ -214,6 +217,9 @@ export async function createPlatform(overrides = {}) {
         "camera=(), microphone=(), geolocation=" + (req.url?.split("?")[0] === "/community" ? "(self)" : "()"),
       );
       const url = new URL(req.url, "http://localhost");
+      // Cookies are scoped by host/path, not port. Keep independent workspaces
+      // and disposable QA instances from replacing one another's login.
+      const cookieName = "aidscaler_" + hash([config.org, server.address().port]).slice(0, 20);
       if (url.pathname === "/mcp") {
         check(
           req.headers.authorization === `Bearer ${config.mcpReadKey}`,
@@ -446,18 +452,24 @@ export async function createPlatform(overrides = {}) {
         );
         res.setHeader(
           "Set-Cookie",
-          `aidscaler=${session.token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800`,
+          sessionCookie(cookieName, session.token),
         );
         return json(res, 200, { user: session.user, csrf: session.csrf });
       }
       if (url.pathname.startsWith("/api/")) {
-        const actor = await auth.session(cookie(req));
+        const scopedToken = cookie(req, cookieName), legacyToken = cookie(req, "aidscaler"),
+          token = scopedToken ?? legacyToken,
+          actor = await auth.session(token);
         check(
           actor?.org === config.org,
           "AUTHENTICATION",
           "Sign in to your response workspace.",
           401,
         );
+        // Existing sessions can migrate without another login, but a present
+        // scoped cookie always wins; an invalid scoped session cannot fall back.
+        if (!scopedToken && legacyToken)
+          res.setHeader("Set-Cookie", sessionCookie(cookieName, legacyToken));
         if (req.method !== "GET")
           check(
             req.headers["x-csrf-token"] === actor.csrf,
@@ -482,11 +494,11 @@ export async function createPlatform(overrides = {}) {
             provider: config.provider,
           });
         if (url.pathname === "/api/logout") {
-          await auth.logout(cookie(req));
-          res.setHeader(
-            "Set-Cookie",
-            "aidscaler=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0",
-          );
+          await auth.logout(token);
+          const ownedLegacy = legacyToken && (legacyToken === token || (await auth.session(legacyToken))?.org === config.org);
+          if (ownedLegacy && legacyToken !== token) await auth.logout(legacyToken);
+          res.setHeader("Set-Cookie", [sessionCookie(cookieName, "", 0),
+            ...(ownedLegacy ? [sessionCookie("aidscaler", "", 0)] : [])]);
           return json(res, 200, { signedOut: true });
         }
         if (actor.role === "field") {
@@ -1101,7 +1113,7 @@ export async function createPlatform(overrides = {}) {
           return json(res, 202, result);
         }
         if (url.pathname === "/api/query") {
-          role(actor, ["analyst", "commander", "dispatcher"]);
+          role(actor, ["admin", "analyst", "commander", "dispatcher"]);
           const result = await connector.action(
             "query",
             { target: b.target, id: b.id, org: b.org },

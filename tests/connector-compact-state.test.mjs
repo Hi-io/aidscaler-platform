@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { SimulatorConnector } from "../src/connector.mjs";
+import { hash } from '../src/store.mjs';
+import { immutableSourceResult } from '../src/immutable-source-result.mjs';
 
 const reply = (data, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -47,6 +49,38 @@ const connectorFor = (fetcher) =>
     sourceHumanKey: "test-human-only",
     fetcher,
   });
+
+test('opt-in immutable results reuse only exact verified content while the default remains detached',async()=>{
+  const map=geography();let state=frame({version:hash(map)}),reads=0;
+  const connector=connectorFor(async url=>{
+    const endpoint=new URL(url);
+    if(endpoint.pathname.endsWith('/state'))return reply(state);
+    reads++;return reply({id:'map-1',version:state.queries[0].resultRef.version,result:map});
+  });
+  const first=await connector.state({immutableResults:true}),second=await connector.state({immutableResults:true});
+  assert.deepEqual(first,second);assert.strictEqual(first.known.map,second.known.map);
+  assert.strictEqual(first.known.map,first.queries[0].result);
+  assert(Object.isFrozen(first.known.map.roads[0]));assert.throws(()=>{first.known.map.roads[0].id='mutation';},TypeError);
+  assert.deepEqual(immutableSourceResult(first.known.map),{digest:hash(map),json:JSON.stringify(map)});
+  assert.equal(immutableSourceResult(Object.freeze(structuredClone(map))),undefined);
+  const mutable=await connector.state();assert.deepEqual(mutable,first);assert.notStrictEqual(mutable.known.map,first.known.map);
+  mutable.known.map.roads[0].id='detached';mutable.queries[0].result.roads[0].id='another detached';
+  assert.equal((await connector.state({immutableResults:true})).known.map.roads[0].id,'road-0');
+  state=frame({runId:'run-2',version:hash(map)});
+  const next=await connector.state({immutableResults:true});assert.notStrictEqual(next.known.map,first.known.map);assert.equal(reads,2);
+  assert.equal(connector.sourceResults.size,1);
+});
+
+test('verified immutable receipts reject mismatched content and opaque legacy revisions cannot acquire trusted identity',async()=>{
+  const map=geography();let revision=hash(map);
+  const connector=connectorFor(async url=>new URL(url).pathname.endsWith('/state')?reply(frame({version:revision})):
+    reply({id:'map-1',version:revision,result:{tampered:true}}));
+  await assert.rejects(connector.state({immutableResults:true}),{code:'SOURCE_RESULT_INTEGRITY'});
+  revision='legacy-opaque';
+  const first=await connector.state({immutableResults:true}),second=await connector.state({immutableResults:true});
+  assert(Object.isFrozen(first.known.map));assert.equal(immutableSourceResult(first.known.map),undefined);
+  assert.notStrictEqual(first.known.map,second.known.map);
+});
 
 test("compact polling downloads an identical large map once and restores the exact legacy snapshot", async () => {
   const map = geography(),
@@ -139,6 +173,7 @@ test("source result caches cannot leak across organization or episode changes", 
   });
   assert.equal(reads, 3);
   assert.equal(connector.sourceResults.size, 1);
+  assert.equal(connector.sourceResultJson.size, 1);
 });
 
 test("new query result revisions are downloaded and retired results leave the bounded cache", async () => {
@@ -165,6 +200,7 @@ test("new query result revisions are downloaded and retired results leave the bo
   const noMap = await connector.state();
   assert.equal(Object.hasOwn(noMap.known, "map"), false);
   assert.equal(connector.sourceResults.size, 0);
+  assert.equal(connector.sourceResultJson.size, 0);
 });
 
 test("concurrent snapshots share a scoped result fetch while callers cannot mutate the cache", async () => {

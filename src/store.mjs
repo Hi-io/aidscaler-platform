@@ -3,6 +3,7 @@ import pg from "pg";
 import { readFile } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { AppError, check } from "./errors.mjs";
+import { hydrateEntityRows } from "./entity-fragments.mjs";
 const canonical = (value) => {
   if (value?.toJSON) return canonical(value.toJSON());
   if (Array.isArray(value)) return value.map(canonical);
@@ -22,9 +23,10 @@ export const hash = (value) =>
     .digest("hex");
 export const uid = (prefix) => `${prefix}_${randomUUID()}`;
 export class Store {
-  constructor(db, postgres = false) {
+  constructor(db, postgres = false, fragmentCache = new Map()) {
     this.db = db;
     this.postgres = postgres;
+    this.fragmentCache = fragmentCache;
   }
   static async open({ dataDir, databaseUrl } = {}) {
     const db = databaseUrl
@@ -43,12 +45,12 @@ export class Store {
     return this.postgres ? this.db.query(sql) : this.db.exec(sql);
   }
   async transaction(fn) {
-    if (!this.postgres) return this.db.transaction((tx) => fn(new Store(tx)));
+    if (!this.postgres) return this.db.transaction((tx) => fn(new Store(tx, false, this.fragmentCache)));
     for (let attempt = 0; attempt < 4; attempt++) {
       const c = await this.db.connect();
       try {
         await c.query("BEGIN ISOLATION LEVEL SERIALIZABLE");
-        const result = await fn(new Store(c, true));
+        const result = await fn(new Store(c, true, this.fragmentCache));
         await c.query("COMMIT");
         return result;
       } catch (e) {
@@ -67,27 +69,28 @@ export class Store {
   }
   async get(org, kind, id, required = true) {
     const { rows } = await this.query(
-      "SELECT id,kind,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND id=$3",
+      "SELECT id,kind,version,data,data_refs,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND id=$3",
       [org, kind, id],
     );
     if (!rows[0] && required)
       throw new AppError("NOT_FOUND", "Record not found.", 404);
-    return rows[0]
+    const hydrated = await this.hydrateRows(org, rows), row = hydrated[0];
+    return row
       ? {
-          ...rows[0].data,
-          id: rows[0].id,
-          version: rows[0].version,
-          createdAt: Number(rows[0].created_at),
-          updatedAt: Number(rows[0].updated_at),
+          ...row.data,
+          id: row.id,
+          version: row.version,
+          createdAt: Number(row.created_at),
+          updatedAt: Number(row.updated_at),
         }
       : null;
   }
   async list(org, kind, limit = 250) {
     const { rows } = await this.query(
-      "SELECT id,kind,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 ORDER BY updated_at DESC,id LIMIT $3",
+      "SELECT id,kind,version,data,data_refs,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 ORDER BY updated_at DESC,id LIMIT $3",
       [org, kind, limit],
     );
-    return rows.map((r) => ({
+    return (await this.hydrateRows(org, rows)).map((r) => ({
       ...r.data,
       id: r.id,
       version: r.version,
@@ -106,13 +109,20 @@ export class Store {
     );
     if (!ids.length) return new Map();
     const { rows } = await this.query(
-      "SELECT id,version,data,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND id=ANY($3::text[])",
+      "SELECT id,version,data,data_refs,created_at,updated_at FROM entities WHERE org=$1 AND kind=$2 AND id=ANY($3::text[])",
       [org, kind, [...new Set(ids)]],
     );
-    return new Map(rows.map((r) => [r.id, {
+    return new Map((await this.hydrateRows(org, rows)).map((r) => [r.id, {
       ...r.data, id: r.id, version: r.version,
       createdAt: Number(r.created_at), updatedAt: Number(r.updated_at),
     }]));
+  }
+  hydrateRows(org, rows) { return hydrateEntityRows(this, org, rows); }
+  async pruneFragments(org) {
+    await this.query(`DELETE FROM entity_fragments AS fragment WHERE fragment.org=$1
+      AND NOT EXISTS (SELECT 1 FROM entities AS entity WHERE entity.org=fragment.org
+        AND entity.data_refs @> jsonb_build_array(jsonb_build_object('digest',fragment.digest)))`, [org]);
+    for (const key of this.fragmentCache.keys()) if (key.startsWith(org + "/")) this.fragmentCache.delete(key);
   }
   async dependents(org, kind, dependency) {
     const { rows } = await this.query(
@@ -150,7 +160,7 @@ export class Store {
       }
     } else {
       const r = await this.query(
-        "UPDATE entities SET data=$4,version=version+1,updated_at=$5 WHERE org=$1 AND kind=$2 AND id=$3 AND version=$6 RETURNING id",
+        "UPDATE entities SET data=$4,data_refs='[]'::jsonb,version=version+1,updated_at=$5 WHERE org=$1 AND kind=$2 AND id=$3 AND version=$6 RETURNING id",
         [org, kind, id, JSON.stringify(clean), Date.now(), expectedVersion],
       );
       check(

@@ -12,6 +12,7 @@ import {
 } from "./simulator-build.mjs";
 import { readFile } from "node:fs/promises";
 import { allocationPlan } from "../src/planning.mjs";
+import { createLocalEvaluationDatabases } from "./local-postgres.mjs";
 import { servicePlan } from "../src/services.mjs";
 import {
   responsePolicy,
@@ -74,6 +75,7 @@ export async function evaluatorFingerprint() {
         "evaluation/proposal-funnel.mjs",
         "evaluation/conventional-source.mjs",
         "evaluation/simulator-build.mjs",
+        "evaluation/local-postgres.mjs",
         "scripts/discovery-benchmark.mjs",
         "scripts/human-capacity-campaign.mjs",
       ].map(async (f) => [
@@ -121,6 +123,7 @@ export async function createHarness({
   platformConfig = {},
   awaitVerifications = true,
   awaitReviews = true,
+  evaluationDatabaseUrl,
 } = {}) {
   const lab = await createLabServers({
       observerPort: 0,
@@ -136,6 +139,15 @@ export async function createHarness({
     }),
     apps = [],
     stores = [];
+  let databases=null,closePromise;
+  const close=()=>closePromise??=(async()=>{
+    const errors=[];
+    for(const app of [...apps].reverse())try{await app.close();}catch(error){errors.push(error);}
+    for(const store of [...stores].reverse())try{await store.close();}catch(error){errors.push(error);}
+    try{await lab.close();}catch(error){errors.push(error);}
+    try{await databases?.close();}catch(error){errors.push(error);}
+    if(errors.length)throw new AggregateError(errors,'Evaluation cleanup did not finish.');
+  })();
   const advanceUntil = (predicate, budgetMs = 1800000) => {
     const deadline = Math.min(
       lab.world.config.durationMs,
@@ -227,6 +239,8 @@ export async function createHarness({
       });
     return fetch(url, options);
   };
+  try {
+  if(evaluationDatabaseUrl)databases=await createLocalEvaluationDatabases(evaluationDatabaseUrl);
   for (let i = 0; i < organizations; i++) {
     const org = "org" + i,
       agentKey = Object.entries(lab.actorKeys).find(
@@ -234,7 +248,7 @@ export async function createHarness({
       )[0],
       humanKey = "test-owner-" + org;
     lab.actorKeys[humanKey] = { id: "scripted-" + org, org, role: "commander" };
-    const store = await Store.open();
+    const store = await Store.open(databases?{databaseUrl:await databases.createDatabase()}:{});
     stores.push(store);
     const source = {
       sourceUrl: `http://127.0.0.1:${lab.sourcePort}`,
@@ -277,12 +291,13 @@ export async function createHarness({
     lab,
     apps,
     advanceUntil,
-    async close() {
-      for (const a of apps) await a.close();
-      for (const s of stores) await s.close();
-      await lab.close();
-    },
+    storage:databases?.metadata()??{backend:'pglite-memory',isolation:'one in-memory database per application'},
+    close,
   };
+  } catch(error) {
+    try{await close();}catch(cleanupError){error.cleanupError=cleanupError;}
+    throw error;
+  }
 }
 export async function scriptedReview(app, p) {
   const actor = (

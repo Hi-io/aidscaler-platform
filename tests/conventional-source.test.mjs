@@ -1,9 +1,35 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { selectOriginalSources, parseExplicitCurrentRequest, conventionalInterpret, keywordCandidates } from "../evaluation/conventional-source.mjs";
+import { selectOriginalSources, parseExplicitCurrentRequest, conventionalInterpret, keywordCandidates, publicLocations } from "../evaluation/conventional-source.mjs";
 
 const places = [{ id: "b1", name: "North School" }, { id: "b2", name: "East Hall" }];
 const post = (id, text, extra = {}) => ({ id, text, publishedAt: 1000, source: "public network", ...extra });
+
+const legacyLocations=(source,places)=>{
+  const text=String(source?.text??''),matches=new Set(),
+    boundary=word=>new RegExp(`(^|[^a-z0-9])${word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?=$|[^a-z0-9])`,'i');
+  for(const place of places){if(!place||typeof place.id!=='string')continue;
+    if(source?.location===place.id||boundary(place.id).test(text)||typeof place.name==='string'&&place.name.length>=3&&boundary(place.name).test(text))matches.add(place.id);}
+  return [...matches];
+};
+test('indexed location admission preserves exact boundaries, overlapping names, Unicode and directory corrections',()=>{
+  const directory=[{id:'b1',name:'North School'},{id:'B10',name:'School'},{id:'x.y',name:'A+B [North] (Shelter)'},
+    {id:'__abc-',name:'Σχολείο 東京'},{id:'',name:'École North'},null,{name:'invalid'},{id:'b1',name:'north school'}],
+    texts=['','b1 B10 xb1 b100','NORTH SCHOOL','School North school x.y xzy','A+B [North] (Shelter)',
+      '__abc--','ΣΧΟΛΕΊΟ 東京','École North','İıſK北b1地','b1\nb10','!x.y?'];
+  for(const text of texts)for(const location of [null,'b1','x.y','unknown',''])
+    assert.deepEqual(publicLocations({text,location},directory),legacyLocations({text,location},directory));
+  directory[0].name='East Medical Center';
+  assert.deepEqual(publicLocations({text:'East Medical Center needs water'},directory),legacyLocations({text:'East Medical Center needs water'},directory));
+  directory.reverse();assert.deepEqual(publicLocations({text:'School b1 B10 x.y'},directory),legacyLocations({text:'School b1 B10 x.y'},directory));
+});
+test('city-sized indexed directory yields the same locations for every generated source form',()=>{
+  const directory=Array.from({length:4356},(_,i)=>({id:'b'+i,name:`Community Center ${i}`}));
+  for(let i=0;i<80;i++){
+    const n=(i*117)%directory.length,source={text:i%2?`b${n} and Community Center ${(n+17)%directory.length} need water today.`:`xb${n} b${n}0 is a different identifier`,location:i%7?'unknown':`b${(n+29)%directory.length}`};
+    assert.deepEqual(publicLocations(source,directory),legacyLocations(source,directory));
+  }
+});
 
 test("canonical current requests are free, scoped native-unit inquiry candidates without truth labels", () => {
   for (const [text, type, quantity, unit] of [["North School still needs 600 litres of drinking water.", "water", 600, "L"], ["Requesting 120 meal portions for East Hall.", "food", 120, "portion"], ["The outstanding request at b1 is 30 blankets.", "blankets", 30, "unit"]]) {
