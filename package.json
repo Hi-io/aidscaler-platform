@@ -34,9 +34,12 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.14",
+    "@google-cloud/pubsub": "^6.3.0",
+    "@google-cloud/tasks": "^7.3.0",
+    "google-auth-library": "^11.3.1",
+    "lucide-static": "^0.574.0",
     "pg": "^8.16.3",
-    "zod": "^4.1.12",
-    "lucide-static": "^0.574.0"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

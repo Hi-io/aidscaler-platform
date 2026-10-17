@@ -46,6 +46,16 @@ Thumbs.db
 **/.codex*
 
 # Local research notes and generated experiment artifacts.
+.terraform/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.auto.tfvars.json
+deploy/gcp/backend.tf
+deploy/gcp/backend.tf.json
+crash.log
+crash.*.log
 /reports/
 /docs/**
 !/docs/LOCAL.md
@@ -57,3 +67,4 @@ Thumbs.db
 !/docs/INTEGRATIONS.md
 !/docs/ARCHITECTURE.md
 !/docs/DEMO.md
+!/deploy/gcp/README.md

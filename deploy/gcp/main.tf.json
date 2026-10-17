@@ -1,0 +1,908 @@
+{
+  "terraform": {
+    "required_version": ">= 1.10",
+    "required_providers": {
+      "google": {
+        "source": "hashicorp/google",
+        "version": "~> 7.0"
+      },
+      "google-beta": {
+        "source": "hashicorp/google-beta",
+        "version": "~> 7.0"
+      },
+      "random": {
+        "source": "hashicorp/random",
+        "version": "~> 3.0"
+      }
+    }
+  },
+  "provider": {
+    "google": {
+      "project": "${var.project_id}",
+      "region": "${var.region}"
+    },
+    "google-beta": {
+      "project": "${var.project_id}",
+      "region": "${var.region}"
+    }
+  },
+  "variable": {
+    "project_id": {
+      "type": "string",
+      "default": "aidscaler"
+    },
+    "project_number": {
+      "type": "string",
+      "default": "439219992256"
+    },
+    "region": {
+      "type": "string",
+      "default": "us-central1"
+    },
+    "alert_email": {
+      "type": "string"
+    },
+    "billing_account_id": {
+      "type": "string",
+      "default": ""
+    },
+    "image": {
+      "type": "string",
+      "default": ""
+    },
+    "deploy_runtime": {
+      "type": "bool",
+      "default": false
+    },
+    "domain": {
+      "type": "string",
+      "default": "aidscaler.com"
+    },
+    "infrastructure_service_ids": {
+      "type": "list(string)",
+      "default": [
+        "services/149C-F9EC-3994",
+        "services/152E-C115-5142",
+        "services/24E6-581D-38E5",
+        "services/2662-232A-AC11",
+        "services/5490-F7B7-8DF6",
+        "services/58CD-E7C3-72CA",
+        "services/5DD3-CA5C-D8EA",
+        "services/8B5D-EF7D-EB12",
+        "services/95FF-2EF5-5EA1",
+        "services/9662-B51E-5089",
+        "services/A1E8-BE35-7EBC",
+        "services/E505-1604-58F8",
+        "services/EE82-7A5E-871C",
+        "services/F3A6-D7B7-9BDA"
+      ]
+    },
+    "kubernetes_jwks": {
+      "type": "string",
+      "default": "",
+      "description": "Public JWKS captured from the local cluster; refreshed before deployment."
+    }
+  },
+  "locals": {
+    "api_url": "https://aidscaler-api-${var.project_number}.${var.region}.run.app"
+  },
+  "resource": {
+    "google_project_service": {
+      "api": {
+        "for_each": {
+          "run.googleapis.com": "run.googleapis.com",
+          "sqladmin.googleapis.com": "sqladmin.googleapis.com",
+          "secretmanager.googleapis.com": "secretmanager.googleapis.com",
+          "pubsub.googleapis.com": "pubsub.googleapis.com",
+          "cloudtasks.googleapis.com": "cloudtasks.googleapis.com",
+          "storage.googleapis.com": "storage.googleapis.com",
+          "artifactregistry.googleapis.com": "artifactregistry.googleapis.com",
+          "cloudbuild.googleapis.com": "cloudbuild.googleapis.com",
+          "firebase.googleapis.com": "firebase.googleapis.com",
+          "firebasehosting.googleapis.com": "firebasehosting.googleapis.com",
+          "monitoring.googleapis.com": "monitoring.googleapis.com",
+          "billingbudgets.googleapis.com": "billingbudgets.googleapis.com",
+          "cloudbilling.googleapis.com": "cloudbilling.googleapis.com",
+          "aiplatform.googleapis.com": "aiplatform.googleapis.com",
+          "bigquery.googleapis.com": "bigquery.googleapis.com",
+          "iam.googleapis.com": "iam.googleapis.com",
+          "iamcredentials.googleapis.com": "iamcredentials.googleapis.com",
+          "sts.googleapis.com": "sts.googleapis.com"
+        },
+        "project": "${var.project_id}",
+        "service": "${each.key}",
+        "disable_on_destroy": false
+      }
+    },
+    "google_service_account": {
+      "identity": {
+        "for_each": {
+          "app": "Application",
+          "push": "Pub/Sub delivery",
+          "tasks": "Tasks invoker",
+          "simulator": "Local simulator",
+          "build": "Cloud Build"
+        },
+        "project": "${var.project_id}",
+        "account_id": "aidscaler-${each.key}",
+        "display_name": "${each.value}",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_artifact_registry_repository": {
+      "images": {
+        "project": "${var.project_id}",
+        "location": "${var.region}",
+        "repository_id": "aidscaler",
+        "format": "DOCKER",
+        "cleanup_policies": [
+          {
+            "id": "delete-untagged",
+            "action": "DELETE",
+            "condition": [
+              {
+                "older_than": "604800s",
+                "tag_state": "UNTAGGED"
+              }
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_storage_bucket": {
+      "files": {
+        "project": "${var.project_id}",
+        "name": "${var.project_id}-demo-evidence",
+        "location": "US-CENTRAL1",
+        "uniform_bucket_level_access": true,
+        "public_access_prevention": "enforced",
+        "force_destroy": false,
+        "lifecycle_rule": [
+          {
+            "condition": [
+              {
+                "age": 30
+              }
+            ],
+            "action": [
+              {
+                "type": "Delete"
+              }
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      },
+      "build": {
+        "project": "${var.project_id}",
+        "name": "${var.project_id}-build-source-${var.project_number}",
+        "location": "US-CENTRAL1",
+        "uniform_bucket_level_access": true,
+        "public_access_prevention": "enforced",
+        "force_destroy": false,
+        "lifecycle_rule": [
+          {
+            "condition": [
+              {
+                "age": 1
+              }
+            ],
+            "action": [
+              {
+                "type": "Delete"
+              }
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_sql_database_instance": {
+      "database": {
+        "project": "${var.project_id}",
+        "name": "aidscaler-demo",
+        "region": "${var.region}",
+        "database_version": "POSTGRES_17",
+        "deletion_protection": true,
+        "settings": [
+          {
+            "edition": "ENTERPRISE",
+            "tier": "db-g1-small",
+            "availability_type": "ZONAL",
+            "disk_size": 20,
+            "disk_type": "PD_SSD",
+            "disk_autoresize": false,
+            "backup_configuration": [
+              {
+                "enabled": true,
+                "point_in_time_recovery_enabled": false,
+                "backup_retention_settings": [
+                  {
+                    "retained_backups": 3
+                  }
+                ]
+              }
+            ],
+            "ip_configuration": [
+              {
+                "ipv4_enabled": true,
+                "ssl_mode": "ENCRYPTED_ONLY"
+              }
+            ],
+            "user_labels": {
+              "app": "aidscaler",
+              "environment": "demo"
+            }
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_sql_database": {
+      "app": {
+        "project": "${var.project_id}",
+        "name": "aidscaler",
+        "instance": "${google_sql_database_instance.database.name}"
+      }
+    },
+    "random_password": {
+      "database": {
+        "length": 40,
+        "special": false
+      },
+      "session": {
+        "length": 64,
+        "special": false
+      }
+    },
+    "google_sql_user": {
+      "app": {
+        "project": "${var.project_id}",
+        "name": "aidscaler",
+        "instance": "${google_sql_database_instance.database.name}",
+        "password": "${random_password.database.result}"
+      }
+    },
+    "google_secret_manager_secret": {
+      "secret": {
+        "for_each": {
+          "database-url": "database-url",
+          "demo-session": "demo-session"
+        },
+        "project": "${var.project_id}",
+        "secret_id": "aidscaler-${each.key}",
+        "replication": [
+          {
+            "auto": [
+              {}
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_secret_manager_secret_version": {
+      "database": {
+        "secret": "${google_secret_manager_secret.secret[\"database-url\"].id}",
+        "secret_data": "postgresql://aidscaler:${random_password.database.result}@localhost/aidscaler?host=/cloudsql/${google_sql_database_instance.database.connection_name}",
+        "depends_on": [
+          "google_sql_user.app"
+        ]
+      },
+      "session": {
+        "secret": "${google_secret_manager_secret.secret[\"demo-session\"].id}",
+        "secret_data": "${random_password.session.result}"
+      }
+    },
+    "google_secret_manager_secret_iam_member": {
+      "app": {
+        "for_each": {
+          "database-url": "database-url",
+          "demo-session": "demo-session"
+        },
+        "project": "${var.project_id}",
+        "secret_id": "${google_secret_manager_secret.secret[each.key].secret_id}",
+        "role": "roles/secretmanager.secretAccessor",
+        "member": "serviceAccount:${google_service_account.identity[\"app\"].email}"
+      }
+    },
+    "google_project_iam_member": {
+      "app": {
+        "for_each": {
+          "roles/cloudsql.client": "roles/cloudsql.client",
+          "roles/aiplatform.user": "roles/aiplatform.user",
+          "roles/cloudtasks.enqueuer": "roles/cloudtasks.enqueuer"
+        },
+        "project": "${var.project_id}",
+        "role": "${each.key}",
+        "member": "serviceAccount:${google_service_account.identity[\"app\"].email}"
+      },
+      "build": {
+        "for_each": {
+          "logs": "roles/logging.logWriter"
+        },
+        "project": "${var.project_id}",
+        "role": "${each.value}",
+        "member": "serviceAccount:${google_service_account.identity[\"build\"].email}"
+      }
+    },
+    "google_storage_bucket_iam_member": {
+      "evidence": {
+        "bucket": "${google_storage_bucket.files.name}",
+        "role": "roles/storage.objectAdmin",
+        "member": "serviceAccount:${google_service_account.identity[\"app\"].email}"
+      },
+      "build_source": {
+        "bucket": "${google_storage_bucket.build.name}",
+        "role": "roles/storage.objectViewer",
+        "member": "serviceAccount:${google_service_account.identity[\"build\"].email}"
+      }
+    },
+    "google_pubsub_topic": {
+      "topic": {
+        "for_each": {
+          "commands": "commands",
+          "replies": "replies"
+        },
+        "project": "${var.project_id}",
+        "name": "aidscaler-${each.key}",
+        "message_retention_duration": "600s",
+        "message_storage_policy": [
+          {
+            "allowed_persistence_regions": [
+              "${var.region}"
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      },
+      "budget": {
+        "project": "${var.project_id}",
+        "name": "aidscaler-infrastructure-budget",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_pubsub_subscription": {
+      "commands": {
+        "project": "${var.project_id}",
+        "name": "aidscaler-simulator-commands",
+        "topic": "${google_pubsub_topic.topic[\"commands\"].id}",
+        "ack_deadline_seconds": 60,
+        "message_retention_duration": "600s",
+        "expiration_policy": [
+          {
+            "ttl": ""
+          }
+        ]
+      },
+      "replies": {
+        "count": "${var.deploy_runtime ? 1 : 0}",
+        "project": "${var.project_id}",
+        "name": "aidscaler-api-replies",
+        "topic": "${google_pubsub_topic.topic[\"replies\"].id}",
+        "ack_deadline_seconds": 60,
+        "message_retention_duration": "600s",
+        "expiration_policy": [
+          {
+            "ttl": ""
+          }
+        ],
+        "push_config": [
+          {
+            "push_endpoint": "${local.api_url}/internal/bridge-reply",
+            "oidc_token": [
+              {
+                "service_account_email": "${google_service_account.identity[\"push\"].email}",
+                "audience": "${local.api_url}"
+              }
+            ]
+          }
+        ],
+        "retry_policy": [
+          {
+            "minimum_backoff": "1s",
+            "maximum_backoff": "30s"
+          }
+        ],
+        "depends_on": [
+          "google_cloud_run_v2_service.api"
+        ]
+      },
+      "budget": {
+        "count": "${var.deploy_runtime ? 1 : 0}",
+        "project": "${var.project_id}",
+        "name": "aidscaler-cost-guard",
+        "topic": "${google_pubsub_topic.budget.id}",
+        "ack_deadline_seconds": 60,
+        "message_retention_duration": "86400s",
+        "expiration_policy": [
+          {
+            "ttl": ""
+          }
+        ],
+        "push_config": [
+          {
+            "push_endpoint": "${local.api_url}/internal/budget",
+            "oidc_token": [
+              {
+                "service_account_email": "${google_service_account.identity[\"push\"].email}",
+                "audience": "${local.api_url}"
+              }
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_cloud_run_v2_service.api"
+        ]
+      }
+    },
+    "google_pubsub_topic_iam_member": {
+      "app": {
+        "project": "${var.project_id}",
+        "topic": "${google_pubsub_topic.topic[\"commands\"].name}",
+        "role": "roles/pubsub.publisher",
+        "member": "serviceAccount:${google_service_account.identity[\"app\"].email}"
+      },
+      "simulator": {
+        "project": "${var.project_id}",
+        "topic": "${google_pubsub_topic.topic[\"replies\"].name}",
+        "role": "roles/pubsub.publisher",
+        "member": "serviceAccount:${google_service_account.identity[\"simulator\"].email}"
+      },
+      "billing": {
+        "project": "${var.project_id}",
+        "topic": "${google_pubsub_topic.budget.name}",
+        "role": "roles/pubsub.publisher",
+        "member": "serviceAccount:billing-budget-pubsub@system.gserviceaccount.com"
+      }
+    },
+    "google_pubsub_subscription_iam_member": {
+      "simulator": {
+        "project": "${var.project_id}",
+        "subscription": "${google_pubsub_subscription.commands.name}",
+        "role": "roles/pubsub.subscriber",
+        "member": "serviceAccount:${google_service_account.identity[\"simulator\"].email}"
+      }
+    },
+    "google_service_account_iam_member": {
+      "pubsub_token": {
+        "service_account_id": "${google_service_account.identity[\"push\"].name}",
+        "role": "roles/iam.serviceAccountTokenCreator",
+        "member": "serviceAccount:service-${var.project_number}@gcp-sa-pubsub.iam.gserviceaccount.com",
+        "depends_on": [
+          "google_project_service_identity.pubsub"
+        ]
+      },
+      "app_task": {
+        "service_account_id": "${google_service_account.identity[\"tasks\"].name}",
+        "role": "roles/iam.serviceAccountUser",
+        "member": "serviceAccount:${google_service_account.identity[\"app\"].email}"
+      },
+      "simulator_federation": {
+        "service_account_id": "${google_service_account.identity[\"simulator\"].name}",
+        "role": "roles/iam.workloadIdentityUser",
+        "member": "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/aidscaler-local/subject/system:serviceaccount:aidscaler:aidscaler-simulator"
+      }
+    },
+    "google_cloud_tasks_queue": {
+      "work": {
+        "project": "${var.project_id}",
+        "name": "aidscaler-demo",
+        "location": "${var.region}",
+        "rate_limits": [
+          {
+            "max_concurrent_dispatches": 1,
+            "max_dispatches_per_second": 1
+          }
+        ],
+        "retry_config": [
+          {
+            "max_attempts": 3,
+            "min_backoff": "10s",
+            "max_backoff": "60s",
+            "max_doublings": 2
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      },
+      "model": {
+        "project": "${var.project_id}",
+        "name": "aidscaler-model",
+        "location": "${var.region}",
+        "rate_limits": [
+          {
+            "max_concurrent_dispatches": 2,
+            "max_dispatches_per_second": 1
+          }
+        ],
+        "retry_config": [
+          {
+            "max_attempts": 3,
+            "min_backoff": "10s",
+            "max_backoff": "60s",
+            "max_doublings": 2
+          }
+        ],
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_firebase_project": {
+      "app": {
+        "provider": "google-beta",
+        "project": "${var.project_id}",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_firebase_hosting_site": {
+      "site": {
+        "provider": "google-beta",
+        "project": "${var.project_id}",
+        "site_id": "${var.project_id}",
+        "depends_on": [
+          "google_firebase_project.app"
+        ]
+      }
+    },
+    "google_bigquery_dataset": {
+      "metrics": {
+        "project": "${var.project_id}",
+        "dataset_id": "aidscaler_demo",
+        "location": "US",
+        "default_table_expiration_ms": 604800000,
+        "max_time_travel_hours": 48,
+        "delete_contents_on_destroy": false,
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_monitoring_notification_channel": {
+      "email": {
+        "project": "${var.project_id}",
+        "display_name": "AidScaler infrastructure alerts",
+        "type": "email",
+        "labels": {
+          "email_address": "${var.alert_email}"
+        },
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_billing_budget": {
+      "infrastructure": {
+        "count": "${var.billing_account_id != \"\" && length(var.infrastructure_service_ids) > 0 ? 1 : 0}",
+        "billing_account": "${var.billing_account_id}",
+        "display_name": "AidScaler infrastructure USD 100",
+        "budget_filter": [
+          {
+            "projects": [
+              "projects/${var.project_number}"
+            ],
+            "services": "${var.infrastructure_service_ids}",
+            "credit_types_treatment": "EXCLUDE_ALL_CREDITS",
+            "calendar_period": "MONTH"
+          }
+        ],
+        "amount": [
+          {
+            "specified_amount": [
+              {
+                "currency_code": "USD",
+                "units": "100"
+              }
+            ]
+          }
+        ],
+        "threshold_rules": [
+          {
+            "threshold_percent": 0.4
+          },
+          {
+            "threshold_percent": 0.55
+          },
+          {
+            "threshold_percent": 0.7
+          },
+          {
+            "threshold_percent": 0.85
+          },
+          {
+            "threshold_percent": 1,
+            "spend_basis": "FORECASTED_SPEND"
+          }
+        ],
+        "all_updates_rule": [
+          {
+            "monitoring_notification_channels": [
+              "${google_monitoring_notification_channel.email.id}"
+            ],
+            "disable_default_iam_recipients": false,
+            "pubsub_topic": "${google_pubsub_topic.budget.id}",
+            "schema_version": "1.0"
+          }
+        ],
+        "depends_on": [
+          "google_pubsub_topic_iam_member.billing"
+        ]
+      }
+    },
+    "google_cloud_run_v2_service": {
+      "api": {
+        "count": "${var.deploy_runtime ? 1 : 0}",
+        "project": "${var.project_id}",
+        "name": "aidscaler-api",
+        "location": "${var.region}",
+        "deletion_protection": false,
+        "ingress": "INGRESS_TRAFFIC_ALL",
+        "template": [
+          {
+            "service_account": "${google_service_account.identity[\"app\"].email}",
+            "timeout": "600s",
+            "max_instance_request_concurrency": 40,
+            "scaling": [
+              {
+                "min_instance_count": 0,
+                "max_instance_count": 1
+              }
+            ],
+            "containers": [
+              {
+                "image": "${var.image}",
+                "resources": [
+                  {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "cpu_idle": true,
+                    "startup_cpu_boost": true
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "GOOGLE_CLOUD_PROJECT",
+                    "value": "${var.project_id}"
+                  },
+                  {
+                    "name": "GOOGLE_CLOUD_LOCATION",
+                    "value": "${var.region}"
+                  },
+                  {
+                    "name": "DEMO_ORIGIN",
+                    "value": "https://${var.domain}"
+                  },
+                  {
+                    "name": "BRIDGE_COMMAND_TOPIC",
+                    "value": "aidscaler-commands"
+                  },
+                  {
+                    "name": "CLOUD_RUN_URL",
+                    "value": "${local.api_url}"
+                  },
+                  {
+                    "name": "CLOUD_TASKS_QUEUE",
+                    "value": "aidscaler-demo"
+                  },
+                  {
+                    "name": "TASK_SERVICE_ACCOUNT",
+                    "value": "${google_service_account.identity[\"tasks\"].email}"
+                  },
+                  {
+                    "name": "PUSH_SERVICE_ACCOUNT",
+                    "value": "${google_service_account.identity[\"push\"].email}"
+                  },
+                  {
+                    "name": "MODEL_ID",
+                    "value": "gemini-3.1-flash-lite"
+                  },
+                  {
+                    "name": "EVIDENCE_DIR",
+                    "value": "/app/evidence"
+                  },
+                  {
+                    "name": "AIDSCALER_LOCAL_DIR",
+                    "value": "/tmp/aidscaler/config"
+                  },
+                  {
+                    "name": "DATA_DIR",
+                    "value": "/tmp/aidscaler"
+                  },
+                  {
+                    "name": "DATABASE_URL",
+                    "value_source": [
+                      {
+                        "secret_key_ref": [
+                          {
+                            "secret": "${google_secret_manager_secret.secret[\"database-url\"].secret_id}",
+                            "version": "latest"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "DEMO_SESSION_SECRET",
+                    "value_source": [
+                      {
+                        "secret_key_ref": [
+                          {
+                            "secret": "${google_secret_manager_secret.secret[\"demo-session\"].secret_id}",
+                            "version": "latest"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MODEL_PROVIDER",
+                    "value": "vertex"
+                  }
+                ],
+                "volume_mounts": [
+                  {
+                    "name": "cloudsql",
+                    "mount_path": "/cloudsql"
+                  },
+                  {
+                    "name": "evidence",
+                    "mount_path": "/app/evidence"
+                  }
+                ],
+                "startup_probe": [
+                  {
+                    "initial_delay_seconds": 0,
+                    "period_seconds": 5,
+                    "timeout_seconds": 2,
+                    "failure_threshold": 30,
+                    "http_get": [
+                      {
+                        "path": "/healthz",
+                        "port": 8080
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "cloudsql",
+                "cloud_sql_instance": [
+                  {
+                    "instances": [
+                      "${google_sql_database_instance.database.connection_name}"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "evidence",
+                "gcs": [
+                  {
+                    "bucket": "${google_storage_bucket.files.name}",
+                    "read_only": false,
+                    "mount_options": [
+                      "stat-cache-max-size-mb=4",
+                      "type-cache-max-size-mb=4",
+                      "uid=1000",
+                      "gid=1000",
+                      "file-mode=660",
+                      "dir-mode=770"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "depends_on": [
+          "google_secret_manager_secret_version.database",
+          "google_secret_manager_secret_version.session",
+          "google_secret_manager_secret_iam_member.app",
+          "google_project_iam_member.app",
+          "google_storage_bucket_iam_member.evidence"
+        ]
+      }
+    },
+    "google_cloud_run_v2_service_iam_member": {
+      "public": {
+        "count": "${var.deploy_runtime ? 1 : 0}",
+        "project": "${var.project_id}",
+        "location": "${var.region}",
+        "name": "${google_cloud_run_v2_service.api[0].name}",
+        "role": "roles/run.invoker",
+        "member": "allUsers"
+      }
+    },
+    "google_iam_workload_identity_pool": {
+      "local": {
+        "project": "${var.project_id}",
+        "workload_identity_pool_id": "aidscaler-local",
+        "display_name": "AidScaler local simulator",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    },
+    "google_iam_workload_identity_pool_provider": {
+      "kubernetes": {
+        "project": "${var.project_id}",
+        "workload_identity_pool_id": "${google_iam_workload_identity_pool.local.workload_identity_pool_id}",
+        "workload_identity_pool_provider_id": "kubernetes",
+        "attribute_mapping": {
+          "google.subject": "assertion.sub"
+        },
+        "attribute_condition": "assertion.sub == 'system:serviceaccount:aidscaler:aidscaler-simulator'",
+        "oidc": [
+          {
+            "issuer_uri": "https://kubernetes.default.svc.cluster.local",
+            "allowed_audiences": [
+              "https://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/aidscaler-local/providers/kubernetes"
+            ],
+            "jwks_json": "${var.kubernetes_jwks}"
+          }
+        ]
+      }
+    },
+    "google_artifact_registry_repository_iam_member": {
+      "build": {
+        "project": "${var.project_id}",
+        "location": "${var.region}",
+        "repository": "${google_artifact_registry_repository.images.repository_id}",
+        "role": "roles/artifactregistry.writer",
+        "member": "serviceAccount:${google_service_account.identity[\"build\"].email}"
+      }
+    },
+    "google_project_service_identity": {
+      "pubsub": {
+        "provider": "google-beta",
+        "project": "${var.project_id}",
+        "service": "pubsub.googleapis.com",
+        "depends_on": [
+          "google_project_service.api"
+        ]
+      }
+    }
+  },
+  "output": {
+    "api_url": {
+      "value": "${local.api_url}"
+    },
+    "repository": {
+      "value": "${var.region}-docker.pkg.dev/${var.project_id}/aidscaler"
+    },
+    "sql_connection": {
+      "value": "${google_sql_database_instance.database.connection_name}"
+    },
+    "simulator_service_account": {
+      "value": "${google_service_account.identity[\"simulator\"].email}"
+    },
+    "hosting_site": {
+      "value": "${google_firebase_hosting_site.site.site_id}"
+    }
+  }
+}

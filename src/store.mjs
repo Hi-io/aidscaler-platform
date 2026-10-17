@@ -46,9 +46,9 @@ export class Store {
     this.postgres = postgres;
     this.fragmentCache = fragmentCache;
   }
-  static async open({ dataDir, databaseUrl, poolFactory = options => new pg.Pool(options), databaseLogger } = {}) {
+  static async open({ dataDir, databaseUrl, poolFactory = options => new pg.Pool(options), databaseLogger, poolMax = 10 } = {}) {
     const db = databaseUrl
-      ? protectPostgresPool(poolFactory({ connectionString: databaseUrl, connectionTimeoutMillis: 5000 }), databaseLogger)
+      ? protectPostgresPool(poolFactory({ connectionString: databaseUrl, connectionTimeoutMillis: 5000, max: poolMax }), databaseLogger)
       : new PGlite(dataDir ?? "memory://");
     const s = new Store(db, !!databaseUrl);
     await s.exec(

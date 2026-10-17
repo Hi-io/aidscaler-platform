@@ -1,5 +1,6 @@
 import http from 'node:http';
 import path from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { randomBytes, createHmac } from 'node:crypto';
 import { createPlatform } from '../server.mjs';
 import { hash } from './store.mjs';
@@ -49,7 +50,7 @@ export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
 }
 
 export async function createDemoGateway({ store, source, secret, dataDir, origin = 'http://127.0.0.1:8080', host = '127.0.0.1', port = 8080,
-  maxActive = 4, maxTeamsTotal = 100, maxSignalsPerTeam = 5000, idleMs = 30 * 60000, platformFactory = createPlatform, providerFactory, startBase = true, testConfig = {}, model = {} } = {}) {
+  maxActive = 4, maxTeamsTotal = 100, maxSignalsPerTeam = 5000, idleMs = 30 * 60000, platformFactory = createPlatform, providerFactory, startBase = true, testConfig = {}, model = {}, managed = null } = {}) {
   check(typeof secret === 'string' && secret.length >= 32, 'DEMO_SECRET', 'A persistent private demo session secret is required.', 500);
   await store.exec(`CREATE TABLE IF NOT EXISTS demo_clients(hash text PRIMARY KEY,csrf text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,expires_at bigint NOT NULL);
     CREATE TABLE IF NOT EXISTS demo_teams(org text PRIMARY KEY,client_hash text UNIQUE NOT NULL,name text NOT NULL,color text NOT NULL,state text NOT NULL,join_key text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,details jsonb NOT NULL DEFAULT '{}');
@@ -92,8 +93,10 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     }
     if (row) {
       req.demoClientHash = row.hash;
-      await store.query('UPDATE demo_clients SET last_seen=$2 WHERE hash=$1', [row.hash, Date.now()]);
-      await store.query("UPDATE demo_teams SET last_seen=$2 WHERE client_hash=$1 AND state='active'", [row.hash, Date.now()]);
+      if (!managed) {
+        await store.query('UPDATE demo_clients SET last_seen=$2 WHERE hash=$1', [row.hash, Date.now()]);
+        await store.query("UPDATE demo_teams SET last_seen=$2 WHERE client_hash=$1 AND state='active'", [row.hash, Date.now()]);
+      }
     }
     return row;
   }
@@ -138,7 +141,8 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       summary,
       limits: { signalsPerTeam: maxSignalsPerTeam, signalsCollected: team ? apps.get(team.org)?.demoSources?.count ?? 0 : 0,
         sourceWindowLimited: !!(team && apps.get(team.org)?.demoSources?.limited) },
-      provider: { model: process.env.MODEL_ID ?? 'google/gemma-4-31b-it', name: 'Gemma 4', provider: 'OpenRouter', ...gate.status() } };
+      provider: { model: testConfig.modelId ?? process.env.MODEL_ID ?? 'google/gemma-4-31b-it',
+        name: testConfig.provider === 'vertex' ? 'Gemini' : 'Gemma 4', provider: testConfig.provider === 'vertex' ? 'Vertex AI' : 'OpenRouter', ...gate.status(), ...managed?.modelStatus?.() } };
   }
   async function credentials(org) {
     return source.credentials(org);
@@ -212,7 +216,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       details = { ...details, login: await app.auth.login(`commander@${row.org}.aidscaler.local`, password(row.org), `demo-${row.org}`) };
       await store.query('UPDATE demo_teams SET details=$2 WHERE org=$1', [row.org, JSON.stringify(details)]);
     }
-    app.demoActivity.at = Date.now(); return details.login;
+    if (!managed) app.demoActivity.at = Date.now(); return details.login;
   }
   async function join(c, b, key) {
     check(c, 'DEMO_SESSION', 'Refresh the demo page and try again.', 401);
@@ -258,6 +262,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       check(!closing, 'DEMO_RESTARTING', 'The demo is reconnecting. Please try again shortly.', 503);
       if (!['/healthz', '/readyz', '/demo/api/health'].includes(p)) rate(req, 'edge', 3000, 60000, p === '/demo/api/bootstrap' ? 20 : 1);
       if (p === '/healthz' || p === '/readyz' || p === '/demo/api/health') {
+        if (managed && p === '/healthz') return send(res, 200, { status: 'ok' });
         await source.healthCheck?.();
         if (p !== '/healthz') {
           try { await store.query('SELECT 1 AS ready'); }
@@ -269,6 +274,18 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       if (p.startsWith('/demo/api/')) {
         const c = await client(req, res, p === '/demo/api/session');
         rate(req, 'read', 600);
+        if (p === '/demo/api/presence' && req.method === 'POST') {
+          assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session.', 403);
+          const body = await jsonBody(req, 1024);
+          check(body.visible === true, 'DEMO_PRESENCE', 'Presence requires a visible demo tab.');
+          if (managed) {
+            await store.query('UPDATE demo_clients SET last_seen=$2 WHERE hash=$1', [c.hash, Date.now()]);
+            await store.query("UPDATE demo_teams SET last_seen=$2 WHERE client_hash=$1 AND state='active'", [c.hash, Date.now()]);
+          }
+          const team = await teamRow(c.hash), app = team && apps.get(team.org);
+          if (app) app.demoActivity.at = Date.now();
+          return send(res, 200, managed ? await managed.touch(c.hash) : { sleeping: false });
+        }
         if (p === '/demo/api/session' && req.method === 'GET') return send(res, 200, await sessionView(c));
         if (p === '/demo/api/session/resupply' && req.method === 'POST') {
           assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session before changing incoming supplies.', 403);
@@ -328,7 +345,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         const login = await innerSession(app, row);
         const target = p.slice('/demo/workspace'.length) || '/';
         check(!target.includes('..') && !target.includes('\\'), 'DEMO_PATH', 'Invalid workspace path.', 403);
-        if (target === '/demo-bridge.mjs') { res.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'no-store' }); return res.end(bridge); }
+        if (target === '/demo-bridge.mjs') { res.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'no-store' }); return res.end(bridge + (managed ? '\n' + await readFile(new URL('./cloud/presence-browser.mjs', import.meta.url), 'utf8') : '')); }
         if (target.startsWith('/api/')) {
           check(!blockedRead.has(target) && !['/api/login', '/api/logout', '/api/network/inbox', '/api/finance/webhook'].includes(target), 'DEMO_SCOPE', 'This setting is managed by the demonstration host.', 403);
           if (req.method !== 'GET') {
@@ -379,7 +396,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(port, host, resolve); });
   if (startBase) for (const org of source.baseOrganizations ?? []) await ensureApp(org.id, org.name, false);
-  for (const row of (await store.query("SELECT * FROM demo_teams WHERE state IN ('active','creating','draining')")).rows) await ensureApp(row.org, row.name);
+  if (!managed) for (const row of (await store.query("SELECT * FROM demo_teams WHERE state IN ('active','creating','draining')")).rows) await ensureApp(row.org, row.name);
   let maintenanceBusy = false, maintenanceSettled = Promise.resolve(), reviewSettled = Promise.resolve();
   async function maintenance() {
     if (maintenanceBusy || closing) return; maintenanceBusy = true;
@@ -412,7 +429,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
           await sourceCall('/api/demo/organizations/release', { org: row.org, idempotencyKey: 'gateway-release-' + row.org });
           if (app) { await app.close(); apps.delete(row.org); reconnectPeers(); }
           await store.query("UPDATE demo_teams SET state='finished' WHERE org=$1", [row.org]);
-        } catch (error) { if (app) app.worker.start(); if (![409, 400].includes(error.status)) throw error; }
+        } catch (error) { if (app && !managed) app.worker.start(); if (![409, 400].includes(error.status)) throw error; }
       }
       // Publish only explicitly shareable capability projections through the existing signed peer protocol.
       for (const app of apps.values()) {
@@ -427,7 +444,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       }
     } finally { maintenanceBusy = false; finished(); }
   }
-  const timer = setInterval(() => maintenance().catch(() => {}), 60000); timer.unref();
+  const timer = managed ? null : setInterval(() => maintenance().catch(() => {}), 60000); timer?.unref();
   let reviewing = false;
   async function reviewBases() {
     if (reviewing || closing) return; reviewing = true;
@@ -435,9 +452,9 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     try { for (const app of apps.values()) if (app.demoVisitor === false) await reviewDemoBaseRequests(app, org => apps.get(org)?.demoVisitor === true); }
     finally { reviewing = false; finished(); }
   }
-  const ownerTimer = setInterval(() => { if (testConfig.startWorker !== false) reviewBases().catch(() => {}); }, 5000); ownerTimer.unref();
+  const ownerTimer = managed ? null : setInterval(() => { if (testConfig.startWorker !== false) reviewBases().catch(() => {}); }, 5000); ownerTimer?.unref();
   let stopped;
-  return { server, store, apps, gate, maintenance, reviewBases, url: `http://${host}:${server.address().port}`, async close() {
+  return { server, store, apps, gate, maintenance, reviewBases, ensureApp, url: `http://${host}:${server.address().port}`, async close() {
     if (stopped) return stopped;
     closing = true; clearInterval(timer); clearInterval(ownerTimer);
     stopped = (async () => {

@@ -6,7 +6,7 @@ started=time.perf_counter()
 mode=request['mode']
 if mode=='audio':
     from faster_whisper import WhisperModel
-    model=WhisperModel(os.environ.get('ASR_MODEL','tiny'),device='cpu',compute_type='int8',cpu_threads=2,download_root='.local/models')
+    model=WhisperModel(os.environ.get('ASR_MODEL','tiny'),device='cpu',compute_type='int8',cpu_threads=2,download_root=os.environ.get('ASR_CACHE','.local/models'))
     segments,info=model.transcribe(request['path'],beam_size=3,vad_filter=True,language=request.get('language'))
     rows=[{'start':s.start,'end':s.end,'text':s.text.strip(),'avgLogProbability':s.avg_logprob,'noSpeechProbability':s.no_speech_prob} for s in segments]
     result={'text':' '.join(s['text'] for s in rows),'segments':rows,'language':info.language,'languageProbability':info.language_probability,'durationSeconds':info.duration,'engine':'faster-whisper','model':os.environ.get('ASR_MODEL','tiny')}

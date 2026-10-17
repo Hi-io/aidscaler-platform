@@ -1,0 +1,8 @@
+FROM node:24.19.0-bookworm-slim
+RUN corepack enable && corepack prepare pnpm@11.25.0 --activate
+WORKDIR /app/disaster-response-simulator
+COPY simulator/package.json simulator/pnpm-lock.yaml simulator/pnpm-workspace.yaml ./
+RUN pnpm install --prod --frozen-lockfile --ignore-scripts
+COPY simulator/ ./
+ENV NODE_ENV=production PORT=8081 DATA_DIR=/var/lib/aidscaler
+CMD ["node","scripts/gcp-bridge.mjs"]
