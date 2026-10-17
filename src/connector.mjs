@@ -41,11 +41,12 @@ const legacyResultSnapshot = (state, immutableResults) => {
   return state;
 };
 export class SimulatorConnector {
-  constructor({ sourceUrl, sourceAgentKey, sourceHumanKey, fetcher = fetch }) {
+  constructor({ sourceUrl, sourceAgentKey, sourceHumanKey, sourceTimeoutMs = 10000, fetcher = fetch }) {
     this.url = sourceUrl.replace(/\/$/, "");
     this.agentKey = sourceAgentKey;
     this.humanKey = sourceHumanKey;
     this.fetcher = fetcher;
+    this.sourceTimeoutMs = sourceTimeoutMs;
     this.transportRetries = 0;
     this.sourceResults = new Map();
     this.sourceResultJson = new Map();
@@ -125,10 +126,12 @@ export class SimulatorConnector {
       try {
         return await this.fetcher(this.url + endpoint, {
           ...options,
-          signal: AbortSignal.timeout(10000),
+          signal: AbortSignal.timeout(this.sourceTimeoutMs),
         });
       } catch (e) {
-        const code = e.cause?.code ?? e.code ?? e.name;
+        // DOMException.code is numeric (23 for TimeoutError), not a transport
+        // identifier. Preserve retry semantics for the named timeout instead.
+        const code = e.name === 'TimeoutError' ? e.name : e.cause?.code ?? e.code ?? e.name;
         if (
           !repeatable ||
           attempt >= 1 ||

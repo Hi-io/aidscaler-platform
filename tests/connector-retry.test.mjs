@@ -48,3 +48,21 @@ test("retrying a command requires its exact idempotency key; an unkeyed POST and
   );
   assert.equal(bodies.length, 1);
 });
+
+test("the cloud connector allows the queue round trip and retries a DOM timeout once", async () => {
+  let attempts = 0, deadline;
+  const original = AbortSignal.timeout;
+  AbortSignal.timeout = ms => { deadline = ms; return new AbortController().signal; };
+  try {
+    const connector = new SimulatorConnector({
+      sourceUrl: "http://127.0.0.1:1", sourceTimeoutMs: 35000,
+      fetcher: async () => {
+        if (++attempts === 1) throw new DOMException("Timed out", "TimeoutError");
+        return { ok: true, json: async () => ({ received: true }) };
+      },
+    });
+    assert.equal((await connector.request("/api/actor/state")).received, true);
+    assert.equal(deadline, 35000);
+    assert.equal(attempts, 2);
+  } finally { AbortSignal.timeout = original; }
+});

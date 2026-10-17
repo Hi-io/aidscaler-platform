@@ -13,9 +13,7 @@ import { configureResponsePolicy } from './response-policy.mjs';
 import { sourceConnection } from './source-connection.mjs';
 
 const colors = ['#5370d6', '#af678d', '#319281', '#bd854a'];
-const cookieName = 'aidscaler_demo';
 const inferenceJobs = ['investigate', 'discover_response', 'compile_response', 'interpret_sources', 'analyze_media'];
-const token = req => req.headers.cookie?.split(';').map(s => s.trim()).find(s => s.startsWith(cookieName + '='))?.slice(cookieName.length + 1);
 const send = (res, status, data) => { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' }); res.end(JSON.stringify(data)); };
 const blockedRead = new Set(['/api/users', '/api/export', '/api/integrations', '/api/integration/status']);
 const allowedWrite = new Set(['/api/sync', '/api/query', '/api/verify', '/api/investigate', '/api/interpret-sources', '/api/discover-response', '/api/investigation/stop', '/api/propose', '/api/review', '/api/proposal/revise', '/api/condition', '/api/reserve', '/api/commitment', '/api/report', '/api/report/followup', '/api/report/moderate', '/api/media/upload', '/api/media/analyze', '/api/claim', '/api/claim/correct', '/api/evidence/group', '/api/evidence/split', '/api/evidence/group/restore', '/api/invalidate', '/api/share', '/api/publication/draft', '/api/publication/publish', '/api/publication/retract', '/api/publication/proof', '/api/task/assign', '/api/task/update', '/api/handover', '/api/handover/acknowledge', '/api/coverage/check', '/api/coverage/cancel', '/api/unloading/plan', '/api/unloading/prepare']);
@@ -32,6 +30,12 @@ export function demoResupply(input = { enabled: true, intervalMs: 1800000, water
   return { enabled, intervalMs, water, food };
 }
 const publicResupply = value => value ? Object.fromEntries(['enabled', 'intervalMs', 'water', 'food', 'nextAt', 'waterCap', 'foodCap', 'receiptsCount', 'lastReceivedAt'].filter(k => value[k] !== undefined).map(k => [k, value[k]])) : null;
+export const recoveredDemoIdentityAbsent = (org, connection, frame) => /^demo-org-\d+$/.test(org) &&
+  typeof connection?.sourceInstance === 'string' && frame?.continuousDemo === true && frame.spectatorOnly === true &&
+  frame.runId === connection.runId && typeof frame.episodeId === 'string' && frame.episodeId !== connection.sourceInstance &&
+  Array.isArray(frame.organizations) && !frame.organizations.some(o => o.id === org);
+export const missingRecoveredDemoTeam = (org, connection, frame) => recoveredDemoIdentityAbsent(org, connection, frame) &&
+  connection.state === 'requires_new_response' && frame.episodeId === connection.observedSourceInstance;
 const bridge = `const base='/demo/workspace';const originalFetch=window.fetch.bind(window);window.fetch=(input,init)=>{if(typeof input==='string'&&input.startsWith('/api/'))input=base+input;else if(input instanceof URL&&input.origin===location.origin&&input.pathname.startsWith('/api/'))input=new URL(base+input.pathname+input.search,location.origin);return originalFetch(input,init)};const rebase=root=>{for(const el of [root,...(root.querySelectorAll?.('[src],[href]')??[])])for(const attr of ['src','href']){const value=el.getAttribute?.(attr);if(value?.startsWith('/')&&!value.startsWith('//')&&!value.startsWith('/demo/'))el.setAttribute(attr,base+value)}};new MutationObserver(changes=>{for(const c of changes){if(c.type==='attributes')rebase(c.target);else for(const node of c.addedNodes)if(node.nodeType===1)rebase(node)}}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['href','src']});document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(a){rebase(a);if(a.target==='_blank')a.removeAttribute('target')}} ,true);`;
 
 export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
@@ -50,7 +54,9 @@ export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
 }
 
 export async function createDemoGateway({ store, source, secret, dataDir, evidenceRoot = path.join(dataDir, 'evidence'), origin = 'http://127.0.0.1:8080', host = '127.0.0.1', port = 8080,
-  maxActive = 4, maxTeamsTotal = 100, maxSignalsPerTeam = 5000, idleMs = 30 * 60000, platformFactory = createPlatform, providerFactory, startBase = true, testConfig = {}, model = {}, managed = null } = {}) {
+  cookieName = 'aidscaler_demo', maxActive = 4, maxTeamsTotal = 100, maxSignalsPerTeam = 5000, idleMs = 30 * 60000, platformFactory = createPlatform, providerFactory, startBase = true, testConfig = {}, model = {}, managed = null } = {}) {
+  check(/^[A-Za-z_][A-Za-z0-9_]*$/.test(cookieName), 'DEMO_COOKIE', 'Use a supported session cookie name.', 500);
+  const token = req => req.headers.cookie?.split(';').map(s => s.trim()).find(s => s.startsWith(cookieName + '='))?.slice(cookieName.length + 1);
   check(typeof secret === 'string' && secret.length >= 32, 'DEMO_SECRET', 'A persistent private demo session secret is required.', 500);
   await store.exec(`CREATE TABLE IF NOT EXISTS demo_clients(hash text PRIMARY KEY,csrf text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,expires_at bigint NOT NULL);
     CREATE TABLE IF NOT EXISTS demo_teams(org text PRIMARY KEY,client_hash text UNIQUE NOT NULL,name text NOT NULL,color text NOT NULL,state text NOT NULL,join_key text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,details jsonb NOT NULL DEFAULT '{}');
@@ -244,7 +250,8 @@ export async function createDemoGateway({ store, source, secret, dataDir, eviden
     }
     const color = intent.color;
     // Source command idempotency survives a lost HTTP response and gateway restart.
-    const allocated = await sourceCall('/api/demo/organizations', { idempotencyKey: 'gateway-' + hash([c.hash, key]), name, color,
+    const minimumOrganization = Number((await store.query("SELECT COALESCE(MAX(substring(org from '[0-9]+$')::integer),0)+1 AS next FROM demo_teams WHERE org ~ '^demo-org-[0-9]+$'")).rows[0].next);
+    const allocated = await sourceCall('/api/demo/organizations', { idempotencyKey: 'gateway-' + hash([c.hash, key]), name, color, minimumOrganization,
       ...(intent.resupply ? { resupply: intent.resupply } : {}) });
     const allocatedOrg = allocated.organization ?? allocated.org, org = allocatedOrg.id;
     await store.transaction(async tx => {
@@ -429,7 +436,18 @@ export async function createDemoGateway({ store, source, secret, dataDir, eviden
           await sourceCall('/api/demo/organizations/release', { org: row.org, idempotencyKey: 'gateway-release-' + row.org });
           if (app) { await app.close(); apps.delete(row.org); reconnectPeers(); }
           await store.query("UPDATE demo_teams SET state='finished' WHERE org=$1", [row.org]);
-        } catch (error) { if (app && !managed) app.worker.start(); if (![409, 400].includes(error.status)) throw error; }
+        } catch (error) {
+          if (error.code === 'DEMO_ORGANIZATION' && fenced && missingRecoveredDemoTeam(row.org,
+            await sourceConnection(store, row.org), await sourceCall('/api/demo/frame'))) {
+            // Only a fenced identity absent from the same recovered run can
+            // finish here. Keep all earlier records; no current trip is reset.
+            await store.transaction(async tx => {
+              await tx.query("UPDATE demo_teams SET state='finished' WHERE org=$1 AND state='draining'", [row.org]);
+              await tx.audit(row.org, 'demo-host', 'demo.recovered_identity_retired', row.org, { historyPreserved: true, sourceConfirmedAbsent: true });
+            });
+            if (app) { await app.close(); apps.delete(row.org); reconnectPeers(); }
+          } else { if (app && !managed) app.worker.start(); if (![409, 400].includes(error.status)) throw error; }
+        }
       }
       // Publish only explicitly shareable capability projections through the existing signed peer protocol.
       for (const app of apps.values()) {
@@ -454,7 +472,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, eviden
   }
   const ownerTimer = managed ? null : setInterval(() => { if (testConfig.startWorker !== false) reviewBases().catch(() => {}); }, 5000); ownerTimer?.unref();
   let stopped;
-  return { server, store, apps, gate, maintenance, reviewBases, ensureApp, url: `http://${host}:${server.address().port}`, async close() {
+  return { server, store, apps, gate, maintenance, reviewBases, ensureApp, sourceFrame: () => sourceCall('/api/demo/frame'), url: `http://${host}:${server.address().port}`, async close() {
     if (stopped) return stopped;
     closing = true; clearInterval(timer); clearInterval(ownerTimer);
     stopped = (async () => {

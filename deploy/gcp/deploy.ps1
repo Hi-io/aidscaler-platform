@@ -68,7 +68,15 @@ try {
     Read-Gcloud @('storage','buckets','create',"gs://$bucket",'--project=aidscaler','--location=us-central1','--uniform-bucket-level-access','--public-access-prevention') | Out-Null
   }
   [System.IO.File]::WriteAllText((Join-Path $PSScriptRoot 'backend.tf'), "terraform {`n  backend `"gcs`" {}`n}`n")
-  Invoke-Checked $terraform @("-chdir=$PSScriptRoot",'init','-reconfigure',"-backend-config=bucket=$bucket",'-backend-config=prefix=demo','-input=false','-no-color')
+  $backendMatches = $false
+  $backendMetadata = Join-Path $PSScriptRoot '.terraform/terraform.tfstate'
+  if (Test-Path -LiteralPath $backendMetadata) {
+    $savedBackend = (Get-Content -LiteralPath $backendMetadata -Raw | ConvertFrom-Json).backend
+    $backendMatches = $savedBackend.type -eq 'gcs' -and $savedBackend.config.bucket -eq $bucket -and $savedBackend.config.prefix -eq 'demo'
+  }
+  if (-not $backendMatches) {
+    Invoke-Checked $terraform @("-chdir=$PSScriptRoot",'init','-reconfigure',"-backend-config=bucket=$bucket",'-backend-config=prefix=demo','-input=false','-no-color')
+  }
   if ($Stage -eq 'Safety') {
     Invoke-Checked $terraform @("-chdir=$PSScriptRoot",'apply','-input=false','-auto-approve','-target=google_billing_budget.infrastructure','-no-color')
     Invoke-Checked 'node' @('deploy/gcp/spend-cap.mjs')
@@ -80,8 +88,11 @@ try {
   } elseif ($Stage -eq 'Runtime') {
     if (-not $Tag) { throw 'Pass the verified build tag with -Tag.' }
     Invoke-Checked 'node' @('deploy/gcp/spend-cap.mjs')
+    $release = (Read-Gcloud @('artifacts','docker','images','describe',"us-central1-docker.pkg.dev/aidscaler/aidscaler/platform:$Tag",'--project=aidscaler','--format=json')) | ConvertFrom-Json
+    $immutableImage = $release.image_summary.fully_qualified_digest
+    if ($immutableImage -notmatch '^us-central1-docker\.pkg\.dev/aidscaler/aidscaler/platform@sha256:[a-f0-9]{64}$') { throw 'Release digest was not verified.' }
     Invoke-Checked $terraform @("-chdir=$PSScriptRoot",'apply','-input=false','-auto-approve','-var=deploy_runtime=true',
-      "-var=image=us-central1-docker.pkg.dev/aidscaler/aidscaler/platform:$Tag",'-no-color')
+      "-var=image=$immutableImage",'-no-color')
   } elseif ($Stage -eq 'Hosting') {
     Invoke-Checked 'node' @('deploy/gcp/prepare.mjs')
     Invoke-Checked 'node' @('deploy/gcp/publish-hosting.mjs')

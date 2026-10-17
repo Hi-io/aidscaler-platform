@@ -49,7 +49,7 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
       conditions: [], actions: [{ type: 'dispatch', owner: config.org, params: { need: need.id, resource: `r-${config.org}-water`, vehicle: `v-${config.org}-0`, quantity: 100 }, dependsOn: [] }],
     });
   } });
-  const options = { store, source, secret: 'test-private-demo-secret-'.repeat(3), dataDir: dir, origin: 'http://demo.test', port: 0, startBase: true,
+  const options = { store, source, secret: 'test-private-demo-secret-'.repeat(3), dataDir: dir, origin: 'http://demo.test', port: 0, startBase: true, cookieName: '__session',
     providerFactory, testConfig: { apiKey: 'non-secret-provider-fixture', autoIngest: false, autoInvestigate: true, autoDiscover: false, startWorker: false } };
   gateway = await createDemoGateway(options);
   const missingAsset = await fetch(gateway.url + '/demo/viewer/vendor/build/three.core.module.js');
@@ -69,6 +69,7 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
     const result = await r.json(); return { response: r, data: result };
   };
   const a = await api(null, '/demo/api/session'); const aCookie = a.response.headers.get('set-cookie').split(';')[0];
+  assert.match(aCookie, /^__session=/, 'the Hosting rewrite preserves the named HttpOnly session');
   assert.deepEqual(a.data.summary, { pendingDecisions: 0, needsRecheck: 0, activeOperations: 0, completedOperations: 0, blockedOperations: 0, canReview: false });
   assert.match(a.response.headers.get('set-cookie'), /HttpOnly; SameSite=Strict; Path=\/demo\//);
   assert.equal((await api(aCookie, '/demo/api/join', { name: 'Harbor Support' }, 'wrong')).response.status, 403);

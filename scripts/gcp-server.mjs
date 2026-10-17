@@ -4,13 +4,16 @@ import { readFile } from 'node:fs/promises';
 import { GoogleAuth, OAuth2Client } from 'google-auth-library';
 import { CloudTasksClient } from '@google-cloud/tasks';
 import { Store } from '../src/store.mjs';
-import { createDemoGateway } from '../src/demo-gateway.mjs';
+import { createDemoGateway, recoveredDemoIdentityAbsent } from '../src/demo-gateway.mjs';
+import { sourceConnection, observeSourceConnection } from '../src/source-connection.mjs';
 import { createDemoSource } from '../src/demo-source.mjs';
 import { DemoModelGate } from '../src/demo-provider.mjs';
 import { VertexProvider } from '../src/vertex-provider.mjs';
+import { OpenRouterProvider } from '../src/provider.mjs';
 import { BridgeClient, bridgePubSub } from '../src/cloud/bridge-client.mjs';
 import { infrastructureBudgetEvent } from '../src/cloud/cost-guard.mjs';
 import { ModelTasks } from '../src/cloud/model-tasks.mjs';
+import { operationalSlice, prioritizePhysicalWork } from '../src/cloud/operational-lanes.mjs';
 
 const INFERENCE = ['investigate', 'discover_response', 'compile_response', 'interpret_sources', 'analyze_media'];
 const env = process.env, project = env.GOOGLE_CLOUD_PROJECT;
@@ -52,6 +55,9 @@ async function costPaused() {
 }
 async function schedule(delaySeconds = 0) {
   if (!await active()) return;
+  // The active turn schedules its own successor. Browser heartbeats should
+  // not build a second backlog of equivalent clock wake-ups while it runs.
+  if (!delaySeconds && Number((await store.query("SELECT worker_until FROM cloud_demo_control WHERE id='tick'")).rows[0]?.worker_until) > Date.now()) return;
   const seconds = Math.floor(Date.now() / 1000) + delaySeconds;
   const name = queue + '/tasks/demo-tick-' + Math.floor(seconds / 10);
   try { await tasks.createTask({ parent: queue, task: { name, scheduleTime: { seconds }, dispatchDeadline: { seconds: 540 },
@@ -101,17 +107,29 @@ async function tick() {
     for (const org of base) await gateway.ensureApp(org.id, org.name, false);
     const visitors = (await store.query("SELECT * FROM demo_teams WHERE state IN ('active','draining')")).rows;
     for (const row of visitors) {
-      const app = await gateway.ensureApp(row.org, row.name); app.demoActivity.at = Number(row.last_seen);
+      try {
+        const app = await gateway.ensureApp(row.org, row.name); app.demoActivity.at = Number(row.last_seen);
+      } catch (error) {
+        if (error.code !== 'ACTOR') throw error;
+        const connection = await sourceConnection(store, row.org), frame = await gateway.sourceFrame();
+        if (!recoveredDemoIdentityAbsent(row.org, connection, frame)) throw error;
+        try { await observeSourceConnection(store, row.org, { sourceInstance: frame.episodeId, runId: frame.runId, now: frame.now }); }
+        catch (boundary) { if (boundary.code !== 'SOURCE_RESPONSE_CHANGED') throw boundary; }
+        await store.query("UPDATE demo_teams SET state='draining' WHERE org=$1", [row.org]);
+      }
     }
     const apps = [...gateway.apps.values()];
     // Ingestion, receipts and physical monitoring keep their own lane.
     const stopAt = Date.now() + 30000;
     const ordered = apps.slice(operationsCursor).concat(apps.slice(0, operationsCursor));
+    await prioritizePhysicalWork(ordered.map(app => app.worker), stopAt);
     for (const app of ordered) {
       if (Date.now() >= stopAt) break;
       const pending = (await store.query("SELECT id FROM jobs WHERE org=$1 AND kind='ingest' AND state IN ('queued','running','retry') LIMIT 1", [app.config.org])).rows.length;
-      if (!pending && !app.demoEnding) await store.enqueue(app.config.org, 'ingest', {});
-      for (let i = 0; i < 3; i++) if (!await app.worker.once({ excludeKinds: INFERENCE })) break;
+      // Base teams refresh their scoped inventory in maintenance below; they
+      // do not need a second public-feed ingestion pass or paid analysis.
+      if (!pending && !app.demoEnding && app.demoVisitor) await store.enqueue(app.config.org, 'ingest', {});
+      await operationalSlice(app.worker, stopAt);
       operationsCursor = (apps.indexOf(app) + 1) % apps.length;
     }
     await gateway.reviewBases();
@@ -183,18 +201,24 @@ async function initialize() {
     const bytes = await readFile(path.join('/app/viewer', filename));
     res.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'public,max-age=86400' }); res.end(bytes);
   };
-  const modelGate = new DemoModelGate(store, { concurrency: 2, hourlyUsd: 5, totalUsd: 1000 }); await modelGate.refresh();
+  const modelGate = new DemoModelGate(store, { concurrency: 2,
+    hourlyUsd: Number(env.DEMO_MODEL_HOURLY_USD ?? 1), totalUsd: Number(env.DEMO_MODEL_TOTAL_USD ?? 15) }); await modelGate.refresh();
   managed.modelStatus = () => modelGate.status();
   gateway = await createDemoGateway({ store, source, secret: env.DEMO_SESSION_SECRET, dataDir: '/tmp/aidscaler',
+    // Firebase Hosting forwards only this reserved cookie to dynamic rewrites.
+    cookieName: '__session',
     evidenceRoot: env.EVIDENCE_DIR ?? '/app/evidence', host: '127.0.0.1',
     port: 0, origin, maxActive: 5, maxTeamsTotal: 100, startBase: false, managed,
-    testConfig: { autoIngest: false, startWorker: false, provider: 'vertex', modelId: env.MODEL_ID ?? 'gemini-3.1-flash-lite',
+    testConfig: { autoIngest: false, startWorker: false, provider: env.MODEL_PROVIDER ?? 'openrouter',
+      sourceTimeoutMs: 35000,
+      modelId: env.MODEL_ID ?? 'google/gemma-4-31b-it',
       vertexProject: project, vertexLocation: 'global', modelMaxOutputTokens: 8192 },
     providerFactory: (_store, config) => {
-      const provider = new VertexProvider(store, config);
+      const budgeted = { ...config, modelBudgetPool: modelGate };
+      const provider = env.MODEL_PROVIDER === 'vertex' ? new VertexProvider(store, budgeted) : new OpenRouterProvider(store, budgeted);
       return { catalogue: () => provider.catalogue(), complete: async request => {
         const leave = await modelGate.enter(request.signal);
-        try { return await provider.complete(request); } finally { leave(); }
+        try { await modelGate.refresh(); return await provider.complete(request); } finally { leave(); }
       } };
     } });
   gateway.sourceBases = source.baseOrganizations;

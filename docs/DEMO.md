@@ -1,5 +1,13 @@
 # Connected Kubernetes demo
 
+The live demo now uses Firebase Hosting, Cloud Run, Cloud SQL and Pub/Sub, with
+the simulator retained in local Kubernetes. It still uses Gemma 4 through
+OpenRouter. See [the current cloud runbook](../deploy/gcp/README.md).
+
+The Kubernetes commands below describe the previous combined deployment and
+local rollback setup. Do not start that writer alongside `gcp-simulator` on the
+same world volume. The old database and PVCs are retained for rollback.
+
 The public entry is `https://aidscaler.com/demo/`. It runs one shared, persistent Takamatsu world. The browser observes a restricted 3D projection and can join with its own organization, three vehicles, 600 L of water and 120 meal portions. These are explicit demo onboarding resources. They are not benchmark inputs or resources discovered by a model.
 
 The existing platform supplies ingestion, source investigation, versioned human review, peer sharing and physical operation tracking. The configured provider is **Gemma 4 31B through OpenRouter**. GCP and Gemini are separate future deployments.

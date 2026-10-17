@@ -97,6 +97,14 @@
     "budget_pause_units": {
       "type": "number",
       "default": 70
+    },
+    "model_provider": {
+      "type": "string",
+      "default": "openrouter"
+    },
+    "model_id": {
+      "type": "string",
+      "default": "google/gemma-4-31b-it"
     }
   },
   "locals": {
@@ -296,7 +304,8 @@
       "secret": {
         "for_each": {
           "database-url": "database-url",
-          "demo-session": "demo-session"
+          "demo-session": "demo-session",
+          "openrouter-key": "openrouter-key"
         },
         "project": "${var.project_id}",
         "secret_id": "aidscaler-${each.key}",
@@ -329,7 +338,8 @@
       "app": {
         "for_each": {
           "database-url": "database-url",
-          "demo-session": "demo-session"
+          "demo-session": "demo-session",
+          "openrouter-key": "openrouter-key"
         },
         "project": "${var.project_id}",
         "secret_id": "${google_secret_manager_secret.secret[each.key].secret_id}",
@@ -737,7 +747,7 @@
                   },
                   {
                     "name": "MODEL_ID",
-                    "value": "gemini-3.1-flash-lite"
+                    "value": "${var.model_id}"
                   },
                   {
                     "name": "EVIDENCE_DIR",
@@ -779,7 +789,7 @@
                   },
                   {
                     "name": "MODEL_PROVIDER",
-                    "value": "vertex"
+                    "value": "${var.model_provider}"
                   },
                   {
                     "name": "BUDGET_CURRENCY",
@@ -792,6 +802,23 @@
                   {
                     "name": "BUDGET_PAUSE_UNITS",
                     "value": "${tostring(var.budget_pause_units)}"
+                  },
+                  {
+                    "name": "OPENROUTER_API_KEY",
+                    "value_source": [
+                      {
+                        "secret_key_ref": [
+                          {
+                            "secret": "${google_secret_manager_secret.secret[\"openrouter-key\"].secret_id}",
+                            "version": "latest"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "AIDSCALER_RELEASE",
+                    "value": "20261018-post-recovery"
                   }
                 ],
                 "volume_mounts": [
@@ -857,6 +884,12 @@
           "google_secret_manager_secret_iam_member.app",
           "google_project_iam_member.app",
           "google_storage_bucket_iam_member.evidence"
+        ],
+        "scaling": [
+          {
+            "min_instance_count": 0,
+            "max_instance_count": 1
+          }
         ]
       }
     },
@@ -868,6 +901,14 @@
         "name": "${google_cloud_run_v2_service.api[0].name}",
         "role": "roles/run.invoker",
         "member": "allUsers"
+      },
+      "internal": {
+        "for_each": "${var.deploy_runtime ? { push = google_service_account.identity[\"push\"].email, tasks = google_service_account.identity[\"tasks\"].email } : {}}",
+        "project": "${var.project_id}",
+        "location": "${var.region}",
+        "name": "${google_cloud_run_v2_service.api[0].name}",
+        "role": "roles/run.invoker",
+        "member": "serviceAccount:${each.value}"
       }
     },
     "google_iam_workload_identity_pool": {

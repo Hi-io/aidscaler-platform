@@ -391,11 +391,11 @@ export class Store {
       ["continue_" + hash([org, proposalId]), org, JSON.stringify(result)],
     );
   }
-  async lease(org, leaseMs = 180000, asOf = Date.now(), { includeKinds = null, excludeKinds = null } = {}) {
+  async lease(org, leaseMs = 180000, asOf = Date.now(), { includeKinds = null, excludeKinds = null, prioritizePeerResponses = false } = {}) {
     return this.transaction(async (tx) => {
       const { rows } = await tx.query(
-        "SELECT * FROM jobs WHERE org=$1 AND created_at<=$3 AND ($4::text[] IS NULL OR kind=ANY($4)) AND ($5::text[] IS NULL OR NOT(kind=ANY($5))) AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY due_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",
-        [org, asOf, asOf, includeKinds, excludeKinds],
+        "SELECT * FROM jobs WHERE org=$1 AND created_at<=$3 AND ($4::text[] IS NULL OR kind=ANY($4)) AND ($5::text[] IS NULL OR NOT(kind=ANY($5))) AND ((state IN ('queued','retry') AND due_at<=$2) OR (state='running' AND leased_until<$2)) ORDER BY CASE WHEN $6 AND kind='peer_send' AND payload#>>'{message,kind}' IN ('response_request','response_receipt') THEN 0 ELSE 1 END,due_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",
+        [org, asOf, asOf, includeKinds, excludeKinds, prioritizePeerResponses],
       );
       if (!rows[0]) return null;
       const token = uid("lease");

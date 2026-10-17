@@ -950,9 +950,9 @@ export class Worker {
     }
     return { simId, results, complete };
   }
-  async once({ asOf = Date.now(), includeKinds = null, excludeKinds = null } = {}) {
+  async once({ asOf = Date.now(), includeKinds = null, excludeKinds = null, prioritizePeerResponses = false } = {}) {
     if ((await sourceConnection(this.store, this.config.org))?.state === 'requires_new_response') return false;
-    const job = await this.store.lease(this.config.org, 180000, asOf, { includeKinds, excludeKinds });
+    const job = await this.store.lease(this.config.org, 180000, asOf, { includeKinds, excludeKinds, prioritizePeerResponses });
     if (!job) return false;
     const heartbeat = setInterval(
       () => this.store.renewJob(job).catch(() => {}),

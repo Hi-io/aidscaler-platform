@@ -56,7 +56,8 @@ environment = {
     "GOOGLE_CLOUD_PROJECT": "aidscaler", "GOOGLE_APPLICATION_CREDENTIALS": "/etc/google/google.json",
     "BRIDGE_COMMAND_SUBSCRIPTION": "aidscaler-simulator-commands", "BRIDGE_REPLY_TOPIC": "aidscaler-replies",
     "DATA_DIR": "/data/demo/gcp-bridge", "DEMO_WORLD_DIR": "/data/demo/simulator",
-    "DEMO_ALLOW_BUILD_UPGRADE": "true", "DEMO_RATE": "10", "HOME": "/tmp", "PORT": "8081"
+    "DEMO_ALLOW_BUILD_UPGRADE": "true", "DEMO_RATE": "10", "HOME": "/tmp", "PORT": "8081",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
 }
 items.append({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {
     "name": "gcp-simulator", "namespace": namespace, "labels": label}, "spec": {
@@ -64,7 +65,7 @@ items.append({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {
     "template": {"metadata": {"labels": label}, "spec": {
         "serviceAccountName": "aidscaler-simulator", "automountServiceAccountToken": False,
         "nodeSelector": {"kubernetes.io/hostname": "worker-1"},
-        "terminationGracePeriodSeconds": 120,
+        "terminationGracePeriodSeconds": 300,
         "securityContext": {"runAsUser": 1000, "runAsGroup": 1000, "fsGroup": 1000},
         "initContainers": [{"name": "install-release", "image": image, "workingDir": "/app",
             "command": ["sh", "-c", install],
@@ -74,9 +75,9 @@ items.append({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {
         "containers": [{"name": "simulator", "image": image, "workingDir": "/app",
             "command": ["node", "scripts/gcp-bridge.mjs"],
             "env": [{"name": key, "value": value} for key, value in environment.items()],
-            "resources": {"requests": {"cpu": "500m", "memory": "1Gi"}, "limits": {"cpu": "2", "memory": "2Gi"}},
+            "resources": {"requests": {"cpu": "500m", "memory": "1Gi"}, "limits": {"cpu": "2", "memory": "6Gi"}},
             "ports": [{"containerPort": 8081}],
-            "startupProbe": {"httpGet": {"path": "/healthz", "port": 8081}, "periodSeconds": 5, "failureThreshold": 36},
+            "startupProbe": {"httpGet": {"path": "/healthz", "port": 8081}, "periodSeconds": 5, "failureThreshold": 120},
             "readinessProbe": {"httpGet": {"path": "/healthz", "port": 8081}, "periodSeconds": 10},
             "securityContext": {"allowPrivilegeEscalation": False, "readOnlyRootFilesystem": True,
                                 "capabilities": {"drop": ["ALL"]}},

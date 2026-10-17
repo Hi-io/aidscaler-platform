@@ -1,7 +1,9 @@
 # AidScaler demo on Google Cloud
 
-Preparation date: 18 October 2026. This directory prepares the hybrid demo;
-it does not automatically publish or migrate the current Kubernetes demo.
+Deployment: 18 October 2026, project `aidscaler`. The hybrid demo uses Google
+Cloud for the application and the existing local Kubernetes cluster for its world.
+The active model remains **Gemma 4 through OpenRouter**. Vertex/Gemini is an
+optional adapter; deployment does not switch providers automatically.
 
 ## Deployment shape
 
@@ -23,16 +25,29 @@ it does not automatically publish or migrate the current Kubernetes demo.
 - BigQuery: short-retention analytics dataset prepared. Domain analytics export
   is not connected yet; transactional application data remains in PostgreSQL.
 
-## Current verification boundary
+## Verification and recovery
 
-The GCP project exists and interactive gcloud authentication was checked.
-Billing is not enabled at preparation time. Terraform validation and mocked plan
-tests, local bridge/provider tests and Kubernetes server-side dry runs can run
-without creating paid resources. No real Cloud Run, Cloud SQL, Pub/Sub, Vertex,
-Firebase Hosting release or live cloud latency claim has been verified yet.
+Real Cloud Build images, Cloud SQL import, Firebase Hosting publication, Pub/Sub
+round trips and two isolated cloud visitor workspaces have been checked. The
+session signing secret and paired PostgreSQL/world backup were preserved.
+A real Vertex tool-call smoke test checked future compatibility only; it does
+not change the demo's active provider or replace its Gemma evaluation evidence.
 
-Cloud image builds and live integration checks are deployment gates after billing
-is available. Do not describe a mocked Terraform plan as a real provider apply.
+Private deployment evidence is in `.local/gcp/`. Keep live functional checks
+separate from mocked Terraform tests. Budget email delivery requires recipient
+confirmation; configured channels alone do not prove an email was delivered.
+
+The first low-memory bridge startup advanced the transport journal beyond its
+checkpoint and therefore created a new source epoch. The physical run and world
+were retained. Old partitions were fenced, not silently rebound. Four automated
+base partitions were archived with hash verification while writers and queues
+were stopped; visitor history and all audit/usage records were preserved.
+A later graceful restart retained the same new source epoch and physical run.
+The five-slot soak then exceeded the original 4 GiB allocation. The local bridge
+now has 6 GiB, a 4 GiB V8 heap allowance and a longer recovery startup probe.
+Unexpected recovery must still fence earlier transport epochs; memory limits
+are not a substitute for this check.
+Do not restore an old database dump over newer visitor work.
 
 ## Local tools and configuration
 
@@ -40,6 +55,10 @@ The current Windows workstation uses Google Cloud CLI in WSL Ubuntu and a portab
 Terraform CLI in the parent workspace's .local/tools directory. deploy.ps1 reads
 the private alert recipient from .local/gcp/settings.json. That file, OAuth
 credentials, Terraform state, plans and backend settings are excluded from Git.
+The cloud gateway uses the reserved `__session` HttpOnly cookie because Firebase
+Hosting forwards only that cookie to dynamic rewrites. CSRF/origin checks and
+organization isolation remain enforced. Operational worker turns reserve space
+for execution and ingestion; partner requests/receipts precede snapshot backlog.
 
     ./deploy/gcp/deploy.ps1 -Stage Check
 
@@ -52,29 +71,29 @@ use the repositories' frozen pnpm lockfiles. Re-run prepare after source changes
 
 ## Budget protection
 
-Amounts are USD before taxes. Gemini/Vertex usage is deliberately outside the
-infrastructure budget and is recorded separately.
+The active billing account uses **THB**, so deployed controls use THB. The
+infrastructure target remains roughly USD 35–55/month at low use; exchange rates,
+taxes and usage change the final invoice. Model charges are separate.
 
-1. Target infrastructure consumption: approximately USD 35–55/month at low use.
-   SQL compute is USD 25.20 for 720 hours, plus SSD and backup storage.
-2. Infrastructure budget: USD 100, filtered to the service IDs used by this stack.
-   Alerts at USD 40/55/70/85 and a forecast of USD 100. The service IDs were
-   checked against Google's public billing catalogue.
-3. A native Cloud Run monthly spend cap of USD 10 is created through the Billing
-   Budget API, because the pinned Terraform provider does not expose spendCap.
-   The script verifies an existing cap and refuses to silently lift one.
-4. Authenticated budget messages pause new dynamic work at USD 70 infrastructure
-   spend or when the forecast alert fires. The remaining margin covers continuing
-   SQL/storage charges. Current in-flight requests may finish.
-5. Cloud Run has maximum one instance; the database has eight pooled connections;
-   model work has at most two lanes; pending Cloud Tasks are bounded.
-6. No visible visitors means no new AI work, no ingestion/tick task chain, and no
-   simulation ticks. Landing visits and health probes do not renew demo presence.
+1. Project-scoped infrastructure budget: **THB 3,000/month**, with actual-spend
+   alerts at 40/55/70/85% and a forecast threshold of 100%.
+2. Authenticated budget messages pause new dynamic work at **THB 2,100** or a
+   forecast alert. Fixed SQL/storage charges continue during this pause.
+3. Native Cloud Run monthly spend cap: **THB 300**, verified through the Billing
+   Budget API. Scripts refuse to silently lift an existing cap.
+4. Cloud Run service and revision maxima are both one instance, minimum zero;
+   eight pooled database connections, two model lanes and five visitor slots.
+5. OpenRouter usage is charged to its existing account and recorded separately.
+   The shared demo inference allowance defaults to USD 1/hour and USD 15 total;
+   each organization also has its own limits. Unknown-cost failed attempts
+   retain their conservative reservation.
+6. No visible visitors means no new AI work and, after ten minutes, no tick task
+   chain or simulation ticks. Landing visits and health probes do not renew
+   presence. Cloud SQL remains running to avoid database wake-up delay.
 
-Budgets and spend caps are not instantaneous invoice guarantees. Storage and
-fixed costs continue while processing is suspended. Keep a margin below USD 100.
-If the billing account uses a currency other than USD, deployment stops before
-resource creation until the budget amounts have been converted and reviewed.
+Budgets, alerts and spend caps are not instantaneous invoice guarantees. The
+conservative THB conversion leaves margin below the requested USD 100 ceiling.
+Do not treat the monthly budget as a prepaid balance or an automatic SQL stop.
 
 References: [Google spend cap API](https://docs.cloud.google.com/billing/docs/how-to/budget-api-spend-cap),
 [spend cap limitations](https://docs.cloud.google.com/billing/docs/how-to/budgets-spend-caps),
@@ -99,8 +118,9 @@ Artifact Registry image digest after its first successful build.
 The state backend is a separate private GCS bucket. It contains generated database
 and session secrets; treat access to it as administrative access. The deployment
 scripts keep access tokens in process environment only and remove them afterward.
-The application uses an attached service account for Vertex; no OpenRouter key
-is needed in the cloud build, browser or Terraform configuration.
+The application reads its OpenRouter key only from Secret Manager at runtime.
+No key enters the cloud build, browser or Terraform source/state variables.
+The attached service account also supports a future Vertex switch.
 
 ## Local simulator activation and preservation
 
@@ -131,8 +151,17 @@ cluster's public JWKS, bound only to system:serviceaccount:aidscaler:aidscaler-s
 No Google service-account private key is generated. Refresh the JWKS configuration
 if the local cluster rotates its signing keys.
 
+The retained large world currently has a 6 GiB simulator memory limit. Monitor
+its working set before raising visitor limits; historical growth matters too.
 The initial dependency install can take minutes during deployment/restart; visits
 resume the already loaded world instead of re-running that installation.
+
+The long-running world also exposed an unrelated SQLite retention scan in the
+local transport. On the retained production queue, the indexed audience-prefix
+query returned the same 187 eligible rows in 4.5 ms instead of 30.6 seconds.
+It still waits for every audience subscriber, retains event-ID tombstones,
+and preserves physical audit history. This is a single-query diagnostic, not
+an application latency percentile or a new response-impact benchmark.
 
 ## Live gates before publishing Hosting or changing DNS
 
@@ -148,8 +177,8 @@ resume the already loaded world instead of re-running that installation.
   the same world, without simulated catch-up or duplicate tasks.
 - Capture cold-start and warm timings; target a usable landing under five seconds.
   Target a live demo resume in 2–10 seconds, to be measured rather than assumed.
-- Run a small real Vertex tool-call sequence, check usage including thinking
-  tokens, and compare required outcomes with the existing Gemma evidence.
+- Confirm the active model is OpenRouter/Gemma, check paid-call receipts and
+  preserve the optional Vertex smoke as compatibility evidence only.
 - Verify real budget emails, the Cloud Run cap, and the authenticated preventive
   pause. Confirm Gemini charges do not trigger the infrastructure budget.
 - Check CPU/RAM and SQL connections with 1, 2 and 5 participants before opening

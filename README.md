@@ -4,13 +4,13 @@
 
 AidScaler is an operations platform for NGOs, emergency services and public response teams. It connects public reports with operational data, investigates what needs checking and prepares actions for human review. Multiple organizations can coordinate their capabilities while keeping control of their resources and decisions.
 
-The platform runs locally with **Gemma 4 31B through OpenRouter**. Gemini and Google Cloud are planned next steps.
+The live hybrid demo runs on **Google Cloud with Gemma 4 31B through OpenRouter**. Its shared simulation runs in Kubernetes. A Vertex AI adapter is available for a future Gemini rollout.
 
 ## Try the connected demo
 
 Open [aidscaler.com/demo](https://aidscaler.com/demo/) to observe the shared Takamatsu response or create a demo organization. No registration is required. Your team receives limited vehicles and supplies, reviews real model proposals and can follow its authorized deliveries in the simulated world.
 
-The public viewer is read-only. Each participant controls their own organization's decisions; simulator controls, connectors and provider credentials stay private. See [Demo deployment](docs/DEMO.md) for Kubernetes operation, quotas and recovery.
+The public viewer is read-only. Each participant controls their own organization's decisions; simulator controls, connectors and provider credentials stay private. See [Cloud deployment](deploy/gcp/README.md) for the current stack, quotas and recovery. The [local demo guide](docs/DEMO.md) retains the Kubernetes rollback workflow.
 
 The shared demo creates further incidents as requests are resolved. Teams receive scheduled supplies by default; expand **Recurring supplies (demo)** when joining, or edit your team's schedule on the map. Operators can also use **Resources & facilities → Record received supplies** to confirm an incoming shipment with a unique delivery reference.
 
@@ -72,4 +72,4 @@ The ordinary test suite uses local fixtures. Commands that explicitly invoke the
 
 ## Project scope
 
-This is a working prototype with a local laboratory and a public Kubernetes demo. The laboratory represents finite resources, human attention, communication delays and physical delivery; its outcomes are simulation evidence. Real emergency operations, institutional adoption, Gemini integration and a Google Cloud deployment need their own validation. Financial flows use a local sandbox and do not charge real money.
+This is a working prototype with a local laboratory and a public hybrid Google Cloud/Kubernetes demo. The laboratory represents finite resources, human attention, communication delays and physical delivery; its outcomes are simulation evidence. Real emergency operations, institutional adoption and Gemini performance need their own validation. Financial flows use a local sandbox and do not charge real money.
