@@ -1,5 +1,7 @@
 // Lucide icons · ISC license. See LICENSE-LUCIDE.txt.
 export const icons = {
+  plus: '<path d="M12 5v14" /><path d="M5 12h14" />',
+  "locate-fixed": '<circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="2" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3" />',
   "chevron-down": '<path d="m6 9 6 6 6-6" />',
   "loader-circle": '<path d="M21 12a9 9 0 1 1-6.219-8.56" />',
   "layout-dashboard":

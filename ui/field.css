@@ -1,0 +1,61 @@
+.field-workspace { max-width: 900px; margin-inline: auto; }
+.field-workspace > .grid { margin-bottom: 20px; }
+.field-workspace .inline-notice { padding: 13px 18px; }
+.field-composer-card { margin-top: 20px; padding: 28px 30px 8px; }
+.field-outbox { margin-top: 18px; padding: 8px 22px; }
+.field-outbox > summary { min-height: 44px; }
+.field-outbox[open] { padding-bottom: 20px; }
+.field-composer { width: 100%; min-width: 0; }
+.field-composer .field-composer-label { margin: 0 0 16px; font-size: 16px; font-weight: 650; }
+.field-composer textarea { display: block; width: 100%; min-height: clamp(160px, 22vh, 240px); padding: 6px 0 20px; border: 0; border-radius: 0; background: transparent; font-size: 15px; line-height: 1.7; resize: vertical; }
+.field-composer textarea::placeholder { color: #8b8d9b; }
+.field-composer textarea:focus-visible { outline-offset: 6px; }
+.field-composer-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 16px; }
+.field-composer-tools { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.field-composer-tools > button, .field-location-control > button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; }
+.field-composer .field-attach-button { width: 38px; padding: 8px; flex: 0 0 38px; }
+.field-composer .field-attach-button .icon { width: 19px; height: 19px; }
+.field-location-control { position: relative; min-width: 0; }
+.field-location-control > button { color: var(--muted); border-color: transparent; background: var(--surface-muted); }
+.field-location-control > button.has-location { color: var(--accent); background: var(--accent-soft); }
+.field-location-control > button > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.field-location-control > button .icon { width: 15px; height: 15px; flex-shrink: 0; }
+.field-composer [data-field-submit] { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 39px; min-width: 100px; }
+.field-location-options { position: absolute; z-index: 20; top: calc(100% + 10px); left: 0; width: 340px; max-width: min(340px, calc(100vw - 100px)); padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: 0 12px 36px #2220391c; overflow-y: auto; overscroll-behavior: contain; }
+.field-location-options.opens-above { top: auto; bottom: calc(100% + 10px); }
+.field-location-options[hidden], .field-attachment-preview[hidden], .field-composer-message[hidden] { display: none; }
+.field-location-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.field-location-heading button { padding: 5px; border: 0; }
+.field-location-heading .icon { width: 16px; height: 16px; }
+.field-location-options [data-field-use-location] { display: flex; align-items: center; gap: 7px; width: 100%; margin-bottom: 16px; text-align: left; }
+.field-location-options label { margin: 0; font-size: 12px; }
+.field-location-options input { font-size: 13px; }
+.field-location-options p { margin: 10px 0 14px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.field-location-options [data-field-save-location] { display: block; margin-left: auto; color: var(--accent); }
+.field-attachment-preview { display: flex; align-items: center; gap: 12px; padding: 9px 12px; margin: 0 0 14px; border-radius: 7px; background: var(--surface-muted); font-size: 12px; }
+.field-attachment-preview span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.field-attachment-preview button { margin-left: auto; flex-shrink: 0; padding: 4px 8px; font-size: 11px; }
+.field-composer-message { margin: 14px 0 0; color: var(--coral); font-size: 12px; line-height: 1.6; }
+.field-report-options { margin-top: 20px; border-top: 1px solid var(--line); }
+.field-report-options > summary { display: flex; gap: 10px; align-items: center; min-height: 46px; color: var(--muted); list-style: none; cursor: pointer; font-size: 12px; }
+.field-report-options > summary::-webkit-details-marker { display: none; }
+.field-report-options > summary::after { content: '+'; margin-left: auto; color: var(--accent); font-size: 18px; }
+.field-report-options[open] > summary::after { content: '−'; }
+.field-report-options > summary > span { font-size: 11px; color: #858594; }
+.field-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 8px 0 0; }
+.field-options-grid label { margin-bottom: 8px; }
+.field-options-grid input, .field-options-grid select { font-size: 13px; }
+.field-options-grid small { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; font-weight: 400; }
+@media (max-width: 620px) {
+  .field-composer-card { padding: 22px 18px 8px; }
+  .field-outbox { padding-inline: 18px; }
+  .field-location-control > button { padding-inline: 9px; }
+  .field-location-control > button .icon:last-child { display: none; }
+  .field-location-options { left: -48px; max-width: calc(100vw - 64px); }
+  .field-report-options > summary { flex-wrap: wrap; gap: 3px 10px; padding-block: 10px; }
+  .field-report-options > summary > span { max-width: 72%; }
+  .field-options-grid { grid-template-columns: 1fr; gap: 10px; }
+  .field-composer-toolbar { gap: 8px; }
+  .field-composer-tools { gap: 6px; }
+  .field-composer [data-field-submit] { min-width: 82px; padding-inline: 10px; }
+}

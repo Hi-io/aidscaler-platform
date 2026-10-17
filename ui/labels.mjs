@@ -1,4 +1,5 @@
 /** Display labels only: identifiers, source text and command payloads never change. */
+import { vehicleIdentity } from './vehicle-identity.mjs';
 const demoOrganizations = ['Relief North', 'Community East', 'Rescue South', 'Medical West', 'Independent contractor'];
 const districts = ['Cedar', 'Maple', 'River', 'Sora', 'Hana', 'Sakura', 'Aoba', 'Mori', 'Harbor', 'Willow', 'Pine', 'Lake'];
 const uses = { residential: 'Homes', shelter: 'Shelter', school: 'School', clinic: 'Clinic', warehouse: 'Depot', water: 'Water Station', hospital: 'Hospital', power: 'Power Station' };
@@ -48,16 +49,19 @@ export function humanLabel(value) {
   return s ? s[0].toUpperCase() + s.slice(1) : '';
 }
 export function resourceLabel(record) { return record.label || record.name || types[record.type] || entityLabel(record.id); }
+/** Fictional registrations are enabled only in a recognized laboratory workspace. */
+export function vehicleDisplayIdentity(record) { return vehicleIdentity(record, { demo }); }
 export function registerDisplayRecords(kind, records) {
   for (const record of Array.isArray(records) ? records : records ? [records] : []) {
     if (!record.id) continue;
     if (kind === 'need') labels.set(record.id, `${humanLabel(record.type)} at ${entityLabel(record.building ?? record.node) || 'unconfirmed location'}`);
     else if (kind === 'resource') labels.set(record.id, resourceLabel(record));
-    else if (['vehicle', 'facility'].includes(kind) && (record.label || record.name)) labels.set(record.id, record.label || record.name);
+    else if (kind === 'vehicle') labels.set(record.id, vehicleDisplayIdentity(record).label);
+    else if (kind === 'facility' && (record.label || record.name)) labels.set(record.id, record.label || record.name);
   }
 }
 /** Use for UI summaries, never for quoted source evidence or raw JSON. */
 export function readableText(value) {
-  return String(value ?? '').replace(/\b(?:need-[\w-]+|r-org\d+-[a-z_]+(?:-\w+)?|v-org\d+-\d+|org\d+|b\d+|n\d+)\b/g, entityLabel);
+  return String(value ?? '').replace(/\b(?:need-[\w-]+|r-org\d+-[a-z_]+(?:-\w+)?|v-org\d+-\d+|traffic-\d+|org\d+|b\d+|n\d+)\b/g, entityLabel);
 }
 export function labelHints() { return usingAliases ? 'Sample place names are display aliases for this laboratory map. Original identifiers remain in source records.' : ''; }

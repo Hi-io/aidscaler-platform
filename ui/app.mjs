@@ -1,5 +1,7 @@
 import { responseReadOnly, responseReadOnlyMessage, responseBoundaryNotice, protectPreviousResponse } from "./source-connection.mjs";
-import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints } from "./labels.mjs";
+import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints, vehicleDisplayIdentity } from "./labels.mjs";
+import { renderFieldComposer, bindFieldComposer } from "./field-composer.mjs";
+import { deliverFieldReport } from "./field-delivery.mjs";
 import { createPortalViews } from "./portal.mjs";
 import { agentMonitor } from "./autonomy.mjs";
 import { createLiveWorkspace, freshnessNotice } from "./live.mjs";
@@ -87,7 +89,10 @@ let state = {
   },
   polling = false,
   dialog = null,
-  renderVersion = 0;
+  renderVersion = 0,
+  disposeFieldComposer = null,
+  flushing = false,
+  flushAgain = false;
 const pageRoles = {
   field: ["field", "media"],
   publisher: ["publications", "media", "overview"],
@@ -357,6 +362,8 @@ function action(label, act, id = "", cls = "") {
   return `<button class="${cls}" data-action="${act}" data-id="${escape(id)}">${label}</button>`;
 }
 function login(error = "") {
+  disposeFieldComposer?.();
+  disposeFieldComposer = null;
   app.innerHTML = `<div class="login"><div class="loginaside"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><div><span class="eyebrow">DISASTER RESPONSE · LOCAL WORKSPACE</span><h1>Scattered signals.<br>A response that<br><span class="gradient">comes together.</span></h1><p>A shared operational picture for the people coordinating help when every minute matters.</p></div><div class="loginbottom small">Model-assisted investigation. Human-owned decisions.</div></div><div class="loginform"><form id="loginform"><h2>Your response workspace</h2><p>Sign in with your organization's account.<br>Roles and authorizations stay separate.</p><label>Email<input type="email" name="email" required autocomplete="username" placeholder="you@your-organization.org"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label>${error ? `<div role="alert" class="error">${escape(error)}</div>` : ""}<button class="primary" type="submit">Enter workspace ${icon("arrow-right")}</button><div class="loginlinks"><a href="/public">Public response portal</a><a href="/community">Report a need</a></div><div class="footnote">Local prototype. Test payments collect no money. Access credentials are provisioned by your administrator.</div></form></div></div>`;
   document.querySelector("#loginform").onsubmit = async (e) => {
     e.preventDefault();
@@ -383,6 +390,8 @@ function shell(content) {
   const active = nav.find(n => n[0] === state.page), scope = `${state.user.org}:${state.user.id}`;
   const previousPage = app.querySelector("main[data-view]")?.dataset.view;
   rememberPresentation(app, scope);
+  disposeFieldComposer?.();
+  disposeFieldComposer = null;
   app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(entityLabel(state.user.org))}</strong><span class="org-role">${escape(humanLabel(state.user.role))}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(humanLabel(state.user.role))}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}" class="${responseReadOnly(state.sourceConnection) ? "response-readonly" : ""}"><div data-source-boundary>${responseBoundaryNotice(state.sourceConnection, escape)}</div>${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p>${labelHints() ? `<p>${escape(labelHints())}</p>` : ""}</details></main></div></div>`;
   bind();
   updateSourceConnection(state.sourceConnection);
@@ -499,12 +508,19 @@ async function resources() {
   const tab = state.resourceTab ?? "inventory";
   const own = items.filter(r => r.owner === state.user.org || !r.owner), peers = items.filter(r => r.owner && r.owner !== state.user.org);
   const inventory = rows => presentation.resourceTable(rows, { usable, available, staffBadge: r => staffAvailabilityBadge(r, dashboard.simulatedAt, { escape, time: simulationClock }), expiryLabel: at => sourceExpiryLabel(at, dashboard.simulatedAt) });
-  const fleet = rows => rows.map(v => `<div class="listrow"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(v.label || entityLabel(v.id))}</h3><p>Capacity ${number(v.capacity)} · ${escape(entityLabel(v.owner))}</p>${driverAvailabilityBadge(v)}<details class="row-details"><summary>Vehicle record</summary><pre class="trace">${escape(JSON.stringify(v,null,2))}</pre></details></div>${badge(v.state)}</div>`).join("");
-  const tabs = [["inventory","Inventory",own.length],["transport","Transport",vehicles.filter(v => v.owner === state.user.org).length],["facilities","Facilities",facilities.length]];
+  const isTraffic = v => vehicleDisplayIdentity(v).isBackground;
+  const operationalVehicles = vehicles.filter(v => !isTraffic(v)), traffic = vehicles.filter(isTraffic);
+  const ownVehicles = operationalVehicles.filter(v => v.owner === state.user.org), partnerVehicles = operationalVehicles.filter(v => v.owner !== state.user.org);
+  const fleet = (rows, background = false) => rows.map(v => {
+    const identity = vehicleDisplayIdentity(v);
+    const name = background ? "Community vehicle" : identity.plate ? identity.label.replace(` · ${identity.plate}`, "") : identity.label;
+    return `<div class="listrow vehicle-row"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(name)} ${identity.plate ? `<span class="vehicle-plate" title="${escape(identity.registrationLabel)}">${escape(identity.plate)}</span>` : ""}</h3><p>${background ? "Observed traffic · Not part of your response fleet" : `Capacity ${number(v.capacity)} · ${escape(entityLabel(v.owner))}`}</p>${background ? "" : driverAvailabilityBadge(v)}<details class="row-details"><summary>Vehicle record</summary>${identity.plate ? `<p class="small">${escape(identity.registrationLabel)}: ${escape(identity.plate)}</p>` : ""}<pre class="trace">${escape(JSON.stringify(v,null,2))}</pre></details></div>${badge(v.state)}</div>`;
+  }).join("");
+  const tabs = [["inventory","Inventory",own.length],["transport","Transport",ownVehicles.length],["facilities","Facilities",facilities.length]];
   return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.", action("Add or update records", "register-record", "", "primary")) +
     `<div class="view-tabs" role="group" aria-label="Resource category">${tabs.map(([id,name,count]) => `<button data-action="resource-tab" data-id="${id}" aria-pressed="${tab===id}">${name} <span>${count}</span></button>`).join("")}</div>` +
     (tab === "inventory" ? `<section class="card resource-group"><div class="section-heading"><h2>Your inventory</h2><span class="small">Ready to commit, after protected stock</span></div>${own.length ? inventory(own) : empty("No owned resources received. Sync your inventory source.","package")}${peers.length ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner inventory <span>${peers.length} resources</span></summary><p class="small">Observed capacity. A partner must confirm any commitment.</p>${inventory(peers)}</details>` : ""}</section>` :
-    tab === "transport" ? `<section class="card"><div class="section-heading"><h2>Your transport</h2><span class="small">Last received vehicle states</span></div>${fleet(vehicles.filter(v => v.owner === state.user.org)) || empty("No owned vehicles have been received.","truck")}<details class="secondary-disclosure"><summary>Partner vehicles <span>${vehicles.filter(v => v.owner !== state.user.org).length} vehicles</span></summary>${fleet(vehicles.filter(v => v.owner !== state.user.org)) || '<p class="small">No partner vehicles received.</p>'}</details></section>` :
+    tab === "transport" ? `<section class="card"><div class="section-heading"><h2>Your transport</h2><span class="small">Last received vehicle states</span></div>${fleet(ownVehicles) || empty("No owned vehicles have been received.","truck")}${partnerVehicles.length ? `<details class="secondary-disclosure" data-ui-key="resources:partner-vehicles"><summary>Partner vehicles <span>${partnerVehicles.length} vehicles</span></summary>${fleet(partnerVehicles)}</details>` : ""}${traffic.length ? `<details class="secondary-disclosure" data-ui-key="resources:traffic"><summary>Traffic observed <span>${traffic.length} vehicles</span></summary>${fleet(traffic,true)}</details>` : ""}</section>` :
     `<section class="card"><div class="section-heading"><h2>Facilities</h2>${action("Request facility check","verifyform","","quiet")}</div>${facilities.map(f => `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(entityLabel(f.id))}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"}</p></div>${badge(f.state ?? "unknown")}${action("Investigate","investigate-facility",f.id)}</div>`).join("") || empty("No assessed facilities received. Request a check before planning their use.","building-2")}</section>`);
 }
 async function network() {
@@ -600,14 +616,25 @@ async function field() {
   const queue = (await offlineQueue("all")).filter(
     (r) => r.queueOrg === state.user.org && r.queueActor === state.user.id,
   );
-  return (
+  return `<div class="field-workspace">` + (
     title(
       "Field workspace",
-      "Capture a need, restriction or receipt. Offline reports remain queued until the server acknowledges them.",
+      "Report what you see. Saved offline until the server confirms receipt.",
     ) +
     (await workforceControls.field()) +
-    `<div class="grid split field-layout"><section class="card"><h2>New observation</h2><form id="fieldform" class="fieldform"><label>Report type<select name="kind"><option value="need">A need or situation</option><option value="receipt">Aid received</option><option value="road">Access restriction</option><option value="facility">Facility assessment</option><option value="correction">A correction</option><option value="voice">Voice note transcript</option></select></label><label>Location<input name="location" placeholder="e.g. Sakura Shelter" required></label><label>What did you observe?<textarea name="text" placeholder="Describe what you saw. Include quantities and uncertainty when known." required></textarea></label><details class="form-disclosure"><summary>Observation time <span>Defaults to now · change for an earlier report</span></summary><label>When did it happen?<input name="observedAt" type="datetime-local" required value="${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}"></label></details><button class="primary" type="submit">${icon("send")} Save & send report</button></form></section><section class="card"><div class="cardheader"><h2>Report outbox</h2>${badge(state.offline ? "offline" : "connected")}</div><div id="fieldqueue">${queue.map((q) => `<div class="listrow"><div class="rowicon">${icon(q.lastError ? "circle-alert" : "clock")}</div><div class="grow"><h3>${escape(q.location)}</h3><p>${escape(String(q.text ?? "").slice(0, 150))}</p>${badge(q.lastError ? "requires_review" : "queued")} <span class="small">${q.lastError ? escape(q.lastError) : "Saved on this device. Not yet received."}</span>${q.lastError ? action("Resolve pending update", "queue-conflict", q.clientId, "accent") : ""}</div></div>`).join("") || empty("Your queued reports will appear here. Server confirmation is required before a report is marked received.", "check")}</div>${queue.length ? action("Retry queued reports", "flush", "", "accent") : ""}</section></div>`
-  );
+    `<section class="card field-composer-card">${renderFieldComposer({escape,icon})}</section>` + fieldOutbox(queue)
+  ) + `</div>`;
+}
+function fieldOutbox(queue) {
+  return `<details class="card field-outbox secondary-disclosure" data-field-outbox ${queue.length ? "open" : ""}><summary>Report outbox <span>${queue.length ? `${queue.length} pending` : "Nothing pending"}</span></summary><div id="fieldqueue">${queue.map(q => `<div class="listrow"><div class="rowicon">${icon(q.lastError ? "circle-alert" : "clock")}</div><div class="grow"><h3>${escape(q.location || "Task update")}</h3><p>${escape(String(q.text ?? "").slice(0,150))}</p>${badge(q.lastError ? "requires_review" : "queued")} <span class="small">${q.lastError ? escape(q.lastError) : "Saved on this device. Not yet received."}${q.attachment ? " · Attachment saved" : ""}</span>${q.lastError && q.queueKind === "task" ? action("Resolve pending update","queue-conflict",q.clientId,"accent") : ""}</div></div>`).join("") || `<p class="small">Nothing waiting on this device. Reports leave the outbox only after the server confirms receipt.</p>`}</div>${queue.length ? action("Retry queued reports","flush","","accent") : ""}</details>`;
+}
+async function refreshFieldOutbox() {
+  const current = app.querySelector("[data-field-outbox]");
+  if (state.page !== "field" || !current || !state.user) return;
+  const queue = (await offlineQueue("all")).filter(r => r.queueOrg === state.user.org && r.queueActor === state.user.id);
+  current.outerHTML = fieldOutbox(queue);
+  const updated = app.querySelector("[data-field-outbox]");
+  if (updated) { bind(updated); protectPreviousResponse(updated,state.sourceConnection); }
 }
 async function settings() {
   const sources = await record("source");
@@ -829,6 +856,15 @@ async function operationDetail(id) {
 }
 async function flush() {
   if (!navigator.onLine) return;
+  if (flushing) { flushAgain = true; return; }
+  flushing = true;
+  try { await flushReports(); }
+  finally {
+    flushing = false;
+    if (flushAgain) { flushAgain = false; void flush().catch(e => toast(e.message)); }
+  }
+}
+async function flushReports() {
   try {
     const me = await api("/api/me");
     state.user = me.user;
@@ -850,21 +886,10 @@ async function flush() {
     if (item.queueOrg !== state.user.org || item.queueActor !== state.user.id)
       continue;
     try {
-      const {
-        queueOrg,
-        queueActor,
-        queueKind,
-        taskPayload,
-        lastError,
-        errorCode,
-        ...payload
-      } = item;
-      await api(
-        queueKind === "task" ? "/api/task/update" : "/api/report",
-        queueKind === "task"
-          ? { ...taskPayload, idempotencyKey: item.clientId }
-          : payload,
-      );
+      if (item.queueKind === "task")
+        await api("/api/task/update", { ...item.taskPayload, idempotencyKey: item.clientId });
+      else
+        await deliverFieldReport(item, { api, persist: saved => offlineQueue("put",saved), actor: state.user });
       await offlineQueue("delete", item.clientId);
       sent++;
     } catch (e) {
@@ -882,7 +907,7 @@ async function flush() {
     toast(
       `${sent} field update${sent === 1 ? "" : "s"} received by the server.`,
     );
-  if (state.page === "field") await render();
+  await refreshFieldOutbox();
 }
 async function runAction(name, id) {
   if (name === "close") { dialog?.close(); return; }
@@ -901,7 +926,7 @@ async function runAction(name, id) {
         r.queueActor === state.user.id &&
         r.queueOrg === state.user.org,
     );
-    if (!item) return;
+    if (!item || item.queueKind !== "task") return;
     state.queueConflict = item;
     let current;
     if (item.queueKind === "task" && navigator.onLine)
@@ -917,7 +942,7 @@ async function runAction(name, id) {
   }
   if (name === "queue-as-observation") {
     const item = state.queueConflict;
-    if (!item || item.clientId !== id) return;
+    if (!item || item.clientId !== id || item.queueKind !== "task") return;
     const observation = {
       clientId: crypto.randomUUID(),
       queueOrg: state.user.org,
@@ -1343,31 +1368,37 @@ function bind(root = app) {
       i?.setSelectionRange(pos, pos);
     }, 350);
   });
-  root.querySelector("#fieldform")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const d = Object.fromEntries(new FormData(e.target));
-    await offlineQueue("put", {
-      ...d,
-      clientId: crypto.randomUUID(),
-      observedAt: new Date(d.observedAt).getTime(),
-      references: [],
-      queueOrg: state.user.org,
-      queueActor: state.user.id,
-    });
-    toast("Report saved on this device.");
-    if (navigator.onLine) await flush();
-    else await render();
+  const fieldForm = root.querySelector("#fieldform");
+  const fieldActor = state.user ? {org:state.user.org,id:state.user.id} : null;
+  if (fieldForm) disposeFieldComposer = bindFieldComposer(fieldForm, {
+    readAttachment, toast,
+    onSave: async payload => {
+      if (!fieldActor || state.user?.id !== fieldActor.id || state.user?.org !== fieldActor.org)
+        throw new Error("Sign in to the original account before saving this report.");
+      if (responseReadOnly(state.sourceConnection)) throw new Error(responseReadOnlyMessage);
+      await offlineQueue("put", { ...payload, clientId: crypto.randomUUID(), references: [], queueOrg: fieldActor.org, queueActor: fieldActor.id });
+      toast("Report saved on this device.");
+      // The composer clears after local storage ACK; networking must not block it.
+      setTimeout(() => (navigator.onLine ? flush() : refreshFieldOutbox()).catch(e => toast(e.message)),0);
+    },
   });
 }
 async function publicView() { await portalViews.publicView(app); }
 async function communityView() { await portalViews.communityView(app); }
+function updateNetworkStatus() {
+  if (responseReadOnly(state.sourceConnection)) return;
+  const label = app.querySelector(".connection-label");
+  if (label) label.innerHTML = `<i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}`;
+}
 window.addEventListener("online", () => {
   state.offline = false;
+  updateNetworkStatus();
   toast("Connection restored. Queued field reports can be retried.");
   if (state.user) flush();
 });
 window.addEventListener("offline", () => {
   state.offline = true;
+  updateNetworkStatus();
   toast("Offline. Field reports will be saved on this device.");
 });
 window.addEventListener("hashchange", () => {
