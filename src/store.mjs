@@ -7,6 +7,21 @@ import { AppError, check } from "./errors.mjs";
 import { hydrateEntityRows } from "./entity-fragments.mjs";
 import { assertSourceResponseCurrent, observeSourceConnection } from './source-connection.mjs';
 const transactionScope = new AsyncLocalStorage();
+const CONNECTION_CODES = new Set(['57P01', '57P02', '57P03', '08000', '08001', '08003', '08004', '08006', '08007', '08P01', '53300', '53400',
+  'ECONNRESET', 'ECONNREFUSED', 'ECONNABORTED', 'EPIPE', 'ENOTFOUND', 'ETIMEDOUT', 'EHOSTUNREACH', 'ENETUNREACH']);
+export function protectPostgresPool(pool, logger = line => console.error(line)) {
+  let reportedAt = -Infinity;
+  const report = error => {
+    const code = CONNECTION_CODES.has(error?.code) ? error.code : 'PG_CONNECTION_ERROR', now = Date.now();
+    pool.aidscalerConnectionError = { code, at: now };
+    // pg attaches the entire Client to some idle errors. Never log the error,
+    // its message, stack, connection object, or additional event arguments.
+    if (now - reportedAt >= 5000) { reportedAt = now; logger(`[AidScaler storage] PostgreSQL connection interrupted (${code}); requests will reconnect.`); }
+  };
+  pool.on('error', report);
+  pool.aidscalerReportConnectionError = report;
+  return pool;
+}
 const canonical = (value) => {
   if (value?.toJSON) return canonical(value.toJSON());
   if (Array.isArray(value)) return value.map(canonical);
@@ -31,9 +46,9 @@ export class Store {
     this.postgres = postgres;
     this.fragmentCache = fragmentCache;
   }
-  static async open({ dataDir, databaseUrl } = {}) {
+  static async open({ dataDir, databaseUrl, poolFactory = options => new pg.Pool(options), databaseLogger } = {}) {
     const db = databaseUrl
-      ? new pg.Pool({ connectionString: databaseUrl })
+      ? protectPostgresPool(poolFactory({ connectionString: databaseUrl, connectionTimeoutMillis: 5000 }), databaseLogger)
       : new PGlite(dataDir ?? "memory://");
     const s = new Store(db, !!databaseUrl);
     await s.exec(
@@ -55,6 +70,9 @@ export class Store {
     });
     for (let attempt = 0; attempt < 4; attempt++) {
       const c = await this.db.connect();
+      let connectionFailed = false;
+      const connectionError = error => { connectionFailed = true; this.db.aidscalerReportConnectionError?.(error); };
+      c.on?.('error', connectionError);
       try {
         await c.query("BEGIN ISOLATION LEVEL SERIALIZABLE");
         const scoped = new Store(c, true, this.fragmentCache),
@@ -62,10 +80,11 @@ export class Store {
         await c.query("COMMIT");
         return result;
       } catch (e) {
-        await c.query("ROLLBACK");
+        await c.query("ROLLBACK").catch(() => {});
         if (e.code !== "40001" || attempt === 3) throw e;
       } finally {
-        c.release();
+        c.release(connectionFailed ? new Error('PG_CONNECTION_ERROR') : undefined);
+        c.removeListener?.('error', connectionError);
       }
     }
     } catch (error) {

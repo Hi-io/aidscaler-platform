@@ -93,16 +93,17 @@ def permissions(volume, user):
 items.append(resource("Service", "demo-postgres", {"selector": DB_LABEL, "ports": [{"name": "postgres", "port": 5432, "targetPort": 5432}]}, DB_LABEL))
 items.append(resource("Deployment", "demo-postgres", {"replicas": 1, "revisionHistoryLimit": 2,
     "strategy": {"type": "Recreate"}, "selector": {"matchLabels": DB_LABEL}, "template": {
-        "metadata": {"labels": DB_LABEL}, "spec": {"automountServiceAccountToken": False,
+        "metadata": {"labels": DB_LABEL}, "spec": {"automountServiceAccountToken": False, "terminationGracePeriodSeconds": 90,
             "nodeSelector": {"kubernetes.io/hostname": NODE_NAME}, "securityContext": {"seccompProfile": {"type": "RuntimeDefault"}},
             "initContainers": [permissions("data", 999)],
-            "containers": [{"name": "postgres", "image": POSTGRES, "args": ["-c", "shared_buffers=96MB", "-c", "max_connections=100"],
+            "containers": [{"name": "postgres", "image": POSTGRES, "args": ["-c", "shared_buffers=96MB", "-c", "max_connections=40", "-c", "work_mem=2MB"],
                 "securityContext": {**security, "runAsNonRoot": True, "runAsUser": 999, "runAsGroup": 999},
                 "env": [{"name": "PGDATA", "value": "/var/lib/postgresql/data/pgdata"}, {"name": "POSTGRES_USER", "value": "aidscaler"},
                         {"name": "POSTGRES_DB", "value": "aidscaler_demo"}, {"name": "POSTGRES_PASSWORD", "valueFrom": {"secretKeyRef": {"name": SECRET_NAME, "key": "POSTGRES_PASSWORD"}}}],
-                "ports": [{"containerPort": 5432}], "resources": {"requests": {"cpu": "100m", "memory": "160Mi"}, "limits": {"cpu": "500m", "memory": "512Mi"}},
-                "readinessProbe": {"exec": {"command": ["pg_isready", "-U", "aidscaler", "-d", "aidscaler_demo"]}, "periodSeconds": 5},
-                "livenessProbe": {"exec": {"command": ["pg_isready", "-U", "aidscaler", "-d", "aidscaler_demo"]}, "initialDelaySeconds": 30, "periodSeconds": 15},
+                "ports": [{"containerPort": 5432}], "resources": {"requests": {"cpu": "150m", "memory": "256Mi"}, "limits": {"cpu": "1", "memory": "1Gi"}},
+                "startupProbe": {"exec": {"command": ["pg_isready", "-U", "aidscaler", "-d", "aidscaler_demo"]}, "periodSeconds": 5, "timeoutSeconds": 5, "failureThreshold": 30},
+                "readinessProbe": {"exec": {"command": ["pg_isready", "-U", "aidscaler", "-d", "aidscaler_demo"]}, "periodSeconds": 5, "timeoutSeconds": 5},
+                "livenessProbe": {"exec": {"command": ["pg_isready", "-U", "aidscaler", "-d", "aidscaler_demo"]}, "periodSeconds": 30, "timeoutSeconds": 5, "failureThreshold": 6},
                 "volumeMounts": [{"name": "data", "mountPath": "/var/lib/postgresql/data"}, {"name": "socket", "mountPath": "/var/run/postgresql"}, {"name": "tmp", "mountPath": "/tmp"}]}],
             "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "demo-postgres"}}, {"name": "socket", "emptyDir": {}}, {"name": "tmp", "emptyDir": {"sizeLimit": "128Mi"}}]}}}, DB_LABEL))
 
@@ -140,7 +141,7 @@ items.append(resource("Deployment", "demo", {"replicas": 1, "revisionHistoryLimi
             "resources": {"requests": {"cpu": "500m", "memory": "768Mi"}, "limits": {"cpu": "2", "memory": "4Gi"}},
             "startupProbe": {"httpGet": {"path": "/demo/api/health", "port": "http"}, "periodSeconds": 5, "failureThreshold": 90, "timeoutSeconds": 4},
             "readinessProbe": {"httpGet": {"path": "/demo/api/health", "port": "http"}, "periodSeconds": 10, "timeoutSeconds": 4},
-            "livenessProbe": {"httpGet": {"path": "/demo/api/health", "port": "http"}, "periodSeconds": 30, "timeoutSeconds": 6, "failureThreshold": 5},
+            "livenessProbe": {"httpGet": {"path": "/healthz", "port": "http"}, "periodSeconds": 30, "timeoutSeconds": 6, "failureThreshold": 5},
             "volumeMounts": [{"name": "app", "mountPath": "/app", "readOnly": True}, {"name": "data", "mountPath": "/data"}, {"name": "tmp", "mountPath": "/tmp"}]}],
         "volumes": [{"name": "app", "emptyDir": {"sizeLimit": "1Gi"}}, {"name": "source", "projected": {"sources": volumes}},
                     {"name": "data", "persistentVolumeClaim": {"claimName": "demo-data"}}, {"name": "tmp", "emptyDir": {"sizeLimit": "256Mi"}}]}}}))

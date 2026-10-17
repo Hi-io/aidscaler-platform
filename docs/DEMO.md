@@ -30,6 +30,8 @@ The runtime PVC advertises 12 GiB, but this `hostPath` storage has no filesystem
 
 Runtime code is an immutable, size-bounded archive in ConfigMaps. A non-root init container extracts it and installs frozen production lockfiles into an ephemeral application volume. Runtime source is read-only; state writes go to the PVC. Images are pinned by digest. No credentials or local development state enter the code bundle. No container registry or privileged build daemon is needed for this cluster.
 
+PostgreSQL has a 1 GiB memory ceiling, 40 connection slots and bounded per-query working memory; organization instances share one connection pool. Readiness checks both the simulator and a database query. Process liveness uses `/healthz` so a temporary database outage does not restart the authoritative world. PostgreSQL connection errors are handled and logged using an allowlisted code only, with no complete client or error object.
+
 ## Initial credentials and deploy
 
 Run from the platform checkout with Node.js 24+. Use the existing ignored `.env.local` or a trusted process environment for `OPENROUTER_API_KEY`:
@@ -91,6 +93,10 @@ The setup is intended for a two-week demonstration. Passing a short soak, renewa
 ## Verification
 
 Run the demo-specific simulator and platform integration tests before release. Acceptance includes two independent visitors, duplicate join replay, denied administrative/control requests, cross-organization access rejection, a model-created proposal, human authorization, actual physical receipt and session recovery after restart. Verify desktop 16:9 and mobile in the real browser. Confirm the browser never receives observer credentials.
+
+The public acceptance run on 17 October 2026 used the actual OpenRouter model and the public Cloudflare URL. Hikari Relief reviewed a sourced proposal for 200 L, authorized its own vehicle, followed its movement and received an engine-confirmed 200 L receipt. The need count decreased from eight to seven. A subsequent Kubernetes deployment preserved the same organization, browser session and receipt. The second organization, Sora Relief, remained isolated and received its own pending proposal. Desktop 1920×1080 and mobile 390×844 were checked in Chrome; the embedded workspace, public sandbox contribution and close controls worked. The workspace also offers a same-tab fallback if embedding is delayed.
+
+Release checks found no provider key in 631 tracked or releasable files, Git-history pattern scans, or 22 public routes/assets. Authenticated workspace responses were checked too. Actual administrative requests with a valid workspace session and CSRF token returned `DEMO_SCOPE`; simulator controls and unapproved viewer assets were denied. The provider key remains in a Kubernetes Secret and the server environment. These checks establish the tested boundaries; they are not a claim of a comprehensive security certification or a fourteen-day soak.
 
 After the cluster passes these checks, shut down the local development lab through its coordinated control:
 

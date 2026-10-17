@@ -57,6 +57,13 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   assert.equal((await fetch(gateway.url + '/demo/api/health')).status, 200, 'a missing async asset never terminates the gateway');
   const threeCore = await fetch(gateway.url + '/demo/viewer/vendor/build/three.core.js');
   assert.equal(threeCore.status, 200); assert.match(threeCore.headers.get('content-type'), /javascript/);
+  const originalQuery = store.query.bind(store); let databaseOffline = true;
+  store.query = async (sql, values) => { if (databaseOffline && sql === 'SELECT 1 AS ready') throw Object.assign(Error('private connection details must not be returned'), { code: 'ECONNRESET' }); return originalQuery(sql, values); };
+  const dbReadiness = await fetch(gateway.url + '/demo/api/health');
+  assert.equal(dbReadiness.status, 503); assert.equal((await dbReadiness.json()).error, 'DEMO_DATABASE');
+  assert.equal((await fetch(gateway.url + '/healthz')).status, 200, 'storage outages do not declare the simulation process dead');
+  databaseOffline = false; assert.equal((await fetch(gateway.url + '/demo/api/health')).status, 200);
+  store.query = originalQuery;
   const api = async (cookie, route, data, csrf, key = 'test-demo-command') => {
     const r = await fetch(gateway.url + route, { method: data ? 'POST' : 'GET', headers: { ...(cookie ? { cookie } : {}), ...(data ? { Origin: 'http://demo.test', 'Content-Type': 'application/json', 'X-CSRF-Token': csrf, 'Idempotency-Key': key } : {}) }, body: data ? JSON.stringify(data) : undefined });
     const result = await r.json(); return { response: r, data: result };

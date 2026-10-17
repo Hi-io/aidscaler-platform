@@ -197,6 +197,10 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       if (!['/healthz', '/readyz', '/demo/api/health'].includes(p)) rate(req, 'edge', 3000, 60000, p === '/demo/api/bootstrap' ? 20 : 1);
       if (p === '/healthz' || p === '/readyz' || p === '/demo/api/health') {
         await source.healthCheck?.();
+        if (p !== '/healthz') {
+          try { await store.query('SELECT 1 AS ready'); }
+          catch { throw new AppError('DEMO_DATABASE', 'Workspace storage is reconnecting. Existing simulation state is retained.', 503); }
+        }
         const health = await sourceCall('/api/demo/frame');
         return send(res, 200, { status: 'ok', sourceInstanceId: health.sourceInstanceId, teams: apps.size, model: gate.status() });
       }
