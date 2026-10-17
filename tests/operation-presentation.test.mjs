@@ -88,7 +88,7 @@ test("operations use destination, native cargo units, named vehicle and permitte
   assert.equal(summary.title, "Delivery to Sakura Shelter");
   assert.equal(summary.unit, "L");
   assert.equal(summary.author, "Alex Morgan");
-  assert.equal(summary.vehicle, "Harbor response truck");
+  assert.equal(summary.vehicle, "Harbor response truck · TK-01-0001");
   assert.match(row, /300 L · Drinking water · Harbor response truck/);
   assert.match(row, /Alex Morgan/);
   assert.match(
@@ -273,4 +273,35 @@ test("field task arrival stays distinct from completion and unconfirmed local ti
     assert.equal(local.stages.filter(([, done]) => done).length, 1);
     assert.match(local.confirmationText, /not yet reached confirmed completion/);
   }
+});
+
+test("source-confirmed loaded departure is on the way while empty pickup stays a separate stage", () => {
+  const base = { type: "delivery", state: "dispatched", phase: "delivery", confirmedBySource: true, times: { accepted: 10, dispatched: 20 } };
+  for (const times of [{ dispatched: 20 }, { departed: 20 }, { dispatched: 0 }]) {
+    const data = { ...base, times }, before = structuredClone({ ...base, times });
+    const summary = operationSummary(data);
+    assert.equal(summary.confirmation, "On the way");
+    assert.match(summary.confirmationText, /departed with the assigned supplies/);
+    assert.match(summary.confirmationText, /Arrival and receipt are still pending/);
+    assert.equal(summary.stages.find(([label]) => label === "In transit")[1], true);
+    assert.deepEqual(data, before);
+  }
+  const pickup = operationSummary({ ...base, phase: "pickup", times: { pickupDispatched: 20, dispatched: 20 } });
+  assert.equal(pickup.confirmation, "Collecting supplies");
+  assert.match(pickup.confirmationText, /Delivery to the destination has not started/);
+  assert.equal(pickup.stages.find(([label]) => label === "In transit")[1], false);
+  const passengers = operationSummary({ ...base, type: "evacuation", phase: "pickup", times: { pickupDispatched: 20 } });
+  assert.equal(passengers.confirmation, "Collecting people");
+});
+
+test("unconfirmed, stopped or invalid departures never claim a vehicle is currently on the way", () => {
+  const base = { type: "delivery", state: "dispatched", confirmedBySource: true, times: { dispatched: 20 } };
+  for (const change of [
+    { confirmedBySource: false }, { state: "blocked" }, { state: "cancelled" }, { state: "failed" },
+    { times: {} }, { times: { dispatched: -1 } }, { phase: "pickup" },
+  ]) assert.notEqual(operationSummary({ ...base, ...change }).confirmation, "On the way");
+  const field = operationSummary({ ...base, type: "inspection" });
+  assert.equal(field.confirmation, "On the way");
+  assert.match(field.confirmationText, /team is travelling to the worksite/);
+  assert.doesNotMatch(field.confirmationText, /supplies|receipt/);
 });

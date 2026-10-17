@@ -1,4 +1,4 @@
-import { entityLabel, humanLabel, resourceLabel } from "./labels.mjs";
+import { entityLabel, humanLabel, resourceLabel, vehicleDisplayIdentity } from "./labels.mjs";
 
 const find = (rows, id) =>
   rows instanceof Map
@@ -19,6 +19,8 @@ const nativeUnits = {
   fuel: "L",
   staff: "people",
 };
+const movingStates = new Set(["dispatched", "travelling", "en_route", "in_transit"]);
+const recordedTime = value => Number.isFinite(value) && value >= 0;
 
 /** Presentation uses exact operation scope and permitted received records only. */
 export function operationSummary(operation, context = {}) {
@@ -47,8 +49,7 @@ export function operationSummary(operation, context = {}) {
       need?.node,
     location = named(locationId, "Destination not named"),
     vehicleName =
-      vehicle?.name ||
-      vehicle?.label ||
+      (vehicle ? vehicleDisplayIdentity(vehicle).label : null) ||
       named(operation.vehicle, "Assigned response vehicle"),
     owner = named(
       operation.owner ?? operation.org ?? context.organization,
@@ -81,6 +82,9 @@ export function operationSummary(operation, context = {}) {
     taskComplete = fieldTask && confirmed && Number.isFinite(times.service),
     receipt = !fieldTask && confirmed && Number.isFinite(times.received),
     arrived = confirmed && Number.isFinite(times.arrived),
+    deliveryDeparted = confirmed && operation.phase !== "pickup" && [times.dispatched, times.departed].some(recordedTime),
+    moving = deliveryDeparted && movingStates.has(operation.state),
+    pickupMoving = confirmed && operation.phase === "pickup" && movingStates.has(operation.state) && recordedTime(times.pickupDispatched),
     received =
       receipt && Number.isFinite(operation.received)
         ? operation.received
@@ -101,6 +105,10 @@ export function operationSummary(operation, context = {}) {
       ? "Receipt recorded"
       : arrived
         ? fieldTask ? "At the worksite" : "Arrived · receipt pending"
+        : moving
+          ? "On the way"
+          : pickupMoving
+            ? ["evacuation", "evacuate"].includes(kind) ? "Collecting people" : "Collecting supplies"
         : confirmed
           ? "Source acknowledged"
           : "Awaiting source acknowledgement",
@@ -116,6 +124,16 @@ export function operationSummary(operation, context = {}) {
         ? fieldTask
           ? "The vehicle has reached the worksite. Task completion is not yet confirmed."
           : "The vehicle has arrived. Receipt is still pending."
+        : moving
+          ? fieldTask
+            ? "The operational source confirms that the team is travelling to the worksite. Arrival and task completion are still pending."
+            : ["evacuation", "evacuate"].includes(kind)
+              ? "The operational source confirms that the vehicle is transporting people to the receiving site. Arrival is still pending."
+              : "The operational source confirms that the vehicle has departed with the assigned supplies. Arrival and receipt are still pending."
+          : pickupMoving
+            ? ["evacuation", "evacuate"].includes(kind)
+              ? "The vehicle is travelling to collect people. Transport to the receiving site has not started yet."
+              : "The vehicle is travelling to collect supplies. Delivery to the destination has not started yet."
         : fieldTask
           ? "The task has not yet reached confirmed completion."
           : "The operation has not yet reached confirmed receipt.",
@@ -136,12 +154,20 @@ export function operationSummary(operation, context = {}) {
         confirmed &&
           [times.loading, times.prepared, times.reserved].some(Number.isFinite),
       ],
-      ["In transit", confirmed && Number.isFinite(times.dispatched)],
+      ["In transit", deliveryDeparted],
       [fieldTask ? "At worksite" : "Arrived", arrived],
       ...(!fieldTask ? [["Received", receipt]] : []),
       [fieldTask ? "Completed" : "Service", confirmed && Number.isFinite(times.service)],
     ],
   };
+}
+
+/** Distinguish concurrent trips without exposing opaque operational identifiers. */
+export function operationChoiceLabel(operation, context = {}) {
+  const summary = operationSummary(operation, context), vehicle = find(context.vehicles, operation.vehicle),
+    identity = vehicle ? vehicleDisplayIdentity(vehicle) : null,
+    transport = identity?.plate || summary.vehicle;
+  return [summary.title, summary.quantity != null ? `${summary.quantity.toLocaleString("en-US")}${summary.unit ? " " + summary.unit : ""}` : "", transport, humanLabel(operation.state)].filter(Boolean).join(" · ");
 }
 
 export function createOperationView({ escape: e, badge, action, number }) {

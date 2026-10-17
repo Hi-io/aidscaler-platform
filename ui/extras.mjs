@@ -1,5 +1,6 @@
-import { entityLabel, humanLabel, readableText } from "./labels.mjs";
+import { entityLabel, humanLabel, readableText, vehicleDisplayIdentity } from "./labels.mjs";
 import { actionBrief } from "./uploads.mjs";
+import { createDecisionExperience } from "./decision.mjs";
 /** Progressive disclosure for evidence, connector setup and manual fallbacks. */
 export function createExtras(h) {
   const {
@@ -18,6 +19,7 @@ export function createExtras(h) {
     toast,
   } = h;
   let editing = null;
+  const decisionExperience = createDecisionExperience(h);
   const options = (rows, label) =>
     rows
       .map((r) => `<option value="${e(r.id)}">${e(label(r))}</option>`)
@@ -42,10 +44,11 @@ export function createExtras(h) {
       }${rows.length > 12 ? `<p class="note">Showing the 12 most recent of ${rows.length} source files.</p>` : ""}</section>${canUpload ? `<details id="media-intake" class="card collapse secondary-disclosure media-intake" ${state.user.role === "field" ? "open" : ""}><summary>Add an attachment</summary><p class="sub">Add an original file from an authorized source when it is not already available through a connected channel.</p><form id="mediaform" class="fieldform"><label>Source file<input type="file" name="file" accept="image/png,image/jpeg,video/mp4,audio/wav,audio/mpeg,application/pdf,text/plain" required></label><label>Source or owner<input name="source" placeholder="Authorized field team or source URL" required></label><label>Short description<input name="title" placeholder="What does this source represent?" required maxlength="150"></label><button class="primary" type="submit">${icon("upload")} Preserve original evidence</button><p class="note">Up to 10 MB. Processing keeps the original available.</p><details class="form-disclosure"><summary>Supported analysis & limits</summary><p class="small">Audio uses local speech recognition. Images and sampled video frames use the configured model. Scanned PDFs may require OCR. Interpretation still needs verification.</p></details></form></details>` : ""}`
     );
   }
-  async function mediaOpen(id) {
+  async function mediaOpen(id, { isCurrent = () => true, afterOpen = () => {} } = {}) {
     const m = await record("media", id),
       a = await record("media_analysis", id).catch(() => null),
       src = "/api/media?id=" + encodeURIComponent(id);
+    if (!isCurrent()) return false;
     const preview = m.mime.startsWith("image")
       ? `<img class="evidence-preview" src="${src}" alt="${e(m.title)}">`
       : m.mime.startsWith("audio")
@@ -66,6 +69,8 @@ export function createExtras(h) {
       `<h2>${e(m.title)}</h2><p class="sub">${e(m.source)} · ${badge(m.state)}</p>${preview}<p class="note">Original hash: ${e(m.contentHash.slice(0, 20))}</p>${a ? `<section class="decision"><span class="eyebrow">INTERPRETED · NEEDS VERIFICATION</span><p class="preserve-lines">${e(summary || "Decoded source available in details below.")}</p></section><details class="collapse"><summary>Transcript, observations & processing receipt</summary><pre class="trace">${e(JSON.stringify(result, null, 2))}</pre></details>` : ["queued", "processing"].includes(m.state) ? '<div class="card processing"><span class="spark">✦</span> Processing source bytes. The original stays available.</div>' : `<p class="sub">${m.state === "failed" ? "Processing failed. You can retry; the failure and any provider costs remain recorded." : "No interpretation has completed yet. The original remains available."}</p>`}`,
       `${result?.pendingPageNumbers?.length && !["queued", "processing"].includes(m.state) && allowed(["field", "analyst", "commander", "dispatcher"]) ? action(`Read next ${Math.min(4, result.pendingPageNumbers.length)} pending pages`, "media-continue", id, "primary") : !a && !["queued", "processing"].includes(m.state) && allowed(["field", "analyst", "commander", "dispatcher"]) ? action(m.state === "failed" ? "Retry source analysis" : "Analyze source bytes", "media-analyze", id, "primary") : ""}${allowed(["admin", "commander"]) ? action("Review local erasure", "erase-media", id) : ""}${action("Close", "close")}`,
     );
+    afterOpen();
+    return true;
   }
   async function connections() {
     const rows = await record("integration");
@@ -85,8 +90,8 @@ export function createExtras(h) {
   }
   async function caseOpen(id) {
     const n = await record("need", id),
-      [proposals, operations, claims] = await Promise.all(
-        ["proposal", "operation", "claim"].map((k) => record(k)),
+      [proposals, operations] = await Promise.all(
+        ["proposal", "operation"].map((k) => record(k)),
       );
     const related = proposals.filter(
         (p) =>
@@ -99,10 +104,11 @@ export function createExtras(h) {
           (o) =>
             !["failed", "cancelled", "completed", "received"].includes(o.state),
         )
-        .reduce((s, o) => s + (o.quantity ?? 0), 0);
+        .reduce((s, o) => s + (o.quantity ?? 0), 0),
+      descriptions = await decisionExperience.describeProposals(related);
     modal(
       "Response case",
-      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h2><div class="stats cols3 case-stats"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div>${n.population ? `<p class="case-population">${n.population} people reported at this location</p>` : ""}<section class="decision"><h3>Responses and responsible owners</h3>${related.filter(p => !["rejected", "cancelled"].includes(p.state)).map((p) => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong><p>${e(readableText(p.benefit))}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response has been prepared yet. The agent checks received information as it arrives.</p>"}</section>${related.some(p => ["rejected", "cancelled"].includes(p.state)) ? `<details class="collapse"><summary>Previous responses · ${related.filter(p => ["rejected", "cancelled"].includes(p.state)).length}</summary>${related.filter(p => ["rejected", "cancelled"].includes(p.state)).map(p => `<div class="listrow"><div class="grow"><strong>${e(readableText(p.title))}</strong>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("")}</details>` : ""}<details class="collapse"><summary>Request an additional check</summary><p class="note">The agent processes received information automatically. Ask for another check when you have new context.</p>${allowed(["analyst", "commander", "dispatcher"]) ? action("Request another investigation", "investigatecase", id) + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}</details><details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
+      `<span class="eyebrow">RECEIVED OPERATIONAL NEED</span><h2>${e(humanLabel(n.type))} · ${e(entityLabel(n.building ?? n.node))}</h2><div class="stats cols3 case-stats"><div class="stat"><span>Still needed</span><strong>${Math.max(0, n.quantity - (n.served ?? 0))}</strong><small>${e(n.unit)}</small></div><div class="stat"><span>Received</span><strong>${n.served ?? 0}</strong><small>${e(n.unit)} · source confirmed</small></div><div class="stat"><span>In progress</span><strong>${incoming}</strong><small>${e(n.unit)} · receipt pending</small></div></div>${n.population ? `<p class="case-population">${n.population} people reported at this location</p>` : ""}<section class="decision"><h3>Responses and responsible owners</h3>${related.filter(p => !["rejected", "cancelled"].includes(p.state)).map((p) => `<div class="listrow"><div class="grow"><strong>${e(descriptions.get(p.id)?.title ?? readableText(p.title))}</strong><p>${e(descriptions.get(p.id)?.summary ?? readableText(p.benefit))}</p>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("") || "<p>No response has been prepared yet. The agent checks received information as it arrives.</p>"}</section>${related.some(p => ["rejected", "cancelled"].includes(p.state)) ? `<details class="collapse"><summary>Previous responses · ${related.filter(p => ["rejected", "cancelled"].includes(p.state)).length}</summary>${related.filter(p => ["rejected", "cancelled"].includes(p.state)).map(p => `<div class="listrow"><div class="grow"><strong>${e(descriptions.get(p.id)?.title ?? readableText(p.title))}</strong>${badge(p.state)}</div>${action("Review", "proposal", p.id)}</div>`).join("")}</details>` : ""}<details class="collapse"><summary>Request an additional check</summary><p class="note">The agent processes received information automatically. Ask for another check when you have new context.</p>${allowed(["analyst", "commander", "dispatcher"]) ? action("Request another investigation", "investigatecase", id) + action("Compare competing needs", "response-options", id) + action("Prepare a manual response", "manual-response", id) : ""}</details><details class="collapse"><summary>Source observations & current record</summary><pre class="trace">${e(JSON.stringify(n, null, 2))}</pre></details>`,
       action("Close", "close"),
     );
   }
@@ -120,8 +126,8 @@ export function createExtras(h) {
           Math.max(0, r.quantity - r.reserved - r.floor) +
           " available",
       )}</select></label><label>Owned vehicle<select name="vehicle">${options(
-        vehicles.filter((v) => v.owner === state.user.org),
-        (v) => entityLabel(v.id) + " · " + v.state,
+        vehicles.filter((v) => v.owner === state.user.org && !vehicleDisplayIdentity(v).isBackground),
+        (v) => vehicleDisplayIdentity(v).label + " · " + v.state,
       )}</select></label><label>Quantity in the resource's native unit<input name="quantity" type="number" min="1" step="1" required></label><label>Why is this response appropriate?<textarea name="rationale" required></textarea></label><button class="primary" type="submit">Prepare for review</button></form>`,
     );
     if (id) document.querySelector('#manualform [name="need"]').value = id;
@@ -173,7 +179,7 @@ export function createExtras(h) {
       }${rows.length > 16 ? `<p class="note">Showing 16 of ${rows.length} reports awaiting moderation.</p>` : ""}</section>${reviewed.length ? `<section class="card"><div class="cardheader"><h2>Keep people informed</h2><span class="badge">${reviewed.length} reviewed</span></div><p class="note">Share a short update with the person who sent a report, or link a source-confirmed response.</p>${reviewed.slice(0, 12).map(r => `<article class="listrow"><div class="rowicon">${icon("message-square")}</div><div class="grow"><h3>${e(r.location || "Community report")}</h3><p>${e(r.text.length > 180 ? r.text.slice(0, 180) + "…" : r.text)}</p>${badge(r.state)}</div>${allowed(["analyst", "commander", "dispatcher"]) ? action("Send update", "report-followup", r.id) : ""}</article>`).join("")}</section>` : ""}`
     );
   }
-  async function run(name, id) {
+  async function run(name, id, options = {}) {
     if (name === "media-continue") {
       const a = await record("media_analysis", id);
       await api("/api/media/analyze", { id, pages: a.result.pendingPageNumbers.slice(0, 4) });
@@ -181,7 +187,7 @@ export function createExtras(h) {
       return true;
     }
     if (name === "media-open") {
-      await mediaOpen(id);
+      await mediaOpen(id, options);
       return true;
     }
     if (name === "media-analyze") {

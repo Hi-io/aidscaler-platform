@@ -1,5 +1,5 @@
 /** Public progress is limited to operations already linked by a reviewed publication. */
-const movingStates = new Set(['travelling', 'en_route', 'in_transit', 'unloading', 'arrived']);
+const movingStates = new Set(['dispatched', 'travelling', 'en_route', 'in_transit', 'unloading', 'arrived', 'waiting_to_unload']);
 const finiteNonNegative = value => Number.isFinite(value) && value >= 0;
 const safeQuantity = value => finiteNonNegative(value) ? value : 0;
 const publicUnits = new Set(['L', 'l', 'ml', 'mL', 'kg', 'g', 't', 'units', 'unit', 'items', 'bottles', 'packs', 'boxes', 'kits', 'doses', 'meals', 'rations', 'blankets', 'litres', 'liters', 'litre', 'liter', 'people', 'persons', 'beds']);
@@ -27,7 +27,10 @@ export function aggregatePublicResponseProgress(publications, operations, resour
     const quantity = safeQuantity(op.quantity);
     const received = Number.isFinite(op.times?.received) || Number.isFinite(op.times?.service)
       ? Math.min(quantity, safeQuantity(op.received)) : 0;
-    const moving = movingStates.has(op.state) && Number.isFinite(op.times?.departed);
+    // The simulator reports the loaded delivery departure as 'dispatched'.
+    // A vehicle travelling empty to collect supplies is a separate pickup leg.
+    const departed = [op.times?.dispatched, op.times?.departed].some(at => Number.isFinite(at) && at >= 0);
+    const moving = movingStates.has(op.state) && op.phase !== 'pickup' && departed;
     const enRoute = moving ? Math.max(0, quantity - received) : 0;
     if (received > 0) receivedDeliveries++;
     if (enRoute > 0) enRouteDeliveries++;

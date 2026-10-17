@@ -1,4 +1,9 @@
-import { entityLabel } from "./labels.mjs";
+import { entityLabel, readableText, humanLabel } from "./labels.mjs";
+import { operationChoiceLabel } from "./operation-view.mjs";
+
+export const fieldTaskTitle = task => humanLabel(readableText(task.title || "Assigned field work"));
+export const fieldTaskDestination = task => task.destinationName || entityLabel(task.destination) || "See operational instructions";
+export const assignmentOperationLabel = operationChoiceLabel;
 export function createWorkforceControls(h) {
   const {
     api,
@@ -39,7 +44,7 @@ export function createWorkforceControls(h) {
         (r) => r.to === state.user.id && !r.acknowledgedAt,
       );
     const card = (t) =>
-      `<article class="card"><div class="cardheader"><h2>${e(t.title)}</h2>${badge(t.state)}</div><p class="sub">${e(t.instructions || "Follow the received operational instructions. Report any change before proceeding.")}</p><p><strong>Destination</strong> ${e(entityLabel(t.destination) || "See operational instructions")}${t.quantity != null ? ` · ${e(t.quantity)} ${e(t.unit ?? "units")}` : ""}</p>${t.contact ? `<p class="small">Responsible contact: ${e(t.contact)}</p>` : ""}<div class="actions">${action("Open current task", "task-open", t.id, "primary")}</div><p class="note">${navigator.onLine ? "Last state acknowledged by the workspace." : "Saved task snapshot · new instructions may be pending."} A field report does not itself confirm physical receipt.</p></article>`;
+      `<article class="card"><div class="cardheader"><h2>${e(fieldTaskTitle(t))}</h2>${badge(t.state)}</div><p class="sub">${e(t.instructions || "Follow the received operational instructions. Report any change before proceeding.")}</p><p><strong>Destination</strong> ${e(fieldTaskDestination(t))}${t.quantity != null ? ` · ${e(t.quantity)} ${e(t.unit ?? "units")}` : ""}</p>${t.contact ? `<p class="small">Responsible contact: ${e(t.contact)}</p>` : ""}<div class="actions">${action("Open current task", "task-open", t.id, "primary")}</div><p class="note">${navigator.onLine ? "Last state acknowledged by the workspace." : "Saved task snapshot · new instructions may be pending."} A field report does not itself confirm physical receipt.</p></article>`;
     return `<div class="grid">${own[0] ? card(own[0]) : `<section class="inline-notice"><strong>No assigned task</strong><span>You can still report an observation below.</span></section>`}${handovers.length ? `<section class="card"><h2>Shift handover</h2>${handovers.map((r) => `<div class="listrow"><div class="grow"><p>${e(r.note)}</p><small>${r.tasks.length} tasks · ${r.proposals.length} decisions</small></div>${action("Acknowledge", "handover-ack", r.id)}</div>`).join("")}</section>` : ""}</div>${own.length > 1 ? `<details class="collapse"><summary>${own.length - 1} other assigned tasks</summary>${own.slice(1).map(card).join("")}</details>` : ""}`;
   }
   async function coordination() {
@@ -58,7 +63,7 @@ export function createWorkforceControls(h) {
           .slice(0, 8)
           .map(
             (t) =>
-              `<div class="listrow"><div class="grow"><h3>${e(t.title)}</h3><p>${e(t.assigneeName)} · ${badge(t.state)}</p></div>${managers() && t.state !== "receipt_reported" ? action("Handover", "handover-task", t.id) : ""}</div>`,
+              `<div class="listrow"><div class="grow"><h3>${e(fieldTaskTitle(t))}</h3><p>${e(t.assigneeName)} · ${badge(t.state)}</p></div>${managers() && t.state !== "receipt_reported" ? action("Handover", "handover-task", t.id) : ""}</div>`,
           )
           .join("") ||
         empty(
@@ -93,15 +98,18 @@ export function createWorkforceControls(h) {
         }[t.state] ?? [];
       modal(
         "Your current field task",
-        `<h2>${e(t.title)}</h2><p class="sub">${e(t.instructions || "Use your operational instructions.")}</p><p>${badge(t.state)} · last server version ${t.version}</p><form id="taskupdateform" class="fieldform"><label>Report the next stage<select name="stage">${stages.map((s) => `<option value="${s}">${e(s.replaceAll("_", " "))}</option>`).join("")}</select></label><label>Observation or discrepancy<textarea name="note" maxlength="1200" placeholder="Keep names and affected people's details out of the report."></textarea></label><label>Received quantity (only for a receipt report)<input name="quantity" type="number" min="0" max="${t.quantity ?? ""}" step="1"></label><button class="primary">Save & send update</button><p class="note">Offline updates are saved with the assignment version. A changed assignment requires review; it is never silently overwritten.</p></form>`,
+        `<h2>${e(fieldTaskTitle(t))}</h2><p class="sub">${e(t.instructions || "Use your operational instructions.")}</p><p>${badge(t.state)} · last server version ${t.version}</p><form id="taskupdateform" class="fieldform"><label>Report the next stage<select name="stage">${stages.map((s) => `<option value="${s}">${e(humanLabel(s))}</option>`).join("")}</select></label><label>Observation or discrepancy<textarea name="note" maxlength="1200" placeholder="Keep names and affected people's details out of the report."></textarea></label><label data-task-received hidden>Received quantity${t.unit ? " (" + e(t.unit) + ")" : ""}<input name="quantity" type="number" min="0" max="${t.quantity ?? ""}" step="1"></label><button class="primary">Save & send update</button><p class="note">Offline updates are saved with the assignment version. A changed assignment requires review; it is never silently overwritten.</p></form>`,
         action("Close", "close"),
       );
       return true;
     }
     if (name === "task-assign") {
-      const [people, ops] = await Promise.all([
+      const [people, ops, needs, resources, vehicles] = await Promise.all([
         api("/api/people"),
         record("operation"),
+        record("need"),
+        record("resource"),
+        record("vehicle"),
       ]);
       const existing = await api("/api/tasks");
       const candidates = ops.filter(
@@ -110,10 +118,15 @@ export function createWorkforceControls(h) {
           !existing.some((t) => t.operation === o.id) &&
           (!id || o.id === id),
       );
+      if (!candidates.length) {
+        const assigned = id && existing.some(task => task.operation === id);
+        modal("Assign received operational work", `<p class="sub">${assigned ? "This operation already has a field task. Review People & handovers to manage its reporting responsibility." : "No operations are available for a new assignment. Follow a received operation to assign its reporting responsibility."}</p>`, action("Close", "close"));
+        return true;
+      }
       editing = { type: "assign" };
       modal(
         "Assign received operational work",
-        `<form id="coordinationform" class="fieldform"><label>Existing operation<select name="operation" required>${opts(candidates, (o) => `${o.type} · ${o.id.slice(-8)} · ${o.state}`)}</select></label><label>Assigned person<select name="assignee" required>${opts(
+        `<form id="coordinationform" class="fieldform"><label for="assignment-operation">Existing operation<select id="assignment-operation" name="operation" required>${opts(candidates, (o) => assignmentOperationLabel(o, { needs, resources, vehicles, organization: state.user.org }))}</select></label><label for="assignment-person">Assigned person<select id="assignment-person" name="assignee" required>${opts(
           people.filter((p) =>
             ["field", "commander", "dispatcher"].includes(p.role),
           ),
@@ -150,7 +163,7 @@ export function createWorkforceControls(h) {
         name === "delegation-new"
           ? "Delegate one exact review"
           : "Handover pending work",
-        `<form id="coordinationform" class="fieldform"><label>Current item<select name="item" required>${opts(candidates, (p) => p.title ?? p.id)}</select></label><label>Receiving person<select name="to" required>${opts(
+        `<form id="coordinationform" class="fieldform"><label>Current item<select name="item" required>${opts(candidates, (p) => name === "handover-task" ? fieldTaskTitle(p) : readableText(p.title ?? p.id))}</select></label><label>Receiving person<select name="to" required>${opts(
           people.filter((p) => roles.includes(p.role)),
           (p) => `${p.name} · ${p.role}`,
         )}</select></label>${name === "delegation-new" ? '<label>Expiry<select name="ttlMs"><option value="1800000">30 minutes</option><option value="3600000">1 hour</option><option value="14400000">4 hours</option></select></label>' : ""}<label>Pending conditions and responsibility<textarea name="note" required minlength="5" maxlength="1200"></textarea></label><button class="primary" ${candidates.length ? "" : "disabled"}>Record scoped ${name === "delegation-new" ? "delegation" : "handover"}</button><p class="note">${name === "delegation-new" ? "A revised proposal needs a new delegation. The model and technical administrator cannot approve." : "The receiver must acknowledge. Existing approvals are not transferred."}</p></form>`,
@@ -213,10 +226,24 @@ export function createWorkforceControls(h) {
           button.disabled = false;
         }
       });
-    root
-      .querySelector("#taskupdateform")
-      ?.addEventListener("submit", async (ev) => {
+    const taskForm = root.querySelector("#taskupdateform");
+    if (taskForm) {
+      const updateReceipt = () => {
+        const receipt = taskForm.elements.stage.value === "receipt_reported";
+        taskForm.querySelector("[data-task-received]").hidden = !receipt;
+        taskForm.elements.quantity.required = receipt;
+        taskForm.elements.note.required = receipt;
+      };
+      taskForm.elements.stage.addEventListener("change",updateReceipt);
+      updateReceipt();
+    }
+    taskForm?.addEventListener("submit", async (ev) => {
         ev.preventDefault();
+        const button = ev.target.querySelector("button[type=submit],button:not([type])");
+        if (button.disabled) return;
+        button.disabled = true;
+        let saved = false;
+        try {
         const b = Object.fromEntries(new FormData(ev.target)),
           t = editing.task,
           clientId = crypto.randomUUID();
@@ -225,7 +252,7 @@ export function createWorkforceControls(h) {
           version: t.version,
           stage: b.stage,
           note: b.note,
-          ...(b.quantity !== "" ? { quantity: Number(b.quantity) } : {}),
+          ...(b.stage === "receipt_reported" && b.quantity !== "" ? { quantity: Number(b.quantity) } : {}),
         };
         await offlineQueue("put", {
           clientId,
@@ -233,13 +260,21 @@ export function createWorkforceControls(h) {
           queueActor: state.user.id,
           queueKind: "task",
           taskPayload: payload,
-          location: t.destination ?? t.title,
+          location: t.destinationName || t.destination || t.title,
           text: b.stage.replaceAll("_", " ") + ": " + b.note,
         });
+        saved = true;
         toast("Saved on this device. Awaiting server acknowledgement.");
         await h.flush();
-        await h.close();
-        await render();
+        } catch (error) {
+          toast(error.message);
+          if (!saved) button.disabled = false;
+        }
+        if (saved) {
+          if (taskForm.isConnected) await h.close();
+          try { await h.refreshFieldOutbox(); }
+          catch { toast("Your update is saved. Reopen the outbox to check its delivery status."); }
+        }
       });
   }
   return { field, coordination, run, bind };

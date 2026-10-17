@@ -1,8 +1,9 @@
 import { responseReadOnly, responseBoundaryNotice, responseReadOnlyMessage, protectPreviousResponse } from "./source-connection.mjs";
+import { createPublicRefresh, updatePublicRegion } from "./public-refresh.mjs";
 /** Organization-owned public pages. Private reports never appear in the public feed. */
 export function createPortalViews(h) {
   const { api, escape: e, icon, money, time, publicProcurement, readAttachment, toast } = h;
-  let trackerTimer, publicProgressTimer, connection;
+  let trackerTimer, publicProgressTimer, publicRefresh, connection;
   function connectionNotice(app, next) {
     if (responseReadOnly(connection) && !responseReadOnly(next)) return;
     connection = next;
@@ -21,31 +22,39 @@ export function createPortalViews(h) {
   const banner = org => org.portal.bannerDataUrl ? `<div class="org-response-banner"><img src="${e(org.portal.bannerDataUrl)}" alt="${e(org.portal.bannerAlt)}"></div>` : "";
   const labels = { support_needed: ["Support needed", "heart-handshake"], en_route: ["On the way", "truck"], received: ["Received", "package-check"], retracted: ["Update withdrawn", "circle-alert"] };
   const quantity = value => Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 1 });
+  function updatesMarkup(updates = []) {
+    return updates.map(p => {
+      const [label, glyph] = labels[p.status] ?? ["Team update", "globe"];
+      return `<article class="org-update-card ${e(p.status)}"><div class="org-update-status">${icon(glyph)}<span>${e(label)}</span></div><h3>${e(p.title)}</h3><p>${e(p.text)}</p><small>${e(p.area)} · ${time(p.publishedAt)}${p.corrected ? " · corrected" : ""}</small>${(p.proofs ?? []).map(f => `<figure class="publicproof"><img src="${e(f.url)}" alt="${e(f.caption)}" loading="lazy"><figcaption>${e(f.caption)} · reviewed evidence</figcaption></figure>`).join("")}</article>`;
+    }).join("") || `<article class="org-no-updates">${icon("radio")}<div><h3>Updates will appear here</h3><p>Our team publishes progress after review. Community reports stay private.</p></div></article>`;
+  }
+  const financeMarkup = finance => `<span class="org-eyebrow">POOLED RESPONSE FUND · TEST FUNDS</span><strong>${money(finance.receivedCents)}</strong><span>Settled support</span><dl><div><dt>Allocated</dt><dd>${money(finance.allocatedCents)}</dd></div><div><dt>Refunded</dt><dd>${money(finance.refundedCents)}</dd></div><div><dt>Available</dt><dd>${money(finance.availableCents)}</dd></div></dl><p class="org-fine-print">Support is pooled, rather than assigned to one item or recipient. A pending test payment is not settled support.</p>`;
   function progressMarkup(progress) {
     const p = progress ?? { receivedDeliveries: 0, enRouteDeliveries: 0, materials: [] };
     const material = row => `<div><strong>${e(row.label)}</strong><span>${quantity(row.received)} ${e(row.unit)} received</span><span>${quantity(row.enRoute)} ${e(row.unit)} on the way</span></div>`;
     return `<section id="public-response-progress" class="org-response-progress" aria-label="Confirmed response progress"><div class="org-progress-intro"><span class="org-eyebrow">CONFIRMED PROGRESS</span><p>From our reviewed response updates.</p></div><div class="org-progress-total"><strong>${quantity(p.receivedDeliveries)}</strong><span>Deliveries received</span></div><div class="org-progress-total"><strong>${quantity(p.enRouteDeliveries)}</strong><span>Deliveries on the way</span></div>${p.materials?.length ? `<div class="org-progress-materials">${p.materials.slice(0, 3).map(material).join("")}${p.materials.length > 3 ? `<details><summary>${p.materials.length - 3} more supply types</summary>${p.materials.slice(3).map(material).join("")}</details>` : ""}</div>` : `<p class="org-progress-empty">Delivery totals appear when a source-confirmed operation is included in a public update.</p>`}</section>`;
   }
   async function publicView(app) {
-    style(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
+    style(); publicRefresh?.stop(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
     const d = await api("/api/public"), org = d.organization; connection = d.sourceConnection;
     document.title = `${org.name} · Response updates`;
-    app.innerHTML = `<div class="org-public" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "updates")}<main id="main" class="org-public-main"><div data-source-boundary>${responseBoundaryNotice(connection, e)}</div>${banner(org)}<section class="org-portal-intro"><div class="org-intro-copy"><span class="org-eyebrow"><i></i> ${e(org.response || "Disaster response")}</span><h1>${e(org.portal.title)}</h1><p>${e(org.portal.description)}</p><div class="org-intro-actions"><a class="org-primary" href="/community">Tell us where help is needed ${icon("arrow-up-right")}</a><a class="org-text-link" href="#response-updates-title">Follow the response ${icon("arrow-down")}</a></div></div><div class="org-intro-aside"><span>ONE COMMUNITY.<br>A SHARED RESPONSE.</span><p>Local knowledge. Coordinated action.<br>Updates from ${e(org.name)}.</p><small>LOCAL DEMONSTRATION</small></div></section>${progressMarkup(d.responseProgress)}<section aria-labelledby="response-updates-title"><div class="org-section-title"><h2 id="response-updates-title">Latest response updates</h2><span>Reviewed by ${e(org.name)}</span></div><div class="org-update-grid">${d.updates.map(p => {
-      const [label, glyph] = labels[p.status] ?? ["Team update", "globe"];
-      return `<article class="org-update-card ${e(p.status)}"><div class="org-update-status">${icon(glyph)}<span>${e(label)}</span></div><h3>${e(p.title)}</h3><p>${e(p.text)}</p><small>${e(p.area)} · ${time(p.publishedAt)}${p.corrected ? " · corrected" : ""}</small>${(p.proofs ?? []).map(f => `<figure class="publicproof"><img src="${e(f.url)}" alt="${e(f.caption)}" loading="lazy"><figcaption>${e(f.caption)} · reviewed evidence</figcaption></figure>`).join("")}</article>`;
-    }).join("") || `<article class="org-no-updates">${icon("radio")}<div><h3>Updates will appear here</h3><p>Our team publishes progress after review. Community reports stay private.</p></div></article>`}</div></section><section class="org-support-grid" aria-labelledby="support-title"><div><span class="org-eyebrow">MAKE THE NEXT RESPONSE POSSIBLE</span><h2 id="support-title">Stand with your community.</h2><p>Contributions support our pooled response fund, so we can direct support where it is needed as the situation changes.</p><form id="contributeform"><label>Test contribution · USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="org-primary">Contribute ${icon("arrow-right")}</button></form><p class="org-fine-print">Sandbox only. No money is collected.</p><div id="contribution-receipt" aria-live="polite"></div></div><div class="org-fund-summary"><span class="org-eyebrow">POOLED RESPONSE FUND · TEST FUNDS</span><strong>${money(d.finance.receivedCents)}</strong><span>Settled support</span><dl><div><dt>Allocated</dt><dd>${money(d.finance.allocatedCents)}</dd></div><div><dt>Refunded</dt><dd>${money(d.finance.refundedCents)}</dd></div><div><dt>Available</dt><dd>${money(d.finance.availableCents)}</dd></div></dl><p class="org-fine-print">Support is pooled, rather than assigned to one item or recipient. A pending test payment is not settled support.</p></div></section>${publicProcurement(d.financeReview, e, time)}<details class="org-explainer"><summary>What do these response stages mean?</summary><p><b>Support needed:</b> a requirement remains. <b>On the way:</b> an operation is travelling; arrival and receipt are pending. <b>Received:</b> a receipt has been recorded. Our team reviews public updates and omits personal details and sensitive locations.</p></details></main>${footer(org)}</div>`;
+    app.innerHTML = `<div class="org-public" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "updates")}<main id="main" class="org-public-main"><div data-source-boundary>${responseBoundaryNotice(connection, e)}</div>${banner(org)}<section class="org-portal-intro"><div class="org-intro-copy"><span class="org-eyebrow"><i></i> ${e(org.response || "Disaster response")}</span><h1>${e(org.portal.title)}</h1><p>${e(org.portal.description)}</p><div class="org-intro-actions"><a class="org-primary" href="/community">Tell us where help is needed ${icon("arrow-up-right")}</a><a class="org-text-link" href="#response-updates-title">Follow the response ${icon("arrow-down")}</a></div></div><div class="org-intro-aside"><span>ONE COMMUNITY.<br>A SHARED RESPONSE.</span><p>Local knowledge. Coordinated action.<br>Updates from ${e(org.name)}.</p><small>LOCAL DEMONSTRATION</small></div></section>${progressMarkup(d.responseProgress)}<section aria-labelledby="response-updates-title"><div class="org-section-title"><h2 id="response-updates-title">Latest response updates</h2><span>Reviewed by ${e(org.name)}</span></div><div id="public-response-updates" class="org-update-grid">${updatesMarkup(d.updates)}</div></section><section class="org-support-grid" aria-labelledby="support-title"><div><span class="org-eyebrow">MAKE THE NEXT RESPONSE POSSIBLE</span><h2 id="support-title">Stand with your community.</h2><p>Contributions support our pooled response fund, so we can direct support where it is needed as the situation changes.</p><form id="contributeform"><label>Test contribution · USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="org-primary">Contribute ${icon("arrow-right")}</button></form><p class="org-fine-print">Sandbox only. No money is collected.</p><div id="contribution-receipt" aria-live="polite"></div></div><div id="public-response-finance" class="org-fund-summary">${financeMarkup(d.finance)}</div></section><div id="public-procurement-review">${publicProcurement(d.financeReview, e, time)}</div><details class="org-explainer"><summary>What do these response stages mean?</summary><p><b>Support needed:</b> a requirement remains. <b>On the way:</b> an operation is travelling; arrival and receipt are pending. <b>Received:</b> a receipt has been recorded. Our team reviews public updates and omits personal details and sensitive locations.</p></details></main>${footer(org)}</div>`;
     connectionNotice(app, connection);
-    publicProgressTimer = setInterval(async () => {
-      if (document.hidden || !app.querySelector("#public-response-progress")) return;
-      try {
-        const latest = await api("/api/public");
-        connectionNotice(app, latest.sourceConnection);
-        const target = app.querySelector("#public-response-progress");
-        if (target && JSON.stringify(latest.responseProgress) !== target.dataset.snapshot) {
-          const holder = document.createElement("div"); holder.innerHTML = progressMarkup(latest.responseProgress);
-          const next = holder.firstElementChild; next.dataset.snapshot = JSON.stringify(latest.responseProgress); target.replaceWith(next);
-        }
-      } catch { /* Keep the last confirmed public projection while offline. */ }
+    publicRefresh = createPublicRefresh({
+      initial: d,
+      load: () => api("/api/public"),
+      current: () => !document.hidden && Boolean(app.querySelector("#public-response-updates")),
+      onData: latest => connectionNotice(app, latest.sourceConnection),
+      apply: (latest, changed) => changed.filter(key => {
+        if (key === "updates") return updatePublicRegion(app, "#public-response-updates", updatesMarkup(latest.updates));
+        if (key === "finance") return updatePublicRegion(app, "#public-response-finance", financeMarkup(latest.finance));
+        if (key === "financeReview") return updatePublicRegion(app, "#public-procurement-review", publicProcurement(latest.financeReview, e, time));
+        const holder = document.createElement("div"); holder.innerHTML = progressMarkup(latest.responseProgress);
+        return updatePublicRegion(app, "#public-response-progress", holder.firstElementChild.innerHTML);
+      }),
+    });
+    publicProgressTimer = setInterval(() => {
+      publicRefresh.poll().catch(() => { /* Keep the last reviewed projection while offline. */ });
     }, 15000);
     app.querySelector("#contributeform").addEventListener("submit", async ev => {
       ev.preventDefault(); if (responseReadOnly(connection)) return toast(responseReadOnlyMessage);
@@ -59,7 +68,7 @@ export function createPortalViews(h) {
     });
   }
   async function communityView(app) {
-    style(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
+    style(); publicRefresh?.stop(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
     const publicData = await api("/api/public");
     const org = publicData.organization; connection = publicData.sourceConnection;
     const storageKey = "aidscaler-community-tracking:" + org.id;

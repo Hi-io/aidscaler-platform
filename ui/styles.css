@@ -2488,6 +2488,8 @@ main { padding-top: 32px; }
 .inline-notice strong { color: var(--ink); }
 .fieldform label { font-size: 13px; }
 .fieldform input, .fieldform select, .fieldform textarea { font-size: 14px; }
+.fieldform input[type="color"] { display: block; width: 88px; height: 44px; padding: 4px; cursor: pointer; }
+#organization-portal > a { display: inline-flex; align-items: center; min-height: 40px; margin-left: 12px; }
 .case-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border: 1px solid var(--line); border-radius: 12px; margin: 20px 0 14px; }
 .case-stats .stat { padding: 20px; border-right: 1px solid var(--line); }
 .case-stats .stat:last-child { border: 0; }
@@ -2602,9 +2604,10 @@ html { overflow-anchor: none; }
 .agent-monitor.compact { height:154px; min-height:154px; padding:0; }
 .agent-monitor.compact .agent-monitor-open { padding:18px 22px; }
 .overview-layout.single-focus { grid-template-columns:minmax(0,1fr); }
-.single-focus .response-priority { padding:21px 0; }
+.single-focus .response-priority { padding:21px 24px; }
 .single-focus .case-suggestion { margin-left:48px; }
 .single-focus .case-suggestion > button { min-height:42px; padding-inline:18px; }
+@media(max-width:760px) { .single-focus .response-priority { padding-inline:18px; } }
 .freshness-slot { min-height:50px; margin:0 0 12px; display:flex; align-items:center; }
 .freshness-button { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; background:#f0edfb; border-color:#ddd5f5; color:var(--ink); padding:10px 16px; text-align:left; }
 .freshness-button strong { display:flex; align-items:center; gap:5px; margin-left:auto; font-size:12px; color:var(--accent); }

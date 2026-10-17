@@ -11,6 +11,30 @@ const STAGES = {
   problem: ["acknowledged", "departed", "arrived"],
   receipt_reported: [],
 };
+const taskActionNames = { delivery: 'Delivery', dispatch: 'Delivery', evacuation: 'Evacuation', evacuate: 'Evacuation', inspection: 'Field assessment', assessment: 'Field assessment', verify: 'Field assessment', repair: 'Road repair' };
+const placeName = value => typeof value === 'string' && value.trim() ? value.trim().slice(0, 200) : null;
+function assignmentPlaces(map) {
+  const names = new Map(), nodes = new Map((map?.nodes ?? []).map(node => [node.id, node]));
+  for (const place of map?.places ?? []) {
+    const nodeName = placeName(nodes.get(place.node)?.name),
+      name = placeName(place.name ?? place.label) ?? nodeName?.replace(/ Junction$/, '');
+    if (name) { names.set(place.id, name); if (place.node && !names.has(place.node)) names.set(place.node, name); }
+  }
+  for (const node of nodes.values()) if (placeName(node.name)) names.set(node.id, placeName(node.name));
+  return names;
+}
+function namedAssignment(task, operation, names, resource) {
+  const destinationName = placeName(task.destinationName) ??
+    [operation?.building, operation?.to, operation?.destination, task.destination].map(id => names.get(id)).find(Boolean) ?? null;
+  const originName = placeName(task.originName) ?? names.get(task.origin) ?? null;
+  const type = typeof operation?.type === 'string' && operation.type ? operation.type : 'Operation',
+    action = taskActionNames[type] ?? (type[0]?.toUpperCase() + type.slice(1).replaceAll('_', ' ')),
+    legacyTitle = `${type} · ${task.destination ?? 'Assigned destination'}`,
+    title = task.title && task.title !== legacyTitle ? task.title : destinationName ? `${action} to ${destinationName}` : `${action} · Assigned destination`;
+  // Only this assignment's names and units cross the field-role boundary.
+  // Directory geometry, other sites and inventory remain private to operators.
+  return { ...task, title, destinationName, originName, unit: task.unit ?? resource?.unit ?? null };
+}
 export class Workforce {
   constructor(store, domain) {
     Object.assign(this, { store, domain });
@@ -46,9 +70,13 @@ export class Workforce {
         [actor.org, actor.role !== "field", actor.id],
       )
     ).rows;
-    return Promise.all(
-      rows.map((r) => this.store.get(actor.org, "task", r.id)),
-    );
+    const tasks = await Promise.all(rows.map(r => this.store.get(actor.org, "task", r.id)));
+    if (tasks.every(task => task.destinationName && task.unit)) return tasks;
+    const directory = await this.store.get(actor.org, 'context', 'geography', false),
+      names = assignmentPlaces(directory?.map),
+      operations = await this.store.getMany(actor.org, 'operation', [...new Set(tasks.map(task => task.operation).filter(Boolean))]),
+      resources = await this.store.getMany(actor.org, 'resource', [...new Set([...operations.values()].map(operation => operation.resource).filter(Boolean))]);
+    return tasks.map(task => namedAssignment(task, operations.get(task.operation), names, resources.get(operations.get(task.operation)?.resource)));
   }
   async assign(
     actor,
@@ -91,18 +119,20 @@ export class Workforce {
           "This operation already has a task. Use an explicit handover to change its responsible person.",
           409,
         );
+        const directory = await tx.get(actor.org, 'context', 'geography', false),
+          names = assignmentPlaces(directory?.map),
+          resource = o.resource ? await tx.get(actor.org, 'resource', o.resource, false) : null;
         const task = await tx.put(
           actor.org,
           "task",
           id,
-          {
+          namedAssignment({
             operation,
             assignee,
             assigneeName: person.name,
             assignedBy: actor.id,
-            title: `${o.type ?? "Operation"} · ${o.to ?? o.destination ?? "Assigned destination"}`,
             origin: o.from ?? null,
-            destination: o.to ?? o.destination ?? null,
+            destination: o.to ?? o.destination ?? o.building ?? null,
             quantity: o.quantity ?? null,
             unit: o.unit ?? null,
             instructions,
@@ -111,7 +141,7 @@ export class Workforce {
             timeline: [],
             sourceStateAtAssignment: o.state,
             note: "Task status is a field report. Operational receipt and service are confirmed separately by the source.",
-          },
+          }, o, names, resource),
           0,
         );
         await tx.audit(actor.org, actor.id, "task.assigned", id, {

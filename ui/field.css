@@ -1,5 +1,6 @@
 .field-workspace { max-width: 900px; margin-inline: auto; }
-.field-workspace > .grid { margin-bottom: 20px; }
+.fieldform [data-task-received][hidden] { display: none; }
+.field-workspace [data-field-tasks] > .grid { margin-bottom: 20px; }
 .field-workspace .inline-notice { padding: 13px 18px; }
 .field-composer-card { margin-top: 20px; padding: 28px 30px 8px; }
 .field-outbox { margin-top: 18px; padding: 8px 22px; }

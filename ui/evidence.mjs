@@ -1,4 +1,4 @@
-import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel } from './labels.mjs';
+import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel, vehicleDisplayIdentity } from './labels.mjs';
 
 const quantity = (value) => Number(value ?? 0).toLocaleString('en-US');
 const received = (r) => r.sourceSnapshot ?? r;
@@ -11,7 +11,8 @@ export function evidenceTitle(found) {
   const at = entityLabel(r.building ?? r.location ?? r.node);
   if (found.kind === 'need') return `${humanLabel(r.type)} · ${at || 'Location not confirmed'}`;
   if (found.kind === 'resource') return `${resourceLabel(r)}${r.owner ? ' · ' + entityLabel(r.owner) : ''}`;
-  if (found.kind === 'vehicle' || found.kind === 'facility') return r.name || r.label || entityLabel(r.id);
+  if (found.kind === 'vehicle') return vehicleDisplayIdentity(r).label;
+  if (found.kind === 'facility') return r.name || r.label || entityLabel(r.id);
   if (found.kind === 'signal') return r.authorName ? `Post by ${r.authorName}` : 'Public post';
   if (found.kind === 'report') return `${r.authorName || r.reporterName || 'Field report'}${at ? ' · ' + at : ''}`;
   if (found.kind === 'verification') return `${humanLabel(r.target || 'Source')} check${r.entity ? ' · ' + entityLabel(r.entity) : ''}`;
@@ -71,6 +72,8 @@ export function createEvidenceExperience({ api, escape: e, icon, badge, action, 
       add('Available', `${quantity(Math.max(0, Number(r.quantity ?? 0) - Number(r.reserved ?? 0) - Number(r.floor ?? 0)))} ${r.unit || 'units'}`);
       if (r.compatibility) add('Compatible with', Array.isArray(r.compatibility) ? r.compatibility.map(humanLabel).join(', ') : humanLabel(r.compatibility));
     } else if (kind === 'vehicle') {
+      const identity = vehicleDisplayIdentity(r);
+      add(identity.registrationLabel, identity.plate || null);
       add('Capacity', r.capacity != null ? quantity(r.capacity) : 'Not recorded');
       add('Cargo limit', r.maxCargoKg != null ? `${quantity(r.maxCargoKg)} kg` : null);
       add('Going to', r.destination ? entityLabel(r.destination) : null);

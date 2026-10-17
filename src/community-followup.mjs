@@ -40,7 +40,7 @@ export class CommunityFollowup {
         const assessment = ["assessment", "inspection", "verify"].includes(op.type ?? op.kind);
         const failed = ["failed", "blocked", "cancelled"].includes(op.state);
         const received = Number.isFinite(op.times?.received) && Number.isFinite(op.received) && op.received > 0;
-        const moving = ["travelling", "en_route", "in_transit"].includes(op.state);
+        const moving = op.phase !== "pickup" && ["dispatched", "travelling", "en_route", "in_transit"].includes(op.state);
         if (failed || received || moving) {
           state = failed ? "response_changed" : received ? "supplies_received" : assessment ? "assessment_on_way" : "aid_on_way";
           events.push({ state, title: failed ? "The response needs another look" : received ? "Supplies received" : assessment ? "Assessment team on the way" : "Help is on the way", text: failed ? "The linked operation has changed. The team needs to review the next step." : received ? "A receipt has been recorded for the linked response. This does not yet confirm that every need is met." : assessment ? "A field team is travelling to assess the linked case." : "A source-confirmed response is travelling. Arrival and receipt are still pending.", at: op.updatedAt });

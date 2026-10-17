@@ -1,4 +1,4 @@
-import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel } from './labels.mjs';
+import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel, vehicleDisplayIdentity } from './labels.mjs';
 import { actionBrief } from './uploads.mjs';
 import { createEvidenceExperience } from './evidence.mjs';
 
@@ -142,7 +142,7 @@ export function createDecisionExperience(h) {
     const p = a.params ?? {}, resource = get(records, p.resource), vehicle = get(records, p.vehicle), owner = entityLabel(a.owner),
       unit = resource?.unit || get(records, p.need)?.unit || 'units',
       cargo = p.quantity != null ? `${number(p.quantity)} ${unit} · ${resource ? resourceLabel(resource) : entityLabel(p.resource)}` : null,
-      vehicleName = vehicle?.name || vehicle?.label || entityLabel(p.vehicle),
+      vehicleName = vehicle ? vehicleDisplayIdentity(vehicle).label : entityLabel(p.vehicle),
       at = destination(p, records);
     let name = humanLabel(a.type), description = readableText(actionBrief(a)), glyph = 'clipboard-check', trail = null;
     if (a.type === 'dispatch') { name = vehicleName || 'Deliver supplies'; description = cargo; glyph = 'truck'; trail = ['Collect supplies', 'Transport', at]; }

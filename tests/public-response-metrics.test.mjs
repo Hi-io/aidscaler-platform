@@ -52,3 +52,17 @@ test('community location uses one approximate coordinate value and rejects inval
   assert.equal(approximateCoordinates({latitude:35.613759,longitude:139.618275}),'Approximate coordinates: 35.614, 139.618');
   for (const invalid of [undefined,{}, {latitude:NaN,longitude:10},{latitude:91,longitude:10},{latitude:10,longitude:181},{latitude:'35',longitude:139}]) assert.equal(approximateCoordinates(invalid),null);
 });
+
+
+test('the actual source dispatched lifecycle counts loaded cargo, never an empty pickup or a departure without a physical timestamp', () => {
+  const operations = [
+    op('delivery', { state:'dispatched', times:{dispatched:200} }),
+    op('pickup', { state:'dispatched', phase:'pickup', times:{pickupDispatched:100,dispatched:200} }),
+    op('no-departure', { state:'dispatched', times:{authorized:100} }),
+    op('invalid-departure', { state:'dispatched', times:{dispatched:-1} }),
+    op('unloading', { state:'waiting_to_unload', times:{dispatched:200,arrived:300} }),
+  ];
+  const result = aggregatePublicResponseProgress(published(operations.map(o=>o.id)),operations,resources);
+  assert.equal(result.enRouteDeliveries,2);
+  assert.deepEqual(result.materials,[{type:'water',label:'Drinking water',unit:'L',received:0,enRoute:200}]);
+});

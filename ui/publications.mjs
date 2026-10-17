@@ -1,3 +1,12 @@
+import { operationSummary, operationChoiceLabel } from "./operation-view.mjs";
+
+/** Existing reviewed photos remain visible even when newer choices exceed a page. */
+export function publicationProofChoices(proofs, selected = []) {
+  const approved = proofs.filter(proof => proof.state === "approved");
+  const retained = approved.filter(proof => selected.includes(proof.id));
+  return [...retained, ...approved.filter(proof => !selected.includes(proof.id)).slice(0, Math.max(0, 12 - retained.length))];
+}
+
 export function createPublicationControls(h) {
   const {
     api,
@@ -43,23 +52,34 @@ export function createPublicationControls(h) {
     );
   }
   async function prepare(p = null) {
-    const [ops, proofs] = await Promise.all([
+    const [ops, proofs, needs, resources, vehicles] = await Promise.all([
       record("operation"),
       record("public_evidence"),
+      record("need"),
+      record("resource"),
+      record("vehicle"),
     ]);
+    // The standard record list is bounded. Resolve older selected references
+    // directly so a text correction does not silently remove reviewed photos.
+    for (const id of p?.proofIds ?? []) {
+      if (proofs.some(proof => proof.id === id)) continue;
+      try { proofs.push(await record("public_evidence", id)); } catch { /* Only permitted, still-available evidence is selectable. */ }
+    }
+    for (const id of p?.operationIds ?? []) {
+      if (ops.some(operation => operation.id === id)) continue;
+      try { ops.push(await record("operation", id)); } catch { /* A missing operational receipt cannot establish public progress. */ }
+    }
     current = p;
     modal(
       p ? "Correct a public update" : "Prepare a public update",
       `<form id="publication-editor" class="fieldform"><label>Title<input name="title" value="${e(p?.title ?? "")}" required maxlength="140"></label><label>Approximate public area<input name="area" value="${e(p?.area ?? "")}" required></label><label>Public status<select name="status"><option value="support_needed">Support needed</option><option value="en_route">On the way</option><option value="received">Received</option></select></label><label>Operational reference<select name="operation"><option value="">No operational claim yet</option>${options(
         ops.filter((o) => o.confirmedBySource),
-        (o) => `${o.id} · ${o.state} · ${o.received ?? 0} received`,
+        (o) => operationChoiceLabel(o, { needs, resources, vehicles, organization: state.user.org }),
       )}</select></label><p class="note">On the way and Received require a current source-confirmed reference. They are not inferred from an authorization.</p><label>Public explanation<textarea name="text" required maxlength="2000">${e(p?.text ?? "")}</textarea></label><details class="collapse"><summary>Add reviewed delivery photos</summary>${
-        proofs
-          .filter((f) => f.state === "approved")
-          .slice(0, 12)
+        publicationProofChoices(proofs, p?.proofIds)
           .map(
             (f) =>
-              `<label class="checkbox"><input type="checkbox" name="proof" value="${e(f.id)}">${e(f.caption)} · ${e(f.operationId)}</label>`,
+              `<label class="checkbox"><input type="checkbox" name="proof" value="${e(f.id)}" ${p?.proofIds?.includes(f.id) ? "checked" : ""}>${e(f.caption)} · ${e(operationSummary(ops.find(operation => operation.id === f.operationId) ?? {}, { organization: state.user.org }).title)}</label>`,
           )
           .join("") ||
         '<p class="small">Review a photo before attaching it to an update.</p>'

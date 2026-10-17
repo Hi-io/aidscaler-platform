@@ -282,6 +282,7 @@ const workforceControls = createWorkforceControls({
   render,
   offlineQueue,
   flush,
+  refreshFieldOutbox,
   close: () => runAction("close", ""),
 });
 const publicationControls = createPublicationControls({
@@ -621,7 +622,7 @@ async function field() {
       "Field workspace",
       "Report what you see. Saved offline until the server confirms receipt.",
     ) +
-    (await workforceControls.field()) +
+    `<div data-field-tasks>${await workforceControls.field()}</div>` +
     `<section class="card field-composer-card">${renderFieldComposer({escape,icon})}</section>` + fieldOutbox(queue)
   ) + `</div>`;
 }
@@ -635,6 +636,15 @@ async function refreshFieldOutbox() {
   current.outerHTML = fieldOutbox(queue);
   const updated = app.querySelector("[data-field-outbox]");
   if (updated) { bind(updated); protectPreviousResponse(updated,state.sourceConnection); }
+}
+async function refreshFieldTasks() {
+  const current = app.querySelector("[data-field-tasks]");
+  if (state.page !== "field" || !current || !state.user) return;
+  const content = await workforceControls.field();
+  if (!current.isConnected || state.page !== "field") return;
+  current.innerHTML = content;
+  bind(current);
+  protectPreviousResponse(current,state.sourceConnection);
 }
 async function settings() {
   const sources = await record("source");
@@ -819,9 +829,10 @@ async function refreshOverview(pulse) {
   for(const selector of ['.overview-metrics','.overview-layout']) { const current=app.querySelector(selector),next=holder.querySelector(selector);if(current&&next){current.replaceWith(next);bind(next);} }
   state.data=d;state.overviewVersion=pulse.overviewVersion;
 }
-async function sourceDetail(id) {
+async function sourceDetail(id, isCurrent = () => true, afterOpen = () => {}) {
   const s = await record("signal", id);
   const context = await caseControls.context(id);
+  if (!isCurrent()) return false;
   modal(
     "Original source & context",
     `<div class="sourceavatars"><div class="socialavatar">${escape((s.authorName ?? "S")[0])}</div><strong>${escape(s.authorName ?? s.source)}</strong>${badge(s.state)}</div><hr class="divider"><p class="signaltext">${escape(s.text)}</p><div class="detailgrid"><div class="decision"><span class="eyebrow">Publication</span><p>Posted ${time(s.publishedAt)}<br>Collected ${time(s.receivedAt)}</p></div><div class="decision"><span class="eyebrow">Location</span><p>${escape(entityLabel(s.location) || "Not confirmed")}</p></div></div><p class="note">A collected post is not a verified fact. Its original references are kept to detect repeated or dependent reports.</p><details class="collapse"><summary>Source references & attachment records</summary><pre class="trace">${escape(JSON.stringify({ sourceVersion: s.sourceVersion, locationId: s.location, references: s.originalReferences ?? s.references, attachments: s.attachments, contentHash: s.contentHash }, null, 2))}</pre></details>`,
@@ -831,6 +842,8 @@ async function sourceDetail(id) {
   review.innerHTML = context;
   document.querySelector(".dialogbody").append(review);
   bind(review);
+  afterOpen();
+  return true;
 }
 async function activityDetail(id) {
   const a = await record("activity", id);
@@ -881,7 +894,7 @@ async function flushReports() {
     return;
   }
   const q = await offlineQueue("all");
-  let sent = 0;
+  let sent = 0, tasksSent = 0;
   for (const item of q) {
     if (item.queueOrg !== state.user.org || item.queueActor !== state.user.id)
       continue;
@@ -892,6 +905,7 @@ async function flushReports() {
         await deliverFieldReport(item, { api, persist: saved => offlineQueue("put",saved), actor: state.user });
       await offlineQueue("delete", item.clientId);
       sent++;
+      if (item.queueKind === "task") tasksSent++;
     } catch (e) {
       if (!navigator.onLine) break;
       await offlineQueue("put", {
@@ -908,6 +922,7 @@ async function flushReports() {
       `${sent} field update${sent === 1 ? "" : "s"} received by the server.`,
     );
   await refreshFieldOutbox();
+  if (tasksSent) await refreshFieldTasks();
 }
 async function runAction(name, id) {
   if (name === "close") { dialog?.close(); return; }
@@ -1042,23 +1057,56 @@ async function runAction(name, id) {
   if (name === "signal") return sourceDetail(id);
   if (name === "activity") return activityDetail(id);
   if (name === "operation") return operationDetail(id);
+  if (name === "evidence-return") {
+    const saved = state.reviewReturn;
+    if (!saved || saved.id !== id) return;
+    const origin = dialog;
+    const p = await record("proposal",id);
+    state.delegatedReviews = (await api("/api/me")).delegatedReviews;
+    const canReview = ["commander","dispatcher"].includes(state.user.role) || state.delegatedReviews?.includes(id);
+    if (await presentProposal(p,canReview,origin)) {
+      const note = dialog.querySelector("#reviewnote");
+      if (note) note.value = saved.note;
+      state.reviewReturn = null;
+    }
+    return;
+  }
   if (name === "evidence") {
+    const origin = dialog, page = state.page, actor = state.user;
+    const isCurrent = () => dialog === origin && (!origin || origin.open) && state.page === page && state.user?.id === actor?.id && state.user?.org === actor?.org;
+    const back = origin?.dataset.proposal ? { id:origin.dataset.proposal, note:origin.querySelector("#reviewnote")?.value ?? "" } : origin?.dataset.reviewReturn ? state.reviewReturn : null;
+    const addReturn = () => {
+      if (!back || !dialog?.open) return;
+      state.reviewReturn = back;
+      dialog.dataset.reviewReturn = back.id;
+      let footer = dialog.querySelector(".dialogfoot");
+      if (!footer) { footer = document.createElement("footer"); footer.className = "dialogfoot"; dialog.append(footer); }
+      footer.insertAdjacentHTML("afterbegin",action("Back to response","evidence-return",back.id,"accent"));
+      bind(footer);
+    };
     try {
       const found = await api("/api/evidence?" + new URLSearchParams({ id })),
         r = found.record;
-      if (found.kind === "signal") return sourceDetail(id);
-      if (found.kind === "media" || found.kind === "media_analysis")
-        return extras.run(
+      if (!isCurrent()) return;
+      if (found.kind === "signal") { await sourceDetail(id, isCurrent, addReturn); return; }
+      if (found.kind === "media" || found.kind === "media_analysis") {
+        await extras.run(
           "media-open",
           found.kind === "media" ? id : r.mediaId,
+          { isCurrent, afterOpen: addReturn },
         );
+        return;
+      }
+      const content = await decisionExperience.renderEvidence(found);
+      if (!isCurrent()) return;
       modal(
         "Evidence record",
-        await decisionExperience.renderEvidence(found),
+        content,
         action("Close", "close"),
       );
+      addReturn();
       return;
-    } catch {}
+    } catch { if (!isCurrent()) return; }
     toast(
       "Source is no longer accessible. Its decision snapshot remains in the audit record.",
     );

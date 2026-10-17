@@ -271,3 +271,52 @@ test('actual source rejects an old bound command after same-seed reset before it
   assert.equal((lab.world.state.queries ?? []).length, 0);
   assert.equal((await sourceConnection(store, 'org0')).state, 'requires_new_response');
 });
+
+
+test('an earlier clock observation queued behind a database transaction cannot freeze its newer transaction-local receipt', { timeout: 10000 }, async t => {
+  const store = await setup(t), state = snapshot(); state.now = 100;
+  const started = Promise.withResolvers(), release = Promise.withResolvers(), observing = Promise.withResolvers();
+  let slow = false;
+  const connector = new SimulatorConnector({ sourceUrl: 'http://127.0.0.1:1', sourceAgentKey: 'test-only',
+    fetcher: async () => {
+      const receipt = structuredClone(state);
+      if (slow) { slow = false; started.resolve(); await release.promise; }
+      return Response.json(receipt, { headers: { [SOURCE_INSTANCE_HEADER]: 'unchanged-instance' } });
+    } });
+  await new Ingestion(store, connector, { org: 'org0' }).sync({ sources: false });
+  const observe = connector.sourceBoundary.observe;
+  connector.sourceBoundary.observe = receipt => {
+    if (receipt.now === 100) observing.resolve();
+    return observe(receipt);
+  };
+  slow = true;
+  const outside = connector.state();
+  await started.promise;
+  await store.transaction(async tx => {
+    release.resolve();
+    await observing.promise; // Old reply already entered observe, waiting for this SQL lock.
+    state.now = 200;
+    assert.equal((await connector.state()).now, 200);
+    await tx.put('org0', 'note', 'newer-receipt-committed', { completed: true }, 0);
+  });
+  assert.equal((await outside).now, 100, 'earlier immutable state remains an exact receipt');
+  assert.equal((await sourceConnection(store, 'org0')).simulatedAt, 200);
+  assert.equal((await sourceConnection(store, 'org0')).state, 'connected');
+});
+
+
+test('a stale concurrent clock never suppresses source instance or scenario identity changes', async t => {
+  const store = await setup(t);
+  for (const change of ['instance', 'scenario']) {
+    const org = change === 'instance' ? 'org0' : 'org1';
+    await store.organization(org);
+    await observeSourceConnection(store, org, {sourceInstance:'first-instance',runId:'first-run',now:200});
+    await assert.rejects(observeSourceConnection(store, org, {
+      sourceInstance:change === 'instance' ? 'different-instance' : 'first-instance',
+      runId:change === 'scenario' ? 'different-run' : 'first-run', now:100,
+      clockIsCurrent:()=>false,
+    }), {code:'SOURCE_RESPONSE_CHANGED'});
+    assert.equal((await sourceConnection(store,org)).reason,
+      change === 'instance' ? 'source_instance_changed' : 'scenario_changed');
+  }
+});

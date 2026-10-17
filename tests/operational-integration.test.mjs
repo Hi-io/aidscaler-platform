@@ -162,6 +162,49 @@ test("authorization, physical loading/travel, receipt and retry do not create du
     lab.world.state.operations.filter((o) => o.type === "delivery").length,
     1,
   );
+  // Exercise the same physical receipt through the public and private
+  // community APIs, using the real source's dispatched lifecycle and clock.
+  const operationId = lab.world.state.operations.find(o => o.type === 'delivery').id;
+  for (let i = 0; i < 30; i++) {
+    lab.world.advance(lab.world.now + 5000);
+    await app.ingestion.sync({ sources: false });
+    if ((await app.store.get('org0', 'operation', operationId, false))?.state === 'dispatched') break;
+  }
+  const movingOperation = await app.store.get('org0', 'operation', operationId);
+  assert.equal(movingOperation.state, 'dispatched');
+  assert.ok(Number.isFinite(movingOperation.times.dispatched));
+  const post = async (route, body, headers = {}) => {
+    const response = await fetch(app.url + route, { method:'POST',
+      headers:{'Content-Type':'application/json',...headers}, body:JSON.stringify(body) });
+    const result = await response.json();
+    assert.ok(response.ok, route + ': ' + JSON.stringify(result));
+    return { response, result };
+  };
+  const token = 'private_shelter_report_key_12345678901234567890';
+  const submitted = (await post('/api/community/report', {
+    clientId:'operational-community-report', trackingToken:token,
+    text:'Private report from a shelter resident.', location:'Shelter entrance', observedAt:lab.world.now,
+  })).result;
+  const login = await post('/api/login', {
+    email:'commander@org0.aidscaler.local', password:'integration-password',
+  });
+  const headers = { cookie:login.response.headers.get('set-cookie').split(';')[0],
+    'X-CSRF-Token':login.result.csrf };
+  await post('/api/report/followup', { id:submitted.id, version:0, operation:operationId,
+    note:'Our team has linked a source-confirmed water delivery.' },
+    { ...headers,'Idempotency-Key':'integration-community-followup' });
+  const publication = (await post('/api/publication/draft', {
+    title:'Drinking water is on the way', text:'Our team is transporting water to the shelter.',
+    area:'Shelter district', status:'en_route', operationIds:[operationId],
+  },{...headers,'Idempotency-Key':'integration-publication-draft'})).result;
+  await post('/api/publication/publish', {id:publication.id,version:publication.version},
+    {...headers,'Idempotency-Key':'integration-publication-publish'});
+  const enRoutePortal = await (await fetch(app.url+'/api/public')).json();
+  assert.equal(enRoutePortal.responseProgress.enRouteDeliveries,1);
+  assert.equal(enRoutePortal.responseProgress.materials.find(m=>m.type==='water').enRoute,300);
+  assert.equal((await post('/api/community/track',{token})).result.state,'aid_on_way');
+  assert.ok(!JSON.stringify(enRoutePortal).includes('Private report from'));
+  assert.ok(!JSON.stringify(enRoutePortal).includes(token));
   lab.world.advance(14400000);
   await app.ingestion.sync({ sources: false });
   const finished = await app.worker.execute(p.id);
@@ -175,6 +218,11 @@ test("authorization, physical loading/travel, receipt and retry do not create du
     }),
   );
   assert.equal(lab.world.need("need-water-main").served, 300);
+  const receivedPortal = await (await fetch(app.url+'/api/public')).json();
+  assert.equal(receivedPortal.responseProgress.enRouteDeliveries,0);
+  assert.equal(receivedPortal.responseProgress.receivedDeliveries,1);
+  assert.equal(receivedPortal.responseProgress.materials.find(m=>m.type==='water').received,300);
+  assert.equal((await post('/api/community/track',{token})).result.state,'supplies_received');
   assert.deepEqual(lab.world.invariants(), []);
   await app.worker.execute(p.id);
   assert.equal(lab.world.need("need-water-main").served, 300);

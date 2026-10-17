@@ -103,13 +103,13 @@ export class SimulatorConnector {
         if (actorState) check(data.organization?.id === this.sourceBoundary.org,
           'SOURCE_ORG', 'The source key belongs to a different organization.', 403);
         // A transaction-local read must not wait behind an outside read whose
-        // database observation is itself waiting for that transaction. Track
-        // actual request order so an earlier concurrent HTTP reply cannot
-        // falsely turn its older clock into a reset. Identity checks still run.
-        const olderConcurrentRead = actorState && sourceReadOrdinal < this.latestSourceRead;
+        // observation awaits its SQL lock. Evaluate clock order inside that
+        // locked observation, not only when this HTTP reply first arrives.
+        // Source instance and scenario identity still validate every receipt.
         if (actorState) this.latestSourceRead = Math.max(this.latestSourceRead, sourceReadOrdinal);
         await this.sourceBoundary.observe({ sourceInstance,
-          ...(actorState ? { runId: data.runId, ...(olderConcurrentRead ? {} : { now: data.now }) } : {}) });
+          ...(actorState ? { runId: data.runId, now: data.now,
+            clockIsCurrent: () => sourceReadOrdinal >= this.latestSourceRead } : {}) });
       }
     }
     if (!res.ok)

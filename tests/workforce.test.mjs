@@ -344,3 +344,48 @@ test("the HTTP field role cannot read decision, source context or identity colle
     200,
   );
 });
+
+
+test('field assignments expose only their readable received destination and native unit without map access or changing legacy task versions', async t => {
+  const {s,w,c,f,f2} = await setup(t);
+  await s.put('org0','context','geography',{map:{
+    nodes:[{id:'n2180',name:'Sakura Shelter access'},{id:'private-node',name:'Private unrelated staging area'}],
+    places:[{id:'b2180',node:'n2180',name:'Sakura Shelter'},{id:'private-place',node:'private-node',name:'Private unrelated site'}],
+    roads:[{id:'private-road',from:'n2180',to:'private-node'}],
+  }},0);
+  await s.put('org1','context','geography',{map:{nodes:[{id:'n2180',name:'Other tenant private destination'}]}},0);
+  await s.upsert('org0','resource','water',{unit:'L'});
+  await s.upsert('org0','operation','delivery',{type:'delivery',destination:'n2180',to:null,building:'b2180',resource:'water',unit:null});
+  const task = await w.assign(c,{operation:'delivery',assignee:f.id,instructions:'Confirm with the receiving team.'},'named-assignment');
+  assert.equal(task.title,'Delivery to Sakura Shelter');
+  assert.equal(task.destination,'n2180');
+  assert.equal(task.destinationName,'Sakura Shelter');
+  assert.equal(task.unit,'L');
+  // Existing assignments gain a read projection without rewriting their
+  // version, stage, signature or the original exact operation references.
+  const legacy = await s.upsert('org0','task',task.id,{title:'delivery · n2180',destinationName:null,unit:null});
+  const app = await createPlatform({org:'org0',store:s,port:0,autoIngest:false,startWorker:false,writeAccessFile:false});
+  t.after(()=>app.close());
+  const login = await fetch(app.url+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:f.email,password:'workforce-test-password'})});
+  assert.equal(login.status,200);
+  const headers={cookie:login.headers.get('set-cookie').split(';')[0]};
+  const response=await fetch(app.url+'/api/tasks',{headers});
+  assert.equal(response.status,200);
+  const rows=await response.json();
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].title,'Delivery to Sakura Shelter');
+  assert.equal(rows[0].destinationName,'Sakura Shelter');
+  assert.equal(rows[0].unit,'L');
+  assert.equal(rows[0].version,legacy.version);
+  assert.deepEqual(await s.get('org0','task',task.id),legacy);
+  assert.deepEqual(await w.tasks(f2),[]);
+  assert.equal((await fetch(app.url+'/api/map',{headers})).status,403);
+  assert.doesNotMatch(JSON.stringify(rows),/Private unrelated|Other tenant|private-road|private-node|private-place/);
+  // An absent directory name remains explicitly unknown rather than being
+  // replaced by a made-up site or by an opaque raw identifier in the title.
+  await s.upsert('org0','operation','unnamed',{type:'delivery',destination:'n9999',quantity:1,state:'reserved'});
+  const unnamed=await w.assign(c,{operation:'unnamed',assignee:f2.id},'unnamed-assignment');
+  assert.equal(unnamed.title,'Delivery · Assigned destination');
+  assert.equal(unnamed.destinationName,null);
+  assert.equal(unnamed.destination,'n9999');
+});

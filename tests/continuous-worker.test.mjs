@@ -39,7 +39,7 @@ test("partitioned leases cannot take another lane's work or lease a job twice", 
 });
 
 test("overlapping ingestion refreshes fetch snapshots in commit order and recover after a failed fetch", async () => {
-  const ingestion = new Ingestion(null,null,{}), order=[];
+  const ingestion = new Ingestion(null,{},{}), order=[];
   let release;
   const slow = new Promise(resolve=>{release=resolve;});
   ingestion.syncSnapshot = async ({name}) => {
