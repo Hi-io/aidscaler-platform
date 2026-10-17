@@ -5,6 +5,7 @@ import { authorizationCurrent } from "./authority.mjs";
 import { assessmentCurrent } from "./assessment-receipts.mjs";
 import { validateDispatchReservation, validatePlan } from "./planning.mjs";
 import { validateUnloadingAction, persistReceivedUnloadingRequests } from "./unloading.mjs";
+import { assertSourceResponseCurrent, sourceConnection } from './source-connection.mjs';
 const PHYSICAL = new Set([
   "dispatch",
   "repair",
@@ -438,6 +439,7 @@ export class Worker {
     });
   }
   async execute(id) {
+    await assertSourceResponseCurrent(this.store, this.config.org);
     const org = this.config.org,
       p = await this.store.get(org, "proposal", id);
     if (
@@ -724,6 +726,7 @@ export class Worker {
           { human: true },
         );
       } catch (e) {
+        if (e.code === 'SOURCE_RESPONSE_CHANGED') throw e;
         if (
           ![400, 403, 404, 409].includes(e.status) ||
           ["STEP_PENDING", "REVIEW_PENDING"].includes(e.code)
@@ -948,6 +951,7 @@ export class Worker {
     return { simId, results, complete };
   }
   async once({ asOf = Date.now(), includeKinds = null, excludeKinds = null } = {}) {
+    if ((await sourceConnection(this.store, this.config.org))?.state === 'requires_new_response') return false;
     const job = await this.store.lease(this.config.org, 180000, asOf, { includeKinds, excludeKinds });
     if (!job) return false;
     const heartbeat = setInterval(
@@ -1035,6 +1039,15 @@ export class Worker {
         await this.intake.complete(job.payload, result);
       return true;
     } catch (e) {
+      if (e.code === 'SOURCE_RESPONSE_CHANGED') {
+        // A response boundary is not an operational failure or exhausted
+        // monitoring attempt. Preserve the pending work for historical review
+        // without changing the proposal or consuming its retry budget.
+        await this.store.query(`UPDATE jobs SET state='queued',attempts=GREATEST(attempts-1,0),
+          leased_until=NULL,lease_token=NULL WHERE id=$1 AND org=$2 AND state='running' AND lease_token=$3`,
+          [job.id, job.org, job.lease_token]);
+        return false;
+      }
       if (
         ["investigate", "discover_response", "compile_response"].includes(
           job.kind,

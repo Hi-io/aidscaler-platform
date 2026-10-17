@@ -192,3 +192,8 @@
   .org-tracking-heading { gap: 10px; }
   .org-tracking-heading>button { max-width: 100px; font-size: 9px; line-height: 1.5; }
 }
+
+.org-public .source-boundary-notice { padding:18px 22px; margin:24px 0; border:1px solid #e5c99d; border-left:3px solid #a87225; border-radius:12px; background:#fffaf1; color:#523d20; line-height:1.55; }
+.org-public .source-boundary-notice strong { display:block; font-size:16px; }
+.org-public .source-boundary-notice p { margin:5px 0 0; max-width:850px; font-size:14px; }
+.org-public button:disabled { cursor:not-allowed; opacity:.5; }

@@ -1,6 +1,7 @@
 import { hash, uid } from "./store.mjs";
 import { check, role } from "./errors.mjs";
 import { responseQueue } from "./response-policy.mjs";
+import { sourceConnection } from './source-connection.mjs';
 /** Persistent, bounded intake. Grouping is a queue aid, not a truth verdict. */
 export class Intake {
   constructor(store, config) {
@@ -124,6 +125,8 @@ export class Intake {
     });
   }
   async kick() {
+    if ((await sourceConnection(this.store, this.config.org))?.state === 'requires_new_response')
+      return { paused: true, reason: 'SOURCE_RESPONSE_CHANGED' };
     const org = this.config.org,
       policy = await this.policy();
     if (!policy.enabled) return { paused: true };

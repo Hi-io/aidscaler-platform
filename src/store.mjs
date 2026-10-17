@@ -2,8 +2,11 @@ import { PGlite } from "@electric-sql/pglite";
 import pg from "pg";
 import { readFile } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { AppError, check } from "./errors.mjs";
 import { hydrateEntityRows } from "./entity-fragments.mjs";
+import { assertSourceResponseCurrent, observeSourceConnection } from './source-connection.mjs';
+const transactionScope = new AsyncLocalStorage();
 const canonical = (value) => {
   if (value?.toJSON) return canonical(value.toJSON());
   if (Array.isArray(value)) return value.map(canonical);
@@ -45,12 +48,17 @@ export class Store {
     return this.postgres ? this.db.query(sql) : this.db.exec(sql);
   }
   async transaction(fn) {
-    if (!this.postgres) return this.db.transaction((tx) => fn(new Store(tx, false, this.fragmentCache)));
+    try {
+    if (!this.postgres) return await this.db.transaction((tx) => {
+      const scoped = new Store(tx, false, this.fragmentCache);
+      return transactionScope.run(scoped, () => fn(scoped));
+    });
     for (let attempt = 0; attempt < 4; attempt++) {
       const c = await this.db.connect();
       try {
         await c.query("BEGIN ISOLATION LEVEL SERIALIZABLE");
-        const result = await fn(new Store(c, true, this.fragmentCache));
+        const scoped = new Store(c, true, this.fragmentCache),
+          result = await transactionScope.run(scoped, () => fn(scoped));
         await c.query("COMMIT");
         return result;
       } catch (e) {
@@ -60,6 +68,18 @@ export class Store {
         c.release();
       }
     }
+    } catch (error) {
+      // A source reset can be discovered while an authorized command owns a
+      // database transaction. Roll that command back first; persist the new
+      // read-only boundary outside it, so the latch survives the rollback.
+      if (error.sourceBoundary && !this.currentTransaction())
+        await observeSourceConnection(this, error.sourceBoundary.org, error.sourceBoundary.receipt);
+      throw error;
+    }
+  }
+  currentTransaction() {
+    const scoped = transactionScope.getStore();
+    return scoped?.fragmentCache === this.fragmentCache ? scoped : null;
   }
   async organization(org, name = org) {
     await this.query(
@@ -249,6 +269,7 @@ export class Store {
     );
   }
   async command(org, key, payload, fn) {
+    await assertSourceResponseCurrent(this, org);
     check(
       typeof key === "string" && key.length >= 3 && key.length <= 180,
       "IDEMPOTENCY",
@@ -258,6 +279,7 @@ export class Store {
       await tx.query("SELECT id FROM organizations WHERE id=$1 FOR UPDATE", [
         org,
       ]);
+      await assertSourceResponseCurrent(tx, org);
       const h = hash(payload),
         existing = (
           await tx.query(

@@ -38,6 +38,7 @@ import { SemanticIngestion } from "./src/semantic-ingestion.mjs";
 import { DiscoveryResponse } from "./src/discovery-response.mjs";
 import { Coverage } from "./src/coverage.mjs";
 import { unloadingPlan, unloadingCheckpoint, prepareUnloading, currentUnloadingRequests } from "./src/unloading.mjs";
+import { assertSourceResponseCurrent, sourceConnection, publicSourceConnection } from './src/source-connection.mjs';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -217,6 +218,12 @@ export async function createPlatform(overrides = {}) {
         "camera=(), microphone=(), geolocation=" + (req.url?.split("?")[0] === "/community" ? "(self)" : "()"),
       );
       const url = new URL(req.url, "http://localhost");
+      if (req.method !== 'GET' && url.pathname.startsWith('/api/') &&
+          !['/api/login', '/api/logout', '/api/community/track'].includes(url.pathname)) {
+        await assertSourceResponseCurrent(store, config.org);
+        if (['/api/contribute', '/api/community/report', '/api/network/inbox', '/api/finance/webhook'].includes(url.pathname))
+          await connector.checkSourceBoundary?.();
+      }
       // Cookies are scoped by host/path, not port. Keep independent workspaces
       // and disposable QA instances from replacing one another's login.
       const cookieName = "aidscaler_" + hash([config.org, server.address().port]).slice(0, 20);
@@ -313,6 +320,7 @@ export async function createPlatform(overrides = {}) {
         }
         return json(res, 200, {
           organization: await organization.publicProfile(config.org),
+          sourceConnection: publicSourceConnection(await sourceConnection(store, config.org)),
           responseProgress: await publicResponseMetrics(store, config.org, publications),
           updates: approved,
           finance: await finance.summary(config.org),
@@ -477,6 +485,12 @@ export async function createPlatform(overrides = {}) {
             "Refresh your session before making this change.",
             403,
           );
+        if (req.method !== 'GET' && url.pathname !== '/api/logout') {
+          await connector.checkSourceBoundary?.();
+          await assertSourceResponseCurrent(store, config.org);
+        }
+        if (url.pathname === '/api/status' && req.method === 'GET')
+          return json(res, 200, { sourceConnection: publicSourceConnection(await sourceConnection(store, config.org)) });
         if (url.pathname === "/api/me")
           return json(res, 200, {
             user: actor,
@@ -492,6 +506,7 @@ export async function createPlatform(overrides = {}) {
             intake: await intake.summary(),
             organization: { id: config.org, name: config.orgName },
             provider: config.provider,
+            sourceConnection: publicSourceConnection(await sourceConnection(store, config.org)),
           });
         if (url.pathname === "/api/logout") {
           await auth.logout(token);
@@ -1184,6 +1199,7 @@ export async function createPlatform(overrides = {}) {
   if (config.autoIngest && config.sourceAgentKey)
     pollTimer = setInterval(async () => {
       try {
+        if ((await sourceConnection(store, config.org))?.state === 'requires_new_response') return;
         const pending = (
           await store.query(
             "SELECT id FROM jobs WHERE org=$1 AND kind='ingest' AND state IN ('queued','running','retry') LIMIT 1",

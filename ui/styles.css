@@ -2641,3 +2641,9 @@ html { overflow-anchor: none; }
  .single-focus .case-suggestion { margin-left:0; }
 }
 @media(prefers-reduced-motion:reduce) { .agent-work-item.arriving { animation:none; } }
+
+.source-boundary-notice { padding:18px 22px; margin-bottom:24px; border:1px solid #e5c99d; border-left:3px solid #a87225; border-radius:12px; background:#fffaf1; color:#523d20; line-height:1.55; }
+.source-boundary-notice strong { display:block; font-size:16px; }
+.source-boundary-notice p { margin:5px 0 0; max-width:850px; font-size:14px; }
+.response-readonly .agent-monitor { display:none; }
+.dialogbody > [data-source-boundary] .source-boundary-notice { margin-bottom:20px; }

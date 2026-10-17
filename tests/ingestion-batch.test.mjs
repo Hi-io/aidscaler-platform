@@ -219,13 +219,13 @@ test("material SQL comparison preserves context receipts, silent corrections, ru
   assert.equal(correctedRoad.sourceVersion, 1);
   assert.equal((await s.query("SELECT id FROM jobs WHERE org=$1 AND kind='invalidate'", ["org0"])).rows.length, 1);
   state.now += 1000; state.runId = "replacement-run"; wall += 1000;
-  await ingestion.sync({ sources: false });
+  await assert.rejects(ingestion.sync({ sources: false }), { code: 'SOURCE_RESPONSE_CHANGED' });
   const replaced = await s.get("org0", "context", "operational");
-  assert.equal(replaced.snapshot.runId, "replacement-run"); assert.equal(replaced.snapshot.now, state.now);
-  assert.equal(replaced.observedAt, wall); assert.equal(replaced.version, corrected.version + 1);
+  assert.deepEqual(replaced, corrected, 'a changed scenario leaves the previous response intact and read-only');
+  assert.equal((await s.get('org0', 'source_connection', 'simulator')).state, 'requires_new_response');
   assert.equal(await s.get("org1", "road", "road", false), null);
   assert.equal(await s.get("org1", "context", "operational", false), null);
   state.organization.id = "org1";
-  await assert.rejects(ingestion.sync({ sources: false }), { code: "SOURCE_ORG" });
+  await assert.rejects(ingestion.sync({ sources: false }), { code: 'SOURCE_RESPONSE_CHANGED' });
   assert.deepEqual(await s.get("org0", "context", "operational"), replaced);
 });

@@ -1,3 +1,4 @@
+import { responseReadOnly, responseReadOnlyMessage, responseBoundaryNotice, protectPreviousResponse } from "./source-connection.mjs";
 import { entityLabel, resourceLabel, humanLabel, readableText, registerDisplayRecords, setDisplayContext, labelHints } from "./labels.mjs";
 import { createPortalViews } from "./portal.mjs";
 import { agentMonitor } from "./autonomy.mjs";
@@ -77,6 +78,7 @@ let state = {
     user: null,
     csrf: null,
     model: null,
+    sourceConnection: null,
     page: location.hash.slice(1) || "overview",
     data: null,
     filter: "",
@@ -146,6 +148,7 @@ function cacheSession() {
       user: state.user,
       model: state.model,
       organization: state.organization,
+      sourceConnection: state.sourceConnection,
       expiresAt: Number(state.user.expiresAt) || Date.now() + 8 * 3600000,
     }),
   );
@@ -161,7 +164,40 @@ function toast(s) {
   el.classList.add("visible");
   setTimeout(() => el.classList.remove("visible"), 5000);
 }
+function updateSourceConnection(connection) {
+  if (!connection) return;
+  // A response fence is latched by the server and cannot be cleared by stale polls.
+  if (responseReadOnly(state.sourceConnection) && !responseReadOnly(connection)) return;
+  const newlyBlocked = !responseReadOnly(state.sourceConnection) && responseReadOnly(connection);
+  state.sourceConnection = connection;
+  if (newlyBlocked && state.user) cacheSession();
+  const blocked = responseReadOnly(connection);
+  const main = app.querySelector('main[data-view]');
+  if (main) {
+    main.classList.toggle('response-readonly', blocked);
+    const slot = main.querySelector('[data-source-boundary]');
+    if (slot) slot.innerHTML = responseBoundaryNotice(connection, escape);
+    const label = app.querySelector('.connection-label');
+    if (blocked && label) label.textContent = 'Previous response · read-only';
+    protectPreviousResponse(main, connection);
+  }
+  if (dialog?.open && blocked) {
+    if (!dialog.querySelector('[data-source-boundary]')) {
+      const notice = document.createElement('div'); notice.dataset.sourceBoundary = 'true';
+      notice.innerHTML = responseBoundaryNotice(connection, escape);
+      dialog.querySelector('.dialogbody').prepend(notice);
+    }
+    protectPreviousResponse(dialog, connection);
+  }
+}
+document.addEventListener('submit', event => {
+  if (state.user && responseReadOnly(state.sourceConnection) && !['loginform', 'trackingform'].includes(event.target.id)) {
+    event.preventDefault(); event.stopImmediatePropagation(); toast(responseReadOnlyMessage);
+  }
+}, true);
 async function api(url, body) {
+  if (body && responseReadOnly(state.sourceConnection) && !['/api/login', '/api/logout', '/api/community/track'].includes(url))
+    throw Object.assign(new Error(responseReadOnlyMessage), { code: 'SOURCE_RESPONSE_CHANGED', httpStatus: 409 });
   const response = await fetch(url, {
     method: body ? "POST" : "GET",
     headers: body
@@ -178,9 +214,11 @@ async function api(url, body) {
   if (!response.ok) {
     const e = new Error(result.message ?? "The request failed.");
     e.code = result.error;
+    if (e.code === 'SOURCE_RESPONSE_CHANGED') updateSourceConnection({ state: 'requires_new_response' });
     e.httpStatus = response.status;
     throw e;
   }
+  if (result.sourceConnection) updateSourceConnection(result.sourceConnection);
   return result;
 }
 const record = async (kind, id) => {
@@ -327,6 +365,7 @@ function login(error = "") {
       const r = await api("/api/login", b);
       state.user = r.user;
       state.csrf = r.csrf;
+      state.sourceConnection = null;
       const me = await api("/api/me");
       state.delegatedReviews = me.delegatedReviews;
       state.model = me.model;
@@ -344,8 +383,9 @@ function shell(content) {
   const active = nav.find(n => n[0] === state.page), scope = `${state.user.org}:${state.user.id}`;
   const previousPage = app.querySelector("main[data-view]")?.dataset.view;
   rememberPresentation(app, scope);
-  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(entityLabel(state.user.org))}</strong><span class="org-role">${escape(humanLabel(state.user.role))}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(humanLabel(state.user.role))}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}">${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p>${labelHints() ? `<p>${escape(labelHints())}</p>` : ""}</details></main></div></div>`;
+  app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(entityLabel(state.user.org))}</strong><span class="org-role">${escape(humanLabel(state.user.role))}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(humanLabel(state.user.role))}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}" class="${responseReadOnly(state.sourceConnection) ? "response-readonly" : ""}"><div data-source-boundary>${responseBoundaryNotice(state.sourceConnection, escape)}</div>${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p>${labelHints() ? `<p>${escape(labelHints())}</p>` : ""}</details></main></div></div>`;
   bind();
+  updateSourceConnection(state.sourceConnection);
   if (previousPage !== state.page) window.scrollTo({ top: 0, behavior: "instant" });
   restorePresentation(app, scope, state.page, { restoreFocus: previousPage === state.page });
 }
@@ -678,6 +718,7 @@ function modal(name, content, footer = "") {
     }
   };
   bind(dialog);
+  updateSourceConnection(state.sourceConnection);
 }
 function proposalFooter(p, canReview) {
   if(p.reviewBlocked) return action('View agent recheck','navigate','investigations','primary')+action('Close','close');
@@ -704,7 +745,7 @@ async function presentProposal(p,canReview,expectedDialog=null) {
 function setDecisionBusy(opened,busy) {
   if(!opened)return;
   opened.setAttribute('aria-busy',String(busy));
-  opened.querySelectorAll('[data-action="reviewapprove"],[data-action="reviewreject"],[data-action="reviewclarify"]').forEach(button=>{button.disabled=busy||opened.dataset.outdated==='true';});
+  opened.querySelectorAll('[data-action="reviewapprove"],[data-action="reviewreject"],[data-action="reviewclarify"]').forEach(button=>{button.disabled=busy||opened.dataset.outdated==='true'||responseReadOnly(state.sourceConnection);});
 }
 function requireProposalReload(opened,id,message='Load its latest plan and checks before making a decision.') {
   opened.dataset.outdated='true';
@@ -927,6 +968,7 @@ async function runAction(name, id) {
     await api("/api/logout", {});
     sessionStorage.removeItem("aidscaler-workspace");
     state.user = null;
+    state.sourceConnection = null;
     login();
     return;
   }
@@ -1358,6 +1400,7 @@ else
       state.user = cached.user;
       state.model = cached.model;
       state.organization = cached.organization;
+      state.sourceConnection = cached.sourceConnection ?? null;
       setDisplayContext({ organization: cached.organization });
       state.page = "field";
       state.offline = true;
@@ -1368,6 +1411,8 @@ setInterval(async () => {
   if(polling||!state.user||!navigator.onLine||document.hidden)return;
   polling=true;
   try {
+    await api("/api/status");
+    if (responseReadOnly(state.sourceConnection)) return;
     if(dialog) {await refreshProposalProgress();return;}
     if(['overview','signals','investigations'].includes(state.page)) {
       const pulse=await liveWorkspace.poll(app);

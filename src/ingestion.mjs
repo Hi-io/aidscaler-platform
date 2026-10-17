@@ -5,6 +5,7 @@ import { persistReceivedUnloadingRequests } from "./unloading.mjs";
 import { persistOperationalReadModel, persistDirectoryReadModel, receivedDirectoryRevision } from "./context-projection.mjs";
 import { immutableSourceResult } from "./immutable-source-result.mjs";
 import { persistFragments } from "./entity-fragments.mjs";
+import { assertSourceResponseCurrent, observeSourceConnection, sourceConnection } from './source-connection.mjs';
 
 function splitSnapshot(snapshot) {
   const chunks = new Map(), refs = [], selected = { ...snapshot };
@@ -128,6 +129,10 @@ async function writeSourceRecords(store, org, kind, changes) {
 export class Ingestion {
   constructor(store, connector, config) {
     Object.assign(this, { store, connector, config });
+    this.connectorBoundaryConfigured = typeof connector.configureSourceConnection === 'function';
+    connector.configureSourceConnection?.({ org: config.org,
+      load: () => sourceConnection(store, config.org),
+      observe: receipt => observeSourceConnection(store, config.org, receipt) });
   }
   sync(options = {}) {
     // An investigation may refresh facts while the background lane receives
@@ -142,6 +147,7 @@ export class Ingestion {
       changed = 0;
     const began = performance.now();
     try {
+      await assertSourceResponseCurrent(this.store, org);
       const state = await this.connector.state({ immutableResults: true });
       check(
         state.organization.id === org,
@@ -149,6 +155,8 @@ export class Ingestion {
         "The source key belongs to a different organization.",
         403,
       );
+      if (!this.connectorBoundaryConfigured)
+        await observeSourceConnection(this.store, org, { runId: state.runId, now: state.now });
       const priorCursor =
         (await this.store.get(org, "source", "simulator", false))
           ?.backfillCursor ?? 100;
@@ -183,6 +191,7 @@ export class Ingestion {
           const accepted = [],
             acceptJob = `source_accept_${org}_${hash(fresh.map((p) => [p.id, p.version]))}`;
           await this.store.transaction(async (tx) => {
+            await assertSourceResponseCurrent(tx, org);
             // Re-read inside the committing transaction: a download receipt
             // must not resurrect an erased source or overwrite a newer page.
             const ids = fresh.map((p) => p.id),
@@ -338,6 +347,7 @@ export class Ingestion {
         receiptIds.push(p.id);
       }
       await this.store.transaction(async (tx) => {
+        await assertSourceResponseCurrent(tx, org);
         await tx.upsert(org, "source", "simulator", {
           state: "connected",
           lastSuccessAt: Date.now(),
@@ -492,6 +502,7 @@ export class Ingestion {
       if (this.afterSync) await this.afterSync();
       return { downloaded, changed, now: state.now };
     } catch (e) {
+      if (e.code === 'SOURCE_RESPONSE_CHANGED') throw e;
       await this.store.upsert(org, "source", "simulator", {
         state: "degraded",
         lastFailureAt: Date.now(),

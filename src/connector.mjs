@@ -1,6 +1,7 @@
 import { AppError, check } from "./errors.mjs";
 import { hash } from "./store.mjs";
 import { deepFreezeJson, rememberImmutableSourceResult, immutableSourceResult } from './immutable-source-result.mjs';
+import { SOURCE_INSTANCE_HEADER, SOURCE_RESPONSE_CHANGED, assertConnectionRecord } from './source-connection.mjs';
 const decoder = (s) => s.replace(/&(?:quot|apos|lt|gt|amp|#\d{1,7}|#x[0-9a-f]{1,6});/gi, entity => {
   const token = entity.slice(1, -1).toLowerCase(),
     named = { quot: '"', apos: "'", lt: '<', gt: '>', amp: '&' };
@@ -50,7 +51,21 @@ export class SimulatorConnector {
     this.sourceResultJson = new Map();
     this.sourceResultReads = new Map();
   }
-  async request(endpoint, { method = "GET", body, human = false } = {}) {
+  configureSourceConnection(boundary) { this.sourceBoundary = boundary; }
+  async checkSourceBoundary() {
+    const bound = assertConnectionRecord(await this.sourceBoundary?.load());
+    if (!this.sourceBoundary || (!bound && !this.agentKey)) return bound;
+    try { await this.request('/api/actor/state?compact=1'); }
+    catch (error) { if (error.status !== 404) throw error; await this.request('/api/actor/state'); }
+    return assertConnectionRecord(await this.sourceBoundary.load());
+  }
+  async request(endpoint, { method = "GET", body, human = false, _sourceSerialized = false } = {}) {
+    const actorState = endpoint.split('?')[0] === '/api/actor/state';
+    if (this.sourceBoundary && actorState && !_sourceSerialized) {
+      const pending = (this.sourceStateTail ?? Promise.resolve()).then(() => this.request(endpoint, { method, body, human, _sourceSerialized: true }));
+      this.sourceStateTail = pending.catch(() => {});
+      return pending;
+    }
     check(
       endpoint.startsWith("/api/actor/") ||
         ["/api/feed", "/api/contracts"].some((p) => endpoint.startsWith(p)),
@@ -58,10 +73,14 @@ export class SimulatorConnector {
       "This connector cannot access observer data.",
       403,
     );
+    let bound = assertConnectionRecord(await this.sourceBoundary?.load());
+    if (method !== 'GET' && this.sourceBoundary && (!bound || !bound.sourceInstance))
+      bound = await this.checkSourceBoundary();
     const options = {
       method,
       headers: {
         Authorization: `Bearer ${human ? this.humanKey : this.agentKey}`,
+        ...(bound?.sourceInstance ? { [SOURCE_INSTANCE_HEADER]: bound.sourceInstance } : {}),
         ...(body ? { "Content-Type": "application/json" } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -73,6 +92,17 @@ export class SimulatorConnector {
       method === "GET" || Boolean(body?.idempotencyKey),
     );
     const data = await res.json();
+    const sourceInstance = res.headers?.get?.(SOURCE_INSTANCE_HEADER);
+    if (this.sourceBoundary) {
+      if (res.status === 409 && data.error === SOURCE_RESPONSE_CHANGED)
+        await this.sourceBoundary.observe({ rejected: true, sourceInstance });
+      if (res.ok && (endpoint.startsWith('/api/actor/') || sourceInstance != null)) {
+        if (actorState) check(data.organization?.id === this.sourceBoundary.org,
+          'SOURCE_ORG', 'The source key belongs to a different organization.', 403);
+        await this.sourceBoundary.observe({ sourceInstance,
+          ...(actorState ? { runId: data.runId, now: data.now } : {}) });
+      }
+    }
     if (!res.ok)
       throw new AppError(
         data.error ?? "SOURCE",

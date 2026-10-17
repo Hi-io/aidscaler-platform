@@ -1,7 +1,15 @@
+import { responseReadOnly, responseBoundaryNotice, responseReadOnlyMessage, protectPreviousResponse } from "./source-connection.mjs";
 /** Organization-owned public pages. Private reports never appear in the public feed. */
 export function createPortalViews(h) {
   const { api, escape: e, icon, money, time, publicProcurement, readAttachment, toast } = h;
-  let trackerTimer, publicProgressTimer;
+  let trackerTimer, publicProgressTimer, connection;
+  function connectionNotice(app, next) {
+    if (responseReadOnly(connection) && !responseReadOnly(next)) return;
+    connection = next;
+    const slot = app.querySelector('[data-source-boundary]');
+    if (slot) slot.innerHTML = responseBoundaryNotice(connection, e);
+    protectPreviousResponse(app, connection);
+  }
   function style() {
     if (!document.querySelector('link[data-portal-style]')) {
       const link = document.createElement("link"); link.rel = "stylesheet"; link.href = "/portal.css"; link.dataset.portalStyle = "true"; document.head.append(link);
@@ -20,16 +28,18 @@ export function createPortalViews(h) {
   }
   async function publicView(app) {
     style(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
-    const d = await api("/api/public"), org = d.organization;
+    const d = await api("/api/public"), org = d.organization; connection = d.sourceConnection;
     document.title = `${org.name} · Response updates`;
-    app.innerHTML = `<div class="org-public" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "updates")}<main id="main" class="org-public-main">${banner(org)}<section class="org-portal-intro"><div class="org-intro-copy"><span class="org-eyebrow"><i></i> ${e(org.response || "Disaster response")}</span><h1>${e(org.portal.title)}</h1><p>${e(org.portal.description)}</p><div class="org-intro-actions"><a class="org-primary" href="/community">Tell us where help is needed ${icon("arrow-up-right")}</a><a class="org-text-link" href="#response-updates-title">Follow the response ${icon("arrow-down")}</a></div></div><div class="org-intro-aside"><span>ONE COMMUNITY.<br>A SHARED RESPONSE.</span><p>Local knowledge. Coordinated action.<br>Updates from ${e(org.name)}.</p><small>LOCAL DEMONSTRATION</small></div></section>${progressMarkup(d.responseProgress)}<section aria-labelledby="response-updates-title"><div class="org-section-title"><h2 id="response-updates-title">Latest response updates</h2><span>Reviewed by ${e(org.name)}</span></div><div class="org-update-grid">${d.updates.map(p => {
+    app.innerHTML = `<div class="org-public" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "updates")}<main id="main" class="org-public-main"><div data-source-boundary>${responseBoundaryNotice(connection, e)}</div>${banner(org)}<section class="org-portal-intro"><div class="org-intro-copy"><span class="org-eyebrow"><i></i> ${e(org.response || "Disaster response")}</span><h1>${e(org.portal.title)}</h1><p>${e(org.portal.description)}</p><div class="org-intro-actions"><a class="org-primary" href="/community">Tell us where help is needed ${icon("arrow-up-right")}</a><a class="org-text-link" href="#response-updates-title">Follow the response ${icon("arrow-down")}</a></div></div><div class="org-intro-aside"><span>ONE COMMUNITY.<br>A SHARED RESPONSE.</span><p>Local knowledge. Coordinated action.<br>Updates from ${e(org.name)}.</p><small>LOCAL DEMONSTRATION</small></div></section>${progressMarkup(d.responseProgress)}<section aria-labelledby="response-updates-title"><div class="org-section-title"><h2 id="response-updates-title">Latest response updates</h2><span>Reviewed by ${e(org.name)}</span></div><div class="org-update-grid">${d.updates.map(p => {
       const [label, glyph] = labels[p.status] ?? ["Team update", "globe"];
       return `<article class="org-update-card ${e(p.status)}"><div class="org-update-status">${icon(glyph)}<span>${e(label)}</span></div><h3>${e(p.title)}</h3><p>${e(p.text)}</p><small>${e(p.area)} · ${time(p.publishedAt)}${p.corrected ? " · corrected" : ""}</small>${(p.proofs ?? []).map(f => `<figure class="publicproof"><img src="${e(f.url)}" alt="${e(f.caption)}" loading="lazy"><figcaption>${e(f.caption)} · reviewed evidence</figcaption></figure>`).join("")}</article>`;
     }).join("") || `<article class="org-no-updates">${icon("radio")}<div><h3>Updates will appear here</h3><p>Our team publishes progress after review. Community reports stay private.</p></div></article>`}</div></section><section class="org-support-grid" aria-labelledby="support-title"><div><span class="org-eyebrow">MAKE THE NEXT RESPONSE POSSIBLE</span><h2 id="support-title">Stand with your community.</h2><p>Contributions support our pooled response fund, so we can direct support where it is needed as the situation changes.</p><form id="contributeform"><label>Test contribution · USD<input name="amount" type="number" min="1" max="100000" value="25" required></label><button class="org-primary">Contribute ${icon("arrow-right")}</button></form><p class="org-fine-print">Sandbox only. No money is collected.</p><div id="contribution-receipt" aria-live="polite"></div></div><div class="org-fund-summary"><span class="org-eyebrow">POOLED RESPONSE FUND · TEST FUNDS</span><strong>${money(d.finance.receivedCents)}</strong><span>Settled support</span><dl><div><dt>Allocated</dt><dd>${money(d.finance.allocatedCents)}</dd></div><div><dt>Refunded</dt><dd>${money(d.finance.refundedCents)}</dd></div><div><dt>Available</dt><dd>${money(d.finance.availableCents)}</dd></div></dl><p class="org-fine-print">Support is pooled, rather than assigned to one item or recipient. A pending test payment is not settled support.</p></div></section>${publicProcurement(d.financeReview, e, time)}<details class="org-explainer"><summary>What do these response stages mean?</summary><p><b>Support needed:</b> a requirement remains. <b>On the way:</b> an operation is travelling; arrival and receipt are pending. <b>Received:</b> a receipt has been recorded. Our team reviews public updates and omits personal details and sensitive locations.</p></details></main>${footer(org)}</div>`;
+    connectionNotice(app, connection);
     publicProgressTimer = setInterval(async () => {
       if (document.hidden || !app.querySelector("#public-response-progress")) return;
       try {
         const latest = await api("/api/public");
+        connectionNotice(app, latest.sourceConnection);
         const target = app.querySelector("#public-response-progress");
         if (target && JSON.stringify(latest.responseProgress) !== target.dataset.snapshot) {
           const holder = document.createElement("div"); holder.innerHTML = progressMarkup(latest.responseProgress);
@@ -38,20 +48,23 @@ export function createPortalViews(h) {
       } catch { /* Keep the last confirmed public projection while offline. */ }
     }, 15000);
     app.querySelector("#contributeform").addEventListener("submit", async ev => {
-      ev.preventDefault(); const button = ev.target.querySelector("button"); button.disabled = true;
+      ev.preventDefault(); if (responseReadOnly(connection)) return toast(responseReadOnlyMessage);
+      const button = ev.target.querySelector("button"); button.disabled = true;
       try {
         const r = await api("/api/contribute", { amountCents: Math.round(Number(new FormData(ev.target).get("amount")) * 100) });
         const receipt = app.querySelector("#contribution-receipt");
         receipt.innerHTML = `<section class="org-receipt" role="status"><button type="button" aria-label="Dismiss contribution confirmation">${icon("x")}</button><strong>${money(r.amountCents)} test contribution created</strong><p>No money was collected. This payment is pending a signed provider confirmation.</p></section>`;
         receipt.querySelector("button").onclick = () => receipt.replaceChildren();
-      } catch (err) { toast(err.message); } finally { button.disabled = false; }
+      } catch (err) { toast(err.message); } finally { button.disabled = responseReadOnly(connection); }
     });
   }
   async function communityView(app) {
     style(); clearInterval(trackerTimer); clearInterval(publicProgressTimer);
-    const { organization: org } = await api("/api/public"), storageKey = "aidscaler-community-tracking:" + org.id;
+    const publicData = await api("/api/public");
+    const org = publicData.organization; connection = publicData.sourceConnection;
+    const storageKey = "aidscaler-community-tracking:" + org.id;
     document.title = `${org.name} · Report a need`;
-    app.innerHTML = `<div class="org-public org-community" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "report")}<main id="main" class="org-community-main"><section class="org-community-intro"><span class="org-eyebrow">DIRECT TO ${e(org.name.toUpperCase())}</span><h1>${e(org.portal.communityTitle)}</h1><p>${e(org.portal.communityDescription)}</p></section><section class="org-report-composer" aria-label="Send a need"><form id="communityform"><label class="org-composer-label" for="need-text">What is needed?</label><textarea id="need-text" name="text" maxlength="6000" placeholder="Tell us what is happening, who needs help and what would help most."></textarea><div id="attachment-preview" class="org-attachment-preview" hidden></div><div class="org-composer-toolbar"><div class="org-composer-tools"><label class="org-attach-button" tabindex="0" aria-label="Add a photo or audio attachment" title="Add a photo or audio attachment"><span aria-hidden="true">+</span><input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg" class="org-file-input"></label><div class="org-location-control"><button type="button" id="attach-location" aria-pressed="true" aria-expanded="false" aria-controls="location-options">${icon("map-pin")}<span>Attach location</span>${icon("chevron-down")}</button><div id="location-options" class="org-location-options" hidden><div class="org-location-heading"><strong>Report location</strong><button type="button" id="close-location" aria-label="Close location options">${icon("x")}</button></div><button type="button" id="use-location">${icon("locate-fixed")} Use my current location</button><label for="report-location">Or enter a nearby place<input id="report-location" name="location" maxlength="200" placeholder="Shelter, neighborhood or landmark" autocomplete="off"></label><div class="org-location-actions"><button type="button" id="remove-location">Don't attach</button><button type="button" id="save-location">Done</button></div><p id="location-help" class="org-fine-print">Only an approximate location is attached. Your browser asks before sharing it.</p></div></div></div><button class="org-primary" type="submit">Submit ${icon("arrow-right")}</button></div><p id="composer-help" class="org-composer-help" hidden>Share what the team needs to know. Avoid private contact details. Reports are reviewed; for immediate danger, contact your local emergency service.</p></form></section><section id="report-tracking" class="org-tracking-section" aria-labelledby="track-title"><div class="org-section-title"><h2 id="track-title">Know what happens next.</h2></div><p>Already sent a report? Check its progress with your private tracking key.</p><form id="trackingform" class="org-tracking-form"><label>Private tracking key<input type="password" name="token" required minlength="32" maxlength="180" autocomplete="off" spellcheck="false" placeholder="Paste your tracking key"></label><button type="submit">Check status ${icon("arrow-right")}</button></form><div id="tracking-result" aria-live="polite"></div></section></main>${footer(org)}</div>`;
+    app.innerHTML = `<div class="org-public org-community" style="--org-accent:${e(org.portal.accent)}">${orgHead(org, "report")}<main id="main" class="org-community-main"><div data-source-boundary>${responseBoundaryNotice(connection, e)}</div><section class="org-community-intro"><span class="org-eyebrow">DIRECT TO ${e(org.name.toUpperCase())}</span><h1>${e(org.portal.communityTitle)}</h1><p>${e(org.portal.communityDescription)}</p></section><section class="org-report-composer" aria-label="Send a need"><form id="communityform"><label class="org-composer-label" for="need-text">What is needed?</label><textarea id="need-text" name="text" maxlength="6000" placeholder="Tell us what is happening, who needs help and what would help most."></textarea><div id="attachment-preview" class="org-attachment-preview" hidden></div><div class="org-composer-toolbar"><div class="org-composer-tools"><label class="org-attach-button" tabindex="0" aria-label="Add a photo or audio attachment" title="Add a photo or audio attachment"><span aria-hidden="true">+</span><input name="attachment" type="file" accept="image/png,image/jpeg,audio/wav,audio/mpeg" class="org-file-input"></label><div class="org-location-control"><button type="button" id="attach-location" aria-pressed="true" aria-expanded="false" aria-controls="location-options">${icon("map-pin")}<span>Attach location</span>${icon("chevron-down")}</button><div id="location-options" class="org-location-options" hidden><div class="org-location-heading"><strong>Report location</strong><button type="button" id="close-location" aria-label="Close location options">${icon("x")}</button></div><button type="button" id="use-location">${icon("locate-fixed")} Use my current location</button><label for="report-location">Or enter a nearby place<input id="report-location" name="location" maxlength="200" placeholder="Shelter, neighborhood or landmark" autocomplete="off"></label><div class="org-location-actions"><button type="button" id="remove-location">Don't attach</button><button type="button" id="save-location">Done</button></div><p id="location-help" class="org-fine-print">Only an approximate location is attached. Your browser asks before sharing it.</p></div></div></div><button class="org-primary" type="submit">Submit ${icon("arrow-right")}</button></div><p id="composer-help" class="org-composer-help" hidden>Share what the team needs to know. Avoid private contact details. Reports are reviewed; for immediate danger, contact your local emergency service.</p></form></section><section id="report-tracking" class="org-tracking-section" aria-labelledby="track-title"><div class="org-section-title"><h2 id="track-title">Know what happens next.</h2></div><p>Already sent a report? Check its progress with your private tracking key.</p><form id="trackingform" class="org-tracking-form"><label>Private tracking key<input type="password" name="token" required minlength="32" maxlength="180" autocomplete="off" spellcheck="false" placeholder="Paste your tracking key"></label><button type="submit">Check status ${icon("arrow-right")}</button></form><div id="tracking-result" aria-live="polite"></div></section></main>${footer(org)}</div>`;
     const form = app.querySelector("#communityform"), locationButton = app.querySelector("#attach-location"), locationOptions = app.querySelector("#location-options"), placeInput = app.querySelector("#report-location"), attachment = form.elements.attachment, preview = app.querySelector("#attachment-preview"), help = app.querySelector("#composer-help");
     let attachLocation = true, pendingSubmission, activeToken;
     const showLocation = show => { locationOptions.hidden = !show; locationButton.setAttribute("aria-expanded", String(show)); };
@@ -92,7 +105,8 @@ export function createPortalViews(h) {
       try { localStorage.setItem(storageKey, token); } catch {}
     };
     form.onsubmit = async ev => {
-      ev.preventDefault(); const button = form.querySelector('button[type="submit"]'); button.disabled = true;
+      ev.preventDefault(); if (responseReadOnly(connection)) return toast(responseReadOnlyMessage);
+      const button = form.querySelector('button[type="submit"]'); button.disabled = true;
       try {
         help.hidden = false;
         const media = await readAttachment(attachment.files[0]);
@@ -105,12 +119,17 @@ export function createPortalViews(h) {
         const r = await api("/api/community/report", { clientId: pendingSubmission.clientId, observedAt: pendingSubmission.observedAt, trackingToken: pendingSubmission.trackingToken, text, location, attachment: media });
         await track(r.trackingToken, true); pendingSubmission = null; form.reset(); preview.hidden = true; attachLocation = true; updateLocationLabel(); showLocation(false); help.hidden = true;
         app.querySelector("#report-tracking").scrollIntoView({ behavior: "smooth", block: "start" });
-      } catch (err) { toast(err.message); } finally { button.disabled = false; }
+      } catch (err) { toast(err.message); } finally { button.disabled = responseReadOnly(connection); }
     };
     app.querySelector("#trackingform").onsubmit = async ev => { ev.preventDefault(); const button = ev.target.querySelector("button"); button.disabled = true; try { await track(ev.target.elements.token.value.trim()); } catch (err) { toast(err.message); } finally { button.disabled = false; } };
     let saved; try { saved = localStorage.getItem(storageKey); } catch {}
     if (saved) { try { await track(saved); } catch { /* A saved report may belong to a previous local lab. */ } }
-    trackerTimer = setInterval(() => { if (activeToken && !document.hidden) track(activeToken).catch(() => {}); }, 10000);
+    connectionNotice(app, connection);
+    trackerTimer = setInterval(async () => {
+      if (document.hidden) return;
+      try { connectionNotice(app, (await api('/api/public')).sourceConnection); } catch {}
+      if (activeToken) track(activeToken).catch(() => {});
+    }, 10000);
   }
   return { publicView, communityView };
 }
