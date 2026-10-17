@@ -1111,12 +1111,12 @@ export class Worker {
       clearInterval(heartbeat);
     }
   }
-  async drain(limit = 32, filter = {}) {
+  async drain(limit = 32, filter = {}, shouldContinue = () => true) {
     // A finite snapshot prevents a continuation from perpetually consuming its
     // own newly created jobs while the modeled world has no chance to advance.
     const asOf = Date.now();
     let count = 0;
-    while (count < limit && (await this.once({ asOf, ...filter }))) count++;
+    while (count < limit && shouldContinue() && (await this.once({ asOf, ...filter }))) count++;
     return { processed: count, limited: count === limit };
   }
   start() {
@@ -1127,7 +1127,7 @@ export class Worker {
     this.lanes = [{ includeKinds: INFERENCE_JOBS }, { excludeKinds: INFERENCE_JOBS }].map(filter => {
       const lane = { filter };
       const loop = async () => {
-        try { if (this.running) await this.drain(32, filter); }
+        try { if (this.running) await this.drain(32, filter, () => this.running); }
         catch (e) { this.lastError = e.code ?? "WORKER"; }
         finally {
           if (this.running) lane.timer = setTimeout(() => { lane.promise = loop(); }, 500);

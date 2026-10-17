@@ -50,6 +50,8 @@ export class SimulatorConnector {
     this.sourceResults = new Map();
     this.sourceResultJson = new Map();
     this.sourceResultReads = new Map();
+    this.sourceReadOrdinal = 0;
+    this.latestSourceRead = 0;
   }
   configureSourceConnection(boundary) { this.sourceBoundary = boundary; }
   async checkSourceBoundary() {
@@ -61,7 +63,7 @@ export class SimulatorConnector {
   }
   async request(endpoint, { method = "GET", body, human = false, _sourceSerialized = false } = {}) {
     const actorState = endpoint.split('?')[0] === '/api/actor/state';
-    if (this.sourceBoundary && actorState && !_sourceSerialized) {
+    if (this.sourceBoundary && actorState && !_sourceSerialized && !this.sourceBoundary.inTransaction?.()) {
       const pending = (this.sourceStateTail ?? Promise.resolve()).then(() => this.request(endpoint, { method, body, human, _sourceSerialized: true }));
       this.sourceStateTail = pending.catch(() => {});
       return pending;
@@ -76,6 +78,7 @@ export class SimulatorConnector {
     let bound = assertConnectionRecord(await this.sourceBoundary?.load());
     if (method !== 'GET' && this.sourceBoundary && (!bound || !bound.sourceInstance))
       bound = await this.checkSourceBoundary();
+    const sourceReadOrdinal = actorState ? ++this.sourceReadOrdinal : null;
     const options = {
       method,
       headers: {
@@ -99,8 +102,14 @@ export class SimulatorConnector {
       if (res.ok && (endpoint.startsWith('/api/actor/') || sourceInstance != null)) {
         if (actorState) check(data.organization?.id === this.sourceBoundary.org,
           'SOURCE_ORG', 'The source key belongs to a different organization.', 403);
+        // A transaction-local read must not wait behind an outside read whose
+        // database observation is itself waiting for that transaction. Track
+        // actual request order so an earlier concurrent HTTP reply cannot
+        // falsely turn its older clock into a reset. Identity checks still run.
+        const olderConcurrentRead = actorState && sourceReadOrdinal < this.latestSourceRead;
+        if (actorState) this.latestSourceRead = Math.max(this.latestSourceRead, sourceReadOrdinal);
         await this.sourceBoundary.observe({ sourceInstance,
-          ...(actorState ? { runId: data.runId, now: data.now } : {}) });
+          ...(actorState ? { runId: data.runId, ...(olderConcurrentRead ? {} : { now: data.now }) } : {}) });
       }
     }
     if (!res.ok)
@@ -212,7 +221,8 @@ export class SimulatorConnector {
       used.add(key);
       let result = this.sourceResults.get(key);
       if (!this.sourceResults.has(key)) {
-        let reading = this.sourceResultReads.get(key);
+        const transactionLocalRead = Boolean(this.sourceBoundary?.inTransaction?.());
+        let reading = transactionLocalRead ? null : this.sourceResultReads.get(key);
         if (!reading) {
           reading = this.request(
             "/api/actor/query-result?" + new URLSearchParams({ id, version }),
@@ -233,7 +243,7 @@ export class SimulatorConnector {
             }
             return row.result;
           });
-          this.sourceResultReads.set(key, reading);
+          if (!transactionLocalRead) this.sourceResultReads.set(key, reading);
         }
         try {
           result = await reading;

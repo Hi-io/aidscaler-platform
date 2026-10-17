@@ -131,6 +131,7 @@ export class Ingestion {
     Object.assign(this, { store, connector, config });
     this.connectorBoundaryConfigured = typeof connector.configureSourceConnection === 'function';
     connector.configureSourceConnection?.({ org: config.org,
+      inTransaction: () => Boolean(store.currentTransaction?.()),
       load: () => sourceConnection(store, config.org),
       observe: receipt => observeSourceConnection(store, config.org, receipt) });
   }

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { mkdtemp, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { Store } from '../src/store.mjs';
+import { Store, hash } from '../src/store.mjs';
 import { Ingestion } from '../src/ingestion.mjs';
 import { Domain } from '../src/domain.mjs';
 import { Worker } from '../src/worker.mjs';
@@ -110,6 +110,83 @@ test('source writes inside an authorization transaction do not deadlock; a raced
   }), { code: 'SOURCE_RESPONSE_CHANGED' });
   assert.equal(await store.get('org0', 'permission', 'must-rollback', false), null);
   assert.equal((await sourceConnection(store, 'org0')).state, 'requires_new_response');
+});
+
+test('a transaction-local source read cannot deadlock behind an outside read waiting for its database lock', { timeout: 10000 }, async t => {
+  const store = await setup(t), remote = source(), connector = remote.connector();
+  await new Ingestion(store, connector, { org: 'org0' }).sync({ sources: false });
+  const entered = Promise.withResolvers(), proceed = Promise.withResolvers();
+  const transaction = store.transaction(async tx => {
+    entered.resolve(); await proceed.promise;
+    assert.equal((await connector.state()).runId, remote.state.runId);
+    await tx.put('org0', 'note', 'lock-order', { completed: true }, 0);
+  });
+  await entered.promise;
+  const outside = connector.state();
+  await new Promise(resolve => setTimeout(resolve, 10));
+  proceed.resolve();
+  await Promise.all([transaction, outside]);
+  assert.equal((await store.get('org0', 'note', 'lock-order')).completed, true);
+  assert.equal((await sourceConnection(store, 'org0')).state, 'connected');
+});
+
+test('an earlier concurrent HTTP clock receipt stays exact without falsely pausing a later transaction-local observation', { timeout: 10000 }, async t => {
+  const store = await setup(t), state = snapshot(); state.now = 100;
+  const started = Promise.withResolvers(), release = Promise.withResolvers(); let slow = false;
+  const connector = new SimulatorConnector({ sourceUrl: 'http://127.0.0.1:1', sourceAgentKey: 'test-only',
+    fetcher: async () => {
+      const receipt = structuredClone(state);
+      if (slow) { slow = false; started.resolve(); await release.promise; }
+      return Response.json(receipt, { headers: { [SOURCE_INSTANCE_HEADER]: 'unchanged-instance' } });
+    } });
+  await new Ingestion(store, connector, { org: 'org0' }).sync({ sources: false });
+  slow = true; const outside = connector.state(); await started.promise;
+  await store.transaction(async () => {
+    state.now = 200;
+    assert.equal((await connector.state()).now, 200);
+    release.resolve();
+  });
+  assert.equal((await outside).now, 100, 'source snapshots are still exact, detached receipts');
+  assert.equal((await sourceConnection(store, 'org0')).simulatedAt, 200);
+  assert.equal((await sourceConnection(store, 'org0')).state, 'connected');
+});
+
+test('transaction-local hydration never joins a pending outside result read whose boundary is waiting for its SQL lock', { timeout: 10000 }, async t => {
+  const store = await setup(t), state = snapshot(), map = { places: [{ id: 'sakura', name: 'Sakura Shelter' }] },
+    version = hash(map);
+  const connector = new SimulatorConnector({ sourceUrl: 'http://127.0.0.1:1', sourceAgentKey: 'test-only',
+    fetcher: async url => Response.json(new URL(url).pathname.endsWith('/query-result')
+      ? { id: 'map-query', version, result: map } : state,
+      { headers: { [SOURCE_INSTANCE_HEADER]: 'unchanged-instance' } }) });
+  await new Ingestion(store, connector, { org: 'org0' }).sync({ sources: false });
+  const frame = { ...state, queries: [{ id: 'map-query', target: 'map', state: 'ready', resultRef: { id: 'map-query', version } }],
+    compact: { version: 1, runId: state.runId, mapQueryId: 'map-query' } },
+    entered = Promise.withResolvers(), proceed = Promise.withResolvers();
+  let inner;
+  const transaction = store.transaction(async () => {
+    entered.resolve(); await proceed.promise;
+    inner = await connector.hydrateState(frame);
+  });
+  await entered.promise;
+  const outside = connector.hydrateState(frame);
+  await new Promise(resolve => setTimeout(resolve, 10));
+  assert.equal(connector.sourceResultReads.size, 1);
+  proceed.resolve();
+  const [, outer] = await Promise.all([transaction, outside]);
+  assert.deepEqual(inner.known.map, map); assert.deepEqual(outer.known.map, map);
+  assert.notStrictEqual(inner.known.map, outer.known.map);
+  assert.equal(connector.sourceResultReads.size, 0);
+});
+
+test('scheduler shutdown starts no further queued job while explicit evaluation drains keep their existing behavior', async () => {
+  const worker = new Worker({}); let jobs = 0;
+  worker.running = true;
+  worker.once = async () => { jobs++; worker.running = false; return true; };
+  assert.equal((await worker.drain(32, {}, () => worker.running)).processed, 1);
+  assert.equal(jobs, 1);
+  jobs = 0; worker.once = async () => { jobs++; return true; };
+  assert.equal((await worker.drain(3)).processed, 3);
+  assert.equal(jobs, 3, 'direct evaluation does not require the background scheduler to be running');
 });
 
 test('a worker discovering a reset preserves its pending job and retry budget instead of failing the old response', async t => {
