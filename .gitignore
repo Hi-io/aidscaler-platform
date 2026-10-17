@@ -1,4 +1,6 @@
 node_modules/
+__pycache__/
+*.pyc
 .env
 .env.*
 !.env.example
@@ -54,3 +56,4 @@ Thumbs.db
 !/docs/LOCAL.md
 !/docs/INTEGRATIONS.md
 !/docs/ARCHITECTURE.md
+!/docs/DEMO.md

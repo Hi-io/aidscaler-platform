@@ -27,6 +27,10 @@ import { driverAvailabilityBadge } from "./fleet.mjs";
 import { receivedLocations, localResourceInput, localResourceForm, registrationGuide } from "./registration.mjs";
 import { staffAvailabilityState, staffAvailabilityBadge, simulationClock, sourceExpiryLabel } from "./staff.mjs";
 const app = document.querySelector("#app");
+const demoMode = location.pathname.startsWith('/demo/workspace/');
+const workspacePath = demoMode ? location.pathname.slice('/demo/workspace'.length) : location.pathname;
+const demoHiddenPages = new Set(['settings', 'connections']);
+const demoHiddenActions = new Set(['automation', 'addresource', 'register-record', 'registration-guide', 'users', 'organization-export', 'erase-source', 'organization-edit', 'organization-policy', 'portal-edit', 'organization-settings', 'organization-save', 'response-configure', 'response-policy', 'logout']);
 const escape = (s) =>
   String(s ?? "").replace(
     /[&<>"']/g,
@@ -144,7 +148,8 @@ const pageRoles = {
 const visibleNav = () =>
   nav.filter(
     (n) =>
-      !pageRoles[state.user?.role] || pageRoles[state.user.role].includes(n[0]),
+      (!demoMode || !demoHiddenPages.has(n[0])) &&
+      (!pageRoles[state.user?.role] || pageRoles[state.user.role].includes(n[0])),
   );
 function cacheSession() {
   sessionStorage.setItem(
@@ -333,6 +338,7 @@ function table(headers, rows) {
   return `<div class="tablewrap"><table class="table"><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 function action(label, act, id = "", cls = "") {
+  if (demoMode && demoHiddenActions.has(act)) return '';
   const permissions = {
     sync: ["admin", "analyst", "commander", "dispatcher"],
     investigate: ["analyst", "commander", "dispatcher"],
@@ -365,6 +371,10 @@ function action(label, act, id = "", cls = "") {
 function login(error = "") {
   disposeFieldComposer?.();
   disposeFieldComposer = null;
+  if (demoMode) {
+    app.innerHTML = `<section class="empty"><h1>Your demo workspace is not connected.</h1><p>${escape(error || 'Return to the response map to restore your team or join the response.')}</p><a href="/demo/" target="_top">Return to the response map →</a></section>`;
+    return;
+  }
   app.innerHTML = `<div class="login"><div class="loginaside"><div class="brand"><img src="/mark.svg" alt="">AidScaler.</div><div><span class="eyebrow">DISASTER RESPONSE · LOCAL WORKSPACE</span><h1>Scattered signals.<br>A response that<br><span class="gradient">comes together.</span></h1><p>A shared operational picture for the people coordinating help when every minute matters.</p></div><div class="loginbottom small">Model-assisted investigation. Human-owned decisions.</div></div><div class="loginform"><form id="loginform"><h2>Your response workspace</h2><p>Sign in with your organization's account.<br>Roles and authorizations stay separate.</p><label>Email<input type="email" name="email" required autocomplete="username" placeholder="you@your-organization.org"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label>${error ? `<div role="alert" class="error">${escape(error)}</div>` : ""}<button class="primary" type="submit">Enter workspace ${icon("arrow-right")}</button><div class="loginlinks"><a href="/public">Public response portal</a><a href="/community">Report a need</a></div><div class="footnote">Local prototype. Test payments collect no money. Access credentials are provisioned by your administrator.</div></form></div></div>`;
   document.querySelector("#loginform").onsubmit = async (e) => {
     e.preventDefault();
@@ -395,6 +405,16 @@ function shell(content) {
   disposeFieldComposer = null;
   app.innerHTML = `<div class="app"><aside class="sidebar"><div class="brand"><img src="/mark.svg" alt="">AidScaler<span class="brand-dot">.</span></div><div class="org"><span>RESPONSE WORKSPACE</span><strong>${escape(entityLabel(state.user.org))}</strong><span class="org-role">${escape(humanLabel(state.user.role))}</span></div><nav aria-label="Workspace">${presentation.navigation(visibleNav(), state.page)}</nav><div class="sidebarfooter"><div class="profile-label"><span class="avatar">${escape(state.user.name.slice(0, 1))}</span><div><strong>${escape(state.user.name)}</strong><span>${escape(humanLabel(state.user.role))}</span></div></div>${action("Sign out", "logout", "", "quiet")}</div></aside><div class="workspace"><header class="topbar"><div class="crumb">Disaster response <span>/</span> <b>${escape(active?.[2] ?? "Workspace")}</b></div><div class="topstatus"><span class="connection-label"><i class="statusdot ${state.offline ? "offline" : ""}"></i>${state.offline ? "Offline · saved work available" : "Workspace connected"}</span><span class="model-pill" title="Configured model: ${escape(state.model ?? "Not connected")}">${icon("sparkles")}${escape(displayModel(state.model))}</span><a href="/public" target="_blank" rel="noopener" aria-label="Open public portal">Public portal ${icon("external-link")}</a>${action("Sign out", "logout", "", "quiet mobile-signout")}</div><select class="mobile-nav" aria-label="Workspace page">${visibleNav().map(([id, , label]) => `<option value="${id}" ${id === state.page ? "selected" : ""}>${label}</option>`).join("")}</select></header><main id="main" data-view="${escape(state.page)}" class="${responseReadOnly(state.sourceConnection) ? "response-readonly" : ""}"><div data-source-boundary>${responseBoundaryNotice(state.sourceConnection, escape)}</div>${content}<details class="view-footnote" data-ui-key="workspace:details"><summary>Local workspace · Human-owned decisions</summary><p>AidScaler local prototype · ${escape(state.model ?? "Model not connected")}. Sources and simulation results remain distinct from real-world outcomes.</p>${labelHints() ? `<p>${escape(labelHints())}</p>` : ""}</details></main></div></div>`;
   bind();
+  if (demoMode) {
+    const portal = app.querySelector('a[href="/public"]');
+    if (portal) { portal.href = '/demo/workspace/public'; portal.removeAttribute('target'); }
+    if (window.parent === window) {
+      const mapButton = document.createElement('button'); mapButton.className = 'quiet'; mapButton.textContent = 'Back to response map';
+      mapButton.addEventListener('click', () => { location.href = '/demo/#response'; });
+      app.querySelector('.topstatus')?.prepend(mapButton);
+    }
+    app.querySelectorAll('.view-footnote summary').forEach(summary => { summary.textContent = 'Shared simulation · Human-owned decisions'; });
+  }
   updateSourceConnection(state.sourceConnection);
   if (previousPage !== state.page) window.scrollTo({ top: 0, behavior: "instant" });
   restorePresentation(app, scope, state.page, { restoreFocus: previousPage === state.page });
@@ -568,7 +588,7 @@ async function publications() {
 async function finance() {
   const data = await api("/api/public"),
     usage = await api("/api/usage");
-  const controls = await financeControls.view();
+  const controls = demoMode ? '<p class="note">Financial summaries are available for exploration. Budget administration is managed by the demo host.</p>' : await financeControls.view();
   return (
     title(
       "Pooled funds",
@@ -755,6 +775,7 @@ function modal(name, content, footer = "") {
     }
   };
   bind(dialog);
+  if (demoMode) dialog.querySelector('#coverage-policy-form')?.closest('details')?.remove();
   updateSourceConnection(state.sourceConnection);
 }
 function proposalFooter(p, canReview) {
@@ -1454,10 +1475,13 @@ window.addEventListener("hashchange", () => {
   state.page = location.hash.slice(1) || "overview";
   if (!dialog) render();
 });
-if ("serviceWorker" in navigator)
+if (!demoMode && "serviceWorker" in navigator)
   navigator.serviceWorker.register("/sw.js").catch(() => {});
-if (location.pathname === "/public") await publicView();
-else if (location.pathname === "/community") await communityView();
+if (demoMode && ['/public', '/community'].includes(workspacePath)) {
+  try { state.csrf = (await api('/api/me')).user.csrf; } catch {}
+}
+if (workspacePath === "/public") await publicView();
+else if (workspacePath === "/community") await communityView();
 else
   try {
     const me = await api("/api/me");
@@ -1468,7 +1492,7 @@ else
     setDisplayContext({ organization: me.organization });
     try { setDisplayContext({ geography: (await api("/api/map")).geography }); } catch {}
     cacheSession();
-    if (location.pathname === "/field") state.page = "field";
+    if (workspacePath === "/field") state.page = "field";
     await render();
   } catch {
     let cached;

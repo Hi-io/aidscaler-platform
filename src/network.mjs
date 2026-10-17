@@ -98,7 +98,7 @@ export class Network {
             ? {
                 id: record.id,
                 type: record.type,
-                available: receivedUsableQuantity(record, await receivedSourceNow(tx, actor.org)),
+                available: Math.min(receivedUsableQuantity(record, await receivedSourceNow(tx, actor.org)), this.config.shareResourceLimits?.[record.type] ?? Infinity),
                 ...lotProjection(record),
                 unit: record.unit,
                 transport: transportProjection(record),
@@ -224,7 +224,7 @@ export class Network {
           owner: org,
           type: row.type,
           node: row.node,
-          available: receivedUsableQuantity(row, await receivedSourceNow(this.store, org)),
+          available: Math.min(receivedUsableQuantity(row, await receivedSourceNow(this.store, org)), this.config.shareResourceLimits?.[row.type] ?? Infinity),
           ...lotProjection(row),
           compatibility: row.compatibility,
           qualifications: row.qualifications,

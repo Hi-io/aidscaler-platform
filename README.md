@@ -6,6 +6,12 @@ AidScaler is an operations platform for NGOs, emergency services and public resp
 
 The platform runs locally with **Gemma 4 31B through OpenRouter**. Gemini and Google Cloud are planned next steps.
 
+## Try the connected demo
+
+Open [aidscaler.com/demo](https://aidscaler.com/demo/) to observe the shared Takamatsu response or create a demo organization. No registration is required. Your team receives limited vehicles and supplies, reviews real model proposals and can follow its authorized deliveries in the simulated world.
+
+The public viewer is read-only. Each participant controls their own organization's decisions; simulator controls, connectors and provider credentials stay private. See [Demo deployment](docs/DEMO.md) for Kubernetes operation, quotas and recovery.
+
 ## What the platform does
 
 - **Bring information together.** Collect public signals, field reports and connected operational sources, preserving their origin and versions.
@@ -64,4 +70,4 @@ The ordinary test suite uses local fixtures. Commands that explicitly invoke the
 
 ## Project scope
 
-This is a working local prototype. The laboratory represents finite resources, human attention, communication delays and physical delivery; its outcomes are simulation evidence. Real emergency operations, institutional adoption, Gemini integration and cloud deployment need their own validation. Financial flows use a local sandbox and do not charge real money.
+This is a working prototype with a local laboratory and a public Kubernetes demo. The laboratory represents finite resources, human attention, communication delays and physical delivery; its outcomes are simulation evidence. Real emergency operations, institutional adoption, Gemini integration and a Google Cloud deployment need their own validation. Financial flows use a local sandbox and do not charge real money.
