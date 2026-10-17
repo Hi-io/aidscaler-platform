@@ -12,6 +12,8 @@ Open [aidscaler.com/demo](https://aidscaler.com/demo/) to observe the shared Tak
 
 The public viewer is read-only. Each participant controls their own organization's decisions; simulator controls, connectors and provider credentials stay private. See [Demo deployment](docs/DEMO.md) for Kubernetes operation, quotas and recovery.
 
+The shared demo creates further incidents as requests are resolved. Teams receive scheduled supplies by default; expand **Recurring supplies (demo)** when joining, or edit your team's schedule on the map. Operators can also use **Resources & facilities → Record received supplies** to confirm an incoming shipment with a unique delivery reference.
+
 ## What the platform does
 
 - **Bring information together.** Collect public signals, field reports and connected operational sources, preserving their origin and versions.

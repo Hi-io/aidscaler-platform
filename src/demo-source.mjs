@@ -5,7 +5,7 @@ import { AppError, check } from './errors.mjs';
 export function createDemoSource({ observerUrl, sourceUrl, observerKey, fetcher = fetch, baseOrganizations = [] }) {
   const actors = new Map();
   async function request(route, body) {
-    check(['/api/demo/bootstrap', '/api/demo/frame', '/api/demo/organizations', '/api/demo/organizations/release', '/api/actors/provision'].includes(route), 'DEMO_SOURCE_SCOPE', 'Unsupported internal demo operation.', 403);
+    check(['/api/demo/bootstrap', '/api/demo/frame', '/api/demo/organizations', '/api/demo/organizations/release', '/api/demo/organizations/resupply', '/api/actors/provision'].includes(route), 'DEMO_SOURCE_SCOPE', 'Unsupported internal demo operation.', 403);
     const response = await fetcher(observerUrl + route, { method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + observerKey, ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(30000) });
     const data = await response.json();
     if (!response.ok) throw new AppError(data.error ?? 'DEMO_SOURCE', data.message ?? 'The simulation is reconnecting.', response.status);

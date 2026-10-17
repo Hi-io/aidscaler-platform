@@ -39,6 +39,7 @@ import { DiscoveryResponse } from "./src/discovery-response.mjs";
 import { Coverage } from "./src/coverage.mjs";
 import { unloadingPlan, unloadingCheckpoint, prepareUnloading, currentUnloadingRequests } from "./src/unloading.mjs";
 import { assertSourceResponseCurrent, sourceConnection, publicSourceConnection } from './src/source-connection.mjs';
+import { InventoryReceipts } from './src/inventory-receipts.mjs';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const json = (res, status, data) => {
   res.writeHead(status, {
@@ -82,6 +83,7 @@ const KINDS = [
   "claim_history",
   "semantic_receipt",
   "erasure",
+  "inventory_receipt",
 ];
 export async function createPlatform(overrides = {}) {
   const config = await configuration(overrides),
@@ -95,6 +97,7 @@ export async function createPlatform(overrides = {}) {
     retention = new Retention(store, domain, config),
     workforce = new Workforce(store, domain),
     connector = overrides.connector ?? new SimulatorConnector(config),
+    inventoryReceipts = new InventoryReceipts(store, connector),
     provider = overrides.provider ?? new OpenRouterProvider(store, config),
     semantic = new SemanticIngestion({ store, provider, connector, config }),
     ingestion = new Ingestion(store, connector, config),
@@ -957,6 +960,8 @@ export async function createPlatform(overrides = {}) {
           return json(res, 200, await domain.satisfy(actor, b.id, b, key));
         if (url.pathname === "/api/resource")
           return json(res, 200, await domain.resource(actor, b, key));
+        if (url.pathname === '/api/inventory/receipt')
+          return json(res, 201, await inventoryReceipts.record(actor, b));
         if (url.pathname === "/api/reserve")
           return json(res, 200, await domain.reserve(actor, b, key));
         if (url.pathname === "/api/commitment")

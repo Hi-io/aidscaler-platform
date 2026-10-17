@@ -27,6 +27,7 @@ import { createCoverageControls } from "./coverage.mjs";
 import { createUnloadingControls } from "./unloading.mjs";
 import { driverAvailabilityBadge } from "./fleet.mjs";
 import { receivedLocations, localResourceInput, localResourceForm, registrationGuide } from "./registration.mjs";
+import { incomingResources, incomingReceiptInput, incomingReceiptForm, incomingReceiptHistory } from './inventory-receipts.mjs';
 import { staffAvailabilityState, staffAvailabilityBadge, simulationClock, sourceExpiryLabel } from "./staff.mjs";
 const app = document.querySelector("#app");
 const demoMode = location.pathname.startsWith('/demo/workspace/');
@@ -524,8 +525,8 @@ async function operations() {
   );
 }
 async function resources() {
-  const [items, facilities, vehicles, dashboard] = await Promise.all(
-    ["resource", "facility", "vehicle"].map(k => record(k)).concat([api("/api/dashboard")])
+  const [items, facilities, vehicles, dashboard, arrivals] = await Promise.all(
+    ["resource", "facility", "vehicle"].map(k => record(k)).concat([api("/api/dashboard"), record('inventory_receipt')])
   );
   const usable = r => !["expired", "damaged", "quarantined"].includes(r.condition) &&
     (r.useByAt === undefined || Number.isFinite(dashboard.simulatedAt) && r.useByAt > dashboard.simulatedAt) &&
@@ -543,9 +544,11 @@ async function resources() {
     return `<div class="listrow vehicle-row"><div class="rowicon">${icon("truck")}</div><div class="grow"><h3>${escape(name)} ${identity.plate ? `<span class="vehicle-plate" title="${escape(identity.registrationLabel)}">${escape(identity.plate)}</span>` : ""}</h3><p>${background ? "Observed traffic · Not part of your response fleet" : `Capacity ${number(v.capacity)} · ${escape(entityLabel(v.owner))}`}</p>${background ? "" : driverAvailabilityBadge(v)}<details class="row-details"><summary>Vehicle record</summary>${identity.plate ? `<p class="small">${escape(identity.registrationLabel)}: ${escape(identity.plate)}</p>` : ""}<pre class="trace">${escape(JSON.stringify(v,null,2))}</pre></details></div>${badge(v.state)}</div>`;
   }).join("");
   const tabs = [["inventory","Inventory",own.length],["transport","Transport",ownVehicles.length],["facilities","Facilities",facilities.length]];
-  return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.", action("Add or update records", "register-record", "", "primary")) +
+  const canReceive = ['commander', 'dispatcher'].includes(state.user.role) && incomingResources(own, state.user.org, demoMode).length > 0;
+  return title("Resources & facilities", "See what is available before committing it. Partner resources stay under their owner's control.",
+    `<div class="actions">${canReceive ? action('Record received supplies', 'incoming-receipt', '', 'primary') : ''}${action("Add or update records", "register-record", "", "quiet")}</div>`) +
     `<div class="view-tabs" role="group" aria-label="Resource category">${tabs.map(([id,name,count]) => `<button data-action="resource-tab" data-id="${id}" aria-pressed="${tab===id}">${name} <span>${count}</span></button>`).join("")}</div>` +
-    (tab === "inventory" ? `<section class="card resource-group"><div class="section-heading"><h2>Your inventory</h2><span class="small">Ready to commit, after protected stock</span></div>${own.length ? inventory(own) : empty("No owned resources received. Sync your inventory source.","package")}${peers.length ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner inventory <span>${peers.length} resources</span></summary><p class="small">Observed capacity. A partner must confirm any commitment.</p>${inventory(peers)}</details>` : ""}</section>` :
+    (tab === "inventory" ? `<section class="card resource-group"><div class="section-heading"><h2>Your inventory</h2><span class="small">Ready to commit, after protected stock</span></div>${own.length ? inventory(own) : empty("No owned resources received. Sync your inventory source.","package")}${incomingReceiptHistory(arrivals, {escape, time, badge})}${peers.length ? `<details class="secondary-disclosure" data-ui-key="resources:partners"><summary>Partner inventory <span>${peers.length} resources</span></summary><p class="small">Observed capacity. A partner must confirm any commitment.</p>${inventory(peers)}</details>` : ""}</section>` :
     tab === "transport" ? `<section class="card"><div class="section-heading"><h2>Your transport</h2><span class="small">Last received vehicle states</span></div>${fleet(ownVehicles) || empty("No owned vehicles have been received.","truck")}${partnerVehicles.length ? `<details class="secondary-disclosure" data-ui-key="resources:partner-vehicles"><summary>Partner vehicles <span>${partnerVehicles.length} vehicles</span></summary>${fleet(partnerVehicles)}</details>` : ""}${traffic.length ? `<details class="secondary-disclosure" data-ui-key="resources:traffic"><summary>Traffic observed <span>${traffic.length} vehicles</span></summary>${fleet(traffic,true)}</details>` : ""}</section>` :
     `<section class="card"><div class="section-heading"><h2>Facilities</h2>${action("Request facility check","verifyform","","quiet")}</div>${facilities.map(f => `<div class="listrow"><div class="rowicon">${icon("building-2")}</div><div class="grow"><h3>${escape(entityLabel(f.id))}</h3><p>${f.safe === true ? "Safety inspection confirmed" : f.safe === false ? "Not safe for use" : "Safety has not been confirmed"}</p></div>${badge(f.state ?? "unknown")}${action("Investigate","investigate-facility",f.id)}</div>`).join("") || empty("No assessed facilities received. Request a check before planning their use.","building-2")}</section>`);
 }
@@ -1242,6 +1245,33 @@ async function runAction(name, id) {
       await api("/api/verify", Object.fromEntries(new FormData(e.target)));
       dialog.close();
       toast("Verification requested.");
+    };
+    return;
+  }
+  if (name === 'incoming-receipt') {
+    const rows = incomingResources(await record('resource'), state.user.org, demoMode);
+    if (!['commander', 'dispatcher'].includes(state.user.role) || !rows.length)
+      throw Error('Your team needs connected warehouse inventory and an authorized receiving operator.');
+    modal('Record received supplies', incomingReceiptForm(rows, {escape, demo: demoMode}));
+    const form = dialog.querySelector('#incomingreceiptform'), opened = dialog;
+    form.elements.resource.onchange = () => {
+      const option = form.elements.resource.selectedOptions[0];
+      form.elements.quantity.max = option.dataset.max;
+      form.querySelector('[data-receipt-unit]').textContent = option.dataset.unit;
+    };
+    form.onsubmit = async e => {
+      e.preventDefault();
+      const button = form.querySelector('button[type="submit"]'), status = form.querySelector('[data-receipt-status]');
+      button.disabled = true;
+      try {
+        const input = incomingReceiptInput(Object.fromEntries(new FormData(form)), rows, {demo: demoMode});
+        status.textContent = 'Waiting for the warehouse to acknowledge this delivery…';
+        await api('/api/inventory/receipt', input);
+        if (dialog === opened) dialog.close();
+        toast('Warehouse receipt confirmed. Latest inventory has been requested.');
+        await render();
+      } catch (error) { status.textContent = error.message; }
+      finally { button.disabled = false; }
     };
     return;
   }

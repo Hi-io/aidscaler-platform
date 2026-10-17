@@ -7,7 +7,7 @@ export function responseBoundaryNotice(connection, escape) {
   return responseReadOnly(connection) ? `<section class="source-boundary-notice" role="status"><strong>${responseReadOnlyHeading}</strong><p>${escape(responseReadOnlyMessage)}</p></section>` : '';
 }
 
-const operationalActions = new Set(['edit-response', 'operational-draft', 'addresource', 'reviewapprove', 'reviewreject', 'reviewclarify', 'sync', 'automation', 'investigate', 'investigatesignal', 'investigate-facility', 'repair', 'stop-inquiry', 'lookup', 'reserve', 'share', 'revoke', 'withdraw', 'confirmcommitment', 'publish', 'publishconfirm', 'queue-as-observation', 'flush', 'discover-page', 'interpret-page', 'verifyneed']);
+const operationalActions = new Set(['edit-response', 'operational-draft', 'addresource', 'incoming-receipt', 'reviewapprove', 'reviewreject', 'reviewclarify', 'sync', 'automation', 'investigate', 'investigatesignal', 'investigate-facility', 'repair', 'stop-inquiry', 'lookup', 'reserve', 'share', 'revoke', 'withdraw', 'confirmcommitment', 'publish', 'publishconfirm', 'queue-as-observation', 'flush', 'discover-page', 'interpret-page', 'verifyneed']);
 export const responseActionWrites = action => operationalActions.has(action);
 
 export function protectPreviousResponse(root, connection) {

@@ -20,6 +20,17 @@ const blockedRead = new Set(['/api/users', '/api/export', '/api/integrations', '
 const allowedWrite = new Set(['/api/sync', '/api/query', '/api/verify', '/api/investigate', '/api/interpret-sources', '/api/discover-response', '/api/investigation/stop', '/api/propose', '/api/review', '/api/proposal/revise', '/api/condition', '/api/reserve', '/api/commitment', '/api/report', '/api/report/followup', '/api/report/moderate', '/api/media/upload', '/api/media/analyze', '/api/claim', '/api/claim/correct', '/api/evidence/group', '/api/evidence/split', '/api/evidence/group/restore', '/api/invalidate', '/api/share', '/api/publication/draft', '/api/publication/publish', '/api/publication/retract', '/api/publication/proof', '/api/task/assign', '/api/task/update', '/api/handover', '/api/handover/acknowledge', '/api/coverage/check', '/api/coverage/cancel', '/api/unloading/plan', '/api/unloading/prepare']);
 for (const route of ['/api/contribute', '/api/community/report', '/api/community/track', '/api/memory', '/api/delegation', '/api/delegation/revoke']) allowedWrite.add(route);
 allowedWrite.add('/api/response-policy');
+allowedWrite.add('/api/inventory/receipt');
+export function demoResupply(input = { enabled: true, intervalMs: 1800000, water: 300, food: 60 }) {
+  check(input && typeof input === 'object' && !Array.isArray(input) && Object.keys(input).every(k => ['enabled', 'intervalMs', 'water', 'food'].includes(k)),
+    'DEMO_RESUPPLY', 'Use the supported incoming-supply schedule fields.');
+  const { enabled, intervalMs, water, food } = input;
+  check(typeof enabled === 'boolean' && Number.isSafeInteger(intervalMs) && intervalMs >= 300000 && intervalMs <= 21600000 &&
+    Number.isSafeInteger(water) && water >= 0 && water <= 600 && Number.isSafeInteger(food) && food >= 0 && food <= 120,
+  'DEMO_RESUPPLY', 'Choose 5 minutes to 6 simulated hours, up to 600 L of water and 120 food portions per arrival.');
+  return { enabled, intervalMs, water, food };
+}
+const publicResupply = value => value ? Object.fromEntries(['enabled', 'intervalMs', 'water', 'food', 'nextAt', 'waterCap', 'foodCap', 'receiptsCount', 'lastReceivedAt'].filter(k => value[k] !== undefined).map(k => [k, value[k]])) : null;
 const bridge = `const base='/demo/workspace';const originalFetch=window.fetch.bind(window);window.fetch=(input,init)=>{if(typeof input==='string'&&input.startsWith('/api/'))input=base+input;else if(input instanceof URL&&input.origin===location.origin&&input.pathname.startsWith('/api/'))input=new URL(base+input.pathname+input.search,location.origin);return originalFetch(input,init)};const rebase=root=>{for(const el of [root,...(root.querySelectorAll?.('[src],[href]')??[])])for(const attr of ['src','href']){const value=el.getAttribute?.(attr);if(value?.startsWith('/')&&!value.startsWith('//')&&!value.startsWith('/demo/'))el.setAttribute(attr,base+value)}};new MutationObserver(changes=>{for(const c of changes){if(c.type==='attributes')rebase(c.target);else for(const node of c.addedNodes)if(node.nodeType===1)rebase(node)}}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['href','src']});document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(a){rebase(a);if(a.target==='_blank')a.removeAttribute('target')}} ,true);`;
 
 export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
@@ -44,6 +55,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     CREATE TABLE IF NOT EXISTS demo_teams(org text PRIMARY KEY,client_hash text UNIQUE NOT NULL,name text NOT NULL,color text NOT NULL,state text NOT NULL,join_key text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,details jsonb NOT NULL DEFAULT '{}');
     CREATE TABLE IF NOT EXISTS demo_upload_quota(org text PRIMARY KEY,bytes bigint NOT NULL DEFAULT 0);
     CREATE TABLE IF NOT EXISTS demo_join_intents(client_hash text PRIMARY KEY,join_key text NOT NULL,name text NOT NULL,color text NOT NULL,created_at bigint NOT NULL);`);
+  await store.exec('ALTER TABLE demo_join_intents ADD COLUMN IF NOT EXISTS resupply jsonb');
   const apps = new Map(), starting = new Map(), limiters = new Map();
   const gate = new DemoModelGate(store, model);
   await gate.refresh();
@@ -94,7 +106,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     const pending = Number((await store.query('SELECT COUNT(*) AS count FROM demo_join_intents')).rows[0].count);
     return { active: pending + rows.filter(r => ['active', 'creating', 'draining'].includes(r.state)).reduce((n, r) => n + Number(r.count), 0), max: maxActive, total: pending + rows.reduce((n, r) => n + Number(r.count), 0), totalMax: maxTeamsTotal };
   }
-  async function sessionView(c) {
+  async function sessionView(c, frame = null) {
     const team = c && await teamRow(c.hash);
     const summary = { pendingDecisions: 0, needsRecheck: 0, activeOperations: 0, completedOperations: 0, blockedOperations: 0, canReview: false };
     if (team?.state === 'active') {
@@ -118,7 +130,10 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         }
       }
     }
-    return { csrf: c?.csrf ?? null, organization: team ? { id: team.org, name: team.name, color: team.color, state: team.state, kit: team.details.kit } : null,
+    if (team?.state === 'active' && !frame) frame = await sourceCall('/api/demo/frame');
+    const liveTeam = summary.canReview ? frame?.organizations?.find(o => o.id === team.org) : null;
+    return { csrf: c?.csrf ?? null, organization: team ? { id: team.org, name: team.name, color: team.color, state: team.state, kit: team.details.kit,
+      resupply: publicResupply(liveTeam?.resupply ?? team.details.resupply) } : null,
       expiresAt: c ? Number(c.expires_at) : null, capacity: await capacity(), workspaceUrl: team?.state === 'active' ? '/demo/workspace/#overview' : null,
       summary,
       limits: { signalsPerTeam: maxSignalsPerTeam, signalsCollected: team ? apps.get(team.org)?.demoSources?.count ?? 0 : 0,
@@ -220,15 +235,16 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     const usedColors = new Set((await store.query("SELECT color FROM demo_teams WHERE state IN ('active','creating','draining') UNION SELECT color FROM demo_join_intents")).rows.map(row => row.color));
     if (!intent && previous) intent = { color: previous.color };
     if (!intent) {
-      intent = { color: colors.find(value => !usedColors.has(value)) ?? colors[counts.total % colors.length] };
-      await store.query('INSERT INTO demo_join_intents(client_hash,join_key,name,color,created_at) VALUES($1,$2,$3,$4,$5)', [c.hash, key, name, intent.color, Date.now()]);
+      intent = { color: colors.find(value => !usedColors.has(value)) ?? colors[counts.total % colors.length], resupply: demoResupply(b.resupply) };
+      await store.query('INSERT INTO demo_join_intents(client_hash,join_key,name,color,created_at,resupply) VALUES($1,$2,$3,$4,$5,$6)', [c.hash, key, name, intent.color, Date.now(), JSON.stringify(intent.resupply)]);
     }
     const color = intent.color;
     // Source command idempotency survives a lost HTTP response and gateway restart.
-    const allocated = await sourceCall('/api/demo/organizations', { idempotencyKey: 'gateway-' + hash([c.hash, key]), name, color });
+    const allocated = await sourceCall('/api/demo/organizations', { idempotencyKey: 'gateway-' + hash([c.hash, key]), name, color,
+      ...(intent.resupply ? { resupply: intent.resupply } : {}) });
     const allocatedOrg = allocated.organization ?? allocated.org, org = allocatedOrg.id;
     await store.transaction(async tx => {
-      if (!previous) await tx.query("INSERT INTO demo_teams(org,client_hash,name,color,state,join_key,created_at,last_seen,details) VALUES($1,$2,$3,$4,'creating',$5,$6,$6,$7)", [org, c.hash, allocatedOrg.name, allocatedOrg.color, key, Date.now(), JSON.stringify({ kit: allocated.kit, runId: allocated.runId })]);
+      if (!previous) await tx.query("INSERT INTO demo_teams(org,client_hash,name,color,state,join_key,created_at,last_seen,details) VALUES($1,$2,$3,$4,'creating',$5,$6,$6,$7)", [org, c.hash, allocatedOrg.name, allocatedOrg.color, key, Date.now(), JSON.stringify({ kit: allocated.kit, runId: allocated.runId, resupply: allocatedOrg.resupply })]);
       await tx.query('DELETE FROM demo_join_intents WHERE client_hash=$1', [c.hash]);
     });
     await ensureApp(org, allocatedOrg.name);
@@ -254,6 +270,22 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         const c = await client(req, res, p === '/demo/api/session');
         rate(req, 'read', 600);
         if (p === '/demo/api/session' && req.method === 'GET') return send(res, 200, await sessionView(c));
+        if (p === '/demo/api/session/resupply' && req.method === 'POST') {
+          assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session before changing incoming supplies.', 403);
+          rate(req, 'action', 100);
+          const team = await teamRow(c.hash);
+          check(team?.state === 'active' && (await sourceConnection(store, team.org))?.state === 'connected',
+            'DEMO_TEAM_ACTIVE', 'Only an active, connected team can change its incoming-supply schedule.', 409);
+          const resupply = demoResupply(await jsonBody(req, 4096)), key = req.headers['idempotency-key'];
+          check(typeof key === 'string' && key.length >= 8 && key.length <= 160, 'DEMO_IDEMPOTENCY', 'An update identifier is required. Retry from the demo page.');
+          const updated = await sourceCall('/api/demo/organizations/resupply', { org: team.org, idempotencyKey: 'resupply-' + hash([c.hash, key]), resupply });
+          await store.query('UPDATE demo_teams SET details=details||$2::jsonb WHERE org=$1', [team.org, JSON.stringify({ resupply: updated.resupply })]);
+          const view = await sessionView(c);
+          // The spectator projection can trail the admitted source command.
+          // Return its exact acknowledgement instead of reverting the editor.
+          view.organization.resupply = publicResupply(updated.resupply);
+          return send(res, 200, view);
+        }
         if (p === '/demo/api/session/end' && req.method === 'POST') {
           assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session before finishing your team.', 403);
           rate(req, 'action', 100);
@@ -278,7 +310,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         if (['/demo/api/bootstrap', '/demo/api/frame'].includes(p)) return send(res, 200, await sourceCall('/api/demo/' + p.split('/').at(-1)));
         if (p === '/demo/api/state') {
           const frame = await sourceCall('/api/demo/frame');
-          const session = await sessionView(c);
+          const session = await sessionView(c, frame);
           return send(res, 200, { ...frame, sourceInstanceId: frame.episodeId, episode: { ...episode, id: frame.episodeId }, session, provider: session.provider });
         }
         throw new AppError('NOT_FOUND', 'This demo endpoint does not exist.', 404);
@@ -359,7 +391,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       for (const intent of (await store.query('SELECT * FROM demo_join_intents ORDER BY created_at')).rows) {
         const owner = (await store.query('SELECT * FROM demo_clients WHERE hash=$1', [intent.client_hash])).rows[0];
         if (!owner) continue;
-        const recover = joinTail.then(() => join(owner, { name: intent.name, kit: 'response' }, intent.join_key));
+        const recover = joinTail.then(() => join(owner, { name: intent.name, kit: 'response', ...(intent.resupply ? { resupply: intent.resupply } : {}) }, intent.join_key));
         joinTail = recover.catch(() => {});
         try { await recover; await store.query('UPDATE demo_teams SET last_seen=$2 WHERE client_hash=$1', [owner.hash, Number(intent.created_at)]); } catch {}
       }
