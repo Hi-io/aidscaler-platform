@@ -16,6 +16,8 @@ export async function operationalSlice(worker, stopAt, now = Date.now) {
   if (now() >= stopAt) return;
   await worker.once({ includeKinds: PHYSICAL });
   if (now() >= stopAt) return;
+  await worker.once({ includeKinds: ['compile_response'] });
+  if (now() >= stopAt) return;
   await worker.once({ includeKinds: ['ingest'] });
   for (let i = 0; i < 4 && now() < stopAt; i++) {
     if (!await worker.once({ excludeKinds: [...MODEL, ...PHYSICAL, 'ingest'], prioritizePeerResponses: true })) break;

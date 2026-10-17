@@ -818,7 +818,7 @@
                   },
                   {
                     "name": "AIDSCALER_RELEASE",
-                    "value": "20261018-post-recovery"
+                    "value": "20261018-verified-base-recovery"
                   }
                 ],
                 "volume_mounts": [

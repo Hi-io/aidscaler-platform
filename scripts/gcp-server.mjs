@@ -14,8 +14,9 @@ import { BridgeClient, bridgePubSub } from '../src/cloud/bridge-client.mjs';
 import { infrastructureBudgetEvent } from '../src/cloud/cost-guard.mjs';
 import { ModelTasks } from '../src/cloud/model-tasks.mjs';
 import { operationalSlice, prioritizePhysicalWork } from '../src/cloud/operational-lanes.mjs';
+import { queueReceivedResponse } from '../src/cloud/received-response-lane.mjs';
 
-const INFERENCE = ['investigate', 'discover_response', 'compile_response', 'interpret_sources', 'analyze_media'];
+const INFERENCE = ['investigate', 'discover_response', 'interpret_sources', 'analyze_media'];
 const env = process.env, project = env.GOOGLE_CLOUD_PROJECT;
 for (const key of ['GOOGLE_CLOUD_PROJECT', 'DATABASE_URL', 'DEMO_SESSION_SECRET', 'BRIDGE_COMMAND_TOPIC', 'CLOUD_RUN_URL',
   'CLOUD_TASKS_QUEUE', 'TASK_SERVICE_ACCOUNT', 'PUSH_SERVICE_ACCOUNT']) if (!env[key]) throw Error('Missing server setting: ' + key);
@@ -125,6 +126,7 @@ async function tick() {
     await prioritizePhysicalWork(ordered.map(app => app.worker), stopAt);
     for (const app of ordered) {
       if (Date.now() >= stopAt) break;
+      await queueReceivedResponse(app);
       const pending = (await store.query("SELECT id FROM jobs WHERE org=$1 AND kind='ingest' AND state IN ('queued','running','retry') LIMIT 1", [app.config.org])).rows.length;
       // Base teams refresh their scoped inventory in maintenance below; they
       // do not need a second public-feed ingestion pass or paid analysis.
@@ -136,7 +138,7 @@ async function tick() {
     const modelApps = apps.filter(app => app.demoVisitor && !app.demoEnding && app.demoActivity.at > Date.now() - 300000);
     // Separate queue: long model calls never hold up receipts or physical work.
     for (const app of modelApps) {
-      const pending = (await store.query("SELECT id FROM jobs WHERE org=$1 AND kind IN ('investigate','discover_response','compile_response','interpret_sources','analyze_media') AND state IN ('queued','retry') AND due_at<=$2 LIMIT 1",
+      const pending = (await store.query("SELECT id FROM jobs WHERE org=$1 AND kind IN ('investigate','discover_response','interpret_sources','analyze_media') AND state IN ('queued','retry') AND due_at<=$2 LIMIT 1",
         [app.config.org, Date.now()])).rows.length;
       if (pending) await modelTasks.schedule(app.config.org);
     }

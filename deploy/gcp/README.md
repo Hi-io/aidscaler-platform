@@ -59,6 +59,12 @@ The cloud gateway uses the reserved `__session` HttpOnly cookie because Firebase
 Hosting forwards only that cookie to dynamic rewrites. CSRF/origin checks and
 organization isolation remain enforced. Operational worker turns reserve space
 for execution and ingestion; partner requests/receipts precede snapshot backlog.
+An independent operational lane schedules the existing checked response compiler
+when received demand/capacity materially changes under an approved coordinator
+policy. It can prepare useful drafts while a separate model inquiry is pending
+or inconclusive. Its activity is labelled as deterministic compilation with zero
+model calls; uncertainty in the investigated case remains visible. This neither
+authorizes resources nor claims that the model authored the compiled plan.
 
     ./deploy/gcp/deploy.ps1 -Stage Check
 
@@ -162,6 +168,13 @@ query returned the same 187 eligible rows in 4.5 ms instead of 30.6 seconds.
 It still waits for every audience subscriber, retains event-ID tombstones,
 and preserves physical audit history. This is a single-query diagnostic, not
 an application latency percentile or a new response-impact benchmark.
+
+Continuous-demo checkpoints are persisted atomically by the simulator worker.
+Only configuration, time and archive descriptors return to the HTTP host;
+city-sized state is not repeatedly transferred through its request loop. The
+full checkpoint and its physical replay remain intact. Deployment/recovery can
+still take minutes for the retained historical world; this differs from waking
+an already loaded, idle simulator.
 
 ## Live gates before publishing Hosting or changing DNS
 
