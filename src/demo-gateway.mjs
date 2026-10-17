@@ -49,7 +49,7 @@ export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
   app.connector.inbox = async () => filter(await inbox());
 }
 
-export async function createDemoGateway({ store, source, secret, dataDir, origin = 'http://127.0.0.1:8080', host = '127.0.0.1', port = 8080,
+export async function createDemoGateway({ store, source, secret, dataDir, evidenceRoot = path.join(dataDir, 'evidence'), origin = 'http://127.0.0.1:8080', host = '127.0.0.1', port = 8080,
   maxActive = 4, maxTeamsTotal = 100, maxSignalsPerTeam = 5000, idleMs = 30 * 60000, platformFactory = createPlatform, providerFactory, startBase = true, testConfig = {}, model = {}, managed = null } = {}) {
   check(typeof secret === 'string' && secret.length >= 32, 'DEMO_SECRET', 'A persistent private demo session secret is required.', 500);
   await store.exec(`CREATE TABLE IF NOT EXISTS demo_clients(hash text PRIMARY KEY,csrf text NOT NULL,created_at bigint NOT NULL,last_seen bigint NOT NULL,expires_at bigint NOT NULL);
@@ -174,7 +174,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
     const work = (async () => {
       const keys = await credentials(org), now = Date.now();
       const config = await configuration({ store, port: 0, host: '127.0.0.1', org, orgName: name, sourceUrl: source.sourceUrl, sourceAgentKey: keys.agent, sourceHumanKey: keys.commander,
-        evidenceDir: path.join(dataDir, 'evidence', org), secret: createHmac('sha256', secret).update('platform:' + org).digest('hex'), writeAccessFile: false,
+        evidenceDir: path.join(evidenceRoot, org), secret: createHmac('sha256', secret).update('platform:' + org).digest('hex'), writeAccessFile: false,
         bootstrapPassword: password(org), autoIngest: visitor, autoInvestigate: visitor, autoDiscover: false, pollMs: 10000,
         ...(!visitor ? { shareResourceLimits: { water: 100, food: 40 } } : {}),
         hourlyCallLimit: 36, hourlyBudgetUsd: 0.5, budgetUsd: 0.35, maxCalls: 12, autoBatchWaitMs: 20000, autoBatchMinSignals: 12,

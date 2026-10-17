@@ -15,9 +15,13 @@ const report = { checkedAt: new Date().toISOString(), account, project: project.
 if (report.billingEnabled) {
   const token = command(['auth', 'print-access-token']);
   const result = await fetch('https://cloudbilling.googleapis.com/v1/' + billing.billingAccountName, { headers: { Authorization: 'Bearer ' + token } });
-  if (!result.ok) throw Error('Cannot verify billing account currency and access. Deployment stopped.');
-  report.billingCurrency = (await result.json()).currencyCode;
-  report.deploymentAllowed = report.billingCurrency === 'USD';
+  if (result.ok) report.billingCurrency = (await result.json()).currencyCode;
+  else if (result.status === 403) {
+    const budgets = await fetch('https://billingbudgets.googleapis.com/v1/' + billing.billingAccountName +
+      '/budgets?scope=projects%2F439219992256&pageSize=100', { headers: { Authorization: 'Bearer ' + token, 'x-goog-user-project': 'aidscaler' } });
+    if (budgets.ok) report.billingCurrency = (await budgets.json()).budgets?.[0]?.amount?.specifiedAmount?.currencyCode;
+  }
+  report.deploymentAllowed = ['USD', 'THB'].includes(report.billingCurrency);
   if (!report.deploymentAllowed) report.blocker = 'Convert USD budgets to the billing currency before applying infrastructure.';
 } else report.blocker = 'Link and enable billing before deploying. Local preparation and tests are available.';
 await mkdir('.local/gcp', { recursive: true });

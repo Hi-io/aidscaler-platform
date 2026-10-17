@@ -150,7 +150,8 @@ const server = http.createServer(async (req, res) => {
     }
     if (p === '/internal/budget') {
       await authenticated(req, env.PUSH_SERVICE_ACCOUNT);
-      const event = infrastructureBudgetEvent(JSON.parse(Buffer.from((await body(req)).message.data, 'base64').toString()));
+      const event = infrastructureBudgetEvent(JSON.parse(Buffer.from((await body(req)).message.data, 'base64').toString()), Date.now(), {
+        currency: env.BUDGET_CURRENCY ?? 'USD', units: Number(env.BUDGET_UNITS ?? 100), pause: Number(env.BUDGET_PAUSE_UNITS ?? 70) });
       if (!event.stale && event.pause) await store.query('INSERT INTO cloud_demo_cost_state VALUES($1,true) ON CONFLICT(month) DO UPDATE SET paused=true', [event.month]);
       return json(res, 200, { accepted: true });
     }
@@ -184,10 +185,11 @@ async function initialize() {
   };
   const modelGate = new DemoModelGate(store, { concurrency: 2, hourlyUsd: 5, totalUsd: 1000 }); await modelGate.refresh();
   managed.modelStatus = () => modelGate.status();
-  gateway = await createDemoGateway({ store, source, secret: env.DEMO_SESSION_SECRET, dataDir: '/tmp/aidscaler', host: '127.0.0.1',
+  gateway = await createDemoGateway({ store, source, secret: env.DEMO_SESSION_SECRET, dataDir: '/tmp/aidscaler',
+    evidenceRoot: env.EVIDENCE_DIR ?? '/app/evidence', host: '127.0.0.1',
     port: 0, origin, maxActive: 5, maxTeamsTotal: 100, startBase: false, managed,
     testConfig: { autoIngest: false, startWorker: false, provider: 'vertex', modelId: env.MODEL_ID ?? 'gemini-3.1-flash-lite',
-      vertexProject: project, vertexLocation: 'global', evidenceDir: env.EVIDENCE_DIR ?? '/app/evidence', modelMaxOutputTokens: 8192 },
+      vertexProject: project, vertexLocation: 'global', modelMaxOutputTokens: 8192 },
     providerFactory: (_store, config) => {
       const provider = new VertexProvider(store, config);
       return { catalogue: () => provider.catalogue(), complete: async request => {

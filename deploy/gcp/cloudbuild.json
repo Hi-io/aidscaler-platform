@@ -10,22 +10,10 @@
         "${_REPOSITORY}/platform:${_TAG}",
         "."
       ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/docker",
-      "args": [
-        "build",
-        "-f",
-        "Dockerfile.simulator",
-        "-t",
-        "${_REPOSITORY}/simulator:${_TAG}",
-        "."
-      ]
     }
   ],
   "images": [
-    "${_REPOSITORY}/platform:${_TAG}",
-    "${_REPOSITORY}/simulator:${_TAG}"
+    "${_REPOSITORY}/platform:${_TAG}"
   ],
   "timeout": "1800s",
   "options": {

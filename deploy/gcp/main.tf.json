@@ -19,11 +19,15 @@
   "provider": {
     "google": {
       "project": "${var.project_id}",
-      "region": "${var.region}"
+      "region": "${var.region}",
+      "billing_project": "${var.project_id}",
+      "user_project_override": true
     },
     "google-beta": {
       "project": "${var.project_id}",
-      "region": "${var.region}"
+      "region": "${var.region}",
+      "billing_project": "${var.project_id}",
+      "user_project_override": true
     }
   },
   "variable": {
@@ -81,6 +85,18 @@
       "type": "string",
       "default": "",
       "description": "Public JWKS captured from the local cluster; refreshed before deployment."
+    },
+    "budget_currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "budget_units": {
+      "type": "number",
+      "default": 100
+    },
+    "budget_pause_units": {
+      "type": "number",
+      "default": 70
     }
   },
   "locals": {
@@ -107,7 +123,9 @@
           "bigquery.googleapis.com": "bigquery.googleapis.com",
           "iam.googleapis.com": "iam.googleapis.com",
           "iamcredentials.googleapis.com": "iamcredentials.googleapis.com",
-          "sts.googleapis.com": "sts.googleapis.com"
+          "sts.googleapis.com": "sts.googleapis.com",
+          "cloudresourcemanager.googleapis.com": "cloudresourcemanager.googleapis.com",
+          "serviceusage.googleapis.com": "serviceusage.googleapis.com"
         },
         "project": "${var.project_id}",
         "service": "${each.key}",
@@ -470,7 +488,7 @@
         "project": "${var.project_id}",
         "topic": "${google_pubsub_topic.budget.name}",
         "role": "roles/pubsub.publisher",
-        "member": "serviceAccount:billing-budget-pubsub@system.gserviceaccount.com"
+        "member": "serviceAccount:billing-budget-alert@system.gserviceaccount.com"
       }
     },
     "google_pubsub_subscription_iam_member": {
@@ -596,7 +614,7 @@
       "infrastructure": {
         "count": "${var.billing_account_id != \"\" && length(var.infrastructure_service_ids) > 0 ? 1 : 0}",
         "billing_account": "${var.billing_account_id}",
-        "display_name": "AidScaler infrastructure USD 100",
+        "display_name": "AidScaler infrastructure ${var.budget_currency} ${var.budget_units}",
         "budget_filter": [
           {
             "projects": [
@@ -611,8 +629,8 @@
           {
             "specified_amount": [
               {
-                "currency_code": "USD",
-                "units": "100"
+                "currency_code": "${var.budget_currency}",
+                "units": "${tostring(var.budget_units)}"
               }
             ]
           }
@@ -642,12 +660,14 @@
             ],
             "disable_default_iam_recipients": false,
             "pubsub_topic": "${google_pubsub_topic.budget.id}",
-            "schema_version": "1.0"
+            "schema_version": "1.0",
+            "enable_project_level_recipients": true
           }
         ],
         "depends_on": [
           "google_pubsub_topic_iam_member.billing"
-        ]
+        ],
+        "ownership_scope": "ALL_USERS"
       }
     },
     "google_cloud_run_v2_service": {
@@ -760,6 +780,18 @@
                   {
                     "name": "MODEL_PROVIDER",
                     "value": "vertex"
+                  },
+                  {
+                    "name": "BUDGET_CURRENCY",
+                    "value": "${var.budget_currency}"
+                  },
+                  {
+                    "name": "BUDGET_UNITS",
+                    "value": "${tostring(var.budget_units)}"
+                  },
+                  {
+                    "name": "BUDGET_PAUSE_UNITS",
+                    "value": "${tostring(var.budget_pause_units)}"
                   }
                 ],
                 "volume_mounts": [
