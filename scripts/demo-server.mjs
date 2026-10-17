@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Store } from '../src/store.mjs';
 import { createDemoSource } from '../src/demo-source.mjs';
 import { createDemoGateway } from '../src/demo-gateway.mjs';
+import { archiveDemoBaseResponse } from '../src/demo-response-archive.mjs';
 
 const root = path.dirname(fileURLToPath(new URL('../server.mjs', import.meta.url)));
 const dataDir = path.resolve(process.env.DATA_DIR ?? path.join(root, '.local', 'demo'));
@@ -23,6 +24,12 @@ try {
   const source = createDemoSource(world.credentials), bootstrap = await source.request('/api/demo/bootstrap');
   source.healthCheck = () => { if (world.persistenceError) throw Object.assign(Error('The simulation is paused while durable storage recovers.'), { status: 503, code: 'DEMO_STORAGE' }); };
   source.baseOrganizations = bootstrap.frame.organizations.filter(o => !o.demoVisitor);
+  // Explicit, private one-time recovery. This runs before there are platform
+  // writers or public admission. Fenced visitor workspaces remain read-only.
+  if (process.env.DEMO_ARCHIVE_FENCED_BASES === 'true') {
+    for (const base of source.baseOrganizations) await archiveDemoBaseResponse({ store, enabled: true, workersStopped: true,
+      organization: base.id, frame: bootstrap.frame });
+  }
   gateway = await createDemoGateway({ store, source, dataDir, secret: process.env.DEMO_SESSION_SECRET,
     host: process.env.DEMO_HOST ?? '0.0.0.0', port: Number(process.env.DEMO_PORT ?? 8080),
     origin: process.env.DEMO_ORIGIN ?? 'http://127.0.0.1:8080', maxActive: Number(process.env.DEMO_MAX_ACTIVE ?? 4),

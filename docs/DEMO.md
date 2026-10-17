@@ -4,6 +4,8 @@ The public entry is `https://aidscaler.com/demo/`. It runs one shared, persisten
 
 The existing platform supplies ingestion, source investigation, versioned human review, peer sharing and physical operation tracking. The configured provider is **Gemma 4 31B through OpenRouter**. GCP and Gemini are separate future deployments.
 
+The map opens with a close view, simulated clock, visible aid vehicles and separate gray traffic markers. Report avatars come from published, located sources; selecting one keeps that source open until the visitor returns to the live stream. “Full map” restores the entire region. A participant's pending responses appear on their workspace button and are still reviewed before authorization.
+
 ## Boundaries
 
 - Public: `/demo/`, `/demo/api/*`, approved spectator assets and a session-bound `/demo/workspace/`.
@@ -69,6 +71,8 @@ DEMO_ALLOW_BUILD_UPGRADE=true bash "$platform/deploy/deploy-demo.sh"
 
 The host checks the checkpoint contract and records the before/after build and unchanged physical state hash. A schema, engine-version or incompatible contract change is refused; it does not create a replacement world. The one-time `DEMO_MIGRATE_OPERATIONAL_CONFIG=true` flag is reserved for the documented operational-demo configuration migration, with a separate audit record. Neither flag enables benchmark migration.
 
+Shutdown first stops source HTTP admission and drains admitted commands before the final pause, transport flush and checkpoint. A genuine source rewind or changed response still fences earlier workspaces. For already fenced automated bases only, trusted maintenance can explicitly set `DEMO_ARCHIVE_FENCED_BASES=true` for one deployment, then remove the flag. This archives the complete previous active partition with a verified hash in the private `demo_response_archives` table before starting a fresh base context. It retains the original audit, billing and replay receipts, admits no archived job, and never unlocks visitor plans. It refuses a different scenario run. Do not use it as a substitute for a paired backup or to reauthorize old work.
+
 Keep a paired backup before significant changes. Quiesce the runtime with `kubectl -n aidscaler scale deployment/demo --replicas=0`, wait for graceful termination, back up both the simulator/evidence volume and a PostgreSQL dump, then scale back to one replica. Preserve identities, secrets, archives and PostgreSQL from the same quiesced point. Restoring only an old world checkpoint beside a newer database is unsafe; source boundary checks must remain enabled.
 
 `kubectl rollout undo deployment/demo` can restore a previous code release, but cannot make an incompatible persisted schema backward-compatible. Preserve the last working immutable source ConfigMaps. Inspect logs locally; never publish credentials, session cookies or full source configuration.
@@ -77,6 +81,7 @@ Keep a paired backup before significant changes. Quiesce the runtime with `kubec
 
 - Four concurrently active visitor teams; 100 total teams per configured demo. Finished teams retain their unique identities and contribution history. Idle teams drain existing operations before their capacity can be released.
 - No email or registration is required in this demo. A finished visitor can explicitly start a new session; the old organization and its history are preserved. An active or draining team cannot use renewal to duplicate its kit.
+- A participant can explicitly end their session. This stops new investigations and workspace writes; already issued physical operations must finish or reach a terminal state before the simulator releases the team. Ending and renewing are separate, session-scoped actions. Participants may also set their operational priorities within the host's bounded review limits; model budgets and technical settings remain private.
 - Each visitor starts with an audited planning policy that prioritizes urgency and deadlines. The existing investigation agent receives operational needs and public sources automatically. The policy orders proposed responses; it never authorizes a resource movement.
 - Session cookies are HttpOnly, Secure on HTTPS and SameSite. Joining and operational writes use origin checks, CSRF protection, idempotency and server-side authorization.
 - Service actor credentials are renewed before the simulator's seven-day TTL. A visitor cookie has its own lifetime and does not expose those credentials.

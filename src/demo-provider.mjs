@@ -44,7 +44,11 @@ export class DemoModelGate {
       complete: async request => {
         check(active(), 'DEMO_AI_IDLE', 'AI investigations resume while a participant is using this workspace. Existing operations continue.', 429);
         const leave = await this.enter(request.signal);
-        try { await this.refresh(); return await real.complete(request); }
+        try {
+          await this.refresh();
+          check(active(), 'DEMO_AI_IDLE', 'AI investigations are paused for this participant. Existing operations continue.', 429);
+          return await real.complete(request);
+        }
         finally { leave(); }
       },
       catalogue: () => real.catalogue(),

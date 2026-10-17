@@ -9,14 +9,17 @@ import { DemoModelGate } from './demo-provider.mjs';
 import { reviewDemoBaseRequests } from './demo-owner.mjs';
 import { configuration } from './config.mjs';
 import { configureResponsePolicy } from './response-policy.mjs';
+import { sourceConnection } from './source-connection.mjs';
 
 const colors = ['#5370d6', '#af678d', '#319281', '#bd854a'];
 const cookieName = 'aidscaler_demo';
+const inferenceJobs = ['investigate', 'discover_response', 'compile_response', 'interpret_sources', 'analyze_media'];
 const token = req => req.headers.cookie?.split(';').map(s => s.trim()).find(s => s.startsWith(cookieName + '='))?.slice(cookieName.length + 1);
 const send = (res, status, data) => { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' }); res.end(JSON.stringify(data)); };
 const blockedRead = new Set(['/api/users', '/api/export', '/api/integrations', '/api/integration/status']);
 const allowedWrite = new Set(['/api/sync', '/api/query', '/api/verify', '/api/investigate', '/api/interpret-sources', '/api/discover-response', '/api/investigation/stop', '/api/propose', '/api/review', '/api/proposal/revise', '/api/condition', '/api/reserve', '/api/commitment', '/api/report', '/api/report/followup', '/api/report/moderate', '/api/media/upload', '/api/media/analyze', '/api/claim', '/api/claim/correct', '/api/evidence/group', '/api/evidence/split', '/api/evidence/group/restore', '/api/invalidate', '/api/share', '/api/publication/draft', '/api/publication/publish', '/api/publication/retract', '/api/publication/proof', '/api/task/assign', '/api/task/update', '/api/handover', '/api/handover/acknowledge', '/api/coverage/check', '/api/coverage/cancel', '/api/unloading/plan', '/api/unloading/prepare']);
 for (const route of ['/api/contribute', '/api/community/report', '/api/community/track', '/api/memory', '/api/delegation', '/api/delegation/revoke']) allowedWrite.add(route);
+allowedWrite.add('/api/response-policy');
 const bridge = `const base='/demo/workspace';const originalFetch=window.fetch.bind(window);window.fetch=(input,init)=>{if(typeof input==='string'&&input.startsWith('/api/'))input=base+input;else if(input instanceof URL&&input.origin===location.origin&&input.pathname.startsWith('/api/'))input=new URL(base+input.pathname+input.search,location.origin);return originalFetch(input,init)};const rebase=root=>{for(const el of [root,...(root.querySelectorAll?.('[src],[href]')??[])])for(const attr of ['src','href']){const value=el.getAttribute?.(attr);if(value?.startsWith('/')&&!value.startsWith('//')&&!value.startsWith('/demo/'))el.setAttribute(attr,base+value)}};new MutationObserver(changes=>{for(const c of changes){if(c.type==='attributes')rebase(c.target);else for(const node of c.addedNodes)if(node.nodeType===1)rebase(node)}}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['href','src']});document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(a){rebase(a);if(a.target==='_blank')a.removeAttribute('target')}} ,true);`;
 
 export function limitDemoSourceWindow(store, app, org, maxSignalsPerTeam) {
@@ -93,14 +96,54 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
   }
   async function sessionView(c) {
     const team = c && await teamRow(c.hash);
+    const summary = { pendingDecisions: 0, needsRecheck: 0, activeOperations: 0, completedOperations: 0, blockedOperations: 0, canReview: false };
+    if (team?.state === 'active') {
+      summary.canReview = (await sourceConnection(store, team.org))?.state === 'connected';
+      // Counts belong only to this authenticated organization. No draft text,
+      // resource, private citation or another participant's queue enters the map.
+      const counts = (await store.query(`SELECT kind,data->>'state' AS state,
+        CASE WHEN data->'reviewBlocked' IS NOT NULL AND data->'reviewBlocked'<>'null'::jsonb THEN true ELSE false END AS blocked,
+        COUNT(*) AS count FROM entities WHERE org=$1 AND
+        (kind='proposal' OR (kind='operation' AND data->>'confirmedBySource'='true'
+          AND COALESCE(data->>'org',data->>'owner',$1)=$1))
+        GROUP BY kind,data->>'state',blocked`, [team.org])).rows;
+      for (const row of counts) {
+        const n = Number(row.count);
+        if (row.kind === 'proposal' && ['awaiting_review', 'requires_review', 'needs_clarification'].includes(row.state))
+          summary[row.state === 'requires_review' || row.blocked ? 'needsRecheck' : 'pendingDecisions'] += n;
+        if (row.kind === 'operation') {
+          if (['completed', 'received', 'service'].includes(row.state)) summary.completedOperations += n;
+          else if (['blocked', 'failed', 'cancelled'].includes(row.state)) summary.blockedOperations += n;
+          else summary.activeOperations += n;
+        }
+      }
+    }
     return { csrf: c?.csrf ?? null, organization: team ? { id: team.org, name: team.name, color: team.color, state: team.state, kit: team.details.kit } : null,
       expiresAt: c ? Number(c.expires_at) : null, capacity: await capacity(), workspaceUrl: team?.state === 'active' ? '/demo/workspace/#overview' : null,
+      summary,
       limits: { signalsPerTeam: maxSignalsPerTeam, signalsCollected: team ? apps.get(team.org)?.demoSources?.count ?? 0 : 0,
         sourceWindowLimited: !!(team && apps.get(team.org)?.demoSources?.limited) },
       provider: { model: process.env.MODEL_ID ?? 'google/gemma-4-31b-it', name: 'Gemma 4', provider: 'OpenRouter', ...gate.status() } };
   }
   async function credentials(org) {
     return source.credentials(org);
+  }
+  function drainApp(app) {
+    if (!app) return;
+    app.demoEnding = true; app.demoActivity.ended = true;
+    app.config.autoIngest = false; app.config.autoInvestigate = false; app.config.autoDiscover = false;
+  }
+  async function endSession(c) {
+    check(c, 'DEMO_SESSION', 'Refresh the demo page before finishing your session.', 401);
+    const team = await teamRow(c.hash);
+    check(team && ['active', 'draining', 'finished'].includes(team.state), 'DEMO_JOIN_REQUIRED', 'No joined demo team is available to finish.', 409);
+    if (team.state === 'active') {
+      await store.query("UPDATE demo_teams SET state='draining' WHERE client_hash=$1 AND state='active'", [c.hash]);
+      await store.audit(team.org, 'demo-participant', 'demo.session_end_requested', team.org,
+        { issuedWorkPreserved: true, historyPreserved: true });
+    }
+    drainApp(apps.get(team.org));
+    return sessionView(c);
   }
   function reconnectPeers() {
     for (const app of apps.values()) app.config.peers = [...apps.values()].filter(other => other !== app)
@@ -118,8 +161,8 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         hourlyCallLimit: 36, hourlyBudgetUsd: 0.5, budgetUsd: 0.35, maxCalls: 12, autoBatchWaitMs: 20000, autoBatchMinSignals: 12,
         modelMaxOutputTokens: 8192, startWorker: true, ...testConfig });
       // The gate accepts a synchronous liveness callback; this cache is updated by normal browser heartbeat.
-      const activity = { at: now };
-      const provider = providerFactory ? providerFactory(store, config) : gate.provider(store, config, () => visitor && activity.at > Date.now() - 5 * 60000);
+      const activity = { at: now, ended: false };
+      const provider = providerFactory ? providerFactory(store, config) : gate.provider(store, config, () => visitor && !activity.ended && activity.at > Date.now() - 5 * 60000);
       const app = await platformFactory({ ...config, provider, startWorker: false });
       // This preconfigured demo kit includes a planning order, not permission
       // to dispatch. Keep every existing coordinator policy and every exact
@@ -130,6 +173,9 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
           investigationCooldownMs: 60000, reason: 'Preconfigured demo planning order: reported priority, then deadline. Every physical action still requires its resource owner’s separate review and authorization.' }, 'demo-initial-planning-policy-v1');
       }
       app.demoActivity = activity; app.demoVisitor = visitor; apps.set(org, app); reconnectPeers();
+      const once = app.worker.once.bind(app.worker);
+      app.worker.once = (options = {}) => once(app.demoEnding ? { ...options, excludeKinds: [...new Set([...(options.excludeKinds ?? []), ...inferenceJobs])] } : options);
+      if ((await store.query('SELECT state FROM demo_teams WHERE org=$1', [org])).rows[0]?.state === 'draining') drainApp(app);
       if (config.startWorker !== false) app.worker.start();
       app.demoSources = { count: 0, limited: false };
       if (visitor) {
@@ -140,7 +186,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       }
       // Query only the ordinary organization-scoped connector; spectator state is never fed into the agent.
       for (const target of ['inventory', 'vehicles', 'map', 'policy'])
-        await app.connector.action('query', { target }, `demo-bootstrap-${org}-${target}`).catch(() => {});
+        await app.connector.action('query', { target }, `demo-bootstrap-${org}-${hash(bootstrap.frame.episodeId).slice(0, 16)}-${target}`).catch(() => {});
       return app;
     })().finally(() => starting.delete(org));
     starting.set(org, work); return work;
@@ -208,6 +254,13 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         const c = await client(req, res, p === '/demo/api/session');
         rate(req, 'read', 600);
         if (p === '/demo/api/session' && req.method === 'GET') return send(res, 200, await sessionView(c));
+        if (p === '/demo/api/session/end' && req.method === 'POST') {
+          assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session before finishing your team.', 403);
+          rate(req, 'action', 100);
+          const result = await endSession(c);
+          setImmediate(() => maintenance().catch(() => {}));
+          return send(res, 200, result);
+        }
         if (p === '/demo/api/session/renew' && req.method === 'POST') {
           assertOrigin(req); check(c && req.headers['x-csrf-token'] === c.csrf, 'DEMO_CSRF', 'Refresh the demo session before starting another team.', 403);
           const previous = await teamRow(c.hash);
@@ -234,7 +287,13 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         const c = await client(req, res), row = c && await teamRow(c.hash);
         rate(req, 'workspace', 900);
         check(row?.state === 'active', 'DEMO_JOIN_REQUIRED', 'Join the response from the demo map to open your workspace.', 401);
-        const app = await ensureApp(row.org, row.name), login = await innerSession(app, row);
+        const app = await ensureApp(row.org, row.name);
+        app.demoRequests = (app.demoRequests ?? 0) + 1;
+        let completedRequest = false;
+        const releaseRequest = () => { if (!completedRequest) { completedRequest = true; app.demoRequests--; } };
+        res.once('finish', releaseRequest); res.once('close', releaseRequest);
+        check((await teamRow(c.hash))?.state === 'active' && !app.demoEnding, 'DEMO_SESSION_ENDING', 'This team is finishing its current response. Follow its deliveries from the demo map.', 409);
+        const login = await innerSession(app, row);
         const target = p.slice('/demo/workspace'.length) || '/';
         check(!target.includes('..') && !target.includes('\\'), 'DEMO_PATH', 'Invalid workspace path.', 403);
         if (target === '/demo-bridge.mjs') { res.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'no-store' }); return res.end(bridge); }
@@ -250,6 +309,13 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
         let body;
         if (req.method !== 'GET') {
           const input = await jsonBody(req, target === '/api/media/upload' ? 14000000 : target === '/api/community/report' ? 3000000 : 1000000);
+          if (target === '/api/response-policy') {
+            // Visitors may choose operational priorities, never expand model
+            // budgets or turn the shared server into an unbounded work queue.
+            check(Number.isInteger(input.maxOpenReviews) && input.maxOpenReviews >= 1 && input.maxOpenReviews <= 8 &&
+              Number.isInteger(input.investigationCooldownMs) && input.investigationCooldownMs >= 30000,
+            'DEMO_PLANNING_LIMIT', 'The shared demo supports 1–8 open reviews and at least 30 seconds between changed-case inquiries. Model limits remain managed by the host.', 400);
+          }
           const encoded = target === '/api/media/upload' ? input.contentBase64 : target === '/api/community/report' ? input.attachment?.contentBase64 : null;
           if (typeof encoded === 'string') {
             const bytes = Buffer.from(encoded, 'base64').length;
@@ -262,6 +328,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
           }
           body = JSON.stringify(input);
         }
+        check(!app.demoEnding, 'DEMO_SESSION_ENDING', 'This team is finishing its current response. Existing work remains recorded.', 409);
         const response = await fetch(app.url + target + url.search, { method: req.method, headers, body, redirect: 'manual', signal: AbortSignal.timeout(120000) });
         const outputHeaders = proxyHeaders(response);
         outputHeaders['cache-control'] = 'no-store';
@@ -299,8 +366,14 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       for (const row of (await store.query("SELECT * FROM demo_teams WHERE state IN ('active','draining')")).rows) {
         if (row.state === 'active' && Number(row.last_seen) > Date.now() - idleMs) { const app = apps.get(row.org); if (app) app.demoActivity.at = Number(row.last_seen); continue; }
         const app = apps.get(row.org);
-        if (row.state === 'active') { await store.query("UPDATE demo_teams SET state='draining' WHERE org=$1", [row.org]); if (app) { app.config.autoInvestigate = false; app.config.autoDiscover = false; } }
-        if (app && (await store.list(row.org, 'proposal', 1000)).some(p => ['authorized', 'executing', 'awaiting_partner'].includes(p.state))) continue;
+        if (row.state === 'active') await store.query("UPDATE demo_teams SET state='draining' WHERE org=$1", [row.org]);
+        drainApp(app);
+        if (app?.demoRequests > 0) continue;
+        const fenced = (await sourceConnection(store, row.org))?.state === 'requires_new_response';
+        // Old, read-only authorizations cannot issue new work. They stay in
+        // history, while the source still refuses retirement until its actual
+        // trips, loaded cargo, reservations and commitments have drained.
+        if (!fenced && app && (await store.list(row.org, 'proposal', 1000)).some(p => ['authorized', 'executing', 'awaiting_partner'].includes(p.state))) continue;
         // Stop issuing source work before requesting release. The simulator refuses release while any physical operation is still active.
         if (app) await app.worker.stop();
         try {
@@ -312,6 +385,7 @@ export async function createDemoGateway({ store, source, secret, dataDir, origin
       // Publish only explicitly shareable capability projections through the existing signed peer protocol.
       for (const app of apps.values()) {
         if (!app.demoVisitor) await app.ingestion.sync({ sources: false }).catch(() => {});
+        if (app.demoEnding || (await sourceConnection(store, app.config.org))?.state === 'requires_new_response') continue;
         const keys = await credentials(app.config.org);
         app.connector.agentKey = keys.agent; app.connector.humanKey = keys.commander;
         if (!app.config.peers.length) continue;

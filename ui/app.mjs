@@ -5,7 +5,7 @@ import { deliverFieldReport } from "./field-delivery.mjs";
 import { createPortalViews } from "./portal.mjs";
 import { agentMonitor } from "./autonomy.mjs";
 import { createLiveWorkspace, freshnessNotice } from "./live.mjs";
-import { createDecisionExperience } from "./decision.mjs";
+import { createDecisionExperience, proposalReviewActions } from "./decision.mjs";
 import { offlineQueue } from "./offline.mjs";
 import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
 import { createActivityView } from "./activity.mjs";
@@ -30,7 +30,7 @@ const app = document.querySelector("#app");
 const demoMode = location.pathname.startsWith('/demo/workspace/');
 const workspacePath = demoMode ? location.pathname.slice('/demo/workspace'.length) : location.pathname;
 const demoHiddenPages = new Set(['settings', 'connections']);
-const demoHiddenActions = new Set(['automation', 'addresource', 'register-record', 'registration-guide', 'users', 'organization-export', 'erase-source', 'organization-edit', 'organization-policy', 'portal-edit', 'organization-settings', 'organization-save', 'response-configure', 'response-policy', 'logout']);
+const demoHiddenActions = new Set(['automation', 'addresource', 'register-record', 'registration-guide', 'users', 'organization-export', 'erase-source', 'organization-edit', 'organization-policy', 'portal-edit', 'organization-settings', 'organization-save', 'response-configure', 'logout']);
 const escape = (s) =>
   String(s ?? "").replace(
     /[&<>"']/g,
@@ -338,7 +338,7 @@ function table(headers, rows) {
   return `<div class="tablewrap"><table class="table"><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 function action(label, act, id = "", cls = "") {
-  if (demoMode && demoHiddenActions.has(act)) return '';
+  if (demoMode && (demoHiddenActions.has(act) || act === 'navigate' && demoHiddenPages.has(id))) return '';
   const permissions = {
     sync: ["admin", "analyst", "commander", "dispatcher"],
     investigate: ["analyst", "commander", "dispatcher"],
@@ -430,7 +430,8 @@ async function overview() {
   const queue = d.proposal.filter(p => ["awaiting_review", "requires_review", "needs_clarification"].includes(p.state));
   const descriptions = await decisionExperience.describeProposals(queue);
   const unresolved = d.need.filter(n => n.quantity > (n.served ?? 0));
-  return title("Response overview", "See what is needed. Review the response. Put help in motion.") +
+  return title("Response overview", "See what is needed. Review the response. Put help in motion.",
+    demoMode && !responseReadOnly(state.sourceConnection) ? `${queue.length ? action(`Review ${queue.length} response${queue.length === 1 ? '' : 's'}`, 'navigate', 'review', 'primary') : ''}${action('Response priorities', 'response-policy', '', 'quiet')}` : '') +
     agentMonitor(intake, {escape, icon, model:state.model, pulse}) +
     presentation.overview({ data: d, queue, unresolved, descriptions,
       sourceStatus: d.source.length ? d.source.map(source => source.state).join(" · ") : "Not connected" });
@@ -482,6 +483,7 @@ async function review() {
     title(
       "Decision queue",
       "Understand the benefit, evidence and conditions before authorizing a response.",
+      demoMode ? action('Response priorities', 'response-policy', '', 'quiet') : '',
     ) +
     `<section class="card ${!rows.length ? "empty-table" : ""}">${table(
       ["Proposed response", "Priority", "State", "Pending conditions", ""],
@@ -775,16 +777,21 @@ function modal(name, content, footer = "") {
     }
   };
   bind(dialog);
-  if (demoMode) dialog.querySelector('#coverage-policy-form')?.closest('details')?.remove();
+  if (demoMode) {
+    dialog.querySelector('#coverage-policy-form')?.closest('details')?.remove();
+    const priorities = dialog.querySelector('#response-policy');
+    if (priorities) {
+      priorities.elements.maxOpenReviews.max = '8';
+      priorities.elements.cooldown.min = '30';
+      const note = document.createElement('p'); note.className = 'note';
+      note.textContent = 'Shared demo: up to 8 open reviews, with at least 30 seconds between changed-case inquiries. These priorities never authorize a delivery or change model budgets.';
+      priorities.append(note);
+    }
+  }
   updateSourceConnection(state.sourceConnection);
 }
 function proposalFooter(p, canReview) {
-  if(p.reviewBlocked) return action('View agent recheck','navigate','investigations','primary')+action('Close','close');
-  if(canReview && ['awaiting_review','requires_review','needs_clarification'].includes(p.state)) {
-    const pending=(p.conditions??[]).some(c=>!c.satisfied);
-    return `${p.state==='requires_review'?action('Investigate a repair','repair',p.id):''}${!p.executionResults?.length?action('Edit draft','edit-response',p.id):''}${action('Ask for clarification','reviewclarify',p.id)}${action('Reject','reviewreject',p.id,'danger')}${action(pending?'Authorize conditionally':'Authorize response','reviewapprove',p.id,'primary')}`;
-  }
-  return action('Follow operations','navigate','operations','primary')+action('Close','close');
+  return proposalReviewActions(p, canReview).map(item => action(item.label, item.action, item.id, item.style)).join('');
 }
 async function proposal(id) {
   state.delegatedReviews=(await api('/api/me')).delegatedReviews;
@@ -792,6 +799,7 @@ async function proposal(id) {
   await presentProposal(p,canReview);
 }
 async function presentProposal(p,canReview,expectedDialog=null) {
+  canReview = canReview && !responseReadOnly(state.sourceConnection);
   const content=await decisionExperience.renderProposal(p,{canReview});
   // A slow source lookup must not reopen a review the operator closed or left.
   if(expectedDialog&&(dialog!==expectedDialog||!expectedDialog.open))return false;

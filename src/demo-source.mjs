@@ -23,7 +23,7 @@ export function createDemoSource({ observerUrl, sourceUrl, observerKey, fetcher 
       keys.expiresAt = Date.now() + 604800000; actors.set(org, keys); return keys;
     },
     async serveViewer(req, res, filename) {
-      check(['spectator-map.mjs', 'motion.js', 'geometry.js', 'vendor/build/three.core.js'].includes(filename) || /^vendor\/(?:build\/three(?:\.core)?\.module\.js|examples\/jsm\/(?:controls\/OrbitControls|utils\/BufferGeometryUtils)\.js)$/.test(filename), 'DEMO_VIEWER_ASSET', 'This spectator asset does not exist.', 404);
+      check(['spectator-map.mjs', 'spectator-activity.mjs', 'motion.js', 'geometry.js', 'vendor/build/three.core.js'].includes(filename) || /^vendor\/(?:build\/three(?:\.core)?\.module\.js|examples\/jsm\/(?:controls\/OrbitControls|utils\/BufferGeometryUtils)\.js)$/.test(filename), 'DEMO_VIEWER_ASSET', 'This spectator asset does not exist.', 404);
       const response = await fetcher(observerUrl + '/' + filename, { headers: { Authorization: 'Bearer ' + observerKey }, signal: AbortSignal.timeout(15000) });
       check(response.ok, 'DEMO_VIEWER_ASSET', 'This spectator asset is unavailable.', response.status);
       res.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'public, max-age=3600', 'X-Content-Type-Options': 'nosniff' }); res.end(Buffer.from(await response.arrayBuffer()));

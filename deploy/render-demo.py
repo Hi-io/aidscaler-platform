@@ -133,6 +133,7 @@ items.append(resource("Deployment", "demo", {"replicas": 1, "revisionHistoryLimi
                 "NODE_ENV": "production", "HOME": "/tmp", "DATA_DIR": "/data/demo", "AIDSCALER_LOCAL_DIR": "/data/demo/config", "DEMO_HOST": "0.0.0.0", "DEMO_PORT": "8080",
                 "DEMO_ORIGIN": "https://aidscaler.com", "DEMO_MAX_ACTIVE": "4", "DEMO_MAX_TEAMS_TOTAL": "100",
                 "DEMO_ALLOW_BUILD_UPGRADE": os.environ.get("DEMO_ALLOW_BUILD_UPGRADE", "false"),
+                "DEMO_ARCHIVE_FENCED_BASES": os.environ.get("DEMO_ARCHIVE_FENCED_BASES", "false"),
                 "DEMO_MIGRATE_OPERATIONAL_CONFIG": os.environ.get("DEMO_MIGRATE_OPERATIONAL_CONFIG", "false"),
                 "DEMO_MODEL_HOURLY_USD": "1", "DEMO_MODEL_TOTAL_USD": "15", "DEMO_MODEL_CONCURRENCY": "2",
                 "MODEL_ID": "google/gemma-4-31b-it", "MODEL_MAX_OUTPUT_TOKENS": "8192",

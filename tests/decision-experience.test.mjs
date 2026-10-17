@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createDecisionExperience, decisionCoverage, decisionReadiness, proposalPresentation, approvalFeedback, executionProgress } from '../ui/decision.mjs';
+import { createDecisionExperience, decisionCoverage, decisionReadiness, proposalPresentation, approvalFeedback, executionProgress, proposalReviewActions } from '../ui/decision.mjs';
 import { createEvidenceExperience, evidenceTitle } from '../ui/evidence.mjs';
 import { setDisplayContext, registerDisplayRecords } from '../ui/labels.mjs';
 
@@ -111,6 +111,19 @@ test('blocked approval is actionable and never claims a new partner request was 
   assert.match(html,/role="alert" tabindex="-1"/);
   assert.match(html,/next planning check/);
   assert.deepEqual(executionProgress(p),[],'a failed review alone creates neither dispatch nor pending partner status');
+});
+
+test('a changed availability check preserves the owner’s repair, edit and review controls', () => {
+  const p = { ...proposal(), state: 'requires_review', reviewBlocked: { code: 'VEHICLE_BUSY' } };
+  const controls = proposalReviewActions(p, true);
+  for (const action of ['repair', 'edit-response', 'reviewclarify', 'reviewreject', 'reviewapprove'])
+    assert.ok(controls.some(c => c.action === action), action);
+  assert.equal(controls.find(c => c.action === 'reviewapprove').label, 'Recheck & authorize');
+  p.executionResults = [{ index: 0, result: { operation: 'existing-trip' } }];
+  assert.ok(!proposalReviewActions(p, true).some(c => c.action === 'edit-response'), 'issued work requires a separate repair instead of an edit');
+  assert.ok(!proposalReviewActions(p, false).some(c => c.action.startsWith('review') || c.action === 'repair'), 'observers gain no authority');
+  assert.ok(!proposalReviewActions({ ...p, state: 'authorized' }, true).some(c => c.action === 'reviewapprove'), 'authorization is never repeated from a completed review');
+  assert.equal(proposalReviewActions({ ...p, conditions: [{ satisfied: false }] }, true).at(-1).label, 'Authorize conditionally');
 });
 
 test('source and partner progress require recorded outgoing request identities', () => {

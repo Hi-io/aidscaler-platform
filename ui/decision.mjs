@@ -4,6 +4,22 @@ import { createEvidenceExperience } from './evidence.mjs';
 
 const number = (n) => Number(n ?? 0).toLocaleString('en-US');
 const reviewStates = ['awaiting_review', 'requires_review', 'needs_clarification'];
+/** A failed availability check is not a loss of the human owner's authority.
+ * Retrying approval still performs every current server-side check. */
+export function proposalReviewActions(p, canReview) {
+  if (!canReview || !reviewStates.includes(p.state)) return [
+    { label: 'Follow operations', action: 'navigate', id: 'operations', style: 'primary' },
+    { label: 'Close', action: 'close' },
+  ];
+  const pending = (p.conditions ?? []).some(c => !c.satisfied);
+  return [
+    ...(p.state === 'requires_review' || p.reviewBlocked ? [{ label: 'Investigate a repair', action: 'repair', id: p.id }] : []),
+    ...(!p.executionResults?.length ? [{ label: 'Edit draft', action: 'edit-response', id: p.id }] : []),
+    { label: 'Ask for clarification', action: 'reviewclarify', id: p.id },
+    { label: 'Reject', action: 'reviewreject', id: p.id, style: 'danger' },
+    { label: pending ? 'Authorize conditionally' : p.reviewBlocked ? 'Recheck & authorize' : 'Authorize response', action: 'reviewapprove', id: p.id, style: 'primary' },
+  ];
+}
 const get = (records, id) => records.get(id)?.record;
 const destination = (p, records) => {
   const n = get(records, p.need);
@@ -82,7 +98,7 @@ export function approvalFeedback(error, proposal = {}) {
     stale = ['VERSION_CONFLICT', 'PROPOSAL_STATE'].includes(code),
     title = busy ? 'The vehicle plan needs an update' : stale ? 'This response has changed' : RECHECK_CODES.has(code) ? 'The plan needs another check' : 'This approval was not completed',
     next = automaticRecheck
-      ? 'Marked for the agent’s next planning check. Review the revised proposal before committing resources.'
+      ? 'Marked for the agent’s next planning check. You can also edit the draft, request a repair, or recheck current availability before authorizing. Issued work stays recorded.'
       : stale ? 'The latest recorded state is shown below. Review it before making another decision.'
         : proposal.state === 'requires_review' ? 'Investigate a repair to update future work. Existing trips and completed deliveries stay recorded.'
           : 'Check the current vehicle, stock and route evidence before trying again.';
@@ -176,7 +192,7 @@ export function createDecisionExperience(h) {
       <section class="approval-explanation"><span class="decision-step-icon">${icon('clipboard-check')}</span><div><h3>${p.authorization ? 'A person owns this decision' : 'Why your approval matters'}</h3><p>${p.authorization ? `Authorized by ${e(p.authorization.name)} at ${e(time(p.authorization.at))}.` : `This commits ${vehicles.size ? `${vehicles.size} vehicle${vehicles.size === 1 ? '' : 's'} and ` : ''}operational resources. ${e(entityLabel(state.user.org))} must accept responsibility before execution.`}${partnerOwners.length ? ` ${partnerOwners.map(entityLabel).map(e).join(', ')} must separately approve their own actions.` : ''}</p></div></section>
       <div class="response-readiness" aria-label="Recorded readiness"><span class="${readiness.evidenceAvailable === readiness.evidenceTotal ? 'ready' : 'attention'}">${icon(readiness.evidenceAvailable === readiness.evidenceTotal ? 'check' : 'circle-alert')}${readiness.evidenceAvailable}/${readiness.evidenceTotal} sources available</span><span class="${pending.length ? 'attention' : 'ready'}">${icon(pending.length ? 'clock' : 'check')}${pending.length ? `${pending.length} condition${pending.length === 1 ? '' : 's'} unresolved` : 'No declared pending conditions'}</span>${readiness.completedChecks.length ? `<span class="${p.reviewBlocked ? 'attention' : 'ready'}">${icon('shield-check')}${readiness.completedChecks.length} ${p.reviewBlocked ? 'saved checks · recheck needed' : 'recorded plan checks'}</span>` : ''}</div>
       ${pending.length ? `<div class="decision-note attention">${icon('circle-alert')}<div><strong>Resolve before physical execution</strong><ul>${pending.map(c => `<li>${e(readableText(c.description))}</li>`).join('')}</ul></div></div>` : ''}
-      <section class="response-plan"><div class="section-heading"><h3>${p.reviewBlocked ? 'Saved plan · awaiting a revision' : p.authorization ? 'Authorized response steps' : 'What you are authorizing'}</h3><span class="small">${actions.length} planned step${actions.length === 1 ? '' : 's'}</span></div><ol class="response-steps">${actions.slice(0, 3).map((a, i) => step(a, i, records)).join('')}</ol>${actions.length > 3 ? `<details class="collapse"><summary>Review ${actions.length - 3} remaining steps</summary><ol class="response-steps" start="4">${actions.slice(3).map((a, i) => step(a, i + 3, records)).join('')}</ol></details>` : ''}<p class="note">These exact steps define the commitment. Authorizing a plan does not confirm arrival or receipt.</p></section>
+      <section class="response-plan"><div class="section-heading"><h3>${p.reviewBlocked ? 'Saved plan · current checks required' : p.authorization ? 'Authorized response steps' : 'What you are authorizing'}</h3><span class="small">${actions.length} planned step${actions.length === 1 ? '' : 's'}</span></div><ol class="response-steps">${actions.slice(0, 3).map((a, i) => step(a, i, records)).join('')}</ol>${actions.length > 3 ? `<details class="collapse"><summary>Review ${actions.length - 3} remaining steps</summary><ol class="response-steps" start="4">${actions.slice(3).map((a, i) => step(a, i + 3, records)).join('')}</ol></details>` : ''}<p class="note">These exact steps define the commitment. Authorizing a plan does not confirm arrival or receipt.</p></section>
       <details class="collapse"><summary>Evidence behind this response · ${(p.references ?? []).length} records</summary>${(p.references ?? []).map(id => evidence.reference(records.get(id), id)).join('')}</details>
       <details class="collapse"><summary>Why this response?</summary><p class="sub">${e(readableText(p.rationale))}</p>${p.benefit && p.benefit.trim() !== p.summary?.trim() ? `<p class="sub">${e(readableText(p.benefit))}</p>` : ''}${readiness.completedChecks.length ? `<ul class="recorded-checks">${readiness.completedChecks.map(c => `<li>${icon('check')}${e(humanLabel(c.type))} · step ${Number(c.index) + 1}</li>`).join('')}</ul>` : `<p class="note">No completed constraint-check record is attached to this draft. The server checks the current plan again when an owner approves.</p>`}</details>
       ${(p.alternatives ?? []).length ? `<details class="collapse"><summary>Other options considered · ${p.alternatives.length}</summary>${p.alternatives.map(a => `<p class="sub"><strong>${e(readableText(a.title))}</strong><br>${e(readableText(a.reason))}</p>`).join('')}</details>` : ''}

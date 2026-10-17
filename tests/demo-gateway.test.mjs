@@ -69,6 +69,7 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
     const result = await r.json(); return { response: r, data: result };
   };
   const a = await api(null, '/demo/api/session'); const aCookie = a.response.headers.get('set-cookie').split(';')[0];
+  assert.deepEqual(a.data.summary, { pendingDecisions: 0, needsRecheck: 0, activeOperations: 0, completedOperations: 0, blockedOperations: 0, canReview: false });
   assert.match(a.response.headers.get('set-cookie'), /HttpOnly; SameSite=Strict; Path=\/demo\//);
   assert.equal((await api(aCookie, '/demo/api/join', { name: 'Harbor Support' }, 'wrong')).response.status, 403);
   const lost = await api(aCookie, '/demo/api/join', { name: 'Harbor Support', kit: 'response' }, a.data.csrf, 'join-visitor-alpha');
@@ -90,8 +91,11 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   assert.notEqual(bj.data.organization.id, org); assert.notEqual(bj.data.organization.color, joined.data.organization.color);
   assert.equal((await store.query('SELECT COUNT(*) AS count FROM demo_join_intents')).rows[0].count, 0);
   const me = await api(aCookie, '/demo/workspace/api/me'); assert.equal(me.data.user.org, org); assert.equal(me.data.user.role, 'commander');
+  const bMe = await api(bCookie, '/demo/workspace/api/me');
   assert.equal((await api(aCookie, '/demo/workspace/api/users')).response.status, 403);
   assert.equal((await api(aCookie, '/demo/workspace/api/organization', { name: 'Bad configuration' }, me.data.user.csrf)).response.status, 403);
+  for (const route of ['/api/automation', '/api/resource', '/api/integration/configure'])
+    assert.equal((await api(aCookie, '/demo/workspace' + route, { enabled: true }, me.data.user.csrf, 'blocked-admin-' + route)).response.status, 403, route);
   assert.equal((await api(aCookie, '/demo/api/control', { play: false }, a.data.csrf)).response.status, 405);
   const shell = await fetch(gateway.url + '/demo/workspace/', { headers: { cookie: aCookie } }); const html = await shell.text();
   assert.match(shell.headers.get('content-security-policy'), /frame-ancestors 'self'/);
@@ -114,6 +118,13 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   await app.ingestion.sync();
   const policy = await store.get(org, 'response_policy', 'active');
   assert.equal(policy.approved, true); assert.equal(policy.order, 'priority_then_deadline');
+  const priorities = { version: policy.version, order: 'deadline_then_priority', protectedTypes: ['water'], maxOpenReviews: 4,
+    investigationCooldownMs: 60000, reason: 'Prioritize useful arrival windows in this response.' };
+  assert.equal((await api(aCookie, '/demo/workspace/api/response-policy', priorities, 'wrong', 'priorities-bad-csrf')).response.status, 403);
+  assert.equal((await api(aCookie, '/demo/workspace/api/response-policy', { ...priorities, maxOpenReviews: 100 }, me.data.user.csrf, 'priorities-unbounded')).response.status, 400);
+  const chosenPolicy = await api(aCookie, '/demo/workspace/api/response-policy', priorities, me.data.user.csrf, 'priorities-own-version');
+  assert.equal(chosenPolicy.response.status, 200, JSON.stringify(chosenPolicy.data));
+  assert.equal((await store.get(bj.data.organization.id, 'response_policy', 'active')).order, 'priority_then_deadline', 'one team cannot change a partner’s planning mandate');
   const queuedResearch = (await store.query("SELECT id,payload FROM jobs WHERE org=$1 AND kind='investigate' AND state='queued' ORDER BY created_at LIMIT 1", [org])).rows[0];
   assert.ok(queuedResearch, 'ordinary source ingestion queues a focused AI investigation automatically');
   assert.equal(queuedResearch.payload.needId, 'demo-need-1');
@@ -122,10 +133,33 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   const researched = await store.get(org, 'activity', queuedResearch.id);
   await lab.runtime.request('control', { play: false });
   assert.equal(providerCalls, 3); assert.ok(researched.proposalId, JSON.stringify(researched));
-  const proposal = await store.get(org, 'proposal', researched.proposalId);
+  let proposal = await store.get(org, 'proposal', researched.proposalId);
   assert.equal(proposal.authorization, null, 'planning defaults never authorize a physical action');
   const foreign = await api(bCookie, '/demo/workspace/api/records?kind=proposal&id=' + proposal.id);
   assert.ok(foreign.response.status === 404 || foreign.data.length === 0, JSON.stringify(foreign.data));
+  const summary = (await api(aCookie, '/demo/api/session')).data.summary;
+  assert.equal(summary.pendingDecisions, 1); assert.equal(summary.canReview, true);
+  assert.equal((await api(bCookie, '/demo/api/session')).data.summary.pendingDecisions, 0, 'private pending counts are tenant scoped');
+  const review = (cookie, csrf, input, key) => api(cookie, '/demo/workspace/api/review', { id: proposal.id, version: proposal.version, ...input }, csrf, key);
+  assert.equal((await review(aCookie, 'wrong', { decision: 'approve' }, 'approval-wrong-csrf')).response.status, 403);
+  assert.equal((await review(bCookie, bMe.data.user.csrf, { decision: 'approve' }, 'approval-wrong-owner')).response.status, 404);
+  assert.equal((await review(aCookie, me.data.user.csrf, { decision: 'approve', version: proposal.version - 1 }, 'approval-stale-version')).response.status, 409);
+  const clarification = await review(aCookie, me.data.user.csrf, { decision: 'clarify', note: 'Check the current vehicle availability before dispatch.' }, 'clarify-own-proposal');
+  assert.equal(clarification.response.status, 200); proposal = clarification.data;
+  const draft = Object.fromEntries(['title', 'summary', 'benefit', 'references', 'conditions', 'alternatives', 'actions', 'priority', 'rationale'].map(k => [k, proposal[k]]));
+  const revise = async (conditions, key) => {
+    const result = await api(aCookie, '/demo/workspace/api/proposal/revise', { id: proposal.id, ...draft, conditions,
+      version: proposal.version, note: 'Revised after owner review; preserve the exact reported water quantity.' }, me.data.user.csrf, key);
+    assert.equal(result.response.status, 200, JSON.stringify(result.data)); proposal = result.data;
+  };
+  await revise([{ type: 'evidence', id: 'not-yet-received-confirmation', description: 'Current confirmation is still required.', satisfied: true }], 'revise-with-unconfirmed-condition');
+  const pending = await review(aCookie, me.data.user.csrf, { decision: 'approve' }, 'approval-unmet-condition');
+  assert.equal(pending.response.status, 400); assert.equal(pending.data.error, 'PENDING_CONDITIONS', 'a visitor cannot self-certify evidence by sending satisfied:true');
+  const conditional = await review(aCookie, me.data.user.csrf, { decision: 'approve', allowConditional: true }, 'approval-conditional-only');
+  assert.equal(conditional.response.status, 200); proposal = conditional.data;
+  assert.equal(proposal.state, 'conditionally_authorized');
+  assert.equal((await source.request('/api/demo/frame')).operations.filter(o => o.org === org).length, 0, 'conditional review alone never issues a delivery');
+  await revise([], 'revise-before-physical-issue');
   const approval = await api(aCookie, '/demo/workspace/api/review', { id: proposal.id, version: proposal.version, decision: 'approve' }, me.data.user.csrf, 'approve-demo-water');
   assert.equal(approval.response.status, 200, JSON.stringify(approval.data));
   const baseNow = (await lab.checkpoint()).now;
@@ -137,6 +171,36 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   }
   const final = await source.request('/api/demo/frame'), received = final.operations.find(o => o.org === org && o.received === 100);
   assert.ok(received, 'the same observer world contains the physically received 100 L contribution');
+  const completedSummary = (await api(aCookie, '/demo/api/session')).data.summary;
+  assert.equal(completedSummary.pendingDecisions, 0); assert.equal(completedSummary.completedOperations, 1);
+  // The visitor is a real scoped operational owner, not a read-only tour.
+  const fieldReport = await api(aCookie, '/demo/workspace/api/report', { clientId: 'own-field-observation', kind: 'receipt',
+    text: 'The team observed supplies at the receiving site; this report is not a source receipt.', location: 'Receiving shelter',
+    observedAt: Math.floor(baseNow), references: [received.id], quantity: 100, unit: 'L' }, me.data.user.csrf, 'own-field-observation');
+  assert.equal(fieldReport.response.status, 201, JSON.stringify(fieldReport.data));
+  const assignment = await api(aCookie, '/demo/workspace/api/task/assign', { operation: received.id, assignee: me.data.user.id,
+    instructions: 'Check the receiving team’s recorded handover.', contact: 'Response team' }, me.data.user.csrf, 'assign-owned-physical-operation');
+  assert.equal(assignment.response.status, 201, JSON.stringify(assignment.data));
+  const acknowledged = await api(aCookie, '/demo/workspace/api/task/update', { id: assignment.data.id, version: assignment.data.version,
+    stage: 'acknowledged', note: 'The assigned team has read the instructions.' }, me.data.user.csrf, 'ack-own-assignment');
+  assert.equal(acknowledged.response.status, 200, JSON.stringify(acknowledged.data));
+  const stockToShare = await store.get(org, 'resource', `r-${org}-water`);
+  const shared = await api(aCookie, '/demo/workspace/api/share', { kind: 'resource', id: stockToShare.id, version: stockToShare.version,
+    to: bj.data.organization.id }, me.data.user.csrf, 'share-real-owned-capability');
+  assert.equal(shared.response.status, 202, JSON.stringify(shared.data));
+  const publicDraft = await api(aCookie, '/demo/workspace/api/publication/draft', { title: 'Drinking water received',
+    text: 'The receiving site has a confirmed delivery of 100 litres of drinking water.', area: 'Response area',
+    status: 'received', operationIds: [received.id] }, me.data.user.csrf, 'draft-confirmed-demo-update');
+  assert.equal(publicDraft.response.status, 201, JSON.stringify(publicDraft.data));
+  const published = await api(aCookie, '/demo/workspace/api/publication/publish', { id: publicDraft.data.id, version: publicDraft.data.version },
+    me.data.user.csrf, 'publish-confirmed-demo-update');
+  assert.equal(published.response.status, 200, JSON.stringify(published.data));
+  const rejectedDraft = await api(aCookie, '/demo/workspace/api/propose', { ...draft, title: 'An optional additional water contribution', conditions: [],
+    actions: [{ ...draft.actions[0], params: { ...draft.actions[0].params, quantity: 10 } }] }, me.data.user.csrf, 'optional-own-draft');
+  assert.equal(rejectedDraft.response.status, 201, JSON.stringify(rejectedDraft.data));
+  const declined = await api(aCookie, '/demo/workspace/api/review', { id: rejectedDraft.data.id, version: rejectedDraft.data.version,
+    decision: 'reject', note: 'Keep this capacity available for the next need.' }, me.data.user.csrf, 'reject-own-draft');
+  assert.equal(declined.response.status, 200); assert.equal(declined.data.state, 'rejected');
   assert.equal(final.organizations.find(o => o.id === org).name, 'Harbor Support');
   const base = gateway.apps.get('org0');
   await base.ingestion.sync({ sources: false });
@@ -188,11 +252,62 @@ test('connected demo: scoped onboarding, real proposal authorization/receipt, re
   assert.ok((await source.request('/api/demo/frame')).operations.some(o => o.id === received.id && o.received === 100));
   const serialized = JSON.stringify((await api(aCookie, '/demo/api/state')).data);
   assert.ok(!serialized.includes(lab.observerKey)); assert.ok(!serialized.includes('sourceAgentKey')); assert.ok(!serialized.includes('password'));
-  // Lifecycle renewal happens only after the prior team is marked finished.
-  // It creates a browser identity, never additional resources or organizations.
-  await store.query("UPDATE demo_teams SET state='draining' WHERE org=$1", [org]);
-  assert.equal((await api(aCookie, '/demo/api/session/renew', {}, a.data.csrf)).response.status, 409);
-  await store.query("UPDATE demo_teams SET state='finished' WHERE org=$1", [org]);
+  const retiredBase = gateway.apps.get('org0'); let staleShares = 0;
+  const originalShare = retiredBase.network.share.bind(retiredBase.network);
+  retiredBase.network.share = (...args) => { staleShares++; return originalShare(...args); };
+  const baseConnection = await store.get('org0', 'source_connection', 'simulator');
+  await store.upsert('org0', 'source_connection', 'simulator', { ...baseConnection, state: 'requires_new_response', reason: 'source_instance_changed' });
+  await gateway.maintenance();
+  assert.equal(staleShares, 0, 'a fenced base never republishes obsolete capability records to live participants');
+  const connection = await store.get(org, 'source_connection', 'simulator');
+  await store.upsert(org, 'source_connection', 'simulator', { ...connection, state: 'requires_new_response', reason: 'source_instance_changed' });
+  assert.equal((await api(aCookie, '/demo/api/session')).data.summary.canReview, false, 'a retained historic workspace cannot advertise new approvals');
+  assert.equal((await api(aCookie, '/demo/workspace/api/propose', draft, restoredMe.data.user.csrf, 'blocked-source-boundary')).response.status, 409);
+  // End is an explicit scoped user action. Source-fenced historical plans are
+  // not unlocked; physical retirement still passes the simulator's checks.
+  assert.equal((await api(aCookie, '/demo/api/session/end', {}, 'bad-csrf')).response.status, 403);
+  const ended = await api(aCookie, '/demo/api/session/end', { org: bj.data.organization.id }, a.data.csrf);
+  assert.equal(ended.response.status, 200); assert.equal(ended.data.organization.state, 'draining');
+  assert.equal((await store.query('SELECT state FROM demo_teams WHERE org=$1', [bj.data.organization.id])).rows[0].state, 'active', 'a supplied partner ID cannot select another session');
+  for (let i = 0; i < 100; i++) { await gateway.maintenance(); if ((await api(aCookie, '/demo/api/session')).data.organization.state === 'finished') break; await new Promise(resolve => setTimeout(resolve, 20)); }
+  assert.equal((await api(aCookie, '/demo/api/session/end', {}, a.data.csrf)).data.organization.state, 'finished', 'ending an already finished session is idempotent');
+  assert.ok(await store.get(org, 'proposal', proposal.id));
+  // A second team ends during a real physical trip. Its old source-boundary
+  // authorization remains in history and must not hold a retired slot forever.
+  const bOrg = bj.data.organization.id, bApp = gateway.apps.get(bOrg);
+  await bApp.ingestion.sync({ sources: false });
+  const bNeed = (await store.list(bOrg, 'need', 100)).find(n => n.id === 'demo-need-1');
+  assert.ok(bNeed);
+  const bDraft = await api(bCookie, '/demo/workspace/api/propose', { ...draft, title: 'A separate team water contribution', conditions: [],
+    references: [bNeed.id, `r-${bOrg}-water`, `v-${bOrg}-0`], actions: [{ type: 'dispatch', owner: bOrg,
+      params: { need: bNeed.id, resource: `r-${bOrg}-water`, vehicle: `v-${bOrg}-0`, quantity: 50 }, dependsOn: [] }] }, bMe.data.user.csrf, 'b-before-session-end');
+  assert.equal(bDraft.response.status, 201, JSON.stringify(bDraft.data));
+  const bApproved = await api(bCookie, '/demo/workspace/api/review', { id: bDraft.data.id, version: bDraft.data.version, decision: 'approve' }, bMe.data.user.csrf, 'b-owner-before-session-end');
+  assert.equal(bApproved.response.status, 200, JSON.stringify(bApproved.data));
+  let endClock = (await lab.checkpoint()).now, endingTrip;
+  for (let i = 0; i < 50; i++) {
+    await bApp.worker.execute(bDraft.data.id); endClock += 1000; await lab.advance(endClock);
+    await new Promise(resolve => setTimeout(resolve, 20));
+    endingTrip = (await source.request('/api/demo/frame')).operations.find(o => o.org === bOrg);
+    if (endingTrip) break;
+  }
+  assert.ok(endingTrip); assert.ok(!['completed', 'received', 'service'].includes(endingTrip.state), 'the team ends before the physical trip is received');
+  const proposalAtEnd = await store.get(bOrg, 'proposal', bDraft.data.id);
+  await store.upsert(bOrg, 'source_connection', 'simulator', { state: 'requires_new_response', reason: 'source_instance_changed' });
+  const endingB = await api(bCookie, '/demo/api/session/end', {}, b.data.csrf);
+  assert.equal(endingB.response.status, 200); assert.equal(endingB.data.organization.state, 'draining');
+  await gateway.maintenance();
+  assert.equal((await api(bCookie, '/demo/api/session')).data.organization.state, 'draining', 'retirement cannot discard an active physical trip');
+  assert.equal((await api(bCookie, '/demo/api/session/renew', {}, b.data.csrf)).response.status, 409);
+  assert.equal((await api(bCookie, '/demo/workspace/api/me')).response.status, 401);
+  for (let i = 0; i < 100; i++) {
+    endClock += 15000; await lab.advance(endClock); await gateway.maintenance();
+    if ((await api(bCookie, '/demo/api/session')).data.organization.state === 'finished') break;
+  }
+  assert.equal((await api(bCookie, '/demo/api/session')).data.organization.state, 'finished');
+  const endedTrip = (await lab.checkpoint()).state.operations.find(o => o.id === endingTrip.id);
+  assert.equal(endedTrip.received, 50, 'the same trip completes after its participant leaves: ' + JSON.stringify(endedTrip));
+  assert.deepEqual(await store.get(bOrg, 'proposal', bDraft.data.id), proposalAtEnd, 'a historic authorization and its issued-work receipts were neither executed again nor erased to retire the slot');
   const organizationsBefore = (await source.request('/api/demo/frame')).organizations.length;
   assert.equal((await api(aCookie, '/demo/api/session/renew', {}, 'bad-csrf')).response.status, 403);
   const renewed = await api(aCookie, '/demo/api/session/renew', {}, a.data.csrf);
