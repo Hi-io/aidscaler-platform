@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { setDisplayContext, entityLabel, registerDisplayRecords, readableText, resourceLabel, labelHints } from '../ui/labels.mjs';
+import { setDisplayContext, entityLabel, registerDisplayRecords, readableText, resourceLabel, labelHints, vehicleReferenceLabel } from '../ui/labels.mjs';
 
 test('laboratory aliases remain unique, deterministic and presentation-only', () => {
   const geography = {places:[{id:'b41',node:'n41',use:'shelter'},{id:'b53',node:'n53',use:'shelter'}]};
@@ -37,4 +37,13 @@ test('an older laboratory directory uses its declared junction name rather than 
   setDisplayContext({organization:{id:'org0',name:'Relief North'},geography:{places:[{id:'b41',node:'n41',use:'shelter'}],nodes:[{id:'n41',name:'South Hill Shelter Junction'}]}});
   assert.equal(entityLabel('b41'),'South Hill Shelter');
   assert.equal(entityLabel('n41'),'South Hill Shelter Junction');
+});
+
+test('unshared partner vehicles use an ordinal reference without inventing a plate or owner name', () => {
+  setDisplayContext({ organization: { id: 'demo-org-3', name: 'Sakura Aid' } });
+  assert.equal(vehicleReferenceLabel('v-org3-0', 'org3'), 'Partner vehicle 1');
+  assert.equal(vehicleReferenceLabel('unknown-car', 'org3'), null);
+  setDisplayContext({ organization: { id: 'org0', name: 'Relief North' } });
+  assert.equal(vehicleReferenceLabel('v-org3-0', 'org3'), 'Medical West · Vehicle 1');
+  assert.doesNotMatch(vehicleReferenceLabel('v-org3-0', 'org3'), /TK-|registration/);
 });

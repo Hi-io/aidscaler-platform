@@ -51,6 +51,14 @@ export function humanLabel(value) {
 export function resourceLabel(record) { return record.label || record.name || types[record.type] || entityLabel(record.id); }
 /** Fictional registrations are enabled only in a recognized laboratory workspace. */
 export function vehicleDisplayIdentity(record) { return vehicleIdentity(record, { demo }); }
+/** A readable reference when no permission-scoped vehicle record was shared.
+ * This is an ordinal label, never a claimed registration or vehicle name. */
+export function vehicleReferenceLabel(id, owner) {
+  if (labels.has(String(id))) return labels.get(String(id));
+  const match = /^v-(?:org\d+|demo-org-\d+)-(\d+)$/.exec(String(id ?? ''));
+  if (!match) return null;
+  return labels.has(String(owner)) ? `${labels.get(String(owner))} · Vehicle ${Number(match[1]) + 1}` : `Partner vehicle ${Number(match[1]) + 1}`;
+}
 export function registerDisplayRecords(kind, records) {
   for (const record of Array.isArray(records) ? records : records ? [records] : []) {
     if (!record.id) continue;

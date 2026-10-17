@@ -1,4 +1,4 @@
-import { entityLabel, humanLabel, resourceLabel, vehicleDisplayIdentity } from "./labels.mjs";
+import { entityLabel, humanLabel, resourceLabel, vehicleDisplayIdentity, vehicleReferenceLabel } from "./labels.mjs";
 
 const find = (rows, id) =>
   rows instanceof Map
@@ -50,6 +50,7 @@ export function operationSummary(operation, context = {}) {
     location = named(locationId, "Destination not named"),
     vehicleName =
       (vehicle ? vehicleDisplayIdentity(vehicle).label : null) ||
+      vehicleReferenceLabel(operation.vehicle, operation.owner ?? operation.org ?? context.organization) ||
       named(operation.vehicle, "Assigned response vehicle"),
     owner = named(
       operation.owner ?? operation.org ?? context.organization,

@@ -1,4 +1,4 @@
-import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel, vehicleDisplayIdentity } from './labels.mjs';
+import { entityLabel, humanLabel, readableText, registerDisplayRecords, resourceLabel, vehicleDisplayIdentity, vehicleReferenceLabel } from './labels.mjs';
 import { actionBrief } from './uploads.mjs';
 import { createEvidenceExperience } from './evidence.mjs';
 
@@ -27,10 +27,24 @@ const destination = (p, records) => {
 };
 
 /** Quantities are derived from typed actions and received records, never model prose. */
+function actionResource(proposal, action, records) {
+  const direct = records.get(action.params?.resource);
+  if (direct?.kind === 'resource' && (!direct.record?.owner || direct.record.owner === action.owner)) return direct.record;
+  // Consent exposes a projection, not a partner's private inventory record.
+  // Keep its exact owner/entity binding; expired offers still describe the
+  // units of a saved plan, without claiming that its stock remains available.
+  for (const ref of proposal.references ?? []) {
+    const found = records.get(ref), offer = found?.record;
+    if (found?.kind === 'peer_offer' && offer.kind === 'resource' && offer.from === action.owner &&
+      offer.entityId === action.params?.resource && offer.projection?.id === offer.entityId && offer.projection.owner === action.owner)
+      return offer.projection;
+  }
+  return null;
+}
 export function decisionCoverage(proposal, records = new Map()) {
   const totals = new Map();
   for (const a of proposal.actions ?? []) {
-    const p = a.params ?? {}, need = get(records, p.need), resource = get(records, p.resource);
+    const p = a.params ?? {}, need = get(records, p.need), resource = actionResource(proposal, a, records);
     if (a.type !== 'dispatch' || !need || !resource || !Number.isFinite(p.quantity)) continue;
     // Records with different native units cannot be combined into a coverage claim.
     if (resource?.unit && need.unit && resource.unit !== need.unit) continue;
@@ -141,7 +155,10 @@ export function createDecisionExperience(h) {
   const { escape: e, icon, badge, action, state, time } = h, evidence = createEvidenceExperience(h);
   const technical = value => `<pre class="trace">${e(JSON.stringify(value, null, 2))}</pre>`;
   async function describeProposals(proposals) {
-    const ids = proposals.flatMap(p => (p.actions ?? []).flatMap(a => ['need', 'resource'].map(k => a.params?.[k]).filter(v => typeof v === 'string'))), records = await evidence.resolve(ids);
+    const ids = proposals.flatMap(p => (p.actions ?? []).flatMap(a => [
+      ...['need', 'resource'].map(k => a.params?.[k]).filter(v => typeof v === 'string'),
+      ...(p.references ?? []).filter(ref => ref === `${a.owner}_resource_${a.params?.resource}`),
+    ])), records = await evidence.resolve(ids);
     for (const found of records.values()) if (found?.record) registerDisplayRecords(found.kind, found.record);
     return new Map(proposals.map(p => [p.id, proposalPresentation(p, records)]));
   }
@@ -154,11 +171,11 @@ export function createDecisionExperience(h) {
     const item = r => `<div class="response-execution-row">${icon(r.state === 'complete' ? 'check' : r.state === 'issued' ? 'truck' : r.state === 'blocked' ? 'circle-alert' : 'clock')}<div><strong>${e(r.title)}</strong><p>${e(r.detail)}</p></div></div>`;
     return `<div data-response-progress>${rows.length ? `<section class="response-execution-status" role="status" aria-label="Recorded response progress">${rows.slice(0,3).map(item).join('')}${rows.length > 3 ? `<details class="collapse"><summary>${rows.length - 3} more step updates</summary>${rows.slice(3).map(item).join('')}</details>` : ''}</section>` : ''}</div>`;
   }
-  function step(a, index, records) {
-    const p = a.params ?? {}, resource = get(records, p.resource), vehicle = get(records, p.vehicle), owner = entityLabel(a.owner),
+  function step(a, index, records, proposal) {
+    const p = a.params ?? {}, resource = actionResource(proposal, a, records), vehicle = get(records, p.vehicle), owner = entityLabel(a.owner),
       unit = resource?.unit || get(records, p.need)?.unit || 'units',
       cargo = p.quantity != null ? `${number(p.quantity)} ${unit} · ${resource ? resourceLabel(resource) : entityLabel(p.resource)}` : null,
-      vehicleName = vehicle ? vehicleDisplayIdentity(vehicle).label : entityLabel(p.vehicle),
+      vehicleName = vehicle ? vehicleDisplayIdentity(vehicle).label : vehicleReferenceLabel(p.vehicle, a.owner) || entityLabel(p.vehicle),
       at = destination(p, records);
     let name = humanLabel(a.type), description = readableText(actionBrief(a)), glyph = 'clipboard-check', trail = null;
     if (a.type === 'dispatch') { name = vehicleName || 'Deliver supplies'; description = cargo; glyph = 'truck'; trail = ['Collect supplies', 'Transport', at]; }
@@ -192,7 +209,7 @@ export function createDecisionExperience(h) {
       <section class="approval-explanation"><span class="decision-step-icon">${icon('clipboard-check')}</span><div><h3>${p.authorization ? 'A person owns this decision' : 'Why your approval matters'}</h3><p>${p.authorization ? `Authorized by ${e(p.authorization.name)} at ${e(time(p.authorization.at))}.` : `This commits ${vehicles.size ? `${vehicles.size} vehicle${vehicles.size === 1 ? '' : 's'} and ` : ''}operational resources. ${e(entityLabel(state.user.org))} must accept responsibility before execution.`}${partnerOwners.length ? ` ${partnerOwners.map(entityLabel).map(e).join(', ')} must separately approve their own actions.` : ''}</p></div></section>
       <div class="response-readiness" aria-label="Recorded readiness"><span class="${readiness.evidenceAvailable === readiness.evidenceTotal ? 'ready' : 'attention'}">${icon(readiness.evidenceAvailable === readiness.evidenceTotal ? 'check' : 'circle-alert')}${readiness.evidenceAvailable}/${readiness.evidenceTotal} sources available</span><span class="${pending.length ? 'attention' : 'ready'}">${icon(pending.length ? 'clock' : 'check')}${pending.length ? `${pending.length} condition${pending.length === 1 ? '' : 's'} unresolved` : 'No declared pending conditions'}</span>${readiness.completedChecks.length ? `<span class="${p.reviewBlocked ? 'attention' : 'ready'}">${icon('shield-check')}${readiness.completedChecks.length} ${p.reviewBlocked ? 'saved checks · recheck needed' : 'recorded plan checks'}</span>` : ''}</div>
       ${pending.length ? `<div class="decision-note attention">${icon('circle-alert')}<div><strong>Resolve before physical execution</strong><ul>${pending.map(c => `<li>${e(readableText(c.description))}</li>`).join('')}</ul></div></div>` : ''}
-      <section class="response-plan"><div class="section-heading"><h3>${p.reviewBlocked ? 'Saved plan · current checks required' : p.authorization ? 'Authorized response steps' : 'What you are authorizing'}</h3><span class="small">${actions.length} planned step${actions.length === 1 ? '' : 's'}</span></div><ol class="response-steps">${actions.slice(0, 3).map((a, i) => step(a, i, records)).join('')}</ol>${actions.length > 3 ? `<details class="collapse"><summary>Review ${actions.length - 3} remaining steps</summary><ol class="response-steps" start="4">${actions.slice(3).map((a, i) => step(a, i + 3, records)).join('')}</ol></details>` : ''}<p class="note">These exact steps define the commitment. Authorizing a plan does not confirm arrival or receipt.</p></section>
+      <section class="response-plan"><div class="section-heading"><h3>${p.reviewBlocked ? 'Saved plan · current checks required' : p.authorization ? 'Authorized response steps' : 'What you are authorizing'}</h3><span class="small">${actions.length} planned step${actions.length === 1 ? '' : 's'}</span></div><ol class="response-steps">${actions.slice(0, 3).map((a, i) => step(a, i, records, p)).join('')}</ol>${actions.length > 3 ? `<details class="collapse"><summary>Review ${actions.length - 3} remaining steps</summary><ol class="response-steps" start="4">${actions.slice(3).map((a, i) => step(a, i + 3, records, p)).join('')}</ol></details>` : ''}<p class="note">These exact steps define the commitment. Authorizing a plan does not confirm arrival or receipt.</p></section>
       <details class="collapse"><summary>Evidence behind this response · ${(p.references ?? []).length} records</summary>${(p.references ?? []).map(id => evidence.reference(records.get(id), id)).join('')}</details>
       <details class="collapse"><summary>Why this response?</summary><p class="sub">${e(readableText(p.rationale))}</p>${p.benefit && p.benefit.trim() !== p.summary?.trim() ? `<p class="sub">${e(readableText(p.benefit))}</p>` : ''}${readiness.completedChecks.length ? `<ul class="recorded-checks">${readiness.completedChecks.map(c => `<li>${icon('check')}${e(humanLabel(c.type))} · step ${Number(c.index) + 1}</li>`).join('')}</ul>` : `<p class="note">No completed constraint-check record is attached to this draft. The server checks the current plan again when an owner approves.</p>`}</details>
       ${(p.alternatives ?? []).length ? `<details class="collapse"><summary>Other options considered · ${p.alternatives.length}</summary>${p.alternatives.map(a => `<p class="sub"><strong>${e(readableText(a.title))}</strong><br>${e(readableText(a.reason))}</p>`).join('')}</details>` : ''}

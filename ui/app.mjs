@@ -6,6 +6,8 @@ import { createPortalViews } from "./portal.mjs";
 import { agentMonitor } from "./autonomy.mjs";
 import { createLiveWorkspace, freshnessNotice } from "./live.mjs";
 import { createDecisionExperience, proposalReviewActions } from "./decision.mjs";
+import { createOperationRefresh } from './operation-live.mjs';
+import { updatePublicRegion } from './public-refresh.mjs';
 import { offlineQueue } from "./offline.mjs";
 import { createPresentation, displayModel, rememberPresentation, restorePresentation } from "./presentation.mjs";
 import { createActivityView } from "./activity.mjs";
@@ -205,7 +207,7 @@ document.addEventListener('submit', event => {
     event.preventDefault(); event.stopImmediatePropagation(); toast(responseReadOnlyMessage);
   }
 }, true);
-async function api(url, body) {
+async function api(url, body, { signal } = {}) {
   if (body && responseReadOnly(state.sourceConnection) && !['/api/login', '/api/logout', '/api/community/track'].includes(url))
     throw Object.assign(new Error(responseReadOnlyMessage), { code: 'SOURCE_RESPONSE_CHANGED', httpStatus: 409 });
   const response = await fetch(url, {
@@ -219,6 +221,7 @@ async function api(url, body) {
         }
       : {},
     body: body ? JSON.stringify(body) : undefined,
+    signal,
   });
   const result = await response.json();
   if (!response.ok) {
@@ -231,8 +234,8 @@ async function api(url, body) {
   if (result.sourceConnection) updateSourceConnection(result.sourceConnection);
   return result;
 }
-const record = async (kind, id) => {
-  const rows = await api("/api/records?" + new URLSearchParams({ kind, ...(id ? { id } : {}) }));
+const record = async (kind, id, options) => {
+  const rows = await api("/api/records?" + new URLSearchParams({ kind, ...(id ? { id } : {}) }), undefined, options);
   registerDisplayRecords(kind, rows);
   return rows;
 };
@@ -760,7 +763,9 @@ async function render() {
     }
   }
 }
+let operationRefresh = null;
 function modal(name, content, footer = "") {
+  operationRefresh?.stop(); operationRefresh = null;
   document.querySelector("dialog")?.remove();
   dialog = document.createElement("dialog");
   dialog.className = "dialog";
@@ -879,10 +884,12 @@ async function activityDetail(id) {
   modal("Investigation activity", activityView.detail(a, { role: state.user.role, model: state.model, now: Date.now() }));
 }
 async function operationDetail(id) {
+  const previousDialog = dialog, previousPage = state.page, user = state.user?.id;
   const [o, context] = await Promise.all([record("operation", id), operationContext()]);
+  if (dialog !== previousDialog || state.page !== previousPage || state.user?.id !== user) return;
   modal(
     "Follow the operation",
-    operationView.detail(o, context),
+    `<div data-operation-updates hidden role="status"><p class="small">New operation progress is available.</p>${action('Load latest progress', 'operation', o.id, 'quiet')}</div><div data-operation-live>${operationView.detail(o, context)}</div>`,
     (["commander", "dispatcher"].includes(state.user.role)
       ? action("Assign field task", "task-assign", o.id, "accent")
       : "") +
@@ -895,6 +902,20 @@ async function operationDetail(id) {
           )
         : action("Close", "close")),
   );
+  const opened = dialog;
+  opened.dataset.operation = o.id;
+  const refresh = createOperationRefresh({ initial: o,
+    current: () => dialog === opened && opened.open && !!state.user && !document.hidden && navigator.onLine && !responseReadOnly(state.sourceConnection),
+    load: signal => record('operation', id, { signal: AbortSignal.any([signal, AbortSignal.timeout(8000)]) }),
+    apply: latest => {
+      const written = updatePublicRegion(opened, '[data-operation-live]', operationView.detail(latest, context));
+      opened.querySelector('[data-operation-updates]').hidden = written;
+      if (written) bind(opened.querySelector('[data-operation-live]'));
+      return written;
+    },
+  });
+  operationRefresh = refresh.start();
+  opened.addEventListener('close', () => { refresh.stop(); if (operationRefresh === refresh) operationRefresh = null; }, { once: true });
 }
 async function flush() {
   if (!navigator.onLine) return;

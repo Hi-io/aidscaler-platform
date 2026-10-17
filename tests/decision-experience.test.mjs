@@ -42,6 +42,46 @@ test('coverage uses exact typed actions and subtracts aid already received or in
   assert.deepEqual(decisionCoverage(p,missing),[],'unavailable stock cannot establish a native-unit coverage claim');
 });
 
+test('consented partner and owned deliveries to one need add together in native units', async () => {
+  const rows = new Map(records), offer = { id: 'org1_resource_r-org1-water', from: 'org1', kind: 'resource', entityId: 'r-org1-water',
+    active: true, projection: { id: 'r-org1-water', owner: 'org1', type: 'water', unit: 'L', available: 100 } };
+  rows.set(offer.id, record('peer_offer', offer));
+  const p = { ...proposal(), references: [need.id, stock.id, offer.id], actions: [
+    { type: 'dispatch', owner: 'org0', params: { need: need.id, resource: stock.id, vehicle: 'v-org0-0', quantity: 100 } },
+    { type: 'dispatch', owner: 'org1', params: { need: need.id, resource: offer.entityId, vehicle: 'v-org1-0', quantity: 100 } },
+  ] };
+  assert.equal(decisionCoverage(p, rows)[0].quantity, 200);
+  assert.match(proposalPresentation(p, rows).summary, /200 L proposed/);
+  const h = helpers(); h.api = async url => { const id = new URL(url, 'http://local').searchParams.get('id'); if (!rows.has(id)) throw Error('Not accessible'); return rows.get(id); };
+  assert.match((await createDecisionExperience(h).describeProposals([p])).get(p.id).summary, /200 L proposed/);
+  for (const changed of [{ ...offer, from: 'another-owner' }, { ...offer, entityId: 'another-resource' }, { ...offer, projection: { ...offer.projection, unit: 'kg' } }]) {
+    const wrong = new Map(rows); wrong.set(offer.id, record('peer_offer', changed));
+    assert.equal(decisionCoverage(p, wrong)[0].quantity, 100, 'wrong owner, resource or units cannot establish a coverage claim');
+  }
+  const inactive = new Map(rows); inactive.set(offer.id, record('peer_offer', { ...offer, active: false }));
+  assert.equal(decisionCoverage(p, inactive)[0].quantity, 200, 'a saved plan’s exact quantity remains visible after an offer expires; availability is separate');
+});
+
+test('a six-step four-location plan stays 600 L plus 80 portions after dispatch and nested receipts', () => {
+  const rows = new Map(), p = { ...proposal(), references: [], actions: [] };
+  for (let i = 0; i < 4; i++) {
+    const n = { id: 'case-' + i, building: 'place-' + i, type: i === 2 ? 'food' : 'water', unit: i === 2 ? 'portions' : 'L', quantity: 500, served: 0, inTransit: 0 };
+    rows.set(n.id, record('need', n)); p.references.push(n.id);
+  }
+  for (const [owner, resource, type, unit] of [['org0', 'own-water', 'water', 'L'], ['org0', 'own-food', 'food', 'portions'], ...[1, 2, 3].map(i => ['org' + i, 'peer-water-' + i, 'water', 'L'])]) {
+    if (owner === 'org0') { rows.set(resource, record('resource', { id: resource, owner, type, unit })); p.references.push(resource); }
+    else { const id = `${owner}_resource_${resource}`; rows.set(id, record('peer_offer', { from: owner, kind: 'resource', entityId: resource, projection: { id: resource, owner, type, unit } })); p.references.push(id); }
+  }
+  for (const [owner, resource, target, quantity] of [['org0', 'own-water', 0, 200], ['org0', 'own-water', 1, 100], ['org0', 'own-food', 2, 80], ['org1', 'peer-water-1', 3, 100], ['org2', 'peer-water-2', 3, 100], ['org3', 'peer-water-3', 1, 100]])
+    p.actions.push({ type: 'dispatch', owner, params: { resource, need: 'case-' + target, quantity }, dependsOn: [] });
+  assert.equal(proposalPresentation(p, rows).title, 'Aid for 4 locations');
+  assert.match(proposalPresentation(p, rows).summary, /600 L proposed · 80 portions proposed · 6 deliveries/);
+  assert.equal(decisionCoverage(p, rows).find(row => row.need.id === 'case-1').quantity, 200);
+  p.state = 'executing'; p.executionResults = p.actions.map(action => ({ partnerResult: { actions: [action], quantity: action.params.quantity } }));
+  for (const found of rows.values()) if (found.kind === 'need') { found.record.served = 300; found.record.inTransit = 100; }
+  assert.match(proposalPresentation(p, rows).summary, /600 L proposed · 80 portions proposed · 6 deliveries/, 'current receipts and in-transit totals never subtract from the exact authorized plan or get counted again');
+});
+
 test('readiness reflects unavailable evidence and explicitly recorded checks without a confidence score',()=>{
   const p=proposal(); p.references.push('missing');
   p.conditions=[{id:'check-1',satisfied:false,description:'Current field confirmation required'}];

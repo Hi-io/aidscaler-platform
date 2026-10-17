@@ -2652,3 +2652,30 @@ html { overflow-anchor: none; }
 .source-boundary-notice p { margin:5px 0 0; max-width:850px; font-size:14px; }
 .response-readonly .agent-monitor { display:none; }
 .dialogbody > [data-source-boundary] .source-boundary-notice { margin-bottom:20px; }
+
+/* Put the response and its action together on a narrow screen. Priority and
+   condition details remain available in the response review. */
+@media (max-width:760px) {
+ main[data-view="review"] > .card > .tablewrap { overflow:visible; }
+ main[data-view="review"] > .card > .tablewrap > .table {
+  display:block; width:100%; min-width:0;
+ }
+ main[data-view="review"] > .card > .tablewrap > .table thead { display:none; }
+ main[data-view="review"] > .card > .tablewrap > .table tbody { display:block; }
+ main[data-view="review"] > .card > .tablewrap > .table tbody tr {
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px 12px;
+  padding:16px 0; border-bottom:1px solid var(--line);
+ }
+ main[data-view="review"] > .card > .tablewrap > .table tbody tr:last-child { border-bottom:0; }
+ main[data-view="review"] > .card > .tablewrap > .table td { padding:0; border:0; min-width:0; }
+ main[data-view="review"] > .card > .tablewrap > .table td:first-child {
+  grid-column:1 / -1; white-space:normal; overflow-wrap:anywhere;
+ }
+ main[data-view="review"] > .card > .tablewrap > .table td:nth-child(2),
+ main[data-view="review"] > .card > .tablewrap > .table td:nth-child(4) { display:none; }
+ main[data-view="review"] > .card > .tablewrap > .table td:nth-child(3) { align-self:center; }
+ main[data-view="review"] > .card > .tablewrap > .table td:last-child { grid-column:2; grid-row:2; }
+ main[data-view="review"] > .card > .tablewrap > .table td:last-child button {
+  min-height:44px; min-width:88px; color:#fff; background:var(--accent); border-color:var(--accent);
+ }
+}
