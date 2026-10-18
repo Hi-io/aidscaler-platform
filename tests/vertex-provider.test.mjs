@@ -1,6 +1,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { vertexRequest, vertexResponse } from '../src/vertex-provider.mjs';
+
+test('Vertex maps non-reasoning perception to the lowest supported Gemini effort', () => {
+  for (const [model,level] of [['gemini-3.8-flash','LOW'],['gemini-3.1-flash-lite','MINIMAL']]) {
+    const request=vertexRequest({model,max_tokens:8192,reasoning:{enabled:false},messages:[{role:'user',content:'Extract observed quantities.'}]});
+    assert.equal(request.generationConfig.thinkingConfig.thinkingLevel,level);
+    assert.equal(request.generationConfig.maxOutputTokens,8192);
+    assert.equal(request.generationConfig.thinkingConfig.includeThoughts,false);
+  }
+  const reasoning=vertexRequest({model:'gemini-3.8-flash',max_tokens:8192,reasoning:{enabled:true},messages:[{role:'user',content:'Investigate alternatives.'}]});
+  assert.equal(reasoning.generationConfig.thinkingConfig.thinkingLevel,undefined);
+});
 test('Vertex tool calls preserve opaque signatures and bill thinking tokens', () => {
   const converted = vertexResponse({ candidates: [{ content: { parts: [{ thought: true, text: 'private reasoning' },
     { functionCall: { name: 'read_context', args: { kind: 'need' } }, thoughtSignature: 'opaque-signature' }] } }],

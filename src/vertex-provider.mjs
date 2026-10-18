@@ -39,7 +39,15 @@ export function vertexRequest(request) {
   return { systemInstruction: { parts: system }, contents,
     ...(request.tools?.length ? { tools: [{ functionDeclarations: request.tools.map(t => ({
       name: t.function.name, description: t.function.description, parametersJsonSchema: t.function.parameters })) }] } : {}),
-    generationConfig: { temperature: 0.1, maxOutputTokens: request.max_tokens, thinkingConfig: { includeThoughts: false } } };
+    generationConfig: { temperature: 0.1, maxOutputTokens: request.max_tokens, thinkingConfig: {
+      includeThoughts: false,
+      // Perception explicitly disables optional reasoning in the provider
+      // contract. Gemini cannot turn it off entirely: use its documented
+      // lowest supported effort, rather than silently keeping MEDIUM.
+      ...(request.reasoning?.enabled === false ? {
+        thinkingLevel: request.model === 'gemini-3.1-flash-lite' ? 'MINIMAL' : 'LOW',
+      } : {}),
+    } } };
 }
 export function vertexResponse(data, model) {
   const candidate = data.candidates?.[0], parts = candidate?.content?.parts ?? [];
