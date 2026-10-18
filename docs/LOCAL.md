@@ -1,83 +1,88 @@
-# Run AidScaler locally
+# Development and evaluation guide
 
-## Setup
+[Overview](../README.md) · [Architecture](ARCHITECTURE.md) · [Google Cloud deployment](../deploy/gcp/README.md)
 
-Use Node.js 24+, pnpm 11 and the sibling checkouts described in the [README](../README.md):
+This guide covers a development checkout and the repeatable evaluation laboratory. The deployed AidScaler platform runs on Google Cloud.
+
+## Install
+
+Use **Node.js 24+**, **pnpm 11** and Git.
+
+```sh
+git clone https://github.com/Hi-io/aidscaler-platform.git
+cd aidscaler-platform
+pnpm install --frozen-lockfile
+pnpm check
+```
+
+## Evaluation laboratory
+
+The laboratory connects multiple AidScaler organizations to the separate disaster-response simulator. Clone it beside the platform and install its dependencies:
+
+```sh
+cd ..
+git clone https://github.com/Hi-io/disaster-response-simulator.git
+cd disaster-response-simulator
+pnpm install --frozen-lockfile
+cd ../aidscaler-platform
+```
+
+Expected layout:
 
 ```text
-your-workspace/
+workspace/
   aidscaler-platform/
   disaster-response-simulator/
 ```
 
-Run `pnpm install --frozen-lockfile` in both repositories. In the platform directory, copy `.env.example` to `.env.local` only if you do not already have a local configuration. Set `OPENROUTER_API_KEY` there, then run:
+Keep the simulator directory named `disaster-response-simulator`: the launcher and evaluation tests resolve that sibling path.
+
+For a new configuration, copy [`.env.example`](../.env.example) to `.env.local`. The standalone laboratory launcher uses the API-key provider configured in that example; supply `OPENROUTER_API_KEY` and review the model and spending settings. Keep an existing configuration when resuming a session.
+
+**Gemini on Vertex AI** is integrated through [`VertexProvider`](../src/vertex-provider.mjs) and the Cloud Run provider factory. The [cloud guide](../deploy/gcp/README.md#configure-gemini-on-vertex-ai) documents the Vertex configuration; the laboratory launcher's provider setup is separate.
+
+Start the laboratory:
 
 ```sh
 pnpm lab
 ```
 
-The current backend integration is **Gemma 4 31B through OpenRouter** (`MODEL_ID=google/gemma-4-31b-it`). Internet access is required for model inference; the workspace, databases and simulator run locally. Gemini and GCP are future integrations.
+| Surface                      | Address                                                     |
+| ---------------------------- | ----------------------------------------------------------- |
+| First organization           | [localhost:4400](http://127.0.0.1:4400/)                    |
+| Other organizations          | Ports 4401–4403                                             |
+| Independent partner          | [localhost:4404](http://127.0.0.1:4404/)                    |
+| Public portal                | [localhost:4400/public](http://127.0.0.1:4400/public)       |
+| Community reporting          | [localhost:4400/community](http://127.0.0.1:4400/community) |
+| 3D evaluation viewer         | [localhost:4328](http://127.0.0.1:4328/)                    |
+| Fictional public source feed | [localhost:4329/feed](http://127.0.0.1:4329/feed)           |
 
-The launcher resolves `../disaster-response-simulator`. Keep that sibling directory name even if you use another platform directory name.
+Generated role accounts are in ignored `.local/access-org*.json` files; the independent partner uses `.local/access-partner-org4.json`. Use the listed account for the role being tested.
 
-## Open the workspace
+Each new launch creates an isolated session under `.local/labs/`, with organization-specific stores and source credentials. `.local/lab.json` identifies the current session. The observer's controls belong to the evaluator and are separate from the model's scoped sources.
 
-| Surface | Address |
-|---|---|
-| First organization | [localhost:4400](http://127.0.0.1:4400/) |
-| Other organizations | Ports 4401–4403 |
-| Independent partner | [localhost:4404](http://127.0.0.1:4404/) |
-| Public updates | [localhost:4400/public](http://127.0.0.1:4400/public) |
-| Community reporting | [localhost:4400/community](http://127.0.0.1:4400/community) |
-| 3D laboratory | [localhost:4328](http://127.0.0.1:4328/) |
-| Fictional source feed | [localhost:4329/feed](http://127.0.0.1:4329/feed) |
+## Follow an operator's workflow
 
-Services bind to localhost. The standalone simulator's defaults are separate from the laboratory launcher ports above.
+1. **Overview:** inspect known needs, supporting sources, received aid and active operations.
+2. **Signals:** review originals and revisions, then investigate a potential need.
+3. **Investigations:** follow model activity, tool results, findings and pending checks.
+4. **Decisions:** review quantities, conditions, evidence and owners. Approve, edit or reject the exact response version.
+5. **Operations:** follow execution through physical receipt and service; review repairs when conditions change.
 
-Find the generated account addresses, roles and password in `.local/access-org0.json`; organizations 1–3 have equivalent files. The independent partner uses `.local/access-partner-org4.json`. Use the listed address rather than constructing an account name. `.env.local`, `.local/`, session databases and credentials are local, Git-ignored data.
+| Role                   | Focus                                                                     |
+| ---------------------- | ------------------------------------------------------------------------- |
+| Commander / dispatcher | Priorities, resources, response review and operational decisions.         |
+| Analyst                | Sources, investigations, checks and draft proposals.                      |
+| Field                  | Assigned tasks, evidence, progress and offline reports.                   |
+| Publisher              | Reviewed public updates and media.                                        |
+| Finance                | Funds, allocations and purchase reconciliation in the evaluation sandbox. |
+| Admin / auditor        | Accounts and connectors / read-only history and evidence.                 |
 
-Each launch creates a new session under `.local/labs/<session>/`, with separate databases and source credentials per organization. Existing generated account passwords are reused, so local sign-in addresses and passwords remain familiar. Earlier sessions are retained. `.local/lab.json` identifies the current session and contains the observer access details. The observer controls and inspects the laboratory; it is not an information source for the model.
+Organization administrators can customize public page identity, copy, accent color and banner. Community reports receive private tracking keys and operator follow-up. Approved publications form the public view of progress.
 
-## A short operator walkthrough
+## Session controls
 
-1. **Overview:** see known needs, their sources, received help and active operations.
-2. **Signals:** inspect originals and revisions. Select sources to interpret or choose **Discover a response** to investigate a possible need.
-3. **Investigations:** follow actual model activity, tool results and pending checks. A request for clarification or assessment remains pending until its response arrives.
-4. **Decisions:** inspect quantities, evidence, conditions and owners. An authorized operator approves, edits or rejects the exact proposal version. Partners review their contributions independently.
-5. **Operations:** follow orders and trips through physical receipt and service. For a blocked operation, review a repair or recovery of the existing operation instead of silently duplicating it.
-
-The model prepares options; it does not acquire an owner's authority. Acknowledgement, departure, arrival and sufficient receipt are separate states.
-
-| Role | Main workspace responsibility |
-|---|---|
-| Commander / dispatcher | Priorities, resources, proposal review and operational decisions |
-| Analyst | Sources, investigations, checks and draft proposals |
-| Field | Assigned tasks, reports and evidence; offline reports sync after reconnection |
-| Publisher | Review and approve public updates and media |
-| Finance | Sandbox funds, allocations and purchase reconciliation |
-| Admin / auditor | Accounts and connectors / read-only history and evidence |
-
-The public portal shows approved aggregates. Community submissions enter moderation. A financial settlement does not establish a physical delivery, and the local payment sandbox does not move real money.
-
-## Organization-owned public pages
-
-In **Sources & access → Public page appearance**, a commander or administrator can edit the organization name, public and reporting page copy, accent color and an optional PNG/JPEG banner. Public pages lead with the organization and keep AidScaler in the footer.
-
-Community reports receive a private tracking key. People can return to `/community` to see the review and team updates. In **Community reports**, operators can review a submission, send a progress update and link a real operational response. Tracking does not expose the original report or manufacture a dispatch status. Test contributions display a dismissible inline receipt and collect no money.
-
-## Model controls and simulation
-
-Automatic source ingestion is enabled by the launcher; automatic investigations start enabled with bounded source batches and the configured call and spending limits. The coordinator can pause or resume them in organization settings. `.env.example` documents provider, timeout and episode-budget settings. Investigations use bounded context and fetch further evidence through scoped tools.
-
-The connected lab runs the physical engine in a dedicated worker. Its local durable event bus and materialized HTTP read views are separate consumers. The visor and platform read published state without requesting a full world reconstruction on every poll. Organization connectors use compact scoped state and download immutable map/query results once per content revision, retaining the existing operational input shape. Slow consumers do not control the simulation clock; modeled inference barriers still follow the selected clock policy. Local queue acknowledgments are transport receipts, not approvals or physical delivery confirmations.
-
-If provider credit is exhausted, new model work pauses while the workspace and human actions remain available. Restore the provider account's credit and restart the affected backend with its existing configuration; avoid replacing the operational database to recover model access.
-
-The interactive laboratory starts at ×10 on Takamatsu's 10 × 10 km mapped road network. The 3D viewer at `4328`, social feed at `4329/feed` and all organization workspaces share this world. The operational map comes from the connector's authorized map query; it is not a fixed illustration or a connection to an independent preview. Set `AIDSCALER_TOPOLOGY` to choose another map for a new laboratory session. Its continuous demo clock keeps moving while model work is pending and can run beyond the scenario horizon; benchmark runners reject this demo mode. Pause or adjust its speed in the viewer. **Human attention profile** selects zero, moderate or burst; Advanced JSON can configure finite pools and timings. These native read/decision/transmission queues do not grant physical approval. The scripted simulator policy is a separate control.
-
-Use **pause/play** to control the connected world and `lab:resume` to restart its services without replacing that world. To reset the world or change its map, shut down the laboratory and run `pnpm lab` for a new isolated session. A simulator-only reset does not clear AidScaler's durable proposals, operations or evidence; do not pair a reset world with a previous world's database. Separate previews on other ports are separate worlds.
-
-To select another scenario before launching, for example in PowerShell:
+The interactive laboratory starts on Takamatsu's 10 × 10 km mapped road network. The viewer can pause the world or adjust its speed. For a different scenario or time scale, set the desired environment values before starting a new session:
 
 ```powershell
 $env:AIDSCALER_SCENARIO = 'S19'
@@ -85,49 +90,59 @@ $env:AIDSCALER_LAB_RATE = '10'
 pnpm lab
 ```
 
-Stop the launcher from a second terminal with `pnpm lab:resume --shutdown` before starting another session. This uses a private localhost control and waits for its own backend workers and stores to close before saving the final world checkpoint. On Windows, terminating a process tree or sending Ctrl+C through a noninteractive execution tool can bypass Node's shutdown handlers.
+To close and later resume the same world, organization databases and credentials:
 
-### Resume an existing demo after a code update
-
-`pnpm lab` starts a fresh world. To preserve the current world, proposals, organization databases and sign-in credentials, run `pnpm lab:resume --shutdown` and wait for its coordinated-shutdown receipt, then run `pnpm lab:resume`. No missing database or bootstrap is recreated. The private control token is saved only in the session's ignored local control file; it is never printed. The endpoint cannot terminate arbitrary processes.
-
-`pnpm lab:resume --capture` is a world-only capture for controlled maintenance; it pauses the clock but does not stop source-writing backends. Do not pair it with databases that continued changing afterward. An unclean launcher status causes resume to refuse an older world snapshot rather than pretend it matches newer operational records. Preserve that session for diagnosis and recover a coordinated snapshot or start a separate demo session. There is no periodic world-only backup presented as a consistent platform recovery.
-
-Strict resume requires the same simulator build. An explicitly authorized update to an **interactive continuous demo** may use `pnpm lab:resume --upgrade-demo-build`. This preserves the original checkpoint and run identity, verifies physical/event-state integrity, and records old/new build provenance privately. An older demo may add only the missing public-publication counter, independently reconstructed from its saved public history and recorded in the migration receipt; every other state value must match. It refuses changed configuration or engine contracts and cannot migrate a benchmark run. Resumed-launcher shutdown saves another private checkpoint after stopping its owned children. Resume bundles and credentials stay Git-ignored in `.local/`.
-
-## Optional media and checks
-
-### Native PostgreSQL for larger local runs
-
-The Store supports an embedded database or a PostgreSQL connection through `DATABASE_URL`. On Windows, a portable, user-owned PostgreSQL runtime can run separately from Node:
-
-```powershell
-pwsh -NoProfile -File scripts/native-postgres.ps1 setup
-pwsh -NoProfile -File scripts/native-postgres.ps1 status
-node scripts/native-postgres-smoke.mjs
+```sh
+pnpm lab:resume --shutdown
+pnpm lab:resume
 ```
 
-The setup verifies the vendor archive, initializes a private cluster under `.local/native-postgres/`, and listens only on `127.0.0.1:5488`. Its generated connection details remain in the ignored `connection.json`; commands do not print the password. Database durability remains enabled. Start or cleanly stop this owned cluster with the same script's `start` and `stop` actions. Existing laboratory databases are retained separately; this setup does not migrate them. The smoke check compares the two Store backends in an isolated temporary schema.
+Wait for the coordinated-shutdown receipt before resuming. Use `pnpm lab` for a **new** session. Keep the world checkpoint and platform databases from the same coordinated point; a matching source identity is part of recovery.
 
-The portable distribution is available through [PostgreSQL's Windows downloads](https://www.postgresql.org/download/windows/) and [EDB's binary archives](https://www.enterprisedb.com/download-postgresql-binaries). This runtime pins PostgreSQL 17.11-3 to the [checksum published by EDB](https://github.com/EnterpriseDB/edb-installers/issues/682).
+Automatic ingestion and investigation are separately configurable. `.env.example` includes call limits, timeouts, batch sizes and spending limits. A coordinator can pause investigations while retaining access to human workflows.
+
+## Persistence
+
+Development uses PostgreSQL-compatible PGlite by default. Set `DATABASE_URL` for an external PostgreSQL database; the deployed platform uses Cloud SQL.
+
+Operational records and evidence bytes are separate. `.env.local`, `.local/`, generated accounts, backups and credentials remain Git-ignored.
+
+For an instance backup, stop its writers and use:
+
+```sh
+node scripts/backup.mjs export <new-backup-file>
+node scripts/backup.mjs restore <backup-file> <new-directory>
+```
+
+Set `AIDSCALER_LOCAL_DIR` to the intended instance directory. Restore its source and network credentials separately, and resume one authoritative instance.
+
+## Media processing
 
 ```sh
 pnpm setup:media
-pnpm check
-pnpm test
 ```
 
-Media setup prepares local transcription and extraction dependencies; the first transcription may download model weights. Supported images and sampled video frames use the configured model. Unprocessed pages, frames or segments remain explicit rather than being presented as fully observed.
+This prepares transcription and document-extraction dependencies. Images and sampled video frames use the configured model. Processed outputs remain linked to their original evidence.
 
-Ordinary checks and tests do not require a paid provider. Live-model demos and inference checks do: run them deliberately with a configured budget. Keep keys and generated access files out of screenshots, exports and Git.
+## Checks
 
-To test offline queue migration in a real browser, install the optional Chromium test binary and run:
+With both repositories installed:
+
+```sh
+pnpm check
+pnpm test
+pnpm hygiene
+```
+
+Focused browser checks:
 
 ```sh
 pnpm exec playwright install chromium
 pnpm test:offline
+pnpm test:journeys
+pnpm test:review
 ```
 
-Existing offline reports retain their command IDs and organization ownership when migrated to AidScaler. Older local backup formats remain accepted after an integrity check; new backups use the AidScaler format.
+The [test directory](../tests/) covers authorization, cross-organization ownership, inventory, physical delivery, recovery, source boundaries, model adapters and workspace behavior. Read each script's configuration before running a live-provider or full evaluation job; inference uses the configured budget.
 
-For a database backup, stop the affected instance first. `node scripts/backup.mjs export <new-backup-file>` saves a private bundle; `restore <backup-file> <new-directory>` requires a new destination. Set `AIDSCALER_LOCAL_DIR` to the intended instance's directory. Restore source/network credentials separately, and do not operate the recovered instance alongside the original against the same physical world.
+For the recorded Gemini comparison and metric definitions, see [Benchmark](BENCHMARK.md).

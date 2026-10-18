@@ -1,0 +1,118 @@
+{
+  "title": "AidScaler + Gemini: paired disaster-response simulation",
+  "recordedAt": "2026-10-18T08:02:14.834Z",
+  "model": "Gemini 3.8 Flash",
+  "provider": "Vertex AI (global)",
+  "scenario": {
+    "location": "Takamatsu, Japan",
+    "extentKm": [10, 10],
+    "organizations": 4,
+    "needsPerMethod": 24,
+    "distractorRecords": 192,
+    "reposts": 2,
+    "formalReportDelayMinutes": 30,
+    "horizonMinutes": 180,
+    "pairedComparisons": 1,
+    "seed": "native-human-capacity-primary-01",
+    "heldConstant": [
+      "source corpus",
+      "fleet",
+      "supplies",
+      "permissions",
+      "human-work parameters"
+    ]
+  },
+  "units": {
+    "time": "simulated minutes",
+    "coordination": "modeled person-minutes",
+    "distance": "km",
+    "fuel": "L",
+    "water": "L",
+    "food": "portions",
+    "blankets": "units"
+  },
+  "conventional": {
+    "needs": 24,
+    "fullyServed": 24,
+    "meanSufficientAidMinutes": 45.22273055555556,
+    "meanAuthorizationMinutes": 28.603044444444446,
+    "coordinationPersonMinutes": 263,
+    "fleetDistanceKm": 214.93788999999998,
+    "fuelLitres": 39.473,
+    "invariantViolations": 0,
+    "resources": [
+      {
+        "type": "water",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 420,
+        "received": 420,
+        "meanSufficientAidMinutes": 47.1954875
+      },
+      {
+        "type": "food",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 173,
+        "received": 173,
+        "meanSufficientAidMinutes": 46.84770625
+      },
+      {
+        "type": "blankets",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 184,
+        "received": 184,
+        "meanSufficientAidMinutes": 41.624997916666665
+      }
+    ]
+  },
+  "aidscalerGemini": {
+    "needs": 24,
+    "fullyServed": 24,
+    "meanSufficientAidMinutes": 33.98458194444444,
+    "meanAuthorizationMinutes": 18.92297222222222,
+    "coordinationPersonMinutes": 16,
+    "fleetDistanceKm": 192.15830000000003,
+    "fuelLitres": 35.296,
+    "invariantViolations": 0,
+    "resources": [
+      {
+        "type": "water",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 420,
+        "received": 420,
+        "meanSufficientAidMinutes": 39.93180208333333
+      },
+      {
+        "type": "food",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 173,
+        "received": 173,
+        "meanSufficientAidMinutes": 19.29775625
+      },
+      {
+        "type": "blankets",
+        "needs": 8,
+        "fullyServed": 8,
+        "demand": 184,
+        "received": 184,
+        "meanSufficientAidMinutes": 42.7241875
+      }
+    ]
+  },
+  "reductionPercent": {
+    "sufficientAid": 24.85,
+    "authorization": 33.84,
+    "coordination": 93.92,
+    "foodSubset": 58.81
+  },
+  "provenance": {
+    "study": "gemini-study-20261018/run-02-low",
+    "comparisonSha256": "2dee85fc53efb0368a42c1a35168fbc55ab290c5daedb89915469212aca346ce",
+    "readoutSha256": "1f75674ef101fb7ec9ebdbce43c5e33ef0058b8942b515eae4f8c40de001998f",
+    "extract": "Conventional and Gemini outcome fields from the recorded comparison; resource metrics use the same paired episode."
+  }
+}

@@ -66,5 +66,9 @@ crash.*.log
 !/docs/LOCAL.md
 !/docs/INTEGRATIONS.md
 !/docs/ARCHITECTURE.md
-!/docs/DEMO.md
 !/deploy/gcp/README.md
+
+# Curated public presentation assets and measured results.
+!/docs/BENCHMARK.md
+!/docs/assets/
+!/docs/assets/**

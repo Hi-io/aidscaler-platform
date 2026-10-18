@@ -1,44 +1,58 @@
-# AidScaler integrations
+# Connect AidScaler to your response network
 
-AidScaler reads scoped sources, preserves evidence and prepares proposals for human review. Connecting a system does not grant authority to consume its resources.
+[Overview](../README.md) · [Architecture](ARCHITECTURE.md) · [Development](LOCAL.md)
 
-## Simulation laboratory
+AidScaler combines public information with the systems and resources response teams already use. Every connection has a defined purpose, scope and owner. Sources retain their origin as information moves into an investigation or response.
 
-Keep [disaster-response-simulator](https://github.com/Hi-io/disaster-response-simulator) beside the platform checkout. `pnpm lab` starts the source gateway and provisions separate agent and commander credentials for each organization.
+## Public information and operational systems
 
-The agent credential reads that organization's received information and submits proposals. Human review uses a separate credential. The observer has access to simulation truth and controls; never give its key or endpoints to the model.
+Operators can register a **read-only JSON HTTP connector** or a **read-only MCP connection** in Integrations. These connections bring authorized public reports, news, inventories and other operational records into the workspace.
 
-See the simulator's [source and action API](https://github.com/Hi-io/disaster-response-simulator/blob/main/docs/API.md) for authentication, actions and receipt semantics.
+1. Register the source and describe its purpose and access permission.
+2. Reference a server-side credential when the source requires authentication.
+3. Inspect a read and confirm the returned records.
+4. Enable a polling interval.
+5. Follow ingestion, source versions and evidence in the workspace.
 
-## External sources
+Use a dedicated environment variable named `AIDSCALER_CONNECTOR_<NAME>` and reference its name in the connector form. MCP connections allow an explicit list of tool names and arguments. Source content is processed as evidence; it does not grant additional permissions.
 
-Operators can register a read-only JSON HTTP connector or a read-only MCP connection in Integrations. Record its purpose and permission or license, then inspect a read before enabling a polling interval. Each ingested version retains its source, time and access scope.
+The [integration registry](../src/integrations.mjs) enforces access scope and destination checks. The [ingestion layer](../src/ingestion.mjs) preserves source versions for downstream investigation.
 
-Credentials stay on the server. Set a dedicated environment variable named `AIDSCALER_CONNECTOR_<NAME>` and reference that variable in the connector form; do not paste the token into the UI. MCP registrations allow an explicit list of tool names and arguments.
+## Multimodal evidence
 
-URL and network checks restrict connector destinations. Redirects, untrusted attachment text and source instructions do not authorize new destinations or actions. Register only sources the organization is allowed to access.
+Text reports, images, voice notes, documents and video frames can contribute to a case. Media processing prepares transcripts, extracted text or image evidence for the configured model. Evidence links preserve the relationship between the original attachment, its processed content and the resulting findings.
 
-## Read-only MCP endpoint
-
-Each AidScaler instance exposes JSON-RPC at `POST /mcp`, using `Authorization: Bearer <dedicated-read-key>`. Configure `AIDSCALER_MCP_KEY` locally or use the generated server configuration. Do not publish this key.
-
-The endpoint supports initialization, tool discovery and these read tools:
-
-| Tool | Returns |
-|---|---|
-| `aidscaler_context` | The organization's received operational snapshot |
-| `aidscaler_signals` | Up to 100 received source records |
-| `aidscaler_evidence` | An accessible evidence record by ID |
-| `aidscaler_responses` | Status of human-owned response proposals |
-
-These tools cannot authorize a response or expose observer truth. Prefer tool discovery over hard-coded schemas when writing a client.
+The development guide includes [media setup](LOCAL.md#media-processing). In the cloud deployment, media dependencies are included in the [application container](../deploy/gcp/Dockerfile).
 
 ## Partner organizations
 
-The local launcher provisions isolated stores and signed links between participating organizations. A partner shares selected capabilities or observations; inventory, reservations and approval remain under the owner's control. Revocations and newer versions invalidate stale assumptions.
+The [network layer](../src/network.mjs) exchanges selected observations, capabilities, proposals and commitments. A partner can offer supplies or transport while keeping inventory, reservations and approvals under its own authority.
 
-Transport uses signed envelopes at `/api/network/inbox` with `X-AIDSCALER-From` and `X-AIDSCALER-Signature`. Provision shared keys out of band and keep them outside Git. A valid message is not a physical delivery receipt.
+Messages use signed envelopes at `/api/network/inbox`, with `X-AIDSCALER-From` and `X-AIDSCALER-Signature` headers. Provision shared keys outside the repository. Version changes and revocations propagate into dependent response checks.
 
-## Media
+This makes complementary resources usable together: a shared response can reference different organizations while each approves its own contribution and follows its completion.
 
-`pnpm setup:media` installs local transcription and document extraction dependencies. Images and sampled video frames use the configured model. The interface distinguishes processed evidence from unsupported or unprocessed parts; an attachment is never treated as a verified instruction.
+## AidScaler's read-only MCP endpoint
+
+Each instance exposes JSON-RPC at `POST /mcp`, authenticated with `Authorization: Bearer <dedicated-read-key>`. Configure `AIDSCALER_MCP_KEY` in the runtime environment.
+
+| Tool                  | Returns                                           |
+| --------------------- | ------------------------------------------------- |
+| `aidscaler_context`   | The organization's received operational snapshot. |
+| `aidscaler_signals`   | Up to 100 received source records.                |
+| `aidscaler_evidence`  | An accessible evidence record by ID.              |
+| `aidscaler_responses` | Status of human-owned response proposals.         |
+
+Use tool discovery for the current schemas. These read tools let other systems consume scoped operational context; authorization remains in the resource owner's workflow.
+
+## Community and field input
+
+Communities can submit reports through an organization-owned page and return with a private tracking key for follow-up. Operators review submissions and connect them to operational cases.
+
+Field teams use assigned tasks to report progress, upload evidence and confirm delivery. Offline reports retain command identity and organization ownership when synchronized.
+
+## Evaluation source
+
+The separate [disaster-response simulator](https://github.com/Hi-io/disaster-response-simulator) provides reproducible source feeds and physical outcomes for evaluation. Its connector uses separate credentials for the organization's received information and human-authorized actions.
+
+The platform consumes published sources and scoped operational queries. Observer access belongs to the evaluator. See [measurement design](BENCHMARK.md) and [laboratory setup](LOCAL.md).
